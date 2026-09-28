@@ -100,45 +100,45 @@ export function SpatialHolodeck() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-6 space-y-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-6 pb-36 space-y-6">
         
         {/* Hardware Telemetry Bar */}
-        <div className="p-4 rounded-2xl bg-[var(--color-secondary,#111)]/60 border border-[var(--color-border,rgba(255,255,255,0.08))] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+        <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[var(--color-accent,#10b981)]">
+            <div className="w-8 h-8 rounded-xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)]">
               <Cpu size={16} />
             </div>
             <div>
-              <div className="text-white font-semibold">
+              <div className="text-[var(--color-text-primary)] font-semibold">
                 GPU: {telemetry ? telemetry.rendererName.slice(0, 45) : 'Scanning Hardware...'}
               </div>
-              <div className="text-[11px] text-neutral-400">
+              <div className="text-[11px] text-[var(--color-text-secondary)]">
                 WebGL: {telemetry?.hasWebGL ? 'Supported (Hardware)' : 'Disabled'} • WebXR: {telemetry?.hasWebXR ? 'Active' : 'Standby'}
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 flex items-center gap-2">
+            <div className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-neutral-400">Recommended:</span>
-              <span className="text-white font-bold">{telemetry?.recommendedTier || '3d-hardware'}</span>
+              <span className="text-[var(--color-text-secondary)]">Recommended:</span>
+              <span className="text-[var(--color-text-primary)] font-bold">{telemetry?.recommendedTier || '3d-hardware'}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 flex items-center gap-2">
-              <span className="text-neutral-400">Active Profile:</span>
-              <span className="text-emerald-400 font-bold">{graphicsTier.toUpperCase()}</span>
+            <div className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center gap-2">
+              <span className="text-[var(--color-text-secondary)]">Active Profile:</span>
+              <span className="text-[var(--color-accent)] font-bold">{graphicsTier.toUpperCase()}</span>
             </div>
           </div>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-white/10 gap-2">
+        <div className="flex border-b border-[var(--color-border)] gap-2">
           <button
             onClick={() => setActiveTab('vectors')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'vectors'
-                ? 'border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)]'
-                : 'border-transparent text-neutral-400 hover:text-white'
+                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
             }`}
           >
             <Compass size={16} />
@@ -149,8 +149,8 @@ export function SpatialHolodeck() {
             onClick={() => setActiveTab('synapses')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'synapses'
-                ? 'border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)]'
-                : 'border-transparent text-neutral-400 hover:text-white'
+                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
             }`}
           >
             <Network size={16} />
@@ -162,7 +162,7 @@ export function SpatialHolodeck() {
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'webxr'
                 ? 'border-violet-400 text-violet-400'
-                : 'border-transparent text-neutral-400 hover:text-white'
+                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
             }`}
           >
             <Glasses size={16} />
@@ -192,44 +192,44 @@ export function SpatialHolodeck() {
         </div>
 
         {/* First-Principles Spatial Intuition Section */}
-        <div className="pt-6 border-t border-white/10 space-y-4">
-          <h2 className="text-xs font-mono uppercase tracking-wider text-neutral-400 flex items-center gap-2">
-            <Sparkles size={14} className="text-[var(--color-accent,#10b981)]" />
+        <div className="pt-6 border-t border-[var(--color-border)] space-y-4">
+          <h2 className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] flex items-center gap-2">
+            <Sparkles size={14} className="text-[var(--color-accent)]" />
             First-Principles: Spatial Geometry & Universal Compatibility
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
             {/* Card 1: Vector Space */}
-            <div className="p-5 rounded-2xl bg-[var(--color-secondary,#111)]/40 border border-white/5 space-y-2">
-              <div className="text-xs font-bold text-white flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-2">
+              <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-2">
                 <Compass size={15} className="text-emerald-400" />
                 Why AI Lives in High-Dimensional Space
               </div>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                 When a Large Language Model understands language, it converts each token into a dense vector (e.g., 1536 floating point numbers). Words with similar semantic meanings cluster together in space. Here, we project these 1536 dimensions down to 3D Euclidean coordinates so human eyes can orbit and perceive semantic proximity.
               </p>
             </div>
 
             {/* Card 2: Neural Synapses */}
-            <div className="p-5 rounded-2xl bg-[var(--color-secondary,#111)]/40 border border-white/5 space-y-2">
-              <div className="text-xs font-bold text-white flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-2">
+              <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-2">
                 <Network size={15} className="text-purple-400" />
                 Action Potentials & Synaptic Weights
               </div>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Information travels through multi-layer perceptrons as continuous matrix multiplications (<code className="text-white font-mono">W · x + b</code>) followed by non-linear activations (ReLU / GELU). Green synaptic lines represent excitatory signals, pink represent inhibitory signals, and traveling pulses model forward inference in real-time.
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Information travels through multi-layer perceptrons as continuous matrix multiplications (<code className="text-[var(--color-accent)] font-mono">W · x + b</code>) followed by non-linear activations (ReLU / GELU). Green synaptic lines represent excitatory signals, pink represent inhibitory signals, and traveling pulses model forward inference in real-time.
               </p>
             </div>
 
             {/* Card 3: $0 Rule & Device Adaptation */}
-            <div className="p-5 rounded-2xl bg-[var(--color-secondary,#111)]/40 border border-white/5 space-y-2">
-              <div className="text-xs font-bold text-white flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-2">
+              <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-2">
                 <ShieldCheck size={15} className="text-cyan-400" />
                 Hardware-Adaptive Tiering ($0 Cost)
               </div>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                OpenGuide is designed to run anywhere. If you are on an older laptop or battery saver, <strong className="text-white">2D Lean Mode</strong> renders pure SVG with 0% GPU load. If you have a GPU, <strong className="text-white">3D WebGL</strong> activates 60FPS orbit. And if you wear a Meta Quest or Apple Vision Pro, <strong className="text-white">WebXR</strong> places the vectors directly in your room.
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                OpenGuide is designed to run anywhere. If you are on an older laptop or battery saver, <strong className="text-[var(--color-text-primary)]">2D Lean Mode</strong> renders pure SVG with 0% GPU load. If you have a GPU, <strong className="text-[var(--color-text-primary)]">3D WebGL</strong> activates 60FPS orbit. And if you wear a Meta Quest or Apple Vision Pro, <strong className="text-[var(--color-text-primary)]">WebXR</strong> places the vectors directly in your room.
               </p>
             </div>
 

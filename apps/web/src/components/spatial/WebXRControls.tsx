@@ -90,7 +90,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
   };
 
   return (
-    <div className={`p-6 rounded-3xl bg-gradient-to-b from-[#09090b] via-[#0d1117] to-[#09090b] border border-[var(--color-border,rgba(255,255,255,0.1))] flex flex-col gap-6 shadow-2xl ${className}`}>
+    <div className={`p-6 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col gap-6 shadow-2xl text-[var(--color-text-primary)] transition-colors ${className}`}>
       
       {/* Title & Hardware Status */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -99,26 +99,26 @@ export function WebXRControls({ className = '' }: { className?: string }) {
             <Glasses size={22} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[var(--color-text-primary)] tracking-tight flex items-center gap-2">
               Spatial Holodeck WebXR & AR Gateway
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-violet-500/20 text-violet-300 border border-violet-500/30">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-violet-500/20 text-violet-400 border border-violet-500/30">
                 6-DOF & Webcam AR
               </span>
             </h3>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-[var(--color-text-secondary)]">
               Immersive spatial computing for Meta Quest, Apple Vision Pro, and universal camera passthrough.
             </p>
           </div>
         </div>
 
         {/* Headset Telemetry Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono shadow-inner">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono shadow-inner">
           {telemetry?.hasImmersiveVR ? (
             <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
               <CheckCircle2 size={14} /> VR Headset Ready
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-neutral-300">
+            <span className="flex items-center gap-1.5 text-[var(--color-text-secondary)]">
               <Laptop size={14} /> Screen Display (Ready for AR Passthrough)
             </span>
           )}
@@ -126,7 +126,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
       </div>
 
       {/* AR Camera Passthrough Viewport (when active) */}
-      <div className={`relative w-full rounded-2xl overflow-hidden border border-white/10 transition-all ${isCameraActive ? 'h-72 bg-black' : 'hidden'}`}>
+      <div className={`relative w-full rounded-2xl overflow-hidden border border-[var(--color-border)] transition-all ${isCameraActive ? 'h-72 bg-black' : 'hidden'}`}>
         <video 
           ref={videoRef} 
           playsInline 
@@ -150,15 +150,15 @@ export function WebXRControls({ className = '' }: { className?: string }) {
           className={`p-4 rounded-2xl border transition-all flex items-center justify-between text-left group cursor-pointer ${
             isCameraActive 
               ? 'bg-rose-950/30 border-rose-500/50 hover:border-rose-400' 
-              : 'bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border-cyan-500/30 hover:border-cyan-400'
+              : 'bg-[var(--color-primary)] border-[var(--color-border)] hover:border-cyan-500/50'
           }`}
         >
           <div className="space-y-1">
-            <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
               {isCameraActive ? <CameraOff size={15} className="text-rose-400" /> : <Camera size={15} className="text-cyan-400" />}
               <span>{isCameraActive ? 'Disable Camera AR' : 'Universal AR Passthrough'}</span>
             </div>
-            <div className="text-[11px] text-neutral-400">
+            <div className="text-[11px] text-[var(--color-text-secondary)]">
               Webcam or Phone Camera Overlay
             </div>
           </div>
@@ -168,13 +168,13 @@ export function WebXRControls({ className = '' }: { className?: string }) {
         {/* Immersive 6-DOF VR */}
         <button
           onClick={() => requestXRSession('immersive-vr')}
-          className="p-4 rounded-2xl bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 hover:border-violet-500/60 transition-all flex items-center justify-between text-left group cursor-pointer"
+          className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-violet-500/60 transition-all flex items-center justify-between text-left group cursor-pointer"
         >
           <div className="space-y-1">
-            <div className="text-xs font-bold text-white group-hover:text-violet-300 transition-colors">
+            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-violet-400 transition-colors">
               Launch Immersive VR (6-DOF)
             </div>
-            <div className="text-[11px] text-neutral-400">
+            <div className="text-[11px] text-[var(--color-text-secondary)]">
               Meta Quest Browser / SteamVR
             </div>
           </div>
@@ -184,13 +184,13 @@ export function WebXRControls({ className = '' }: { className?: string }) {
         {/* Pass-Through AR for Vision Pro / Quest */}
         <button
           onClick={() => requestXRSession('immersive-ar')}
-          className="p-4 rounded-2xl bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border border-emerald-500/30 hover:border-emerald-500/60 transition-all flex items-center justify-between text-left group cursor-pointer"
+          className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-emerald-500/60 transition-all flex items-center justify-between text-left group cursor-pointer"
         >
           <div className="space-y-1">
-            <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-emerald-400 transition-colors">
               WebXR Pass-Through AR
             </div>
-            <div className="text-[11px] text-neutral-400">
+            <div className="text-[11px] text-[var(--color-text-secondary)]">
               Apple Vision Pro / Quest 3
             </div>
           </div>
@@ -200,13 +200,13 @@ export function WebXRControls({ className = '' }: { className?: string }) {
 
       {/* Status Output if triggered */}
       {statusMsg && (
-        <div className="p-4 rounded-2xl bg-violet-950/40 border border-violet-500/40 flex items-start gap-3 text-xs shadow-lg">
+        <div className="p-4 rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-start gap-3 text-xs shadow-lg">
           <AlertCircle size={17} className="text-violet-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <div className="text-violet-200 font-mono leading-relaxed">{statusMsg}</div>
+            <div className="text-[var(--color-text-primary)] font-mono leading-relaxed">{statusMsg}</div>
             {!telemetry?.hasImmersiveVR && (
-              <div className="text-[11px] text-neutral-400 leading-relaxed">
-                Developer Note: To test native WebXR spatial hand controllers on Chrome desktop, install Google's official <span className="text-white font-semibold">WebXR API Emulator</span> Chrome Extension, or open this URL directly inside your Meta Quest browser.
+              <div className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed">
+                Developer Note: To test native WebXR spatial hand controllers on Chrome desktop, install Google's official <span className="text-[var(--color-text-primary)] font-semibold">WebXR API Emulator</span> Chrome Extension, or open this URL directly inside your Meta Quest browser.
               </div>
             )}
           </div>
@@ -215,19 +215,19 @@ export function WebXRControls({ className = '' }: { className?: string }) {
 
       {/* Spatial Architecture Feature Highlights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/5 space-y-1 shadow-inner">
-          <div className="text-xs font-bold text-white">Direct Hand & Pointer Hit-Testing</div>
-          <div className="text-[11px] text-neutral-400">Three.js raycaster hits 3D nodes instantly with tactile Web Audio feedback.</div>
+        <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-1 shadow-inner">
+          <div className="text-xs font-bold text-[var(--color-text-primary)]">Direct Hand & Pointer Hit-Testing</div>
+          <div className="text-[11px] text-[var(--color-text-secondary)]">Three.js raycaster hits 3D nodes instantly with tactile Web Audio feedback.</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/5 space-y-1 shadow-inner">
-          <div className="text-xs font-bold text-white">Zero Cloud Compute ($0)</div>
-          <div className="text-[11px] text-neutral-400">100% of spatial meshes and linear algebra run on device GPU via WebGL & WebXR.</div>
+        <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-1 shadow-inner">
+          <div className="text-xs font-bold text-[var(--color-text-primary)]">Zero Cloud Compute ($0)</div>
+          <div className="text-[11px] text-[var(--color-text-secondary)]">100% of spatial meshes and linear algebra run on device GPU via WebGL & WebXR.</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/5 space-y-1 shadow-inner">
-          <div className="text-xs font-bold text-white">Instant 2D Lean Fallback</div>
-          <div className="text-[11px] text-neutral-400">Low-spec laptops and mobile phones automatically drop down to lightweight 0% GPU SVG.</div>
+        <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-1 shadow-inner">
+          <div className="text-xs font-bold text-[var(--color-text-primary)]">Instant 2D Lean Fallback</div>
+          <div className="text-[11px] text-[var(--color-text-secondary)]">Low-spec laptops and mobile phones automatically drop down to lightweight 0% GPU SVG.</div>
         </div>
       </div>
 

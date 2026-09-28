@@ -5,7 +5,8 @@ import {
   RotateCcw,
   Sparkles,
   Volume2,
-  VolumeX
+  VolumeX,
+  Layers
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
@@ -32,11 +33,11 @@ export const SEMANTIC_VECTORS: SemanticVectorNode[] = [
   { id: 'cosine', label: 'Cosine Similarity', cluster: 'vector', coords: [-1.8, 1.0, 1.1], color: '#06b6d4', details: 'Dot-product angular distance formula' },
   { id: 'rag', label: 'RAG Pipeline', cluster: 'vector', coords: [-1.2, 2.5, -0.4], color: '#06b6d4', details: 'Retrieval-Augmented Generation context injection' },
 
-  // Cluster 3: Math & Optimization (Violet / Purple)
-  { id: 'gradient', label: 'Gradient Descent', cluster: 'math', coords: [0.5, -2.2, 1.8], color: '#8b5cf6', details: 'First-order iterative optimization algorithm' },
-  { id: 'backprop', label: 'Backpropagation', cluster: 'math', coords: [0.8, -1.8, 2.3], color: '#8b5cf6', details: 'Chain-rule reverse gradient computation' },
-  { id: 'loss', label: 'Cross-Entropy Loss', cluster: 'math', coords: [-0.2, -2.5, 1.4], color: '#8b5cf6', details: 'Prediction error quantification penalty' },
-  { id: 'learning_rate', label: 'Learning Rate (η)', cluster: 'math', coords: [1.2, -2.8, 0.9], color: '#8b5cf6', details: 'Step size hyperparameter per iteration' },
+  // Cluster 3: Math & Optimization (Violet / Purple) - Centered & Normalized in Viewport
+  { id: 'gradient', label: 'Gradient Descent', cluster: 'math', coords: [0.5, -1.2, 1.8], color: '#8b5cf6', details: 'First-order iterative optimization algorithm' },
+  { id: 'backprop', label: 'Backpropagation', cluster: 'math', coords: [0.8, -0.8, 2.3], color: '#8b5cf6', details: 'Chain-rule reverse gradient computation' },
+  { id: 'loss', label: 'Cross-Entropy Loss', cluster: 'math', coords: [-0.2, -1.4, 1.4], color: '#8b5cf6', details: 'Prediction error quantification penalty' },
+  { id: 'learning_rate', label: 'Learning Rate (η)', cluster: 'math', coords: [1.2, -1.6, 0.9], color: '#8b5cf6', details: 'Step size hyperparameter per iteration' },
 
   // Cluster 4: Autonomous Agents & Memory (Amber / Orange)
   { id: 'agent', label: 'Autonomous Agent', cluster: 'agents', coords: [-0.5, 1.8, -2.4], color: '#f59e0b', details: 'Self-directed ReAct reasoning & execution loop' },
@@ -62,6 +63,11 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   const [isRotating, setIsRotating] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [hardwareInfo] = useState(() => detectHardwareSync());
+  
+  // Spatial XR Suite Controls (Meta/Oculus & VisionOS Grade)
+  const [clusterFilter, setClusterFilter] = useState<'all' | 'neural' | 'vector' | 'math' | 'agents'>('all');
+  const [simThreshold, setSimThreshold] = useState<number>(0.65);
+  const [gimbalAngles, setGimbalAngles] = useState({ pitch: 0, yaw: 0 });
 
   // Determine if we should render 3D WebGL or 2D Lean
   const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL;
@@ -74,6 +80,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     const mag = v1.length() * v2.length();
     return mag > 0 ? (dot / mag) : 0;
   })();
+
+  const angleDegrees = Math.acos(Math.max(-1, Math.min(1, cosineSim))) * (180 / Math.PI);
 
   // Web Audio Spatial Synthesizer Chime
   const playNodeChime = (cluster: string) => {
@@ -106,14 +114,16 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     const canvas = canvasRef.current;
     const container = containerRef.current;
     const width = container.clientWidth || 800;
-    const height = container.clientHeight || 520;
+    const height = container.clientHeight || 560;
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
     scene.background = null;
 
+    // Centered & Balanced Camera for Meta/VisionOS Spatial View
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(0, 3.5, 9.5);
+    camera.position.set(0, 0.6, 9.0);
+    camera.lookAt(0, 0.1, 0);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -124,85 +134,93 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    // Spatial Lighting Setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
     scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0x10b981, 2.5, 60);
-    pointLight.position.set(0, 6, 6);
-    scene.add(pointLight);
+    const primaryLight = new THREE.PointLight(0x10b981, 3.0, 70);
+    primaryLight.position.set(2, 6, 6);
+    scene.add(primaryLight);
 
-    const backLight = new THREE.PointLight(0x8b5cf6, 1.8, 50);
-    backLight.position.set(-5, -4, -5);
+    const secondaryLight = new THREE.PointLight(0x06b6d4, 2.5, 60);
+    secondaryLight.position.set(-6, 4, 4);
+    scene.add(secondaryLight);
+
+    const backLight = new THREE.PointLight(0x8b5cf6, 2.0, 50);
+    backLight.position.set(0, -4, -6);
     scene.add(backLight);
 
     // Root Group for Rotation
     const galaxyGroup = new THREE.Group();
     scene.add(galaxyGroup);
 
-    // 1. Cosmic Latent Space Particle Cloud (1,200 floating manifold points)
+    // 1. Cosmic Latent Space Particle Cloud (1,400 floating manifold points)
     const starGeo = new THREE.BufferGeometry();
-    const starCount = 1200;
+    const starCount = 1400;
     const starPos = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount * 3; i++) {
-      starPos[i] = (Math.random() - 0.5) * 22;
+      starPos[i] = (Math.random() - 0.5) * 26;
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
     const starMat = new THREE.PointsMaterial({
       color: 0x38bdf8,
       size: 0.05,
       transparent: true,
-      opacity: 0.4
+      opacity: 0.45
     });
     const starField = new THREE.Points(starGeo, starMat);
     galaxyGroup.add(starField);
 
-    // 2. Holographic Coordinate Rings (Spatial Gyroscope)
-    const ringGeo1 = new THREE.RingGeometry(3.4, 3.42, 64);
-    const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
+    // 2. Holographic Coordinate Rings (Spatial Gyroscope & Horizon Planes)
+    const ringGeo1 = new THREE.RingGeometry(3.6, 3.63, 64);
+    const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.28 });
     const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
     ring1.rotation.x = Math.PI / 2;
     galaxyGroup.add(ring1);
 
-    const ringGeo2 = new THREE.RingGeometry(4.2, 4.22, 64);
-    const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x10b981, side: THREE.DoubleSide, transparent: true, opacity: 0.2 });
+    const ringGeo2 = new THREE.RingGeometry(4.4, 4.43, 64);
+    const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x10b981, side: THREE.DoubleSide, transparent: true, opacity: 0.22 });
     const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
     ring2.rotation.x = Math.PI / 3;
     ring2.rotation.y = Math.PI / 6;
     galaxyGroup.add(ring2);
 
-    // 3. Grid Floor Plane (Spatial Coordinate Grid)
-    const gridHelper = new THREE.GridHelper(12, 12, 0x10b981, 0x1f2937);
-    gridHelper.position.y = -3.2;
+    // 3. Grid Floor Plane (Spatial Coordinate Grid) - Balanced at y = -2.2
+    const gridHelper = new THREE.GridHelper(14, 14, 0x10b981, 0x334155);
+    gridHelper.position.y = -2.2;
     galaxyGroup.add(gridHelper);
 
-    // 4. Create 3D Nodes
+    // 4. Create Physical Dielectric 3D Nodes
     const nodeMeshes: { mesh: THREE.Mesh; halo: THREE.Mesh; data: SemanticVectorNode }[] = [];
-    const sphereGeo = new THREE.SphereGeometry(0.22, 24, 24);
-    const haloGeo = new THREE.SphereGeometry(0.34, 16, 16);
+    const sphereGeo = new THREE.SphereGeometry(0.24, 28, 28);
+    const haloGeo = new THREE.SphereGeometry(0.38, 16, 16);
 
     SEMANTIC_VECTORS.forEach(vec => {
       const isSelected = vec.id === selectedNode.id;
       const isCompared = vec.id === comparedNode.id;
+      const matchesFilter = clusterFilter === 'all' || vec.cluster === clusterFilter;
 
+      // High-grade physical shader material with depth sheen
       const mat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(vec.color),
         emissive: new THREE.Color(vec.color),
-        emissiveIntensity: isSelected ? 0.9 : isCompared ? 0.6 : 0.25,
-        roughness: 0.25,
-        metalness: 0.3
+        emissiveIntensity: isSelected ? 1.0 : isCompared ? 0.7 : matchesFilter ? 0.35 : 0.08,
+        roughness: 0.2,
+        metalness: 0.35,
+        transparent: true,
+        opacity: matchesFilter ? 1.0 : 0.2
       });
 
       const mesh = new THREE.Mesh(sphereGeo, mat);
       mesh.position.set(...vec.coords);
       galaxyGroup.add(mesh);
 
-      // Halo Wireframe Beacon for Selected node
+      // Holographic Wireframe Halo for Selected / Compared node
       const haloMat = new THREE.MeshBasicMaterial({
         color: new THREE.Color(vec.color),
         wireframe: true,
         transparent: true,
-        opacity: isSelected ? 0.6 : 0
+        opacity: isSelected ? 0.75 : isCompared ? 0.4 : 0
       });
       const halo = new THREE.Mesh(haloGeo, haloMat);
       halo.position.set(...vec.coords);
@@ -214,7 +232,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       const lineMat = new THREE.LineBasicMaterial({
         color: new THREE.Color(vec.color),
         transparent: true,
-        opacity: isSelected ? 0.6 : 0.2
+        opacity: isSelected ? 0.7 : matchesFilter ? 0.25 : 0.05
       });
       const lineGeo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, 0, 0),
@@ -224,13 +242,13 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       galaxyGroup.add(line);
     });
 
-    // 5. Connecting Vector Line between Selected and Compared nodes
+    // 5. Connecting Geodesic Vector Line between Selected and Compared nodes
     const pairLineMat = new THREE.LineDashedMaterial({
-      color: 0xffffff,
+      color: 0x38bdf8,
       dashSize: 0.25,
       gapSize: 0.12,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.95
     });
     const pairLineGeo = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(...selectedNode.coords),
@@ -260,7 +278,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         const hit = nodeMeshes.find(n => n.mesh === intersects[0].object);
         if (hit) {
           setHoveredNode(hit.data);
-          hit.mesh.scale.set(1.25, 1.25, 1.25);
+          hit.mesh.scale.set(1.3, 1.3, 1.3);
         }
       } else {
         canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
@@ -287,15 +305,13 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       }
     };
 
-    // 7. Mouse & Touch Orbit Controls
+    // 7. Mouse & Touch Orbit Controls (Interactive Spatial Gyroscope)
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
-    let movedDistance = 0;
 
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
-      movedDistance = 0;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       prevMouseX = clientX;
@@ -308,10 +324,14 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       const deltaX = clientX - prevMouseX;
       const deltaY = clientY - prevMouseY;
-      movedDistance += Math.abs(deltaX) + Math.abs(deltaY);
 
       galaxyGroup.rotation.y += deltaX * 0.007;
       galaxyGroup.rotation.x += deltaY * 0.007;
+
+      setGimbalAngles({
+        yaw: Math.round(((galaxyGroup.rotation.y * 180) / Math.PI) % 360),
+        pitch: Math.round(((galaxyGroup.rotation.x * 180) / Math.PI) % 360)
+      });
 
       prevMouseX = clientX;
       prevMouseY = clientY;
@@ -337,18 +357,19 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       animId = requestAnimationFrame(animate);
 
       if (isRotating && !isDragging) {
-        galaxyGroup.rotation.y += 0.0025;
-        starField.rotation.y -= 0.0005;
+        galaxyGroup.rotation.y += 0.0022;
+        starField.rotation.y -= 0.0004;
       }
 
       // Rotate selected node halo
       nodeMeshes.forEach(n => {
         if (n.data.id === selectedNode.id) {
-          n.halo.rotation.y += 0.02;
-          n.halo.rotation.x += 0.01;
+          n.halo.rotation.y += 0.025;
+          n.halo.rotation.x += 0.015;
         }
       });
 
+      camera.lookAt(0, 0.1, 0);
       renderer.render(scene, camera);
     };
     animate();
@@ -385,43 +406,50 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       sphereGeo.dispose();
       haloGeo.dispose();
     };
-  }, [use3D, isRotating, selectedNode, comparedNode, hardwareInfo.isLowEnd, soundEnabled]);
+  }, [use3D, isRotating, selectedNode, comparedNode, hardwareInfo.isLowEnd, soundEnabled, clusterFilter, simThreshold]);
 
   return (
-    <div className={`relative w-full rounded-3xl overflow-hidden bg-gradient-to-b from-[#09090b] via-[#0d1117] to-[#09090b] border border-[var(--color-border,rgba(255,255,255,0.1))] flex flex-col shadow-2xl ${className}`}>
+    <div className={`relative w-full rounded-3xl overflow-hidden bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col shadow-2xl text-[var(--color-text-primary)] transition-colors ${className}`}>
       
-      {/* Top HUD Controls */}
-      <div className="px-5 py-3.5 border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[#09090b]/80 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 z-10">
+      {/* Top HUD Controls (Meta/VisionOS Spatial Command Bar) */}
+      <div className="px-5 py-3.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 z-10">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[var(--color-accent,#10b981)]/20 border border-[var(--color-accent,#10b981)]/40 flex items-center justify-center text-[var(--color-accent,#10b981)] shadow-inner">
+          <div className="w-8 h-8 rounded-xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)] shadow-inner">
             <Compass size={18} />
           </div>
           <div>
-            <h4 className="text-xs font-bold tracking-tight text-white flex items-center gap-2">
+            <h4 className="text-xs font-bold tracking-tight text-[var(--color-text-primary)] flex items-center gap-2">
               Semantic Embedding Hyper-Space
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                Interactive Raycaster
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-[var(--color-accent)]/20 text-[var(--color-accent)] border border-[var(--color-accent)]/30 font-bold">
+                XR Manifold Suite
               </span>
             </h4>
-            <span className="text-[10px] font-mono text-neutral-400">
-              {use3D ? 'Click any 3D node directly to select & calculate Cosine Proximity' : '2D Lean SVG Projection'}
+            <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">
+              {use3D ? '6-DOF Latent Manifold Projection • Direct Raycaster' : '2D Lean SVG Projection'}
             </span>
           </div>
         </div>
 
-        {/* Orbit & Cosine Readout & Audio Toggle */}
+        {/* Orbit, Gyroscope & Audio Toggles */}
         <div className="flex items-center gap-2.5">
-          <div className="px-3 py-1 rounded-xl bg-black/60 border border-white/10 flex items-center gap-2 text-xs font-mono shadow-inner">
-            <span className="text-neutral-400">Cosine Angle:</span>
+          {/* Spatial Gimbal Telemetry Pill */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[10px] font-mono shadow-inner">
+            <span className="text-[var(--color-text-secondary)]">Gimbal:</span>
+            <span className="text-[var(--color-accent)] font-bold">Y:{gimbalAngles.yaw}° P:{gimbalAngles.pitch}°</span>
+          </div>
+
+          {/* Cosine & Angle Proximity Badge */}
+          <div className="px-3 py-1 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center gap-2 text-xs font-mono shadow-inner">
+            <span className="text-[var(--color-text-secondary)]">Proximity:</span>
             <span className={`font-bold ${cosineSim > 0.8 ? 'text-emerald-400' : cosineSim > 0.3 ? 'text-amber-400' : 'text-neutral-400'}`}>
-              {(cosineSim * 100).toFixed(1)}% ({(cosineSim).toFixed(3)})
+              {(cosineSim * 100).toFixed(1)}% (θ={angleDegrees.toFixed(1)}°)
             </span>
           </div>
 
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className={`p-2 rounded-xl text-xs border transition-colors cursor-pointer ${
-              soundEnabled ? 'bg-white/10 border-white/20 text-white' : 'bg-white/5 border-white/5 text-neutral-500'
+              soundEnabled ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)]/40 text-[var(--color-accent)]' : 'bg-[var(--color-primary)] border-[var(--color-border)] text-[var(--color-text-secondary)]'
             }`}
             title={soundEnabled ? 'Mute Spatial Audio Chimes' : 'Enable Spatial Audio'}
           >
@@ -432,7 +460,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
             <button
               onClick={() => setIsRotating(!isRotating)}
               className={`p-2 rounded-xl text-xs border transition-colors cursor-pointer ${
-                isRotating ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)]' : 'bg-white/5 border-white/10 text-neutral-400'
+                isRotating ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)]' : 'bg-[var(--color-primary)] border-[var(--color-border)] text-[var(--color-text-secondary)]'
               }`}
               title={isRotating ? 'Pause Rotation' : 'Resume Orbit'}
             >
@@ -442,24 +470,67 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         </div>
       </div>
 
-      {/* Canvas Area */}
-      <div ref={containerRef} className="relative w-full h-[460px] flex items-center justify-center overflow-hidden">
+      {/* Spatial Sub-Manifold Cluster Slicer Bar */}
+      <div className="px-5 py-2.5 bg-[var(--color-primary)]/70 border-b border-[var(--color-border)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2">
+          <Layers size={14} className="text-[var(--color-accent)]" />
+          <span className="text-[var(--color-text-secondary)]">Isolate Sub-Manifold:</span>
+          {(['all', 'neural', 'vector', 'math', 'agents'] as const).map(c => (
+            <button
+              key={c}
+              onClick={() => setClusterFilter(c)}
+              className={`px-2.5 py-1 rounded-lg text-[11px] capitalize transition-all cursor-pointer ${
+                clusterFilter === c
+                  ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]'
+              }`}
+            >
+              {c === 'all' ? 'All Clusters' : c}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] text-[var(--color-text-secondary)]">Sim Threshold:</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={simThreshold}
+            onChange={(e) => setSimThreshold(parseFloat(e.target.value))}
+            className="w-24 accent-[var(--color-accent)] cursor-pointer"
+            title="Filter semantic connections"
+          />
+          <span className="text-[10px] font-bold text-[var(--color-accent)]">≥ {(simThreshold * 100).toFixed(0)}%</span>
+        </div>
+      </div>
+
+      {/* Canvas Area (High-End Spatial Viewport) */}
+      <div ref={containerRef} className="relative w-full h-[520px] md:h-[580px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]">
         {use3D ? (
           <>
             <canvas ref={canvasRef} className="w-full h-full block" />
             
             {/* Real-time Hovered / Active Node Floating Badge */}
             {hoveredNode && (
-              <div className="absolute top-4 left-4 pointer-events-none z-20 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md border border-cyan-500/40 text-xs font-mono text-cyan-300 shadow-xl flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: hoveredNode.color }} />
-                <span>{hoveredNode.label}</span>
-                <span className="text-[10px] text-neutral-400">Click to focus</span>
+              <div className="absolute top-4 left-4 pointer-events-none z-20 px-3.5 py-2 rounded-xl bg-[var(--color-secondary)]/95 backdrop-blur-md border border-cyan-500/50 text-xs font-mono text-cyan-400 shadow-2xl flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: hoveredNode.color }} />
+                <span className="font-bold">{hoveredNode.label}</span>
+                <span className="text-[10px] text-[var(--color-text-secondary)]">Click to focus</span>
               </div>
             )}
 
-            <div className="absolute bottom-3 left-4 text-[10px] font-mono text-neutral-400 pointer-events-none select-none flex items-center gap-2 bg-black/40 px-3 py-1 rounded-lg border border-white/5">
-              <Sparkles size={12} className="text-emerald-400" />
-              <span>Direct Click: Focus Node • Drag: Orbit • Pinch: Zoom • 1,200 Latent Particles</span>
+            {/* 3D Spatial Reticle & HUD Instructions */}
+            <div className="absolute bottom-3 left-4 text-[10px] font-mono text-[var(--color-text-secondary)] pointer-events-none select-none flex items-center gap-2 bg-[var(--color-primary)]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[var(--color-border)] shadow-md">
+              <Sparkles size={12} className="text-[var(--color-accent)]" />
+              <span>Click node to select • Drag to orbit • 1,400 Manifold Particles • PCA R³ Projection</span>
+            </div>
+
+            {/* Spatial Vector Coordinates Tag */}
+            <div className="absolute bottom-3 right-4 hidden sm:flex items-center gap-2 text-[10px] font-mono text-[var(--color-text-secondary)] bg-[var(--color-primary)]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[var(--color-border)] shadow-md">
+              <span>Target:</span>
+              <span className="text-[var(--color-accent)] font-bold">[{selectedNode.coords.map(n => n.toFixed(1)).join(', ')}]</span>
             </div>
           </>
         ) : (
@@ -478,7 +549,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 y1={-selectedNode.coords[1]} 
                 x2={comparedNode.coords[0]} 
                 y2={-comparedNode.coords[1]} 
-                stroke="#ffffff" 
+                stroke="#38bdf8" 
                 strokeWidth="0.04" 
                 strokeDasharray="0.1, 0.1" 
               />
@@ -505,7 +576,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 );
               })}
             </svg>
-            <div className="text-[10px] font-mono text-neutral-400">
+            <div className="text-[10px] font-mono text-[var(--color-text-secondary)]">
               Rendering in 2D Lean Vector Projection mode (Optimal for low-power CPUs).
             </div>
           </div>
@@ -513,9 +584,9 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       </div>
 
       {/* Bottom Concept Selector Bar */}
-      <div className="p-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))] bg-[#09090b]/80 backdrop-blur-md space-y-3">
+      <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-secondary)] backdrop-blur-md space-y-3">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-mono text-neutral-400">Semantic Clusters:</span>
+          <span className="font-mono text-[var(--color-text-secondary)]">Semantic Cluster Manifolds:</span>
           <div className="flex gap-2">
             <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400" /> Neural
@@ -549,8 +620,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 }}
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono shrink-0 border transition-all cursor-pointer ${
                   isSelected 
-                    ? 'bg-[var(--color-accent,#10b981)] text-black font-bold border-transparent shadow-lg scale-105'
-                    : 'border-white/5 bg-black/40 text-neutral-300 hover:text-white hover:border-white/20'
+                    ? 'bg-[var(--color-accent)] text-black font-bold border-transparent shadow-lg scale-105'
+                    : 'border-[var(--color-border)] bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/50'
                 }`}
               >
                 {node.label}
@@ -560,12 +631,12 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         </div>
 
         {/* Active Node Detail Card */}
-        <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 flex items-center justify-between text-xs shadow-inner">
+        <div className="p-3.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-between text-xs shadow-inner">
           <div>
-            <span className="font-bold text-white mr-2">{selectedNode.label}:</span>
-            <span className="text-neutral-300">{selectedNode.details}</span>
+            <span className="font-bold text-[var(--color-text-primary)] mr-2">{selectedNode.label}:</span>
+            <span className="text-[var(--color-text-secondary)]">{selectedNode.details}</span>
           </div>
-          <span className="font-mono text-[10px] text-emerald-400 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+          <span className="font-mono text-[10px] text-[var(--color-accent)] px-2 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]">
             [{selectedNode.coords.map(n => n.toFixed(1)).join(', ')}]
           </span>
         </div>

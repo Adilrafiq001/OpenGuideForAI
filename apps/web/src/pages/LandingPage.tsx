@@ -10,7 +10,6 @@ import {
   Sparkles, 
   Award,
   Brain,
-  HelpCircle,
   Glasses,
   ChevronDown,
   Menu,
@@ -27,6 +26,7 @@ import { SynapseLounge } from '../components/SynapseLounge';
 import { FirstPrinciplesModal } from '../components/FirstPrinciplesModal';
 import { CognitiveAccelerator } from '../components/CognitiveAccelerator';
 import { Tooltip } from '../components/Tooltip';
+import { HeroPhysicsStage } from '../components/HeroPhysicsStage';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
@@ -475,187 +475,19 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         </AnimatePresence>
       </nav>
 
-      {/* Hero Section: Editorial & Crystal Clear */}
-      <header className="relative min-h-[90dvh] w-full flex flex-col items-center justify-center pt-28 px-6 md:px-12 text-center">
-        
-        {/* Subtle Accent Glow */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div 
-            className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] opacity-[0.08] blur-[140px] rounded-full"
-            style={{ backgroundColor: currentThemeInfo.accent }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
-          
-          {/* Status Badge */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-sm mb-8 text-xs font-mono"
-          >
-            <span 
-              className="w-2 h-2 rounded-full animate-ping"
-              style={{ backgroundColor: currentThemeInfo.accent }}
-            />
-            <span 
-              className="font-semibold tracking-wider uppercase"
-              style={{ color: currentThemeInfo.accent }}
-            >
-              {t('heroTag')}
-            </span>
-            <span className="text-[var(--color-text-secondary)] opacity-40">•</span>
-            <span className="text-[var(--color-text-secondary)]">{t('heroSubTag')}</span>
-          </motion.div>
-
-          {/* Massive Typographic Headline */}
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className={`text-5xl sm:text-7xl md:text-[8.5vw] font-black select-none mb-8 ${
-              isNonLatinLanguage(language)
-                ? 'leading-[1.2] sm:leading-[1.14] md:leading-[1.1] tracking-normal'
-                : 'leading-[0.94] tracking-tighter uppercase'
-            } text-[var(--color-text-primary)]`}
-          >
-            {t('heroTitlePrefix')}<br />
-            <span 
-              className="transition-colors"
-              style={{ color: currentThemeInfo.accent }}
-            >
-              {t('heroTitleSuffix')}
-            </span>
-          </motion.h1>
-
-          {/* Editorial Subtitle with Absolute Simplicity */}
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg md:text-2xl text-[var(--color-text-secondary)] font-normal max-w-3xl leading-relaxed tracking-tight mb-8"
-          >
-            {t('heroDescription')}
-          </motion.p>
-
-          {/* Action Row */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-10"
-          >
-            <button
-              onClick={() => navigate('/track/0/intro')}
-              className="w-full sm:w-auto px-8 py-4 rounded-full font-bold text-sm tracking-wide uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-              style={{
-                backgroundColor: currentThemeInfo.accent,
-                color: accentTextColor
-              }}
-            >
-              <span>{t('launchTrack0')}</span>
-              <ArrowUpRight size={18} />
-            </button>
-
-            <a
-              href="#pathways"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] font-semibold text-sm tracking-wide uppercase transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-            >
-              <span>{t('explorePathways')}</span>
-              <ChevronRight size={16} />
-            </a>
-          </motion.div>
-
-          {/* Plain-Language Explainer Cluster in Hero (Balanced, Centered, Symmetrical) */}
-          <div className="w-full max-w-4xl mx-auto flex flex-col items-center mb-10">
-            <div className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] opacity-85 mb-3 flex items-center justify-center gap-2">
-              <Sparkles size={14} style={{ color: currentThemeInfo.accent }} />
-              <span>{t('firstPrinciplesLabel')}</span>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl">
-              <ExplainerPill 
-                label={t('whyPythonLabel')}
-                title="Why Python is the Global Standard for AI"
-                explanation="Every major frontier research lab (OpenAI, DeepMind, Meta) writes their libraries (PyTorch, Hugging Face) in Python. Its clean syntax reads like English, allowing you to focus on intelligence architecture rather than syntax boilerplate."
-                takeaway="Python is the universal steering wheel for deep neural networks."
-              />
-              <ExplainerPill 
-                label={t('whyWasmLabel')}
-                title="Why In-Browser WebAssembly Python Beats Cloud Servers"
-                explanation="Instead of renting expensive cloud servers, your browser runs CPython directly on your local device CPU via WebAssembly. You get instant 0ms execution, complete data privacy, and zero server hosting bills."
-                takeaway="Learn without credit cards or fear of surprise cloud bills."
-              />
-              <ExplainerPill 
-                label={t('whyVectorLabel')}
-                title="Why AI Needs Vector Databases Instead of Relational SQL"
-                explanation="Traditional SQL only matches exact characters. Vector databases project language into high-dimensional geometric space where conceptual synonyms cluster close together by meaning."
-                takeaway="Vector databases give AI persistent semantic long-term memory."
-              />
-              <ExplainerPill 
-                label={t('whyRAGLabel')}
-                title="Why RAG Beats Costly Model Fine-Tuning"
-                explanation="Fine-tuning is expensive and freezes knowledge. RAG retrieves fresh, verified documents at query time and injects them into the prompt, delivering factual accuracy with zero training cost."
-                takeaway="RAG connects frozen models to your live personal knowledge base."
-              />
-              <ExplainerPill 
-                label={t('whyZeroBudgetLabel')}
-                title="Why You Should Never Pay for Subscriptions to Learn"
-                explanation="Platforms like Hugging Face Spaces (2vCPU free), Google Colab (free GPU), Kaggle (30h/wk GPU), and Chroma offer 100% of the tools required to build production portfolios without spending a penny."
-                takeaway="Pay $0 until you have a paying enterprise client."
-              />
-
-              {/* Matrix Expander Button */}
-              <button
-                onClick={() => setIsMatrixModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-full border border-[var(--color-border)] hover:border-[var(--color-accent)] bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95"
-              >
-                <HelpCircle size={13} style={{ color: currentThemeInfo.accent }} />
-                <span>{t('exploreAllQuestions')} &rarr;</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Feature Badges Bottom Bar */}
-          <div className="w-full max-w-6xl mx-auto mt-8 pt-8 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[var(--color-text-secondary)]">
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-[var(--color-secondary)] border-2 border-[var(--color-primary)] flex items-center justify-center text-[10px] font-bold text-[var(--color-text-primary)]">
-                  A
-                </div>
-                <div 
-                  className="w-7 h-7 rounded-full border-2 border-[var(--color-primary)] flex items-center justify-center text-[10px] font-bold"
-                  style={{ backgroundColor: currentThemeInfo.accent, color: accentTextColor }}
-                >
-                  R
-                </div>
-                <div className="w-7 h-7 rounded-full bg-[var(--color-border)] border-2 border-[var(--color-primary)] flex items-center justify-center text-[10px] font-bold text-[var(--color-text-primary)]">
-                  D
-                </div>
-              </div>
-              <p className="text-left font-medium">
-                Architected & Designed by <strong className="text-[var(--color-text-primary)]">ARD</strong> • 100% Free AI Curriculum
-              </p>
-            </div>
-
-            <div className="flex items-center gap-6 font-mono text-[11px]">
-              <span className="flex items-center gap-1.5">
-                <Zap size={14} style={{ color: currentThemeInfo.accent }} />
-                Client-Side Pyodide WASM
-              </span>
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck size={14} className="text-cyan-500" />
-                IndexedDB Local-First
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Award size={14} className="text-amber-500" />
-                $0 Budget Stack
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Hero Section: Motionsites-Inspired Physics, 3D Tilt & Orbital Nodes */}
+      <HeroPhysicsStage
+        currentThemeInfo={currentThemeInfo}
+        accentTextColor={accentTextColor}
+        language={language}
+        t={t}
+        onExplorePathways={() => {
+          const el = document.getElementById('pathways');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        }}
+        onLaunchTrack0={() => navigate('/track/0/intro')}
+        onOpenMatrixModal={() => setIsMatrixModalOpen(true)}
+      />
 
       {/* SECTION 1: ADAPTIVE LEARNING PATHWAYS (Multi-Tier & Topic Deep Dives) */}
       <section id="pathways" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">

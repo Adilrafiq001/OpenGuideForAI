@@ -36,22 +36,22 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
 
   const dockItems: DockItemData[] = [
     {
-      icon: <Home size={22} className={location.pathname === '/' ? 'text-[var(--color-accent,#10b981)]' : ''} />,
+      icon: <Home size={20} className={location.pathname === '/' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Home Overview',
       onClick: () => navigate('/')
     },
     {
-      icon: <Compass size={22} className={location.pathname === '/track/0/intro' ? 'text-[var(--color-accent,#10b981)]' : ''} />,
+      icon: <Compass size={20} className={location.pathname === '/track/0/intro' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Track 0: Absolute Zero',
       onClick: () => navigate('/track/0/intro')
     },
     {
-      icon: <Terminal size={22} className={location.pathname === '/track/0/engine' ? 'text-[var(--color-accent,#10b981)]' : ''} />,
+      icon: <Terminal size={20} className={location.pathname === '/track/0/engine' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'IDE Workspace (Pyodide)',
       onClick: () => navigate('/track/0/engine')
     },
     {
-      icon: <Target size={22} className="text-emerald-400" />,
+      icon: <Target size={20} className="text-[var(--color-accent)]" />,
       label: '80/20 Psychology Accelerator',
       onClick: () => {
         if (location.pathname !== '/') {
@@ -65,7 +65,7 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       }
     },
     {
-      icon: <Brain size={22} className="text-violet-400" />,
+      icon: <Brain size={20} className="text-[var(--color-text-primary)]" />,
       label: 'The Synapse Lounge',
       onClick: () => {
         if (location.pathname !== '/') {
@@ -79,27 +79,27 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       }
     },
     {
-      icon: <Glasses size={22} className={location.pathname === '/holodeck' ? 'text-[var(--color-accent,#10b981)]' : 'text-purple-400'} />,
+      icon: <Glasses size={20} className={location.pathname === '/holodeck' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Spatial Holodeck (3D/VR)',
       onClick: () => navigate('/holodeck')
     },
     {
-      icon: <Palette size={22} />,
+      icon: <Palette size={20} className="text-[var(--color-text-secondary)]" />,
       label: 'Color Themes (20)',
       onClick: () => onOpenThemes?.()
     },
     {
-      icon: <Settings size={22} />,
+      icon: <Settings size={20} className="text-[var(--color-text-secondary)]" />,
       label: 'Editor Preferences',
       onClick: () => onOpenSettings?.()
     },
     {
-      icon: <HelpCircle size={22} />,
+      icon: <HelpCircle size={20} className="text-[var(--color-text-secondary)]" />,
       label: 'Keyboard & Help',
       onClick: () => onOpenHelp?.()
     },
     {
-      icon: <EyeOff size={20} className="opacity-60 hover:opacity-100" />,
+      icon: <EyeOff size={19} className="opacity-70 hover:opacity-100 text-[var(--color-text-secondary)]" />,
       label: 'Hide Dock',
       onClick: () => setIsMinimized(true)
     }
@@ -110,10 +110,10 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       <div className="fixed bottom-4 right-6 z-[100]">
         <button
           onClick={() => setIsMinimized(false)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary,#111)]/80 backdrop-blur-md border border-[var(--color-border,rgba(255,255,255,0.15))] text-xs font-mono text-[var(--color-text-secondary,#a1a1aa)] hover:text-white shadow-lg hover:border-[var(--color-accent,#10b981)] transition-all"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--color-secondary)]/90 backdrop-blur-md border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xl hover:border-[var(--color-accent)] transition-all cursor-pointer"
           title="Restore Command Dock"
         >
-          <Eye size={14} className="text-[var(--color-accent,#10b981)]" />
+          <Eye size={14} className="text-[var(--color-accent)]" />
           <span>Show Dock</span>
         </button>
       </div>
@@ -121,7 +121,7 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
   }
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto overflow-visible">
       <MagnificationDock
         items={dockItems}
         panelHeight={64}
