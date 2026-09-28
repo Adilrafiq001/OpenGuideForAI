@@ -1,6 +1,4 @@
-/*
-  Cache headers for Cloudflare Pages
-  See ARCHITECTURE.md
-*/
+# Cache headers for Cloudflare Pages
+# See ARCHITECTURE.md
 /*
   Cache-Control: public, max-age=31536000, immutable
