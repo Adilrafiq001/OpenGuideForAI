@@ -26,7 +26,7 @@ export function BrandLogo({ className = '', showBadge = true, size = 'md' }: Bra
       {/* Perfectly Aligned Single-Line Pill Badge */}
       {showBadge && (
         <span 
-          className={`inline-flex items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] font-mono font-semibold tracking-wider uppercase whitespace-nowrap leading-none shrink-0 ${badgeSize}`}
+          className={`hidden sm:inline-flex items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] font-mono font-semibold tracking-wider uppercase whitespace-nowrap leading-none shrink-0 ${badgeSize}`}
         >
           AI STUDIO
         </span>

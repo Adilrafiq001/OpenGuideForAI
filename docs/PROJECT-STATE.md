@@ -47,5 +47,13 @@
     - Executed Lesson 2, verified progression counter (`2 / 9 Completed`).
     - Executed regression sweeps across Landing Page (`/`), Track 0 Briefing (`/track/0/intro`), and Spatial Holodeck (`/holodeck`) with 0 console errors and clean production build.
 
+- **UI De-Clutter, Viewport Scale Containment & Cross-Platform Polish (Complete):**
+  - **Header De-Cluttering & Hover Reveal:** Streamlined top navbar to 4 serene links (`Tracks`, `Curriculum`, `Spatial Holodeck [3D]`, `Labs & Science ▾`) with smooth hover reveal mega-menu with safe pointer bridge and slide-out mobile drawer.
+  - **Harmonious Track Briefing Bento Grid:** Replaced scattered modules with an aligned Bento Directives & Sandbox Launch strip and balanced 3-column responsive module cards.
+  - **Locked 100dvh Viewport IDE Containment:** Fixed CoursePlayer IDE stretching by enforcing a strict `100dvh overflow-hidden flex flex-col` root container, tabbed left column (`Briefing` vs `Modules`), bounded terminal (`h-36 sm:h-44`), and auto-minimizing CommandDock pill (`Show Dock`) on `/track/0*`, eliminating page scroll and button cut-offs.
+  - **Cross-Platform & Cross-Device Compatibility:** Physically validated on Desktop (1440x900), Tablet (768x1024), and Mobile (375x812) across Windows, Linux, macOS, iOS, Android, and XR/VR with mobile view switcher (`[ Briefing ]` vs `[ Code & Run ]`), responsive navigation, safe area padding, and touch-target compliance.
+  - **Spring-Animated Tooltips (`Tooltip.tsx`):** Designed reusable Emil Kowalski spring-animated glassmorphic tooltips with shortcut badges (`T`, `Ctrl+↵`, `Alt+X`), multi-directional positioning, keyboard focus (`role="tooltip"`), and mobile tap-outside dismissal.
+  - **Git Identity Verification:** Local git author and committer permanently configured to `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+
 **Next:** Phase 2 interactive coding challenges within Track 1 (Embeddings & Cosine Mathematics).
-**Attribution:** Architected & Designed by ARD.
+**Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).

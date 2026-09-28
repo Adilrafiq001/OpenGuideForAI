@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Home, 
@@ -24,7 +24,15 @@ interface CommandDockProps {
 export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isMinimized, setIsMinimized] = useState(false);
+  const isEngine = location.pathname === '/track/0' || location.pathname === '/track/0/engine';
+  const [isMinimized, setIsMinimized] = useState(() => isEngine);
+
+  // Auto-minimize when entering the active IDE workspace
+  useEffect(() => {
+    if (isEngine) {
+      setIsMinimized(true);
+    }
+  }, [location.pathname, isEngine]);
 
   const dockItems: DockItemData[] = [
     {

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowUpRight, 
   ShieldCheck, 
@@ -11,7 +11,10 @@ import {
   Award,
   Brain,
   HelpCircle,
-  Glasses
+  Glasses,
+  ChevronDown,
+  Menu,
+  X
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, isNonLatinLanguage } from '../store/useLanguageStore';
@@ -23,6 +26,7 @@ import { ExplainerPill } from '../components/ExplainerPill';
 import { SynapseLounge } from '../components/SynapseLounge';
 import { FirstPrinciplesModal } from '../components/FirstPrinciplesModal';
 import { CognitiveAccelerator } from '../components/CognitiveAccelerator';
+import { Tooltip } from '../components/Tooltip';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
@@ -43,6 +47,8 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
   const { theme } = useSettingsStore();
   const { language, t } = useLanguageStore();
   const [isMatrixModalOpen, setIsMatrixModalOpen] = useState(false);
+  const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const currentThemeInfo = useMemo(() => {
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
@@ -176,7 +182,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
     <div className="min-h-[100dvh] bg-[var(--color-primary)] text-[var(--color-text-primary)] selection:bg-[var(--color-accent)] selection:text-black overflow-x-hidden font-sans pb-32 transition-colors duration-300">
       
       {/* Top Glass Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 sm:px-6 md:px-12 py-3.5 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/85 border-b border-[var(--color-border)] shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 sm:px-6 md:px-12 py-3 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/90 border-b border-[var(--color-border)] shadow-sm">
         <div className="flex items-center gap-8">
           
           {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
@@ -184,60 +190,289 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             <BrandLogo size="md" />
           </a>
           
-          <div className="hidden lg:flex items-center gap-7 text-[var(--color-text-secondary)] text-xs font-semibold tracking-wider uppercase">
-            <a href="#pathways" className="hover:text-[var(--color-text-primary)] transition-colors">Learning Paths</a>
-            <a href="#free-stack" className="hover:text-[var(--color-text-primary)] transition-colors">Free Stack</a>
-            <a href="#curriculum" className="hover:text-[var(--color-text-primary)] transition-colors">Curriculum</a>
-            <a href="#cognitive-accelerator" className="hover:text-[var(--color-text-primary)] transition-colors text-emerald-400 font-bold flex items-center gap-1">
-              <span>80/20 Psychology</span>
-            </a>
-            <a href="#synapse-lounge" className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-violet-400 font-bold">
-              <Brain size={14} />
-              <span>Synapse Lounge</span>
-            </a>
-            <button 
-              onClick={() => navigate('/holodeck')}
-              className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs text-purple-400 font-bold font-mono cursor-pointer"
+          {/* Desktop Streamlined Navigation with Hover Reveals */}
+          <div className="hidden lg:flex items-center gap-6 text-[var(--color-text-secondary)] text-xs font-medium tracking-normal">
+            <Tooltip
+              position="bottom"
+              content="10 Structured Pathways"
+              subtitle="From Absolute Zero to Autonomous Agents • 9 Interactive Labs"
             >
-              <Glasses size={14} />
-              <span>Spatial Holodeck</span>
-            </button>
-            <a href="#vault" className="hover:text-[var(--color-text-primary)] transition-colors">Free Vault</a>
-            <a href="#pillars" className="hover:text-[var(--color-text-primary)] transition-colors">11 Pillars</a>
+              <a href="#pathways" className="hover:text-[var(--color-text-primary)] transition-colors py-1">
+                Tracks
+              </a>
+            </Tooltip>
+            
+            <Tooltip
+              position="bottom"
+              content="Curriculum Architecture"
+              subtitle="Foundations, Vector DBs, RAG, Pyodide & 100% Free Stack"
+            >
+              <a href="#curriculum" className="hover:text-[var(--color-text-primary)] transition-colors py-1">
+                Curriculum
+              </a>
+            </Tooltip>
+
+            <Tooltip
+              position="bottom"
+              content="Spatial Holodeck [3D]"
+              subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
+            >
+              <button 
+                onClick={() => navigate('/holodeck')}
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1"
+              >
+                <Glasses size={14} className="opacity-70" />
+                <span>Spatial Holodeck</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">3D</span>
+              </button>
+            </Tooltip>
+
+            {/* Hover Reveal Dropdown: Explore Labs & Ecosystem */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsExploreOpen(true)}
+              onMouseLeave={() => setIsExploreOpen(false)}
+            >
+              <button 
+                onClick={() => setIsExploreOpen(!isExploreOpen)}
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1 py-1 cursor-pointer font-medium"
+                aria-expanded={isExploreOpen}
+                aria-haspopup="true"
+              >
+                <span>Labs & Science</span>
+                <ChevronDown size={12} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {isExploreOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    className="absolute top-full left-0 pt-2 z-50 pointer-events-auto"
+                  >
+                    <div className="w-72 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-3 shadow-2xl backdrop-blur-2xl">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold">
+                      Cognitive Labs & Ecosystem
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <a 
+                        href="#cognitive-accelerator" 
+                        onClick={() => setIsExploreOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Zap size={14} className="text-emerald-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            80/20 Psychology Lab
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            Pareto, blurting retrieval & Feynman test
+                          </div>
+                        </div>
+                      </a>
+
+                      <a 
+                        href="#synapse-lounge" 
+                        onClick={() => setIsExploreOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Brain size={14} className="text-violet-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            The Synapse Lounge
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            Diffuse-mode neuro-plasticity arcade
+                          </div>
+                        </div>
+                      </a>
+
+                      <a 
+                        href="#free-stack" 
+                        onClick={() => setIsExploreOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Sparkles size={14} className="text-cyan-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            Zero-Cost Free Stack
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            $0 Vector DBs, Pyodide & HuggingFace
+                          </div>
+                        </div>
+                      </a>
+
+                      <a 
+                        href="#vault" 
+                        onClick={() => setIsExploreOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Award size={14} className="text-amber-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            Verified Science Vault
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            Ultralearning, Anki & research sheets
+                          </div>
+                        </div>
+                      </a>
+
+                      <a 
+                        href="#pillars" 
+                        onClick={() => setIsExploreOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <ShieldCheck size={14} className="text-blue-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            11 Architectural Pillars
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            Foundational principles for production AI
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Multi-Language Selector */}
           <LanguageSelector />
 
           {/* Quick Theme Switcher Button */}
-          <button 
-            onClick={onOpenThemes}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer"
-            title="Choose from 20 themes"
-            aria-label="Choose color theme"
+          <Tooltip
+            position="bottom"
+            content="20 Calibrated Themes"
+            subtitle="10 Dark & 10 Light themes engineered for WCAG AAA contrast"
+            shortcut="T"
           >
-            <div 
-              className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
-              style={{ backgroundColor: currentThemeInfo.accent }}
-            />
-            <span className="hidden sm:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
-            <Palette size={14} className="opacity-70" />
-          </button>
+            <button 
+              onClick={onOpenThemes}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+              aria-label="Choose color theme"
+            >
+              <div 
+                className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
+                style={{ backgroundColor: currentThemeInfo.accent }}
+              />
+              <span className="hidden sm:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
+              <Palette size={14} className="opacity-70" />
+            </button>
+          </Tooltip>
 
-          <button 
-            onClick={() => navigate('/track/0/intro')}
-            className="px-4 sm:px-5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer"
-            style={{
-              backgroundColor: currentThemeInfo.accent,
-              color: accentTextColor
-            }}
+          {/* Launch Track 0 Button (hidden on mobile, visible on sm+) */}
+          <div className="hidden sm:block">
+            <Tooltip
+              position="bottom"
+              content="Launch Interactive IDE"
+              subtitle="Track 0: Absolute Zero • Zero prerequisites"
+              shortcut="↵"
+            >
+              <button 
+                onClick={() => navigate('/track/0/intro')}
+                className="px-3.5 sm:px-5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                style={{
+                  backgroundColor: currentThemeInfo.accent,
+                  color: accentTextColor
+                }}
+              >
+                <span>{t('launchTrack0')}</span>
+                <ChevronRight size={14} />
+              </button>
+            </Tooltip>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+            aria-label="Toggle navigation menu"
           >
-            <span>{t('launchTrack0')}</span>
-            <ChevronRight size={14} />
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
+
+        {/* Mobile Slide-Out Drawer */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden absolute top-full left-0 right-0 bg-[var(--color-secondary)] border-b border-[var(--color-border)] p-4 shadow-2xl backdrop-blur-2xl overflow-hidden"
+            >
+              <div className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
+                <a 
+                  href="#pathways" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  Learning Tracks
+                </a>
+                <a 
+                  href="#curriculum" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  Curriculum
+                </a>
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/holodeck'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Glasses size={16} />
+                    <span>Spatial Holodeck</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">3D / VR</span>
+                </button>
+                <a 
+                  href="#cognitive-accelerator" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  80/20 Psychology Lab
+                </a>
+                <a 
+                  href="#synapse-lounge" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  The Synapse Lounge
+                </a>
+                <a 
+                  href="#vault" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  Verified Science Vault
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section: Editorial & Crystal Clear */}
