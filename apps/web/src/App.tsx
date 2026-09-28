@@ -38,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} />} />
           <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+          <Route path="/track/0" element={<CoursePlayer track={track0} />} />
           <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
           <Route path="/holodeck" element={<SpatialHolodeck />} />
         </Routes>

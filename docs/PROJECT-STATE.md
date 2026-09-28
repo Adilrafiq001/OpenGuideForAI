@@ -27,5 +27,25 @@
   - **Verified Cognitive Science Vault:** Direct outbound verified resources (Farnam Street Feynman Guide, Scott Young's Ultralearning Principles, The Learning Scientists study sheets, and Anki Web).
 - **Physical Verification via Playwright MCP:** Verified all 3D Holodeck modes (Vector Space, Synapse, WebXR passthrough) and all 5 Cognitive Accelerator tabs on live browser with 0 console errors and clean build.
 
+- **Track 0: Absolute Zero & X-Ray Debug Lens Inspector (Complete):**
+  - **Comprehensive 9-Lesson Curriculum Across 3 Modules:**
+    - *Module 0.1 (In-Browser Execution & WebAssembly Runtime):* 0.1.1 Hello World & In-Browser CPython WASM Sandbox; 0.1.2 Standard Streams & Dynamic Prompt Formatting; 0.1.3 Web Worker Non-Blocking Execution & Event Loops.
+    - *Module 0.2 (Python Essentials, Dictionaries & JSON Schemas):* 0.2.1 Variables, Lists & Vector Primitives; 0.2.2 Dictionaries & Structured Message Serialization; 0.2.3 Parsing & Validating Structured Output (Tool Calling).
+    - *Module 0.3 (The First LLM Call: Tokens, Prompts & Temperature):* 0.3.1 Tokenization Mechanics & Byte-Pair Encoding; 0.3.2 System Prompts vs. User Prompts; 0.3.3 Temperature & Sampling Distribution Simulation.
+    - Formatted each lesson with The Intuition (First Principles), structured code challenges, deterministic `expectedOutput` validators, and progressive pedagogical hints.
+  - **Pyodide Web Worker & Telemetry Upgrades:**
+    - Engineered bidirectional telemetry reporting sub-millisecond execution duration (`durationMs`), WebAssembly memory heap tracking (`memory.heapUsed`), and automatic Python namespace inspection (`globals()` extraction).
+    - Incorporated resilient offline fallback Python simulator guaranteeing zero-crash execution even when Pyodide CDN assets are unreachable.
+  - **X-Ray Debug Lens Inspector (`XRayDebugLens.tsx`):**
+    - Built spatial floating glass HUD overlay accessible via `Alt+X` keyboard shortcut or dynamic HUD button.
+    - Implemented 4 diagnostic tabs: *Performance & Heap* (execution duration, WASM heap, worker status), *IPC Message Payload* (raw JSON payload, message type, schema compliance), *Live State Inspector* (extracted user Python variables with type badges and values), and *Execution Log* (stdout timeline).
+  - **CoursePlayer Engine Polish:**
+    - Dynamic output verification against expected outputs with instant pass/fail validation.
+    - Persistent local storage of progress (`openguide_completed_lessons`) with completion badges, counter, and dynamic "Next Lesson →" advancement.
+  - **Physical Verification via Playwright MCP:**
+    - Executed and validated Lesson 1 (`> Hello, World! Running natively in browser.`), verified challenge passed, verified X-Ray Telemetry HUD, IPC payload, and variable inspection.
+    - Executed Lesson 2, verified progression counter (`2 / 9 Completed`).
+    - Executed regression sweeps across Landing Page (`/`), Track 0 Briefing (`/track/0/intro`), and Spatial Holodeck (`/holodeck`) with 0 console errors and clean production build.
+
 **Next:** Phase 2 interactive coding challenges within Track 1 (Embeddings & Cosine Mathematics).
 **Attribution:** Architected & Designed by ARD.

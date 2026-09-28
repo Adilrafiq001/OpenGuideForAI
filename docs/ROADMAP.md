@@ -27,10 +27,10 @@
 - [x] Track 0 Briefing & Launch flow.
 - [x] Spatial Holodeck Laboratory (`/holodeck`).
 - [x] Cognitive Accelerator Suite (`#cognitive-accelerator`).
-- [ ] Track 0 Module 1: In-Browser Execution & Web Worker Pyodide Runner.
-- [ ] Track 0 Module 2: Python Essentials, Dictionaries & JSON Schemas.
-- [ ] Track 0 Module 3: Tokens, Prompts & Temperature Lab.
-- [ ] X-Ray Debug Lens Inspector.
+- [x] Track 0 Module 1: In-Browser Execution & Web Worker Pyodide Runner.
+- [x] Track 0 Module 2: Python Essentials, Dictionaries & JSON Schemas.
+- [x] Track 0 Module 3: Tokens, Prompts & Temperature Lab.
+- [x] X-Ray Debug Lens Inspector.
 
 ## Phase 2: Vector Space & Embeddings (Upcoming)
 - [x] 3D/2D High-Dimensional Vector Geometry Visualizer (Holodeck).

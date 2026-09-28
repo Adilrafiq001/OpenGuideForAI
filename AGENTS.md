@@ -49,11 +49,11 @@
 
 ## ZONE B - PROFILE (OpenGuide)
 - **Project Name:** OpenGuide (Brand: `OpenGuide.`, Monogram: `OG`, Subtitle: `AI STUDIO`).
-- **Creator & Architect:** ARD (Mandatory credit in all derivatives, footers, and specifications).
+- **Creator & Architect:** Adil Rafiq Dar (ARD) (Mandatory credit in all derivatives, footers, and specifications).
 - **Core Architecture:** Static SPA (Vite + React 18 + TypeScript), Local-First (IndexedDB via Dexie/native IDB), in-browser CPython WebAssembly runtime (Pyodide v0.26 via Web Worker). Target host: Cloudflare Pages / Static CDN.
 - **$0 Rule (Hard Constraint):** Zero paid external APIs or paid backend infrastructure. User Brings Own Key (BYOK) for frontier models; all foundational compute executes locally in client browser (WASM / WebGPU).
 - **UI & Interaction Standards:** Emil Kowalski interaction craft (`emil-design-eng`, `animate`, `design-taste-frontend`, `impeccable`, `baseline-ui`). Animate compositor properties only (`transform`, `opacity`). Spring physics (`stiffness: 280, damping: 22`). WCAG AAA color contrast across 20 calibrated themes (10 Dark, 10 Light). Zero mentions of demeaning language ("dog"/"puppy"); use "The Intuition" and plain-language first principles.
 - **Language / i18n:** Multi-language persistent store (`en`, `es`, `zh`, `hi`, `fr`, `de`). Script-safe responsive line heights (avoid vertical text collisions in Devanagari, CJK, etc.).
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
-- **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages.
+- **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
 - **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`.

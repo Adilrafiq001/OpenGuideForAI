@@ -28,9 +28,18 @@ Every module and curriculum milestone is anchored in three universal questions:
 
 ### Track 0: Absolute Zero
 **Goal:** Run first native Python script inside browser, understand tokens, JSON schemas, and command orchestration.
-- **Module 0.1:** In-Browser Execution & WebAssembly Runtime (Pillar 12)
-- **Module 0.2:** Python Essentials, Dictionaries & JSON Schemas (Pillar 12)
-- **Module 0.3:** The First LLM Call: Tokens, Prompts & Temperature (Pillar 1)
+- **Module 0.1: In-Browser Execution & WebAssembly Runtime (Pillar 12)**
+  - *Lesson 0.1.1:* Hello, World! & The In-Browser CPython WASM Sandbox (Pyodide v0.26 WebAssembly compilation, zero-install architecture).
+  - *Lesson 0.1.2:* Standard Streams & Dynamic Prompt Formatting (Capturing stdout, formatted f-strings, LLM prompt templates).
+  - *Lesson 0.1.3:* Web Worker Non-Blocking Execution & Event Loops (Async IPC postMessage lifecycle, non-blocking UI thread).
+- **Module 0.2: Python Essentials, Dictionaries & JSON Schemas (Pillar 12)**
+  - *Lesson 0.2.1:* Variables, Lists & Vector Primitives (Ordered float sequences as the atomic building block of semantic vectors).
+  - *Lesson 0.2.2:* Dictionaries & Structured Message Serialization (Key-value maps, OpenAI chat message schema serialization with `json.dumps`).
+  - *Lesson 0.2.3:* Parsing & Validating Structured Output (Tool Calling / Function Calling JSON schemas, safe key retrieval).
+- **Module 0.3: The First LLM Call: Tokens, Prompts & Temperature (Pillar 1)**
+  - *Lesson 0.3.1:* Tokenization Mechanics & Byte-Pair Encoding (Subwords vs characters, token estimation ratio `~0.75 words/token`).
+  - *Lesson 0.3.2:* System Prompts vs. User Prompts (Context hierarchy, behavioral guardrails, multi-turn message arrays).
+  - *Lesson 0.3.3:* Temperature & Sampling Distribution Simulation (Softmax probabilities, greediness vs creativity, zero-temperature determinism).
 
 ### Track 1: Beginner (Foundations)
 **Goal:** Deployed chatbot calling a real model with memory.

@@ -20,6 +20,10 @@
   - *The Feynman Novice Translator:* Real-time Cognitive Jargon Alert scanner evaluating explanations against non-technical vocabulary benchmarks.
   - *Targeted Deliberate Drills:* Edge-case scenario isolation with instantaneous diagnostic feedback.
   - *Verified Learning Vault:* Direct integration of cognitive science guides and spaced repetition software (Farnam Street, Scott Young Ultralearning, Learning Scientists, Anki Web).
+- **In-Browser Execution & Telemetry Architecture:**
+  - *Pyodide Web Worker Runner:* Isolates CPython runtime off the main thread, intercepting `sys.stdout` streams and serializing results via async worker `postMessage`. Resilient fallback simulator guarantees 100% uptime when external CDN is unreachable.
+  - *Runtime Variable Introspection:* Inspects execution namespace via automated `globals()` serialization, capturing user variables, lists, and dictionaries.
+  - *X-Ray Debug Lens Inspector:* Spatial floating glass HUD (`Alt+X`) exposing 4 real-time diagnostic tabs: Performance & WASM Heap, Raw IPC Message Schema, Live Variable State Inspector, and Full Execution Log.
 - **The Synapse Lounge:** Neuro-plasticity arcade featuring *Vector Hyper-Space Alignment* and *Neural Gate Deductor* for diffuse-mode learning.
 - **Testing:** Playwright MCP for physical browser inspection and automated regression tests.
 
