@@ -1,0 +1,251 @@
+/* ==========================================================================
+   20 WORLD-CLASS THEMES (10 DARK, 10 LIGHT) - IMPECCABLE CONTRAST & HARMONY
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   10 DARK THEMES
+   -------------------------------------------------------------------------- */
+
+/* 1. Obsidian (Default True Black & Matrix Emerald) */
+:root, [data-theme="obsidian"] {
+  --bg-primary: #050505;
+  --bg-secondary: #0f0f12;
+  --bg-tertiary: #1a1a20;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --accent: #10b981; /* Emerald */
+  --accent-transparent: rgba(16, 185, 129, 0.2);
+}
+
+/* 2. Midnight Slate (Deep Navy & Electric Indigo) */
+[data-theme="midnight"] {
+  --bg-primary: #080c14;
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #1e293b;
+  --border-color: rgba(148, 163, 184, 0.18);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent: #6366f1; /* Indigo */
+  --accent-transparent: rgba(99, 102, 241, 0.25);
+}
+
+/* 3. Cyberpunk (Deep Violet & Hot Neon Fuchsia) */
+[data-theme="cyberpunk"] {
+  --bg-primary: #0d0818;
+  --bg-secondary: #170e2b;
+  --bg-tertiary: #271747;
+  --border-color: rgba(244, 63, 94, 0.25);
+  --text-primary: #fdf4ff;
+  --text-secondary: #d8b4fe;
+  --accent: #f43f5e; /* Rose / Fuchsia */
+  --accent-transparent: rgba(244, 63, 94, 0.22);
+}
+
+/* 4. Nordic Arctic (Calm Glacial Charcoal & Teal) */
+[data-theme="nord-dark"] {
+  --bg-primary: #1e222a;
+  --bg-secondary: #282c34;
+  --bg-tertiary: #353b45;
+  --border-color: rgba(136, 192, 208, 0.22);
+  --text-primary: #eceff4;
+  --text-secondary: #d8dee9;
+  --accent: #88c0d0; /* Frost Teal */
+  --accent-transparent: rgba(136, 192, 208, 0.2);
+}
+
+/* 5. Dracula (Gothic Charcoal & Radiant Orchid Pink) */
+[data-theme="dracula"] {
+  --bg-primary: #191a21;
+  --bg-secondary: #21222c;
+  --bg-tertiary: #343746;
+  --border-color: rgba(98, 114, 164, 0.35);
+  --text-primary: #f8f8f2;
+  --text-secondary: #bdc3c7;
+  --accent: #ff79c6; /* Vampire Pink */
+  --accent-transparent: rgba(255, 121, 198, 0.22);
+}
+
+/* 6. Tokyo Night (Tokyo Dusk & Neon Cyan Blue) */
+[data-theme="tokyo-night"] {
+  --bg-primary: #13141c;
+  --bg-secondary: #1a1b26;
+  --bg-tertiary: #24283b;
+  --border-color: rgba(122, 162, 247, 0.22);
+  --text-primary: #c0caf5;
+  --text-secondary: #9aa5ce;
+  --accent: #7aa2f7; /* Sky Blue */
+  --accent-transparent: rgba(122, 162, 247, 0.25);
+}
+
+/* 7. Monokai Pro (High-Contrast Espresso & Coral Flame) */
+[data-theme="monokai"] {
+  --bg-primary: #1b191b;
+  --bg-secondary: #272427;
+  --bg-tertiary: #393639;
+  --border-color: rgba(255, 97, 136, 0.25);
+  --text-primary: #fcfcfa;
+  --text-secondary: #ababa8;
+  --accent: #ff6188; /* Coral */
+  --accent-transparent: rgba(255, 97, 136, 0.22);
+}
+
+/* 8. Gruvbox Dark (Warm Espresso & Retro Gold) */
+[data-theme="gruvbox-dark"] {
+  --bg-primary: #1d2021;
+  --bg-secondary: #282828;
+  --bg-tertiary: #3c3836;
+  --border-color: rgba(250, 189, 47, 0.22);
+  --text-primary: #fbf1c7;
+  --text-secondary: #bdae93;
+  --accent: #fabd2f; /* Gold */
+  --accent-transparent: rgba(250, 189, 47, 0.2);
+}
+
+/* 9. Catppuccin Mocha (Smooth Velvet & Lavender) */
+[data-theme="catppuccin-dark"] {
+  --bg-primary: #11111b;
+  --bg-secondary: #181825;
+  --bg-tertiary: #313244;
+  --border-color: rgba(203, 166, 247, 0.25);
+  --text-primary: #cdd6f4;
+  --text-secondary: #a6adc8;
+  --accent: #cba6f7; /* Lavender */
+  --accent-transparent: rgba(203, 166, 247, 0.22);
+}
+
+/* 10. Crimson Velvet (Deep Burgundy Wine & Scarlet Flame) */
+[data-theme="crimson"] {
+  --bg-primary: #120707;
+  --bg-secondary: #1f0b0b;
+  --bg-tertiary: #331212;
+  --border-color: rgba(239, 68, 68, 0.25);
+  --text-primary: #fff1f1;
+  --text-secondary: #fca5a5;
+  --accent: #ef4444; /* Scarlet */
+  --accent-transparent: rgba(239, 68, 68, 0.22);
+}
+
+/* --------------------------------------------------------------------------
+   10 LIGHT THEMES (HIGH CONTRAST, HIGH LEGIBILITY, ZERO EYE STRAIN)
+   -------------------------------------------------------------------------- */
+
+/* 11. Pure Paper (Minimalist Apple/Vercel Studio White) */
+[data-theme="pure-paper"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #0f172a; /* Onyx Black */
+  --accent-transparent: rgba(15, 23, 42, 0.1);
+}
+
+/* 12. Solarized Parchment (Warm Gentle Sepia & Terracotta) */
+[data-theme="solarized-light"] {
+  --bg-primary: #fdf6e3;
+  --bg-secondary: #f4ecdc;
+  --bg-tertiary: #e8dfcb;
+  --border-color: #d8ccb4;
+  --text-primary: #073642;
+  --text-secondary: #586e75;
+  --accent: #cb4b16; /* Terracotta Orange */
+  --accent-transparent: rgba(203, 75, 22, 0.15);
+}
+
+/* 13. GitHub Primer (Clean Developer Daylight & Primer Blue) */
+[data-theme="github-light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eaeef2;
+  --border-color: #d0d7de;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --accent: #0969da; /* Primer Blue */
+  --accent-transparent: rgba(9, 105, 218, 0.12);
+}
+
+/* 14. Nord Snow Storm (Cool Nordic Ice & Polar Blue) */
+[data-theme="nord-light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #edf2f7;
+  --bg-tertiary: #e2e8f0;
+  --border-color: #cbd5e1;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --accent: #0284c7; /* Glacial Blue */
+  --accent-transparent: rgba(2, 132, 199, 0.15);
+}
+
+/* 15. Mint Forest (Crisp Botanical White & Deep Emerald) */
+[data-theme="emerald-light"] {
+  --bg-primary: #f9fbf9;
+  --bg-secondary: #eef7ee;
+  --bg-tertiary: #e0f0e0;
+  --border-color: #c2e2c2;
+  --text-primary: #064e3b;
+  --text-secondary: #065f46;
+  --accent: #059669; /* Forest Emerald */
+  --accent-transparent: rgba(5, 150, 105, 0.15);
+}
+
+/* 16. Warm Latte (Velvety Milk, Cream & Roasted Coffee) */
+[data-theme="warm-cream"] {
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f3efe8;
+  --bg-tertiary: #e8e2d7;
+  --border-color: #d6ccbf;
+  --text-primary: #292524;
+  --text-secondary: #78716c;
+  --accent: #78350f; /* Amber Coffee */
+  --accent-transparent: rgba(120, 53, 15, 0.15);
+}
+
+/* 17. Lavender Mist (Airy Lilac White & Royal Violet) */
+[data-theme="lavender-light"] {
+  --bg-primary: #faf8ff;
+  --bg-secondary: #f3effe;
+  --bg-tertiary: #e9e2fd;
+  --border-color: #d8cafc;
+  --text-primary: #3b0764;
+  --text-secondary: #6b21a8;
+  --accent: #9333ea; /* Royal Purple */
+  --accent-transparent: rgba(147, 51, 234, 0.15);
+}
+
+/* 18. Peach Dawn (Warm Sunrise Orange & Coral) */
+[data-theme="peach-dawn"] {
+  --bg-primary: #fffaf5;
+  --bg-secondary: #feede0;
+  --bg-tertiary: #fddfcb;
+  --border-color: #fbc7a7;
+  --text-primary: #431407;
+  --text-secondary: #9a3412;
+  --accent: #ea580c; /* Sunrise Orange */
+  --accent-transparent: rgba(234, 88, 12, 0.15);
+}
+
+/* 19. Rosé Pine Dawn (Soft Desert Sand & Iris Rose) */
+[data-theme="rose-pine-dawn"] {
+  --bg-primary: #faf4ed;
+  --bg-secondary: #f2e9de;
+  --bg-tertiary: #e4d7c6;
+  --border-color: #cebeaa;
+  --text-primary: #575279;
+  --text-secondary: #797593;
+  --accent: #907aa9; /* Dusty Iris */
+  --accent-transparent: rgba(144, 122, 169, 0.15);
+}
+
+/* 20. Cyber Minimal (High-Contrast Industrial Light & Electric Cyan) */
+[data-theme="cyber-light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+  --border-color: #cbd5e1;
+  --text-primary: #020617;
+  --text-secondary: #334155;
+  --accent: #0891b2; /* Cyan */
+  --accent-transparent: rgba(8, 145, 178, 0.15);
+}

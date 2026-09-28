@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import type { RunnerMessage, WorkerMessage } from '@openguideforai/runner';
-import PyodideWorker from '@openguideforai/runner/src/pyodide.worker?worker';
 
 export type PyodideState = 'idle' | 'initializing' | 'ready' | 'running' | 'error';
 
@@ -20,7 +19,7 @@ export function usePyodide() {
 
   useEffect(() => {
     setState('initializing');
-    const worker = new PyodideWorker();
+    const worker = new Worker('/pyodide.worker.js');
     workerRef.current = worker;
 
     worker.onmessage = (event: MessageEvent<WorkerMessage>) => {

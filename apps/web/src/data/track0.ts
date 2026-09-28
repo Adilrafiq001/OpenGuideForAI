@@ -3,33 +3,37 @@ export type Lesson = {
   title: string;
   content: string;
   initialCode: string;
-  expectedOutput?: string; // Very simple exact match for now
+  expectedOutput?: string;
 };
 
 export type Module = {
   id: string;
   title: string;
+  description?: string;
   lessons: Lesson[];
 };
 
 export type Track = {
   id: string;
   title: string;
+  description?: string;
   modules: Module[];
 };
 
 export const track0: Track = {
   id: 'track-0',
   title: 'Track 0: Absolute Zero',
+  description: 'Master the command line, environment configuration, Python runtime basics, and JSON schemas directly inside your browser.',
   modules: [
     {
       id: 'module-0-1',
       title: 'Module 0.1: The Command Line & Environment',
+      description: 'Terminal navigation, process execution, and running Python code natively.',
       lessons: [
         {
           id: 'lesson-0-1-1',
           title: 'Hello, World!',
-          content: 'Welcome to OpenGuideForAI. In this environment, you will execute Python code natively in your browser. Python is the dominant language for AI engineering. Let us start with the basics: printing text to the console.',
+          content: 'Welcome to OpenGuide. In this environment, you will execute Python code natively in your browser. Python is the dominant language for AI engineering. Let us start with the basics: printing text to the console.',
           initialCode: 'print("Hello, World!")',
           expectedOutput: 'Hello, World!',
         }
@@ -38,6 +42,7 @@ export const track0: Track = {
     {
       id: 'module-0-2',
       title: 'Module 0.2: Python Basics & JSON',
+      description: 'Data primitives, dictionaries, lists, and parsing structured JSON schemas.',
       lessons: [
         {
           id: 'lesson-0-2-1',
@@ -58,6 +63,7 @@ export const track0: Track = {
     {
       id: 'module-0-3',
       title: 'Module 0.3: What is an API? Tokens & Prompts',
+      description: 'HTTP communication patterns, token estimation, and simulating LLM completion calls.',
       lessons: [
         {
           id: 'lesson-0-3-1',

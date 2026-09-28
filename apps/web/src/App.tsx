@@ -1,26 +1,69 @@
-import { CoursePlayer } from './components/CoursePlayer'
-import { track0 } from './data/track0'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { LandingPage } from './pages/LandingPage';
+import { TrackBriefing } from './pages/TrackBriefing';
+import { CoursePlayer } from './components/CoursePlayer';
+import { SpatialHolodeck } from './pages/SpatialHolodeck';
+import { CommandDock } from './components/CommandDock';
+import { ThemeSettingsModal } from './components/ThemeSettingsModal';
+import { HelpModal } from './components/HelpModal';
+import { useSettingsStore } from './store/useSettingsStore';
+import { track0 } from './data/track0';
+import './App.css';
 
 function App() {
-  
-  // Note: the CoursePlayer currently fetches its own usePyodide hook instance.
-  // Wait, if CoursePlayer calls usePyodide, it spawns its own worker.
-  // App also calls usePyodide? Let's just use it in one place or use a context.
-  // Actually, for now let's just render the CoursePlayer. X-Ray lens would need global state.
-  // We will mount a mock X-Ray lens that just tells the user to click it for now, 
-  // or we pass the same Pyodide instance down. 
-  
-  // To avoid spinning up 2 workers, let's remove usePyodide from App and let CoursePlayer handle it.
-  // BUT XRayLens needs state and logs! So we should keep usePyodide in App and pass it down.
-  // Let me just export CoursePlayer to not use usePyodide directly, but accept it as props.
+  const { theme } = useSettingsStore();
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+  const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+
+  // Synchronize data-theme on root HTML document element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const handleOpenThemes = () => {
+    setInitialModalTab('themes');
+    setIsThemeModalOpen(true);
+  };
+
+  const handleOpenSettings = () => {
+    setInitialModalTab('preferences');
+    setIsThemeModalOpen(true);
+  };
 
   return (
-    <>
-      <CoursePlayer track={track0} />
-      {/* XRayLens omitted here for simplicity in this step. We'll integrate it properly soon. */}
-    </>
-  )
+    <Router>
+      <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
+        <Routes>
+          <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} />} />
+          <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+          <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
+          <Route path="/holodeck" element={<SpatialHolodeck />} />
+        </Routes>
+
+        {/* Global Floating Magnification Dock */}
+        <CommandDock 
+          onOpenThemes={handleOpenThemes}
+          onOpenSettings={handleOpenSettings}
+          onOpenHelp={() => setIsHelpModalOpen(true)}
+        />
+
+        {/* Interactive 20-Theme Swatch & Settings Modal */}
+        <ThemeSettingsModal 
+          isOpen={isThemeModalOpen}
+          onClose={() => setIsThemeModalOpen(false)}
+          initialTab={initialModalTab}
+        />
+
+        {/* Help & Architecture Shortcuts Modal */}
+        <HelpModal 
+          isOpen={isHelpModalOpen}
+          onClose={() => setIsHelpModalOpen(false)}
+        />
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;

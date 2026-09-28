@@ -1,0 +1,19 @@
+{
+  "name": "OpenGuide — AI Engineering Studio",
+  "short_name": "OpenGuide",
+  "description": "Zero-cost, browser-native AI engineering curriculum with client-side Python Pyodide execution.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "developer", "productivity"]
+}
