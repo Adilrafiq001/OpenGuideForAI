@@ -1,5 +1,5 @@
 ---
-name: openlyst-xray-ui
+name: openguideforai-xray-ui
 description: Guidelines for building the X-Ray debug lens toggle in OpenGuideForAI.
 ---
 
