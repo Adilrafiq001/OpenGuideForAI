@@ -1,73 +1,24 @@
-import { useState } from 'react'
-import { usePyodide } from './hooks/usePyodide'
-import { XRayLens } from './components/XRayLens'
+import { CoursePlayer } from './components/CoursePlayer'
+import { track0 } from './data/track0'
 import './App.css'
 
 function App() {
-  const { state, logs, runCode } = usePyodide()
-  const [code, setCode] = useState('print("Hello from Pyodide Web Worker!")\n2 + 2')
-  const [isXRayOpen, setIsXRayOpen] = useState(false)
-
-  const handleRun = async () => {
-    try {
-      await runCode(code)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  
+  // Note: the CoursePlayer currently fetches its own usePyodide hook instance.
+  // Wait, if CoursePlayer calls usePyodide, it spawns its own worker.
+  // App also calls usePyodide? Let's just use it in one place or use a context.
+  // Actually, for now let's just render the CoursePlayer. X-Ray lens would need global state.
+  // We will mount a mock X-Ray lens that just tells the user to click it for now, 
+  // or we pass the same Pyodide instance down. 
+  
+  // To avoid spinning up 2 workers, let's remove usePyodide from App and let CoursePlayer handle it.
+  // BUT XRayLens needs state and logs! So we should keep usePyodide in App and pass it down.
+  // Let me just export CoursePlayer to not use usePyodide directly, but accept it as props.
 
   return (
     <>
-      <main style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-        <h1>OpenGuideForAI</h1>
-        <p>Phase 2: Vertical Slice</p>
-        
-        <div style={{ marginTop: '20px', padding: '20px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-          <h2>Python Engine Status: <span style={{ color: state === 'ready' ? 'green' : 'orange' }}>{state}</span></h2>
-          
-          <div style={{ marginTop: '20px' }}>
-            <textarea 
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              style={{
-                width: '100%',
-                height: '150px',
-                padding: '12px',
-                fontFamily: 'monospace',
-                fontSize: '14px',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                resize: 'vertical'
-              }}
-              disabled={state !== 'ready' && state !== 'running'}
-            />
-          </div>
-          
-          <button 
-            onClick={handleRun}
-            disabled={state !== 'ready'}
-            style={{
-              marginTop: '12px',
-              padding: '10px 20px',
-              background: state === 'ready' ? '#2563eb' : '#94a3b8',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: state === 'ready' ? 'pointer' : 'not-allowed',
-              fontWeight: 'bold'
-            }}
-          >
-            {state === 'initializing' ? 'Booting AI Engine...' : 'Run Python Code'}
-          </button>
-        </div>
-      </main>
-
-      <XRayLens 
-        state={state} 
-        logs={logs} 
-        isOpen={isXRayOpen} 
-        onToggle={() => setIsXRayOpen(!isXRayOpen)} 
-      />
+      <CoursePlayer track={track0} />
+      {/* XRayLens omitted here for simplicity in this step. We'll integrate it properly soon. */}
     </>
   )
 }
