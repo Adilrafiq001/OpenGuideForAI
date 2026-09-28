@@ -2,8 +2,15 @@
   "name": "@openguideforai/runner",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "pyodide": "^314.0.7"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
   }
 }
