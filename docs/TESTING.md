@@ -1,17 +1,11 @@
 # Testing Strategy
-
-OpenGuideForAI employs a testing pyramid: Unit (logic/schemas) -> Component (React) -> E2E (Playwright) -> Accessibility (Axe) -> Content Validation.
-
-## Playwright Optimisation Checklist
-The following practices are mandatory for E2E tests:
-
-- [ ] **Headless Default:** Run headless in CI; headed/UI mode only locally.
-- [ ] **Resilient Locators:** Prefer role- and label-based locators (`getByRole`, `getByText`). Avoid brittle CSS/XPath.
-- [ ] **No Fixed Sleeps:** Rely on auto-waiting and web-first assertions (`expect(locator).toBeVisible()`).
-- [ ] **Parallel Execution:** Parallelise across files/workers; shard across CI jobs.
-- [ ] **Storage State:** Reuse authenticated/seeded state via storage state to avoid repeating setup UI steps in every test.
-- [ ] **Network Mocking:** Mock or intercept LLM/network calls for determinism. Keep a small, separate set of live "smoke" tests.
-- [ ] **Resource Blocking:** Block unneeded resources (fonts, images, external analytics) to speed up tests.
-- [ ] **Tracing & Retries:** Capture traces/screenshots/video only on the first retry. Limit retries to 1-2 to track flakes.
-- [ ] **Production Build:** Run E2E tests against a production build, not a dev server.
-- [ ] **Duration Budgets:** Track suite duration in CI; fail the build if it regresses beyond the set budget.
+**Pyramid:** Unit (Schemas/Logic) -> Component (React) -> E2E (Playwright) -> A11y (Axe) -> Content.
+**Playwright Rules:**
+1. Headless CI, parallel, sharded.
+2. Locators: Role/Label-based. NO CSS/XPath.
+3. Timing: Auto-wait only. NO fixed sleeps.
+4. State: Use storage state (reuse auth).
+5. Network: Mock LLMs/APIs (except smoke tests).
+6. Assets: Block unneeded fonts/images.
+7. Retries: Max 2. Trace/video on first retry only.
+8. Build: Run against production build.
