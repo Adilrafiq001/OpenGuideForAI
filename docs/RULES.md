@@ -3,7 +3,7 @@
 This document lists the always-on agent rules located in `.agents/rules/`.
 
 - **00-project-constraints.md**: Enforces $0 cost, BYOK, local-first (IndexedDB), and "no secrets" policies.
-- **10-process.md**: Mandates docs-first approach, small OpenGuide AI loops, ADRs for decisions, and no guessing.
+- **10-process.md**: Mandates docs-first approach, small OpenGuideForAI loops, ADRs for decisions, and no guessing.
 - **20-code-style.md**: Enforces modular architecture, content-as-data, and ports/adapters pattern.
 - **30-testing.md**: Outlines Playwright E2E requirements, schema validation for content, and zero-flake CI.
 - **40-content-authoring.md**: Rules for writing Markdown/JSON lessons, ensuring they are verifiable and runnable.

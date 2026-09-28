@@ -1,12 +1,12 @@
-# OpenGuide AI
+# OpenGuideForAI
 
 The open-source, $0, zero-to-AI-engineer platform that is also its own worked example.
 
-## What is OpenGuide AI?
-OpenGuide AI takes anyone in the world, with zero coding knowledge, and turns them into someone who can design, build, test, deploy, and responsibly operate AI-powered software. It runs entirely in your browser.
+## What is OpenGuideForAI?
+OpenGuideForAI takes anyone in the world, with zero coding knowledge, and turns them into someone who can design, build, test, deploy, and responsibly operate AI-powered software. It runs entirely in your browser.
 
 ## Why it's different
-Every feature of OpenGuide AI is explainable by OpenGuide AI. You don't just learn how to build AI apps; you use X-Ray mode to see exactly how OpenGuide AI itself was built using the same principles.
+Every feature of OpenGuideForAI is explainable by OpenGuideForAI. You don't just learn how to build AI apps; you use X-Ray mode to see exactly how OpenGuideForAI itself was built using the same principles.
 
 ## Quickstart (Local Development)
 *Coming in Phase 1...*

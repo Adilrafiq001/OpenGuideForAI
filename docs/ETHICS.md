@@ -1,9 +1,9 @@
 # Ethics & Responsible AI Policy
 
-**Disclaimer:** This document outlines the ethical and legal principles guiding the development of OpenGuide AI. It does not constitute legal advice.
+**Disclaimer:** This document outlines the ethical and legal principles guiding the development of OpenGuideForAI. It does not constitute legal advice.
 
 ## 1. Engagement & Behaviour Design
-OpenGuide AI uses gamification to encourage learning, but we reject manipulative design ("dark patterns").
+OpenGuideForAI uses gamification to encourage learning, but we reject manipulative design ("dark patterns").
 - **No guilt-trip copy:** We do not shame users for losing a streak.
 - **No pay-to-win or false scarcity:** All features are free; artificial limits are not imposed.
 - **Opt-out:** Users can disable streak mechanics, notifications, and gamification entirely.

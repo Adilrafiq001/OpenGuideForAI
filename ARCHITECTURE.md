@@ -1,13 +1,13 @@
 # Architecture
 
 ## 1. Context & Principles
-OpenGuide AI is a static-first, local-first educational platform. All code execution and model inference happens in the user's browser or via free-tier cloud APIs to guarantee a $0 operating cost and accessibility on **any device**.
+OpenGuideForAI is a static-first, local-first educational platform. All code execution and model inference happens in the user's browser or via free-tier cloud APIs to guarantee a $0 operating cost and accessibility on **any device**.
 - **Modular Monorepo:** Distinct packages for the runner, LLM adapter, gamification, and content.
 - **Content as Data:** Lessons are Markdown + JSON/YAML.
 - **Ports & Adapters:** Volatile services (LLMs, code execution, storage) are abstracted.
 
 ## 2. Risk Mitigation & Accessibility
-To ensure OpenGuide AI runs on low-end mobile devices:
+To ensure OpenGuideForAI runs on low-end mobile devices:
 - **Pyodide (Python):** Runs exclusively in a Web Worker to prevent UI freezing. The bundle is minified, and Cloudflare Pages `_headers` caching ensures assets are downloaded only once.
 - **LLM Inference:** Local inference (WebLLM) is an *optional enhancement* for powerful devices. The **primary, guaranteed path** is BYOK (Bring Your Own Key) using generous free-tier APIs (e.g., Groq, Google Gemini) which require zero client-side compute, guaranteeing access on any device.
 
@@ -15,7 +15,7 @@ To ensure OpenGuide AI runs on low-end mobile devices:
 
 ```mermaid
 graph TD
-    User[User Browser (Any Device)] --> App[OpenGuide AI PWA (Vite + React)]
+    User[User Browser (Any Device)] --> App[OpenGuideForAI PWA (Vite + React)]
     App --> ContentStore[Content Store (MDX/JSON)]
     App --> GamifyEngine[Gamification Engine]
     App --> RunnerAdapter[Code Runner Adapter]

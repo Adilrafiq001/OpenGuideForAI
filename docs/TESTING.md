@@ -1,6 +1,6 @@
 # Testing Strategy
 
-OpenGuide AI employs a testing pyramid: Unit (logic/schemas) -> Component (React) -> E2E (Playwright) -> Accessibility (Axe) -> Content Validation.
+OpenGuideForAI employs a testing pyramid: Unit (logic/schemas) -> Component (React) -> E2E (Playwright) -> Accessibility (Axe) -> Content Validation.
 
 ## Playwright Optimisation Checklist
 The following practices are mandatory for E2E tests:

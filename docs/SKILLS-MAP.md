@@ -1,6 +1,6 @@
 # Skills Map
 
-This document maps the skills required to build OpenGuide AI, the necessary depth, free learning resources, and the repository files affected.
+This document maps the skills required to build OpenGuideForAI, the necessary depth, free learning resources, and the repository files affected.
 
 ## 1. Product & Curriculum Design
 - **Why it's needed:** To design an engaging, logical progression from absolute beginner to AI engineer.
@@ -75,7 +75,7 @@ This document maps the skills required to build OpenGuide AI, the necessary dept
 - **Affected Files:** `docs/*`, `content/*`.
 
 ## 13. Open Source Community Management
-- **Why it's needed:** To scale OpenGuide AI via community contributions.
+- **Why it's needed:** To scale OpenGuideForAI via community contributions.
 - **Depth Required:** Intermediate community building and PR review processes.
 - **Free Sources:** [Open Source Guides](https://opensource.guide/) (Accessed 2026-09-28).
 - **Affected Files:** `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`.

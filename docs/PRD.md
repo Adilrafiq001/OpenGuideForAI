@@ -1,12 +1,12 @@
-# PRD: OpenGuide AI
+# PRD: OpenGuideForAI
 
 ## 1. Vision
-Build a free, open-source web application that takes anyone from zero coding knowledge to an AI engineer capable of designing, building, testing, deploying, and operating AI-powered software. OpenGuide AI is a "living example" — the platform itself is built using the exact architecture and practices it teaches.
+Build a free, open-source web application that takes anyone from zero coding knowledge to an AI engineer capable of designing, building, testing, deploying, and operating AI-powered software. OpenGuideForAI is a "living example" — the platform itself is built using the exact architecture and practices it teaches.
 
 ## 2. Personas
 - **The Absolute Beginner:** Zero programming experience. Needs foundational knowledge (terminal, Python, HTTP).
 - **The Transitioning Developer:** Knows some code (e.g., JavaScript/Python) but is new to AI APIs, RAG, and Agents.
-- **The Open-Source Contributor:** Wants to understand how OpenGuide AI is built and contribute new lessons.
+- **The Open-Source Contributor:** Wants to understand how OpenGuideForAI is built and contribute new lessons.
 
 ## 3. User Journeys
 1. **Onboarding:** User arrives, takes a short placement quiz, and is routed to Track 0, 1, 2, or 3.
