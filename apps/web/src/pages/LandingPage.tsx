@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowUpRight, 
+  ArrowUp,
   ShieldCheck, 
   Palette, 
   ChevronRight, 
@@ -49,6 +50,30 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
   const [isMatrixModalOpen, setIsMatrixModalOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Scroll progress & dynamic header elevation state
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const currentScroll = window.scrollY;
+          const progress = totalHeight > 0 ? Math.min(1, Math.max(0, currentScroll / totalHeight)) : 0;
+          setScrollProgress(progress);
+          setIsScrolled(currentScroll > 24);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const currentThemeInfo = useMemo(() => {
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
@@ -181,8 +206,23 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
   return (
     <div className="min-h-[100dvh] bg-[var(--color-primary)] text-[var(--color-text-primary)] selection:bg-[var(--color-accent)] selection:text-black overflow-x-hidden font-sans pb-32 transition-colors duration-300">
       
+      {/* Hardware-Accelerated Top Nano Scroll Progress Line */}
+      <div 
+        data-testid="scroll-progress-bar"
+        className="fixed top-0 left-0 right-0 h-[2.5px] z-[120] pointer-events-none origin-left transition-transform duration-75 ease-out"
+        style={{
+          transform: `scaleX(${scrollProgress})`,
+          background: 'linear-gradient(90deg, var(--color-accent) 0%, #38bdf8 50%, #a855f7 100%)',
+          boxShadow: '0 0 10px var(--color-accent)'
+        }}
+      />
+
       {/* Top Glass Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-4 sm:px-6 md:px-12 py-3 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/90 border-b border-[var(--color-border)] shadow-sm">
+      <nav className={`fixed top-0 left-0 right-0 z-[100] px-4 sm:px-6 md:px-12 py-3 flex items-center justify-between backdrop-blur-xl transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-[var(--color-primary)]/95 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/20' 
+          : 'bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]/60 shadow-sm'
+      }`}>
         <div className="flex items-center gap-8">
           
           {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
@@ -805,7 +845,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 </div>
               </div>
 
-              <h3 className="text-3xl font-bold tracking-tight text-white mb-3 group-hover:text-violet-300 transition-colors">
+              <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3 group-hover:text-violet-500 dark:group-hover:text-violet-300 transition-colors">
                 Spatial Holodeck
               </h3>
               
@@ -814,7 +854,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </p>
             </div>
 
-            <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono text-neutral-400">
+            <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
               <span className="flex items-center gap-1.5 text-violet-300">
                 <Sparkles size={13} />
                 Universal Adaptive
@@ -905,6 +945,25 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           </div>
         </div>
       </footer>
+
+      {/* Floating Scroll Velocity & To-Top Pill */}
+      <div 
+        data-testid="scroll-to-top-container"
+        className={`fixed bottom-24 sm:bottom-8 right-6 z-40 transition-all duration-300 transform pointer-events-auto ${
+          isScrolled ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95 pointer-events-none'
+        }`}
+      >
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] backdrop-blur-xl shadow-lg hover:shadow-xl text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer hover:border-[var(--color-accent)]/50 active:scale-95"
+          title="Smooth scroll to top"
+        >
+          <ArrowUp size={13} className="text-[var(--color-accent)] group-hover:-translate-y-0.5 transition-transform" />
+          <span className="font-semibold">{Math.round(scrollProgress * 100)}%</span>
+          <span className="opacity-40">|</span>
+          <span>Top</span>
+        </button>
+      </div>
 
       {/* First Principles Full Knowledge Matrix Modal */}
       <FirstPrinciplesModal 

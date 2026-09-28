@@ -32,23 +32,23 @@ export function SpatialHolodeck() {
     <div className="min-h-screen bg-[var(--color-primary,#09090b)] text-[var(--color-text-primary,#fafafa)] flex flex-col transition-colors selection:bg-[var(--color-accent,#10b981)] selection:text-black">
       
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 w-full border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#09090b)]/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-40 w-full border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-secondary)]/90 backdrop-blur-xl px-6 py-4 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/')}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white transition-colors cursor-pointer flex items-center gap-2 text-xs font-mono"
+            className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] font-semibold transition-colors cursor-pointer flex items-center gap-2 text-xs font-mono shadow-sm"
           >
             <ArrowLeft size={16} />
             <span>Back to Studio</span>
           </button>
 
-          <div className="h-4 w-[1px] bg-white/10" />
+          <div className="h-4 w-[1px] bg-[var(--color-border)]" />
 
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent,#10b981)] animate-pulse" />
-            <h1 className="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+            <h1 className="text-sm font-bold tracking-tight text-[var(--color-text-primary)] flex items-center gap-2">
               Spatial Holodeck
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--color-accent,#10b981)]/20 text-[var(--color-accent,#10b981)] border border-[var(--color-accent,#10b981)]/30">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--color-accent,#10b981)]/20 text-[var(--color-accent,#10b981)] border border-[var(--color-accent,#10b981)]/30 font-semibold">
                 3D • VR • 2D Lean
               </span>
             </h1>
@@ -57,12 +57,12 @@ export function SpatialHolodeck() {
 
         {/* Graphics Tier Selector Quick Bar */}
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-neutral-400 hidden sm:inline">Compute Tier:</span>
-          <div className="flex p-1 rounded-xl bg-black/50 border border-white/10 text-xs font-mono">
+          <span className="text-[11px] font-mono text-[var(--color-text-secondary)] font-semibold hidden sm:inline">Compute Tier:</span>
+          <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm">
             <button
               onClick={() => setGraphicsTier('auto')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                graphicsTier === 'auto' ? 'bg-[var(--color-accent,#10b981)] text-black font-bold' : 'text-neutral-400 hover:text-white'
+                graphicsTier === 'auto' ? 'bg-[var(--color-accent,#10b981)] text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
               title="Auto-detects hardware and picks optimal mode"
             >
@@ -71,7 +71,7 @@ export function SpatialHolodeck() {
             <button
               onClick={() => setGraphicsTier('2d-lean')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                graphicsTier === '2d-lean' ? 'bg-amber-400 text-black font-bold' : 'text-neutral-400 hover:text-white'
+                graphicsTier === '2d-lean' ? 'bg-amber-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
               title="Ultra-lightweight 2D SVG (0% GPU load)"
             >
@@ -80,7 +80,7 @@ export function SpatialHolodeck() {
             <button
               onClick={() => setGraphicsTier('3d-hardware')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                graphicsTier === '3d-hardware' ? 'bg-cyan-400 text-black font-bold' : 'text-neutral-400 hover:text-white'
+                graphicsTier === '3d-hardware' ? 'bg-cyan-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
               title="Hardware accelerated 3D WebGL"
             >
@@ -89,7 +89,7 @@ export function SpatialHolodeck() {
             <button
               onClick={() => setGraphicsTier('spatial-xr')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                graphicsTier === 'spatial-xr' ? 'bg-purple-400 text-black font-bold' : 'text-neutral-400 hover:text-white'
+                graphicsTier === 'spatial-xr' ? 'bg-purple-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
               title="Immersive 6-DOF WebXR for Quest & Vision Pro"
             >

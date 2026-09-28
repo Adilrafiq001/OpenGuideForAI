@@ -205,7 +205,7 @@ export function HeroPhysicsStage({
         </div>
 
         {/* Lens Interactive Display Canvas */}
-        <div className="p-6 font-mono text-xs overflow-x-auto min-h-[170px] flex flex-col justify-between bg-[var(--color-primary)]/40">
+        <div className="p-6 font-mono text-xs overflow-x-auto momentum-scroll-x custom-scrollbar min-h-[170px] flex flex-col justify-between bg-[var(--color-primary)]/40">
           <AnimatePresence mode="wait">
             {activeLens === 'wasm' && (
               <motion.div

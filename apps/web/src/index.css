@@ -17,17 +17,24 @@
   --color-accent-trans: var(--accent-transparent);
 }
 
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Custom Scrollbars */
+/* Universal Tactile Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -35,14 +42,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 8px;
-  border: 2px solid transparent;
+  background: var(--border-color, rgba(120, 120, 120, 0.3));
+  border-radius: 9999px;
+  border: 1px solid transparent;
   background-clip: padding-box;
+  transition: background-color 200ms ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-secondary);
+  background-color: var(--accent, #10b981);
 }
 
 /* Firefox scrollbars */
@@ -50,3 +58,33 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--border-color) transparent;
 }
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Innovative Horizontal Scroll Fade Mask */
+.scroll-mask-x {
+  mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
+}
+
+/* Inertial Momentum Scrolling */
+.momentum-scroll-x {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+

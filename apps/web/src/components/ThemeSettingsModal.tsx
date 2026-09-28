@@ -732,12 +732,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           onClick={() => setGraphicsTier(tierOpt.id)}
                           className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
                             graphicsTier === tierOpt.id
-                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-white font-bold'
-                              : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white hover:border-white/10'
+                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-text-primary)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent,#10b981)]/40'
                           }`}
                         >
                           <div className="text-xs font-mono">{tierOpt.label}</div>
-                          <div className="text-[9px] text-neutral-400 mt-0.5">{tierOpt.desc}</div>
+                          <div className="text-[9px] text-[var(--color-text-secondary)] mt-0.5">{tierOpt.desc}</div>
                         </button>
                       ))}
                     </div>
@@ -746,7 +746,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
                 {/* Section 4: Reset Preferences to Defaults */}
                 <div className="pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
-                  <div className="text-xs text-neutral-400">
+                  <div className="text-xs text-[var(--color-text-secondary)]">
                     Need to restore standard developer environment settings?
                   </div>
                   <button
@@ -755,7 +755,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       setResetConfirmed(true);
                       setTimeout(() => setResetConfirmed(false), 2000);
                     }}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 hover:border-white/20 bg-neutral-800/80 text-white flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-primary)] flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
                   >
                     {resetConfirmed ? (
                       <>

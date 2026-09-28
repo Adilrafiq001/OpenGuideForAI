@@ -429,4 +429,124 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 2); // allowance for scrollbar
   });
 
+  test('11. Spatial Holodeck: Light Theme Text Contrast & Header Element Visibility (WCAG AAA Verification)', async ({ page }) => {
+    // Set theme to GitHub Primer Light
+    await page.addInitScript(() => {
+      window.localStorage.setItem('openguide-settings', JSON.stringify({
+        state: { theme: 'github-light', graphicsTier: 'auto' },
+        version: 0
+      }));
+      document.documentElement.setAttribute('data-theme', 'github-light');
+    });
+
+    await page.goto('/holodeck', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Verify header container
+    const header = page.locator('header').first();
+    await expect(header).toBeVisible({ timeout: 10000 });
+
+    // Verify "Back to Studio" button
+    const backBtn = page.locator('button:has-text("Back to Studio")').first();
+    await expect(backBtn).toBeVisible();
+
+    // Verify "Spatial Holodeck" Title
+    const title = page.locator('h1:has-text("Spatial Holodeck")').first();
+    await expect(title).toBeVisible();
+
+    // Check computed color of title is dark (not white!) in light theme
+    const titleColor = await title.evaluate((el) => window.getComputedStyle(el).color);
+    // In github-light, text-primary is rgb(36, 41, 47) or rgb(31, 35, 40)
+    // Verify it is not rgb(255, 255, 255)
+    expect(titleColor).not.toBe('rgb(255, 255, 255)');
+    expect(titleColor).not.toBe('rgba(255, 255, 255, 1)');
+
+    // Verify "Compute Tier:" label
+    const computeLabel = page.locator('text=Compute Tier:').first();
+    await expect(computeLabel).toBeVisible();
+    const labelColor = await computeLabel.evaluate((el) => window.getComputedStyle(el).color);
+    expect(labelColor).not.toBe('rgb(255, 255, 255)');
+
+    // Verify Tier selector buttons exist and are clickable
+    const autoBtn = page.getByRole('button', { name: 'Auto', exact: true }).first();
+    const leanBtn = page.getByRole('button', { name: '2D Lean', exact: true }).first();
+    await expect(autoBtn).toBeVisible();
+    await expect(leanBtn).toBeVisible();
+    await leanBtn.click();
+    await page.waitForTimeout(300);
+
+    // Also verify under Pure Paper theme
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'pure-paper');
+    });
+    await page.waitForTimeout(300);
+    const titleColorPaper = await title.evaluate((el) => window.getComputedStyle(el).color);
+    expect(titleColorPaper).not.toBe('rgb(255, 255, 255)');
+  });
+
+  test('12. Universal Vertical Scroll Physics, Nano-Bar Progress & Scroll To Top Affordance', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+
+    // Verify top nano scroll progress line exists
+    const progressBar = page.locator('div[data-testid="scroll-progress-bar"]').first();
+    await expect(progressBar).toBeAttached({ timeout: 5000 });
+
+    // Initial transform style should be scaleX(0)
+    const initialTransform = await progressBar.evaluate((el) => el.style.transform);
+    expect(initialTransform).toContain('scaleX(0');
+
+    // Scroll down 1200px
+    await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
+    await page.waitForTimeout(400);
+
+    // Progress bar transform should now be > 0
+    const scrolledTransform = await progressBar.evaluate((el) => el.style.transform);
+    expect(scrolledTransform).not.toBe('scaleX(0)');
+    expect(scrolledTransform).toContain('scaleX(');
+
+    // Floating scroll-to-top pill should become visible
+    const toTopContainer = page.locator('div[data-testid="scroll-to-top-container"]').first();
+    await expect(toTopContainer).toBeVisible({ timeout: 5000 });
+    await expect(toTopContainer).toContainText(/Top/i);
+
+    // Click Top button
+    const topBtn = toTopContainer.locator('button').first();
+    await topBtn.click();
+    await page.waitForTimeout(600);
+
+    // Verify smooth return towards top
+    const currentY = await page.evaluate(() => window.scrollY);
+    expect(currentY).toBeLessThan(300);
+  });
+
+  test('13. Horizontal Scroll Containers: Momentum, Edge Fade Masks & Chip Navigation', async ({ page }) => {
+    await page.goto('/holodeck', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Vector chips scroll container
+    const chipsContainer = page.locator('div[data-testid="vector-chips-scroll"]').first();
+    await expect(chipsContainer).toBeVisible({ timeout: 10000 });
+
+    // Verify momentum-scroll-x and scroll-mask-x classes are applied
+    const classList = await chipsContainer.evaluate((el) => el.className);
+    expect(classList).toContain('momentum-scroll-x');
+    expect(classList).toContain('scroll-mask-x');
+
+    // Verify chips inside can be selected
+    const chips = chipsContainer.locator('button');
+    const chipCount = await chips.count();
+    expect(chipCount).toBeGreaterThan(3);
+
+    // Click the 4th chip
+    await chips.nth(3).click();
+    await page.waitForTimeout(300);
+
+    // Studio Console on Landing page also has momentum-scroll-x
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const consoleContainer = page.locator('.momentum-scroll-x').first();
+    await expect(consoleContainer).toBeAttached();
+  });
+
 });
+

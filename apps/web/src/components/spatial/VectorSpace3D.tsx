@@ -604,7 +604,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         </div>
 
         {/* Quick Vector Node Chips */}
-        <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
+        <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar scroll-mask-x momentum-scroll-x px-2" data-testid="vector-chips-scroll">
           {SEMANTIC_VECTORS.map(node => {
             const isSelected = node.id === selectedNode.id;
             return (
