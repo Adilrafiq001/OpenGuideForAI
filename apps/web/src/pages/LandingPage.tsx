@@ -191,7 +191,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           </a>
           
           {/* Desktop Streamlined Navigation with Hover Reveals */}
-          <div className="hidden lg:flex items-center gap-6 text-[var(--color-text-secondary)] text-xs font-medium tracking-normal">
+          <div className="hidden lg:flex items-center gap-6 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight">
             <Tooltip
               position="bottom"
               content="10 Structured Pathways"
@@ -369,7 +369,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           >
             <button 
               onClick={onOpenThemes}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
               aria-label="Choose color theme"
             >
               <div 

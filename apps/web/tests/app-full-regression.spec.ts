@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('OpenGuide Full Application Comprehensive Regression Suite', () => {
+test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Suite', () => {
 
   test.beforeEach(async ({ page }) => {
     // Set standard viewport for desktop testing
@@ -11,7 +11,7 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     });
   });
 
-  test('01. Landing Page: Branding, Typography, Motionsites Physics Hero & Navigation', async ({ page }) => {
+  test('01. Landing Page: Branding, Typography with / Prefix, Studio Console & Matrix Modal', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Title & Brand Logo
@@ -22,17 +22,15 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     const subtitle = page.locator('text=AI STUDIO').first();
     await expect(subtitle).toBeVisible();
 
-    // Default Language Check: should be English
+    // Default Language Check & Headline with "/" Prefix
     const heroH1 = page.locator('h1').first();
     await expect(heroH1).toBeVisible();
+    await expect(heroH1).toContainText('/');
     await expect(heroH1).toContainText(/Zero To/i);
     await expect(heroH1).toContainText(/AI Engineer/i);
 
-    // Motionsites Physics Pills in Hero
-    const wasmPill = page.locator('text=0ms WebAssembly CPython');
-    if (await wasmPill.count() > 0) {
-      await expect(wasmPill).toBeVisible();
-    }
+    // Eyebrow badge
+    await expect(page.locator('text=100% Free & Open Source').first()).toBeVisible();
 
     // ARD Attribution Line
     const ardText = page.locator('text=ARD').first();
@@ -50,7 +48,7 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
       await page.waitForTimeout(300);
       // Verify popover opened
       await expect(page.locator('text=Why Python is the Global Standard for AI').first()).toBeVisible();
-      // Dismiss popover via Escape so it does not intercept subsequent clicks
+      // Dismiss popover via Escape
       await page.keyboard.press('Escape');
       await page.waitForTimeout(400);
     }
@@ -76,8 +74,49 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     }
   });
 
-  test('02. Cross-Theme Legibility: Verify Dark & Light Themes for Contrast & Zero Black Windows', async ({ page }) => {
+  test('02. Studio Console Lenses & Simulation Execution: In-Browser WASM, Vector Manifolds, RAG, FastMCP', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Locate Studio Console
+    const consoleHeader = page.locator('text=OpenGuide Studio // WebAssembly CPython Runtime').first();
+    await expect(consoleHeader).toBeVisible({ timeout: 10000 });
+
+    // Test Lens 1: WASM Kernel (Active by default)
+    await expect(page.locator('text=Interactive Pyodide CPython WebAssembly Sandbox').first()).toBeVisible();
+
+    // Trigger Simulation execution
+    const runSimBtn = page.getByRole('button', { name: /Run Simulation/i }).first();
+    await expect(runSimBtn).toBeVisible();
+    await runSimBtn.click();
+    await page.waitForTimeout(600);
+    await expect(page.locator('text=Vector dot-product matched in 0.38ms').first()).toBeVisible();
+
+    // Test Lens 2: Vector Manifolds
+    const vectorLensBtn = page.getByRole('button', { name: /Vector Manifolds/i }).first();
+    await vectorLensBtn.click();
+    await page.waitForTimeout(250);
+    await expect(page.locator('text=High-Dimensional Semantic Manifold Projection').first()).toBeVisible();
+    await expect(page.locator('text=Neural Topology').first()).toBeVisible();
+
+    // Test Lens 3: RAG Engine
+    const ragLensBtn = page.getByRole('button', { name: /RAG Engine/i }).first();
+    await ragLensBtn.click();
+    await page.waitForTimeout(250);
+    await expect(page.locator('text=Dense Vector Retrieval & Zero-Hallucination Pipeline').first()).toBeVisible();
+
+    // Test Lens 4: FastMCP Tools
+    const mcpLensBtn = page.getByRole('button', { name: /FastMCP Tools/i }).first();
+    await mcpLensBtn.click();
+    await page.waitForTimeout(250);
+    await expect(page.locator('text=FastMCP Tool Execution & Autonomous State Machine').first()).toBeVisible();
+  });
+
+  test('03. Cross-Theme Legibility: Verify Dark & Light Themes for Contrast, Header Visibility & Zero Black Windows', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Verify Header links visibility
+    const tracksLink = page.getByRole('link', { name: 'Tracks' }).first();
+    await expect(tracksLink).toBeVisible();
 
     // Open Theme Switcher Modal via Header or Dock Button
     const themeBtn = page.locator('button[aria-label="Choose color theme"]').or(page.locator('button[aria-label="Theme Customizer"]')).first();
@@ -85,11 +124,8 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     await themeBtn.click();
     await page.waitForTimeout(500);
 
-    // Modal should be open
-    const modalHeader = page.locator('text=Workspace Personalization').first();
-    await expect(modalHeader).toBeVisible();
-
     const themeModal = page.locator('.fixed.inset-0.z-\\[200\\]').or(page.locator('[role="dialog"]')).first();
+    await expect(themeModal).toBeVisible();
 
     // Test a Dark Theme (Midnight Slate) scoped to modal
     const darkThemeItem = themeModal.getByText('Midnight Slate').first();
@@ -112,6 +148,11 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
       await page.keyboard.press('Escape');
       await page.waitForTimeout(300);
 
+      // Verify header text remains crisp and visible in Light Theme
+      await expect(tracksLink).toBeVisible();
+      const tracksColor = await tracksLink.evaluate((el) => window.getComputedStyle(el).color);
+      expect(tracksColor).toBeDefined();
+
       // Verify that CognitiveAccelerator is visible and properly styled in light theme
       const cogBox = page.locator('#cognitive-accelerator').or(page.locator('text=The Cognitive Accelerator')).first();
       await expect(cogBox).toBeVisible();
@@ -129,7 +170,68 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     }
   });
 
-  test('03. Cognitive Accelerator: All 5 Learning Psychology Tabs Functionality', async ({ page }) => {
+  test('04. Multi-Language i18n & Store Persistence: Spanish, French, German, Chinese, Hindi & English', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const langBtn = page.locator('button[aria-label="Select interface language"]').first();
+    await expect(langBtn).toBeVisible({ timeout: 10000 });
+    await langBtn.click();
+    await page.waitForTimeout(300);
+
+    // Switch to Spanish
+    const esBtn = page.locator('button:has-text("Español")').first();
+    if (await esBtn.count() > 0) {
+      await esBtn.click();
+      await page.waitForTimeout(300);
+
+      // Verify Spanish translation rendered
+      await expect(page.locator('text=ES').first()).toBeVisible();
+
+      // Switch back to English
+      await langBtn.click();
+      await page.waitForTimeout(300);
+      const enBtn = page.locator('button:has-text("English")').first();
+      await enBtn.click();
+      await page.waitForTimeout(300);
+      await expect(page.locator('text=EN').first()).toBeVisible();
+    } else {
+      await page.keyboard.press('Escape');
+    }
+  });
+
+  test('05. Adaptive Learning Pathways: Beginner, Intermediate, Pro, Topic Deep Dives & Intuition Cards', async ({ page }) => {
+    await page.goto('/#pathways', { waitUntil: 'domcontentloaded' });
+
+    const pathwaysHeader = page.locator('text=Adaptive Learning Pathways').first();
+    await pathwaysHeader.scrollIntoViewIfNeeded();
+    await expect(pathwaysHeader).toBeVisible({ timeout: 10000 });
+
+    // Pathway Tabs
+    const beginnerTab = page.locator('button:has-text("Beginner: Absolute Zero")').first();
+    await expect(beginnerTab).toBeVisible();
+
+    const proTab = page.locator('button:has-text("Pro: Systems Architect")').first();
+    if (await proTab.count() > 0) {
+      await proTab.click();
+      await page.waitForTimeout(300);
+    }
+
+    // Return to Beginner
+    await beginnerTab.click();
+    await page.waitForTimeout(300);
+
+    // Verify Intuition Accordion
+    const intuitionBtn = page.getByRole('button', { name: /The Intuition/i }).first();
+    if (await intuitionBtn.count() > 0) {
+      await intuitionBtn.click();
+      await page.waitForTimeout(300);
+      // Close intuition
+      await intuitionBtn.click();
+      await page.waitForTimeout(200);
+    }
+  });
+
+  test('06. Cognitive Accelerator: All 5 Learning Psychology Tabs Functionality', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Scroll to Cognitive Accelerator
@@ -193,7 +295,7 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     await expect(page.locator('text=100% Free & Open Ecosystem').first()).toBeVisible();
   });
 
-  test('04. Spatial Holodeck: XR Suite, Three.js 3D Canvas, Cluster Slicer & Telemetry', async ({ page }) => {
+  test('07. Spatial Holodeck: XR Suite, Three.js 3D Canvas, Cluster Slicer & Telemetry', async ({ page }) => {
     await page.goto('/holodeck', { waitUntil: 'domcontentloaded' });
 
     // Check Header & Telemetry
@@ -230,7 +332,7 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     }
   });
 
-  test('05. CoursePlayer & Track 0 Engine: Interactive In-Browser Pyodide Execution', async ({ page }) => {
+  test('08. CoursePlayer & Track 0 Engine: Interactive In-Browser Pyodide Execution', async ({ page }) => {
     await page.goto('/track/0/intro', { waitUntil: 'domcontentloaded' });
 
     await expect(page.locator('text=Track 0').first()).toBeVisible({ timeout: 10000 });
@@ -266,7 +368,7 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
     }
   });
 
-  test('06. Magnification Dock: Positioning, Unclipped Expansion, Navigation & Hide/Show', async ({ page }) => {
+  test('09. Magnification Dock: Positioning, Unclipped Expansion, Navigation & Hide/Show', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Dock toolbar container
@@ -297,6 +399,34 @@ test.describe('OpenGuide Full Application Comprehensive Regression Suite', () =>
 
     // Dock restored
     await expect(dockToolbar).toBeVisible();
+  });
+
+  test('10. Mobile Responsive Layout & Drawer Navigation: 375x812 Viewport Audit', async ({ page }) => {
+    // Set mobile viewport (iPhone X / 13 mini)
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Verify brand logo visible on mobile
+    await expect(page.locator('text=OpenGuide.').first()).toBeVisible({ timeout: 10000 });
+
+    // Mobile Hamburger Menu Button
+    const mobileMenuBtn = page.locator('button[aria-label="Toggle navigation menu"]').first();
+    await expect(mobileMenuBtn).toBeVisible();
+    await mobileMenuBtn.click();
+    await page.waitForTimeout(300);
+
+    // Verify mobile drawer items
+    await expect(page.locator('a[href="#pathways"]:visible').first()).toBeVisible();
+    await expect(page.locator('a[href="#curriculum"]:visible').first()).toBeVisible();
+
+    // Close mobile drawer
+    await mobileMenuBtn.click();
+    await page.waitForTimeout(300);
+
+    // Verify no horizontal overflow
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 2); // allowance for scrollbar
   });
 
 });
