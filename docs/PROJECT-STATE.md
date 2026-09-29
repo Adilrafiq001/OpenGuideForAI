@@ -1,6 +1,26 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 20 Calibrated Themes & Performance Architecture
 
 **Done:**
+- **Zero-Friction Beginner-to-Pro Architecture, Micro-Grammar & UI Hardening (Complete):**
+  - **Universal Tooltip Collision Detection & Responsive Boundaries (`Tooltip.tsx`):**
+    - Extended `TooltipProps` with `align?: 'start' | 'center' | 'end'`.
+    - Implemented dynamic 140px viewport boundary detection to automatically shift tooltip positioning from center to end/start when near viewport edges.
+    - Replaced `min-w-max` with `w-max max-w-[240px] sm:max-w-[280px]` and `break-words` with `z-50` isolation to eliminate any horizontal clipping or container overflow.
+    - Explicitly set `align="end"` on `Run Code` and `Next Lesson` in `CoursePlayer.tsx`. Verified via Playwright MCP with 37px safety margin from viewport edge.
+  - **Single-Arrow Directional Localization Hardening (`CoursePlayer.tsx`):**
+    - Eradicated duplicate arrow rendering on the `Next Lesson →` button by removing the hardcoded `<ArrowRight />` icon that was colliding with pre-localized directional strings (`'Next Lesson →'` and `'اگلا سبق ←'`).
+    - Guarantees seamless single-arrow directionality across all 12 supported languages.
+  - **Track 0 Python Micro-Grammar Syntax Explainer (`CoursePlayer.tsx`):**
+    - Added an interactive visual micro-grammar card for absolute beginners directly below "The Intuition" in Track 0.
+    - Decodes core programming tokens (`variable_name`, `= (Assignment)`, `"text" (String)`, `print(...)`, `# comment`, and `assert ...`) with individual explanatory chips and contextual hover tooltips.
+  - **Zero-Setup Beginner Onboarding Bridge (`HeroPhysicsStage.tsx`):**
+    - Added a high-visibility, zero-barrier onboarding button (*"Never Coded Before? Start at Track 0: Absolute Zero (0 Setup Required) →"*) directly below the main hero CTA.
+    - Automatically routes novices directly into Track 0 with zero environment installation or friction.
+  - **Playwright MCP Physical Verification & Production Build:**
+    - Physically tested on real browser session: verified hero bridge button navigation, micro-grammar card rendering, tooltip hover geometry without clipping, Pyodide in-browser code execution, and single-arrow button rendering.
+    - Production build (`npm run build`) passed with 0 errors in 5.33s.
+    - Clean As You Go policy enforced: transient test artifacts removed.
+
 - **Interactive Progressive Hints, Canonical Solution Reveal & Offline PWA Verification (Complete):**
   - **CoursePlayer Progressive Learning Support (`CoursePlayer.tsx`, `track0.ts`):**
     - Extended `Lesson` type with optional `progressiveHints` and `solutionCode`.

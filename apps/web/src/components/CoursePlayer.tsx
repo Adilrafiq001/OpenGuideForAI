@@ -344,6 +344,57 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     </p>
                   </div>
 
+                  {/* Track 0 Micro-Grammar Decoder Card for Absolute Beginners */}
+                  {trackNum === '0' && (
+                    <div className="p-3.5 rounded-xl bg-[var(--color-secondary)]/80 border border-[var(--color-border)] space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-[var(--color-accent)] font-bold">
+                          <Code size={13} />
+                          <span>Python Micro-Grammar (First Principles)</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">Hover to decode</span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
+                        <Tooltip content="Variable: A named label in memory that stores a piece of data." align="start">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-purple-400 font-bold">variable_name</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Named Memory Box</div>
+                          </div>
+                        </Tooltip>
+                        <Tooltip content="Assignment: Stores the right-side value into the left-side name. (NOT math equality!)" align="center">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-amber-400 font-bold">= (Assignment)</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Store into Name</div>
+                          </div>
+                        </Tooltip>
+                        <Tooltip content='String: Raw text data wrapped in matching quotation marks ("..." or \x27...\x27).' align="end">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-emerald-400 font-bold">&quot;text&quot; (String)</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Literal Text</div>
+                          </div>
+                        </Tooltip>
+                        <Tooltip content="print(): Python's built-in loudspeaker that sends text to your screen." align="start">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-blue-400 font-bold">print(...)</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Console Output</div>
+                          </div>
+                        </Tooltip>
+                        <Tooltip content="# comment: Notes for human readers. Python completely skips and ignores this line." align="center">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-[var(--color-text-secondary)] font-bold"># comment</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Human-Only Note</div>
+                          </div>
+                        </Tooltip>
+                        <Tooltip content="assert condition: Automatic verification that proves your code produced the exact expected result." align="end">
+                          <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
+                            <div className="text-[10px] text-rose-400 font-bold">assert ...</div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Unit Test Guard</div>
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Concrete Instructions */}
                   <div className="text-[var(--color-text-secondary)] leading-relaxed text-xs sm:text-sm space-y-2">
                     <p>{currentLesson.content}</p>

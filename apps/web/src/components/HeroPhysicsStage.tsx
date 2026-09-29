@@ -149,10 +149,9 @@ export function HeroPhysicsStage({
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
-        className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-14"
+        className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-4"
       >
         <LaunchTrack0HeroButton onLaunch={onLaunchTrack0} />
-
 
         <a
           href="#pathways"
@@ -162,6 +161,33 @@ export function HeroPhysicsStage({
           <span>{t('hero_explore_pathways')}</span>
           <ChevronRight size={16} />
         </a>
+      </motion.div>
+
+      {/* 4b. Absolute Beginner Bridge: Zero-Friction First Steps */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
+        className="mb-14 flex items-center justify-center"
+      >
+        <button
+          onClick={onLaunchTrack0}
+          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-bold text-emerald-800 dark:text-emerald-300">
+            Never Coded Before?
+          </span>
+          <span className="text-[var(--color-text-secondary)] hidden sm:inline">
+            Start at Track 0: Absolute Zero (0 Setup Required)
+          </span>
+          <span className="text-[var(--color-text-secondary)] sm:hidden">
+            Track 0: Absolute Zero
+          </span>
+          <span className="text-emerald-700 dark:text-emerald-300 font-bold transition-transform group-hover:translate-x-0.5">
+            &rarr;
+          </span>
+        </button>
       </motion.div>
 
       {/* 5. Motionsites.ai-Inspired Cinematic 2.5D Studio Preview Console */}
