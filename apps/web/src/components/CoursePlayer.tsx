@@ -23,6 +23,7 @@ import { SettingsDropdown } from './SettingsDropdown';
 import { BrandLogo } from './BrandLogo';
 import { XRayDebugLens } from './XRayDebugLens';
 import { Tooltip } from './Tooltip';
+import { NewtonsCradleLoader } from './NewtonsCradleLoader';
 import type { Track } from '../data/track0';
 
 type CoursePlayerProps = {
@@ -520,7 +521,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               </div>
               
               <div className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
-                {logs.length === 0 ? (
+                {state === 'running' ? (
+                  <div className="py-2 flex items-center justify-center">
+                    <NewtonsCradleLoader size={34} label="Executing in CPython WASM Web Worker..." />
+                  </div>
+                ) : logs.length === 0 ? (
                   <div className="text-[var(--color-text-secondary)] italic opacity-40 font-mono text-[11px]">
                     Ready for execution. Click "Run Code" above.
                   </div>

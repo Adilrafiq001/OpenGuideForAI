@@ -1,0 +1,359 @@
+/* 3D In-House Offline AI Chatbot Widget (Uiverse.io by Cobp adapted for OpenGuide) */
+
+.ai-widget-section {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  min-height: 380px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  overflow: visible;
+  padding: 20px;
+}
+
+.container-ai-input {
+  --perspective: 1000px;
+  --translateY: 25px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  z-index: 5;
+}
+
+.area-cell {
+  width: 100%;
+  height: 100%;
+}
+
+.container-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 9;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.container-wrap:hover {
+  padding: 0;
+}
+
+.container-wrap:active {
+  transform: scale(0.97);
+}
+
+.container-wrap-backdrop {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 17rem;
+  height: 16rem;
+  background-color: var(--color-surface, #1e1e24);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border-radius: 3.2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+  z-index: -1;
+}
+
+.container-wrap.is-expanded .container-wrap-backdrop {
+  width: 26rem;
+  height: 22rem;
+  border-radius: 2rem;
+}
+
+.ai-widget-card {
+  width: 14rem;
+  height: 14rem;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.container-wrap.is-expanded .ai-widget-card {
+  width: 24rem;
+  height: 20rem;
+  border-radius: 1.8rem;
+}
+
+.background-blur-balls {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background-color: rgba(15, 15, 20, 0.85);
+  backdrop-filter: blur(40px);
+}
+
+.balls {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%;
+  height: 100%;
+  animation: rotate-background-balls 12s linear infinite;
+}
+
+.container-wrap:hover .balls {
+  animation-play-state: paused;
+}
+
+.background-blur-balls .ball {
+  width: 7rem;
+  height: 7rem;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(28px);
+  opacity: 0.65;
+}
+
+.background-blur-balls .ball.violet {
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #9147ff;
+}
+
+.background-blur-balls .ball.green {
+  bottom: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #34d399;
+}
+
+.background-blur-balls .ball.rosa {
+  top: 50%;
+  left: -10%;
+  transform: translateY(-50%);
+  background-color: #ec4899;
+}
+
+.background-blur-balls .ball.cyan {
+  top: 50%;
+  right: -10%;
+  transform: translateY(-50%);
+  background-color: #05e0f5;
+}
+
+.content-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.eyes {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  gap: 2rem;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.eyes .eye {
+  width: 24px;
+  height: 48px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  animation: animate-eyes 8s infinite linear;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.eyes.happy {
+  display: none;
+  color: #fff;
+  gap: 0;
+}
+
+.eyes.happy svg {
+  width: 58px;
+  height: 58px;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+}
+
+.container-wrap:not(.is-expanded):hover .eyes:not(.happy) {
+  display: none;
+}
+
+.container-wrap:not(.is-expanded):hover .eyes.happy {
+  display: flex;
+}
+
+.container-wrap.is-expanded .eyes {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Chat container inside card */
+.container-ai-chat {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.container-wrap.is-expanded .container-ai-chat {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.chat-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 18px;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  background-color: var(--color-surface, rgba(30, 30, 36, 0.95));
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  color: var(--color-text-primary);
+  overflow: hidden;
+}
+
+.chat-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  font-size: 0.75rem;
+}
+
+.chat-response-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.chat-bot-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-secondary, rgba(15, 15, 20, 0.7));
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+.chat-bot-input textarea {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 38px;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  resize: none;
+  outline: none;
+}
+
+.chat-bot-input textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #45f8f8 0%, #3b82f6 100%);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-submit:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(69, 248, 248, 0.5);
+}
+
+.quick-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-top: 6px;
+}
+
+.quick-chip {
+  font-size: 0.68rem;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: var(--color-secondary, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-chip:hover {
+  border-color: var(--color-accent, #45f8f8);
+  color: var(--color-text-primary);
+}
+
+@keyframes rotate-background-balls {
+  from {
+    transform: translateX(-50%) translateY(-50%) rotate(360deg);
+  }
+  to {
+    transform: translateX(-50%) translateY(-50%) rotate(0);
+  }
+}
+
+@keyframes animate-eyes {
+  0%, 46%, 50%, 96%, 100% {
+    height: 48px;
+  }
+  48%, 98% {
+    height: 10px;
+  }
+}

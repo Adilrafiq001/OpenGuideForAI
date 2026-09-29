@@ -12,6 +12,7 @@ import { THEMES_DATA } from '../data/themesData';
 import { track0 } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
 import { InitializeWorkspaceButton } from '../components/InitializeWorkspaceButton';
+import { NewtonsCradleLoader } from '../components/NewtonsCradleLoader';
 
 interface TrackBriefingProps {
   onOpenThemes?: () => void;
@@ -183,9 +184,12 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
                 <span className="text-emerald-400 text-[11px]">● Live Sandbox</span>
               </div>
               
-              <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)] space-y-1">
-                <p><span style={{ color: currentThemeInfo.accent }}>print</span>(<span className="text-emerald-400">"Hello, World!"</span>)</p>
-                <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># In-browser WASM ready</p>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)]">
+                <div className="space-y-1">
+                  <p><span style={{ color: currentThemeInfo.accent }}>print</span>(<span className="text-emerald-400">"Hello, World!"</span>)</p>
+                  <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># In-browser WASM ready</p>
+                </div>
+                <NewtonsCradleLoader size={32} label="" />
               </div>
             </div>
 
