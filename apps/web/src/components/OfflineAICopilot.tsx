@@ -157,7 +157,7 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
         <div className="copilot-footer">
           <div className="copilot-guarantee">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Hardware Isolated • Zero Outbound Telemetry</span>
+            <span>Client-Side In-Browser Engine • $0 Forever</span>
           </div>
           <div>Press <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-xs">Esc</kbd> to close</div>
         </div>

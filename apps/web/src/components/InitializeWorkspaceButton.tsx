@@ -12,25 +12,39 @@ export const InitializeWorkspaceButton: React.FC<InitializeWorkspaceButtonProps>
   label = 'Initialize Workspace Now',
   className = ''
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsChecked(prev => !prev);
-    onClick();
+    if (!isOpen) {
+      setIsOpen(true);
+      // Give 450ms for the 3D mechanical flap and rotating gears animation to play
+      setTimeout(() => {
+        onClick();
+      }, 450);
+    } else {
+      onClick();
+    }
   };
 
   return (
-    <div className={`inline-flex flex-col items-center gap-2 ${className}`}>
-      <label className="mech-area" onClick={handleClick} aria-label={label}>
+    <div className={`inline-flex flex-col items-center ${className}`}>
+      <button
+        type="button"
+        className="mech-area"
+        onClick={handleClick}
+        aria-label={label}
+        aria-expanded={isOpen}
+      >
         <input 
           type="checkbox" 
-          checked={isChecked} 
+          checked={isOpen} 
           readOnly 
           aria-hidden="true" 
+          tabIndex={-1}
         />
         
-        <div className="mech-button">
+        <div className={`mech-button ${isOpen ? 'mech-open' : ''}`}>
           {/* Animated 3D Flap Cover */}
           <div className="mech-wrap">
             <div className="mech-reflex" />
@@ -58,10 +72,7 @@ export const InitializeWorkspaceButton: React.FC<InitializeWorkspaceButtonProps>
             </div>
           </div>
         </div>
-      </label>
-      <span className="text-[10px] font-mono tracking-wider text-[var(--color-text-secondary)] opacity-80 uppercase">
-        Tactile Physical Trigger • ARD Mechanical Standard
-      </span>
+      </button>
     </div>
   );
 };

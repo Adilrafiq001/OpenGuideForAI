@@ -7,7 +7,7 @@ import { SpatialHolodeck } from './pages/SpatialHolodeck';
 import { CommandDock } from './components/CommandDock';
 import { ThemeSettingsModal } from './components/ThemeSettingsModal';
 import { HelpModal } from './components/HelpModal';
-import { OfflineAICopilot } from './components/OfflineAICopilot';
+import { AbbyChatbot } from './components/AbbyChatbot';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { useSettingsStore } from './store/useSettingsStore';
 import { track0 } from './data/track0';
@@ -19,7 +19,6 @@ function App() {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
 
   // Synchronize data-theme on root HTML document element
   useEffect(() => {
@@ -56,7 +55,6 @@ function App() {
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
           onOpenHelp={() => setIsHelpModalOpen(true)}
-          onOpenCopilot={() => setIsCopilotOpen(true)}
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}
@@ -72,10 +70,9 @@ function App() {
           onClose={() => setIsHelpModalOpen(false)}
         />
 
-        {/* In-House Offline AI Copilot ($0, 100% Client-Side) */}
-        <OfflineAICopilot 
-          isOpen={isCopilotOpen}
-          onClose={() => setIsCopilotOpen(false)}
+        {/* Standalone In-House AI Chatbot: Abby (100% Offline + BYOK Frontier Option) */}
+        <AbbyChatbot 
+          onOpenSettings={handleOpenSettings}
         />
       </div>
     </Router>

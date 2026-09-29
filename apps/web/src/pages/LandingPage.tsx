@@ -200,7 +200,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
     { title: 'Scalable Folder Structure', desc: 'Clean separation: frontend, backend adapters, local vector indices, and testing harnesses.' },
     { title: 'Optimized Playwright Tests', desc: 'Parallel headless browser runs, zero flakiness, verified accessibility, and instant reporting.' },
     { title: 'Intuitive UX & Design', desc: 'World-class spatial interfaces, 20 calibrated themes, and interfaces beginners love to use.' },
-    { title: 'Legal & Ethical AI', desc: 'Client-side privacy, BYOK zero-telemetry keys, copyright safety, and responsible deployment.' },
+    { title: 'Legal & Ethical AI', desc: 'Client-side privacy, BYOK zero-cloud-exposure keys, copyright safety, and responsible deployment.' },
     { title: 'Adaptive Learning', desc: 'Curriculum updated continuously as frontier models release new capabilities.' }
   ];
 

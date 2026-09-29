@@ -70,15 +70,22 @@
 
 .mech-button::after {
   transform: scale(0);
-  animation: mech-pulse-out 3s var(--ease-elastic) infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.mech-button::before,
-.mech-area input:not(:checked) ~ .mech-button::after {
+.mech-button::before {
   opacity: 0;
 }
 
-.mech-area input:not(:checked) ~ .mech-button::before {
+.mech-area input:checked ~ .mech-button::after,
+.mech-button.mech-open::after {
+  opacity: 1;
+  animation: mech-pulse-out 3s var(--ease-elastic) infinite;
+}
+
+.mech-area input:checked ~ .mech-button::before,
+.mech-button.mech-open::before {
   opacity: 1;
 }
 
@@ -89,14 +96,15 @@
   background: linear-gradient(to bottom, #2b3945 0%, #15202b 50%, #0d151c 100%);
   position: absolute;
   transform-origin: top;
-  transform: scale(0.99, 1) translate(0px, -7px);
+  transform: scale(0.99, 1) translate3d(0px, -7px, 10px);
+  box-shadow: none;
   transition: all 0.7s ease;
-  animation: mech-cover-close 0.9s ease forwards;
   z-index: 10;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.mech-area input:not(:checked) ~ .mech-button .mech-wrap {
+.mech-area input:checked ~ .mech-button .mech-wrap,
+.mech-button.mech-open .mech-wrap {
   animation: mech-cover-open 0.9s ease forwards;
 }
 
@@ -195,7 +203,8 @@
   animation-delay: 0.4s;
 }
 
-.mech-area input:not(:checked) ~ .mech-button .mech-wave {
+.mech-area input:checked ~ .mech-button .mech-wave,
+.mech-button.mech-open .mech-wave {
   opacity: 1;
 }
 
@@ -298,7 +307,8 @@
   pointer-events: none;
 }
 
-.mech-area input:not(:checked) ~ .mech-button .mech-gears {
+.mech-area input:checked ~ .mech-button .mech-gears,
+.mech-button.mech-open .mech-gears {
   opacity: 1;
 }
 

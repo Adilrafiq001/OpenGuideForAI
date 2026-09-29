@@ -23,6 +23,9 @@ export interface SettingsState {
   soundFx: boolean;
   codeCompletion: boolean;
   graphicsTier: 'auto' | '2d-lean' | '3d-hardware' | 'spatial-xr';
+  byokApiKey: string;
+  byokProvider: 'openai' | 'anthropic' | 'gemini' | 'openrouter';
+  byokModel: string;
   setTheme: (theme: Theme) => void;
   setFontSize: (size: number) => void;
   setTabSize: (size: number) => void;
@@ -36,6 +39,9 @@ export interface SettingsState {
   setSoundFx: (enabled: boolean) => void;
   setCodeCompletion: (enabled: boolean) => void;
   setGraphicsTier: (tier: 'auto' | '2d-lean' | '3d-hardware' | 'spatial-xr') => void;
+  setByokApiKey: (key: string) => void;
+  setByokProvider: (provider: 'openai' | 'anthropic' | 'gemini' | 'openrouter') => void;
+  setByokModel: (model: string) => void;
   resetDefaults: () => void;
 }
 
@@ -55,6 +61,9 @@ export const useSettingsStore = create<SettingsState>()(
       soundFx: true,
       codeCompletion: true,
       graphicsTier: 'auto',
+      byokApiKey: '',
+      byokProvider: 'openrouter',
+      byokModel: 'google/gemini-2.5-flash',
       setTheme: (theme) => set({ theme }),
       setFontSize: (fontSize) => set({ fontSize }),
       setTabSize: (tabSize) => set({ tabSize }),
@@ -68,6 +77,9 @@ export const useSettingsStore = create<SettingsState>()(
       setSoundFx: (soundFx) => set({ soundFx }),
       setCodeCompletion: (codeCompletion) => set({ codeCompletion }),
       setGraphicsTier: (graphicsTier) => set({ graphicsTier }),
+      setByokApiKey: (byokApiKey) => set({ byokApiKey }),
+      setByokProvider: (byokProvider) => set({ byokProvider }),
+      setByokModel: (byokModel) => set({ byokModel }),
       resetDefaults: () => set({
         fontSize: 14,
         tabSize: 2,
@@ -80,7 +92,10 @@ export const useSettingsStore = create<SettingsState>()(
         wasmHeapMb: 1024,
         soundFx: true,
         codeCompletion: true,
-        graphicsTier: 'auto'
+        graphicsTier: 'auto',
+        byokApiKey: '',
+        byokProvider: 'openrouter',
+        byokModel: 'google/gemini-2.5-flash'
       })
     }),
     {

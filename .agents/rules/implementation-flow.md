@@ -35,6 +35,14 @@ Evidence > assumptions. Actual project state > prompt assumptions. VERIFY unknow
 If critical ambiguity cannot be verified, STOP and ASK. NEVER fabricate behavior,
 files, APIs, errors, tests, results or completion.
 
+## TODO & HANDOVER CONTINUITY (ALWAYS-ON)
+
+Every response, plan, and session MUST maintain an explicit, live To-Do checklist.
+As soon as any task or sub-task is completed, it MUST be marked `[x]` immediately.
+This guarantees that if a session compaction, pause, or agent handover occurs,
+the incoming agent and user can immediately identify what has been completed
+and what remains. Never leave completions unrecorded.
+
 ## IMPLEMENT
 
 Make ONLY necessary, surgical changes. NO unnecessary refactors, files, dependencies,

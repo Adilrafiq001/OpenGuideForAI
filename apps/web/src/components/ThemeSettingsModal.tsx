@@ -9,10 +9,12 @@ import {
   Sliders, 
   Sparkle, 
   Eye,
+  EyeSlash,
   Cpu,
   ArrowCounterClockwise,
   TextT,
-  Cube
+  Cube,
+  Key
 } from '@phosphor-icons/react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { THEMES_DATA, type ThemeInfo } from '../data/themesData';
@@ -61,12 +63,19 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     setVimMode,
     graphicsTier,
     setGraphicsTier,
+    byokApiKey,
+    setByokApiKey,
+    byokProvider,
+    setByokProvider,
+    byokModel,
+    setByokModel,
     resetDefaults
   } = useSettingsStore();
   const [activeTab, setActiveTab] = useState<'themes' | 'preferences'>(initialTab);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'Dark Themes' | 'Light Themes'>('all');
   const [hoveredTheme, setHoveredTheme] = useState<ThemeInfo | null>(null);
   const [resetConfirmed, setResetConfirmed] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
 
   const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const displayedTheme = hoveredTheme || activeThemeInfo;
@@ -83,6 +92,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen && initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
 
   const filteredThemes = THEMES_DATA.filter(t => {
     if (categoryFilter === 'all') return true;
@@ -744,7 +759,108 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   </div>
                 </div>
 
-                {/* Section 4: Reset Preferences to Defaults */}
+                {/* Section 4: Abby AI Assistant & Educational BYOK */}
+                <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
+                      <Key size={16} weight="bold" />
+                      <span>Abby AI Assistant & Educational BYOK</span>
+                    </div>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                      byokApiKey 
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-bold' 
+                        : 'bg-[var(--color-secondary)] border-[var(--color-border)] text-[var(--color-text-secondary)]'
+                    }`}>
+                      {byokApiKey ? 'BYOK Frontier Active' : '100% Offline Local Engine ($0)'}
+                    </span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
+                    <p className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed">
+                      By default, <strong>Abby</strong> operates 100% offline in your browser at $0 cost using our local first-principles knowledge engine. You can optionally supply your own frontier API key below to unlock extended educational research and reasoning. Your keys stay strictly in your local browser storage.
+                    </p>
+
+                    {/* Provider Selection */}
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-[var(--color-text-primary)]">AI Provider</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          { id: 'openrouter' as const, label: 'OpenRouter', hint: 'Any Model' },
+                          { id: 'openai' as const, label: 'OpenAI', hint: 'GPT-4o' },
+                          { id: 'gemini' as const, label: 'Google Gemini', hint: 'Gemini 2.5' },
+                          { id: 'anthropic' as const, label: 'Anthropic', hint: 'Claude 3.5' }
+                        ].map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setByokProvider(p.id)}
+                            className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                              byokProvider === p.id
+                                ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-text-primary)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                            }`}
+                          >
+                            <div className="text-xs font-mono">{p.label}</div>
+                            <div className="text-[9px] text-[var(--color-text-secondary)]">{p.hint}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* API Key Input */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-semibold text-[var(--color-text-primary)]">
+                          API Key (Optional)
+                        </label>
+                        {byokApiKey && (
+                          <button
+                            type="button"
+                            onClick={() => setByokApiKey('')}
+                            className="text-[10px] text-rose-400 hover:underline cursor-pointer"
+                          >
+                            Clear Key (Revert to 100% Offline)
+                          </button>
+                        )}
+                      </div>
+                      <div className="relative flex items-center">
+                        <input
+                          type={showApiKey ? 'text' : 'password'}
+                          value={byokApiKey}
+                          onChange={(e) => setByokApiKey(e.target.value)}
+                          placeholder="Paste API key (e.g. sk-or-v1-..., AIzaSy...)"
+                          className="w-full px-3.5 py-2 pr-10 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/50 font-mono focus:outline-none focus:border-[var(--color-accent)]"
+                          id="byok-api-key-input"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowApiKey(!showApiKey)}
+                          className="absolute right-3 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                          aria-label={showApiKey ? 'Hide key' : 'Show key'}
+                        >
+                          {showApiKey ? <EyeSlash size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Model Name Input */}
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-[var(--color-text-primary)]">
+                        Model Identifier
+                      </label>
+                      <input
+                        type="text"
+                        value={byokModel}
+                        onChange={(e) => setByokModel(e.target.value)}
+                        placeholder="e.g. google/gemini-2.5-flash or gpt-4o-mini"
+                        className="w-full px-3.5 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-mono focus:outline-none focus:border-[var(--color-accent)]"
+                        id="byok-model-input"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 5: Reset Preferences to Defaults */}
                 <div className="pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
                   <div className="text-xs text-[var(--color-text-secondary)]">
                     Need to restore standard developer environment settings?

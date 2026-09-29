@@ -57,5 +57,7 @@
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
 - **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
 - **Clean As You Go & Project Hygiene (Mandatory Rule):** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (such as temporary screenshots in `.playwright-mcp/`, `test-results/`, and temporary log files) as we advance to subsequent tasks. Maintain a strictly clean, neat, and tidy project directory tree at all times.
+- **Mandatory Live To-Do Tracking & Handover Continuity (Mandatory Rule):** Always create and maintain an explicit, real-time To-Do checklist in all responses and plans. Mark tasks completed `[x]` immediately as soon as they are completed, so that if a session compaction, pause, or handover occurs, any incoming agent or the user instantly knows what has been completed so far and what remains.
 - **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`.
+
 

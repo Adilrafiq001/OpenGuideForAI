@@ -17,7 +17,7 @@ export interface KnowledgeEntry {
 export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'openguide-arch',
-    keywords: ['architecture', 'openguide', 'stack', 'how it works', 'design', 'cpython', 'wasm', 'webassembly'],
+    keywords: ['architecture', 'openguide', 'stack', 'how it works', 'design', 'cpython', 'wasm', 'webassembly', '$0', 'rule', 'free', 'cost', 'zero'],
     title: 'How OpenGuide Executes AI Locally ($0 Rule)',
     category: 'architecture',
     summary: 'OpenGuide runs genuine CPython 3.12 directly in your browser using Pyodide compiled to WebAssembly (WASM).',
@@ -40,7 +40,7 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     title: 'BYOK (Bring Your Own Key) Security Guarantee',
     category: 'architecture',
     summary: 'Frontier AI models connect directly from your browser with client-side key storage.',
-    explanation: 'When exploring frontier LLM integrations (like OpenAI, Google Gemini, or Anthropic), OpenGuide uses BYOK. Your keys are stored strictly in browser localStorage/IndexedDB. OpenGuide has no backend server and collects zero telemetry or credentials.',
+    explanation: 'When exploring frontier LLM integrations (like OpenAI, Google Gemini, or Anthropic), OpenGuide uses BYOK. Your keys are stored strictly in browser localStorage/IndexedDB. OpenGuide has no backend server and stores zero credentials.',
     takeaway: 'Your keys never touch any intermediate server. TLS encryption connects directly to provider APIs.'
   },
   {
@@ -96,7 +96,12 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
   const clean = query.toLowerCase().trim();
   if (!clean) return OFFLINE_KNOWLEDGE_BASE;
 
-  const terms = clean.split(/\s+/).filter(t => t.length > 1);
+  // Strip punctuation but keep alphanumeric and $ symbol
+  const sanitized = clean.replace(/[^\w\s$]/g, ' ');
+  const stopWords = new Set(['what', 'is', 'the', 'how', 'does', 'in', 'my', 'a', 'an', 'to', 'and', 'for', 'of', 'on', 'can', 'i', 'you']);
+  const terms = sanitized.split(/\s+/).filter(t => t.length > 0 && !stopWords.has(t));
+
+  const effectiveTerms = terms.length > 0 ? terms : sanitized.split(/\s+/).filter(t => t.length > 1);
 
   return OFFLINE_KNOWLEDGE_BASE.map(entry => {
     let score = 0;
@@ -104,9 +109,9 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
     const summaryLower = entry.summary.toLowerCase();
     const explanationLower = entry.explanation.toLowerCase();
 
-    for (const term of terms) {
-      if (titleLower.includes(term)) score += 10;
-      if (entry.keywords.some(k => k.includes(term))) score += 8;
+    for (const term of effectiveTerms) {
+      if (titleLower.includes(term)) score += 12;
+      if (entry.keywords.some(k => k === term || k.includes(term))) score += 10;
       if (summaryLower.includes(term)) score += 4;
       if (explanationLower.includes(term)) score += 2;
     }

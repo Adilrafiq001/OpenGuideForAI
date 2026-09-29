@@ -10,6 +10,8 @@
 2. **Never guess:** If ambiguous, ask in `docs/OPEN-QUESTIONS.md`. Propose a default.
 3. **ADRs:** Every architectural decision gets an ADR in `docs/adr/`.
 4. **Small loops:** Plan -> Change -> Test -> Commit. Never leave repo red.
+5. **Clean As You Go:** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (temporary screenshots, logs). Maintain a neat and tidy repo tree.
+6. **Live To-Do Tracking:** Always create and maintain an explicit real-time To-Do list, marking items [x] immediately upon completion for handover continuity.
 # Code Style
 
 1. **Modular Monorepo:** Keep packages decoupled.
