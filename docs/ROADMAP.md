@@ -37,11 +37,11 @@
 - [x] 3D Offline AI Copilot & Chatbot Widget (Abby) with local semantic memory.
 - [x] Animated 404 Mechanical Duck Page (`/404`).
 
-## Phase 2: Vector Space & Embeddings (Upcoming)
+## Phase 2: Vector Space & Embeddings (Active / Delivered)
 - [x] 3D/2D High-Dimensional Vector Geometry Visualizer (Holodeck).
-- [ ] Track 1 Module 1: Vector Embeddings & Real Data Projection.
-- [ ] Track 1 Module 2: Cosine Similarity & Client-Side Vector Search.
-- [ ] Boss Project: Interactive Semantic Search Engine.
+- [x] Track 1 Module 1: Vector Embeddings & Real Data Projection (9 Labs).
+- [x] Track 1 Module 2: Cosine Similarity & Client-Side Vector Search.
+- [x] Boss Project: Interactive Semantic Search Engine (`SemanticSearchEngine`).
 
 ## Phase 3: RAG & Production Agents (Upcoming)
 - [ ] Ingestion, chunking, and context augmentation pipelines.

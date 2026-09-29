@@ -14,7 +14,8 @@ import {
   ChevronDown,
   Menu,
   X,
-  Settings
+  Settings,
+  Layers
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, isNonLatinLanguage } from '../store/useLanguageStore';
@@ -409,17 +410,17 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             </button>
           </Tooltip>
 
-          {/* Launch Track 0 Button (hidden on mobile, visible on sm+) */}
-          <div className="hidden sm:block">
+          {/* Launch Track Buttons (hidden on mobile, visible on sm+) */}
+          <div className="hidden sm:flex items-center gap-2">
             <Tooltip
               position="bottom"
-              content="Launch Interactive IDE"
-              subtitle="Track 0: Absolute Zero • Zero prerequisites"
+              content="Track 0: Absolute Zero"
+              subtitle="Python WASM Interactive IDE • Zero setup"
               shortcut="↵"
             >
               <button 
                 onClick={() => navigate('/track/0/intro')}
-                className="px-3.5 sm:px-5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                className="px-3.5 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor
@@ -427,6 +428,20 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               >
                 <span>{t('nav_launch_track0')}</span>
                 <ChevronRight size={14} />
+              </button>
+            </Tooltip>
+
+            <Tooltip
+              position="bottom"
+              content="Track 1: Vector Space & Embeddings"
+              subtitle="9 Practical Labs • Vector Geometry & Semantic Search"
+            >
+              <button 
+                onClick={() => navigate('/track/1/intro')}
+                className="px-3.5 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Layers size={13} style={{ color: currentThemeInfo.accent }} />
+                <span>Track 1: Vectors</span>
               </button>
             </Tooltip>
           </div>
@@ -452,6 +467,27 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               className="lg:hidden absolute top-full left-0 right-0 bg-[var(--color-secondary)] border-b border-[var(--color-border)] p-4 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
               <div className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/track/0/intro'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold"
+                  style={{ color: currentThemeInfo.accent }}
+                >
+                  <span className="flex items-center gap-2">
+                    <Zap size={16} />
+                    <span>{t('nav_launch_track0')}</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 0</span>
+                </button>
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/track/1/intro'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
+                >
+                  <span className="flex items-center gap-2">
+                    <Layers size={16} style={{ color: currentThemeInfo.accent }} />
+                    <span>Track 1: Vector Space & Embeddings</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 1</span>
+                </button>
                 <a 
                   href="#pathways" 
                   onClick={() => setIsMobileMenuOpen(false)}

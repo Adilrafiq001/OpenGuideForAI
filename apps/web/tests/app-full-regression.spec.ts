@@ -612,5 +612,61 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(ideSettingsBtn).toBeVisible();
   });
 
+  test('15. Phase 2 Track 1: Vector Spaces, Dynamic Briefing & In-Browser Semantic Search Boss Project', async ({ page }) => {
+    // 1. Verify Track 1 Dynamic Briefing (/track/1/intro)
+    await page.goto('/track/1/intro', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const h1 = page.locator('h1').first();
+    await expect(h1).toBeVisible({ timeout: 10000 });
+    await expect(h1).toContainText(/Vector Spaces & High-Dimensional Geometry/i);
+
+    // Verify 9 practical labs total
+    await expect(page.locator('text=9 Practical Labs Total')).toBeVisible();
+
+    // Verify 3 Modules: 1.1, 1.2, 1.3
+    await expect(page.getByText('MODULE 1.1', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 1.2', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 1.3', { exact: true })).toBeVisible();
+
+    // Verify Live Sandbox shows vector cosine code
+    await expect(page.locator('text=cosine_similarity(v1, v2)')).toBeVisible();
+
+    // Verify 3D Mechanical Initialize Button exists
+    const mechCheckbox = page.locator('#init-mech-button');
+    await expect(mechCheckbox).toBeAttached();
+
+    // 2. Verify Track 1 Interactive IDE Workspace (/track/1/engine)
+    await page.goto('/track/1/engine', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Verify Lesson 1.1.1 Title
+    const lessonTitle = page.locator('h1').first();
+    await expect(lessonTitle).toBeVisible({ timeout: 10000 });
+    await expect(lessonTitle).toContainText(/The Vector as an Arrow in Semantic Space/i);
+
+    // Verify Dynamic Module Header (Module 1.1 • Lesson 1)
+    await expect(page.locator('text=Module 1.1 • Lesson 1')).toBeVisible();
+
+    // Verify Curriculum Drawer shows Module 1.1, 1.2, 1.3
+    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    await modulesTab.click();
+    await page.waitForTimeout(300);
+
+    await expect(page.locator('text=Module 1.1: Vector Embeddings & High-Dimensional Geometry')).toBeVisible();
+    await expect(page.locator('text=Module 1.2: Cosine Similarity & Distance Metrics')).toBeVisible();
+    await expect(page.locator('text=Module 1.3: Client-Side Vector Search & Boss Project')).toBeVisible();
+
+    // Verify Boss Project Lesson is present
+    await expect(page.locator('text=Boss Project: Interactive Semantic Search Engine')).toBeVisible();
+
+    // 3. Verify Landing Page Track 1 Navigation Affordance
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const track1NavBtn = page.getByRole('button', { name: /Track 1: Vectors/i }).first();
+    await expect(track1NavBtn).toBeVisible({ timeout: 10000 });
+  });
+
 });
 

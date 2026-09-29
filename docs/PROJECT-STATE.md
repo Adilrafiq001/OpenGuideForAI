@@ -100,7 +100,21 @@
   - **GitHub Actions CI Workflow Modernization (`ci.yml`):** Fixed 11-second CI failure by enabling Corepack and switching from `npm ci` to `yarn install --immutable` and `yarn build`.
   - **Holistic Visual & UI/UX Inspection Standard (`testing-standards.md`):** Added Section 11 mandating total viewport sweep, translation key check, scrollbar polish, and immediate regression cataloging.
 
-**Next:** Deepen Phase 2 Track 1 interactive coding visualizations and vector hyper-space canvas.
+- **Phase 2: Vector Space & Embeddings Track 1 Curriculum & Boss Project (Complete):**
+  - **Comprehensive 9-Lesson Vector Space Curriculum (`apps/web/src/data/track1.ts`):**
+    - *Module 1.1 (Vector Embeddings & High-Dimensional Geometry):* 1.1.1 First Principles of Vector Embeddings; 1.1.2 High-Dimensional Coordinate Spaces & Sparse vs Dense Representations; 1.1.3 Dot Products & Vector Projections.
+    - *Module 1.2 (Cosine Similarity & Distance Metrics):* 1.2.1 Cosine Similarity from Scratch; 1.2.2 Metric Comparison: Cosine vs Euclidean vs Manhattan; 1.2.3 Normalization & Unit Vectors.
+    - *Module 1.3 (Client-Side Vector Search & Boss Project):* 1.3.1 In-Memory Vector Indexing & Brute-Force Top-K Search; 1.3.2 Query Embedding & Semantic Matching; 1.3.3 Boss Project: Interactive Semantic Search Engine (`SemanticSearchEngine` class with indexing, cosine ranking, and threshold filtering).
+    - Every lab features clear intuitive analogies, verifiable deterministic validation (`expectedOutput`), progressive hints, and zero external network dependencies ($0 Rule).
+  - **Dynamic Route-Aware Track Briefing (`TrackBriefing.tsx`):**
+    - Made `TrackBriefing.tsx` dynamically adapt to both Track 0 and Track 1 from the URL route (`/track/1/intro` vs `/track/0/intro`).
+    - Dynamic mission objective, sandbox code preview, specifications strip, and module card generation (`MODULE 1.1`, `MODULE 1.2`, `MODULE 1.3`).
+    - 3D mechanical "Initialize Workspace" button dynamically launches `/track/1/engine`.
+  - **Landing Page & Command Dock Track 1 Affordances:**
+    - Added dedicated Track 1 direct launch buttons in `LandingPage.tsx` desktop navigation and mobile slide-out drawer.
+    - Integrated Track 1 into `CommandDock.tsx` with active path awareness.
+
+**Next:** Deepen Phase 3 RAG & Production Agents (Ingestion, chunking, context augmentation, and MCP).
 **Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
 
 
