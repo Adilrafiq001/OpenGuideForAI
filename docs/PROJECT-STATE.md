@@ -1,6 +1,19 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 20 Calibrated Themes & Performance Architecture
 
 **Done:**
+- **Interactive Progressive Hints, Canonical Solution Reveal & Offline PWA Verification (Complete):**
+  - **CoursePlayer Progressive Learning Support (`CoursePlayer.tsx`, `track0.ts`):**
+    - Extended `Lesson` type with optional `progressiveHints` and `solutionCode`.
+    - Integrated multi-tiered guidance in `CoursePlayer.tsx`:
+      - Level 1: Expected Console Target (theme-aware container with `var(--color-primary)` and `var(--color-border)`).
+      - Level 2: "Need a Progressive Clue?" accordion with implementation guidance and high-contrast amber styling.
+      - Level 3: "Reveal Canonical Solution" card with disclosure lock toggle, syntax-highlighted code container, 1-click "Copy" action, and 1-click "Load into Editor" action (replaces editor code, resets feedback, and enables immediate execution).
+  - **Offline PWA & Service Worker Physical Verification (Playwright MCP):**
+    - Physically tested browser in disconnected offline mode: verified `OfflineStatusIndicator.tsx` surfaces floating status pill (*"Offline Mode • Running seamlessly on local IndexedDB & Pyodide"*).
+    - Executed Python code in Pyodide Web Worker during simulated network disconnection: verified local WASM runtime and Dexie IDB persistence execute with 100% fidelity without network access ($0 Rule).
+    - Verified smooth reconnection feedback (*"Connection Restored • Studio synchronized"*).
+    - Enforced Clean As You Go policy: removed all transient test artifacts.
+
 - **Studio-Wide Hands-On Curriculum Scaffolding & Automated Pyodide Unit Test Suite (Complete):**
   - **Track 1: Vector Spaces & High-Dimensional Geometry Scaffolding (`apps/web/src/data/track1.ts`):**
     - Upgraded all 9 lessons across Modules 1.1, 1.2, and 1.3 from passive code into interactive engineering labs with clear `# TODO: Step N` scaffolding, mathematical intuition comments, and embedded Python unit test assertions (`assert ...`).

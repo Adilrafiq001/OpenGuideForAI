@@ -15,7 +15,11 @@ import {
   Check,
   ArrowCounterClockwise,
   Lightbulb,
-  List
+  List,
+  Copy,
+  Lock,
+  LockOpen,
+  ArrowSquareIn
 } from '@phosphor-icons/react';
 import { usePyodide } from '../hooks/usePyodide';
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -41,6 +45,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [currentLessonIdx, setCurrentLessonIdx] = useState(0);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
+  const [copiedSolution, setCopiedSolution] = useState(false);
   const [leftTab, setLeftTab] = useState<'briefing' | 'curriculum'>('briefing');
   const [mobileTab, setMobileTab] = useState<'briefing' | 'editor'>('briefing');
   
@@ -89,6 +95,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     clearLogs();
     setFeedback({ type: null, message: '' });
     setShowHint(false);
+    setShowSolution(false);
+    setCopiedSolution(false);
     setIsChallengePassed(completedLessonIds.includes(targetLesson.id));
   };
 
@@ -96,6 +104,24 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setCode(currentLesson.initialCode);
     clearLogs();
     setFeedback({ type: null, message: '' });
+    setShowSolution(false);
+  };
+
+  const handleInsertSolution = () => {
+    const solution = currentLesson.solutionCode || currentLesson.initialCode;
+    setCode(solution);
+    clearLogs();
+    setFeedback({ 
+      type: 'success', 
+      message: '✓ Canonical solution loaded into editor. Click "Run Code" to execute.' 
+    });
+  };
+
+  const handleCopySolution = () => {
+    const solution = currentLesson.solutionCode || currentLesson.initialCode;
+    navigator.clipboard.writeText(solution);
+    setCopiedSolution(true);
+    setTimeout(() => setCopiedSolution(false), 2000);
   };
 
   const advanceNextLesson = () => {
@@ -324,31 +350,101 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     <p>{currentLesson.content}</p>
                   </div>
 
-                  {/* Expected Output Target */}
-                  <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1 text-xs font-mono">
-                    <span className="text-[10px] uppercase text-neutral-400">Expected Console Target:</span>
-                    <div className="text-emerald-300 bg-black/60 p-2 rounded-lg border border-emerald-500/20 whitespace-pre-wrap text-[11px]">
-                      {currentLesson.expectedOutput}
+                  {/* Progressive Learning Support: Target, Clues & Solution Reveal */}
+                  <div className="space-y-3 pt-1">
+                    {/* Expected Output Target */}
+                    <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-1.5 text-xs font-mono">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
+                          Expected Console Target:
+                        </span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                          Pyodide Test
+                        </span>
+                      </div>
+                      <div className="text-emerald-700 dark:text-emerald-300 bg-[var(--color-secondary)] p-2.5 rounded-lg border border-emerald-500/20 whitespace-pre-wrap text-[11px] leading-relaxed">
+                        {currentLesson.expectedOutput}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Collapsible Hint */}
-                  {currentLesson.hint && (
-                    <div className="pt-1">
+                    {/* Progressive Hint Accordion */}
+                    {currentLesson.hint && (
+                      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
+                        <button
+                          onClick={() => setShowHint(!showHint)}
+                          className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <Lightbulb size={13} className="text-amber-500" />
+                            <span className="font-semibold">{showHint ? 'Hide Progressive Hint' : 'Need a Progressive Clue?'}</span>
+                          </span>
+                          <span className="text-[10px] font-mono opacity-70">
+                            {showHint ? '[Collapse]' : '[Expand]'}
+                          </span>
+                        </button>
+                        {showHint && (
+                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/5 text-xs text-amber-800 dark:text-amber-200 leading-relaxed font-mono space-y-2">
+                            <div className="font-bold flex items-center gap-1.5 text-[11px]">
+                              <Sparkle size={12} className="text-amber-500" />
+                              <span>Implementation Guidance:</span>
+                            </div>
+                            <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Canonical Solution Reveal Card */}
+                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
                       <button
-                        onClick={() => setShowHint(!showHint)}
-                        className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                        onClick={() => setShowSolution(!showSolution)}
+                        className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
                       >
-                        <Lightbulb size={13} className="text-amber-400" />
-                        <span>{showHint ? 'Hide Hint' : t('ide_hint')}</span>
+                        <span className="flex items-center gap-1.5">
+                          {showSolution ? (
+                            <LockOpen size={13} className="text-emerald-400" />
+                          ) : (
+                            <Lock size={13} className="text-[var(--color-text-secondary)]" />
+                          )}
+                          <span className="font-semibold">{showSolution ? 'Hide Canonical Solution' : 'Reveal Canonical Solution'}</span>
+                        </span>
+                        <span className="text-[10px] font-mono text-[var(--color-accent)] font-semibold">
+                          {showSolution ? '[Hide]' : '[Reveal]'}
+                        </span>
                       </button>
-                      {showHint && (
-                        <div className="mt-2 p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/20 text-xs text-amber-200 leading-relaxed font-mono">
-                          {currentLesson.hint}
+
+                      {showSolution && (
+                        <div className="p-3 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/70 space-y-2.5">
+                          <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)] font-mono">
+                            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                              <CheckCircle size={12} />
+                              <span>Verified Implementation</span>
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={handleCopySolution}
+                                className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-[10px] font-mono text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-95"
+                              >
+                                {copiedSolution ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                                <span>{copiedSolution ? 'Copied!' : 'Copy'}</span>
+                              </button>
+                              <button
+                                onClick={handleInsertSolution}
+                                className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-accent)] hover:brightness-110 text-white text-[10px] font-mono font-bold transition-all cursor-pointer active:scale-95 shadow-sm"
+                              >
+                                <ArrowSquareIn size={11} />
+                                <span>Load into Editor</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <pre className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] text-[10px] sm:text-[11px] font-mono text-[var(--color-text-primary)] overflow-x-auto max-h-56 leading-relaxed selection:bg-[var(--color-accent-trans)]">
+                            <code>{currentLesson.solutionCode || currentLesson.initialCode}</code>
+                          </pre>
                         </div>
                       )}
                     </div>
-                  )}
+                  </div>
                 </motion.div>
               </AnimatePresence>
             ) : (

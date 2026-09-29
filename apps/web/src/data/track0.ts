@@ -7,6 +7,8 @@ export type Lesson = {
   initialCode: string;
   expectedOutput: string;
   hint?: string;
+  progressiveHints?: string[];
+  solutionCode?: string;
 };
 
 export type Module = {
