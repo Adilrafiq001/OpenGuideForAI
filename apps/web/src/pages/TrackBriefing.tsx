@@ -13,6 +13,7 @@ import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
+import { track2 } from '../data/track2';
 import type { Track } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -42,8 +43,11 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
   const currentThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
-  const activeTrack: Track = propTrack || (location.pathname.includes('/track/1') ? track1 : track0);
-  const trackNum = activeTrack.id === 'track-1' ? '1' : '0';
+  const activeTrack: Track = propTrack || (
+    location.pathname.includes('/track/2') ? track2 :
+    location.pathname.includes('/track/1') ? track1 : track0
+  );
+  const trackNum = activeTrack.id.replace('track-', '');
   const totalLessons = activeTrack.modules.reduce((acc, mod) => acc + mod.lessons.length, 0);
 
   return (
@@ -69,9 +73,9 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           <div className="h-4 w-px bg-[var(--color-border)] hidden sm:block" />
 
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
-            <span className="font-bold" style={{ color: currentThemeInfo.accent }}>TRACK 00</span>
+            <span className="font-bold" style={{ color: currentThemeInfo.accent }}>TRACK 0{trackNum}</span>
             <span className="text-[var(--color-text-secondary)]">/</span>
-            <span className="font-medium text-[var(--color-text-primary)]">{track0.title}</span>
+            <span className="font-medium text-[var(--color-text-primary)]">{activeTrack.title}</span>
           </div>
         </div>
 
@@ -136,11 +140,11 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
-            {activeTrack.id === 'track-1' ? activeTrack.title : t('briefing_title')}
+            {activeTrack.id !== 'track-0' ? activeTrack.title : t('briefing_title')}
           </h1>
           
           <p className="text-[var(--color-text-secondary)] text-lg md:text-xl max-w-3xl leading-relaxed">
-            {activeTrack.id === 'track-1' ? activeTrack.description : t('briefing_subtitle')}
+            {activeTrack.id !== 'track-0' ? activeTrack.description : t('briefing_subtitle')}
           </p>
         </div>
 
@@ -205,7 +209,12 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
               
               <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)]">
                 <div className="space-y-1">
-                  {activeTrack.id === 'track-1' ? (
+                  {activeTrack.id === 'track-2' ? (
+                    <>
+                      <p><span style={{ color: currentThemeInfo.accent }}>agent</span> = AutonomousResearchAgent()</p>
+                      <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># ReAct + MCP Tool Loop</p>
+                    </>
+                  ) : activeTrack.id === 'track-1' ? (
                     <>
                       <p><span style={{ color: currentThemeInfo.accent }}>sim</span> = cosine_similarity(v1, v2)</p>
                       <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># In-memory vector engine</p>
@@ -317,10 +326,10 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             style={{ backgroundColor: currentThemeInfo.accent }}
           />
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
-            {activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
+            {activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
           </h2>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
-            {activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
+            {activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
           </p>
           <InitializeWorkspaceButton
             onClick={() => navigate(`/track/${trackNum}/engine`)}

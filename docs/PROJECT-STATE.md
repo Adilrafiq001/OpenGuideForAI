@@ -114,8 +114,24 @@
     - Added dedicated Track 1 direct launch buttons in `LandingPage.tsx` desktop navigation and mobile slide-out drawer.
     - Integrated Track 1 into `CommandDock.tsx` with active path awareness.
 
-**Next:** Deepen Phase 3 RAG & Production Agents (Ingestion, chunking, context augmentation, and MCP).
+- **Phase 3: RAG & Production Agents Track 2 Curriculum & Boss Project (Complete):**
+  - **Comprehensive 9-Lesson Track 2 Curriculum (`apps/web/src/data/track2.ts`):**
+    - *Module 2.1 (Ingestion, Chunking & Retrieval Pipelines):* 2.1.1 Sliding-Window Chunking with Overlap (Stride); 2.1.2 Context Augmentation & Prompt Guardrails; 2.1.3 Hybrid Retrieval via Reciprocal Rank Fusion (RRF).
+    - *Module 2.2 (The ReAct Loop & Model Context Protocol):* 2.2.1 The ReAct State Machine (Thought -> Action -> Observation); 2.2.2 Model Context Protocol (MCP) JSON-RPC 2.0 Schemas; 2.2.3 Resilient Tool Execution & Error Feedback Loops.
+    - *Module 2.3 (Multi-Agent Systems & Boss Project):* 2.3.1 Sequential Agent Handoffs (Planner -> Worker -> Critic); 2.3.2 Agent Memory (Scratchpad vs Vector Store); 2.3.3 Boss Project: Autonomous Research Agent (`AutonomousResearchAgent` with RAG retrieval, MCP tool dispatch, and multi-turn ReAct reasoning loop).
+  - **Dynamic Route-Aware Track Briefing & Live Sandbox Preview (`TrackBriefing.tsx`):**
+    - Dynamic route resolution for `/track/2/intro` and `/track/2/engine`.
+    - Track 2 Live Sandbox preview showing `AutonomousResearchAgent()` execution.
+    - 3D mechanical "Initialize Workspace" button dynamically wired to launch `/track/2/engine`.
+  - **Landing Page & Command Dock Track 2 Affordances:**
+    - Direct launch buttons for `[ Track 2: Agents ]` in desktop navigation and mobile drawer.
+    - Added dedicated Track 2 CPU icon in `CommandDock.tsx` with active path awareness.
+  - **Comprehensive 16-Suite Playwright E2E Automation Regression Suite (`app-full-regression.spec.ts`):**
+    - Added Test 16 covering Track 2 dynamic briefing, live sandbox, 3D mechanical button, IDE workspace, curriculum drawer, and landing page navigation.
+
+**Next:** Advance Phase 4 (Autonomous Evaluation, Benchmarking & Production Observability).
 **Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
+
 
 
 

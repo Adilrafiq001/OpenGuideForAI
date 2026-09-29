@@ -6,6 +6,7 @@ import { AbbyChatbot } from './components/AbbyChatbot';
 import { useSettingsStore } from './store/useSettingsStore';
 import { track0 } from './data/track0';
 import { track1 } from './data/track1';
+import { track2 } from './data/track2';
 import './App.css';
 
 import { ThemeSettingsModal } from './components/ThemeSettingsModal';
@@ -50,6 +51,9 @@ function App() {
             <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
             <Route path="/track/1" element={<CoursePlayer track={track1} />} />
             <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
+            <Route path="/track/2/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+            <Route path="/track/2" element={<CoursePlayer track={track2} />} />
+            <Route path="/track/2/engine" element={<CoursePlayer track={track2} />} />
             <Route path="/holodeck" element={<SpatialHolodeck />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

@@ -49,13 +49,20 @@ Every module and curriculum milestone is anchored in three universal questions:
 - **Module 1.4:** Deployment & Operations on Free Hugging Face Spaces (Pillar 17)
 - **Boss Project:** Deploy a production-ready conversational chatbot with memory.
 
-### Track 2: Intermediate (RAG & Memory)
-**Goal:** Deployed RAG application searching over private documents.
-- **Module 2.1:** High-Dimensional Vector Embeddings & Cosine Similarity (Pillar 13)
-- **Module 2.2:** Ingestion Pipelines, Chunking & Semantic Search (Pillar 2)
-- **Module 2.3:** Accessible UI/UX & Responsive Spatial Interfaces (Pillars 9, 20)
-- **Module 2.4:** Local Vector Stores (Chroma, Qdrant Free Tier) (Pillar 16)
-- **Boss Project:** Deploy a verified RAG application with cited sources.
+### Track 2: Intermediate (RAG, Retrieval & Autonomous Agents)
+**Goal:** Deploy an autonomous research agent combining chunked document retrieval, MCP tools, and ReAct multi-turn reasoning.
+- **Module 2.1: Ingestion, Chunking & Retrieval Pipelines (Pillar 2)**
+  - *Lesson 2.1.1:* Sliding-Window Chunking with Overlap (Stride) (Character/token boundary preservation).
+  - *Lesson 2.1.2:* Context Augmentation & Prompt Guardrails (Delimiter sandboxing, source citations, injection defense).
+  - *Lesson 2.1.3:* Hybrid Retrieval: Reciprocal Rank Fusion (RRF) (Merging dense semantic and sparse keyword rankings).
+- **Module 2.2: The ReAct Loop & Model Context Protocol (Pillar 13)**
+  - *Lesson 2.2.1:* The ReAct State Machine (Thought -> Action -> Observation loop implementation).
+  - *Lesson 2.2.2:* Model Context Protocol (MCP) JSON-RPC 2.0 Schemas (Standardized tool manifest & call serialization).
+  - *Lesson 2.2.3:* Resilient Tool Execution & Error Feedback Loops (Exception handling & auto-recovery reasoning).
+- **Module 2.3: Multi-Agent Systems & Boss Project (Pillar 14)**
+  - *Lesson 2.3.1:* Sequential Agent Handoffs (Planner -> Worker -> Critic specialized handoffs).
+  - *Lesson 2.3.2:* Agent Memory: Short-Term Scratchpad vs Long-Term Vector Store (Working context vs persistent store).
+  - *Lesson 2.3.3:* Boss Project: Autonomous Research Agent with RAG & MCP Tools (`AutonomousResearchAgent` synthesis).
 
 ### Track 3: Pro (Autonomous Agents & Systems Architecture)
 **Goal:** Autonomous multi-agent workflow with external tools, evals, and CI/CD.

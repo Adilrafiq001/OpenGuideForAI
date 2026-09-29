@@ -56,6 +56,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
   const { theme, fontSize, wordWrap } = useSettingsStore();
 
+  const trackNum = track.id.replace('track-', '') || '0';
   const currentModule = track.modules[currentModuleIdx] || track.modules[0];
   const currentLesson = currentModule.lessons[currentLessonIdx] || currentModule.lessons[0];
 
@@ -167,7 +168,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             subtitle={`Return to ${track.title} Briefing & syllabus`}
           >
             <button
-              onClick={() => navigate(`/track/${track.id === 'track-1' ? '1' : '0'}/intro`)}
+              onClick={() => navigate(`/track/${trackNum}/intro`)}
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98]"
             >
               <ArrowLeft size={13} />
@@ -210,7 +211,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <Tooltip
             position="bottom"
             content="Module Progress"
-            subtitle={`Lesson ${currentLessonIdx + 1} of ${currentModule.lessons.length} in Module ${track.id === 'track-1' ? '1' : '0'}.${currentModuleIdx + 1}`}
+            subtitle={`Lesson ${currentLessonIdx + 1} of ${currentModule.lessons.length} in Module ${trackNum}.${currentModuleIdx + 1}`}
           >
             <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span className="text-[var(--color-accent)] font-bold">L{currentLessonIdx + 1}</span>
@@ -296,7 +297,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 >
                   <div>
                     <div className="text-[10px] uppercase tracking-wider font-mono text-[var(--color-text-secondary)] mb-1">
-                      Module {track.id === 'track-1' ? '1' : '0'}.{currentModuleIdx + 1} • Lesson {currentLessonIdx + 1}
+                      Module {trackNum}.{currentModuleIdx + 1} • Lesson {currentLessonIdx + 1}
                     </div>
                     <h1 className="text-xl sm:text-2xl tracking-tight leading-tight font-bold text-[var(--color-text-primary)]">
                       {currentLesson.title}
@@ -356,7 +357,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   <div key={mod.id} className="space-y-1.5">
                     <div className="text-[11px] font-bold text-[var(--color-accent)] uppercase tracking-wider flex items-center gap-1.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
-                      <span>Module {track.id === 'track-1' ? '1' : '0'}.{mIdx + 1}: {mod.title}</span>
+                      <span>Module {trackNum}.{mIdx + 1}: {mod.title}</span>
                     </div>
                     <div className="space-y-1 pl-3 border-l border-[var(--color-border)]">
                       {mod.lessons.map((les, lIdx) => {

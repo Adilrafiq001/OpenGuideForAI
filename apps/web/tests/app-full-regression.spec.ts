@@ -668,5 +668,62 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(track1NavBtn).toBeVisible({ timeout: 10000 });
   });
 
+  test('16. Phase 3 Track 2: RAG Pipelines, MCP Tools & Autonomous Agents', async ({ page }) => {
+    // 1. Verify Track 2 Dynamic Briefing (/track/2/intro)
+    await page.goto('/track/2/intro', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const h1 = page.locator('h1').first();
+    await expect(h1).toBeVisible({ timeout: 10000 });
+    await expect(h1).toContainText(/RAG, Retrieval & Autonomous Agents/i);
+
+    // Verify 9 practical labs total
+    await expect(page.locator('text=9 Practical Labs Total')).toBeVisible();
+
+    // Verify 3 Modules: 2.1, 2.2, 2.3
+    await expect(page.getByText('MODULE 2.1', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 2.2', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 2.3', { exact: true })).toBeVisible();
+
+    // Verify Live Sandbox shows AutonomousResearchAgent code
+    await expect(page.locator('text=AutonomousResearchAgent()')).toBeVisible();
+
+    // Verify 3D Mechanical Initialize Button exists
+    const mechCheckbox = page.locator('#init-mech-button');
+    await expect(mechCheckbox).toBeAttached();
+
+    // 2. Verify Track 2 Interactive IDE Workspace (/track/2/engine)
+    await page.goto('/track/2/engine', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Verify Lesson 2.1.1 Title
+    const lessonTitle = page.locator('h1').first();
+    await expect(lessonTitle).toBeVisible({ timeout: 10000 });
+    await expect(lessonTitle).toContainText(/Sliding-Window Chunking with Overlap/i);
+
+    // Verify Dynamic Module Header (Module 2.1 • Lesson 1)
+    await expect(page.locator('text=Module 2.1 • Lesson 1')).toBeVisible();
+
+    // Verify Curriculum Drawer shows Module 2.1, 2.2, 2.3
+    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    await modulesTab.click();
+    await page.waitForTimeout(300);
+
+    await expect(page.locator('text=Module 2.1: Ingestion, Chunking & Retrieval Pipelines')).toBeVisible();
+    await expect(page.locator('text=Module 2.2: The ReAct Loop & Model Context Protocol')).toBeVisible();
+    await expect(page.locator('text=Module 2.3: Multi-Agent Systems & Boss Project')).toBeVisible();
+
+    // Verify Boss Project Lesson is present
+    await expect(page.locator('text=Boss Project: Autonomous Research Agent')).toBeVisible();
+
+    // 3. Verify Landing Page Track 2 Navigation Affordance
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const track2NavBtn = page.getByRole('button', { name: /Track 2: Agents/i }).first();
+    await expect(track2NavBtn).toBeVisible({ timeout: 10000 });
+  });
+
 });
+
 

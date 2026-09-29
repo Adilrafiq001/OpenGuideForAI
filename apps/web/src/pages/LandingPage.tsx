@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   Settings,
-  Layers
+  Layers,
+  Cpu
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, isNonLatinLanguage } from '../store/useLanguageStore';
@@ -438,10 +439,24 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             >
               <button 
                 onClick={() => navigate('/track/1/intro')}
-                className="px-3.5 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Layers size={13} style={{ color: currentThemeInfo.accent }} />
                 <span>Track 1: Vectors</span>
+              </button>
+            </Tooltip>
+
+            <Tooltip
+              position="bottom"
+              content="Track 2: RAG & Autonomous Agents"
+              subtitle="9 Practical Labs • Chunking, MCP & ReAct Agents"
+            >
+              <button 
+                onClick={() => navigate('/track/2/intro')}
+                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Cpu size={13} style={{ color: currentThemeInfo.accent }} />
+                <span>Track 2: Agents</span>
               </button>
             </Tooltip>
           </div>
@@ -487,6 +502,16 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                     <span>Track 1: Vector Space & Embeddings</span>
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 1</span>
+                </button>
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/track/2/intro'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
+                >
+                  <span className="flex items-center gap-2">
+                    <Cpu size={16} style={{ color: currentThemeInfo.accent }} />
+                    <span>Track 2: RAG & Autonomous Agents</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 2</span>
                 </button>
                 <a 
                   href="#pathways" 

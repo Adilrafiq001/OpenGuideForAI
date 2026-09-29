@@ -5,6 +5,7 @@ import {
   Compass, 
   Terminal, 
   Layers,
+  Cpu,
   Palette, 
   Settings, 
   HelpCircle,
@@ -26,7 +27,7 @@ interface CommandDockProps {
 export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || location.pathname === '/track/0' || location.pathname === '/track/1');
+  const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || location.pathname === '/track/0' || location.pathname === '/track/1' || location.pathname === '/track/2');
   const [isMinimized, setIsMinimized] = useState(() => isEngine);
 
   // Auto-minimize when entering the active IDE workspace
@@ -53,9 +54,17 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       onClick: () => navigate('/track/1/intro')
     },
     {
+      icon: <Cpu size={20} className={location.pathname === '/track/2/intro' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
+      label: 'Track 2: RAG & Autonomous Agents',
+      onClick: () => navigate('/track/2/intro')
+    },
+    {
       icon: <Terminal size={20} className={location.pathname.endsWith('/engine') ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'IDE Workspace (Pyodide)',
-      onClick: () => navigate(location.pathname.includes('/track/1') ? '/track/1/engine' : '/track/0/engine')
+      onClick: () => navigate(
+        location.pathname.includes('/track/2') ? '/track/2/engine' :
+        location.pathname.includes('/track/1') ? '/track/1/engine' : '/track/0/engine'
+      )
     },
     {
       icon: <Target size={20} className="text-[var(--color-accent)]" />,

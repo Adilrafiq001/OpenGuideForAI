@@ -43,10 +43,10 @@
 - [x] Track 1 Module 2: Cosine Similarity & Client-Side Vector Search.
 - [x] Boss Project: Interactive Semantic Search Engine (`SemanticSearchEngine`).
 
-## Phase 3: RAG & Production Agents (Upcoming)
-- [ ] Ingestion, chunking, and context augmentation pipelines.
-- [ ] The ReAct Loop (Reason -> Act -> Observe).
-- [ ] Model Context Protocol (MCP) integrations.
-- [ ] Multi-Agent Systems Architectures.
+## Phase 3: RAG & Production Agents (Active / Delivered)
+- [x] Ingestion, chunking, and context augmentation pipelines (Sliding-window chunking, stride overlap, citations & guardrails).
+- [x] The ReAct Loop (Reason -> Act -> Observe) & Model Context Protocol (MCP JSON-RPC 2.0).
+- [x] Multi-Agent Systems Architectures & Sequential Agent Handoffs (Planner -> Worker -> Critic).
+- [x] Boss Project: Autonomous Research Agent (`AutonomousResearchAgent` with RAG retrieval and tool dispatch).
 
 **Creator & Architect:** ARD
