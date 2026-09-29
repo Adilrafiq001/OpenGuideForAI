@@ -1,6 +1,21 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 20 Calibrated Themes & Performance Architecture
 
 **Done:**
+- **Studio-Wide Hands-On Curriculum Scaffolding & Automated Pyodide Unit Test Suite (Complete):**
+  - **Track 1: Vector Spaces & High-Dimensional Geometry Scaffolding (`apps/web/src/data/track1.ts`):**
+    - Upgraded all 9 lessons across Modules 1.1, 1.2, and 1.3 from passive code into interactive engineering labs with clear `# TODO: Step N` scaffolding, mathematical intuition comments, and embedded Python unit test assertions (`assert ...`).
+    - Covers 2D semantic coordinates, Euclidean norm & L2 normalization, vector dot products, cosine similarity length-invariance, multi-candidate ranking matrix, Manhattan vs Euclidean vs Cosine distance metrics, in-memory vector store indexing, Top-K nearest neighbor retrieval, and the complete interactive `SemanticSearchEngine` Boss Project.
+  - **Track 2: RAG, Retrieval & Autonomous Agents Scaffolding (`apps/web/src/data/track2.ts`):**
+    - Upgraded all 9 lessons across Modules 2.1, 2.2, and 2.3 into interactive labs with automated assertions.
+    - Covers sliding-window chunking with overlap (stride), augmented context prompt assembly with hallucination guardrails, Reciprocal Rank Fusion (RRF) hybrid scoring, ReAct state machine loop (Thought -> Action -> Observation), Model Context Protocol (MCP) JSON-RPC 2.0 tool dispatching, resilient error-capturing wrappers, sequential multi-agent handoffs (Planner -> Worker -> Critic), tiered rolling agent memory buffers, and the complete `AutonomousResearchAgent` Boss Project.
+  - **Track 3: Production Evals, Guardrails & Security Scaffolding (`apps/web/src/data/track3.ts`):**
+    - Upgraded all 9 lessons across Modules 3.1, 3.2, and 3.3 with production-grade engineering tasks and test assertions.
+    - Covers exact-match normalized evaluation harnesses, synthetic edge-case probing matrices, LLM-as-a-Judge Likert scoring rubrics, prompt injection delimiter sandbox defenses, PII and secret API key scrubbers, automated adversarial red teaming with Attack Success Rate (ASR) tracking, token budget guards, resilient fallback state machines, and the complete `ProductionEvalSuite` Boss Project.
+  - **Physical Browser & Pyodide Web Worker Verification (Playwright MCP):**
+    - Physically executed and verified code challenges on live browser across `/track/1`, `/track/2`, and `/track/3`.
+    - Confirmed automated Python assertions execute deterministically inside the browser Web Worker, streaming `✓ [TEST PASSED]` feedback, marking challenge pass state, and enabling seamless lesson progression.
+    - Enforced Clean As You Go policy: zero transient artifacts left in workspace.
+
 - **Theme System Hardening, Direct Header Day/Night Switch & Track 0 Scaffolding with Pyodide Unit Tests (Complete):**
   - **Direct Header Day/Night Switch & Universal Theme Control:**
     - Integrated animated Uiverse Sun/Moon toggle switch (`ThemeSwitch.tsx`) directly into the desktop header navigation bar (`LandingHeader.tsx`) and the mobile slide-out navigation drawer. Users can now instantly toggle between Day and Night modes with a single click from any viewport.
