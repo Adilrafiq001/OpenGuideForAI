@@ -325,14 +325,14 @@ export function PortfolioPage() {
           {/* Stat 4: Cryptographic Ledger */}
           <div className="p-6 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-2">
             <div className="flex items-center justify-between text-[var(--color-text-secondary)]">
-              <span className="text-xs font-mono uppercase tracking-wider">Cryptographic Proof</span>
+              <span className="text-xs font-mono uppercase tracking-wider">Document Integrity</span>
               <Lock size={20} className="text-amber-400" />
             </div>
             <div className="text-2xl font-bold font-mono text-emerald-400">
               SHA-256 Valid
             </div>
             <span className="text-[11px] font-mono text-neutral-400 block pt-4">
-              Deterministic W3C WebCrypto Digest
+              Deterministic Document Integrity Digest
             </span>
           </div>
         </div>
@@ -508,6 +508,7 @@ export function PortfolioPage() {
                     <User size={16} className="text-[var(--color-accent)] ml-2 shrink-0" />
                     <input
                       type="text"
+                      maxLength={80}
                       value={studentName}
                       onChange={(e) => handleNameChange(e.target.value)}
                       placeholder="Enter Recipient Name..."
@@ -615,7 +616,7 @@ export function PortfolioPage() {
                     <Award size={28} className="text-[var(--color-accent)] animate-pulse" />
                   </div>
                   <span className="text-[9px] uppercase tracking-wider text-[var(--color-accent)] font-bold">
-                    CRYPTOGRAPHIC SEAL
+                    INTEGRITY SEAL
                   </span>
                 </div>
 
@@ -632,7 +633,7 @@ export function PortfolioPage() {
                   <Key size={16} className="text-[var(--color-accent)] shrink-0" />
                   <div className="overflow-hidden">
                     <span className="text-[9px] font-mono text-[var(--color-text-secondary)] uppercase block">
-                      Verification Signature (SHA-256)
+                      Deterministic SHA-256 Document Integrity Signature
                     </span>
                     <span className="text-[10px] font-mono text-[var(--color-text-primary)] truncate block select-all">
                       {verificationHash}

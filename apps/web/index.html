@@ -70,7 +70,7 @@
 
           var styleEl = document.createElement('style');
           styleEl.id = 'theme-pre-bootstrap';
-          styleEl.innerHTML = 'html, body, #root { background-color: ' + bg + ' !important; color: ' + textColor + ' !important; min-height: 100vh; } @keyframes ogPulse { 0%, 100% { opacity: 0.2; transform: scale(0.98); } 50% { opacity: 0.45; transform: scale(1.02); } }';
+          styleEl.innerHTML = 'html, body, #root { background-color: ' + bg + '; color: ' + textColor + '; min-height: 100vh; } @keyframes ogPulse { 0%, 100% { opacity: 0.2; transform: scale(0.98); } 50% { opacity: 0.45; transform: scale(1.02); } }';
           document.head.appendChild(styleEl);
 
           var savedLang = localStorage.getItem('openguide_lang') || 'en';

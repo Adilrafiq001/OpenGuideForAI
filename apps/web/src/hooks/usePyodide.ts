@@ -38,7 +38,10 @@ export function usePyodide() {
     reject: (err: any) => void;
   } | null>(null);
 
-  useEffect(() => {
+  // Watchdog timer ref (terminates runaway code > 15 seconds)
+  const watchdogTimerRef = useRef<number | null>(null);
+
+  const initWorker = useCallback(() => {
     setState('initializing');
     const worker = new Worker('/pyodide.worker.js');
     workerRef.current = worker;
@@ -66,6 +69,11 @@ export function usePyodide() {
           break;
 
         case 'RESULT':
+          if (watchdogTimerRef.current) {
+            clearTimeout(watchdogTimerRef.current);
+            watchdogTimerRef.current = null;
+          }
+
           const resultText = msg.error || (typeof msg.data === 'string' ? msg.data : JSON.stringify(msg.data));
           setLogs(prev => [...prev, { type: 'RESULT', text: resultText, timestamp }]);
           
@@ -106,24 +114,44 @@ export function usePyodide() {
           break;
 
         case 'ERROR':
+          if (watchdogTimerRef.current) {
+            clearTimeout(watchdogTimerRef.current);
+            watchdogTimerRef.current = null;
+          }
           setState('error');
           setLogs(prev => [...prev, { type: 'STDERR', text: msg.error || 'Worker encountered an error', timestamp }]);
+          if (activeExecution.current) {
+            activeExecution.current.reject(new Error(msg.error || 'Worker encountered an error'));
+            activeExecution.current = null;
+          }
           break;
       }
     };
 
     worker.onerror = (err) => {
       console.warn('[Pyodide Worker Error]', err);
+      if (watchdogTimerRef.current) {
+        clearTimeout(watchdogTimerRef.current);
+        watchdogTimerRef.current = null;
+      }
       setState('error');
     };
 
     // Kick off initialization
     worker.postMessage({ type: 'INIT' });
+  }, []);
+
+  useEffect(() => {
+    initWorker();
 
     return () => {
-      worker.terminate();
+      if (watchdogTimerRef.current) {
+        clearTimeout(watchdogTimerRef.current);
+        watchdogTimerRef.current = null;
+      }
+      workerRef.current?.terminate();
     };
-  }, []);
+  }, [initWorker]);
 
   const runCode = useCallback((code: string): Promise<{ result: any; stdout: string; durationMs: number }> => {
     if (state !== 'ready' && state !== 'running') {
@@ -142,8 +170,26 @@ export function usePyodide() {
 
       setState('running');
       workerRef.current?.postMessage({ type: 'EXECUTE', code, id });
+
+      // 15-second watchdog timer: terminate and respawn worker if execution exceeds budget
+      if (watchdogTimerRef.current) {
+        clearTimeout(watchdogTimerRef.current);
+      }
+      watchdogTimerRef.current = window.setTimeout(() => {
+        if (activeExecution.current && activeExecution.current.id === id) {
+          const timeoutMsg = 'Execution terminated: Exceeded 15-second watchdog budget.';
+          setLogs(prev => [...prev, { type: 'STDERR', text: timeoutMsg, timestamp: new Date().toLocaleTimeString() }]);
+          
+          workerRef.current?.terminate();
+          const timedOutExec = activeExecution.current;
+          activeExecution.current = null;
+          timedOutExec.reject(new Error(timeoutMsg));
+          
+          initWorker();
+        }
+      }, 15000);
     });
-  }, [state]);
+  }, [state, initWorker]);
 
   const clearLogs = useCallback(() => setLogs([]), []);
 

@@ -102,6 +102,35 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
     setLegalModalOpen(true);
   };
 
+  // Focus trap and keyboard dismiss handler for modal dialogs (WCAG 2.2 AA SC 2.4.3 & SC 2.1.2)
+  const handleModalKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, closeModal: () => void) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      return;
+    }
+    if (e.key === 'Tab') {
+      const container = e.currentTarget;
+      const focusable = container.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  };
+
   return (
     <footer id="studio-footer" className="relative pt-24 pb-16 px-6 md:px-12 border-t border-[var(--color-border)] max-w-7xl mx-auto text-[var(--color-text-primary)]">
       
@@ -456,9 +485,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              className="w-full max-w-3xl max-h-[85vh] bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+              className="w-full max-w-3xl max-h-[85vh] bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden outline-none"
               role="dialog"
+              aria-modal="true"
               aria-labelledby="legal-modal-title"
+              tabIndex={-1}
+              onKeyDown={(e) => handleModalKeyDown(e, () => setLegalModalOpen(false))}
             >
               {/* Header */}
               <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between shrink-0">
@@ -563,6 +595,10 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     <p>
                       When a certificate is generated, the cryptographic SHA-256 hash is calculated client-side via the W3C Web Cryptography API (<code className="text-[var(--color-accent)]">window.crypto.subtle</code>). No student identity is transmitted across the network.
                     </p>
+                    <h4 className="text-sm font-bold text-[var(--color-text-primary)] font-mono">4. External CDN Runtime & Video Boundaries</h4>
+                    <p>
+                      To execute Python code client-side at $0 infrastructure cost, OpenGuide downloads compiled CPython WebAssembly binaries on demand from <code className="text-[var(--color-accent)]">cdn.jsdelivr.net</code> (Pyodide official distribution). In air-gapped or offline environments, an integrated local Standby Engine provides local execution without network calls. Additionally, in the Free Courses Studio, optional educational video lectures are embedded using privacy-enhanced mode (<code className="text-[var(--color-accent)]">youtube-nocookie.com</code>), which prevents tracking cookies until playback is initiated.
+                    </p>
                   </div>
                 )}
 
@@ -639,9 +675,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              className="w-full max-w-lg bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5"
+              className="w-full max-w-lg bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 outline-none"
               role="dialog"
+              aria-modal="true"
               aria-labelledby="contact-modal-title"
+              tabIndex={-1}
+              onKeyDown={(e) => handleModalKeyDown(e, () => setContactModalOpen(false))}
             >
               <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
                 <div className="flex items-center gap-2">
@@ -763,9 +802,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              className="w-full max-w-2xl max-h-[85vh] bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+              className="w-full max-w-2xl max-h-[85vh] bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden outline-none"
               role="dialog"
+              aria-modal="true"
               aria-labelledby="changelog-modal-title"
+              tabIndex={-1}
+              onKeyDown={(e) => handleModalKeyDown(e, () => setChangelogModalOpen(false))}
             >
               <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">

@@ -444,8 +444,9 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Verify brand logo visible on mobile
-    await expect(page.locator('text=OpenGuide.').first()).toBeVisible({ timeout: 10000 });
+    // Verify brand logo visible on mobile (compact monogram on mobile viewports)
+    await expect(page.locator('header a[href="/"]').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('header a[href="/"]').getByText('OG').first()).toBeVisible();
 
     // Mobile Hamburger Menu Button
     const mobileMenuBtn = page.locator('button[aria-label="Toggle navigation menu"]').first();
@@ -664,8 +665,9 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
-    const track1NavBtn = page.getByRole('button', { name: /Track 1: Vectors/i }).first();
-    await expect(track1NavBtn).toBeVisible({ timeout: 10000 });
+    const track1Nav = page.locator('button[aria-label="Select Learning Track"]').first();
+    await track1Nav.click();
+    await expect(page.locator('text=Track 1: Vectors').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('16. Phase 3 Track 2: RAG Pipelines, MCP Tools & Autonomous Agents', async ({ page }) => {
@@ -720,8 +722,9 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
-    const track2NavBtn = page.getByRole('button', { name: /Track 2: Agents/i }).first();
-    await expect(track2NavBtn).toBeVisible({ timeout: 10000 });
+    const track2Nav = page.locator('button[aria-label="Select Learning Track"]').first();
+    await track2Nav.click();
+    await expect(page.locator('text=Track 2: Agents').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('17. Phase 4: Track 3 Production Evals & Security + WebGPU Hardware Telemetry', async ({ page }) => {
@@ -776,8 +779,9 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
-    const track3NavBtn = page.getByRole('button', { name: /Track 3: Evals/i }).first();
-    await expect(track3NavBtn).toBeVisible({ timeout: 10000 });
+    const track3Nav = page.locator('button[aria-label="Select Learning Track"]').first();
+    await track3Nav.click();
+    await expect(page.locator('text=Track 3: Evals').first()).toBeVisible({ timeout: 5000 });
 
     const webgpuTab = page.getByRole('button', { name: /WebGPU/i }).first();
     await expect(webgpuTab).toBeVisible({ timeout: 10000 });
@@ -803,10 +807,17 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.getByRole('heading', { name: 'Agent Commander' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Systems Defender' })).toBeVisible();
 
+    // In uncompleted state, verify milestone gating and preview certificate
+    const previewBtn = page.getByRole('button', { name: /Preview Watermarked Sample/i });
+    if (await previewBtn.isVisible()) {
+      await previewBtn.click();
+      await page.waitForTimeout(300);
+    }
+
     // Verify Certificate Canvas
     await expect(page.locator('text=Certificate of Engineering Mastery').first()).toBeVisible();
     await expect(page.locator('text=Adil Rafiq Dar (ARD)').first()).toBeVisible();
-    await expect(page.locator('text=Verification Signature (SHA-256)').first()).toBeVisible();
+    await expect(page.locator('text=Deterministic SHA-256 Document Integrity Signature').or(page.locator('text=Verification Signature (SHA-256)')).first()).toBeVisible();
 
     // Verify Interactive Student Name Input reactively updates certificate
     const nameInput = page.locator('input[placeholder="Enter Recipient Name..."]');

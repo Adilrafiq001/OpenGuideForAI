@@ -26,6 +26,16 @@ function App() {
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
+  // Remove pre-bootstrap style tag and inline overrides once React hydrates
+  useEffect(() => {
+    const preBootstrapEl = document.getElementById('theme-pre-bootstrap');
+    if (preBootstrapEl) {
+      preBootstrapEl.remove();
+    }
+    document.documentElement.style.backgroundColor = '';
+    document.documentElement.style.color = '';
+  }, []);
+
   // Synchronize data-theme on root HTML document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

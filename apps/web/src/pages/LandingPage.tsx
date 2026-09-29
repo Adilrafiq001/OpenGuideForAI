@@ -220,6 +220,14 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
   return (
     <div className="min-h-[100dvh] bg-[var(--color-primary)] text-[var(--color-text-primary)] selection:bg-[var(--color-accent)] selection:text-black overflow-x-hidden font-sans pb-32 transition-colors duration-300">
       
+      {/* Accessible Skip-To-Content Link (WCAG 2.2 AA SC 2.4.1) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[999] px-4 py-2 bg-[var(--color-accent)] text-black rounded-xl font-bold shadow-xl outline-none ring-2 ring-black"
+      >
+        Skip to content
+      </a>
+
       {/* Hardware-Accelerated Top Nano Scroll Progress Line */}
       {/* Dynamic Nano-Bar Scroll Progress (Isolated Leaf Component) */}
       <ScrollProgressBar />
@@ -238,7 +246,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
           </a>
           
           {/* Desktop Streamlined Navigation with Hover Reveals (visible on xl+ to prevent overlap) */}
-          <div className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+          <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap">
             <Tooltip
               position="bottom"
               content="10 Structured Pathways"
@@ -267,7 +275,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
               >
                 <button 
                   onClick={() => navigate('/holodeck')}
-                  className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap"
+                  className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
                 >
                   <Glasses size={14} className="opacity-70" />
                   <span>{t('nav_holodeck')}</span>
@@ -284,7 +292,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
             >
               <button 
                 onClick={() => navigate('/portfolio')}
-                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap"
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
               >
                 <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
                 <span>Portfolio</span>
@@ -299,7 +307,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
             >
               <button 
                 onClick={() => setIsExploreOpen(!isExploreOpen)}
-                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1 py-1 cursor-pointer font-medium whitespace-nowrap"
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1 py-1 cursor-pointer font-medium whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
                 aria-expanded={isExploreOpen}
                 aria-haspopup="true"
               >
@@ -435,7 +443,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
                 )}
               </AnimatePresence>
             </div>
-          </div>
+          </nav>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
@@ -494,7 +502,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
             >
               <button
                 onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-                className="px-3 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm cursor-pointer shrink-0"
+                className="px-3 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] shadow-sm cursor-pointer shrink-0"
                 aria-expanded={isTracksMenuOpen}
                 aria-haspopup="true"
                 aria-label="Select Learning Track"
@@ -588,7 +596,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
               transition={{ duration: 0.2 }}
               className="xl:hidden absolute top-full left-0 right-0 bg-[var(--color-secondary)] border-b border-[var(--color-border)] p-4 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
-              <div className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
+              <nav aria-label="Mobile Navigation" className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
                 <button 
                   onClick={() => { setIsMobileMenuOpen(false); navigate('/track/0/intro'); }}
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold"
@@ -692,13 +700,15 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
                 >
                   {t('nav_pillars')}
                 </a>
-              </div>
+              </nav>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
 
-      {/* Hero Section: Motionsites-Inspired Physics, 3D Tilt & Orbital Nodes */}
+      {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
+      <main id="main-content">
+        {/* Hero Section: Motionsites-Inspired Physics, 3D Tilt & Orbital Nodes */}
       <HeroPhysicsStage
         currentThemeInfo={currentThemeInfo}
         accentTextColor={accentTextColor}
@@ -1178,6 +1188,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
           </button>
         </div>
       </section>
+      </main>
 
       {/* Comprehensive Studio Footer */}
       <StudioFooter

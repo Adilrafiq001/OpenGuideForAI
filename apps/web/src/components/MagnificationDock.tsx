@@ -131,7 +131,7 @@ function DockLabel({ children, className = '', isHovered }: DockLabelProps) {
           animate={{ opacity: 1, y: -16, scale: 1 }}
           exit={{ opacity: 0, y: 4, scale: 0.95 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className={`${className} absolute -top-9 left-1/2 w-fit whitespace-pre rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)] px-3 py-1 text-[11px] font-bold text-[var(--color-text-primary)] shadow-2xl pointer-events-none z-50 backdrop-blur-xl`}
+          className={`${className} absolute -top-9 left-1/2 w-fit max-w-[85vw] truncate whitespace-pre rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)] px-3 py-1 text-[11px] font-bold text-[var(--color-text-primary)] shadow-2xl pointer-events-none z-50 backdrop-blur-xl`}
           role="tooltip"
           style={{ x: '-50%' }}
         >
