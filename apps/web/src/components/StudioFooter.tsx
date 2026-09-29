@@ -62,8 +62,8 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
 
   // Commit hash copy state
   const [copiedHash, setCopiedHash] = useState(false);
-  const buildHash = 'de79f98';
-  const buildVersion = 'v2.4.0';
+  const buildHash = '36503a8';
+  const buildVersion = 'v2.5.0';
   const buildDate = '2026.09.29-PROD';
 
   const handleCopyHash = () => {
@@ -825,14 +825,29 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </div>
 
               <div className="p-6 overflow-y-auto space-y-6 text-xs font-mono">
-                {/* Phase 6 */}
+                {/* Phase 7-10 / v2.5.0 */}
                 <div className="space-y-2 border-l-2 border-[var(--color-accent)] pl-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
+                      Phase 7–10: Production PWA, Attention Radar, 24 Themes & Abby Copilot
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                      v2.5.0 • Active
+                    </span>
+                  </div>
+                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
+                    Offline PWA service worker with pre-caching, Cloudflare Pages immutable headers, 12 Special research-calibrated physiological themes (melatonin-preserving Circadian Amber, Scotopic Mariana, E-Ink Papyrus, Biophilic Forest), resizable Abby Copilot with deep domain intelligence and fluid Apple exit physics, Hero interactive mechanical button, and Synapse Lounge Transformer Attention Radar with dynamic Softmax temperature routing.
+                  </p>
+                </div>
+
+                {/* Phase 6 */}
+                <div className="space-y-2 border-l-2 border-cyan-500 pl-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
                       Phase 6: In-App Free Courses Studio & Granular Setup Guides
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                      v2.4.0 • Active
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                      v2.4.0
                     </span>
                   </div>
                   <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">

@@ -12,6 +12,7 @@ import './App.css';
 
 import { ThemeSettingsModal } from './components/ThemeSettingsModal';
 import { HelpModal } from './components/HelpModal';
+import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -99,8 +100,12 @@ function App() {
         <AbbyChatbot 
           onOpenSettings={handleOpenSettings}
         />
+
+        {/* Real-Time Offline PWA Connection Status */}
+        <OfflineStatusIndicator />
       </div>
     </Router>
+
   );
 }
 

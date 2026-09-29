@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Settings, X, Copy, Check } from 'lucide-react';
+import { Settings, X, Copy, Check, Maximize2, Minimize2 } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -20,6 +20,7 @@ interface AbbyChatbotProps {
 
 export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [chatSize, setChatSize] = useState<'standard' | 'expanded' | 'compact'>('standard');
   const [query, setQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -57,15 +58,26 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const toggleSize = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setChatSize((prev) => {
+      if (prev === 'standard') return 'expanded';
+      if (prev === 'expanded') return 'compact';
+      return 'standard';
+    });
+  };
+
   const generateOfflineResponse = (userQuery: string): { content: string; codeSnippet?: string; takeaway?: string } => {
-    const qLower = userQuery.toLowerCase();
+    const qLower = userQuery.toLowerCase().trim();
     const results = searchOfflineKnowledge(userQuery);
 
     if (results.length > 0) {
       const top = results[0];
-      let responseText = `${top.summary}\n\n${top.explanation}`;
+      let responseText = `**${top.title}**\n\n${top.summary}\n\n${top.explanation}`;
       if (results.length > 1) {
-        responseText += `\n\n*Related concepts:* ${results.slice(1, 3).map(r => r.title).join(', ')}`;
+        const related = results.slice(1, 3).map(r => `• **${r.title}**: ${r.summary}`).join('\n\n');
+        responseText += `\n\n---\n**Related Knowledge:**\n${related}`;
       }
       return {
         content: responseText,
@@ -74,32 +86,38 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       };
     }
 
-    if (qLower.includes('track 0') || qLower.includes('zero') || qLower.includes('start')) {
+    // Dynamic semantic synthesis for general questions
+    if (qLower.includes('track') || qLower.includes('curriculum') || qLower.includes('learn') || qLower.includes('start')) {
       return {
-        content: "**Track 0: Absolute Zero** teaches foundational AI programming directly inside your browser. You run CPython 3.12 via Pyodide compiled to WebAssembly. Master tensors, linear algebra, and data pipelines with zero cloud dependencies!",
-        codeSnippet: "# Track 0 In-Browser Execution:\nimport sys\nprint(f'Python {sys.version.split()[0]} running in browser WASM!')",
-        takeaway: "Instant zero-setup Python learning without Docker or cloud bills."
+        content: "OpenGuide features **4 Comprehensive Hands-On Tracks** (36 Labs in total):\n\n• **Track 0: Absolute Zero:** In-browser CPython 3.12 WebAssembly, non-blocking Web Workers, vector primitives, and BPE tokenization.\n• **Track 1: Vector Spaces:** High-dimensional embedding spaces, cosine similarity vs Euclidean distance, and in-memory Top-K search.\n• **Track 2: RAG & Agents:** Sliding-window chunking, ReAct loop state machines, Model Context Protocol (MCP JSON-RPC 2.0), and autonomous research agents.\n• **Track 3: Evals & Guardrails:** Synthetic fuzzing, OWASP AI Top 10 defenses, canary token traps, and local client-side WebGPU neural inference.\n\nAll labs execute 100% locally in your browser with zero setup or paid subscriptions.",
+        takeaway: "Master AI engineering from foundational tensors to production agent swarms."
       };
     }
 
-    if (qLower.includes('track 1') || qLower.includes('vector') || qLower.includes('embedding')) {
+    if (qLower.includes('holodeck') || qLower.includes('3d') || qLower.includes('vr') || qLower.includes('xr') || qLower.includes('spatial')) {
       return {
-        content: "**Track 1: Vector Spaces & High-Dimensional Geometry** introduces embeddings, dot product math, cosine similarity, and in-memory vector indexing from scratch without external libraries.",
-        codeSnippet: "import math\n\ndef cosine_similarity(u, v):\n    dot = sum(a * b for a, b in zip(u, v))\n    norm_u = math.sqrt(sum(a * a for a in u))\n    norm_v = math.sqrt(sum(b * b for b in v))\n    return dot / (norm_u * norm_v)\n\nprint('Similarity:', cosine_similarity([1, 2], [2, 4])) # 1.0",
-        takeaway: "Vectors quantify semantic meaning as directional angles in hyperspace."
+        content: "The **Spatial Holodeck** (`/holodeck`) is OpenGuide's spatial computing laboratory. It features 3 universal compute tiers:\n\n1. **Tier 1 (2D Lean SVG):** Lightweight coordinate projection for older devices and battery savings (0% GPU load).\n2. **Tier 2 (Hardware-Accelerated 3D):** Three.js WebGL orbit space with Cosmic Starfield, interactive Raycaster node hit testing, and spatial audio chimes.\n3. **Tier 3 (WebXR Spatial Gateway):** 6-DOF immersive VR (Meta Quest) & AR passthrough (Vision Pro and mobile webcam camera).\n\nExplore 24 semantic AI concepts mapped in geometric hyper-space with live cosine distances.",
+        takeaway: "Spatial intuition bridges mathematical formulas with tangible 3D geometry."
       };
     }
 
-    if (qLower.includes('theme') || qLower.includes('color') || qLower.includes('contrast')) {
+    if (qLower.includes('synapse') || qLower.includes('minigame') || qLower.includes('game') || qLower.includes('arcade')) {
       return {
-        content: "OpenGuide features **20 calibrated themes** (10 Dark & 10 Light), each verified for WCAG AAA contrast ratio (>7:1). Switch them using the Color Themes dock item, in Settings, or via the `Ctrl+T` shortcut!",
-        takeaway: "Universal accessibility across light and dark workspaces."
+        content: "The **Synapse Lounge** is our neuro-plasticity diffuse-mode arcade featuring 3 tactile minigames:\n\n1. **Vector Alignment Radar:** Align the probe vector with semantic target embeddings in a unit circle.\n2. **Neural Gate Deductor:** Tune weights (w1, w2) and bias to solve logical AND, OR, and NAND gates.\n3. **Transformer Attention Radar:** Manipulate Query/Key dot products, dimension scaling (√d_k), and temperature (τ) to route attention weights!",
+        takeaway: "Tactile play strengthens deep conceptual memory."
+      };
+    }
+
+    if (qLower.includes('free') || qLower.includes('cost') || qLower.includes('bill') || qLower.includes('$0') || qLower.includes('pricing')) {
+      return {
+        content: "OpenGuide adheres to the **$0 Rule (Hard Constraint)**:\n\n• Zero paid cloud subscriptions\n• Zero middleman servers or API hosting costs\n• Zero data collection or telemetry tracking\n\nAll foundational compute runs via client-side CPython WebAssembly (Pyodide) and WebGPU in your own browser. If you choose to explore frontier models (OpenAI, Gemini, Anthropic), you simply Bring Your Own Key (BYOK) stored privately in your browser.",
+        takeaway: "$0 Forever • Complete financial and computational sovereignty"
       };
     }
 
     return {
-      content: `I've analyzed your question: "${userQuery}". OpenGuide is a 100% client-side AI engineering studio running Python WebAssembly locally in your browser. You can explore Track 0 for foundational linear algebra or configure an optional BYOK key in Settings for frontier models.`,
-      takeaway: "Local-First Architecture • Pure client-side computation"
+      content: `I've analyzed your question regarding **"${userQuery}"**.\n\nOpenGuide is an in-browser AI engineering studio operating strictly under the **$0 Rule**. Here is where you can explore:\n\n• **Curriculum Tracks (0–3):** Jump directly into in-browser CPython WASM, vector math, RAG agent loops, or production evals.\n• **Interactive Laboratories:** Check out the Spatial Holodeck (\`/holodeck\`), Synapse Lounge minigames, or Cognitive Accelerator.\n• **Developer Tools:** Open the X-Ray Debug Lens (\`Alt+X\`), explore Free Courses Studio, or inspect the Four Tools setup guides.\n\nFeel free to ask me for exact code snippets, mathematical proofs, or navigation shortcuts!`,
+      takeaway: "100% Client-Side WASM • Complete local data privacy"
     };
   };
 
@@ -129,7 +147,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         timestamp: 'Just now'
       };
       setMessages(prev => [...prev, assistantMsg]);
-    }, 250);
+    }, 200);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -152,18 +170,20 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   };
 
   const handleSettingsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     onOpenSettings?.();
   };
 
   const handleClose = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsOpen(false);
   };
 
   return (
     <div className={`abby-floating-anchor ${isOpen ? 'is-open' : ''}`} id="abby-copilot">
-      <div className={`container-ai-input ${isOpen ? 'is-open' : ''}`}>
+      <div className={`container-ai-input ${isOpen ? 'is-open' : ''} size-${chatSize}`}>
         {/* 15 3D Mouse Hover Tilt Areas */}
         <div className="area" onClick={() => setIsOpen(true)} />
         <div className="area" onClick={() => setIsOpen(true)} />
@@ -219,7 +239,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
             </div>
 
             {/* Post-Click Chat Interface */}
-            <div className="container-ai-chat" onClick={(e) => e.stopPropagation()}>
+            <div className="container-ai-chat" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
               <div className="chat">
                 {/* Header with Title & Controls */}
                 <div className="abby-chat-header">
@@ -231,6 +251,15 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                     </span>
                   </div>
                   <div className="abby-header-actions">
+                    <button 
+                      type="button" 
+                      onClick={toggleSize} 
+                      className="abby-icon-btn" 
+                      title={chatSize === 'expanded' ? 'Compact View' : 'Expand View'}
+                      aria-label="Toggle Window Size"
+                    >
+                      {chatSize === 'expanded' ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                    </button>
                     <button 
                       type="button" 
                       onClick={handleSettingsClick} 
@@ -256,14 +285,14 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                 <div className="abby-messages-container">
                   {messages.map((msg) => (
                     <div key={msg.id} className={`abby-message-bubble ${msg.role}`}>
-                      <div>{msg.content}</div>
+                      <div className="whitespace-pre-line">{msg.content}</div>
                       {msg.codeSnippet && (
-                        <div className="relative group">
+                        <div className="relative group mt-2">
                           <pre className="abby-code-block">{msg.codeSnippet}</pre>
                           <button
                             type="button"
                             onClick={() => handleCopy(msg.id, msg.codeSnippet!)}
-                            className="absolute top-1.5 right-1.5 p-1 rounded bg-black/40 text-slate-300 hover:text-white transition-colors"
+                            className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-slate-300 hover:text-white transition-colors cursor-pointer"
                             title="Copy snippet"
                           >
                             {copiedId === msg.id ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}

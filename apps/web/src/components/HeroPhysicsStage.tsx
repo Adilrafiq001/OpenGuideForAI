@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowUpRight, 
   ChevronRight, 
   Sparkles, 
   HelpCircle, 
@@ -18,7 +17,9 @@ import {
   Workflow
 } from 'lucide-react';
 import { ExplainerPill } from './ExplainerPill';
+import { LaunchTrack0HeroButton } from './LaunchTrack0HeroButton';
 import { type SupportedLanguage } from '../store/useLanguageStore';
+
 import type { ThemeInfo } from '../data/themesData';
 
 interface HeroPhysicsStageProps {
@@ -116,17 +117,8 @@ export function HeroPhysicsStage({
         transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
         className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-14"
       >
-        <button
-          onClick={onLaunchTrack0}
-          style={{
-            backgroundColor: currentThemeInfo.accent,
-            color: accentTextColor,
-          }}
-          className="w-full sm:w-auto px-8 py-3.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-        >
-          <span>{t('hero_launch_track0')}</span>
-          <ArrowUpRight size={17} />
-        </button>
+        <LaunchTrack0HeroButton onLaunch={onLaunchTrack0} />
+
 
         <a
           href="#pathways"

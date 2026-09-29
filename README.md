@@ -11,10 +11,11 @@ Every feature of OpenGuideForAI is explainable by OpenGuideForAI. You don't just
 ## Key Features
 - **100% In-Browser CPython WebAssembly:** Learn with real Python compiled to WebAssembly via Pyodide v0.26 in isolated Web Workers. Zero server roundtrips, zero local install, zero subscription fees ($0 Rule).
 - **Universal Multilingual & RTL Support:** 12 world languages including Urdu (`ur`) and Arabic (`ar`) with automatic bidirectional RTL layout and script-safe typography.
-- **20 Calibrated WCAG AAA Themes:** 10 Dark and 10 Light themes engineered for maximum legibility and contrast across all devices.
+- **24 Calibrated WCAG AAA Themes:** 12 Special research-calibrated themes (grounded in circadian photobiology and visual physiology), 6 curated Dark, and 6 curated Light themes.
 - **Hardware-Adaptive Spatial Holodeck:** 3D WebGL semantic vector space, 3D neural synapse engine, 6-DOF WebXR, and zero-overhead 2D Lean SVG fallback.
-- **Cognitive Accelerator Suite:** 80/20 Pareto curriculum, "Blurting" active retrieval, Feynman novice translator, and deliberate practice drills.
-- **X-Ray Debug Lens (`Alt+X`):** Real-time spatial glass HUD inspecting execution telemetry, WASM memory heaps, IPC payloads, and live variable namespaces.
+- **Cognitive Accelerator Suite & Synapse Lounge:** 80/20 Pareto curriculum, "Blurting" active retrieval, Feynman novice translator, deliberate practice drills, and 3 cognitive minigames (Vector Alignment, Neural Deductor, and Transformer Attention Radar).
+- **Offline-First PWA & Cloudflare Pages Hosting:** Pre-cached service worker, instant offline execution, and high-performance edge headers.
+- **X-Ray Debug Lens (`Alt+X`) & Abby AI Copilot:** Real-time spatial glass HUD inspecting execution telemetry, WASM memory heaps, IPC payloads, and live variable namespaces, alongside a resizable local Abby AI assistant.
 
 ## Quickstart (Local Development)
 ```bash

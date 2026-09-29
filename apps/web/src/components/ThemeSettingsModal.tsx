@@ -72,7 +72,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     resetDefaults
   } = useSettingsStore();
   const [activeTab, setActiveTab] = useState<'themes' | 'preferences'>(initialTab);
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'Dark Themes' | 'Light Themes'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'Special Themes' | 'Dark Themes' | 'Light Themes'>('Special Themes');
   const [hoveredTheme, setHoveredTheme] = useState<ThemeInfo | null>(null);
   const [resetConfirmed, setResetConfirmed] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -80,8 +80,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const displayedTheme = hoveredTheme || activeThemeInfo;
 
+  const specialCount = THEMES_DATA.filter(t => t.category === 'Special Themes').length;
   const darkCount = THEMES_DATA.filter(t => t.category === 'Dark Themes').length;
   const lightCount = THEMES_DATA.filter(t => t.category === 'Light Themes').length;
+
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -200,22 +202,23 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                 <div className="flex-1 flex flex-col border-r border-[var(--color-border,rgba(255,255,255,0.08))] overflow-hidden">
                   
                   {/* Category Filter Pills */}
-                  <div className="px-6 py-3 bg-[var(--color-primary)]/20 flex items-center gap-2 border-b border-[var(--color-border,rgba(255,255,255,0.05))]">
+                  <div className="px-6 py-3 bg-[var(--color-primary)]/20 flex flex-wrap items-center gap-2 border-b border-[var(--color-border,rgba(255,255,255,0.05))]">
                     <button
-                      onClick={() => setCategoryFilter('all')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                        categoryFilter === 'all'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm'
+                      onClick={() => setCategoryFilter('Special Themes')}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        categoryFilter === 'Special Themes'
+                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
-                      All (20)
+                      <Sparkle size={13} className="text-[var(--color-accent)]" />
+                      Special ({specialCount})
                     </button>
                     <button
                       onClick={() => setCategoryFilter('Dark Themes')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors ${
+                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                         categoryFilter === 'Dark Themes'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm'
+                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
@@ -224,16 +227,27 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </button>
                     <button
                       onClick={() => setCategoryFilter('Light Themes')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors ${
+                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                         categoryFilter === 'Light Themes'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm'
+                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
                       <Sun size={13} />
                       Light ({lightCount})
                     </button>
+                    <button
+                      onClick={() => setCategoryFilter('all')}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                        categoryFilter === 'all'
+                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
+                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                      }`}
+                    >
+                      All ({THEMES_DATA.length})
+                    </button>
                   </div>
+
 
                   {/* Themes Grid / List */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -275,6 +289,11 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                                 <span className="font-semibold text-sm text-[var(--color-text-primary,#fff)]">
                                   {t.name}
                                 </span>
+                                {t.category === 'Special Themes' && (
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-mono font-bold tracking-wider">
+                                    {t.subCategory === 'Dark' ? 'SPECIAL • DARK' : 'SPECIAL • LIGHT'}
+                                  </span>
+                                )}
                                 {t.category === 'Light Themes' && (
                                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono">
                                     LIGHT
@@ -366,6 +385,19 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         Execute In-Browser
                       </button>
                     </div>
+
+                    {/* Physiology Basis if available */}
+                    {displayedTheme.physiologyBasis && (
+                      <div className="mt-4 p-3 rounded-xl border border-emerald-500/20 bg-emerald-950/20 space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                          <Sparkle size={12} weight="fill" />
+                          <span>Physiological & Visual Science</span>
+                        </div>
+                        <p className="text-[11px] text-neutral-300 leading-relaxed font-sans">
+                          {displayedTheme.physiologyBasis}
+                        </p>
+                      </div>
+                    )}
 
                     {/* Detailed Color Breakdown Palette */}
                     <div className="mt-6 space-y-3">

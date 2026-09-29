@@ -230,8 +230,34 @@
     - `npx playwright test` passed 20 out of 20 tests (100% pass rate).
     - Physical Playwright MCP browser checks confirmed light theme background (`rgb(255, 255, 255)`), landmarks (`mainCount: 1, navCount: 1`), skip link, modal dialog ARIA attributes, and certificate input boundaries.
 
-**Next:** Production Deployment Pipeline & Cloudflare Pages Static Hosting Launch.
-**Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
+- **Phase 9: Cloudflare Pages Production Deployment & Edge Caching (Complete):**
+  - Configured `apps/web/public/_headers` with immutable 1-year caching for `/assets/*` and strict zero-cache revalidation (`max-age=0, must-revalidate`) for HTML, manifest, and service worker.
+  - Production security headers deployed: `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Permissions-Policy`.
+  - Clean production build (`tsc -b && vite build`) confirmed with 0 errors.
+
+- **Phase 10: Offline-First PWA & Service Worker Pre-Caching (Complete):**
+  - Engineered production Service Worker (`apps/web/public/sw.js`) implementing cache-first strategy for hashed static assets and stale-while-revalidate for navigation HTML.
+  - Built `OfflineStatusIndicator.tsx` floating pill reporting offline status and connection restoration events.
+  - Registered Service Worker in `main.tsx` (`!import.meta.env.DEV`).
+
+- **Phase 11: Synapse Lounge Transformer Attention Radar & 24 Physiological Themes (Complete):**
+  - Delivered Minigame 3 (`Transformer Attention Radar`) in `SynapseLounge.tsx` featuring Query-Key dot products, $\sqrt{d_k}$ scaling toggle, temperature slider $\tau \in [0.1, 2.5]$, live Softmax distribution bars, and +300 Synapse XP reward.
+  - Overhauled theme system into 24 research-calibrated themes:
+    - 12 Special Themes (6 Dark, 6 Light) grounded in visual physiology, circadian photobiology (460-490nm blue light elimination), and scotopic rod-cell sensitivity (507nm peak).
+    - 6 Best Dark Themes (`obsidian-black`, `monokai-pro`, `catppuccin-macchiato`, `dracula-vampire`, `nord-frost`, `tokyo-night`).
+    - 6 Best Light Themes (`pure-paper`, `solarized-light`, `github-light`, `latte-creme`, `cupcake-pastelle`, `academic-slate`).
+  - Added Special Themes badges (`SPECIAL • DARK`, `SPECIAL • LIGHT`) and live Physiological & Visual Science inspector card in `ThemeSettingsModal.tsx`.
+
+- **Phase 12: Resizable Apple-Craft Abby AI Copilot & Hero Mechanical Button (Release v2.5.0 Complete):**
+  - Transformed Abby AI Chatbot into a resizable window with 3 ergonomic presets (`compact`, `standard`, `expanded`).
+  - Expanded offline semantic database (`offlineKnowledge.ts`) across all 4 Tracks, Holodeck, Synapse Lounge, Cognitive Accelerator, X-Ray Lens, Free Tools, and ARD attribution—completely eliminating repetitive responses.
+  - Implemented fluid Apple-inspired spring exit physics (`cubic-bezier(0.16, 1, 0.3, 1)`) and eradicated all AI interface slop using semantic theme variables and clean typography.
+  - Built interactive mechanical "Launch Track 0" Hero CTA (`LaunchTrack0HeroButton.tsx` & `launch-track-button.css`) with opening gear casing, glowing filament, noise texture, "Time To Shine" state morph, and smooth 1450ms delayed redirection.
+  - Updated platform version and changelog milestones to `v2.5.0` in `StudioFooter.tsx`.
+
+**Current Release:** v2.5.0 Production-Ready (Build `36503a8`)
+**Creator & Architect:** Adil Rafiq Dar (ARD)
+
 
 
 

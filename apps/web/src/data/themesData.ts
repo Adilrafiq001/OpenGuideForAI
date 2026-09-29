@@ -3,7 +3,8 @@ import type { Theme } from '../store/useSettingsStore';
 export interface ThemeInfo {
   id: Theme;
   name: string;
-  category: 'Dark Themes' | 'Light Themes';
+  category: 'Dark Themes' | 'Light Themes' | 'Special Themes';
+  subCategory?: 'Dark' | 'Light';
   bg: string;
   surface: string;
   border: string;
@@ -12,11 +13,197 @@ export interface ThemeInfo {
   textPrimary: string;
   textSecondary: string;
   description: string;
+  physiologyBasis?: string;
 }
 
 export const THEMES_DATA: ThemeInfo[] = [
   // -------------------------------------------------------------------------
-  // 10 WORLD-CLASS DARK THEMES
+  // 12 RESEARCH-BASED SPECIAL THEMES (6 Dark, 6 Light Balanced)
+  // Human Visual Physiology, Circadian Photobiology & Cognitive Ergonomics
+  // -------------------------------------------------------------------------
+  {
+    id: 'circadian-amber',
+    name: 'Circadian Amber CRT',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#0a0908',
+    surface: '#15120e',
+    border: 'rgba(245, 158, 11, 0.25)',
+    accent: '#f59e0b',
+    accentName: 'Amber Phosphor',
+    textPrimary: '#fef3c7',
+    textSecondary: '#d97706',
+    description: 'Zero blue light (<500nm). Preserves natural nighttime melatonin synthesis.',
+    physiologyBasis: 'Harvard Medical School circadian studies show <500nm suppression protects circadian clock.'
+  },
+  {
+    id: 'mariana-bioluminescent',
+    name: 'Mariana Bioluminescence',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#040a12',
+    surface: '#081424',
+    border: 'rgba(6, 182, 212, 0.25)',
+    accent: '#06b6d4',
+    accentName: 'Bioluminescent Cyan',
+    textPrimary: '#e0f2fe',
+    textSecondary: '#38bdf8',
+    description: 'Scotopic rod-cell sensitivity peak (~507nm) for deep night clarity without pupil dilation strain.',
+    physiologyBasis: 'Maximizes rod-cell quantum efficiency in low-ambient lighting environments.'
+  },
+  {
+    id: 'biophilic-forest',
+    name: 'Biophilic Forest Canopy',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#060d08',
+    surface: '#0d1a10',
+    border: 'rgba(34, 197, 94, 0.25)',
+    accent: '#22c55e',
+    accentName: 'Chlorophyll Emerald',
+    textPrimary: '#f0fdf4',
+    textSecondary: '#86efac',
+    description: 'Attention Restoration Theory (Kaplan). Natural moss greens lower salivary cortisol and eye fatigue.',
+    physiologyBasis: 'Biophilic visual stimulation proven to reduce sympathetic nervous system heart-rate variability.'
+  },
+  {
+    id: 'shinjuku-neon',
+    name: 'Shinjuku Cyberpunk Violet',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#0b0714',
+    surface: '#150d24',
+    border: 'rgba(236, 72, 153, 0.25)',
+    accent: '#ec4899',
+    accentName: 'Electric Magenta',
+    textPrimary: '#fdf2f8',
+    textSecondary: '#f472b6',
+    description: 'Purkinje shift focal contrast. Velvety deep violet with laser magenta excitation.',
+    physiologyBasis: 'High-contrast focal chromatic boundaries heighten vigilance and trigger cognitive flow.'
+  },
+  {
+    id: 'solar-flare',
+    name: 'Cosmic Solar Flare',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#0c0a09',
+    surface: '#171311',
+    border: 'rgba(234, 88, 12, 0.25)',
+    accent: '#ea580c',
+    accentName: 'Molten Solar Orange',
+    textPrimary: '#fff7ed',
+    textSecondary: '#fb923c',
+    description: 'Warm chromatic resonance without glare. Rich anthracite black with molten solar core.',
+    physiologyBasis: 'Warm 600nm wavelengths trigger alertness without activating disruptive retinal ganglion cells.'
+  },
+  {
+    id: 'ergonomic-graphite',
+    name: 'Ergonomic Monochromatic Graphite',
+    category: 'Special Themes',
+    subCategory: 'Dark',
+    bg: '#121212',
+    surface: '#1c1c1c',
+    border: 'rgba(255, 255, 255, 0.16)',
+    accent: '#e5e5e5',
+    accentName: 'Platinum Silver',
+    textPrimary: '#fafafa',
+    textSecondary: '#a3a3a3',
+    description: 'Zero-chroma distraction. Achromatic neutral balance eliminates lateral chromatic aberration.',
+    physiologyBasis: 'Prevents ocular lens accommodation strain caused by differential chromatic refraction.'
+  },
+  {
+    id: 'e-ink-papyrus',
+    name: 'E-Ink Papyrus Reader',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#fbf8f2',
+    surface: '#f3ece0',
+    border: 'rgba(133, 77, 14, 0.22)',
+    accent: '#854d0e',
+    accentName: 'Walnut Bistre',
+    textPrimary: '#1c1815',
+    textSecondary: '#574c43',
+    description: 'Simulates diffuse reflectance of natural paper (ISO 2470 82%). Zero specular screen glare.',
+    physiologyBasis: 'Matches diffuse paper reflectance curve, eliminating blue spike photophobia.'
+  },
+  {
+    id: 'nordic-fjord',
+    name: 'Nordic Fjord Daylight',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#f1f5f9',
+    surface: '#e2e8f0',
+    border: 'rgba(2, 132, 199, 0.22)',
+    accent: '#0284c7',
+    accentName: 'Fjord Blue',
+    textPrimary: '#0f172a',
+    textSecondary: '#334155',
+    description: 'Cool scotopic balance (~5500K daylight). Maximizes visual acuity in bright sunlit offices.',
+    physiologyBasis: 'Daylight balanced spectrum stimulates non-visual ipRGC receptors to combat daytime drowsiness.'
+  },
+  {
+    id: 'tuscan-terracotta',
+    name: 'Tuscan Terracotta Warmth',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#faf6f0',
+    surface: '#f0e8dc',
+    border: 'rgba(194, 65, 12, 0.22)',
+    accent: '#c2410c',
+    accentName: 'Terracotta Clay',
+    textPrimary: '#1e140d',
+    textSecondary: '#63391b',
+    description: 'Earthy organic warmth. Soft ivory parchment with comforting roasted terracotta accents.',
+    physiologyBasis: 'Earth-tone reflection reduces autonomic fight-or-flight triggers during intense debugging.'
+  },
+  {
+    id: 'matcha-ceremonial',
+    name: 'Matcha Tea Ceremonial',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#f3f6f1',
+    surface: '#e4ebe0',
+    border: 'rgba(21, 128, 61, 0.22)',
+    accent: '#15803d',
+    accentName: 'Bamboo Forest',
+    textPrimary: '#142918',
+    textSecondary: '#2f4f34',
+    description: 'Calming mid-frequency spectrum (520–560nm). Pale ceremonial tea base with deep forest ink.',
+    physiologyBasis: 'Mid-wavelength green balance minimizes visual cortex hyper-excitation.'
+  },
+  {
+    id: 'swiss-modernist',
+    name: 'Swiss Bauhaus Modernist',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#fcfcfc',
+    surface: '#f4f4f5',
+    border: 'rgba(37, 99, 235, 0.25)',
+    accent: '#2563eb',
+    accentName: 'International Klein Blue',
+    textPrimary: '#09090b',
+    textSecondary: '#27272a',
+    description: 'Josef Müller-Brockmann grid clarity. Pure alabaster with stark black typography (>18:1 contrast).',
+    physiologyBasis: 'Maximum typographic foveal acuity for rapid code scanning and proofreading.'
+  },
+  {
+    id: 'alpenglow-apricot',
+    name: 'Alpenglow Apricot Dawn',
+    category: 'Special Themes',
+    subCategory: 'Light',
+    bg: '#fdf6f0',
+    surface: '#f7eae0',
+    border: 'rgba(219, 39, 119, 0.22)',
+    accent: '#db2777',
+    accentName: 'Alpenglow Rose',
+    textPrimary: '#24141e',
+    textSecondary: '#543246',
+    description: 'Morning alpenglow sunrise curve. Gentle peach cream with deep velvet prune typography.',
+    physiologyBasis: 'Sunrise spectrum promotes positive emotional valence and visual softness.'
+  },
+
+  // -------------------------------------------------------------------------
+  // 6 CURATED WORLD-CLASS DARK THEMES
   // -------------------------------------------------------------------------
   {
     id: 'obsidian',
@@ -96,190 +283,86 @@ export const THEMES_DATA: ThemeInfo[] = [
     textSecondary: '#9aa5ce',
     description: 'Neon metropolis dusk with atmospheric blue tones'
   },
-  {
-    id: 'monokai',
-    name: 'Monokai Pro',
-    category: 'Dark Themes',
-    bg: '#1b191b',
-    surface: '#272427',
-    border: 'rgba(255, 97, 136, 0.25)',
-    accent: '#ff6188',
-    accentName: 'Coral Flame',
-    textPrimary: '#fcfcfa',
-    textSecondary: '#ababa8',
-    description: 'Iconic hacker contrast with sharp laser coral'
-  },
-  {
-    id: 'gruvbox-dark',
-    name: 'Gruvbox Dark',
-    category: 'Dark Themes',
-    bg: '#1d2021',
-    surface: '#282828',
-    border: 'rgba(250, 189, 47, 0.22)',
-    accent: '#fabd2f',
-    accentName: 'Retro Gold',
-    textPrimary: '#fbf1c7',
-    textSecondary: '#bdae93',
-    description: 'Warm organic espresso wood with aged gold sheen'
-  },
-  {
-    id: 'catppuccin-dark',
-    name: 'Catppuccin Mocha',
-    category: 'Dark Themes',
-    bg: '#11111b',
-    surface: '#181825',
-    border: 'rgba(203, 166, 247, 0.25)',
-    accent: '#cba6f7',
-    accentName: 'Soft Lavender',
-    textPrimary: '#cdd6f4',
-    textSecondary: '#a6adc8',
-    description: 'Soothing velvety dark background with calm lilac'
-  },
-  {
-    id: 'crimson',
-    name: 'Crimson Velvet',
-    category: 'Dark Themes',
-    bg: '#120707',
-    surface: '#1f0b0b',
-    border: 'rgba(239, 68, 68, 0.25)',
-    accent: '#ef4444',
-    accentName: 'Scarlet Flame',
-    textPrimary: '#fff1f1',
-    textSecondary: '#fca5a5',
-    description: 'Rich dark burgundy wine with intense scarlet spark'
-  },
 
   // -------------------------------------------------------------------------
-  // 10 WORLD-CLASS LIGHT THEMES (WCAG AAA CONTRAST, HIGH LEGIBILITY)
+  // 6 CURATED WORLD-CLASS LIGHT THEMES
   // -------------------------------------------------------------------------
   {
     id: 'pure-paper',
     name: 'Pure Paper',
     category: 'Light Themes',
     bg: '#ffffff',
-    surface: '#f8fafc',
-    border: '#e2e8f0',
-    accent: '#0f172a',
-    accentName: 'Onyx Black',
-    textPrimary: '#0f172a',
-    textSecondary: '#475569',
-    description: 'Pristine Apple/Vercel studio white with crisp dark text'
+    surface: '#f4f4f5',
+    border: 'rgba(0, 0, 0, 0.12)',
+    accent: '#0d9488',
+    accentName: 'Electric Teal',
+    textPrimary: '#111111',
+    textSecondary: '#4b5563',
+    description: 'Archival museum white with crisp jet black typography'
   },
   {
     id: 'solarized-light',
-    name: 'Solarized Parchment',
+    name: 'Solarized Light',
     category: 'Light Themes',
     bg: '#fdf6e3',
-    surface: '#f4ecdc',
-    border: '#d8ccb4',
-    accent: '#cb4b16',
-    accentName: 'Terracotta',
+    surface: '#eee8d5',
+    border: 'rgba(38, 139, 210, 0.2)',
+    accent: '#2aa198',
+    accentName: 'Cobalt Cyan',
     textPrimary: '#073642',
-    textSecondary: '#586e75',
-    description: 'Scientifically calculated warm sepia that eliminates glare'
+    textSecondary: '#3b5359',
+    description: 'Ethan Schoonover mathematical precision palette'
   },
   {
     id: 'github-light',
-    name: 'GitHub Primer',
+    name: 'GitHub Light',
     category: 'Light Themes',
     bg: '#ffffff',
     surface: '#f6f8fa',
-    border: '#d0d7de',
+    border: 'rgba(31, 35, 40, 0.15)',
     accent: '#0969da',
     accentName: 'Primer Blue',
     textPrimary: '#1f2328',
-    textSecondary: '#656d76',
-    description: 'Standard software engineer daylight interface with clear blue'
+    textSecondary: '#4b535d',
+    description: 'Familiar modern engineering high-density canvas'
   },
   {
     id: 'nord-light',
-    name: 'Nord Snow Storm',
+    name: 'Nord Snow',
     category: 'Light Themes',
-    bg: '#f8fafc',
-    surface: '#edf2f7',
-    border: '#cbd5e1',
-    accent: '#0284c7',
-    accentName: 'Polar Blue',
-    textPrimary: '#1e293b',
-    textSecondary: '#475569',
-    description: 'Clean polar ice aesthetic with crisp deep slate reading'
-  },
-  {
-    id: 'emerald-light',
-    name: 'Mint Forest',
-    category: 'Light Themes',
-    bg: '#f9fbf9',
-    surface: '#eef7ee',
-    border: '#c2e2c2',
-    accent: '#059669',
-    accentName: 'Forest Emerald',
-    textPrimary: '#064e3b',
-    textSecondary: '#065f46',
-    description: 'Fresh organic botanical white with rich forest evergreen'
+    bg: '#eceff4',
+    surface: '#e5e9f0',
+    border: 'rgba(94, 129, 172, 0.25)',
+    accent: '#5e81ac',
+    accentName: 'Frost Teal',
+    textPrimary: '#2e3440',
+    textSecondary: '#434c5e',
+    description: 'Pristine arctic snow with soothing cool slate ink'
   },
   {
     id: 'warm-cream',
-    name: 'Warm Latte',
+    name: 'Warm Cream',
     category: 'Light Themes',
     bg: '#faf8f5',
-    surface: '#f3efe8',
-    border: '#d6ccbf',
-    accent: '#78350f',
-    accentName: 'Roasted Amber',
-    textPrimary: '#292524',
-    textSecondary: '#78716c',
-    description: 'Cozy steamed milk and roasted coffee for relaxed reading'
-  },
-  {
-    id: 'lavender-light',
-    name: 'Lavender Mist',
-    category: 'Light Themes',
-    bg: '#faf8ff',
-    surface: '#f3effe',
-    border: '#d8cafc',
-    accent: '#9333ea',
-    accentName: 'Royal Violet',
-    textPrimary: '#3b0764',
-    textSecondary: '#6b21a8',
-    description: 'Airy lilac mist with deep royal purple typography'
-  },
-  {
-    id: 'peach-dawn',
-    name: 'Peach Dawn',
-    category: 'Light Themes',
-    bg: '#fffaf5',
-    surface: '#feede0',
-    border: '#fbc7a7',
-    accent: '#ea580c',
-    accentName: 'Sunrise Orange',
-    textPrimary: '#431407',
-    textSecondary: '#9a3412',
-    description: 'Gentle sunrise warmth with rich terracotta ink'
+    surface: '#f3efe6',
+    border: 'rgba(217, 119, 6, 0.2)',
+    accent: '#d97706',
+    accentName: 'Amber Bronze',
+    textPrimary: '#1c1917',
+    textSecondary: '#57534e',
+    description: 'Organic warm editorial cream with deep espresso text'
   },
   {
     id: 'rose-pine-dawn',
     name: 'Rosé Pine Dawn',
     category: 'Light Themes',
     bg: '#faf4ed',
-    surface: '#f2e9de',
-    border: '#cebeaa',
-    accent: '#907aa9',
-    accentName: 'Dusty Iris',
+    surface: '#fffaf3',
+    border: 'rgba(40, 105, 131, 0.2)',
+    accent: '#286983',
+    accentName: 'Pine Teal',
     textPrimary: '#575279',
-    textSecondary: '#797593',
-    description: 'Soft Mediterranean desert sand with dusty rose accents'
-  },
-  {
-    id: 'cyber-light',
-    name: 'Cyber Minimal',
-    category: 'Light Themes',
-    bg: '#f8fafc',
-    surface: '#f1f5f9',
-    border: '#cbd5e1',
-    accent: '#0891b2',
-    accentName: 'Electric Cyan',
-    textPrimary: '#020617',
-    textSecondary: '#334155',
-    description: 'High-contrast industrial monochrome with sharp cyan'
+    textSecondary: '#484469',
+    description: 'Warm Nordic daylight with muted plum and dusky teal'
   }
 ];

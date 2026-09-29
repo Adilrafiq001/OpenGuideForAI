@@ -97,7 +97,29 @@
 - [x] Resolved Major F-09: Synchronized Playwright test suite locators in `app-full-regression.spec.ts` (monogram mobile brand check, Tracks menu dropdown, and certificate milestone preview).
 - [x] Resolved Minor F-08: Refined certificate copy to *"Deterministic SHA-256 Document Integrity Signature"*.
 - [x] Resolved Minor & Cosmetic F-06, F-02, F-10: Added `:focus-visible` rings, `maxLength={80}` on student name input, and `max-w-[85vw] truncate` to Command Dock labels.
-- [x] Verified 20/20 tests passing in Playwright test suite (100% pass rate) and clean production build (`tsc -b && vite build`) in 20.62s.
+## Phase 9: Cloudflare Pages Production Deployment & Edge Caching (Active / Delivered)
+- [x] Cloudflare Pages `_headers` configuration with immutable asset caching (`Cache-Control: public, max-age=31536000, immutable`).
+- [x] Zero-cache HTML and service worker revalidation (`max-age=0, must-revalidate`) preventing stale clientside SPA bundles.
+- [x] Production security headers (`X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`).
+- [x] Clean zero-error production build (`tsc -b && vite build`) with zero TypeScript warnings.
+
+## Phase 10: Offline-First PWA & Service Worker Pre-Caching (Active / Delivered)
+- [x] Production Service Worker (`apps/web/public/sw.js`) implementing stale-while-revalidate for navigation HTML and cache-first for hashed static assets.
+- [x] Real-Time Offline Status Indicator (`OfflineStatusIndicator.tsx`) floating status pill with connection drop/restore announcements.
+- [x] Native Service Worker registration in `main.tsx` (`!import.meta.env.DEV`) for zero-friction offline execution.
+
+## Phase 11: Synapse Lounge Attention Radar & 24 Physiological Themes (Active / Delivered)
+- [x] Minigame 3: Transformer Attention Radar (`activeGame: 'attention'`) in Synapse Lounge with Query-Key dot products and $\sqrt{d_k}$ scaling toggle.
+- [x] Softmax routing temperature slider $\tau \in [0.1, 2.5]$ with live distribution bars, scenario navigation, and +300 Synapse XP reward.
+- [x] 24 Research-Calibrated Themes (12 Special, 6 Dark, 6 Light) grounded in visual physiology, circadian photobiology (460-490nm blue light elimination), and scotopic rod-cell sensitivity (507nm peak).
+- [x] Theme Settings Modal category filtering (`Special (12)`, `Dark (6)`, `Light (6)`, `All (24)`) and live Physiological & Visual Science inspector panel.
+
+## Phase 12: Resizable Apple-Craft Abby AI Copilot & Hero Mechanical Button (Release v2.5.0)
+- [x] Resizable Abby Chatbot with 3 ergonomic sizing presets (`compact`, `standard`, `expanded`).
+- [x] Deep multi-domain knowledge base (`offlineKnowledge.ts`) covering all 4 Tracks, Spatial Holodeck, Synapse Lounge, Cognitive Accelerator, X-Ray Lens, Free Tools, and ARD authorship.
+- [x] Fluid Apple spring exit physics (`cubic-bezier(0.16, 1, 0.3, 1)`) and zero AI slop (theme variables, clean typography).
+- [x] Mechanical Hero "Launch Track 0" button with animated cover opening, internal filament glow, gear mechanics, and "Time To Shine" transition.
+- [x] Studio Footer Changelog & Release Milestones updated to `v2.5.0`.
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 

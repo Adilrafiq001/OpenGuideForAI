@@ -7,8 +7,11 @@ import {
   Check, 
   Flame,
   Compass,
-  Sparkles
+  Sparkles,
+  Layers,
+  Sliders
 } from 'lucide-react';
+
 import { useSettingsStore } from '../store/useSettingsStore';
 
 // Web Audio sound generator for haptic engagement
@@ -65,9 +68,93 @@ function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boole
 
 export function SynapseLounge() {
   const { soundFx } = useSettingsStore();
-  const [activeGame, setActiveGame] = useState<'vector' | 'neuron'>('vector');
+  const [activeGame, setActiveGame] = useState<'vector' | 'neuron' | 'attention'>('vector');
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
+
+  // --- GAME 3: TRANSFORMER ATTENTION RADAR & SOFTMAX SCALER ---
+  const attentionScenarios = [
+    {
+      querySentence: 'The bank of the river overflowed its stone banks',
+      queryToken: 'bank (index 1)',
+      targetToken: 'river',
+      description: 'Route attention weight to contextual anchor "river" to resolve polysemy',
+      tokens: [
+        { word: 'The', rawDot: 1.2 },
+        { word: 'bank', rawDot: 3.8 },
+        { word: 'of', rawDot: 0.8 },
+        { word: 'the', rawDot: 1.1 },
+        { word: 'river', rawDot: 7.4 },
+        { word: 'overflowed', rawDot: 4.8 }
+      ]
+    },
+    {
+      querySentence: 'The autonomous agent retrieved verified evidence',
+      queryToken: 'agent',
+      targetToken: 'autonomous',
+      description: 'Align attention to the functional modifier defining behavior',
+      tokens: [
+        { word: 'The', rawDot: 0.9 },
+        { word: 'autonomous', rawDot: 7.8 },
+        { word: 'agent', rawDot: 3.6 },
+        { word: 'retrieved', rawDot: 5.1 },
+        { word: 'verified', rawDot: 4.3 }
+      ]
+    },
+    {
+      querySentence: 'Gradient descent minimizes the scalar loss',
+      queryToken: 'minimizes',
+      targetToken: 'loss',
+      description: 'Route mathematical action directly to the optimization objective',
+      tokens: [
+        { word: 'Gradient', rawDot: 3.2 },
+        { word: 'descent', rawDot: 2.9 },
+        { word: 'minimizes', rawDot: 3.8 },
+        { word: 'the', rawDot: 0.7 },
+        { word: 'scalar', rawDot: 4.1 },
+        { word: 'loss', rawDot: 8.2 }
+      ]
+    }
+  ];
+
+  const [attentionIdx, setAttentionIdx] = useState(0);
+  const [temperature, setTemperature] = useState(1.0);
+  const [useScaleFactor, setUseScaleFactor] = useState(true);
+  const [hasAwardedAttention, setHasAwardedAttention] = useState(false);
+
+  const currentAttention = attentionScenarios[attentionIdx];
+  const dk = 64; // standard transformer d_k
+  const sqrtDk = Math.sqrt(dk); // 8
+
+  // Scaled dot-product calculation
+  const scaledScores = currentAttention.tokens.map(t => {
+    const raw = t.rawDot;
+    const scaled = useScaleFactor ? raw / (sqrtDk * temperature) : raw / temperature;
+    return scaled;
+  });
+
+  // Numerically stable softmax
+  const maxScore = Math.max(...scaledScores);
+  const expScores = scaledScores.map(s => Math.exp(s - maxScore));
+  const sumExp = expScores.reduce((a, b) => a + b, 0);
+  const attentionWeights = expScores.map(e => e / sumExp);
+
+  // Target token verification
+  const targetTokenIdx = currentAttention.tokens.findIndex(t => t.word === currentAttention.targetToken);
+  const targetWeight = targetTokenIdx >= 0 ? attentionWeights[targetTokenIdx] : 0;
+  const isAttentionOptimized = targetWeight >= 0.40;
+
+  useEffect(() => {
+    if (isAttentionOptimized && !hasAwardedAttention) {
+      setHasAwardedAttention(true);
+      playSound('success', soundFx);
+      setScore(s => s + 300);
+      setStreak(st => st + 1);
+    } else if (!isAttentionOptimized && hasAwardedAttention) {
+      setHasAwardedAttention(false);
+    }
+  }, [isAttentionOptimized, hasAwardedAttention, soundFx]);
+
 
   // --- GAME 1: VECTOR SPACE ALIGNMENT (Interactive Angle + Semantic Cards) ---
   const [probeAngle, setProbeAngle] = useState(135);
@@ -274,7 +361,24 @@ export function SynapseLounge() {
           <Cpu size={16} />
           <span>Neural Gate Deductor</span>
         </button>
+
+        <button
+
+          onClick={() => {
+            playSound('click', soundFx);
+            setActiveGame('attention');
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+            activeGame === 'attention'
+              ? 'bg-[var(--color-accent)] text-black shadow-md'
+              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+          }`}
+        >
+          <Layers size={16} />
+          <span>Transformer Attention Radar</span>
+        </button>
       </div>
+
 
       {/* Active Game Canvas */}
       <div className="relative rounded-[2.5rem] bg-[var(--color-secondary)]/60 border border-[var(--color-border)] p-6 sm:p-10 shadow-2xl overflow-hidden min-h-[440px] flex flex-col justify-between">
@@ -681,7 +785,213 @@ export function SynapseLounge() {
           </div>
         )}
 
+        {/* Game 3: Transformer Attention Radar */}
+        {activeGame === 'attention' && (
+          <div className="space-y-8 flex-1 flex flex-col justify-between">
+            <div className="space-y-6">
+              {/* Scenario Selector & Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30 uppercase">
+                      Scaled Dot-Product Softmax
+                    </span>
+                    <span className="text-xs text-[var(--color-text-secondary)] font-mono">
+                      Scenario {attentionIdx + 1} of {attentionScenarios.length}
+                    </span>
+                  </div>
+                  <h4 className="text-base font-bold text-[var(--color-text-primary)]">
+                    {currentAttention.description}
+                  </h4>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {attentionScenarios.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        playSound('click', soundFx);
+                        setAttentionIdx(idx);
+                        setHasAwardedAttention(false);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-all cursor-pointer ${
+                        attentionIdx === idx
+                          ? 'bg-[var(--color-accent)] text-black border-[var(--color-accent)] font-bold'
+                          : 'border-[var(--color-border)] bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                      }`}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interactive Query Sentence Preview */}
+              <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex flex-wrap items-center gap-2">
+                <span className="text-xs font-mono text-[var(--color-text-secondary)] uppercase mr-2">Sequence:</span>
+                {currentAttention.tokens.map((t, idx) => {
+                  const isQuery = t.word.toLowerCase() === currentAttention.queryToken.split(' ')[0].toLowerCase();
+                  const isTarget = t.word.toLowerCase() === currentAttention.targetToken.toLowerCase();
+                  return (
+                    <span
+                      key={idx}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all ${
+                        isQuery
+                          ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold'
+                          : isTarget
+                          ? 'bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/50 text-[var(--color-accent)] font-bold'
+                          : 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
+                      }`}
+                    >
+                      {t.word}
+                      {isQuery && <span className="ml-1 text-[9px] opacity-75">(Q)</span>}
+                      {isTarget && <span className="ml-1 text-[9px] opacity-75">(Target)</span>}
+                    </span>
+                  );
+                })}
+              </div>
+
+              {/* Sliders and Controls Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                {/* Attention Hyperparameters (Left) */}
+                <div className="md:col-span-5 space-y-5 p-5 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-semibold flex items-center gap-2">
+                      <Sliders size={14} className="text-[var(--color-accent)]" /> Hyperparameters
+                    </span>
+                    <span className="text-xs font-mono text-[var(--color-accent)] font-bold">
+                      τ = {temperature.toFixed(2)}
+                    </span>
+                  </div>
+
+                  {/* Temperature Slider */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-[var(--color-text-secondary)]">Softmax Temperature (τ):</span>
+                      <span className="font-mono font-bold text-[var(--color-text-primary)]">
+                        {temperature < 0.5 ? 'Sharp / Argmax' : temperature > 1.5 ? 'High Entropy' : 'Balanced'}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="2.5"
+                      step="0.05"
+                      value={temperature}
+                      onChange={(e) => {
+                        setTemperature(Number(e.target.value));
+                      }}
+                      className="w-full h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                    />
+                    <div className="flex gap-1.5 pt-1">
+                      {[
+                        { label: '0.2 (Sharp)', val: 0.2 },
+                        { label: '1.0 (Standard)', val: 1.0 },
+                        { label: '2.0 (Diffused)', val: 2.0 }
+                      ].map((preset) => (
+                        <button
+                          key={preset.val}
+                          onClick={() => {
+                            playSound('click', soundFx);
+                            setTemperature(preset.val);
+                          }}
+                          className={`px-2 py-1 rounded text-[10px] font-mono border transition-all cursor-pointer ${
+                            Math.abs(temperature - preset.val) < 0.05
+                              ? 'bg-[var(--color-accent)] text-black border-[var(--color-accent)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Scaling Factor Toggle */}
+                  <div className="pt-3 border-t border-[var(--color-border)] space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs text-[var(--color-text-primary)] font-medium flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={useScaleFactor}
+                          onChange={(e) => {
+                            playSound('click', soundFx);
+                            setUseScaleFactor(e.target.checked);
+                          }}
+                          className="rounded accent-[var(--color-accent)]"
+                        />
+                        <span>Scale by √d_k (d_k=64, √d_k=8)</span>
+                      </label>
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">
+                        {useScaleFactor ? 'Active' : 'Bypassed'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed">
+                      Without √d_k scaling, large dot products blow up in magnitude, pushing softmax into flat saturated regions where gradients vanish.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Live Attention Distribution Bars (Right) */}
+                <div className="md:col-span-7 space-y-3 p-5 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-semibold">
+                      Softmax Attention Weights (Q · K^T / (√d_k · τ))
+                    </span>
+                    {isAttentionOptimized && (
+                      <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 animate-pulse">
+                        <Check size={14} /> Focus Locked!
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {currentAttention.tokens.map((token, i) => {
+                      const weight = attentionWeights[i];
+                      const pct = Math.round(weight * 100);
+                      const isTarget = token.word.toLowerCase() === currentAttention.targetToken.toLowerCase();
+
+                      return (
+                        <div key={i} className="space-y-1">
+                          <div className="flex items-center justify-between text-xs font-mono">
+                            <span className={isTarget ? 'font-bold text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}>
+                              {token.word} {isTarget && '★'}
+                            </span>
+                            <span className="text-[11px] text-[var(--color-text-secondary)]">
+                              raw: {token.rawDot.toFixed(1)} | <strong className={isTarget ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'}>{pct}%</strong>
+                            </span>
+                          </div>
+                          <div className="h-3 w-full bg-[var(--color-secondary)] rounded-full overflow-hidden p-0.5 border border-[var(--color-border)]">
+                            <div
+                              style={{ width: `${Math.max(pct, 3)}%` }}
+                              className={`h-full rounded-full transition-all duration-300 ${
+                                isTarget
+                                  ? 'bg-[var(--color-accent)]'
+                                  : 'bg-[var(--color-text-secondary)]/40'
+                              }`}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Educational takeaway */}
+            <div className="pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[var(--color-text-secondary)]">
+              <span>
+                Attention(Q, K, V) = softmax(Q·K^T / (√d_k · τ))·V. Tune temperature τ to concentrate semantic routing onto the target token!
+              </span>
+              <span className="font-mono text-emerald-400 font-bold shrink-0">
+                {isAttentionOptimized ? '+300 Synapse XP Earned' : 'Tune τ to route >40% attention'}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
+
     </section>
   );
 }

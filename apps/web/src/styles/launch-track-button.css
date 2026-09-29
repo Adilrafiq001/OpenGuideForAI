@@ -1,0 +1,500 @@
+/* Launch Track 0 Mechanical Hero Action Button */
+.launch-track-hero-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.launch-track-hero-container .area {
+  --ease-elastic: cubic-bezier(0.5, 2, 0.3, 0.8);
+  --ease-elastic-2: cubic-bezier(0.5, -1, 0.3, 0.8);
+  --primary: #ff8800;
+  --rounded-max: 100px;
+  --rounded-min: 10px;
+  --h: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.launch-track-hero-container .area-wrapper {
+  position: relative;
+  padding: 10px 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.launch-track-hero-container .area-wrapper:hover .wrapper,
+.launch-track-hero-container .area-wrapper.is-opening .wrapper {
+  transform: translateY(0) scale(1);
+}
+
+.launch-track-hero-container .area-wrapper:hover .case .mask,
+.launch-track-hero-container .area-wrapper.is-opening .case .mask {
+  box-shadow:
+    inset 8px -15px 15px -10px black,
+    inset 10px -17px 12px -12px white,
+    0 20px 50px -5px #111;
+}
+
+.launch-track-hero-container .area-wrapper:hover .part-2 .glass,
+.launch-track-hero-container .area-wrapper.is-opening .part-2 .glass {
+  box-shadow:
+    inset 0 0 7px -4px white,
+    inset 0 -10px 10px -8px rgba(255, 255, 255, 0.4),
+    inset 8px -15px 15px -10px black,
+    inset 8px -10px 12px -12px white,
+    0 20px 50px -5px #111;
+}
+
+.launch-track-hero-container svg {
+  overflow: visible;
+}
+
+.launch-track-hero-container .wrapper {
+  display: block;
+  border-radius: 100px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.6s cubic-bezier(0.5, 2, 0.3, 0.8);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.launch-track-hero-container .button-btn {
+  background: transparent;
+  display: flex;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.launch-track-hero-container .button-btn::before {
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 25%;
+  width: 70%;
+  height: 100%;
+  margin: auto;
+  border-radius: 0 50% 50% 0;
+  position: absolute;
+  pointer-events: none;
+  background: var(--primary);
+  background: linear-gradient(
+    to right,
+    var(--primary) 0%,
+    transparent 100%
+  );
+  z-index: 1;
+  filter: blur(30px);
+  mix-blend-mode: color-dodge;
+  transition: all 1s ease 0.4s;
+  opacity: 0;
+}
+
+.launch-track-hero-container .button-btn::after {
+  content: "";
+  width: 50px;
+  height: 50px;
+  top: 0;
+  bottom: 0;
+  left: 28%;
+  margin: auto;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+  background: var(--primary);
+  z-index: 2;
+  filter: blur(15px);
+  mix-blend-mode: color-dodge;
+  transition: all 1s ease 0.4s;
+  opacity: 0;
+}
+
+.launch-track-hero-container .part-1 {
+  position: relative;
+  z-index: 1;
+  height: var(--h);
+  width: 76px;
+  border-radius: var(--rounded-max) var(--rounded-min) var(--rounded-min) var(--rounded-max);
+}
+
+.launch-track-hero-container .part-1 .line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  transition: all 0.4s ease;
+}
+
+.launch-track-hero-container .part-1 .line::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  content: "";
+  width: 1px;
+  background: white;
+  box-shadow: 1px 0 10px 3px #ffa600;
+  border-radius: 50%;
+  height: 0%;
+  margin: auto;
+  animation: launch-btn-line 1.8s ease infinite;
+}
+
+.launch-track-hero-container .part-1 .screw {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: -1;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.launch-track-hero-container .part-1 .screw svg {
+  width: auto;
+  height: 52px;
+}
+
+.launch-track-hero-container .part-1 .screw svg g {
+  transform-origin: center;
+}
+
+.launch-track-hero-container .part-1 .screw .dot {
+  color: #8e8c8b;
+}
+
+.launch-track-hero-container .part-1 .case {
+  height: var(--h);
+  width: 76px;
+  border-radius: inherit;
+  transform: translateX(0px);
+  transition: all 0.9s cubic-bezier(0.5, 2, 0.3, 0.8);
+}
+
+.launch-track-hero-container .area-wrapper.is-opening .part-1 .case {
+  transform: translateX(-40px);
+  transition: all 1.25s cubic-bezier(0.5, -1, 0.3, 0.8);
+}
+
+.launch-track-hero-container .case .mask {
+  position: absolute;
+  overflow: hidden;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    #2c2e31 0%,
+    #31343e 20%,
+    #212329 100%
+  );
+  box-shadow:
+    inset 8px -15px 15px -10px black,
+    inset 10px -17px 12px -12px white,
+    0 25px 60px -5px #111;
+  transition: all 0.9s cubic-bezier(0.5, 2, 0.3, 0.8);
+}
+
+.launch-track-hero-container .case .mask::before {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  left: 30%;
+  top: 23%;
+  width: 100%;
+  height: 30%;
+  background: white;
+  filter: blur(12px);
+}
+
+.launch-track-hero-container .case .mask::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  mix-blend-mode: overlay;
+}
+
+.launch-track-hero-container .part-2 {
+  position: relative;
+  height: var(--h);
+  width: 215px;
+  border-radius: var(--rounded-min) var(--rounded-max) var(--rounded-max) var(--rounded-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s ease;
+}
+
+.launch-track-hero-container .part-2 .glass {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  transition: all 0.9s cubic-bezier(0.5, 2, 0.3, 0.8);
+  border-radius: inherit;
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  box-shadow:
+    inset 0 0 7px -4px white,
+    inset 0 -10px 10px -8px rgba(255, 255, 255, 0.4),
+    inset 8px -15px 15px -10px black,
+    inset 8px -10px 12px -12px white,
+    0 25px 60px -5px #111;
+}
+
+.launch-track-hero-container .part-2 .glass::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10%;
+  right: 14%;
+  height: 70%;
+  border-radius: 0 25px 0 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+.launch-track-hero-container .part-2 .glass::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 15%;
+  right: 5%;
+  height: 75%;
+  border-radius: 0 30px 30px 0;
+  box-shadow: inset -2px -6px 5px -5px rgba(255, 255, 255, 0.8);
+  filter: blur(3px);
+}
+
+.launch-track-hero-container .glass-reflex {
+  position: absolute;
+  inset: 0;
+  width: 70%;
+  border-radius: 0 50% 50% 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  transform: translateX(-115%) skewX(30deg);
+}
+
+.launch-track-hero-container .glass-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+}
+
+.launch-track-hero-container .path-glass {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.6s linear;
+  opacity: 0;
+}
+
+.launch-track-hero-container .path-glass path {
+  stroke-dashoffset: 430;
+  stroke-dasharray: 430 430;
+  animation: launch-btn-path-glass 1.4s ease infinite;
+}
+
+@keyframes launch-btn-path-glass {
+  0% {
+    stroke-dasharray: 430 430;
+    color: #45f8f8;
+    opacity: 1;
+    filter: blur(2px);
+  }
+  50% {
+    stroke-dasharray: 860 430;
+    opacity: 1;
+    filter: blur(4px);
+  }
+  100% {
+    stroke-dasharray: 860 430;
+    color: var(--primary);
+    opacity: 0;
+  }
+}
+
+.launch-track-hero-container .filament {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: auto;
+  height: 24px;
+  stroke-width: 2px;
+  opacity: 0.3;
+}
+
+.launch-track-hero-container .filament path {
+  transition: all 0.6s ease-in-out;
+}
+
+.launch-track-hero-container .filament-on {
+  opacity: 1;
+}
+
+.launch-track-hero-container .filament-on path {
+  stroke-dashoffset: 100;
+  stroke-dasharray: 100 100;
+}
+
+.launch-track-hero-container .filament-blur {
+  opacity: 1;
+  filter: blur(8px);
+  color: rgb(255, 208, 0);
+  stroke-width: 10px;
+}
+
+.launch-track-hero-container .text {
+  transition: all 0.3s ease;
+  transform: translateY(-2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.launch-track-hero-container .text span {
+  display: block;
+  color: transparent;
+  position: relative;
+  font-weight: 700;
+}
+
+.launch-track-hero-container .text span::before,
+.launch-track-hero-container .text span::after {
+  content: attr(data-label);
+  position: absolute;
+  font-size: 15px;
+  left: 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: inherit;
+}
+
+.launch-track-hero-container .text span::before {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.launch-track-hero-container .area-wrapper.is-opening .button-btn .filament path {
+  transition-delay: 0.2s;
+  stroke-dasharray: 100 0;
+}
+
+.launch-track-hero-container .area-wrapper:hover .button-btn::before,
+.launch-track-hero-container .area-wrapper:hover .button-btn::after,
+.launch-track-hero-container .area-wrapper.is-opening .button-btn::before,
+.launch-track-hero-container .area-wrapper.is-opening .button-btn::after,
+.launch-track-hero-container .area-wrapper.is-opening .button-btn .path-glass {
+  opacity: 1;
+}
+
+.launch-track-hero-container .area-wrapper:hover .glass-reflex,
+.launch-track-hero-container .area-wrapper.is-opening .glass-reflex {
+  animation: launch-btn-reflex 0.6s ease;
+}
+
+.launch-track-hero-container .area-wrapper:not(.is-opening) .text.state-1 span::before {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.launch-track-hero-container .area-wrapper.is-opening .text.state-1 span::before,
+.launch-track-hero-container .area-wrapper.is-opening .text.state-1 span::after {
+  opacity: 0;
+  animation: launch-btn-char-out 0.6s ease calc(var(--i) * 0.03s) forwards;
+}
+
+.launch-track-hero-container .area-wrapper.is-opening .text.state-2 span::before {
+  opacity: 1;
+  animation: launch-btn-char-in 0.8s ease calc(0.3s + var(--i) * 0.03s) forwards;
+}
+
+.launch-track-hero-container .area-wrapper:not(.is-opening) .text.state-2 span::before,
+.launch-track-hero-container .area-wrapper:not(.is-opening) .text.state-2 span::after {
+  opacity: 0;
+}
+
+@keyframes launch-btn-line {
+  0% {
+    height: 0%;
+    opacity: 1;
+  }
+  50% {
+    height: 100%;
+    opacity: 1;
+  }
+  100% {
+    height: 140%;
+    opacity: 0;
+  }
+}
+
+@keyframes launch-btn-char-in {
+  0% {
+    opacity: 0;
+    transform: scale(2) translateY(-20%);
+    filter: blur(8px);
+    color: #45f8f8;
+  }
+  50% {
+    transform: translateY(5%);
+    opacity: 1;
+    filter: blur(0);
+    color: var(--primary);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+    color: #ffffff;
+  }
+}
+
+@keyframes launch-btn-char-out {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80%);
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+@keyframes launch-btn-reflex {
+  0% {
+    transform: translateX(-115%);
+  }
+  100% {
+    transform: translateX(140%);
+  }
+}

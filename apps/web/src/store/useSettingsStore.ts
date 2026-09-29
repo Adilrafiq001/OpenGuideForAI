@@ -2,12 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type Theme = 
-  // 10 Dark Themes
-  | 'obsidian' | 'midnight' | 'cyberpunk' | 'nord-dark' | 'dracula'
-  | 'tokyo-night' | 'monokai' | 'gruvbox-dark' | 'catppuccin-dark' | 'crimson'
-  // 10 Light Themes
-  | 'pure-paper' | 'solarized-light' | 'github-light' | 'nord-light' | 'emerald-light'
-  | 'warm-cream' | 'lavender-light' | 'peach-dawn' | 'rose-pine-dawn' | 'cyber-light';
+  // 6 Curated Dark Themes
+  | 'obsidian' | 'midnight' | 'cyberpunk' | 'nord-dark' | 'dracula' | 'tokyo-night'
+  // 6 Curated Light Themes
+  | 'pure-paper' | 'solarized-light' | 'github-light' | 'nord-light' | 'warm-cream' | 'rose-pine-dawn'
+  // 12 Special Research-Based Themes (6 Dark, 6 Light)
+  | 'circadian-amber' | 'mariana-bioluminescent' | 'biophilic-forest' | 'shinjuku-neon' | 'solar-flare' | 'ergonomic-graphite'
+  | 'e-ink-papyrus' | 'nordic-fjord' | 'tuscan-terracotta' | 'matcha-ceremonial' | 'swiss-modernist' | 'alpenglow-apricot';
+
 
 export interface SettingsState {
   theme: Theme;
