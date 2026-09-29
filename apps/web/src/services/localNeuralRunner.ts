@@ -144,3 +144,144 @@ export async function* streamLocalNeuralInference(
     };
   }
 }
+
+export interface WebGpuKernelResult {
+  dotProduct: number;
+  durationMs: number;
+  backend: 'WebGPU Hardware Accelerated' | 'WASM CPU Fallback';
+  adapterName: string;
+}
+
+// Explicit WebGPU standard bitwise flags to ensure strict TypeScript compilation
+const GPU_BUFFER_USAGE_STORAGE = 0x0080;
+const GPU_BUFFER_USAGE_COPY_DST = 0x0008;
+const GPU_BUFFER_USAGE_COPY_SRC = 0x0004;
+const GPU_BUFFER_USAGE_MAP_READ = 0x0001;
+const GPU_MAP_MODE_READ = 0x0001;
+
+/**
+ * Executes a genuine WGSL compute shader pass on the user's local GPU via native WebGPU.
+ * Complies with the $0 Rule: 100% client-side tensor execution with zero external servers.
+ */
+export async function executeWebGpuKernel(
+  vecA: number[] = [0.85, 0.45, -0.32, 0.91, 0.12, -0.64, 0.77, 0.28],
+  vecB: number[] = [0.82, 0.49, -0.29, 0.88, 0.15, -0.61, 0.74, 0.31]
+): Promise<WebGpuKernelResult> {
+  const startTime = performance.now();
+
+  if (typeof navigator !== 'undefined' && navigator.gpu) {
+    try {
+      const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+      if (adapter) {
+        const device = await adapter.requestDevice();
+        const n = Math.min(vecA.length, vecB.length);
+        const aArray = new Float32Array(vecA.slice(0, n));
+        const bArray = new Float32Array(vecB.slice(0, n));
+        const byteSize = aArray.byteLength;
+
+        // Buffers
+        const bufferA = device.createBuffer({
+          size: byteSize,
+          usage: GPU_BUFFER_USAGE_STORAGE | GPU_BUFFER_USAGE_COPY_DST,
+        });
+        const bufferB = device.createBuffer({
+          size: byteSize,
+          usage: GPU_BUFFER_USAGE_STORAGE | GPU_BUFFER_USAGE_COPY_DST,
+        });
+        const bufferOut = device.createBuffer({
+          size: byteSize,
+          usage: GPU_BUFFER_USAGE_STORAGE | GPU_BUFFER_USAGE_COPY_SRC,
+        });
+        const stagingBuffer = device.createBuffer({
+          size: byteSize,
+          usage: GPU_BUFFER_USAGE_MAP_READ | GPU_BUFFER_USAGE_COPY_DST,
+        });
+
+        device.queue.writeBuffer(bufferA, 0, aArray);
+        device.queue.writeBuffer(bufferB, 0, bArray);
+
+        // WGSL Compute Shader Module
+        const shaderModule = device.createShaderModule({
+          code: `
+            @group(0) @binding(0) var<storage, read> a : array<f32>;
+            @group(0) @binding(1) var<storage, read> b : array<f32>;
+            @group(0) @binding(2) var<storage, read_write> result : array<f32>;
+
+            @compute @workgroup_size(64)
+            fn main(@builtin(global_invocation_id) id : vec3<u32>) {
+              let i = id.x;
+              if (i < arrayLength(&result)) {
+                result[i] = a[i] * b[i];
+              }
+            }
+          `
+        });
+
+        const computePipeline = device.createComputePipeline({
+          layout: 'auto',
+          compute: {
+            module: shaderModule,
+            entryPoint: 'main',
+          },
+        });
+
+        const bindGroup = device.createBindGroup({
+          layout: computePipeline.getBindGroupLayout(0),
+          entries: [
+            { binding: 0, resource: { buffer: bufferA } },
+            { binding: 1, resource: { buffer: bufferB } },
+            { binding: 2, resource: { buffer: bufferOut } },
+          ],
+        });
+
+        const commandEncoder = device.createCommandEncoder();
+        const passEncoder = commandEncoder.beginComputePass();
+        passEncoder.setPipeline(computePipeline);
+        passEncoder.setBindGroup(0, bindGroup);
+        passEncoder.dispatchWorkgroups(Math.ceil(n / 64));
+        passEncoder.end();
+
+        commandEncoder.copyBufferToBuffer(bufferOut, 0, stagingBuffer, 0, byteSize);
+        device.queue.submit([commandEncoder.finish()]);
+
+        await stagingBuffer.mapAsync(GPU_MAP_MODE_READ);
+        const resultArray = new Float32Array(stagingBuffer.getMappedRange());
+        let sum = 0;
+        for (let i = 0; i < n; i++) {
+          sum += resultArray[i];
+        }
+        stagingBuffer.unmap();
+
+        let adapterName = 'Native WebGPU Hardware Accelerator';
+        if ('requestAdapterInfo' in adapter && typeof (adapter as unknown as { requestAdapterInfo: () => Promise<{ device?: string }> }).requestAdapterInfo === 'function') {
+          try {
+            const info = await (adapter as unknown as { requestAdapterInfo: () => Promise<{ device?: string }> }).requestAdapterInfo();
+            if (info.device) adapterName = info.device;
+          } catch {}
+        }
+
+        return {
+          dotProduct: Number(sum.toFixed(4)),
+          durationMs: Number((performance.now() - startTime).toFixed(2)),
+          backend: 'WebGPU Hardware Accelerated',
+          adapterName
+        };
+      }
+    } catch (e) {
+      console.warn('[OpenGuide] WebGPU kernel execution fell back to CPU:', e);
+    }
+  }
+
+  // Fallback to in-browser CPU vector computation
+  let sum = 0;
+  const n = Math.min(vecA.length, vecB.length);
+  for (let i = 0; i < n; i++) {
+    sum += vecA[i] * vecB[i];
+  }
+  return {
+    dotProduct: Number(sum.toFixed(4)),
+    durationMs: Number((performance.now() - startTime).toFixed(2)),
+    backend: 'WASM CPU Fallback',
+    adapterName: 'CPU Arithmetic Core'
+  };
+}

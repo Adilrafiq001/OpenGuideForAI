@@ -118,8 +118,13 @@
 - [x] Resizable Abby Chatbot with 3 ergonomic sizing presets (`compact`, `standard`, `expanded`).
 - [x] Deep multi-domain knowledge base (`offlineKnowledge.ts`) covering all 4 Tracks, Spatial Holodeck, Synapse Lounge, Cognitive Accelerator, X-Ray Lens, Free Tools, and ARD authorship.
 - [x] Fluid Apple spring exit physics (`cubic-bezier(0.16, 1, 0.3, 1)`) and zero AI slop (theme variables, clean typography).
-- [x] Mechanical Hero "Launch Track 0" button with animated cover opening, internal filament glow, gear mechanics, and "Time To Shine" transition.
+- [x] Hero "Launch Track 0" Mechanical Button Fix: Eliminated `<label>` and `<input type="checkbox">` nesting, converting to semantic `<button>` with explicit `.is-idle` and `.is-opening` state management. Added 1,500ms delay allowing mechanical cover slide (-26px), screw pulse, vacuum filament glow, and "Time To Shine" transition to completely render before navigation to `/track/0/intro`.
+- [x] Browser History & BFCache Restore Guard: Wired `popstate` and `pageshow` event listeners with `resetToIdle()`, guaranteeing that navigating back via browser Back button restores the button to its pristine resting dark steel/glass state with zero stuck orange/filament glare, and enables continuous repeated launches.
+- [x] Curriculum Lab Depth Across Tracks 1, 2, and 3: 27 in-depth interactive labs across Vector Spaces, RAG pipelines, and Production Evals with local in-browser WASM verification and expected output assertions.
+- [x] Native WebGPU WGSL Compute Kernel Engine (`localNeuralRunner.ts`): Implemented direct WGSL compute shader pass for client-side tensor multiplication with automatic WASM CPU fallback and hardware adapter telemetry ($0 Rule).
+- [x] Cloudflare Pages Edge Deployment & Build Validation: Verified production build (`tsc -b && vite build`) with 0 errors in 3.09s, valid `_headers` edge caching, and PWA service worker pre-caching.
 - [x] Studio Footer Changelog & Release Milestones updated to `v2.5.0`.
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
+
 

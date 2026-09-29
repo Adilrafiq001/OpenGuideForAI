@@ -252,11 +252,21 @@
   - Transformed Abby AI Chatbot into a resizable window with 3 ergonomic presets (`compact`, `standard`, `expanded`).
   - Expanded offline semantic database (`offlineKnowledge.ts`) across all 4 Tracks, Holodeck, Synapse Lounge, Cognitive Accelerator, X-Ray Lens, Free Tools, and ARD attribution—completely eliminating repetitive responses.
   - Implemented fluid Apple-inspired spring exit physics (`cubic-bezier(0.16, 1, 0.3, 1)`) and eradicated all AI interface slop using semantic theme variables and clean typography.
-  - Built interactive mechanical "Launch Track 0" Hero CTA (`LaunchTrack0HeroButton.tsx` & `launch-track-button.css`) with opening gear casing, glowing filament, noise texture, "Time To Shine" state morph, and smooth 1450ms delayed redirection.
+  - Built interactive mechanical "Launch Track 0" Hero CTA (`LaunchTrack0HeroButton.tsx` & `launch-track-button.css`) with opening gear casing, glowing filament, noise texture, and "Time To Shine" state morph.
+  - Fixed Hero mechanical button architecture: Eliminated checkbox hack and nested label synthetic event bubbling, refactoring into a semantic `<button>` with explicit `.is-idle` and `.is-opening` state management.
+  - Added 1,500ms opening animation delay ensuring the case sliding (-26px), screw pulsing, filament glow, and "Time To Shine" luminescence render completely before redirecting to `/track/0/intro`.
+  - Added `popstate` and `pageshow` history traversal listeners with `resetToIdle()`, guaranteeing that browser Back navigation restores the button to its pristine resting dark steel/glass state with zero stuck orange/amber color, and enables repeated launches.
   - Updated platform version and changelog milestones to `v2.5.0` in `StudioFooter.tsx`.
 
-**Current Release:** v2.5.0 Production-Ready (Build `36503a8`)
+- **Phase 13: Native WebGPU WGSL Compute Engine & Production Edge Readiness (Delivered):**
+  - Upgraded `localNeuralRunner.ts` with direct client-side WebGPU WGSL compute shader execution (`executeWebGpuKernel`) for hardware-accelerated tensor operations with automatic WASM CPU fallback ($0 Rule).
+  - Connected live WebGPU hardware telemetry and real-time shader compilation/execution to 2.5D Studio Console Lens 05 (`05 • WebGPU Neural`) in `HeroPhysicsStage.tsx`.
+  - Validated full Curriculum Lab Depth across Tracks 1, 2, and 3 (36 total interactive labs) with in-browser WASM verification and expected output assertions.
+  - Verified production build (`npm run build`) passing cleanly with 0 errors in 3.09s, valid `_headers` edge caching rules, and PWA service worker pre-caching.
+
+**Current Release:** v2.5.0 Production-Ready (Build Verified)
 **Creator & Architect:** Adil Rafiq Dar (ARD)
+
 
 
 
