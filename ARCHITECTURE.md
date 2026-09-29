@@ -27,7 +27,10 @@
   - *Runtime Variable Introspection:* Inspects execution namespace via automated `globals()` serialization, capturing user variables, lists, and dictionaries.
   - *X-Ray Debug Lens Inspector:* Spatial floating glass HUD (`Alt+X`) exposing 4 real-time diagnostic tabs: Performance & WASM Heap, Raw IPC Message Schema, Live Variable State Inspector, and Full Execution Log.
 - **The Synapse Lounge:** Neuro-plasticity arcade featuring *Vector Hyper-Space Alignment* and *Neural Gate Deductor* for diffuse-mode learning.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests.
+- **In-App Free Courses Studio (`FreeCoursesModal`):** Security-hardened in-app studio (`youtube-nocookie.com` with sandboxed iframes) featuring 8 Karpathy lectures, interactive chapter timestamp seekers, real-time searchable transcripts, 1-click Markdown/Text exports, and runnable Python autograd code snippets.
+- **Four Tools. Zero Subscriptions. Setup Engine (`FreeToolsModal`):** Idiot-proof, step-by-step setup guides across Memory, Glue, Compute, and Hosting with 2026 quota caveats, working code, and smoke tests.
+- **Responsive Header Layout Architecture:** Unified header architecture with adaptive collapsing (`Tracks ▾` dropdown on desktop, `Launch Track 0` primary CTA, responsive `BrandLogo`, and zero horizontal collisions from 375px to 1440px).
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (20 comprehensive suites).
 
 ## Monorepo Modules
 - `/apps/web`: Responsive web application, landing page, theme manager, and course player.

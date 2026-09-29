@@ -886,6 +886,123 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.waitForTimeout(300);
   });
 
+  test('20. Free Courses In-App Studio, Four Tools Setup Guides & De-Cluttered Header Responsiveness', async ({ page }) => {
+    // 1. Audit Header Across Viewports (375px, 768px, 1024px, 1280px)
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+
+    const header = page.locator('header').first();
+    await expect(header).toBeVisible();
+
+    // On 375px mobile, verify BrandLogo monogram and controls fit without overlap
+    const logoBox375 = await page.locator('header a[href="/"]').boundingBox();
+    const rightControls375 = await page.locator('header > div:last-child').boundingBox();
+    expect(logoBox375).not.toBeNull();
+    expect(rightControls375).not.toBeNull();
+    // Zero horizontal collision
+    expect(logoBox375!.x + logoBox375!.width).toBeLessThanOrEqual(rightControls375!.x + 10);
+
+    // On 768px tablet, verify clean separation
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(300);
+    const logoBox768 = await page.locator('header a[href="/"]').boundingBox();
+    const rightControls768 = await page.locator('header > div:last-child').boundingBox();
+    expect(logoBox768!.x + logoBox768!.width + 50).toBeLessThan(rightControls768!.x);
+
+    // On 1024px, verify Launch Track 0 and Tracks dropdown exist
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.waitForTimeout(300);
+    await expect(page.locator('header button:has-text("Launch Track 0")').first()).toBeVisible();
+    await expect(page.locator('header button:has-text("Tracks")').first()).toBeVisible();
+
+    // On 1280px, verify desktop navigation and controls coexist with ample room
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.waitForTimeout(300);
+    await expect(page.locator('header a[href="#pathways"]').first()).toBeVisible();
+
+    // 2. In-App Curated Free Courses Studio Test
+    const vaultSection = page.locator('#vault');
+    await vaultSection.scrollIntoViewIfNeeded();
+    await expect(page.locator('text=The World\'s Best Free AI Courses')).toBeVisible();
+
+    // Click on Karpathy course card
+    const karpathyCard = page.locator('#vault .grid > div:first-child');
+    await karpathyCard.click();
+    await page.waitForTimeout(400);
+
+    // Verify FreeCoursesModal dialog opened
+    const coursesDialog = page.locator('[role="dialog"][aria-labelledby="course-modal-title"]');
+    await expect(coursesDialog).toBeVisible({ timeout: 5000 });
+    await expect(coursesDialog.locator('text=Neural Networks: Zero to Hero').first()).toBeVisible();
+
+    // Verify YouTube iframe embed
+    const iframe = coursesDialog.locator('iframe');
+    await expect(iframe).toBeVisible();
+    const iframeSrc = await iframe.getAttribute('src');
+    expect(iframeSrc).toContain('youtube-nocookie.com/embed/VMj-3S1tku0');
+
+    // Verify Chapter timestamps
+    await expect(coursesDialog.locator('button:has-text("00:00")').first()).toBeVisible();
+    await expect(coursesDialog.locator('text=Introduction & Value class').first()).toBeVisible();
+
+    // Switch to Transcript Tab
+    const transcriptTab = coursesDialog.locator('button:has-text("Transcript")');
+    await transcriptTab.click();
+    await page.waitForTimeout(200);
+
+    // Verify transcript search filter
+    const transcriptInput = coursesDialog.locator('input[placeholder*="Search lecture transcript"]');
+    await expect(transcriptInput).toBeVisible();
+    await transcriptInput.fill('chain rule');
+    await page.waitForTimeout(200);
+    await expect(coursesDialog.locator('text=chain rule').first()).toBeVisible();
+
+    // Verify Export buttons
+    await expect(coursesDialog.locator('button:has-text("Export .MD")')).toBeVisible();
+    await expect(coursesDialog.locator('button:has-text("Export .TXT")')).toBeVisible();
+
+    // Switch to Runnable Python Tab
+    const codeTab = coursesDialog.locator('button:has-text("Runnable Python")');
+    await codeTab.click();
+    await page.waitForTimeout(200);
+    await expect(coursesDialog.locator('text=class Value:').first()).toBeVisible();
+
+    // Close FreeCoursesModal with Escape
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await expect(coursesDialog).not.toBeVisible();
+
+    // 3. Four Tools. Zero Subscriptions. Setup Guides Test
+    const freeStackSection = page.locator('#free-stack');
+    await freeStackSection.scrollIntoViewIfNeeded();
+    await expect(page.locator('text=Four Tools. Zero Subscriptions.')).toBeVisible();
+
+    // Click MEMORY category badge
+    const memoryPill = freeStackSection.locator('button:has-text("MEMORY")').first();
+    await memoryPill.click();
+    await page.waitForTimeout(400);
+
+    // Verify FreeToolsModal dialog opened
+    const toolsDialog = page.locator('[role="dialog"][aria-labelledby="tools-modal-title"]');
+    await expect(toolsDialog).toBeVisible({ timeout: 5000 });
+    await expect(toolsDialog.locator('text=Chroma').first()).toBeVisible();
+    await expect(toolsDialog.locator('text=pip install chromadb').first()).toBeVisible();
+    await expect(toolsDialog.locator('text=2026 Free Tier Policy Notice').first()).toBeVisible();
+
+    // Switch to COMPUTE category inside modal
+    const computeBtn = toolsDialog.locator('button:has-text("COMPUTE")').first();
+    await computeBtn.click();
+    await page.waitForTimeout(300);
+    await expect(toolsDialog.locator('text=Google Colab').first()).toBeVisible();
+    await expect(toolsDialog.locator('text=T4 GPU').first()).toBeVisible();
+
+    // Close FreeToolsModal with Escape
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await expect(toolsDialog).not.toBeVisible();
+  });
+
 });
 
 

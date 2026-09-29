@@ -31,6 +31,8 @@ import { CognitiveAccelerator } from '../components/CognitiveAccelerator';
 import { Tooltip } from '../components/Tooltip';
 import { HeroPhysicsStage } from '../components/HeroPhysicsStage';
 import { ScrollProgressBar, ScrollToTopButton } from '../components/ScrollIndicators';
+import { FreeCoursesModal } from '../components/FreeCoursesModal';
+import { FreeToolsModal } from '../components/FreeToolsModal';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
@@ -53,6 +55,14 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
   const [isMatrixModalOpen, setIsMatrixModalOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isTracksMenuOpen, setIsTracksMenuOpen] = useState(false);
+
+  // In-app interactive modals for Free Courses and Free Tools
+  const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState('karpathy');
+  const [isToolsModalOpen, setIsToolsModalOpen] = useState(false);
+  const [selectedToolCategory, setSelectedToolCategory] = useState<'MEMORY' | 'GLUE' | 'COMPUTE' | 'HOSTING'>('MEMORY');
+  const [selectedToolId, setSelectedToolId] = useState<string | undefined>('chroma');
 
   // Dynamic header elevation state (only updates when crossing threshold, zero per-frame re-renders)
   const [isScrolled, setIsScrolled] = useState(false);
@@ -92,9 +102,9 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         takeaway: t('free_stack_why_vector_takeaway')
       },
       tools: [
-        { name: 'Chroma', desc: 'Embed & search your data client-side or serverless', badge: 'OPEN SOURCE' },
-        { name: 'Qdrant', desc: 'Production-grade high-throughput vector store', badge: 'FREE TIER' },
-        { name: 'pgvector', desc: 'Vector search right inside standard PostgreSQL', badge: 'OPEN SOURCE' }
+        { id: 'chroma', name: 'Chroma', desc: 'Embed & search your data client-side or serverless', badge: 'OPEN SOURCE' },
+        { id: 'qdrant', name: 'Qdrant', desc: 'Production-grade high-throughput vector store', badge: 'FREE TIER' },
+        { id: 'pgvector', name: 'pgvector', desc: 'Vector search right inside standard PostgreSQL', badge: 'OPEN SOURCE' }
       ]
     },
     {
@@ -108,8 +118,8 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         takeaway: t('free_stack_why_frameworks_takeaway')
       },
       tools: [
-        { name: 'LangChain', desc: 'Build modular RAG pipelines and autonomous agents', badge: 'FREE / OSS' },
-        { name: 'LlamaIndex', desc: 'Connect your documents, PDFs, and data to models', badge: 'FREE / OSS' }
+        { id: 'langchain', name: 'LangChain', desc: 'Build modular RAG pipelines and autonomous agents', badge: 'FREE / OSS' },
+        { id: 'llamaindex', name: 'LlamaIndex', desc: 'Connect your documents, PDFs, and data to models', badge: 'FREE / OSS' }
       ]
     },
     {
@@ -123,8 +133,8 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         takeaway: t('free_stack_why_gpus_takeaway')
       },
       tools: [
-        { name: 'Google Colab', desc: '15GB RAM, free GPU, zero terminal installation', badge: 'FREE' },
-        { name: 'Kaggle', desc: '30 hours/week of free NVIDIA T4/P100 GPU compute', badge: 'FREE 30H/WK' }
+        { id: 'colab', name: 'Google Colab', desc: '15GB RAM, free GPU, zero terminal installation', badge: 'FREE' },
+        { id: 'kaggle', name: 'Kaggle', desc: '30 hours/week of free NVIDIA T4/P100 GPU compute', badge: 'FREE 30H/WK' }
       ]
     },
     {
@@ -138,8 +148,8 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         takeaway: t('free_stack_why_hosting_takeaway')
       },
       tools: [
-        { name: 'Hugging Face Spaces', desc: '2vCPU • 16GB RAM • Free public domain', badge: 'DEPLOY FREE' },
-        { name: 'Streamlit Community', desc: 'Deploy interactive Python apps directly from Git', badge: 'DEPLOY FREE' }
+        { id: 'hf-spaces', name: 'Hugging Face Spaces', desc: '2vCPU • 16GB RAM • Free public domain', badge: 'DEPLOY FREE' },
+        { id: 'streamlit-cloud', name: 'Streamlit Community', desc: 'Deploy interactive Python apps directly from Git', badge: 'DEPLOY FREE' }
       ]
     }
   ], [language, t]);
@@ -147,36 +157,42 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
   // Curated Knowledge Vault
   const knowledgeVault = [
     {
+      id: 'karpathy',
       title: 'Neural Networks: Zero to Hero',
       author: 'Andrej Karpathy (YouTube)',
       desc: 'Build micrograd, makemore, and a complete GPT from raw Python math with zero black boxes.',
       badge: '100% FREE'
     },
     {
+      id: 'huggingface',
       title: 'Hugging Face Official Courses',
       author: 'Hugging Face',
       desc: 'Comprehensive NLP, Audio, Vision, Deep RL, and AI Agents — hands-on code with certificates.',
       badge: 'FREE CERT'
     },
     {
+      id: 'ms-genai',
       title: 'Generative AI for Beginners',
       author: 'Microsoft',
       desc: '18 comprehensive lessons taking you from text generation foundations to production RAG.',
       badge: '18 LESSONS'
     },
     {
+      id: 'ms-agents',
       title: 'AI Agents for Beginners',
       author: 'Microsoft',
       desc: '8 hands-on architectural lessons building multi-agent systems and semantic kernels.',
       badge: '8 LESSONS'
     },
     {
+      id: 'google-kaggle',
       title: '5-Day Gen AI Intensive',
       author: 'Google x Kaggle',
       desc: 'Foundational models, embeddings, multimodal vision, agents, and production MLOps.',
       badge: 'FREE INTENSIVE'
     },
     {
+      id: 'deeplearning-ai',
       title: 'Short Courses: RAG, Agents, Evals',
       author: 'DeepLearning.AI',
       desc: 'Built in partnership with OpenAI and Anthropic — high-density 1-hour applied masterclasses.',
@@ -207,20 +223,20 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       <ScrollProgressBar />
 
       {/* Top Glass Navigation Header */}
-      <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-6 md:px-12 py-2.5 sm:py-3 flex items-center justify-between flex-nowrap backdrop-blur-xl transition-all duration-300 ${
+      <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-6 md:px-8 xl:px-12 py-2.5 sm:py-3 flex items-center justify-between flex-nowrap backdrop-blur-xl transition-all duration-300 ${
         isScrolled 
           ? 'bg-[var(--color-primary)]/95 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/20' 
           : 'bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]/60 shadow-sm'
       }`}>
-        <div className="flex items-center gap-3 xl:gap-6 min-w-0">
+        <div className="flex items-center gap-3 xl:gap-5 min-w-0 shrink">
           
           {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
           <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl shrink-0">
             <BrandLogo size="md" />
           </a>
           
-          {/* Desktop Streamlined Navigation with Hover Reveals */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+          {/* Desktop Streamlined Navigation with Hover Reveals (visible on xl+ to prevent overlap) */}
+          <div className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap">
             <Tooltip
               position="bottom"
               content="10 Structured Pathways"
@@ -241,19 +257,21 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </a>
             </Tooltip>
 
-            <Tooltip
-              position="bottom"
-              content="Spatial Holodeck [3D]"
-              subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
-            >
-              <button 
-                onClick={() => navigate('/holodeck')}
-                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap"
+            <div className="hidden 2xl:flex">
+              <Tooltip
+                position="bottom"
+                content="Spatial Holodeck [3D]"
+                subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
               >
-                <Glasses size={14} className="opacity-70" />
-                <span>{t('nav_holodeck')}</span>
-              </button>
-            </Tooltip>
+                <button 
+                  onClick={() => navigate('/holodeck')}
+                  className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap"
+                >
+                  <Glasses size={14} className="opacity-70" />
+                  <span>{t('nav_holodeck')}</span>
+                </button>
+              </Tooltip>
+            </div>
 
             {/* Credentials / Portfolio link */}
             <Tooltip
@@ -301,6 +319,23 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                     </div>
                     
                     <div className="space-y-1">
+                      <button 
+                        onClick={() => { setIsExploreOpen(false); navigate('/holodeck'); }}
+                        className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group text-left cursor-pointer"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Glasses size={14} className="text-cyan-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                            {t('nav_holodeck')}
+                          </div>
+                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            3D / WebXR neural topology holodeck
+                          </div>
+                        </div>
+                      </button>
+
                       <a 
                         href="#cognitive-accelerator" 
                         onClick={() => setIsExploreOpen(false)}
@@ -419,15 +454,15 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
                 style={{ backgroundColor: currentThemeInfo.accent }}
               />
-              <span className="hidden sm:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
+              <span className="hidden lg:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
               <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
-              <span className="opacity-25 text-[10px] select-none">|</span>
-              <Settings size={13} className="opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
+              <span className="hidden lg:inline opacity-25 text-[10px] select-none">|</span>
+              <Settings size={13} className="hidden lg:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
             </button>
           </Tooltip>
 
-          {/* Launch Track Buttons (hidden on mobile, visible on sm+) */}
-          <div className="hidden sm:flex items-center gap-2">
+          {/* Launch Track Button & Responsive Dropdown (visible on sm+) */}
+          <div className="hidden sm:flex items-center gap-1.5 sm:gap-2 shrink-0">
             <Tooltip
               position="bottom"
               content="Track 0: Absolute Zero"
@@ -436,7 +471,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             >
               <button 
                 onClick={() => navigate('/track/0/intro')}
-                className="px-3.5 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                className="px-3 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor
@@ -447,53 +482,92 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </button>
             </Tooltip>
 
-            <Tooltip
-              position="bottom"
-              content="Track 1: Vector Space & Embeddings"
-              subtitle="9 Practical Labs • Vector Geometry & Semantic Search"
+            {/* Desktop Tracks Menu Dropdown (visible on lg+) */}
+            <div 
+              className="relative hidden lg:block"
+              onMouseEnter={() => setIsTracksMenuOpen(true)}
+              onMouseLeave={() => setIsTracksMenuOpen(false)}
             >
-              <button 
-                onClick={() => navigate('/track/1/intro')}
-                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+              <button
+                onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
+                className="px-3 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm cursor-pointer shrink-0"
+                aria-expanded={isTracksMenuOpen}
+                aria-haspopup="true"
+                aria-label="Select Learning Track"
               >
                 <Layers size={13} style={{ color: currentThemeInfo.accent }} />
-                <span>Track 1: Vectors</span>
+                <span>Tracks</span>
+                <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
               </button>
-            </Tooltip>
 
-            <Tooltip
-              position="bottom"
-              content="Track 2: RAG & Autonomous Agents"
-              subtitle="9 Practical Labs • Chunking, MCP & ReAct Agents"
-            >
-              <button 
-                onClick={() => navigate('/track/2/intro')}
-                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                <Cpu size={13} style={{ color: currentThemeInfo.accent }} />
-                <span>Track 2: Agents</span>
-              </button>
-            </Tooltip>
+              <AnimatePresence>
+                {isTracksMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    className="absolute top-full right-0 pt-2 z-50 pointer-events-auto"
+                  >
+                    <div className="w-64 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2.5 shadow-2xl backdrop-blur-2xl space-y-1">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-2.5 py-1 font-bold">
+                        Learning Tracks
+                      </div>
 
-            <Tooltip
-              position="bottom"
-              content="Track 3: Production Evals & Security"
-              subtitle="9 Practical Labs • OWASP AI Top 10 & Benchmark Evals"
-            >
-              <button 
-                onClick={() => navigate('/track/3/intro')}
-                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                <ShieldCheck size={13} style={{ color: currentThemeInfo.accent }} />
-                <span>Track 3: Evals</span>
-              </button>
-            </Tooltip>
+                      <button
+                        onClick={() => { setIsTracksMenuOpen(false); navigate('/track/0/intro'); }}
+                        className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Zap size={14} className="text-amber-400" />
+                          <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 0: Absolute Zero</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">WASM</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setIsTracksMenuOpen(false); navigate('/track/1/intro'); }}
+                        className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Layers size={14} className="text-emerald-400" />
+                          <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 1: Vectors</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setIsTracksMenuOpen(false); navigate('/track/2/intro'); }}
+                        className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Cpu size={14} className="text-blue-400" />
+                          <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 2: Agents</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setIsTracksMenuOpen(false); navigate('/track/3/intro'); }}
+                        className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck size={14} className="text-purple-400" />
+                          <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 3: Evals</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
+            className="xl:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -508,7 +582,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden absolute top-full left-0 right-0 bg-[var(--color-secondary)] border-b border-[var(--color-border)] p-4 shadow-2xl backdrop-blur-2xl overflow-hidden"
+              className="xl:hidden absolute top-full left-0 right-0 bg-[var(--color-secondary)] border-b border-[var(--color-border)] p-4 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
               <div className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
                 <button 
@@ -682,16 +756,22 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span 
-                    className="text-xs font-mono font-bold px-3 py-1 rounded-full border"
+                  <button 
+                    onClick={() => {
+                      setSelectedToolCategory(category.category as any);
+                      setSelectedToolId(category.tools[0].id);
+                      setIsToolsModalOpen(true);
+                    }}
+                    className="text-xs font-mono font-bold px-3 py-1 rounded-full border hover:scale-105 active:scale-95 transition-all cursor-pointer"
                     style={{
                       borderColor: `${category.accentColor}40`,
                       backgroundColor: `${category.accentColor}15`,
                       color: category.accentColor
                     }}
+                    title={`Open step-by-step setup guide for ${category.category}`}
                   >
-                    {category.category}
-                  </span>
+                    <span>{category.category} ↗</span>
+                  </button>
                   <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">100% FREE</span>
                 </div>
 
@@ -713,11 +793,18 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   {category.tools.map((tool, tIdx) => (
                     <div 
                       key={tIdx}
-                      className="p-3 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex flex-col gap-1"
+                      onClick={() => {
+                        setSelectedToolCategory(category.category as any);
+                        setSelectedToolId(tool.id);
+                        setIsToolsModalOpen(true);
+                      }}
+                      className="p-3 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-secondary)] transition-all duration-200 cursor-pointer flex flex-col gap-1 group"
+                      title="Click for idiot-proof step-by-step setup guide"
                     >
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-[var(--color-text-primary)]">
-                          {tool.name}
+                        <h4 className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1">
+                          <span>{tool.name}</span>
+                          <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                         </h4>
                         <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]">
                           {tool.badge}
@@ -758,7 +845,12 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           {knowledgeVault.map((course, idx) => (
             <div 
               key={idx}
-              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between"
+              onClick={() => {
+                setSelectedCourseId(course.id);
+                setIsCoursesModalOpen(true);
+              }}
+              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+              title="Click to open full in-app course studio with transcripts & code"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -776,8 +868,9 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-2">
-                  {course.title}
+                <h3 className="text-lg font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors mb-2 flex items-center justify-between">
+                  <span>{course.title}</span>
+                  <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
                 </h3>
 
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mb-4">
@@ -787,7 +880,18 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
 
               <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
                 <span>{t('vault_free_access')}</span>
-                <span className="text-emerald-500 font-semibold">{t('vault_included')}</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCourseId(course.id);
+                    setIsCoursesModalOpen(true);
+                  }}
+                  className="text-emerald-500 hover:text-emerald-400 font-semibold flex items-center gap-1 hover:underline cursor-pointer"
+                >
+                  <span>{t('vault_included')}</span>
+                  <ChevronRight size={13} />
+                </button>
               </div>
             </div>
           ))}
@@ -1087,6 +1191,21 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       <FirstPrinciplesModal 
         isOpen={isMatrixModalOpen} 
         onClose={() => setIsMatrixModalOpen(false)} 
+      />
+
+      {/* In-App Curated Free Courses Studio (Zero External Redirects) */}
+      <FreeCoursesModal
+        isOpen={isCoursesModalOpen}
+        onClose={() => setIsCoursesModalOpen(false)}
+        initialCourseId={selectedCourseId}
+      />
+
+      {/* In-App Four Tools. Zero Subscriptions. Step-by-Step Setup Guides */}
+      <FreeToolsModal
+        isOpen={isToolsModalOpen}
+        onClose={() => setIsToolsModalOpen(false)}
+        initialCategory={selectedToolCategory}
+        initialToolId={selectedToolId}
       />
 
     </div>

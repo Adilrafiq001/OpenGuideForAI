@@ -63,5 +63,15 @@
 - [x] IDE ReAct Agent Execution Graph Visualizer (`ReActFlowVisualizer.tsx` in `XRayDebugLens.tsx`).
 - [x] The Synapse Lounge tactile minigames (Unit Circle Vector Alignment Radar & Perceptron Gate Deductor).
 
-**Creator & Architect:** ARD
+## Phase 6: In-App Free Courses Studio, Four Tools Setup Guides & De-Cluttered Header (Active / Delivered)
+- [x] In-App Free Courses Studio (`FreeCoursesModal.tsx`) with zero-redirect `youtube-nocookie.com` player.
+- [x] Integrated 8 Karpathy lectures, timestamp chapter seeking, live searchable transcript, and 1-click Markdown/Text export.
+- [x] In-App Runnable Python First-Principles code snippets and comprehensive syllabi.
+- [x] Four Tools. Zero Subscriptions. Idiot-Proof Setup Guides (`FreeToolsModal.tsx`) across Memory, Glue, Compute, and Hosting.
+- [x] Granular step-by-step setup guides for Chroma, Qdrant, pgvector, LangChain, LlamaIndex, Colab, Kaggle, Hugging Face, and Streamlit.
+- [x] Verification smoke tests with expected terminal outputs and 2026 Free Tier Quota notices with local alternatives.
+- [x] Header Responsive De-Cluttering eliminating horizontal collisions across all screen sizes (375px to 1440px).
+- [x] Playwright Test Suite 20 full automated regression coverage.
+
+**Creator & Architect:** Adil Rafiq Dar (ARD)
 

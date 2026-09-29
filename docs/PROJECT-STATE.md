@@ -162,7 +162,26 @@
     - Registered lazy-loaded `/portfolio` route in `App.tsx`.
     - Added Portfolio & Credentials affordance to `CommandDock.tsx` and desktop/mobile headers in `LandingPage.tsx`.
   - **Playwright Full Regression Test Suite:**
-    - Added Test 18 to `app-full-regression.spec.ts` covering `/portfolio`, `#synapse-lounge`, and IDE X-Ray ReAct flow DAG; all 19 tests passing (100% pass rate in 2.5m).
+- **Phase 6: In-App Free Courses Studio, Four Tools Setup Guides & Responsive Header De-Cluttering (Complete):**
+  - **In-App Free Courses Studio (`FreeCoursesModal.tsx`):**
+    - Security-hardened, zero-redirect in-app learning studio covering 6 world-class AI curricula: Andrej Karpathy's *Neural Networks: Zero to Hero*, Hugging Face *NLP & Transformers*, Microsoft *Generative AI for Beginners*, Microsoft *AI Agents for Beginners*, Google & Kaggle *5-Day GenAI Intensive*, and DeepLearning.AI *Short Courses*.
+    - Zero external redirects: embedded via `youtube-nocookie.com` with `sandbox="allow-scripts allow-same-origin allow-presentation"` and `referrerPolicy="strict-origin-when-cross-origin"`.
+    - Integrated multi-lecture navigation, duration badges, and chapter timestamp seek pills.
+    - Full searchable lecture transcripts with instant real-time text matching.
+    - 1-click export utilities: "Export .MD" (markdown) and "Export .TXT" (text) client-side download generators.
+    - "Runnable Python" tab with self-contained first-principles code snippets (e.g. Karpathy scalar `Value` autograd engine).
+    - "Syllabus & Notes" tab detailing modular breakdowns and lab objectives.
+  - **Four Tools. Zero Subscriptions. Idiot-Proof Setup Guides (`FreeToolsModal.tsx`):**
+    - Granular, step-by-step setup guides across all 4 core stack categories (`MEMORY`, `GLUE`, `COMPUTE`, `HOSTING`) and 9 industry standard tools (`Chroma`, `Qdrant`, `pgvector`, `LangChain`, `LlamaIndex`, `Google Colab`, `Kaggle`, `Hugging Face Spaces`, `Streamlit Community Cloud`).
+    - Granular sections per tool: What It Is, Why Use It in 2026, Zero-Dollar Verification, Step-by-Step Installation (exact shell commands), Complete Working Python Setup Code with 1-click copy, Smoke Test Verification boxes with expected outputs, and 2026 Free Tier Caveats & Quotas with local permanent alternatives.
+    - Interactive category navigation and quick-switch pills.
+  - **Header De-Cluttering & Responsive Collision Resolution (`LandingPage.tsx`, `BrandLogo.tsx`):**
+    - Resolved horizontal collision between 768px and 1280px viewports: collapsed multiple track buttons into a primary CTA (`Launch Track 0`) and compact `Tracks ▾` dropdown on desktop (`lg:block`).
+    - Moved standalone `Spatial Holodeck [3D]` link to `hidden 2xl:flex` while integrating it as first-class item in `Labs & Science ▾` / `Explore` dropdown.
+    - Compacted theme button label on intermediate viewports (`hidden lg:inline`) and refined `BrandLogo.tsx` for narrow mobile screens (<440px).
+    - Guaranteed zero visual collisions and generous horizontal breathing room across all viewports (375px, 768px, 1024px, 1280px, 1440px).
+  - **Playwright Full Regression Test Suite Expansion (`app-full-regression.spec.ts`):**
+    - Added Test 20 verifying header responsiveness across 375px, 768px, 1024px, and 1280px with zero collisions, opening `FreeCoursesModal` from `#vault`, verifying YouTube iframe embed, chapter timestamps, transcript search filter, export triggers, and Python code tab, opening `FreeToolsModal` from `#free-stack`, verifying setup instructions, switching categories, and `Escape` key dismissal. All 20 tests verified with 100% pass rate.
 
 **Next:** Production Deployment Pipeline & Cloudflare Pages Static Hosting Launch.
 **Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
