@@ -9,7 +9,6 @@ import {
   WarningCircle, 
   BookOpenText, 
   ArrowLeft,
-  ArrowRight,
   Sparkle,
   Eye,
   Check,
@@ -559,6 +558,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 {(isChallengePassed || isCurrentCompleted) && hasNextLesson && (
                   <Tooltip
                     position="top"
+                    align="end"
                     content={t('ide_next_lesson')}
                     subtitle="Advance to next first-principles lab"
                   >
@@ -567,13 +567,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                       className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98]"
                     >
                       <span>{t('ide_next_lesson')}</span>
-                      <ArrowRight size={13} />
                     </button>
                   </Tooltip>
                 )}
 
                 <Tooltip
                   position="top"
+                  align="end"
                   content={t('ide_run_code')}
                   subtitle="Runs in local Pyodide runtime (no server latency)"
                   shortcut="Ctrl+↵"
