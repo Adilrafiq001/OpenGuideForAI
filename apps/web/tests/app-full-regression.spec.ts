@@ -724,6 +724,68 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(track2NavBtn).toBeVisible({ timeout: 10000 });
   });
 
+  test('17. Phase 4: Track 3 Production Evals & Security + WebGPU Hardware Telemetry', async ({ page }) => {
+    // 1. Verify Track 3 Dynamic Briefing (/track/3/intro)
+    await page.goto('/track/3/intro', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const h1 = page.locator('h1').first();
+    await expect(h1).toBeVisible({ timeout: 10000 });
+    await expect(h1).toContainText(/Track 3: Production Evals, Guardrails & Security/i);
+
+    // Verify 9 practical labs total
+    await expect(page.locator('text=9 Practical Labs Total')).toBeVisible();
+
+    // Verify 3 Modules: 3.1, 3.2, 3.3
+    await expect(page.getByText('MODULE 3.1', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 3.2', { exact: true })).toBeVisible();
+    await expect(page.getByText('MODULE 3.3', { exact: true })).toBeVisible();
+
+    // Verify Live Sandbox shows ProductionEvalSuite code
+    await expect(page.locator('text=ProductionEvalSuite()')).toBeVisible();
+
+    // Verify 3D Mechanical Initialize Button exists
+    const mechCheckbox = page.locator('#init-mech-button');
+    await expect(mechCheckbox).toBeAttached();
+
+    // 2. Verify Track 3 Interactive IDE Workspace (/track/3/engine)
+    await page.goto('/track/3/engine', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Verify Lesson 3.1.1 Title
+    const lessonTitle = page.locator('h1').first();
+    await expect(lessonTitle).toBeVisible({ timeout: 10000 });
+    await expect(lessonTitle).toContainText(/Exact-Match & Normalized Assertion Evals/i);
+
+    // Verify Dynamic Module Header (Module 3.1 • Lesson 1)
+    await expect(page.locator('text=Module 3.1 • Lesson 1')).toBeVisible();
+
+    // Verify Curriculum Drawer shows Module 3.1, 3.2, 3.3
+    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    await modulesTab.click();
+    await page.waitForTimeout(300);
+
+    await expect(page.locator('text=Module 3.1: Model Evaluation & Benchmarking (Evals)')).toBeVisible();
+    await expect(page.locator('text=Module 3.2: OWASP AI Top 10 & Security Guardrails')).toBeVisible();
+    await expect(page.locator('text=Module 3.3: Production Telemetry & Boss Project')).toBeVisible();
+
+    // Verify Boss Project Lesson is present
+    await expect(page.locator('text=Boss Project: Production Evaluation & Security Harness')).toBeVisible();
+
+    // 3. Verify Landing Page Track 3 Navigation Affordance & Lens 05 WebGPU
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    const track3NavBtn = page.getByRole('button', { name: /Track 3: Evals/i }).first();
+    await expect(track3NavBtn).toBeVisible({ timeout: 10000 });
+
+    const webgpuTab = page.getByRole('button', { name: /WebGPU/i }).first();
+    await expect(webgpuTab).toBeVisible({ timeout: 10000 });
+    await webgpuTab.click();
+    await expect(page.locator('text=WebGPU Tensor Dispatch & Quantized Neural SLM')).toBeVisible();
+  });
+
 });
+
 
 

@@ -857,6 +857,22 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         id="byok-model-input"
                       />
                     </div>
+
+                    {/* WebGPU Hardware Acceleration Telemetry */}
+                    <div className="pt-3 border-t border-[var(--color-border)]">
+                      <div className="flex items-center justify-between text-[11px] mb-1.5 font-mono">
+                        <span className="text-[var(--color-text-secondary)] flex items-center gap-1.5 font-semibold">
+                          <Cpu size={14} className="text-purple-400" />
+                          <span>Local WebGPU Neural Acceleration</span>
+                        </span>
+                        <span className="text-emerald-400 font-semibold text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                          {typeof navigator !== 'undefined' && 'gpu' in navigator ? 'WebGPU Supported' : 'WASM CPU Fallback'}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-[var(--color-text-secondary)] leading-relaxed">
+                        Hardware shaders compile locally via Direct3D/Metal/Vulkan with 0ms network latency and $0 cost.
+                      </p>
+                    </div>
                   </div>
                 </div>
 

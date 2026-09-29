@@ -14,6 +14,7 @@ import { THEMES_DATA } from '../data/themesData';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
+import { track3 } from '../data/track3';
 import type { Track } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -44,6 +45,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
   const activeTrack: Track = propTrack || (
+    location.pathname.includes('/track/3') ? track3 :
     location.pathname.includes('/track/2') ? track2 :
     location.pathname.includes('/track/1') ? track1 : track0
   );
@@ -209,7 +211,12 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
               
               <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)]">
                 <div className="space-y-1">
-                  {activeTrack.id === 'track-2' ? (
+                  {activeTrack.id === 'track-3' ? (
+                    <>
+                      <p><span style={{ color: currentThemeInfo.accent }}>eval_suite</span> = ProductionEvalSuite()</p>
+                      <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># OWASP Defenses + Judge Evals</p>
+                    </>
+                  ) : activeTrack.id === 'track-2' ? (
                     <>
                       <p><span style={{ color: currentThemeInfo.accent }}>agent</span> = AutonomousResearchAgent()</p>
                       <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># ReAct + MCP Tool Loop</p>
@@ -326,10 +333,10 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             style={{ backgroundColor: currentThemeInfo.accent }}
           />
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
-            {activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
+            {activeTrack.id === 'track-3' ? 'Ready to Deploy Enterprise AI Guardrails?' : activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
           </h2>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
-            {activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
+            {activeTrack.id === 'track-3' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive model evaluation & OWASP defense labs.' : activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
           </p>
           <InitializeWorkspaceButton
             onClick={() => navigate(`/track/${trackNum}/engine`)}

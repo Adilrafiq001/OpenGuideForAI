@@ -64,16 +64,20 @@ Every module and curriculum milestone is anchored in three universal questions:
   - *Lesson 2.3.2:* Agent Memory: Short-Term Scratchpad vs Long-Term Vector Store (Working context vs persistent store).
   - *Lesson 2.3.3:* Boss Project: Autonomous Research Agent with RAG & MCP Tools (`AutonomousResearchAgent` synthesis).
 
-### Track 3: Pro (Autonomous Agents & Systems Architecture)
-**Goal:** Autonomous multi-agent workflow with external tools, evals, and CI/CD.
-- **Module 3.1:** Tool Calling & The ReAct Loop (Pillar 13)
-- **Module 3.2:** Model Evaluation (Evals) & Observability (Pillar 14)
-- **Module 3.3:** CI/CD & Headless Playwright Test Harnesses (Pillars 6, 8)
-- **Module 3.4:** OWASP AI Top 10 Security & Prompt Injection Defense (Pillar 15)
-- **Module 3.5:** Decoupled Ports-and-Adapters Architecture (Pillars 3, 7)
-- **Module 3.6:** Privacy-by-Design, Legal & Ethical AI (Pillars 10, 19)
-- **Module 3.7:** Portfolio Showcase, Open-Source Contributions & Career (Pillars 18, 21)
-- **Boss Project:** Deploy an Autonomous Multi-Agent Research System.
+### Track 3: Pro (Production Evals, Guardrails & Security)
+**Goal:** Deploy a production evaluation and adversarial security validation suite certifying model readiness, prompt injection defense, and budget compliance.
+- **Module 3.1: Model Evaluation & Benchmarking (Evals) (Pillars 13, 14)**
+  - *Lesson 3.1.1:* Exact-Match & Normalized Assertion Evals (Stripping formatting noise, regex normalization).
+  - *Lesson 3.1.2:* Synthetic Test Set Generation & Edge-Case Probing (Input boundary stress testing, null handling).
+  - *Lesson 3.1.3:* LLM-as-a-Judge Rubric & Likert Scoring (Structured 1-5 scale evaluation & criteria extraction).
+- **Module 3.2: OWASP AI Top 10 & Security Guardrails (Pillar 15)**
+  - *Lesson 3.2.1:* Prompt Injection & Delimiter Sandbox Defenses (XML delimiter escaping & canary token leak defense).
+  - *Lesson 3.2.2:* Data Exfiltration Defense & PII Redaction (Regex token masking for emails, API keys, and sensitive tokens).
+  - *Lesson 3.2.3:* Automated Adversarial Red Teaming (Jailbreak payload evaluation and Attack Success Rate calculation).
+- **Module 3.3: Production Telemetry & Boss Project (Pillars 8, 12)**
+  - *Lesson 3.3.1:* Token Accounting & $0 Compute Budget Enforcer (Cost tracking and context window overflow protection).
+  - *Lesson 3.3.2:* Resilient Fallback State Machine & Exponential Backoff (429/503 retry routing and fallback cascading).
+  - *Lesson 3.3.3:* Boss Project: Production Evaluation & Security Harness (`ProductionEvalSuite` complete certification report).
 
 ---
 

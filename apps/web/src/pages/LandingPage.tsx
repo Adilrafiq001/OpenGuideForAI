@@ -459,6 +459,20 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 <span>Track 2: Agents</span>
               </button>
             </Tooltip>
+
+            <Tooltip
+              position="bottom"
+              content="Track 3: Production Evals & Security"
+              subtitle="9 Practical Labs • OWASP AI Top 10 & Benchmark Evals"
+            >
+              <button 
+                onClick={() => navigate('/track/3/intro')}
+                className="px-3 sm:px-3.5 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <ShieldCheck size={13} style={{ color: currentThemeInfo.accent }} />
+                <span>Track 3: Evals</span>
+              </button>
+            </Tooltip>
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -512,6 +526,16 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                     <span>Track 2: RAG & Autonomous Agents</span>
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 2</span>
+                </button>
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/track/3/intro'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
+                >
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck size={16} style={{ color: currentThemeInfo.accent }} />
+                    <span>Track 3: Production Evals & Security</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 3</span>
                 </button>
                 <a 
                   href="#pathways" 

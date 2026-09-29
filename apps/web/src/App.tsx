@@ -7,6 +7,7 @@ import { useSettingsStore } from './store/useSettingsStore';
 import { track0 } from './data/track0';
 import { track1 } from './data/track1';
 import { track2 } from './data/track2';
+import { track3 } from './data/track3';
 import './App.css';
 
 import { ThemeSettingsModal } from './components/ThemeSettingsModal';
@@ -54,6 +55,9 @@ function App() {
             <Route path="/track/2/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
             <Route path="/track/2" element={<CoursePlayer track={track2} />} />
             <Route path="/track/2/engine" element={<CoursePlayer track={track2} />} />
+            <Route path="/track/3/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+            <Route path="/track/3" element={<CoursePlayer track={track3} />} />
+            <Route path="/track/3/engine" element={<CoursePlayer track={track3} />} />
             <Route path="/holodeck" element={<SpatialHolodeck />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

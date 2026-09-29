@@ -31,7 +31,7 @@ interface HeroPhysicsStageProps {
   onOpenMatrixModal: () => void;
 }
 
-type StudioLens = 'wasm' | 'vector' | 'rag' | 'mcp';
+type StudioLens = 'wasm' | 'vector' | 'rag' | 'mcp' | 'webgpu';
 
 export function HeroPhysicsStage({
   currentThemeInfo,
@@ -174,6 +174,7 @@ export function HeroPhysicsStage({
               { id: 'vector' as const, label: t('hero_console_tab_vector'), icon: Database },
               { id: 'rag' as const, label: t('hero_console_tab_rag'), icon: Layers },
               { id: 'mcp' as const, label: t('hero_console_tab_mcp'), icon: Workflow },
+              { id: 'webgpu' as const, label: '05 • WebGPU Neural', icon: Cpu },
             ].map(lens => {
               const Icon = lens.icon;
               const isActive = activeLens === lens.id;
@@ -321,6 +322,57 @@ export function HeroPhysicsStage({
                 </div>
                 <div className="p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60 font-mono text-[11px] text-[var(--color-text-secondary)]">
                   <span className="text-[var(--color-accent)]">@mcp_tool</span> dispatch: compute_matrix_similarity(query=&apos;vector&apos;) &rarr; returned <span className="text-emerald-400">100% verified</span> in 1.4ms
+                </div>
+              </motion.div>
+            )}
+
+            {activeLens === 'webgpu' && (
+              <motion.div
+                key="webgpu"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-3"
+              >
+                <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)]">
+                  <span className="flex items-center gap-2">
+                    <Cpu size={13} className="text-purple-400" />
+                    <span>In-Browser WebGPU Tensor Dispatch & Quantized Neural SLM</span>
+                  </span>
+                  <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                    <CheckCircle2 size={12} />
+                    Hardware Acceleration ($0 Rule)
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
+                    <div className="text-[10px] text-[var(--color-text-secondary)]">Pipeline</div>
+                    <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">WebGPU Native</div>
+                    <div className="text-[10px] font-mono text-purple-400 mt-1">Direct3D / Metal</div>
+                  </div>
+                  <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
+                    <div className="text-[10px] text-[var(--color-text-secondary)]">Latency</div>
+                    <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">0ms Network</div>
+                    <div className="text-[10px] font-mono text-emerald-400 mt-1">Local VRAM</div>
+                  </div>
+                  <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
+                    <div className="text-[10px] text-[var(--color-text-secondary)]">Throughput</div>
+                    <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">~48 tokens/sec</div>
+                    <div className="text-[10px] font-mono text-cyan-400 mt-1">Quantized Q4_K</div>
+                  </div>
+                  <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
+                    <div className="text-[10px] text-[var(--color-text-secondary)]">Cost</div>
+                    <div className="text-xs font-bold text-emerald-400 mt-0.5">$0.00 Forever</div>
+                    <div className="text-[10px] font-mono text-[var(--color-text-secondary)] mt-1">100% Client-Side</div>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[var(--color-border)] flex items-center justify-between text-[11px]">
+                  <span className="text-purple-400 font-semibold flex items-center gap-1.5">
+                    <CheckCircle2 size={13} />
+                    {simOutput || 'Output: WebGPU Tensor Dispatch Initialized • Shaders Compiled (12ms)'}
+                  </span>
+                  <span className="text-[var(--color-text-secondary)] font-mono">navigator.gpu detected</span>
                 </div>
               </motion.div>
             )}
