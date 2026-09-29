@@ -29,13 +29,14 @@ import { XRayDebugLens } from './XRayDebugLens';
 import { Tooltip } from './Tooltip';
 import { LanguageSelector } from './LanguageSelector';
 import { NewtonsCradleLoader } from './NewtonsCradleLoader';
+import { CodeEditor } from './CodeEditor';
+import { MarkdownRenderer } from './MarkdownRenderer';
+import { useProgressStore } from '../store/useProgressStore';
 import type { Track } from '../data/track0';
 
 type CoursePlayerProps = {
   track: Track;
 };
-
-const STORAGE_KEY = 'openguide_completed_lessons';
 
 export function CoursePlayer({ track }: CoursePlayerProps) {
   const navigate = useNavigate();
@@ -49,15 +50,12 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [leftTab, setLeftTab] = useState<'briefing' | 'curriculum'>('briefing');
   const [mobileTab, setMobileTab] = useState<'briefing' | 'editor'>('briefing');
   
-  // Persistent completed lesson tracking
-  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  // Local-first persistent completed lesson store (IndexedDB + In-Memory Cache)
+  const { completedLessonIds, completeLesson, initProgress } = useProgressStore();
+
+  useEffect(() => {
+    initProgress();
+  }, [initProgress]);
 
   const { theme, fontSize, wordWrap } = useSettingsStore();
 
@@ -75,15 +73,6 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
-
-  // Persist completed lessons
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(completedLessonIds));
-    } catch {
-      // Storage optional
-    }
-  }, [completedLessonIds]);
 
   // Reset code when lesson changes
   const handleLessonChange = (modIdx: number, lesIdx: number) => {
@@ -136,21 +125,28 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setFeedback({ type: null, message: '' });
     
     try {
-      const { result, stdout } = await runCode(code);
+      // Decoupled test runner: if isolated testCode is provided, append it to execution payload
+      const executionPayload = currentLesson.testCode
+        ? `${code}\n\n# ============================================================\n# Isolated Automated Test Harness (Serverless Pyodide Verification)\n# ============================================================\n${currentLesson.testCode}`
+        : code;
+
+      const { result, stdout } = await runCode(executionPayload);
       
       const expected = currentLesson.expectedOutput.trim();
       const combinedOut = (stdout || (typeof result === 'string' ? result : '')).trim();
 
-      // Check if output meets expectation
-      const passed = combinedOut.includes(expected) || 
-        combinedOut.includes('[TEST PASSED]') ||
-        combinedOut.replace(/\s+/g, ' ') === expected.replace(/\s+/g, ' ') ||
-        combinedOut.replace(/'/g, '"') === expected.replace(/'/g, '"') ||
-        String(result).trim() === expected;
+      // If isolated testCode was present, surviving without Python exceptions means all assertions passed
+      const passed = currentLesson.testCode 
+        ? true 
+        : (combinedOut.includes(expected) || 
+           combinedOut.includes('[TEST PASSED]') ||
+           combinedOut.replace(/\s+/g, ' ') === expected.replace(/\s+/g, ' ') ||
+           combinedOut.replace(/'/g, '"') === expected.replace(/'/g, '"') ||
+           String(result).trim() === expected);
 
       if (passed) {
         setIsChallengePassed(true);
-        setCompletedLessonIds(prev => prev.includes(currentLesson.id) ? prev : [...prev, currentLesson.id]);
+        completeLesson(currentLesson.id, track.id);
         setFeedback({ 
           type: 'success', 
           message: '✓ Challenge Passed! Output matches expected first-principles criteria.' 
@@ -162,19 +158,30 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         });
       }
     } catch (e: any) {
-      setFeedback({ type: 'error', message: e.message || 'Execution failed' });
+      const errMsg = e.message || 'Execution failed';
+      const cleanMsg = errMsg.includes('AssertionError:') 
+        ? `Assertion Failed: ${errMsg.split('AssertionError:')[1].trim()}`
+        : errMsg;
+      setFeedback({ type: 'error', message: cleanMsg || 'Execution failed' });
     }
   };
 
-  // Keyboard shortcut listener: Alt+X for X-Ray Lens
+  // Keyboard shortcut & Touch event listener for X-Ray Lens
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.key.toLowerCase() === 'x') {
         setIsXRayOpen(prev => !prev);
       }
     };
+    const handleToggleEvent = () => {
+      setIsXRayOpen(prev => !prev);
+    };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('openguide:toggle-xray', handleToggleEvent);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('openguide:toggle-xray', handleToggleEvent);
+    };
   }, []);
 
   const hasNextLesson = currentLessonIdx < currentModule.lessons.length - 1 || currentModuleIdx < track.modules.length - 1;
@@ -215,6 +222,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         {/* Mobile Viewport Tab Switcher (<lg screens) */}
         <div className="flex lg:hidden items-center p-0.5 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono">
           <button
+            data-testid="mobile-tab-briefing"
             onClick={() => setMobileTab('briefing')}
             className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
               mobileTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
@@ -223,6 +231,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             {t('ide_tab_briefing')}
           </button>
           <button
+            data-testid="mobile-tab-editor"
             onClick={() => setMobileTab('editor')}
             className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
               mobileTab === 'editor' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
@@ -254,11 +263,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             shortcut="Alt+X"
           >
             <button
+              data-testid="xray-toggle-btn"
               onClick={() => setIsXRayOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-all cursor-pointer active:scale-[0.98]"
+              aria-label="Toggle X-Ray Debug Lens"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-all cursor-pointer active:scale-[0.98] min-h-[34px]"
             >
-              <Eye size={13} className="text-emerald-400" />
-              <span className="font-bold">{t('ide_xray_btn')}</span>
+              <Eye size={14} className="text-emerald-400 shrink-0" />
+              <span className="font-bold hidden sm:inline">{t('ide_xray_btn')}</span>
               <span className="hidden xl:inline text-[10px] text-emerald-400/60 font-mono">[Alt+X]</span>
             </button>
           </Tooltip>
@@ -397,7 +408,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
                   {/* Concrete Instructions */}
                   <div className="text-[var(--color-text-secondary)] leading-relaxed text-xs sm:text-sm space-y-2">
-                    <p>{currentLesson.content}</p>
+                    <MarkdownRenderer content={currentLesson.content} />
                   </div>
 
                   {/* Progressive Learning Support: Target, Clues & Solution Reveal */}
@@ -581,15 +592,15 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               </div>
             </div>
 
-            {/* Code Textarea */}
-            <textarea
-              value={code}
-              onChange={e => setCode(e.target.value)}
-              style={{ fontSize: `${fontSize}px`, whiteSpace: wordWrap ? 'pre-wrap' : 'pre' }}
-              aria-label="Python Code Editor"
-              className="flex-1 min-h-0 w-full bg-transparent text-[var(--color-text-primary)] p-4 font-mono leading-relaxed resize-none outline-none selection:bg-[var(--color-accent-trans)] overflow-y-auto custom-scrollbar text-xs sm:text-sm"
-              spellCheck="false"
-            />
+            {/* CodeMirror 6 Python Engine */}
+            <div className="flex-1 min-h-0 w-full overflow-hidden relative">
+              <CodeEditor
+                value={code}
+                onChange={setCode}
+                fontSize={fontSize}
+                wordWrap={wordWrap}
+              />
+            </div>
 
             {/* Editor Action Bottom Bar */}
             <div className="p-3 border-t border-[var(--color-border)] flex items-center justify-between gap-2 bg-[var(--color-primary)]/20 shrink-0">
@@ -674,7 +685,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 </div>
               </div>
               
-              <div className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
+              <div 
+                id="terminal-output" 
+                className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
                 {state === 'running' ? (
                   <div className="py-2 flex items-center justify-center">
                     <NewtonsCradleLoader size={34} label="Executing in CPython WASM Web Worker..." />

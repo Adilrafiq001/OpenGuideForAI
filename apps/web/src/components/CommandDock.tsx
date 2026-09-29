@@ -108,6 +108,13 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       onClick: () => navigate('/holodeck')
     },
     {
+      icon: <Eye size={20} className="text-emerald-400" />,
+      label: 'X-Ray Debug Lens (Alt+X)',
+      onClick: () => {
+        window.dispatchEvent(new CustomEvent('openguide:toggle-xray'));
+      }
+    },
+    {
       icon: <Award size={20} className={location.pathname === '/portfolio' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Portfolio & Credentials',
       onClick: () => navigate('/portfolio')
@@ -136,7 +143,10 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-4 left-6 z-[100]">
+      <div 
+        className="fixed left-6 z-[100]"
+        style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+      >
         <button
           onClick={() => setIsMinimized(false)}
           className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--color-secondary)]/90 backdrop-blur-md border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xl hover:border-[var(--color-accent)] transition-all cursor-pointer"
@@ -150,7 +160,10 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
   }
 
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto overflow-visible">
+    <div 
+      className="fixed left-1/2 -translate-x-1/2 z-[100] pointer-events-auto overflow-visible"
+      style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
+    >
       <MagnificationDock
         items={dockItems}
         panelHeight={64}

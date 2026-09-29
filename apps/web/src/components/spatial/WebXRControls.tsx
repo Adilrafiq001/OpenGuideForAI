@@ -64,17 +64,24 @@ export function WebXRControls({ className = '' }: { className?: string }) {
     }
   };
 
-  // WebXR Native Session Request
+  const [isSimulatorActive, setIsSimulatorActive] = useState<boolean>(false);
+  const [simulatorProfile, setSimulatorProfile] = useState<'quest' | 'visionpro'>('quest');
+
+  // WebXR Native Session Request with honest cross-platform detection
   const requestXRSession = async (mode: 'immersive-vr' | 'immersive-ar') => {
     if (typeof navigator === 'undefined' || !('xr' in navigator) || !navigator.xr) {
-      setStatusMsg('WebXR is not supported by your current browser engine.');
+      setStatusMsg('WebXR is not supported by your current browser engine (Safari iOS/macOS, Firefox). WebXR is supported natively on Meta Quest Browser and visionOS Safari (immersive-vr). Use the "XR Headset Simulator" below to preview either device.');
       return;
     }
 
     try {
       const isSupported = await navigator.xr.isSessionSupported(mode);
       if (!isSupported) {
-        setStatusMsg(`No active ${mode === 'immersive-vr' ? 'VR Headset (e.g. Meta Quest)' : 'AR Device (e.g. Apple Vision Pro)'} detected on this display.`);
+        if (mode === 'immersive-ar') {
+          setStatusMsg('Notice: Apple visionOS Safari supports immersive-vr with gaze+pinch, but does NOT support immersive-ar camera passthrough due to Apple privacy limits. Meta Quest 3/Pro supports immersive-ar with full color passthrough. Use "Universal AR Passthrough" for browser camera overlays on all devices.');
+        } else {
+          setStatusMsg(`No active ${mode === 'immersive-vr' ? 'VR Headset (e.g. Meta Quest / Vision Pro)' : 'AR Device'} detected on this display. You can test and preview immediately using the "XR Headset Simulator" below.`);
+        }
         return;
       }
 
@@ -143,7 +150,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
       </div>
 
       {/* Action Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Universal Camera AR Passthrough Button */}
         <button
           onClick={toggleCameraPassthrough}
@@ -159,7 +166,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               <span>{isCameraActive ? 'Disable Camera AR' : 'Universal AR Passthrough'}</span>
             </div>
             <div className="text-[11px] text-[var(--color-text-secondary)]">
-              Webcam or Phone Camera Overlay
+              Webcam or Phone Camera
             </div>
           </div>
           <Sparkles size={16} className="text-cyan-400 group-hover:scale-110 transition-transform" />
@@ -175,13 +182,13 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               Launch Immersive VR (6-DOF)
             </div>
             <div className="text-[11px] text-[var(--color-text-secondary)]">
-              Meta Quest Browser / SteamVR
+              Meta Quest / visionOS Safari
             </div>
           </div>
           <Maximize2 size={16} className="text-violet-400 group-hover:scale-110 transition-transform" />
         </button>
 
-        {/* Pass-Through AR for Vision Pro / Quest */}
+        {/* Pass-Through AR for Quest */}
         <button
           onClick={() => requestXRSession('immersive-ar')}
           className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-emerald-500/60 transition-all flex items-center justify-between text-left group cursor-pointer"
@@ -191,12 +198,117 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               WebXR Pass-Through AR
             </div>
             <div className="text-[11px] text-[var(--color-text-secondary)]">
-              Apple Vision Pro / Quest 3
+              Meta Quest 3/Pro Exclusive
             </div>
           </div>
           <Sparkles size={16} className="text-emerald-400 group-hover:scale-110 transition-transform" />
         </button>
+
+        {/* Headset Simulator Mode (Preview Quest / Vision Pro without physical hardware) */}
+        <button
+          data-testid="xr-simulator-btn"
+          onClick={() => {
+            const next = !isSimulatorActive;
+            setIsSimulatorActive(next);
+            setStatusMsg(next 
+              ? `XR Headset Simulator Active: Testing ${simulatorProfile === 'quest' ? 'Meta Quest 3 (Dual 6-DOF Controllers)' : 'Apple Vision Pro (Gaze + Micro-Pinch)'} stereo viewport.`
+              : 'XR Headset Simulator deactivated.'
+            );
+          }}
+          className={`p-4 rounded-2xl border transition-all flex items-center justify-between text-left group cursor-pointer ${
+            isSimulatorActive 
+              ? 'bg-amber-950/40 border-amber-500/60 hover:border-amber-400' 
+              : 'bg-[var(--color-primary)] border-[var(--color-border)] hover:border-amber-500/50'
+          }`}
+        >
+          <div className="space-y-1">
+            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+              <Glasses size={15} className="text-amber-400" />
+              <span>{isSimulatorActive ? 'Exit Simulator' : 'XR Headset Simulator'}</span>
+            </div>
+            <div className="text-[11px] text-[var(--color-text-secondary)]">
+              Quest 3 &amp; Vision Pro Preview
+            </div>
+          </div>
+          <Sparkles size={16} className="text-amber-400 group-hover:scale-110 transition-transform" />
+        </button>
       </div>
+
+      {/* Headset Simulator Interactive HUD */}
+      {isSimulatorActive && (
+        <div data-testid="xr-simulator-viewport" className="p-5 rounded-2xl bg-black/90 border border-amber-500/40 flex flex-col gap-4 text-xs font-mono shadow-2xl">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/20 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="font-bold text-amber-400">HARDWARE EMULATION ACTIVE</span>
+            </div>
+            {/* Profile Selector */}
+            <div className="flex items-center p-0.5 rounded-xl bg-slate-900 border border-amber-500/30">
+              <button
+                type="button"
+                data-testid="profile-quest-btn"
+                onClick={() => setSimulatorProfile('quest')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${simulatorProfile === 'quest' ? 'bg-amber-500 text-black font-bold' : 'text-slate-400'}`}
+              >
+                Meta Quest 3 (6-DOF)
+              </button>
+              <button
+                type="button"
+                data-testid="profile-visionpro-btn"
+                onClick={() => setSimulatorProfile('visionpro')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${simulatorProfile === 'visionpro' ? 'bg-amber-500 text-black font-bold' : 'text-slate-400'}`}
+              >
+                Apple Vision Pro (Gaze)
+              </button>
+            </div>
+          </div>
+
+          {/* Dual Eye Stereoscopic Simulation Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">LEFT EYE (Stereo IPD: 64mm)</div>
+              <div className="text-center text-slate-400 text-xs py-4">
+                {simulatorProfile === 'quest' ? (
+                  <div>
+                    <span className="text-violet-400">Left Controller: Tracked-Pointer</span>
+                    <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 0.0 • Thumbstick: (0.0, 0.0)</div>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-cyan-400">Gaze Vector (Left Fovea)</span>
+                    <div className="text-[10px] text-slate-500 mt-1">Ray: [0.02, -0.01, -1.00] • Pupil Dilation: 3.4mm</div>
+                  </div>
+                )}
+              </div>
+              <div className="text-[10px] text-emerald-400 flex items-center justify-between">
+                <span>FPS: 90.0</span>
+                <span>Pose: [X: 0.00, Y: 1.65m, Z: 0.00]</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">RIGHT EYE (Stereo IPD: 64mm)</div>
+              <div className="text-center text-slate-400 text-xs py-4">
+                {simulatorProfile === 'quest' ? (
+                  <div>
+                    <span className="text-violet-400">Right Controller: Ray Hit Active</span>
+                    <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 1.0 (Pinch) • Target: Node 04</div>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-cyan-400">Pinch Gesture: Micro-Tap Detected</span>
+                    <div className="text-[10px] text-slate-500 mt-1">Thumb-Index Distance: 2.1mm • Target: Semantic Vector 04</div>
+                  </div>
+                )}
+              </div>
+              <div className="text-[10px] text-emerald-400 flex items-center justify-between">
+                <span>FOV: 110° Diag</span>
+                <span>Latency: ~11ms (Motion-to-Photon)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Status Output if triggered */}
       {statusMsg && (

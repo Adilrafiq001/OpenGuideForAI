@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Award, 
@@ -15,14 +15,16 @@ import {
   User, 
   Lock, 
   Key, 
-  ExternalLink
+  ExternalLink,
+  Download,
+  Upload
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
+import { useProgressStore } from '../store/useProgressStore';
 
-const STORAGE_KEY = 'openguide_completed_lessons';
 const STUDENT_NAME_KEY = 'openguide_student_name';
 
 interface TrackMetadata {
@@ -39,21 +41,26 @@ interface TrackMetadata {
 
 export function PortfolioPage() {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    completedLessonIds,
+    resetProgress,
+    simulateAllComplete,
+    exportProgressJSON,
+    importProgressJSON,
+    initProgress
+  } = useProgressStore();
+
+  useEffect(() => {
+    initProgress();
+  }, [initProgress]);
 
   const [studentName, setStudentName] = useState(() => {
     try {
       return localStorage.getItem(STUDENT_NAME_KEY) || 'Autonomous AI Engineer';
     } catch {
       return 'Autonomous AI Engineer';
-    }
-  });
-
-  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
     }
   });
 
@@ -160,17 +167,33 @@ export function PortfolioPage() {
   // Demo toggle: complete all labs or reset
   const handleSimulateCompletion = () => {
     const allIds = allTracks.flatMap(t => t.lessons.map(l => l.id));
-    setCompletedLessonIds(allIds);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(allIds));
-    } catch {}
+    simulateAllComplete(allIds);
   };
 
   const handleResetProgress = () => {
-    setCompletedLessonIds([]);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-    } catch {}
+    resetProgress();
+  };
+
+  const handleExportBackup = () => {
+    const json = exportProgressJSON();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    const success = await importProgressJSON(text);
+    if (!success) {
+      alert('Unable to import: Invalid JSON ledger format.');
+    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   return (
@@ -253,8 +276,34 @@ export function PortfolioPage() {
             </p>
           </div>
 
-          {/* Quick Sandbox Controls */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Quick Sandbox Controls & Durability Ledger */}
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              onClick={handleExportBackup}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Download your cryptographic learning ledger as a JSON file"
+            >
+              <Download size={13} className="text-[var(--color-accent)]" />
+              <span>Export Ledger (.json)</span>
+            </button>
+
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Restore completed labs from a previous JSON backup"
+            >
+              <Upload size={13} className="text-[var(--color-accent)]" />
+              <span>Import Backup</span>
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={handleImportBackup}
+            />
+
             <button
               onClick={handleSimulateCompletion}
               className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/50 text-[11px] font-mono text-emerald-400 transition-all cursor-pointer"
@@ -262,12 +311,13 @@ export function PortfolioPage() {
             >
               Simulate 100% Complete
             </button>
+
             <button
               onClick={handleResetProgress}
               className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-rose-500/50 text-[11px] font-mono text-rose-400 transition-all cursor-pointer"
               title="Reset progress to 0"
             >
-              Reset Labs
+              Reset
             </button>
           </div>
         </div>

@@ -21,22 +21,26 @@ export const track1: Track = {
 # Objective: The Vector as an Arrow in Semantic Space
 # ============================================================
 
-# In modern AI, concepts are represented as coordinates in continuous space.
-# Words with related meanings point in similar directions.
-
 # TODO: Step 1 - Define the 2D coordinate vector for "king" as [0.9, 0.2]
-king = [0.9, 0.2]
+king = []
 
 # TODO: Step 2 - Define the 2D coordinate vector for "queen" as [0.85, 0.25]
+queen = []
+
+print(f"King vector coordinates : {king}")
+print(f"Queen vector coordinates: {queen}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.1.1 (Canonical Solution)
+# ============================================================
+
+king = [0.9, 0.2]
 queen = [0.85, 0.25]
 
 print(f"King vector coordinates : {king}")
 print(f"Queen vector coordinates: {queen}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert isinstance(king, list) and len(king) == 2, "king must be a 2D list [x, y]"
+`,
+          testCode: `assert isinstance(king, list) and len(king) == 2, "king must be a 2D list [x, y]"
 assert isinstance(queen, list) and len(queen) == 2, "queen must be a 2D list [x, y]"
 assert king == [0.9, 0.2], f"Expected king = [0.9, 0.2], got {king}"
 assert queen == [0.85, 0.25], f"Expected queen = [0.85, 0.25], got {queen}"
@@ -60,19 +64,29 @@ import math
 v = [3.0, 4.0]
 
 # TODO: Step 1 - Calculate Euclidean magnitude: sqrt(x^2 + y^2)
-mag = math.sqrt(v[0]**2 + v[1]**2)
+mag = 0.0
 
 # TODO: Step 2 - Normalize each coordinate by dividing by magnitude (round to 2 decimals)
+unit_v = []
+
+print(f"Original Vector: {v}")
+print(f"Magnitude (L2): {mag}")
+print(f"Normalized Unit Vector: {unit_v}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.1.2 (Canonical Solution)
+# ============================================================
+import math
+
+v = [3.0, 4.0]
+mag = math.sqrt(v[0]**2 + v[1]**2)
 unit_v = [round(x / mag, 2) for x in v]
 
 print(f"Original Vector: {v}")
 print(f"Magnitude (L2): {mag}")
 print(f"Normalized Unit Vector: {unit_v}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert mag == 5.0, f"Expected magnitude 5.0, got {mag}"
+`,
+          testCode: `assert mag == 5.0, f"Expected magnitude 5.0, got {mag}"
 assert unit_v == [0.6, 0.8], f"Expected normalized vector [0.6, 0.8], got {unit_v}"
 assert round(math.sqrt(unit_v[0]**2 + unit_v[1]**2), 1) == 1.0, "Unit vector must have magnitude 1.0"
 print("✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.")
@@ -96,17 +110,25 @@ b = [4, 5, 6]
 
 # TODO: Step 1 - Compute dot product by multiplying corresponding elements and summing:
 # sum(x * y for x, y in zip(a, b))
+dot = 0
+
+print(f"Vector A: {a}")
+print(f"Vector B: {b}")
+print(f"Dot Product (A · B): {dot}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.1.3 (Canonical Solution)
+# ============================================================
+
+a = [1, 2, 3]
+b = [4, 5, 6]
 dot = sum(x * y for x, y in zip(a, b))
 
 print(f"Vector A: {a}")
 print(f"Vector B: {b}")
 print(f"Dot Product (A · B): {dot}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-# 1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32
-assert dot == 32, f"Expected dot product 32, got {dot}"
+`,
+          testCode: `assert dot == 32, f"Expected dot product 32, got {dot}"
 assert sum(x * y for x, y in zip([1, 0], [0, 1])) == 0, "Orthogonal dot product must equal 0"
 print("✓ [TEST PASSED] Vector dot product calculation verified.")
 `,
@@ -135,6 +157,25 @@ import math
 # TODO: Step 1 - Complete the cosine similarity function:
 # dot_product / (magnitude1 * magnitude2)
 def cosine_sim(v1, v2):
+    dot = 0.0 # TODO: sum(a * b for a, b in zip(v1, v2))
+    mag1 = 1.0 # TODO: math.sqrt(sum(a * a for a in v1))
+    mag2 = 1.0 # TODO: math.sqrt(sum(b * b for b in v2))
+    return dot / (mag1 * mag2)
+
+short_doc = [1.0, 2.0]
+long_doc = [10.0, 20.0]
+
+sim = cosine_sim(short_doc, long_doc)
+print(f"Short Document Vector: {short_doc}")
+print(f"10x Long Document Vector: {long_doc}")
+print(f"Angular Cosine Similarity: {round(sim, 2)}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.2.1 (Canonical Solution)
+# ============================================================
+import math
+
+def cosine_sim(v1, v2):
     dot = sum(a * b for a, b in zip(v1, v2))
     mag1 = math.sqrt(sum(a * a for a in v1))
     mag2 = math.sqrt(sum(b * b for b in v2))
@@ -147,11 +188,8 @@ sim = cosine_sim(short_doc, long_doc)
 print(f"Short Document Vector: {short_doc}")
 print(f"10x Long Document Vector: {long_doc}")
 print(f"Angular Cosine Similarity: {round(sim, 2)}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert round(sim, 2) == 1.0, f"Identical direction must yield 1.0 similarity, got {sim}"
+`,
+          testCode: `assert round(sim, 2) == 1.0, f"Identical direction must yield 1.0 similarity, got {sim}"
 assert cosine_sim([1, 0], [0, 1]) == 0.0, "Orthogonal vectors must yield 0.0 similarity"
 assert cosine_sim([1, 0], [-1, 0]) == -1.0, "Opposite vectors must yield -1.0 similarity"
 print("✓ [TEST PASSED] Angular cosine similarity function verified.")
@@ -186,14 +224,33 @@ candidates = {
 
 # TODO: Step 1 - Calculate similarity for each candidate and store in scores dict
 scores = {}
+# for topic, vec in candidates.items():
+#     scores[topic] = ...
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.2.2 (Canonical Solution)
+# ============================================================
+import math
+
+def cosine_similarity(v1, v2):
+    dot = sum(a * b for a, b in zip(v1, v2))
+    mag1 = math.sqrt(sum(a * a for a in v1))
+    mag2 = math.sqrt(sum(b * b for b in v2))
+    return round(dot / (mag1 * mag2), 4)
+
+query = [0.8, 0.6]
+candidates = {
+    "AI Systems": [0.85, 0.52],
+    "Biology Genetics": [-0.3, 0.95],
+    "Machine Learning": [0.79, 0.61]
+}
+
+scores = {}
 for topic, vec in candidates.items():
     scores[topic] = cosine_similarity(query, vec)
     print(f"Alignment to [{topic}]: {scores[topic]}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert len(scores) == 3, f"Expected 3 topic scores, got {len(scores)}"
+`,
+          testCode: `assert len(scores) == 3, f"Expected 3 topic scores, got {len(scores)}"
 assert scores["Machine Learning"] > scores["Biology Genetics"], "Machine Learning must rank higher than Biology"
 assert scores["AI Systems"] >= 0.99, f"AI Systems score should be >= 0.99, got {scores['AI Systems']}"
 assert scores["Biology Genetics"] < 0.5, f"Biology Genetics score should be < 0.5, got {scores['Biology Genetics']}"
@@ -218,12 +275,29 @@ p = [1.0, 2.0]
 q = [4.0, 6.0]
 
 # TODO: Step 1 - Manhattan Distance (L1): sum(|p_i - q_i|)
-manhattan = sum(abs(a - b) for a, b in zip(p, q))
+manhattan = 0.0
 
 # TODO: Step 2 - Euclidean Distance (L2): sqrt(sum((p_i - q_i)^2))
-euclidean = math.sqrt(sum((a - b)**2 for a, b in zip(p, q)))
+euclidean = 0.0
 
 # TODO: Step 3 - Cosine Distance: 1.0 - cosine_similarity
+cos_dist = 0.0
+
+print(f"L1 Manhattan Distance: {manhattan}")
+print(f"L2 Euclidean Distance: {euclidean}")
+print(f"Cosine Distance: {cos_dist}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.2.3 (Canonical Solution)
+# ============================================================
+import math
+
+p = [1.0, 2.0]
+q = [4.0, 6.0]
+
+manhattan = sum(abs(a - b) for a, b in zip(p, q))
+euclidean = math.sqrt(sum((a - b)**2 for a, b in zip(p, q)))
+
 dot = sum(a * b for a, b in zip(p, q))
 mag_p = math.sqrt(sum(a*a for a in p))
 mag_q = math.sqrt(sum(b*b for b in q))
@@ -233,11 +307,8 @@ cos_dist = round(1.0 - cos_sim, 4)
 print(f"L1 Manhattan Distance: {manhattan}")
 print(f"L2 Euclidean Distance: {euclidean}")
 print(f"Cosine Distance: {cos_dist}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert manhattan == 7.0, f"Expected Manhattan 7.0, got {manhattan}"
+`,
+          testCode: `assert manhattan == 7.0, f"Expected Manhattan 7.0, got {manhattan}"
 assert euclidean == 5.0, f"Expected Euclidean 5.0, got {euclidean}"
 assert cos_dist == 0.0039, f"Expected Cosine distance 0.0039, got {cos_dist}"
 print("✓ [TEST PASSED] Tri-metric geometric comparison verified.")
@@ -269,12 +340,32 @@ class SimpleVectorStore:
         self.documents = []
 
     def add(self, doc_id, text, vector):
+        # TODO: Append dictionary {"id": doc_id, "text": text, "vector": vector}
+        pass
+
+    def count(self):
+        return len(self.documents)
+
+store = SimpleVectorStore()
+store.add("doc1", "Introduction to Neural Networks", [0.9, 0.1, 0.4])
+store.add("doc2", "French Cooking Recipes", [-0.2, 0.8, 0.1])
+
+print(f"Indexed {store.count()} documents successfully.")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.3.1 (Canonical Solution)
+# ============================================================
+
+class SimpleVectorStore:
+    def __init__(self):
+        self.documents = []
+
+    def add(self, doc_id, text, vector):
         self.documents.append({"id": doc_id, "text": text, "vector": vector})
 
     def count(self):
         return len(self.documents)
 
-# TODO: Step 2 - Instantiate and index two documents
 store = SimpleVectorStore()
 store.add("doc1", "Introduction to Neural Networks", [0.9, 0.1, 0.4])
 store.add("doc2", "French Cooking Recipes", [-0.2, 0.8, 0.1])
@@ -282,11 +373,8 @@ store.add("doc2", "French Cooking Recipes", [-0.2, 0.8, 0.1])
 print(f"Indexed {store.count()} documents successfully.")
 for doc in store.documents:
     print(f"  [{doc['id']}] {doc['text']}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert store.count() == 2, f"Expected 2 documents, got {store.count()}"
+`,
+          testCode: `assert store.count() == 2, f"Expected 2 documents, got {store.count()}"
 assert store.documents[0]["id"] == "doc1"
 assert store.documents[1]["id"] == "doc2"
 assert len(store.documents[0]["vector"]) == 3
@@ -321,25 +409,46 @@ corpus = [
 
 query_vec = [0.88, 0.25, 0.15]
 
-# TODO: Step 1 - Score candidate documents against the query vector
+# TODO: Step 1 - Score candidate documents against query vector
+scored = []
+
+# TODO: Step 2 - Sort candidates descending by cosine score
+# scored.sort(...)
+
+# TODO: Step 3 - Extract top-2 nearest neighbors
+top_k = []
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.3.2 (Canonical Solution)
+# ============================================================
+import math
+
+def cosine_sim(v1, v2):
+    dot = sum(a * b for a, b in zip(v1, v2))
+    mag1 = math.sqrt(sum(a * a for a in v1))
+    mag2 = math.sqrt(sum(b * b for b in v2))
+    return dot / (mag1 * mag2) if (mag1 * mag2) > 0 else 0
+
+corpus = [
+    {"id": "doc_1", "text": "Linear algebra and matrix operations", "vec": [0.9, 0.2, 0.1]},
+    {"id": "doc_2", "text": "Italian baking and bread sourdough", "vec": [-0.5, 0.8, -0.2]},
+    {"id": "doc_3", "text": "Deep neural network architectures", "vec": [0.85, 0.35, 0.2]}
+]
+
+query_vec = [0.88, 0.25, 0.15]
+
 scored = []
 for item in corpus:
     score = cosine_sim(query_vec, item["vec"])
     scored.append({"id": item["id"], "score": round(score, 4), "text": item["text"]})
 
-# TODO: Step 2 - Sort candidates descending by cosine score
 scored.sort(key=lambda x: x["score"], reverse=True)
-
-# TODO: Step 3 - Extract top-2 nearest neighbors
 top_k = scored[:2]
 
 for rank, result in enumerate(top_k, 1):
     print(f"Rank {rank}: [{result['id']}] Score: {result['score']} | {result['text']}")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert len(top_k) == 2, f"Expected 2 matches, got {len(top_k)}"
+`,
+          testCode: `assert len(top_k) == 2, f"Expected 2 matches, got {len(top_k)}"
 assert top_k[0]["id"] == "doc_1", f"Top match should be doc_1, got {top_k[0]['id']}"
 assert top_k[1]["id"] == "doc_3", f"Second match should be doc_3, got {top_k[1]['id']}"
 assert top_k[0]["score"] > top_k[1]["score"], "Results must be sorted descending"
@@ -360,7 +469,50 @@ print("✓ [TEST PASSED] Top-K nearest neighbor ranking verified.")
 # ============================================================
 import math
 
-# TODO: Step 1 - Complete SemanticSearchEngine with indexing & normalized search
+class SemanticSearchEngine:
+    def __init__(self):
+        self.index = []
+
+    def add_document(self, doc_id, title, vector):
+        # TODO: Normalize vector and append {"id": doc_id, "title": title, "vector": norm_vec}
+        mag = math.sqrt(sum(x * x for x in vector))
+        norm_vec = [x / mag for x in vector] if mag > 0 else vector
+        self.index.append({"id": doc_id, "title": title, "vector": norm_vec})
+
+    def search(self, query_vector, top_k=2):
+        # TODO: Normalize query vector, compute cosine similarity, sort descending, return top_k
+        mag = math.sqrt(sum(x * x for x in query_vector))
+        norm_query = [x / mag for x in query_vector] if mag > 0 else query_vector
+        
+        results = []
+        for doc in self.index:
+            sim = sum(a * b for a, b in zip(norm_query, doc["vector"]))
+            results.append({"id": doc["id"], "title": doc["title"], "score": round(sim, 4)})
+            
+        results.sort(key=lambda x: x["score"], reverse=True)
+        return results[:top_k]
+
+# TODO: Instantiate and populate engine with 5 documents
+engine = SemanticSearchEngine()
+engine.add_document("ai_01", "Vector Manifolds & Embeddings", [0.92, 0.35, 0.15])
+engine.add_document("cook_02", "Artisan Sourdough Fermentation", [-0.60, 0.75, -0.20])
+engine.add_document("ai_03", "Transformer Attention Mechanisms", [0.88, 0.40, 0.22])
+engine.add_document("phys_04", "General Relativity & Spacetime", [0.10, -0.30, 0.95])
+engine.add_document("cook_05", "Classic French Pastry Techniques", [-0.55, 0.80, -0.15])
+
+# TODO: Query for an AI topic and retrieve top 2
+ai_query = [0.90, 0.38, 0.18]
+matches = engine.search(ai_query, top_k=2)
+
+print(f"Total Indexed Documents: {len(engine.index)}")
+for i, match in enumerate(matches, 1):
+    print(f"Top {i}: {match['id']} - {match['title']} (Cosine: {match['score']})")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 1 - Lab 1.3.3 (Canonical Solution)
+# ============================================================
+import math
+
 class SemanticSearchEngine:
     def __init__(self):
         self.index = []
@@ -382,7 +534,6 @@ class SemanticSearchEngine:
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:top_k]
 
-# TODO: Step 2 - Index knowledge base documents
 engine = SemanticSearchEngine()
 engine.add_document("ai_01", "Vector Manifolds & Embeddings", [0.92, 0.35, 0.15])
 engine.add_document("cook_02", "Artisan Sourdough Fermentation", [-0.60, 0.75, -0.20])
@@ -390,18 +541,14 @@ engine.add_document("ai_03", "Transformer Attention Mechanisms", [0.88, 0.40, 0.
 engine.add_document("phys_04", "General Relativity & Spacetime", [0.10, -0.30, 0.95])
 engine.add_document("cook_05", "Classic French Pastry Techniques", [-0.55, 0.80, -0.15])
 
-# TODO: Step 3 - Query for an AI topic and retrieve top 2
 ai_query = [0.90, 0.38, 0.18]
 matches = engine.search(ai_query, top_k=2)
 
 print(f"Total Indexed Documents: {len(engine.index)}")
 for i, match in enumerate(matches, 1):
     print(f"Top {i}: {match['id']} - {match['title']} (Cosine: {match['score']})")
-
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert len(engine.index) == 5, f"Expected 5 indexed documents, got {len(engine.index)}"
+`,
+          testCode: `assert len(engine.index) == 5, f"Expected 5 indexed documents, got {len(engine.index)}"
 assert len(matches) == 2, f"Expected 2 top matches, got {len(matches)}"
 assert matches[0]["id"] == "ai_01", f"Top match must be ai_01, got {matches[0]['id']}"
 assert matches[1]["id"] == "ai_03", f"Second match must be ai_03, got {matches[1]['id']}"

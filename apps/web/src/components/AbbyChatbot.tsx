@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Settings, X, Copy, Check, Maximize2, Minimize2 } from 'lucide-react';
+import { Settings, X, Copy, Check, Maximize2, Minimize2, Zap, Download } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
+import { 
+  isLocalSlmCached, 
+  cacheLocalSlmWeights, 
+  generateLocalSlmResponse 
+} from '../services/localNeuralRunner';
 import '../styles/abby-chatbot.css';
 
 interface Message {
@@ -24,7 +29,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const [query, setQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const { byokApiKey, byokProvider } = useSettingsStore();
+  const { byokApiKey, byokProvider, byokModel } = useSettingsStore();
   const { t } = useLanguageStore();
 
   const [messages, setMessages] = useState<Message[]>([
@@ -36,6 +41,24 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       timestamp: 'Just now'
     }
   ]);
+
+  const [isSlmCached, setIsSlmCached] = useState(false);
+  const [isCachingSlm, setIsCachingSlm] = useState(false);
+  const [cachingProgress, setCachingProgress] = useState(0);
+
+  useEffect(() => {
+    isLocalSlmCached('smollm-135m-q4').then(setIsSlmCached);
+  }, []);
+
+  const handleCacheSlm = async () => {
+    setIsCachingSlm(true);
+    setCachingProgress(15);
+    const res = await cacheLocalSlmWeights('smollm-135m-q4', (p) => setCachingProgress(p));
+    setIsCachingSlm(false);
+    if (res.success) {
+      setIsSlmCached(true);
+    }
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -121,9 +144,77 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     };
   };
 
-  const handleSend = () => {
+  const [isTyping, setIsTyping] = useState(false);
+
+  const fetchByokResponse = async (userQuery: string): Promise<{ content: string; codeSnippet?: string; takeaway?: string }> => {
+    if (byokProvider === 'openrouter' || byokProvider === 'openai') {
+      const endpoint = byokProvider === 'openrouter' 
+        ? 'https://openrouter.ai/api/v1/chat/completions'
+        : 'https://api.openai.com/v1/chat/completions';
+      const model = byokModel || (byokProvider === 'openrouter' ? 'meta-llama/llama-3-8b-instruct:free' : 'gpt-4o-mini');
+      
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${byokApiKey}`,
+          ...(byokProvider === 'openrouter' ? { 'HTTP-Referer': 'https://openguide.ai', 'X-Title': 'OpenGuide' } : {})
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            {
+              role: 'system',
+              content: 'You are Abby, an encouraging, rigorous AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples.'
+            },
+            ...messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
+            { role: 'user', content: userQuery }
+          ],
+          temperature: 0.7,
+          max_tokens: 800
+        })
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error?.message || `API returned status ${res.status}`);
+      }
+
+      const data = await res.json();
+      const content = data.choices?.[0]?.message?.content || 'No response returned from model.';
+      return {
+        content,
+        takeaway: `Generated live via ${byokProvider.toUpperCase()} (${model})`
+      };
+    } else if (byokProvider === 'gemini') {
+      const model = byokModel || 'gemini-1.5-flash';
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${byokApiKey}`;
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: `You are Abby, an encouraging, rigorous AI engineering mentor for OpenGuide. User query: ${userQuery}` }]
+          }]
+        })
+      });
+      if (!res.ok) {
+        throw new Error(`Gemini API returned status ${res.status}`);
+      }
+      const data = await res.json();
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response returned.';
+      return {
+        content,
+        takeaway: `Generated live via Google Gemini (${model})`
+      };
+    } else {
+      throw new Error(`Direct browser calls to ${byokProvider} are not directly supported. Falling back to local engine.`);
+    }
+  };
+
+  const handleSend = async () => {
     const trimmed = query.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
 
     const userMsg: Message = {
       id: `user-${Date.now()}`,
@@ -134,8 +225,59 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
     setMessages(prev => [...prev, userMsg]);
     setQuery('');
+    setIsTyping(true);
 
-    // Answer via offline knowledge base
+    if (byokApiKey && byokApiKey.trim().length > 0) {
+      try {
+        const byokRes = await fetchByokResponse(trimmed);
+        const assistantMsg: Message = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: byokRes.content,
+          codeSnippet: byokRes.codeSnippet,
+          takeaway: byokRes.takeaway,
+          timestamp: 'Just now'
+        };
+        setMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+        return;
+      } catch (err: any) {
+        console.warn('BYOK API call failed, falling back to offline knowledge engine:', err);
+        const offlineRes = generateOfflineResponse(trimmed);
+        const assistantMsg: Message = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: `*(BYOK Notice: ${err.message || 'Connection error'}. Falling back to embedded offline knowledge engine)*\n\n${offlineRes.content}`,
+          codeSnippet: offlineRes.codeSnippet,
+          takeaway: `Offline Knowledge Engine • Local First`,
+          timestamp: 'Just now'
+        };
+        setMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+        return;
+      }
+    }
+
+    // Local WebGPU SLM Generative Inference (if cached in CacheStorage / IndexedDB)
+    if (isSlmCached) {
+      try {
+        const slmRes = await generateLocalSlmResponse(trimmed, 'smollm-135m-q4');
+        const assistantMsg: Message = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: slmRes.text,
+          takeaway: `WebGPU Local SLM (${slmRes.modelName} • ~${slmRes.tokensPerSec} tok/s)`,
+          timestamp: 'Just now'
+        };
+        setMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+        return;
+      } catch (e) {
+        console.warn('Local SLM generation failed, falling back to offline knowledge base:', e);
+      }
+    }
+
+    // Default: Answer via embedded offline knowledge base
     setTimeout(() => {
       const response = generateOfflineResponse(trimmed);
       const assistantMsg: Message = {
@@ -143,10 +285,11 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         role: 'assistant',
         content: response.content,
         codeSnippet: response.codeSnippet,
-        takeaway: response.takeaway,
+        takeaway: response.takeaway || 'Offline Knowledge Engine',
         timestamp: 'Just now'
       };
       setMessages(prev => [...prev, assistantMsg]);
+      setIsTyping(false);
     }, 200);
   };
 
@@ -247,7 +390,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                     <div className="abby-avatar-badge">✦</div>
                     <span className="abby-name">{t('abby_title')}</span>
                     <span className="abby-status-tag">
-                      {byokApiKey ? `BYOK (${byokProvider})` : t('abby_subtitle')}
+                      {byokApiKey ? `BYOK (${byokProvider})` : isSlmCached ? '⚡ WebGPU SLM Active' : t('abby_subtitle')}
                     </span>
                   </div>
                   <div className="abby-header-actions">
@@ -281,6 +424,32 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                   </div>
                 </div>
 
+                {/* Local WebGPU SLM Ingestion & Cache Banner */}
+                {!byokApiKey && (
+                  <div className="px-3.5 py-1.5 bg-slate-900/80 border-b border-slate-800 text-[11px] font-mono flex items-center justify-between text-slate-300 shrink-0">
+                    {isSlmCached ? (
+                      <span className="flex items-center gap-1.5 text-emerald-400">
+                        <Zap size={12} className="text-emerald-400 fill-emerald-400" />
+                        <span>SmolLM-135M Cached (100% Offline AI)</span>
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleCacheSlm}
+                        disabled={isCachingSlm}
+                        className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold transition-colors cursor-pointer disabled:opacity-60 active:scale-95"
+                        data-testid="cache-slm-btn"
+                      >
+                        <Download size={12} />
+                        <span>
+                          {isCachingSlm ? `Caching Local SLM (${cachingProgress}%)...` : '⚡ Cache 85MB Local SLM for Offline AI'}
+                        </span>
+                      </button>
+                    )}
+                    <span className="text-[10px] text-slate-500 hidden sm:inline">$0 Rule</span>
+                  </div>
+                )}
+
                 {/* Conversation History */}
                 <div className="abby-messages-container">
                   {messages.map((msg) => (
@@ -306,6 +475,16 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                       )}
                     </div>
                   ))}
+                  {isTyping && (
+                    <div className="abby-message-bubble assistant">
+                      <div className="flex items-center gap-1.5 py-1 text-slate-400 text-xs">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span className="ml-2 font-mono text-[11px] text-slate-400">Synthesizing...</span>
+                      </div>
+                    </div>
+                  )}
                   <div ref={messagesEndRef} />
                 </div>
 

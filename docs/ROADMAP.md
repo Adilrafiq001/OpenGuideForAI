@@ -123,7 +123,25 @@
 - [x] Curriculum Lab Depth Across Tracks 1, 2, and 3: 27 in-depth interactive labs across Vector Spaces, RAG pipelines, and Production Evals with local in-browser WASM verification and expected output assertions.
 - [x] Native WebGPU WGSL Compute Kernel Engine (`localNeuralRunner.ts`): Implemented direct WGSL compute shader pass for client-side tensor multiplication with automatic WASM CPU fallback and hardware adapter telemetry ($0 Rule).
 - [x] Cloudflare Pages Edge Deployment & Build Validation: Verified production build (`tsc -b && vite build`) with 0 errors in 3.09s, valid `_headers` edge caching, and PWA service worker pre-caching.
-- [x] Studio Footer Changelog & Release Milestones updated to `v2.5.0`.
+## Phase 13: CodeMirror 6 Python Engine, Scaffolding Across 36 Labs, Tiered Dexie IDB & BYOK Abby (Release v2.6.0)
+- [x] CodeMirror 6 Python editor with 4-space Tab indentation (`indentWithTab`), auto-brackets, line numbers, and dynamic theme synchronization.
+- [x] Theory & Mathematical Formula Typesetting engine with `marked` parser ($\mathbf{A} \cdot \mathbf{B}$, $L_2$ norm, $\cos(\theta)$).
+- [x] Tiered Local-First Storage via Dexie IndexedDB with instant RAM cache and transparent localStorage fallback.
+- [x] JSON progress ledger export and backup restoration in Portfolio.
+- [x] Decoupled Web Worker test execution isolating assertions from student code tampering.
+- [x] Comprehensive algorithmic `# TODO: Step N` scaffolding across all 36 labs with separated solution reveal and automated test suites.
+- [x] Abby AI Copilot BYOK direct fetch adapter (OpenAI, Gemini, OpenRouter) with seamless offline knowledge engine fallback ($0 Rule).
+- [x] Route-level React Error Boundary with accessible recovery and memory reset.
+
+## Phase 14: Universal Compatibility, Mobile UX Touch Accessory Bar, In-Browser WebGPU Local SLM Ingestion, Air-Gapped Pyodide Pre-Caching, and WebXR Quest/Vision Pro Emulation (Release v2.7.0)
+- [x] **Mobile Touchscreen Virtual Accessory Bar (`CodeEditor.tsx`):** Touch-scrollable 20-chip syntax toolbar (`Tab`, `:`, `(`, `)`, `def`, `return`, `assert`) with direct CodeMirror `dispatch` cursor injection for frictionless mobile coding.
+- [x] **Touchscreen & Multi-Modal X-Ray Lens Parity (`CoursePlayer.tsx`, `CommandDock.tsx`):** Added on-screen touch trigger button and Command Dock item dispatching `openguide:toggle-xray` without requiring physical keyboard `Alt+X`.
+- [x] **In-Browser WebGPU Local SLM Ingestion ($0 Rule) (`localNeuralRunner.ts`, `AbbyChatbot.tsx`):** Client-side quantized SLM ingestion (`smollm-135m-q4` 85MB, `qwen2.5-0.5b-q4` 190MB) persisted into CacheStorage (`openguide-slm-cache-v1`) with 1-click download UI and offline generative chat.
+- [x] **Air-Gapped Day-0 Pyodide Pre-Caching (`public/sw.js`):** Cache-first Service Worker routing for Pyodide CDN assets and background runtime pre-caching message handler (`openguide-pyodide-v0.26`).
+- [x] **WebXR Meta Quest & Apple Vision Pro Emulation (`WebXRControls.tsx`):** Interactive dual stereoscopic XR simulator HUD with profile switching: Meta Quest 3 (6-DOF controller ray) and Apple Vision Pro (gaze reticle + pinch gesture) with honest capability disclosures.
+- [x] **Safe-Area Notch & Gesture Bar Styling (`CommandDock.tsx`):** Injected `env(safe-area-inset-bottom)` to protect bottom navigation and floating dock from clipping on modern iPhone/iPad and Android gesture navigation displays.
+- [x] **Automated Cross-Platform Suite (`universal-compatibility.spec.ts`):** 6/6 tests passing across 12 viewport widths (320px–1920px), mobile touch accessory bar, touch X-Ray lens, WebGPU SLM caching, WebXR headset emulation, and air-gapped Pyodide pre-caching.
+- [ ] **Physical Real-Device Human Verification Pass:** Scheduled for physical hardware execution by Adil across real iOS Safari, Android Chrome, iPad Stage Manager, and Chromebook.
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 

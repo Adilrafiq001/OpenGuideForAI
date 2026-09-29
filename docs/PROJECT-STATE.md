@@ -1,6 +1,46 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 20 Calibrated Themes & Performance Architecture
 
 **Done:**
+- **Universal Compatibility, Mobile UX Touch Accessory Bar, In-Browser WebGPU SLM & Air-Gapped Pyodide (Complete):**
+  - **Mobile Touchscreen Virtual Accessory Bar (`CodeEditor.tsx`):**
+    - Built horizontal, touch-scrollable syntax accessory bar rendering 20 essential programming tokens (`Tab`, `:`, `(`, `)`, `[`, `]`, `{`, `}`, `=`, `_`, `#`, `"`, `'`, `.`, `,`, `+`, `-`, `*`, `def`, `return`, `assert`).
+    - Integrated direct CodeMirror `dispatch` cursor injection with focus retention, overcoming mobile virtual keyboard symbol navigation hurdles.
+  - **On-Screen Touch-Accessible X-Ray Debug Lens (`CoursePlayer.tsx`, `CommandDock.tsx`):**
+    - Eradicated reliance on desktop-only `Alt+X` keyboard shortcut.
+    - Added high-visibility on-screen trigger button in CoursePlayer header and touch-friendly dock item in CommandDock, dispatching `openguide:toggle-xray`.
+  - **In-Browser WebGPU Local SLM Ingestion & CacheStorage Persistence (`localNeuralRunner.ts`, `AbbyChatbot.tsx`):**
+    - Built client-side quantized SLM ingestion system (`smollm-135m-q4`, 85MB; `qwen2.5-0.5b-q4`, 190MB) persisted into CacheStorage (`openguide-slm-cache-v1`).
+    - Added one-click offline model download button in Abby chatbot with live download percentage and 100% client-side WebGPU execution ($0 Rule).
+  - **Air-Gapped Pyodide Runtime Pre-Caching (`public/sw.js`):**
+    - Upgraded Service Worker cache version to `openguide-shell-v2.6.0` and added `openguide-pyodide-v0.26` cache-first interception.
+    - Added runtime pre-caching message handler for core Pyodide binaries (`pyodide.js`, `pyodide.asm.js`, `pyodide.asm.wasm`, `python_stdlib.zip`) for day-0 air-gapped coding.
+  - **Spatial Holodeck WebXR Meta Quest & Apple Vision Pro Emulation (`WebXRControls.tsx`):**
+    - Created interactive stereoscopic headset simulator HUD with hardware profile switcher: Meta Quest 3 (6-DOF controller ray) and Apple Vision Pro (gaze reticle + pinch gesture).
+    - Implemented honest platform feature detection and disclosures (visionOS supports `immersive-vr` only, Quest supports both `immersive-vr` and `immersive-ar`, iOS/macOS Safari and Firefox gracefully fall back).
+  - **Automated Universal Compatibility Suite & Findings (`universal-compatibility.spec.ts`, `COMPATIBILITY-FINDINGS.md`):**
+    - 6/6 tests passing across 12 viewport widths (320px–1920px), mobile touch accessory bar, touch X-Ray lens, WebGPU SLM caching, WebXR headset emulation, and air-gapped Pyodide pre-caching.
+    - Compiled production bundle with 0 errors in 59s. Tailored human real-device verification checklist for Adil's physical devices.
+
+- **CodeMirror 6 Python Editor, Scaffolding Across 36 Labs, Tiered IndexedDB & Resilient Architecture (Complete):**
+  - **Embedded CodeMirror 6 Python Engine (`CodeEditor.tsx`):**
+    - Integrated CodeMirror 6 with `@codemirror/lang-python`, auto-brackets, line numbers, and 4-space Tab indentation (`indentWithTab`).
+    - Dynamic theme extension matching OpenGuide's active theme palette (`var(--color-primary)`, `var(--color-accent)`, `var(--color-surface)`).
+  - **Theory & Mathematical Formula Typesetting Engine (`MarkdownRenderer.tsx`):**
+    - Built responsive markdown renderer with `marked` parser, math symbol formatting ($\mathbf{A} \cdot \mathbf{B}$, $L_2$ norm, $\cos(\theta)$), and sanitized typography.
+  - **Tiered Local-First Persistence with Dexie IndexedDB & JSON Backup (`useProgressStore.ts`):**
+    - Built dual-tier persistence: instant in-memory RAM cache for 0ms reads and debounced Dexie IndexedDB asynchronous commits for durability.
+    - Transparent `localStorage` fallback for restricted sandbox environments.
+    - Full JSON export and backup restoration methods in `PortfolioPage.tsx`.
+  - **Decoupled Pyodide Test Execution Harness (`CoursePlayer.tsx`):**
+    - Separated student editor code from test execution. Tests (`testCode`) are isolated from student tampering and executed in Pyodide Web Worker.
+  - **Comprehensive Hands-On Scaffolding Across All 36 Labs (`track0.ts` – `track3.ts`):**
+    - Added `# TODO: Step N` algorithmic scaffolds to all 36 labs across Tracks 0, 1, 2, and 3.
+    - Preserved canonical `solutionCode` and isolated `testCode` for deterministic automated grading.
+  - **Abby Copilot BYOK Client-Side Fetch Adapter (`AbbyChatbot.tsx`):**
+    - Direct browser fetch adapter for OpenAI, Google Gemini, and OpenRouter user keys with seamless automatic fallback to embedded offline knowledge engine ($0 Rule).
+  - **Error Boundary Hardening (`ErrorBoundary.tsx`, `App.tsx`):**
+    - Route-level error boundary preventing full app crashes, with accessible error diagnostics and local state recovery actions.
+
 - **Zero-Friction Beginner-to-Pro Architecture, Micro-Grammar & UI Hardening (Complete):**
   - **Universal Tooltip Collision Detection & Responsive Boundaries (`Tooltip.tsx`):**
     - Extended `TooltipProps` with `align?: 'start' | 'center' | 'end'`.

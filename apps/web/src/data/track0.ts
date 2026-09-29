@@ -5,6 +5,7 @@ export type Lesson = {
   firstPrinciplesIntuition: string;
   content: string;
   initialCode: string;
+  testCode?: string;
   expectedOutput: string;
   hint?: string;
   progressiveHints?: string[];
@@ -48,15 +49,19 @@ export const track0: Track = {
 
 # TODO: Step 1 - Define the message variable with the exact text:
 # "Hello, World! Running natively in browser."
-message = "Hello, World! Running natively in browser."
+message = ""
 
 # TODO: Step 2 - Use print() to write the message to stdout
-print(message)
+# print(...)
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.1 (Canonical Solution)
+# ============================================================
 
-# ============================================================
-# Automated Unit Test Verification (Pyodide Test Harness)
-# ============================================================
-assert message == "Hello, World! Running natively in browser.", (
+message = "Hello, World! Running natively in browser."
+print(message)
+`,
+          testCode: `assert message == "Hello, World! Running natively in browser.", (
     f"Expected 'Hello, World! Running natively in browser.', got '{message}'"
 )
 print("✓ [TEST PASSED] CPython stdout stream successfully verified.")
@@ -80,14 +85,21 @@ audience = "a beginner"
 
 # TODO: Construct a formatted prompt using an f-string:
 # "Explain {topic} in one plain sentence for {audience}."
-prompt = f"Explain {topic} in one plain sentence for {audience}."
+prompt = ""
 
 print(prompt)
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.2 (Canonical Solution)
+# ============================================================
 
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-expected_prompt = "Explain Vector Embeddings in one plain sentence for a beginner."
+topic = "Vector Embeddings"
+audience = "a beginner"
+
+prompt = f"Explain {topic} in one plain sentence for {audience}."
+print(prompt)
+`,
+          testCode: `expected_prompt = "Explain Vector Embeddings in one plain sentence for a beginner."
 assert prompt == expected_prompt, f"Expected '{expected_prompt}', got '{prompt}'"
 print("✓ [TEST PASSED] Dynamic prompt template verified.")
 `,
@@ -106,17 +118,22 @@ print("✓ [TEST PASSED] Dynamic prompt template verified.")
 # ============================================================
 
 # TODO: Step 1 - Set the total batch count to 1000 items
-batch_count = 1000
+batch_count = 0
 
 # TODO: Step 2 - Compute total processed coordinates (each point has 3 coordinates: x, y, z)
-total_coordinates = batch_count * 3
+total_coordinates = 0
 
 print(f"Processed {batch_count} vectors ({total_coordinates} coordinates) in Web Worker.")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.3 (Canonical Solution)
+# ============================================================
 
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert batch_count == 1000, f"Expected batch_count to be 1000, got {batch_count}"
+batch_count = 1000
+total_coordinates = batch_count * 3
+print(f"Processed {batch_count} vectors ({total_coordinates} coordinates) in Web Worker.")
+`,
+          testCode: `assert batch_count == 1000, f"Expected batch_count to be 1000, got {batch_count}"
 assert total_coordinates == 3000, f"Expected total_coordinates to be 3000, got {total_coordinates}"
 print("✓ [TEST PASSED] Background Web Worker simulation complete.")
 `,
@@ -142,20 +159,27 @@ print("✓ [TEST PASSED] Background Web Worker simulation complete.")
 # ============================================================
 
 # TODO: Step 1 - Define the 3D embedding coordinate list: [0.24, -0.89, 0.51]
-vector_point = [0.24, -0.89, 0.51]
+vector_point = []
 
 # TODO: Step 2 - Compute dimensions using len()
-dimensions = len(vector_point)
+dimensions = 0
 
-# TODO: Step 3 - Compute the vector magnitude (norm) = sqrt(x^2 + y^2 + z^2)
+# TODO: Step 3 - Compute vector magnitude (norm) = sqrt(x^2 + y^2 + z^2)
+magnitude = 0.0
+
+print(f"Dimensions: {dimensions} | Magnitude: {round(magnitude, 4)}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.1 (Canonical Solution)
+# ============================================================
+
+vector_point = [0.24, -0.89, 0.51]
+dimensions = len(vector_point)
 magnitude = sum(x**2 for x in vector_point) ** 0.5
 
 print(f"Dimensions: {dimensions} | Magnitude: {round(magnitude, 4)}")
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert len(vector_point) == 3, f"Expected 3 dimensions, got {len(vector_point)}"
+`,
+          testCode: `assert len(vector_point) == 3, f"Expected 3 dimensions, got {len(vector_point)}"
 assert vector_point == [0.24, -0.89, 0.51], "Vector point values do not match requirements."
 assert round(magnitude, 3) == 1.053, f"Expected magnitude ≈ 1.053, got {magnitude}"
 print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
@@ -176,22 +200,31 @@ print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
 # Objective: Structured Chat Message Serialization
 # ============================================================
 
-# TODO: Step 1 - Construct the message dictionary with 'role' and 'content' keys
+# TODO: Step 1 - Construct message dictionary with 'role' and 'content' keys
+message = {}
+
+# TODO: Step 2 - Serialize dictionary to JSON string using json.dumps()
+json_string = ""
+
+print("Serialized JSON Payload:")
+print(json_string)
+`,
+          solutionCode: `import json
+
+# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.2 (Canonical Solution)
+# ============================================================
+
 message = {
     "role": "user",
     "content": "What is an embedding?"
 }
 
-# TODO: Step 2 - Serialize the message dictionary into a JSON string using json.dumps()
 json_string = json.dumps(message)
-
 print("Serialized JSON Payload:")
 print(json_string)
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-parsed = json.loads(json_string)
+`,
+          testCode: `parsed = json.loads(json_string)
 assert parsed.get("role") == "user", "Message role must be 'user'"
 assert parsed.get("content") == "What is an embedding?", "Content must be 'What is an embedding?'"
 print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
@@ -215,20 +248,33 @@ print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
 raw_tool_call = '{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}'
 
 # TODO: Step 1 - Parse raw_tool_call JSON into a Python dictionary using json.loads()
-call = json.loads(raw_tool_call)
+call = {}
 
 # TODO: Step 2 - Extract tool name, query, and top_k parameters
+tool_name = ""
+query = ""
+top_k = 0
+
+execution_signature = f"Calling: {tool_name}(query='{query}', top_k={top_k})"
+print(execution_signature)
+`,
+          solutionCode: `import json
+
+# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.3 (Canonical Solution)
+# ============================================================
+
+raw_tool_call = '{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}'
+
+call = json.loads(raw_tool_call)
 tool_name = call.get("tool", "")
 query = call.get("query", "")
 top_k = call.get("top_k", 0)
 
 execution_signature = f"Calling: {tool_name}(query='{query}', top_k={top_k})"
 print(execution_signature)
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert tool_name == "vector_search", "Tool name must be 'vector_search'"
+`,
+          testCode: `assert tool_name == "vector_search", "Tool name must be 'vector_search'"
 assert query == "cosine similarity", "Query must be 'cosine similarity'"
 assert top_k == 3, "top_k must be 3"
 assert execution_signature == "Calling: vector_search(query='cosine similarity', top_k=3)"
@@ -258,20 +304,29 @@ print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
 sentence = "OpenGuide makes AI engineering intuitive"
 
 # TODO: Step 1 - Split the sentence into words using sentence.split()
-words = sentence.split()
+words = []
 
 # TODO: Step 2 - Calculate estimated tokens using int(len(words) * 1.33)
-estimated_tokens = int(len(words) * 1.33)
+estimated_tokens = 0
 
 # TODO: Step 3 - Calculate character-based estimate using round(len(sentence) / 4)
+char_tokens = 0
+
+print(f"Words: {len(words)} | BPE Word Est: {estimated_tokens} | Char Est: {char_tokens}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.1 (Canonical Solution)
+# ============================================================
+
+sentence = "OpenGuide makes AI engineering intuitive"
+
+words = sentence.split()
+estimated_tokens = int(len(words) * 1.33)
 char_tokens = round(len(sentence) / 4)
 
 print(f"Words: {len(words)} | BPE Word Est: {estimated_tokens} | Char Est: {char_tokens}")
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert len(words) == 5, f"Expected 5 words, got {len(words)}"
+`,
+          testCode: `assert len(words) == 5, f"Expected 5 words, got {len(words)}"
 assert estimated_tokens == 6, f"Expected 6 tokens (5 * 1.33 = 6.65 -> int 6), got {estimated_tokens}"
 assert char_tokens == 10, f"Expected 10 char tokens (41 chars / 4 ≈ 10), got {char_tokens}"
 print("✓ [TEST PASSED] Token estimation heuristics verified.")
@@ -290,13 +345,28 @@ print("✓ [TEST PASSED] Token estimation heuristics verified.")
 # Objective: Role Separation & Prompt Injection Guardrails
 # ============================================================
 
-# TODO: Step 1 - Define a conversation with system instructions and user inquiry
 conversation = [
     {"role": "system", "content": "You are a concise AI teacher."},
     {"role": "user", "content": "What is cosine similarity?"}
 ]
 
-# TODO: Step 2 - Format each turn as "[ROLE]: Content"
+# TODO: Step 1 - Format each turn as "[ROLE]: Content"
+formatted_dialogue = []
+# for msg in conversation:
+#     ...
+
+rendered = "\\n".join(formatted_dialogue)
+print(rendered)
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.2 (Canonical Solution)
+# ============================================================
+
+conversation = [
+    {"role": "system", "content": "You are a concise AI teacher."},
+    {"role": "user", "content": "What is cosine similarity?"}
+]
+
 formatted_dialogue = []
 for msg in conversation:
     role_tag = msg["role"].upper()
@@ -304,11 +374,8 @@ for msg in conversation:
 
 rendered = "\\n".join(formatted_dialogue)
 print(rendered)
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert len(formatted_dialogue) == 2, "Conversation should have 2 turns"
+`,
+          testCode: `assert len(formatted_dialogue) == 2, "Conversation should have 2 turns"
 assert formatted_dialogue[0] == "[SYSTEM]: You are a concise AI teacher."
 assert formatted_dialogue[1] == "[USER]: What is cosine similarity?"
 print("✓ [TEST PASSED] Multi-turn role separation verified.")
@@ -329,12 +396,25 @@ print("✓ [TEST PASSED] Multi-turn role separation verified.")
 
 def simulate_token_sampling(temperature: float) -> str:
     # TODO: Step 1 - If temperature is below 0.3, return "greedy_argmax"
+    # TODO: Step 2 - If temperature is between 0.3 and 0.8 (inclusive), return "balanced_sampling"
+    # TODO: Step 3 - If temperature is above 0.8, return "high_entropy_creative"
+    return ""
+
+t0 = simulate_token_sampling(0.0)
+t5 = simulate_token_sampling(0.5)
+t9 = simulate_token_sampling(0.95)
+
+print(f"T=0.0: {t0} | T=0.5: {t5} | T=0.95: {t9}")
+`,
+          solutionCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.3 (Canonical Solution)
+# ============================================================
+
+def simulate_token_sampling(temperature: float) -> str:
     if temperature < 0.3:
         return "greedy_argmax"
-    # TODO: Step 2 - If temperature is between 0.3 and 0.8 (inclusive), return "balanced_sampling"
     elif temperature <= 0.8:
         return "balanced_sampling"
-    # TODO: Step 3 - If temperature is above 0.8, return "high_entropy_creative"
     return "high_entropy_creative"
 
 t0 = simulate_token_sampling(0.0)
@@ -342,11 +422,8 @@ t5 = simulate_token_sampling(0.5)
 t9 = simulate_token_sampling(0.95)
 
 print(f"T=0.0: {t0} | T=0.5: {t5} | T=0.95: {t9}")
-
-# ============================================================
-# Automated Unit Test Verification
-# ============================================================
-assert simulate_token_sampling(0.1) == "greedy_argmax", "Low temp must be greedy_argmax"
+`,
+          testCode: `assert simulate_token_sampling(0.1) == "greedy_argmax", "Low temp must be greedy_argmax"
 assert simulate_token_sampling(0.7) == "balanced_sampling", "Mid temp must be balanced_sampling"
 assert simulate_token_sampling(1.2) == "high_entropy_creative", "High temp must be high_entropy_creative"
 print("✓ [TEST PASSED] Temperature distribution simulation verified.")

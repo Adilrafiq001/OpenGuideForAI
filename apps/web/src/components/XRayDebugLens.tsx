@@ -69,6 +69,7 @@ export function XRayDebugLens({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.94, opacity: 0, y: 20 }}
           transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+          data-testid="xray-modal-hud"
           className="relative w-full max-w-4xl max-h-[85vh] rounded-3xl bg-neutral-950/95 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden font-mono text-xs z-10"
         >
           {/* Header Bar */}

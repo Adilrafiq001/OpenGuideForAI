@@ -332,8 +332,8 @@ export function LandingHeader({ onOpenThemes }: LandingHeaderProps) {
           </button>
         </Tooltip>
 
-        {/* Launch Track Button & Responsive Dropdown (visible on sm+) */}
-        <div className="hidden sm:flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Launch Track Button & Responsive Dropdown (visible on lg+) */}
+        <div className="hidden lg:flex items-center gap-1.5 sm:gap-2 shrink-0">
           <Tooltip
             position="bottom"
             content="Track 0: Absolute Zero"

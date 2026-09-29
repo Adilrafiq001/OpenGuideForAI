@@ -7,14 +7,22 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-python": "^6.2.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.13",
     "@openguideforai/runner": "workspace:^",
     "@phosphor-icons/react": "^2.1.10",
     "clsx": "^2.1.1",
+    "codemirror": "^6.0.2",
+    "dexie": "^4.4.6",
     "framer-motion": "^13.4.4",
     "lucide-react": "^1.48.0",
+    "marked": "^18.0.14",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4",

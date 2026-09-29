@@ -69,6 +69,19 @@ NEVER suppress, skip, or ignore failures.
 
 ---
 
+## 4.1 Strict 5-Point Pre-Flight Gate (MANDATORY Before ANY Commit / Push / Task Done)
+
+Before claiming ANY task is done, committing code, or pushing to GitHub:
+1. **Dev Server Live Check:** Confirm the local Vite dev server is running as an active daemon task and responds with HTTP `200 OK` (`(Invoke-WebRequest http://localhost:5173).StatusCode == 200`).
+2. **Physical Playwright MCP Verification:** Physically inspect the real browser DOM, routes, and user interactions. Run `browser_console_messages(level: "error")` to verify 0 runtime errors.
+3. **Lint Verification:** `yarn lint` must pass with 0 errors.
+4. **100% Test Suite Passage:** `npx playwright test` across the ENTIRE test directory (100% passing, 0 failing, 0 skipped across all test files).
+5. **Production Build Compilation:** `yarn --cwd apps/web build` must complete with 0 errors.
+
+A failure in ANY of these 5 checks blocks all further action until resolved. Zero broken CI tolerance.
+
+---
+
 ## 5. Client Runtime & Worker Testing
 
 ```bash

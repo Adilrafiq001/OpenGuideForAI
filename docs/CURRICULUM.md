@@ -41,13 +41,20 @@ Every module and curriculum milestone is anchored in three universal questions:
   - *Lesson 0.3.2:* System Prompts vs. User Prompts (Context hierarchy, behavioral guardrails, multi-turn message arrays).
   - *Lesson 0.3.3:* Temperature & Sampling Distribution Simulation (Softmax probabilities, greediness vs creativity, zero-temperature determinism).
 
-### Track 1: Beginner (Foundations)
-**Goal:** Deployed chatbot calling a real model with memory.
-- **Module 1.1:** Connecting to Frontier Models via REST & BYOK (Pillars 4, 13)
-- **Module 1.2:** Prompt Engineering & Structured JSON Output (Pillar 13)
-- **Module 1.3:** Git & Version Control for Prompts & Data (Pillar 5)
-- **Module 1.4:** Deployment & Operations on Free Hugging Face Spaces (Pillar 17)
-- **Boss Project:** Deploy a production-ready conversational chatbot with memory.
+### Track 1: Vector Spaces, Embeddings & Semantic Search
+**Goal:** Build and deploy an in-memory high-dimensional vector search engine from scratch using linear algebra and cosine similarity.
+- **Module 1.1: High-Dimensional Vectors & Distance Metrics (Pillars 2, 12)**
+  - *Lesson 1.1.1:* Vectors in Space & 2D Semantic Coordinates (Floating-point coordinate representations and spatial vectors).
+  - *Lesson 1.1.2:* Magnitude & Euclidean Distance ($L_2$ norm, geometric distance between embeddings).
+  - *Lesson 1.1.3:* The Dot Product & Directional Projection (Inner product mechanics and parallel vs orthogonal vectors).
+- **Module 1.2: Cosine Similarity & Normalization (Pillars 2, 12)**
+  - *Lesson 1.2.1:* Cosine Similarity: Length-Invariant Angular Metric ($\cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|}$).
+  - *Lesson 1.2.2:* Vector Normalization ($L_2$ unit vectors, transforming dot product directly into cosine similarity).
+  - *Lesson 1.2.3:* Semantic Similarity Matrix & Multi-Candidate Ranking (Ranking documents by query vector similarity).
+- **Module 1.3: Distance Metrics, Vector Indexing & Boss Project (Pillars 2, 12)**
+  - *Lesson 1.3.1:* Distance Metrics: Manhattan ($L_1$) vs Euclidean ($L_2$) vs Cosine (Sparse vs dense trade-offs).
+  - *Lesson 1.3.2:* Building an In-Memory Vector Store Index (Document storage, embedding projection, and Top-K retrieval).
+  - *Lesson 1.3.3:* Boss Project: Interactive Semantic Search Engine (`SemanticSearchEngine` class with indexing and query search).
 
 ### Track 2: Intermediate (RAG, Retrieval & Autonomous Agents)
 **Goal:** Deploy an autonomous research agent combining chunked document retrieval, MCP tools, and ReAct multi-turn reasoning.

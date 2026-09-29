@@ -57,7 +57,15 @@
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
 - **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
 - **Clean As You Go & Project Hygiene (Mandatory Rule):** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (such as temporary screenshots in `.playwright-mcp/`, `test-results/`, and temporary log files) as we advance to subsequent tasks. Maintain a strictly clean, neat, and tidy project directory tree at all times.
-- **Mandatory Live To-Do Tracking & Handover Continuity (Mandatory Rule):** Always create and maintain an explicit, real-time To-Do checklist in all responses and plans. Mark tasks completed `[x]` immediately as soon as they are completed, so that if a session compaction, pause, or handover occurs, any incoming agent or the user instantly knows what has been completed so far and what remains.
-- **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`.
+- **Zero-Tolerance GitHub CI & Pre-Flight Gate (Strict Mandatory Rule):** Before ANY commit, push, or claiming completion of ANY task, the agent MUST run and physically verify the 5-Point Local Pre-Flight Suite:
+  1. **Dev Server Live Check:** Confirm the local dev server is running as a daemon and responds with HTTP `200 OK` (`(Invoke-WebRequest http://localhost:5173).StatusCode == 200`).
+  2. **Physical Playwright MCP Verification:** Physically inspect live DOM, user interactions, and confirm 0 console errors via `browser_console_messages(level: "error")`.
+  3. **Lint Verification:** `yarn lint` must pass with 0 errors.
+  4. **100% Test Suite Passage:** `npx playwright test` across the ENTIRE test directory (100% passing, 0 failing, 0 skipped).
+  5. **Production Build Compilation:** `yarn --cwd apps/web build` must succeed with 0 errors.
+  Never commit, push, or report success if any of these 5 steps fails. A single failing test on GitHub Actions or locally is a P0 regression that blocks all other work.
+- **Physical Verification Integrity Rule (No Blind Claims):** Never claim an app is serving, tested, or ready without concrete physical execution evidence. Never assume a server is running after a test command exits. The daemon dev server must be kept running and verified.
+- **100% Automated Regression Coverage:** Every bug fix, UI layout change, or architectural feature must have permanent Playwright regression assertions added. Never delete, weaken, or bypass a test to pass CI.
+- **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`, `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`.
 
 

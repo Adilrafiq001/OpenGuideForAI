@@ -6,18 +6,22 @@
 
 ## Technology Stack
 - **Web Client:** Static SPA with Vite, React 18, TypeScript, Tailwind CSS, and Framer Motion.
-- **Client Runtime:** CPython compiled to WebAssembly (Pyodide v0.26) isolated in a Web Worker.
-- **Storage:** IndexedDB (Dexie / native IDB) for local persistence of code, state, and vector indices.
-- **BYOK AI:** Direct client-side fetch to frontier endpoints using user-supplied API keys (zero middleman proxy servers).
+- **Code Editor Engine:** Embedded CodeMirror 6 Python editor with 4-space Tab indentation (`indentWithTab`), line numbering, auto-bracket closing, live CSS variable theme synchronization, and a mobile-optimized touch Virtual Accessory Bar (`codemirror-accessory-bar`) providing single-tap injection for syntax keys (`Tab`, `:`, `(`, `)`, `def`, `return`, etc.).
+- **Theory & Mathematical Typesetting:** In-browser Markdown renderer powered by `marked` with formula typesetting for vector geometry ($\mathbf{A} \cdot \mathbf{B}$, $L_2$ norm, $\cos(\theta)$).
+- **Client Runtime:** CPython compiled to WebAssembly (Pyodide v0.26) isolated in a dedicated Web Worker with decoupled hidden test assertion harness and Service Worker cache-first pre-caching for day-0 air-gapped operation.
+- **In-Browser WebGPU Local SLM:** Client-side quantized neural ingestion service (`localNeuralRunner.ts`) providing 100% private, local generative intelligence (`smollm-135m-q4` 85MB, `qwen2.5-0.5b-q4` 190MB) persisted into CacheStorage (`openguide-slm-cache-v1`) without paid external API keys ($0 Rule).
+- **Tiered Local-First Storage:** Dexie IndexedDB persistence with an instantaneous in-memory RAM cache tier, transparent `localStorage` fallback, and JSON export/import backup and restore.
+- **Error Boundaries:** Granular React Error Boundaries wrapping all route transitions with accessible error cards, reload actions, and local memory reset.
+- **BYOK AI & Abby Copilot:** Direct client-side fetch to frontier endpoints using user-supplied API keys (OpenAI, Google Gemini, OpenRouter), local WebGPU SLM execution, and automatic fallback to embedded offline knowledge engine ($0 Rule).
 - **Theming & Craft:** 20 WCAG AAA calibrated palettes (10 Dark, 10 Light) inspired by developer tools (Claude, Linear, Cursor, GitHub, Notion) and fine paper ergonomics (Archival Fine Paper, E-Ink Papyrus, Swiss Bauhaus Modernist), controlled by an animated Uiverse Sun/Moon Day/Night toggle switch with zero hover jitter, script-safe responsive typography, and spring physics (`stiffness: 280, damping: 22`).
 - **Universal Multilingual Subsystem:** 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic bidirectional `dir="rtl"` activation for Urdu and Arabic, script-safe line-height preservation, and material-wide reactive translations.
 - **Universal Header Synchronization:** Uniform `<LanguageSelector />` and theme/settings pill affordance (`[ ● Theme 🎨 | ⚙️ ]`) with hover gear micro-rotation across all page headers.
 - **Offline-First PWA Architecture:** Production Service Worker (`/sw.js`) implementing cache-first for hashed immutable assets and stale-while-revalidate for navigation HTML, paired with real-time `OfflineStatusIndicator.tsx` floating status announcements.
 - **Cloudflare Pages Production Edge Configuration:** Custom `_headers` routing immutable 1-year caching for `/assets/*` and instant revalidation for app manifest and service worker.
-- **Spatial Compute Tiering ($0 Compute Rule):**
+- **Spatial Compute Tiering & Headset Emulation ($0 Compute Rule):**
   - *Tier 1 (2D Lean Mode):* Pure SVG coordinate geometry for low-end CPUs, older smartphones, and battery savers (0% GPU load).
   - *Tier 2 (Hardware-Accelerated 3D WebGL):* High-FPS orbital embedding hyper-space and multi-layer neural synapse propagation engine via Three.js with Raycaster pointer hit testing, Cosmic Latent Space Starfield, holographic gyroscope rings, and dynamic Web Audio API spatial synthesizer chimes.
-  - *Tier 3 (WebXR Spatial Gateway & Universal AR Passthrough):* 6-DOF immersive VR (Meta Quest), pass-through AR (Apple Vision Pro), and universal webcam/mobile AR camera passthrough overlay (`getUserMedia`).
+  - *Tier 3 (WebXR Spatial Gateway & Universal AR Passthrough):* 6-DOF immersive VR (Meta Quest), pass-through AR (Apple Vision Pro), universal webcam/mobile AR camera passthrough overlay (`getUserMedia`), and built-in interactive dual stereoscopic XR simulator for headless cross-device validation.
 - **Cognitive Accelerator Architecture:**
   - *Pareto 80/20 Engine:* Direct extraction and focus on foundational concepts governing AI engineering.
   - *The "Blurting" Active Retrieval Protocol:* Timed focus window with blank-canvas recall extraction and red-ink consolidation keyword gap analysis.
@@ -25,11 +29,11 @@
   - *Targeted Deliberate Drills:* Edge-case scenario isolation with instantaneous diagnostic feedback.
   - *Verified Learning Vault:* Direct integration of cognitive science guides and spaced repetition software (Farnam Street, Scott Young Ultralearning, Learning Scientists, Anki Web).
 - **In-Browser Execution & Telemetry Architecture:**
-  - *Pyodide Web Worker Runner:* Isolates CPython runtime off the main thread, intercepting `sys.stdout` streams and serializing results via async worker `postMessage`. Resilient fallback simulator guarantees 100% uptime when external CDN is unreachable.
+  - *Pyodide Web Worker Runner:* Isolates CPython runtime off the main thread, intercepting `sys.stdout` streams and serializing results via async worker `postMessage`. Decoupled test harness validates student implementations against hidden assertions. Resilient fallback simulator guarantees 100% uptime when external CDN is unreachable.
   - *Runtime Variable Introspection:* Inspects execution namespace via automated `globals()` serialization, capturing user variables, lists, and dictionaries.
   - *X-Ray Debug Lens Inspector:* Spatial floating glass HUD (`Alt+X`) exposing 4 real-time diagnostic tabs: Performance & WASM Heap, Raw IPC Message Schema, Live Variable State Inspector, and Full Execution Log.
 - **The Synapse Lounge:** Neuro-plasticity arcade featuring *Vector Hyper-Space Alignment*, *Neural Gate Deductor*, and *Transformer Attention Radar* (Query-Key dot product, $\sqrt{d_k}$ scaling, and temperature-controlled Softmax routing) for diffuse-mode learning.
-- **Offline Abby AI Copilot Architecture:** Standalone local chatbot with resizable window geometry (`compact`, `standard`, `expanded`), multi-domain semantic retrieval covering all tracks, tools, and shortcuts, zero AI slop, and Apple-like fluid spring physics.
+- **Offline Abby AI Copilot Architecture:** Standalone local chatbot with resizable window geometry (`compact`, `standard`, `expanded`), multi-domain semantic retrieval covering all tracks, tools, and shortcuts, optional BYOK direct fetch adapter, and zero AI slop.
 - **In-App Free Courses Studio (`FreeCoursesModal`):** Security-hardened in-app studio (`youtube-nocookie.com` with sandboxed iframes) featuring 8 Karpathy lectures, interactive chapter timestamp seekers, real-time searchable transcripts, 1-click Markdown/Text exports, and runnable Python autograd code snippets.
 - **Four Tools. Zero Subscriptions. Setup Engine (`FreeToolsModal`):** Idiot-proof, step-by-step setup guides across Memory, Glue, Compute, and Hosting with 2026 quota caveats, working code, and smoke tests.
 - **Responsive Header Layout Architecture:** Unified header architecture with adaptive collapsing (`Tracks ▾` dropdown on desktop, `Launch Track 0` primary CTA, responsive `BrandLogo`, and zero horizontal collisions from 375px to 1440px).
@@ -38,9 +42,11 @@
 - **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 36-lab completion validation, sample preview mode, and zero-leak client-side name stamping for PDF/print export.
 - **Testing:** Playwright MCP for physical browser inspection and automated regression tests (20 comprehensive suites).
 
-## Monorepo Modules
-- `/apps/web`: Responsive web application, landing page, theme manager, and course player.
-- `/packages/core`: Types, schemas, and first-principles data models.
-- `/packages/runner`: Web Worker Pyodide execution harness.
-- `/packages/llm`: Client-side BYOK multi-provider adapters (REST/WebLLM).
-- `/packages/content`: Lesson blueprints, code challenges, and markdown curriculum assets.
+## Application Directory Structure
+- `/apps/web`: Production web application root.
+  - `src/components/`: Core UI components (`CodeEditor.tsx`, `MarkdownRenderer.tsx`, `ErrorBoundary.tsx`, `CoursePlayer.tsx`, `Holodeck.tsx`, `AbbyChatbot.tsx`).
+  - `src/data/`: First-principles curriculum blueprints (`track0.ts`, `track1.ts`, `track2.ts`, `track3.ts`) with 36 scaffolded labs and offline knowledge base.
+  - `src/store/`: Tiered local-first state stores (`useProgressStore.ts`, `useSettingsStore.ts`, `useLanguageStore.ts`).
+  - `src/worker/`: Dedicated Pyodide CPython WebAssembly Web Worker runner (`pyodide.worker.ts`).
+  - `src/locales/`: Universal 12-language translation catalogs.
+  - `src/styles/`: Craft CSS sheets, 20 theme tokens, and GPU-composited animations.
