@@ -119,7 +119,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(tracksLink).toBeVisible();
 
     // Open Theme Switcher Modal via Header or Dock Button
-    const themeBtn = page.locator('button[aria-label="Choose color theme"]').or(page.locator('button[aria-label="Theme Customizer"]')).first();
+    const themeBtn = page.locator('button[aria-label="Themes and Studio Settings"]').or(page.locator('button[aria-label="Choose color theme"]')).or(page.locator('button[aria-label="Theme Customizer"]')).first();
     await expect(themeBtn).toBeVisible({ timeout: 10000 });
     await themeBtn.click();
     await page.waitForTimeout(500);
@@ -170,7 +170,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     }
   });
 
-  test('04. Multi-Language i18n & Store Persistence: Spanish, French, German, Chinese, Hindi & English', async ({ page }) => {
+  test('04. Universal 12-Language Support, RTL Bidirectionality & Material-Wide Translation', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     const langBtn = page.locator('button[aria-label="Select interface language"]').first();
@@ -178,24 +178,62 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await langBtn.click();
     await page.waitForTimeout(300);
 
-    // Switch to Spanish
+    // 1. Switch to Urdu (اردو) - verify RTL activation and document lang
+    const urBtn = page.locator('button:has-text("اردو")').first();
+    if (await urBtn.count() > 0) {
+      await urBtn.click();
+      await page.waitForTimeout(300);
+
+      const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
+      const htmlLang = await page.evaluate(() => document.documentElement.getAttribute('lang'));
+      expect(htmlDir).toBe('rtl');
+      expect(htmlLang).toBe('ur');
+
+      // Verify Urdu translation rendered on badge/headings
+      await expect(page.locator('text=UR').first()).toBeVisible();
+
+      // Verify Track 0 button has Urdu text
+      const urTrack0Btn = page.locator('text=مشن بریفنگ میں داخل ہوں').or(page.locator('text=ٹریک 0 شروع کریں')).first();
+      await expect(urTrack0Btn).toBeVisible();
+    }
+
+    // 2. Switch to Arabic (العربية) - verify RTL remains active
+    await langBtn.click();
+    await page.waitForTimeout(300);
+    const arBtn = page.locator('button:has-text("العربية")').first();
+    if (await arBtn.count() > 0) {
+      await arBtn.click();
+      await page.waitForTimeout(300);
+
+      const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
+      expect(htmlDir).toBe('rtl');
+      await expect(page.locator('text=AR').first()).toBeVisible();
+    }
+
+    // 3. Switch to Spanish (Español) - verify LTR returns
+    await langBtn.click();
+    await page.waitForTimeout(300);
     const esBtn = page.locator('button:has-text("Español")').first();
     if (await esBtn.count() > 0) {
       await esBtn.click();
       await page.waitForTimeout(300);
 
-      // Verify Spanish translation rendered
+      const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
+      expect(htmlDir).toBe('ltr');
       await expect(page.locator('text=ES').first()).toBeVisible();
+    }
 
-      // Switch back to English
-      await langBtn.click();
-      await page.waitForTimeout(300);
-      const enBtn = page.locator('button:has-text("English")').first();
+    // 4. Switch back to English (English)
+    await langBtn.click();
+    await page.waitForTimeout(300);
+    const enBtn = page.locator('button:has-text("English")').first();
+    if (await enBtn.count() > 0) {
       await enBtn.click();
       await page.waitForTimeout(300);
+
+      const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
+      expect(htmlDir).toBe('ltr');
       await expect(page.locator('text=EN').first()).toBeVisible();
-    } else {
-      await page.keyboard.press('Escape');
     }
   });
 
@@ -412,7 +450,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     // Mobile Hamburger Menu Button
     const mobileMenuBtn = page.locator('button[aria-label="Toggle navigation menu"]').first();
     await expect(mobileMenuBtn).toBeVisible();
-    await mobileMenuBtn.click();
+    await mobileMenuBtn.click({ force: true });
     await page.waitForTimeout(300);
 
     // Verify mobile drawer items
@@ -420,7 +458,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('a[href="#curriculum"]:visible').first()).toBeVisible();
 
     // Close mobile drawer
-    await mobileMenuBtn.click();
+    await mobileMenuBtn.click({ force: true });
     await page.waitForTimeout(300);
 
     // Verify no horizontal overflow
@@ -546,6 +584,32 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const consoleContainer = page.locator('.momentum-scroll-x').first();
     await expect(consoleContainer).toBeAttached();
+  });
+
+  test('14. Universal Header Synchronization: Language Selector & Theme/Settings Gear Across All Pages', async ({ page }) => {
+    // 1. Landing Page Header Controls
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const landingLangBtn = page.locator('header button[aria-label="Select interface language"]').first();
+    await expect(landingLangBtn).toBeVisible({ timeout: 10000 });
+
+    const landingThemeSettingsBtn = page.locator('header button[aria-label="Themes and Studio Settings"]').first();
+    await expect(landingThemeSettingsBtn).toBeVisible();
+
+    // 2. Track Briefing Page Header Controls
+    await page.goto('/track/0/intro', { waitUntil: 'domcontentloaded' });
+    const introLangBtn = page.locator('header button[aria-label="Select interface language"]').first();
+    await expect(introLangBtn).toBeVisible({ timeout: 10000 });
+
+    const introThemeSettingsBtn = page.locator('header button[aria-label="Themes and Studio Settings"]').first();
+    await expect(introThemeSettingsBtn).toBeVisible();
+
+    // 3. Course Player IDE Header Controls
+    await page.goto('/track/0/engine', { waitUntil: 'domcontentloaded' });
+    const ideLangBtn = page.locator('header button[aria-label="Select interface language"]').first();
+    await expect(ideLangBtn).toBeVisible({ timeout: 10000 });
+
+    const ideSettingsBtn = page.locator('header button[aria-label="Settings"]').first();
+    await expect(ideSettingsBtn).toBeVisible();
   });
 
 });

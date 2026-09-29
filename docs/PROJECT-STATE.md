@@ -81,6 +81,14 @@
   - **Newton's Cradle Physics Loader (`NewtonsCradleLoader.tsx`, `newtons-cradle.css`):** Integrated into `CoursePlayer.tsx` terminal execution stream and `TrackBriefing.tsx` Live Sandbox preview card.
   - **Physical Verification via Playwright MCP:** Physically verified 404 duck page, 3D mechanical button navigation to Pyodide IDE, 3D Offline AI Chatbot card expansion and search, Newton's Cradle loader in sandbox and terminal, Track 1 routing, and light-theme contrast on live browser with 0 errors and a clean production build (`npm run build`).
 
+- **Universal 12-Language Expansion, RTL Bidirectionality & Studio-Wide Translation (Complete):**
+  - **Comprehensive 12-Language Support:** Expanded from 6 to 12 world languages: English (`en`), Urdu (`ur` - اردو), Arabic (`ar` - العربية), Spanish (`es`), Mandarin (`zh`), Hindi (`hi`), French (`fr`), German (`de`), Japanese (`ja`), Portuguese (`pt`), Russian (`ru`), and Italian (`it`).
+  - **Automatic RTL Layout & Script-Safe Line Heights:** Automatic `dir="rtl"` activation for Urdu and Arabic on the document root with script-safe line-height preservation (`leading-normal` to `leading-relaxed`) preventing vertical text collisions in Nastaliq, Arabic, and Devanagari scripts.
+  - **Material-Wide Translation:** Replaced localized heading-only translations with full-material translations spanning navigation links, hero headline, 2.5D Studio console simulation tabs, first-principles explainer pills, all 4 curriculum tracks, 11 architectural pillars, free tool ecosystem, knowledge vault, Abby offline AI guide, and footer.
+  - **Universal Header Synchronization & Settings Affordance:** Standardized header controls across all three core pages (`LandingPage`, `TrackBriefing`, and `CoursePlayer`) with responsive `<LanguageSelector />` and unified Theme/Settings pill displaying `[ ● ThemeName 🎨 | ⚙️ ]` with a subtle divider and 45° hover rotation on the gear icon.
+  - **Abby Chatbot Aesthetics & Zero-Overlap Scroll Physics:** Refined Abby chatbot greeting, scaled floating anchor with 3D eye tracking, and implemented zero-overlap CSS transitions gracefully fading out the floating scroll-to-top pill when Abby chat window expands.
+  - **Comprehensive 15-Suite Playwright E2E Automation Regression Suite (`app-full-regression.spec.ts` & `example.spec.ts`):** 15/15 tests passing with 0 failures, covering 12-language switching, RTL layout activation, cross-theme contrast, mobile drawer navigation, spatial holodeck, Pyodide terminal execution, universal header synchronization, and scroll mechanics. Verified clean production build (`npm run build` exits 0 in 5.43s).
+
 **Next:** Deepen Phase 2 Track 1 interactive coding visualizations and vector hyper-space canvas.
 **Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
 

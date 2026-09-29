@@ -7,10 +7,13 @@ import {
   Sparkle,
   ArrowRight
 } from '@phosphor-icons/react';
+import { Settings } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
 import { track0 } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
+import { LanguageSelector } from '../components/LanguageSelector';
 import { InitializeWorkspaceButton } from '../components/InitializeWorkspaceButton';
 import { NewtonsCradleLoader } from '../components/NewtonsCradleLoader';
 
@@ -31,6 +34,7 @@ function getContrastColor(hexColor: string): string {
 export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
   const navigate = useNavigate();
   const { theme } = useSettingsStore();
+  const { t } = useLanguageStore();
   const currentThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
@@ -44,7 +48,7 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
         <div className="flex items-center gap-4">
           <Tooltip
             position="bottom"
-            content="Return to Overview"
+            content={t('briefing_back')}
             subtitle="Back to OpenGuide Studio"
           >
             <button
@@ -52,7 +56,7 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
               className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all group cursor-pointer"
             >
               <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-              <span>Back to Overview</span>
+              <span>{t('briefing_back')}</span>
             </button>
           </Tooltip>
 
@@ -66,30 +70,35 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Universal Multi-Language Selector */}
+          <LanguageSelector />
+
           {/* Quick Theme Switcher */}
           <Tooltip
             position="bottom"
-            content="20 Calibrated Themes"
-            subtitle="10 Dark & 10 Light themes"
+            content={t('theme_settings_label')}
+            subtitle={t('theme_settings_subtitle')}
             shortcut="T"
           >
             <button
               onClick={onOpenThemes}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer"
-              aria-label="Theme Palette"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer group"
+              aria-label="Themes and Studio Settings"
             >
               <div 
                 className="w-3 h-3 rounded-full border border-black/20 dark:border-white/20"
                 style={{ backgroundColor: currentThemeInfo.accent }}
               />
-              <Palette size={14} />
+              <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
+              <span className="opacity-30 text-[10px] select-none">|</span>
+              <Settings size={13} className="opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
             </button>
           </Tooltip>
 
           {/* Close Button */}
           <Tooltip
             position="bottom"
-            content="Close Briefing"
+            content={t('nav_close')}
             subtitle="Return to Studio Overview"
           >
             <button
@@ -117,15 +126,15 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
             }}
           >
             <Sparkle weight="fill" size={13} />
-            <span>Mission Staging & Setup</span>
+            <span>{t('briefing_directive')}</span>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
-            Track 0: Absolute Zero
+            {t('briefing_title')}
           </h1>
           
           <p className="text-[var(--color-text-secondary)] text-lg md:text-xl max-w-3xl leading-relaxed">
-            {track0.description}
+            {t('briefing_subtitle')}
           </p>
         </div>
 
@@ -145,7 +154,7 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
                 style={{ color: currentThemeInfo.accent }}
               >
                 <Terminal size={16} />
-                <span>Mission Directives</span>
+                <span>{t('briefing_directive')}</span>
               </h2>
 
               <p className="text-sm text-[var(--color-text-primary)] leading-relaxed mb-2">
@@ -208,7 +217,7 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
                   color: accentTextColor
                 }}
               >
-                <span>Engage Engine</span>
+                <span>{t('briefing_launch_btn')}</span>
                 <ArrowRight size={16} />
               </button>
             </Tooltip>
@@ -219,7 +228,7 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
         {/* Section Header for Modules */}
         <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--color-border)]">
           <h2 className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
-            Curriculum Modules • Track 0
+            {t('briefing_modules_overview')}
           </h2>
           <span 
             className="text-xs font-mono font-bold"
@@ -289,14 +298,14 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
             style={{ backgroundColor: currentThemeInfo.accent }}
           />
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
-            Ready to Begin Track 0?
+            {t('briefing_title')}
           </h2>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
-            Engage the in-browser CPython WebAssembly runtime. Zero cloud cost, 100% offline privacy, and zero installation required.
+            {t('briefing_subtitle')}
           </p>
           <InitializeWorkspaceButton
             onClick={() => navigate('/track/0/engine')}
-            label="Initialize Workspace Now"
+            label={t('briefing_launch_btn')}
           />
         </div>
 

@@ -6,7 +6,9 @@
 - [x] High-craft UI/UX Design System with 20 calibrated themes (10 Dark & 10 Light).
 - [x] Script-safe typography & multilingual line-height decoupling (Devanagari, CJK, Latin).
 - [x] First-Principles Knowledge Matrix (Why • How • What) with interactive exploration modal.
-- [x] Multi-Language Store (`en`, `es`, `zh`, `hi`, `fr`, `de`).
+- [x] Multi-Language Store across 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic RTL bidirectional layout and script-safe line heights.
+- [x] Material-wide dynamic translation spanning all curriculum tracks, hero copy, 11 pillars, free tools, and Abby guide.
+- [x] Universal Header Synchronization (`LanguageSelector` and `[ ● Theme 🎨 | ⚙️ ]`) across all page headers.
 - [x] Advanced Editor & Environment Preferences Dashboard (Monaco, WASM heap, sound FX).
 - [x] "The Synapse Lounge" Neuro-plasticity lab and cognitive arcade minigames.
 - [x] Universal Hardware-Adaptive Spatial Holodeck:
@@ -21,16 +23,19 @@
   - [x] Targeted Deliberate Drills with Instant Diagnostic Feedback.
   - [x] Verified Cognitive Science Resource Vault.
 - [x] PWA offline caching manifest & mobile safe-area calibration.
-- [x] Playwright MCP automated testing harness.
+- [x] Playwright MCP automated testing harness (15-test exhaustive full regression suite).
 
-## Phase 1: Interactive Learning Tracks (Active)
+## Phase 1: Interactive Learning Tracks (Complete)
 - [x] Track 0 Briefing & Launch flow.
 - [x] Spatial Holodeck Laboratory (`/holodeck`).
 - [x] Cognitive Accelerator Suite (`#cognitive-accelerator`).
 - [x] Track 0 Module 1: In-Browser Execution & Web Worker Pyodide Runner.
 - [x] Track 0 Module 2: Python Essentials, Dictionaries & JSON Schemas.
 - [x] Track 0 Module 3: Tokens, Prompts & Temperature Lab.
-- [x] X-Ray Debug Lens Inspector.
+- [x] X-Ray Debug Lens Inspector (`Alt+X`).
+- [x] 3D Mechanical "Initialize Workspace Now" Button with animated cover opening and gear physics.
+- [x] 3D Offline AI Copilot & Chatbot Widget (Abby) with local semantic memory.
+- [x] Animated 404 Mechanical Duck Page (`/404`).
 
 ## Phase 2: Vector Space & Embeddings (Upcoming)
 - [x] 3D/2D High-Dimensional Vector Geometry Visualizer (Holodeck).

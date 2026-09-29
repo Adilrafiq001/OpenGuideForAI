@@ -17,6 +17,15 @@
   z-index: 120;
 }
 
+/* Gracefully conceal scroll-to-top pill when Abby chat window is expanded to prevent overlap */
+body:has(.abby-floating-anchor .is-open) [data-testid="scroll-to-top-container"],
+body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(16px) scale(0.9) !important;
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
+}
+
 .container-ai-input {
   --perspective: 800px;
   --translateY: 18px;

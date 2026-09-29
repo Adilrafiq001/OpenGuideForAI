@@ -10,6 +10,8 @@
 - **Storage:** IndexedDB (Dexie / native IDB) for local persistence of code, state, and vector indices.
 - **BYOK AI:** Direct client-side fetch to frontier endpoints using user-supplied API keys (zero middleman proxy servers).
 - **Theming & Craft:** 20 WCAG AAA calibrated palettes (10 Dark & 10 Light), script-safe responsive typography, and spring physics (`stiffness: 280, damping: 22`).
+- **Universal Multilingual Subsystem:** 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic bidirectional `dir="rtl"` activation for Urdu and Arabic, script-safe line-height preservation, and material-wide reactive translations.
+- **Universal Header Synchronization:** Uniform `<LanguageSelector />` and theme/settings pill affordance (`[ ● Theme 🎨 | ⚙️ ]`) with hover gear micro-rotation across all page headers.
 - **Spatial Compute Tiering ($0 Compute Rule):**
   - *Tier 1 (2D Lean Mode):* Pure SVG coordinate geometry for low-end CPUs, older smartphones, and battery savers (0% GPU load).
   - *Tier 2 (Hardware-Accelerated 3D WebGL):* High-FPS orbital embedding hyper-space and multi-layer neural synapse propagation engine via Three.js with Raycaster pointer hit testing, Cosmic Latent Space Starfield, holographic gyroscope rings, and dynamic Web Audio API spatial synthesizer chimes.

@@ -14,7 +14,8 @@ import {
   Glasses,
   ChevronDown,
   Menu,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, isNonLatinLanguage } from '../store/useLanguageStore';
@@ -83,17 +84,17 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
     return getContrastColor(currentThemeInfo.accent);
   }, [currentThemeInfo.accent]);
 
-  // 100% Free Stack Ecosystem (from user Word doc)
-  const freeStack = [
+  // 100% Free Stack Ecosystem (Reactive to active language)
+  const freeStack = useMemo(() => [
     {
       category: 'MEMORY',
       tag: 'Vector Databases — Give It Memory',
       accentColor: '#10b981',
       explainer: {
-        label: 'Why Vector DBs?',
-        title: 'Why Vector DBs Search by Meaning, Not Words',
-        explanation: 'Traditional databases search for exact word matches ("doctor" = "doctor"). Vector databases turn text into numeric coordinates in space, so searching for "physician" instantly finds "surgeon" and "medical clinic" based on conceptual proximity.',
-        takeaway: 'Vector search allows AI to understand semantic context instead of keyword matching.'
+        label: t('whyVectorLabel'),
+        title: t('free_stack_why_vector_title'),
+        explanation: t('free_stack_why_vector_desc'),
+        takeaway: t('free_stack_why_vector_takeaway')
       },
       tools: [
         { name: 'Chroma', desc: 'Embed & search your data client-side or serverless', badge: 'OPEN SOURCE' },
@@ -106,10 +107,10 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       tag: 'Frameworks — Wire It Together',
       accentColor: '#6366f1',
       explainer: {
-        label: 'Why Frameworks?',
-        title: 'Why RAG Frameworks Beat Custom Spaghetti Code',
-        explanation: 'Frameworks like LangChain and LlamaIndex provide standardized document parsers, chunking strategies, and retrieval pipelines so you avoid reinventing complex context-injection logic.',
-        takeaway: 'Use modular frameworks to prototype fast, then simplify.'
+        label: t('whyRAGLabel'),
+        title: t('free_stack_why_frameworks_title'),
+        explanation: t('free_stack_why_frameworks_desc'),
+        takeaway: t('free_stack_why_frameworks_takeaway')
       },
       tools: [
         { name: 'LangChain', desc: 'Build modular RAG pipelines and autonomous agents', badge: 'FREE / OSS' },
@@ -121,10 +122,10 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       tag: 'Free GPUs in Your Browser',
       accentColor: '#f59e0b',
       explainer: {
-        label: 'Why Free GPUs?',
-        title: 'Why Cloud Notebooks Beat Local GPU Purchases',
-        explanation: 'NVIDIA AI graphics cards cost thousands of dollars. Google Colab and Kaggle provide free T4 GPUs directly in your browser with zero driver setup and zero electrical costs.',
-        takeaway: 'Train and fine-tune models on enterprise hardware for $0.'
+        label: t('whyWasmLabel'),
+        title: t('free_stack_why_gpus_title'),
+        explanation: t('free_stack_why_gpus_desc'),
+        takeaway: t('free_stack_why_gpus_takeaway')
       },
       tools: [
         { name: 'Google Colab', desc: '15GB RAM, free GPU, zero terminal installation', badge: 'FREE' },
@@ -136,17 +137,17 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       tag: 'Put Your App on the Public Internet',
       accentColor: '#ec4899',
       explainer: {
-        label: 'Why Free Hosting?',
-        title: 'Why Free Spaces Beat Expensive Web Hosting',
-        explanation: 'Hugging Face Spaces and Streamlit Community give you live public URLs with 2vCPU compute and 16GB RAM for free. You can showcase working apps to employers or clients worldwide without paying server hosting fees.',
-        takeaway: 'Share real working prototypes without ongoing bills.'
+        label: t('whyZeroBudgetLabel'),
+        title: t('free_stack_why_hosting_title'),
+        explanation: t('free_stack_why_hosting_desc'),
+        takeaway: t('free_stack_why_hosting_takeaway')
       },
       tools: [
         { name: 'Hugging Face Spaces', desc: '2vCPU • 16GB RAM • Free public domain', badge: 'DEPLOY FREE' },
         { name: 'Streamlit Community', desc: 'Deploy interactive Python apps directly from Git', badge: 'DEPLOY FREE' }
       ]
     }
-  ];
+  ], [language, t]);
 
   // Curated Knowledge Vault
   const knowledgeVault = [
@@ -217,13 +218,13 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         }}
       />
 
-      {/* Top Glass Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-[100] px-4 sm:px-6 md:px-12 py-3 flex items-center justify-between backdrop-blur-xl transition-all duration-300 ${
+      {/* Top Glass Navigation Header */}
+      <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-6 md:px-12 py-2.5 sm:py-3 flex items-center justify-between flex-nowrap backdrop-blur-xl transition-all duration-300 ${
         isScrolled 
           ? 'bg-[var(--color-primary)]/95 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/20' 
           : 'bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]/60 shadow-sm'
       }`}>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-8 min-w-0">
           
           {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
           <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl">
@@ -238,7 +239,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               subtitle="From Absolute Zero to Autonomous Agents • 9 Interactive Labs"
             >
               <a href="#pathways" className="hover:text-[var(--color-text-primary)] transition-colors py-1">
-                Tracks
+                {t('nav_tracks')}
               </a>
             </Tooltip>
             
@@ -248,7 +249,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               subtitle="Foundations, Vector DBs, RAG, Pyodide & 100% Free Stack"
             >
               <a href="#curriculum" className="hover:text-[var(--color-text-primary)] transition-colors py-1">
-                Curriculum
+                {t('nav_curriculum')}
               </a>
             </Tooltip>
 
@@ -262,7 +263,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1"
               >
                 <Glasses size={14} className="opacity-70" />
-                <span>Spatial Holodeck</span>
+                <span>{t('nav_holodeck')}</span>
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">3D</span>
               </button>
             </Tooltip>
@@ -279,7 +280,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 aria-expanded={isExploreOpen}
                 aria-haspopup="true"
               >
-                <span>Labs & Science</span>
+                <span>{t('nav_labs_science')}</span>
                 <ChevronDown size={12} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -294,7 +295,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   >
                     <div className="w-72 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-3 shadow-2xl backdrop-blur-2xl">
                       <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold">
-                      Cognitive Labs & Ecosystem
+                      {t('nav_labs_science')}
                     </div>
                     
                     <div className="space-y-1">
@@ -308,7 +309,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            80/20 Psychology Lab
+                            {t('nav_cognitive_accelerator')}
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             Pareto, blurting retrieval & Feynman test
@@ -326,7 +327,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            The Synapse Lounge
+                            {t('nav_synapse_lounge')}
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             Diffuse-mode neuro-plasticity arcade
@@ -344,7 +345,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            Zero-Cost Free Stack
+                            {t('free_stack_heading')}
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             $0 Vector DBs, Pyodide & HuggingFace
@@ -362,7 +363,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            Verified Science Vault
+                            {t('nav_science_vault')}
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             Ultralearning, Anki & research sheets
@@ -380,7 +381,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            11 Architectural Pillars
+                            {t('nav_pillars')}
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             Foundational principles for production AI
@@ -396,28 +397,30 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Multi-Language Selector */}
           <LanguageSelector />
 
-          {/* Quick Theme Switcher Button */}
+          {/* Quick Theme Switcher Button with Small Settings Gear */}
           <Tooltip
             position="bottom"
-            content="20 Calibrated Themes"
-            subtitle="10 Dark & 10 Light themes engineered for WCAG AAA contrast"
+            content={t('theme_settings_label')}
+            subtitle={t('theme_settings_subtitle')}
             shortcut="T"
           >
             <button 
               onClick={onOpenThemes}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-              aria-label="Choose color theme"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+              aria-label="Themes and Studio Settings"
             >
               <div 
                 className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
                 style={{ backgroundColor: currentThemeInfo.accent }}
               />
               <span className="hidden sm:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
-              <Palette size={14} className="opacity-70" />
+              <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
+              <span className="opacity-25 text-[10px] select-none">|</span>
+              <Settings size={13} className="opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
             </button>
           </Tooltip>
 
@@ -437,7 +440,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   color: accentTextColor
                 }}
               >
-                <span>{t('launchTrack0')}</span>
+                <span>{t('nav_launch_track0')}</span>
                 <ChevronRight size={14} />
               </button>
             </Tooltip>
@@ -446,7 +449,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+            className="lg:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -469,14 +472,14 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
                 >
-                  Learning Tracks
+                  {t('nav_tracks')}
                 </a>
                 <a 
                   href="#curriculum" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
                 >
-                  Curriculum
+                  {t('nav_curriculum')}
                 </a>
                 <button 
                   onClick={() => { setIsMobileMenuOpen(false); navigate('/holodeck'); }}
@@ -484,7 +487,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 >
                   <span className="flex items-center gap-2">
                     <Glasses size={16} />
-                    <span>Spatial Holodeck</span>
+                    <span>{t('nav_holodeck')}</span>
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">3D / VR</span>
                 </button>
@@ -493,27 +496,34 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
                 >
-                  80/20 Psychology Lab
+                  {t('nav_cognitive_accelerator')}
                 </a>
                 <a 
                   href="#synapse-lounge" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
                 >
-                  The Synapse Lounge
+                  {t('nav_synapse_lounge')}
                 </a>
                 <a 
                   href="#vault" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
                 >
-                  Verified Science Vault
+                  {t('nav_science_vault')}
+                </a>
+                <a 
+                  href="#pillars" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors"
+                >
+                  {t('nav_pillars')}
                 </a>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+      </header>
 
       {/* Hero Section: Motionsites-Inspired Physics, 3D Tilt & Orbital Nodes */}
       <HeroPhysicsStage
@@ -544,7 +554,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             </h2>
           </div>
           <p className="text-sm font-mono text-[var(--color-text-secondary)] max-w-md">
-            Custom pathways for beginners, intermediate engineers, system architects, and topic-specific specialists.
+            {t('pathways_desc')}
           </p>
         </div>
 
@@ -559,7 +569,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3"
             style={{ color: currentThemeInfo.accent }}
           >
-            The $0 Stack Ecosystem
+            {t('free_stack_badge')}
           </span>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
             {t('freeStackHeading')}
@@ -638,14 +648,14 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-2"
               style={{ color: currentThemeInfo.accent }}
             >
-              Curated Goldmines
+              {t('vault_badge')}
             </span>
             <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)]">
-              The World's Best Free AI Courses
+              {t('vault_heading')}
             </h2>
           </div>
           <p className="text-sm font-mono text-[var(--color-text-secondary)] max-w-md">
-            The internet is flooded with low-quality paid bootcamps. These are the gold standards built by real creators.
+            {t('vault_subtitle')}
           </p>
         </div>
 
@@ -681,8 +691,8 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </div>
 
               <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-                <span>Free Access</span>
-                <span className="text-emerald-500 font-semibold">Included in Guide &rarr;</span>
+                <span>{t('vault_free_access')}</span>
+                <span className="text-emerald-500 font-semibold">{t('vault_included')}</span>
               </div>
             </div>
           ))}
@@ -696,13 +706,13 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3"
             style={{ color: currentThemeInfo.accent }}
           >
-            Comprehensive Engineering
+            {t('pillars_badge')}
           </span>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
-            The 11 Pillars of Real AI Systems
+            {t('pillars_heading')}
           </h2>
           <p className="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed">
-            Every module in this course is systematically aligned with these 11 production pillars so your knowledge is robust and production-grade.
+            {t('pillars_subtitle')}
           </p>
         </div>
 
@@ -745,10 +755,10 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               className="text-xs font-mono font-bold tracking-[0.3em] uppercase mb-2"
               style={{ color: currentThemeInfo.accent }}
             >
-              Interactive Curriculum
+              {t('curriculum_badge')}
             </h2>
             <p className="text-3xl md:text-5xl font-bold tracking-tight text-[var(--color-text-primary)]">
-              Volume 01 &mdash; From Metal to Neural
+              {t('curriculum_title')}
             </p>
           </div>
           <span className="hidden md:block text-[var(--color-text-secondary)] text-xs font-mono uppercase tracking-widest">
@@ -772,7 +782,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                     color: currentThemeInfo.accent
                   }}
                 >
-                  TRACK 00 • ACTIVE & PLAYABLE
+                  {t('track0_badge')}
                 </span>
                 <div 
                   className="w-10 h-10 rounded-full border border-[var(--color-border)] group-hover:scale-110 flex items-center justify-center transition-all duration-300"
@@ -786,21 +796,21 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </div>
 
               <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
-                Track 0: Absolute Zero
+                {t('track0_title')}
               </h3>
               
               <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                Terminal orchestration, environment setup, Python fundamentals, and JSON schemas. The non-negotiable foundation every AI builder must possess.
+                {t('track0_desc')}
               </p>
             </div>
 
             <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-              <span>3 Modules • 6 Interactive Lessons</span>
+              <span>{t('track0_stats')}</span>
               <span 
                 className="font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1"
                 style={{ color: currentThemeInfo.accent }}
               >
-                Enter Mission Briefing &rarr;
+                {t('track0_cta')}
               </span>
             </div>
           </article>
@@ -810,23 +820,23 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]">
-                  TRACK 01 • UPCOMING
+                  {t('track1_badge')}
                 </span>
-                <span className="text-xs font-mono text-[var(--color-text-secondary)]">PHASE 2</span>
+                <span className="text-xs font-mono text-[var(--color-text-secondary)]">{t('track1_phase')}</span>
               </div>
 
               <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3">
-                Track 1: Embeddings
+                {t('track1_title')}
               </h3>
               
               <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                High-dimensional vector geometry, cosine similarity calculations, embedding matrices, and client-side vector search algorithms.
+                {t('track1_desc')}
               </p>
             </div>
 
             <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-              <span>Cosine Math • HNSW</span>
-              <span>In Development</span>
+              <span>{t('track1_stats')}</span>
+              <span>{t('track1_cta')}</span>
             </div>
           </article>
 
@@ -838,7 +848,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-300 font-bold">
-                  SPATIAL LAB • 3D & VR
+                  {t('holodeck_badge')}
                 </span>
                 <div className="w-10 h-10 rounded-full border border-violet-500/40 bg-violet-600/20 text-violet-300 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
                   <Glasses size={20} />
@@ -846,21 +856,21 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </div>
 
               <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3 group-hover:text-violet-500 dark:group-hover:text-violet-300 transition-colors">
-                Spatial Holodeck
+                {t('holodeck_title')}
               </h3>
               
               <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                Hardware-adaptive 3D WebGL vector galaxy, animated neural synapse propagation, and 6-DOF WebXR for Meta Quest and Apple Vision Pro. Includes 0% GPU 2D Lean Mode.
+                {t('holodeck_desc')}
               </p>
             </div>
 
             <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
               <span className="flex items-center gap-1.5 text-violet-300">
                 <Sparkles size={13} />
-                Universal Adaptive
+                {t('holodeck_stats')}
               </span>
               <span className="text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold">
-                Enter Holodeck &rarr;
+                {t('holodeck_cta')}
               </span>
             </div>
           </article>
@@ -927,7 +937,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 color: accentTextColor
               }}
             >
-              <span>Initialize Workspace Now</span>
+              <span>{t('briefing_launch_btn')}</span>
               <ArrowUpRight size={18} />
             </button>
           </div>
@@ -964,13 +974,13 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         </div>
 
         <div className="pt-8 border-t border-[var(--color-border)] flex flex-col sm:flex-row justify-between items-center text-[var(--color-text-secondary)] text-xs gap-4">
-          <p>&copy; 2026 OpenGuide. Architected & Designed by <strong className="text-[var(--color-text-primary)] font-semibold">ARD</strong>.</p>
+          <p>&copy; 2026 OpenGuide. {t('footer_credit')}.</p>
           <div className="flex items-center gap-6">
             <button onClick={onOpenThemes} className="hover:text-[var(--color-text-primary)] transition-colors">
-              Theme Palette (20)
+              {t('theme_settings_label')}
             </button>
             <span className="text-[var(--color-text-secondary)]">•</span>
-            <span className="font-mono">Open Source AI Studio</span>
+            <span className="font-mono">{t('footer_tagline')}</span>
           </div>
         </div>
       </footer>

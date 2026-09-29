@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Settings, X, Copy, Check } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { useLanguageStore } from '../store/useLanguageStore';
 import '../styles/abby-chatbot.css';
 
 interface Message {
@@ -23,13 +24,14 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const { byokApiKey, byokProvider } = useSettingsStore();
+  const { t } = useLanguageStore();
 
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       role: 'assistant',
-      content: "Hi, I am Abby, your offline guide for OpenGuide. Ask me anything about our tracks, in-browser WebAssembly, vector math, or keyboard shortcuts!",
-      takeaway: "100% in-browser offline intelligence • Zero cloud costs",
+      content: t('abby_greeting'),
+      takeaway: t('abby_offline_status'),
       timestamp: 'Just now'
     }
   ]);
@@ -139,13 +141,13 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
   const handleQuickPrompt1 = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setQuery("What is Track 0: Absolute Zero?");
+    setQuery(t('abby_suggestion_1'));
     textareaRef.current?.focus();
   };
 
   const handleQuickPrompt2 = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setQuery("How does in-browser Pyodide WebAssembly work?");
+    setQuery(t('abby_suggestion_2'));
     textareaRef.current?.focus();
   };
 
@@ -223,9 +225,9 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                 <div className="abby-chat-header">
                   <div className="abby-chat-header-title">
                     <div className="abby-avatar-badge">✦</div>
-                    <span className="abby-name">Abby</span>
+                    <span className="abby-name">{t('abby_title')}</span>
                     <span className="abby-status-tag">
-                      {byokApiKey ? `BYOK (${byokProvider})` : 'Offline Guide'}
+                      {byokApiKey ? `BYOK (${byokProvider})` : t('abby_subtitle')}
                     </span>
                   </div>
                   <div className="abby-header-actions">
@@ -282,7 +284,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                 <div className="chat-bot">
                   <textarea 
                     ref={textareaRef}
-                    placeholder="Imagine Something...✦˚" 
+                    placeholder={t('abby_placeholder')} 
                     name="chat_bot" 
                     id="chat_bot" 
                     value={query}
@@ -297,8 +299,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                     <button 
                       type="button" 
                       onClick={handleQuickPrompt1}
-                      title="Quick prompt: Track 0"
-                      aria-label="Quick prompt Track 0"
+                      title={t('abby_suggestion_1')}
+                      aria-label={t('abby_suggestion_1')}
                     >
                       <svg viewBox="0 0 24 24" height={20} width={20} xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" fill="none" />
@@ -307,8 +309,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                     <button 
                       type="button" 
                       onClick={handleQuickPrompt2}
-                      title="Quick prompt: Pyodide WASM"
-                      aria-label="Quick prompt Pyodide WASM"
+                      title={t('abby_suggestion_2')}
+                      aria-label={t('abby_suggestion_2')}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm0 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm0-8h6m-3-3v6" />

@@ -19,10 +19,12 @@ import {
 } from '@phosphor-icons/react';
 import { usePyodide } from '../hooks/usePyodide';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { useLanguageStore } from '../store/useLanguageStore';
 import { SettingsDropdown } from './SettingsDropdown';
 import { BrandLogo } from './BrandLogo';
 import { XRayDebugLens } from './XRayDebugLens';
 import { Tooltip } from './Tooltip';
+import { LanguageSelector } from './LanguageSelector';
 import { NewtonsCradleLoader } from './NewtonsCradleLoader';
 import type { Track } from '../data/track0';
 
@@ -34,6 +36,7 @@ const STORAGE_KEY = 'openguide_completed_lessons';
 
 export function CoursePlayer({ track }: CoursePlayerProps) {
   const navigate = useNavigate();
+  const { t } = useLanguageStore();
   const [currentModuleIdx, setCurrentModuleIdx] = useState(0);
   const [currentLessonIdx, setCurrentLessonIdx] = useState(0);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
@@ -168,7 +171,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98]"
             >
               <ArrowLeft size={13} />
-              <span>Exit</span>
+              <span>{t('ide_exit')}</span>
             </button>
           </Tooltip>
 
@@ -190,7 +193,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               mobileTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
             }`}
           >
-            Briefing
+            {t('ide_tab_briefing')}
           </button>
           <button
             onClick={() => setMobileTab('editor')}
@@ -198,7 +201,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               mobileTab === 'editor' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
             }`}
           >
-            Code & Run
+            {t('ide_tab_editor')}
           </button>
         </div>
 
@@ -228,12 +231,14 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-all cursor-pointer active:scale-[0.98]"
             >
               <Eye size={13} className="text-emerald-400" />
-              <span className="font-bold">X-Ray</span>
+              <span className="font-bold">{t('ide_xray_btn')}</span>
               <span className="hidden xl:inline text-[10px] text-emerald-400/60 font-mono">[Alt+X]</span>
             </button>
           </Tooltip>
           
           <div className="w-px h-4 bg-[var(--color-border)]" />
+          
+          <LanguageSelector />
           
           <SettingsDropdown />
         </div>
@@ -256,7 +261,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 }`}
               >
                 <BookOpenText size={13} />
-                <span>Briefing</span>
+                <span>{t('ide_tab_briefing')}</span>
               </button>
               <button
                 onClick={() => setLeftTab('curriculum')}
@@ -333,7 +338,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                         className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Lightbulb size={13} className="text-amber-400" />
-                        <span>{showHint ? 'Hide Hint' : 'Need a Hint?'}</span>
+                        <span>{showHint ? 'Hide Hint' : t('ide_hint')}</span>
                       </button>
                       {showHint && (
                         <div className="mt-2 p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/20 text-xs text-amber-200 leading-relaxed font-mono">
@@ -400,7 +405,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               <div className="flex items-center gap-3">
                 <Tooltip
                   position="bottom"
-                  content="Reset Code"
+                  content={t('ide_reset_code')}
                   subtitle="Revert editor to starter template"
                 >
                   <button
@@ -408,7 +413,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     className="px-2 py-0.5 rounded text-neutral-400 hover:text-white hover:bg-white/5 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowCounterClockwise size={12} />
-                    <span>Reset</span>
+                    <span>{t('ide_reset_code')}</span>
                   </button>
                 </Tooltip>
 
@@ -456,14 +461,14 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 {(isChallengePassed || isCurrentCompleted) && hasNextLesson && (
                   <Tooltip
                     position="top"
-                    content="Next Lesson"
+                    content={t('ide_next_lesson')}
                     subtitle="Advance to next first-principles lab"
                   >
                     <button
                       onClick={advanceNextLesson}
                       className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98]"
                     >
-                      <span>Next Lesson</span>
+                      <span>{t('ide_next_lesson')}</span>
                       <ArrowRight size={13} />
                     </button>
                   </Tooltip>
@@ -471,7 +476,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
                 <Tooltip
                   position="top"
-                  content="Execute Python Code"
+                  content={t('ide_run_code')}
                   subtitle="Runs in local Pyodide runtime (no server latency)"
                   shortcut="Ctrl+↵"
                 >
@@ -485,7 +490,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     }`}
                   >
                     <span className="font-bold">
-                      {state === 'running' ? 'Executing...' : 'Run Code'}
+                      {state === 'running' ? 'Executing...' : t('ide_run_code')}
                     </span>
                     <Play weight="fill" size={11} className={state === 'ready' ? 'text-[var(--color-primary)]' : ''} />
                   </button>

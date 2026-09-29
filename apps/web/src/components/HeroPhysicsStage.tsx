@@ -51,7 +51,7 @@ export function HeroPhysicsStage({
     setSimOutput(null);
     setTimeout(() => {
       setIsSimRunning(false);
-      setSimOutput('Vector dot-product matched in 0.38ms (score: 0.9984). Zero server cost.');
+      setSimOutput(t('hero_console_sim_done'));
     }, 450);
   };
 
@@ -72,7 +72,7 @@ export function HeroPhysicsStage({
         className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-xl text-xs font-mono text-[var(--color-text-primary)] font-semibold mb-6 shadow-sm hover:border-[var(--color-accent)] transition-colors select-none"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span>100% Free & Open Source • Zero Cloud Bills • In-Browser WASM</span>
+        <span>{t('hero_tag')}</span>
       </motion.div>
 
       {/* 2. Architectural Display Headline */}
@@ -89,12 +89,12 @@ export function HeroPhysicsStage({
           >
             /
           </span>
-          <span>Zero To </span>
+          <span>{t('hero_title_prefix')} </span>
           <span 
             className="inline-block"
             style={{ color: currentThemeInfo.accent }}
           >
-            AI Engineer.
+            {t('hero_title_suffix')}
           </span>
         </h1>
       </motion.div>
@@ -106,7 +106,7 @@ export function HeroPhysicsStage({
         transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
         className="text-base sm:text-lg md:text-xl text-[var(--color-text-secondary)] font-normal max-w-2xl mx-auto leading-relaxed mb-8"
       >
-        The comprehensive, zero-cost curriculum engineered for serious developers. Master neural networks, vector manifolds, RAG, and autonomous agents through crystal-clear first principles and browser-native WebAssembly compute.
+        {t('hero_description')}
       </motion.p>
 
       {/* 4. Primary Call to Action Cluster */}
@@ -124,7 +124,7 @@ export function HeroPhysicsStage({
           }}
           className="w-full sm:w-auto px-8 py-3.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
         >
-          <span>{t('launchTrack0')}</span>
+          <span>{t('hero_launch_track0')}</span>
           <ArrowUpRight size={17} />
         </button>
 
@@ -133,7 +133,7 @@ export function HeroPhysicsStage({
           onClick={onExplorePathways}
           className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] font-semibold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
         >
-          <span>{t('explorePathways')}</span>
+          <span>{t('hero_explore_pathways')}</span>
           <ChevronRight size={16} />
         </a>
       </motion.div>
@@ -154,14 +154,14 @@ export function HeroPhysicsStage({
               <div className="w-3 h-3 rounded-full bg-emerald-500/80 shadow-sm" />
             </div>
             <span className="font-mono text-[11px] text-[var(--color-text-secondary)] font-semibold tracking-tight">
-              OpenGuide Studio // WebAssembly CPython Runtime
+              {t('hero_console_title')}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-[11px] font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>0.38ms In-Browser</span>
+              <span>{t('hero_console_runtime_badge')}</span>
             </div>
           </div>
         </div>
@@ -170,10 +170,10 @@ export function HeroPhysicsStage({
         <div className="px-5 py-2.5 border-b border-[var(--color-border)] bg-black/[0.02] dark:bg-black/20 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             {[
-              { id: 'wasm' as const, label: '01 • WASM Kernel', icon: Terminal },
-              { id: 'vector' as const, label: '02 • Vector Manifolds', icon: Database },
-              { id: 'rag' as const, label: '03 • RAG Engine', icon: Layers },
-              { id: 'mcp' as const, label: '04 • FastMCP Tools', icon: Workflow },
+              { id: 'wasm' as const, label: t('hero_console_tab_wasm'), icon: Terminal },
+              { id: 'vector' as const, label: t('hero_console_tab_vector'), icon: Database },
+              { id: 'rag' as const, label: t('hero_console_tab_rag'), icon: Layers },
+              { id: 'mcp' as const, label: t('hero_console_tab_mcp'), icon: Workflow },
             ].map(lens => {
               const Icon = lens.icon;
               const isActive = activeLens === lens.id;
@@ -200,7 +200,7 @@ export function HeroPhysicsStage({
             className="px-3 py-1 rounded-xl bg-[var(--color-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-50"
           >
             <Play size={12} className={isSimRunning ? 'animate-spin' : ''} style={{ color: currentThemeInfo.accent }} />
-            <span>{isSimRunning ? 'Executing...' : 'Run Simulation'}</span>
+            <span>{isSimRunning ? t('hero_console_sim_running') : t('hero_console_run_sim')}</span>
           </button>
         </div>
 
