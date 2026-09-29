@@ -14,7 +14,8 @@ import {
   Eye,
   Brain,
   Glasses,
-  Target
+  Target,
+  Award
 } from 'lucide-react';
 import { MagnificationDock, type DockItemData } from './MagnificationDock';
 
@@ -105,6 +106,11 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       icon: <Glasses size={20} className={location.pathname === '/holodeck' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Spatial Holodeck (3D/VR)',
       onClick: () => navigate('/holodeck')
+    },
+    {
+      icon: <Award size={20} className={location.pathname === '/portfolio' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
+      label: 'Portfolio & Credentials',
+      onClick: () => navigate('/portfolio')
     },
     {
       icon: <Palette size={20} className="text-[var(--color-text-secondary)]" />,

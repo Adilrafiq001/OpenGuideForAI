@@ -17,6 +17,7 @@ import { HelpModal } from './components/HelpModal';
 const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
 const CoursePlayer = lazy(() => import('./components/CoursePlayer').then(m => ({ default: m.CoursePlayer })));
 const SpatialHolodeck = lazy(() => import('./pages/SpatialHolodeck').then(m => ({ default: m.SpatialHolodeck })));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
             <Route path="/track/3" element={<CoursePlayer track={track3} />} />
             <Route path="/track/3/engine" element={<CoursePlayer track={track3} />} />
             <Route path="/holodeck" element={<SpatialHolodeck />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

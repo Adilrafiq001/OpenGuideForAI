@@ -8,9 +8,11 @@ import {
   CheckCircle, 
   WarningCircle, 
   BracketsCurly,
-  Sparkle
+  Sparkle,
+  GitFork
 } from '@phosphor-icons/react';
 import type { PyodideTelemetry, PyodideState } from '../hooks/usePyodide';
+import { ReActFlowVisualizer } from './ReActFlowVisualizer';
 
 interface XRayDebugLensProps {
   isOpen: boolean;
@@ -18,6 +20,7 @@ interface XRayDebugLensProps {
   state: PyodideState;
   telemetry: PyodideTelemetry;
   activeLessonTitle: string;
+  logs?: Array<{ text: string } | string>;
 }
 
 export function XRayDebugLens({
@@ -25,9 +28,10 @@ export function XRayDebugLens({
   onClose,
   state,
   telemetry,
-  activeLessonTitle
+  activeLessonTitle,
+  logs = []
 }: XRayDebugLensProps) {
-  const [activeTab, setActiveTab] = useState<'telemetry' | 'ipc' | 'variables' | 'history'>('telemetry');
+  const [activeTab, setActiveTab] = useState<'telemetry' | 'ipc' | 'variables' | 'history' | 'react'>('telemetry');
 
   // Keyboard shortcut listener (Escape or Alt+X to close)
   useEffect(() => {
@@ -103,6 +107,7 @@ export function XRayDebugLens({
           <div className="flex items-center gap-2 px-6 py-3 border-b border-white/5 bg-black/40 shrink-0 overflow-x-auto">
             {[
               { id: 'telemetry' as const, label: 'Performance & Heap', icon: Cpu },
+              { id: 'react' as const, label: 'Agent Flow DAG', icon: GitFork },
               { id: 'ipc' as const, label: 'IPC Message Payload', icon: BracketsCurly },
               { id: 'variables' as const, label: `State Inspector (${variableKeys.length})`, icon: Database },
               { id: 'history' as const, label: `Execution Log (${telemetry.history.length})`, icon: Clock }
@@ -293,6 +298,11 @@ type WorkerResponse =
                   </div>
                 )}
               </div>
+            )}
+
+            {/* TAB 5: REACT AGENT FLOW DAG */}
+            {activeTab === 'react' && (
+              <ReActFlowVisualizer logs={logs} activeLessonTitle={activeLessonTitle} />
             )}
 
           </div>

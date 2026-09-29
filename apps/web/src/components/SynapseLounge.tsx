@@ -6,7 +6,8 @@ import {
   RotateCcw, 
   Check, 
   Flame,
-  Compass
+  Compass,
+  Sparkles
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 
@@ -64,11 +65,30 @@ function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boole
 
 export function SynapseLounge() {
   const { soundFx } = useSettingsStore();
-  const [activeGame, setActiveGame] = useState<'vector' | 'neuron' | 'context'>('vector');
+  const [activeGame, setActiveGame] = useState<'vector' | 'neuron'>('vector');
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
 
-  // --- GAME 1: VECTOR SPACE ALIGNMENT ---
+  // --- GAME 1: VECTOR SPACE ALIGNMENT (Interactive Angle + Semantic Cards) ---
+  const [probeAngle, setProbeAngle] = useState(135);
+  const targetConceptAngle = 45; // Target is at 45 degrees in unit circle
+  const angleDelta = Math.abs(probeAngle - targetConceptAngle);
+  const angularDistance = angleDelta > 180 ? 360 - angleDelta : angleDelta;
+  const cosineSim = Math.cos((angularDistance * Math.PI) / 180);
+  const isAngleAligned = cosineSim >= 0.92;
+  const [hasAwardedAngle, setHasAwardedAngle] = useState(false);
+
+  useEffect(() => {
+    if (isAngleAligned && !hasAwardedAngle) {
+      setHasAwardedAngle(true);
+      playSound('combo', soundFx);
+      setScore(s => s + 150);
+      setStreak(st => st + 1);
+    } else if (!isAngleAligned && hasAwardedAngle) {
+      setHasAwardedAngle(false);
+    }
+  }, [isAngleAligned, hasAwardedAngle, soundFx]);
+
   const vectorRounds = [
     {
       anchor: 'Transformer Architecture',
@@ -142,8 +162,8 @@ export function SynapseLounge() {
   };
 
   // --- GAME 2: NEURAL GATE DEDUCTOR (Perceptron Logic) ---
-  const [neuronWeights, setNeuronWeights] = useState({ w1: 1, w2: 1, bias: -1.5 });
-  const [targetGate, setTargetGate] = useState<'AND' | 'OR'>('AND');
+  const [neuronWeights, setNeuronWeights] = useState({ w1: 1.0, w2: 1.0, bias: -1.5 });
+  const [targetGate, setTargetGate] = useState<'AND' | 'OR' | 'NAND'>('AND');
   const [gateSolved, setGateSolved] = useState(false);
 
   // Perceptron function: f(x1, x2) = 1 if (x1*w1 + x2*w2 + bias) > 0 else 0
@@ -152,11 +172,18 @@ export function SynapseLounge() {
     return val > 0 ? 1 : 0;
   };
 
+  const getExpected = (x1: number, x2: number, gate: 'AND' | 'OR' | 'NAND') => {
+    if (gate === 'AND') return (x1 === 1 && x2 === 1) ? 1 : 0;
+    if (gate === 'OR') return (x1 === 1 || x2 === 1) ? 1 : 0;
+    if (gate === 'NAND') return !(x1 === 1 && x2 === 1) ? 1 : 0;
+    return 0;
+  };
+
   const truthTable = [
-    { x1: 0, x2: 0, expected: targetGate === 'AND' ? 0 : 0 },
-    { x1: 0, x2: 1, expected: targetGate === 'AND' ? 0 : 1 },
-    { x1: 1, x2: 0, expected: targetGate === 'AND' ? 0 : 1 },
-    { x1: 1, x2: 1, expected: targetGate === 'AND' ? 1 : 1 }
+    { x1: 0, x2: 0, expected: getExpected(0, 0, targetGate) },
+    { x1: 0, x2: 1, expected: getExpected(0, 1, targetGate) },
+    { x1: 1, x2: 0, expected: getExpected(1, 0, targetGate) },
+    { x1: 1, x2: 1, expected: getExpected(1, 1, targetGate) }
   ];
 
   const allPassed = truthTable.every(row => evaluatePerceptron(row.x1, row.x2) === row.expected);
@@ -167,8 +194,21 @@ export function SynapseLounge() {
       playSound('combo', soundFx);
       setScore(s => s + 250);
       setStreak(st => st + 1);
+    } else if (!allPassed && gateSolved) {
+      setGateSolved(false);
     }
   }, [allPassed, gateSolved, soundFx]);
+
+  // Unit circle geometry coordinates for probe vector
+  const circleRadius = 55;
+  const circleCenter = 70;
+  const probeRad = (probeAngle * Math.PI) / 180;
+  const probeX = circleCenter + circleRadius * Math.cos(probeRad);
+  const probeY = circleCenter - circleRadius * Math.sin(probeRad);
+
+  const targetRad = (targetConceptAngle * Math.PI) / 180;
+  const targetX = circleCenter + circleRadius * Math.cos(targetRad);
+  const targetY = circleCenter - circleRadius * Math.sin(targetRad);
 
   return (
     <section id="synapse-lounge" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)] content-visibility-auto">
@@ -217,7 +257,7 @@ export function SynapseLounge() {
           }`}
         >
           <Compass size={16} />
-          <span>Vector Alignment (Hyper-Space)</span>
+          <span>Vector Hyper-Space Alignment</span>
         </button>
 
         <button
@@ -232,7 +272,7 @@ export function SynapseLounge() {
           }`}
         >
           <Cpu size={16} />
-          <span>Neural Gate Deductor (Perceptron)</span>
+          <span>Neural Gate Deductor</span>
         </button>
       </div>
 
@@ -248,8 +288,121 @@ export function SynapseLounge() {
                   Round {vectorRoundIdx + 1} of {vectorRounds.length} • Spatial Proximity
                 </span>
                 <span className="text-xs text-[var(--color-text-secondary)] font-mono">
-                  Target: 2 Nearest Neighbors
+                  Target: Cosine Similarity &gt; 0.90
                 </span>
+              </div>
+
+              {/* Top Row: Unit Circle Radar + Real-Time Angle Controller */}
+              <div className="p-6 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)] mb-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                
+                {/* SVG 2D Unit Circle Embeddings Radar */}
+                <div className="md:col-span-4 flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border border-white/5">
+                  <svg width="140" height="140" className="overflow-visible">
+                    {/* Radar Circles */}
+                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius} fill="none" stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
+                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius * 0.5} fill="none" stroke="rgba(255,255,255,0.06)" />
+                    
+                    {/* Axes */}
+                    <line x1="15" y1={circleCenter} x2="125" y2={circleCenter} stroke="rgba(255,255,255,0.08)" />
+                    <line x1={circleCenter} y1="15" x2={circleCenter} y2="125" stroke="rgba(255,255,255,0.08)" />
+                    
+                    {/* Target Concept Vector (Emerald) */}
+                    <line 
+                      x1={circleCenter} 
+                      y1={circleCenter} 
+                      x2={targetX} 
+                      y2={targetY} 
+                      stroke="#10b981" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round"
+                    />
+                    <circle cx={targetX} cy={targetY} r="4" fill="#10b981" />
+
+                    {/* Student Probe Vector (Cyan) */}
+                    <line 
+                      x1={circleCenter} 
+                      y1={circleCenter} 
+                      x2={probeX} 
+                      y2={probeY} 
+                      stroke="#06b6d4" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round"
+                    />
+                    <circle cx={probeX} cy={probeY} r="4" fill="#06b6d4" />
+                    
+                    {/* Origin */}
+                    <circle cx={circleCenter} cy={circleCenter} r="3" fill="#ffffff" />
+                  </svg>
+
+                  <div className="flex items-center gap-3 mt-3 text-[10px] font-mono">
+                    <span className="flex items-center gap-1 text-emerald-400">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> Target (45°)
+                    </span>
+                    <span className="flex items-center gap-1 text-cyan-400">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block" /> Probe ({probeAngle}°)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Tactile Probe Angle Slider & Real-Time Dot Product */}
+                <div className="md:col-span-8 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-wider block">
+                        Interactive Embedding Probe
+                      </span>
+                      <h4 className="text-sm font-bold text-[var(--color-text-primary)]">
+                        Tune Probe Vector Angle θ
+                      </h4>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase block">
+                        Cosine Metric
+                      </span>
+                      <span className={`text-base font-mono font-bold ${isAngleAligned ? 'text-emerald-400' : 'text-neutral-300'}`}>
+                        cos(Δθ) = {cosineSim.toFixed(3)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Slider Control */}
+                  <div className="space-y-2">
+                    <input 
+                      type="range"
+                      min="0"
+                      max="360"
+                      value={probeAngle}
+                      onChange={(e) => {
+                        setProbeAngle(Number(e.target.value));
+                      }}
+                      className="w-full h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                    />
+                    <div className="flex justify-between text-[10px] font-mono text-[var(--color-text-secondary)]">
+                      <span>0°</span>
+                      <span>90° (Orthogonal)</span>
+                      <span>180° (Opposite)</span>
+                      <span>270°</span>
+                      <span>360°</span>
+                    </div>
+                  </div>
+
+                  {isAngleAligned ? (
+                    <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <Sparkles size={14} /> Hyper-Plane Aligned! Semantic projection matched.
+                      </span>
+                      <span className="text-[10px] bg-emerald-500/20 px-2 py-0.5 rounded-full font-bold">
+                        +150 XP
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-[var(--color-text-secondary)]">
+                      Rotate probe slider until vector aligns with the target manifold (&lt; 25° angular difference).
+                    </p>
+                  )}
+                </div>
+
               </div>
 
               {/* Anchor Vector Radar Target */}
@@ -308,7 +461,7 @@ export function SynapseLounge() {
               <div className="flex items-center gap-2">
                 <Target size={16} className="text-[var(--color-accent)] shrink-0" />
                 <span>
-                  {vectorFeedback || 'Select 2 related concepts. Tests semantic clustering in vector embeddings.'}
+                  {vectorFeedback || 'Select 2 related concepts or align probe angle. Tests semantic clustering in vector embeddings.'}
                 </span>
               </div>
               <button
@@ -334,14 +487,14 @@ export function SynapseLounge() {
                   Single Perceptron Circuit • Target Gate: {targetGate}
                 </span>
                 <div className="flex gap-2">
-                  {(['AND', 'OR'] as const).map(gate => (
+                  {(['AND', 'OR', 'NAND'] as const).map(gate => (
                     <button
                       key={gate}
                       onClick={() => {
                         setTargetGate(gate);
                         setGateSolved(false);
                       }}
-                      className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                      className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                         targetGate === gate 
                           ? 'bg-[var(--color-accent)] text-black' 
                           : 'bg-white/5 text-neutral-400 hover:text-white'
@@ -365,25 +518,38 @@ export function SynapseLounge() {
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs font-mono">
                       <span>Weight 1 (W1):</span>
-                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.w1}</span>
+                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.w1.toFixed(1)}</span>
                     </div>
-                    <div className="flex gap-1.5">
-                      {[-1, 0, 1, 2].map(w => (
-                        <button
-                          key={w}
-                          onClick={() => {
-                            playSound('click', soundFx);
-                            setNeuronWeights(nw => ({ ...nw, w1: w }));
-                          }}
-                          className={`flex-1 py-1 rounded-lg text-xs font-mono border transition-all ${
-                            neuronWeights.w1 === w
-                              ? 'bg-[var(--color-accent)] text-black font-bold'
-                              : 'border-white/5 bg-white/5 text-neutral-400'
-                          }`}
-                        >
-                          {w}
-                        </button>
-                      ))}
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="range"
+                        min="-2"
+                        max="2"
+                        step="0.5"
+                        value={neuronWeights.w1}
+                        onChange={(e) => {
+                          setNeuronWeights(nw => ({ ...nw, w1: Number(e.target.value) }));
+                        }}
+                        className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                      />
+                      <div className="flex gap-1">
+                        {[-1, 1, 2].map(w => (
+                          <button
+                            key={w}
+                            onClick={() => {
+                              playSound('click', soundFx);
+                              setNeuronWeights(nw => ({ ...nw, w1: w }));
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
+                              neuronWeights.w1 === w
+                                ? 'bg-[var(--color-accent)] text-black font-bold'
+                                : 'border-white/5 bg-white/5 text-neutral-400'
+                            }`}
+                          >
+                            {w}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
@@ -391,25 +557,38 @@ export function SynapseLounge() {
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs font-mono">
                       <span>Weight 2 (W2):</span>
-                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.w2}</span>
+                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.w2.toFixed(1)}</span>
                     </div>
-                    <div className="flex gap-1.5">
-                      {[-1, 0, 1, 2].map(w => (
-                        <button
-                          key={w}
-                          onClick={() => {
-                            playSound('click', soundFx);
-                            setNeuronWeights(nw => ({ ...nw, w2: w }));
-                          }}
-                          className={`flex-1 py-1 rounded-lg text-xs font-mono border transition-all ${
-                            neuronWeights.w2 === w
-                              ? 'bg-[var(--color-accent)] text-black font-bold'
-                              : 'border-white/5 bg-white/5 text-neutral-400'
-                          }`}
-                        >
-                          {w}
-                        </button>
-                      ))}
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="range"
+                        min="-2"
+                        max="2"
+                        step="0.5"
+                        value={neuronWeights.w2}
+                        onChange={(e) => {
+                          setNeuronWeights(nw => ({ ...nw, w2: Number(e.target.value) }));
+                        }}
+                        className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                      />
+                      <div className="flex gap-1">
+                        {[-1, 1, 2].map(w => (
+                          <button
+                            key={w}
+                            onClick={() => {
+                              playSound('click', soundFx);
+                              setNeuronWeights(nw => ({ ...nw, w2: w }));
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
+                              neuronWeights.w2 === w
+                                ? 'bg-[var(--color-accent)] text-black font-bold'
+                                : 'border-white/5 bg-white/5 text-neutral-400'
+                            }`}
+                          >
+                            {w}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
@@ -417,25 +596,38 @@ export function SynapseLounge() {
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs font-mono">
                       <span>Activation Bias (B):</span>
-                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.bias}</span>
+                      <span className="text-[var(--color-accent)] font-bold">{neuronWeights.bias.toFixed(1)}</span>
                     </div>
-                    <div className="flex gap-1.5">
-                      {[-2, -1.5, -0.5, 0.5].map(b => (
-                        <button
-                          key={b}
-                          onClick={() => {
-                            playSound('click', soundFx);
-                            setNeuronWeights(nw => ({ ...nw, bias: b }));
-                          }}
-                          className={`flex-1 py-1 rounded-lg text-xs font-mono border transition-all ${
-                            neuronWeights.bias === b
-                              ? 'bg-[var(--color-accent)] text-black font-bold'
-                              : 'border-white/5 bg-white/5 text-neutral-400'
-                          }`}
-                        >
-                          {b}
-                        </button>
-                      ))}
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="range"
+                        min="-3"
+                        max="2"
+                        step="0.5"
+                        value={neuronWeights.bias}
+                        onChange={(e) => {
+                          setNeuronWeights(nw => ({ ...nw, bias: Number(e.target.value) }));
+                        }}
+                        className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                      />
+                      <div className="flex gap-1">
+                        {[-1.5, -0.5, 0.5].map(b => (
+                          <button
+                            key={b}
+                            onClick={() => {
+                              playSound('click', soundFx);
+                              setNeuronWeights(nw => ({ ...nw, bias: b }));
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
+                              neuronWeights.bias === b
+                                ? 'bg-[var(--color-accent)] text-black font-bold'
+                                : 'border-white/5 bg-white/5 text-neutral-400'
+                            }`}
+                          >
+                            {b}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -467,8 +659,8 @@ export function SynapseLounge() {
                           }`}
                         >
                           <span>Inputs: X1={row.x1}, X2={row.x2}</span>
-                          <span>Formula Sum: {(row.x1 * neuronWeights.w1 + row.x2 * neuronWeights.w2 + neuronWeights.bias).toFixed(1)}</span>
-                          <span className="font-bold">Output: {actual} (Expected: {row.expected})</span>
+                          <span>Sum: {(row.x1 * neuronWeights.w1 + row.x2 * neuronWeights.w2 + neuronWeights.bias).toFixed(1)}</span>
+                          <span className="font-bold">Output: {actual} (Exp: {row.expected})</span>
                         </div>
                       );
                     })}
@@ -480,7 +672,7 @@ export function SynapseLounge() {
             {/* Educational takeaway */}
             <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs text-[var(--color-text-secondary)]">
               <span>
-                Formula: Output = 1 if (X1·W1 + X2·W2 + Bias &gt; 0) else 0. Single neurons can solve AND & OR, but never XOR!
+                Formula: Output = 1 if (X1·W1 + X2·W2 + Bias &gt; 0) else 0. Single neurons can solve AND, OR & NAND, but never XOR!
               </span>
               <span className="font-mono text-emerald-400 font-bold">
                 {allPassed ? '+250 Synapse XP Earned' : 'Tune weights to match'}

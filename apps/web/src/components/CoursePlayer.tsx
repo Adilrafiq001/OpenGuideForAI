@@ -564,6 +564,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         state={state}
         telemetry={telemetry}
         activeLessonTitle={currentLesson.title}
+        logs={logs}
       />
 
     </div>

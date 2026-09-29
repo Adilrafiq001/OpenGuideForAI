@@ -785,6 +785,107 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=WebGPU Tensor Dispatch & Quantized Neural SLM')).toBeVisible();
   });
 
+  test('18. Interactive Suite: Portfolio Certification, ReAct Agent Flow DAG & Synapse Minigames', async ({ page }) => {
+    // 1. Verify Portfolio Page (/portfolio)
+    await page.goto('/portfolio', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+
+    // Verify Title & Monogram
+    const portfolioH1 = page.locator('h1').first();
+    await expect(portfolioH1).toBeVisible({ timeout: 10000 });
+    await expect(portfolioH1).toContainText(/AI Engineering Credentials/i);
+    await expect(page.locator('text=PORTFOLIO LEDGER')).toBeVisible();
+
+    // Verify 4 Curriculum Milestone Badges
+    await expect(page.locator('text=Curriculum Milestone Badges')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Kernel Architect' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Geometrician' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Agent Commander' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Systems Defender' })).toBeVisible();
+
+    // Verify Certificate Canvas
+    await expect(page.locator('text=Certificate of Engineering Mastery').first()).toBeVisible();
+    await expect(page.locator('text=Adil Rafiq Dar (ARD)').first()).toBeVisible();
+    await expect(page.locator('text=Verification Signature (SHA-256)').first()).toBeVisible();
+
+    // Verify Interactive Student Name Input reactively updates certificate
+    const nameInput = page.locator('input[placeholder="Enter Recipient Name..."]');
+    await expect(nameInput).toBeVisible();
+    await nameInput.fill('Dr. Alan Turing');
+    await page.waitForTimeout(300);
+    await expect(page.locator('text=Dr. Alan Turing')).toBeVisible();
+
+    // Test Simulate 100% Complete button
+    const simulateBtn = page.getByRole('button', { name: /Simulate 100% Complete/i });
+    await expect(simulateBtn).toBeVisible();
+    await simulateBtn.click();
+    await page.waitForTimeout(400);
+
+    // Verify Mastered badges
+    await expect(page.locator('text=36 / 36').first()).toBeVisible();
+    await expect(page.locator('text=MASTERED').first()).toBeVisible();
+
+    // 2. Verify The Synapse Lounge on Landing Page (/)
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+
+    const synapseSection = page.locator('#synapse-lounge');
+    await synapseSection.scrollIntoViewIfNeeded();
+    await expect(page.locator('text=The Synapse Lounge.')).toBeVisible();
+
+    // Verify Vector Hyper-Space Alignment Minigame with Unit Circle
+    await expect(page.getByRole('button', { name: /Vector Hyper-Space Alignment/i })).toBeVisible();
+    await expect(page.locator('text=Interactive Embedding Probe')).toBeVisible();
+    await expect(page.locator('text=Cosine Metric')).toBeVisible();
+
+    // Test slider adjustment
+    const probeSlider = page.locator('input[type="range"]').first();
+    await expect(probeSlider).toBeVisible();
+    await probeSlider.fill('45');
+    await probeSlider.dispatchEvent('change');
+    await page.waitForTimeout(300);
+    await expect(page.locator('text=Hyper-Plane Aligned!').first()).toBeVisible();
+
+    // Verify Neural Gate Deductor Tab
+    const neuronTab = page.getByRole('button', { name: /Neural Gate Deductor/i });
+    await neuronTab.click();
+    await page.waitForTimeout(300);
+    await expect(page.locator('text=Single Perceptron Circuit')).toBeVisible();
+    await expect(page.locator('text=NAND GATE')).toBeVisible();
+    await expect(page.locator('text=Adjust Synaptic Weights & Activation Bias')).toBeVisible();
+    await expect(page.locator('text=Live Truth Table Output')).toBeVisible();
+
+    // 3. Verify X-Ray Debug Lens 5th Tab (Agent Flow DAG) in IDE (/track/2/engine)
+    await page.goto('/track/2/engine', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    // Open X-Ray Debug Lens via Alt+X
+    await page.keyboard.press('Alt+X');
+    await page.waitForTimeout(400);
+
+    // Verify "Agent Flow DAG" tab exists and switch to it
+    const flowTab = page.getByRole('button', { name: /Agent Flow DAG/i });
+    await expect(flowTab).toBeVisible({ timeout: 10000 });
+    await flowTab.click();
+    await page.waitForTimeout(300);
+
+    // Verify ReAct DAG Visualizer components
+    await expect(page.locator('text=ReAct Reasoning & Tool Execution DAG')).toBeVisible();
+    await expect(page.locator('text=Sequential Reasoning Chain')).toBeVisible();
+    await expect(page.locator('text=Node Telemetry Inspector')).toBeVisible();
+
+    // Verify preloaded trace switching
+    const mcpTraceBtn = page.getByRole('button', { name: /FastMCP Determinant/i });
+    await expect(mcpTraceBtn).toBeVisible();
+    await mcpTraceBtn.click();
+    await page.waitForTimeout(300);
+    await expect(page.locator('text=fastmcp.matrix_det').first()).toBeVisible();
+
+    // Close X-Ray Lens
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+  });
+
 });
 
 

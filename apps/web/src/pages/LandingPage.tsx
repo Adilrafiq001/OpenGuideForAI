@@ -255,6 +255,21 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
               </button>
             </Tooltip>
 
+            {/* Credentials / Portfolio link */}
+            <Tooltip
+              position="bottom"
+              content="Credentials & Portfolio [SHA-256]"
+              subtitle="Verifiable 36-lab accomplishments & cryptographic certificate"
+            >
+              <button 
+                onClick={() => navigate('/portfolio')}
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap"
+              >
+                <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
+                <span>Portfolio</span>
+              </button>
+            </Tooltip>
+
             {/* Hover Reveal Dropdown: Explore Labs & Ecosystem */}
             <div 
               className="relative"
@@ -560,6 +575,16 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                     <span>{t('nav_holodeck')}</span>
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">3D / VR</span>
+                </button>
+                <button 
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/portfolio'); }}
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Award size={16} className="text-[var(--color-accent)]" />
+                    <span>Portfolio & Credentials</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">SHA-256</span>
                 </button>
                 <a 
                   href="#cognitive-accelerator" 
