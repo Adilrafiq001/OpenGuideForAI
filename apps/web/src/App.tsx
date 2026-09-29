@@ -10,9 +10,11 @@ import { track2 } from './data/track2';
 import { track3 } from './data/track3';
 import './App.css';
 
-import { ThemeSettingsModal } from './components/ThemeSettingsModal';
-import { HelpModal } from './components/HelpModal';
 import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
+
+// Modals: Lazy-load offscreen modals so they are not included in the initial page bundle
+const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
+const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -37,9 +39,20 @@ function App() {
     document.documentElement.style.color = '';
   }, []);
 
-  // Synchronize data-theme on root HTML document element
+  // Synchronize data-theme, data-theme-mode, classes, and colorScheme on root HTML document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    const lightThemeIds = new Set([
+      'pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream',
+      'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial'
+    ]);
+    const mode = lightThemeIds.has(theme) ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme-mode', mode);
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+    document.documentElement.classList.toggle('light', mode === 'light');
+    document.documentElement.style.colorScheme = mode;
+    document.body.style.backgroundColor = 'var(--bg-primary)';
+    document.body.style.color = 'var(--text-primary)';
   }, [theme]);
 
   const handleOpenThemes = () => {
@@ -84,17 +97,25 @@ function App() {
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}
-        <ThemeSettingsModal 
-          isOpen={isThemeModalOpen}
-          onClose={() => setIsThemeModalOpen(false)}
-          initialTab={initialModalTab}
-        />
+        {isThemeModalOpen && (
+          <Suspense fallback={null}>
+            <ThemeSettingsModal 
+              isOpen={isThemeModalOpen}
+              onClose={() => setIsThemeModalOpen(false)}
+              initialTab={initialModalTab}
+            />
+          </Suspense>
+        )}
 
         {/* Help & Architecture Shortcuts Modal */}
-        <HelpModal 
-          isOpen={isHelpModalOpen}
-          onClose={() => setIsHelpModalOpen(false)}
-        />
+        {isHelpModalOpen && (
+          <Suspense fallback={null}>
+            <HelpModal 
+              isOpen={isHelpModalOpen}
+              onClose={() => setIsHelpModalOpen(false)}
+            />
+          </Suspense>
+        )}
 
         {/* Standalone In-House AI Chatbot: Abby (100% Offline + BYOK Frontier Option) */}
         <AbbyChatbot 

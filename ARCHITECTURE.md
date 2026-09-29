@@ -1,7 +1,7 @@
 # Architecture: OpenGuide
 
 **Project Brand:** `OpenGuide.` • **Monogram:** `OG` • **Subtitle:** `AI STUDIO`  
-**Creator & Architect:** ARD  
+**Creator & Architect:** Adil Rafiq Dar (ARD)  
 **Core Constraint:** $0 infrastructure cost, any device, local-first.
 
 ## Technology Stack
@@ -9,7 +9,7 @@
 - **Client Runtime:** CPython compiled to WebAssembly (Pyodide v0.26) isolated in a Web Worker.
 - **Storage:** IndexedDB (Dexie / native IDB) for local persistence of code, state, and vector indices.
 - **BYOK AI:** Direct client-side fetch to frontier endpoints using user-supplied API keys (zero middleman proxy servers).
-- **Theming & Craft:** 24 WCAG AAA calibrated palettes (12 Special, 6 Dark, 6 Light) grounded in visual physiology, circadian photobiology (460-490nm blue-blockers), and scotopic rod-cell sensitivity (507nm peak), script-safe responsive typography, and spring physics (`stiffness: 280, damping: 22`).
+- **Theming & Craft:** 20 WCAG AAA calibrated palettes (10 Dark, 10 Light) inspired by developer tools (Claude, Linear, Cursor, GitHub, Notion) and fine paper ergonomics (Archival Fine Paper, E-Ink Papyrus, Swiss Bauhaus Modernist), controlled by an animated Uiverse Sun/Moon Day/Night toggle switch with zero hover jitter, script-safe responsive typography, and spring physics (`stiffness: 280, damping: 22`).
 - **Universal Multilingual Subsystem:** 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic bidirectional `dir="rtl"` activation for Urdu and Arabic, script-safe line-height preservation, and material-wide reactive translations.
 - **Universal Header Synchronization:** Uniform `<LanguageSelector />` and theme/settings pill affordance (`[ ● Theme 🎨 | ⚙️ ]`) with hover gear micro-rotation across all page headers.
 - **Offline-First PWA Architecture:** Production Service Worker (`/sw.js`) implementing cache-first for hashed immutable assets and stale-while-revalidate for navigation HTML, paired with real-time `OfflineStatusIndicator.tsx` floating status announcements.

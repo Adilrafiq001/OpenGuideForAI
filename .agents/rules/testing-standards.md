@@ -146,4 +146,26 @@ Whenever inspecting visual artifacts or testing UI changes:
 4. **Contrast & Theme Harmony:** Verify legibility across both extreme dark and bright light themes (WCAG AAA standard).
 5. **Immediate Regression Cataloging:** If ANY visual misalignment, overflow, clip, or styling defect is spotted during inspection—even if unrelated to the current target feature—it must be immediately documented, converted into a regression test case, and resolved before declaring production readiness.
 
+---
+
+## 12. SPA Cross-Route Style Isolation & Route Re-entry Protocol (Mandatory)
+
+### A. Zero Unscoped Global Selectors in Custom Stylesheets
+- In a code-split Vite/React SPA, any stylesheet imported by a page or component remains active in `<head>` for the lifetime of the session.
+- **NEVER** use generic top-level class selectors (e.g. `.button`, `.content`, `.area`, `.text`, `.wrap`, `.reflex`, `.card`) in custom CSS files.
+- **ALWAYS** scope all rules under a unique container class or BEM root (e.g. `.workspace-cta-container .button`, `.launch-track-hero-container .content`).
+- Add defensive overrides on shared class names where appropriate (e.g. `.launch-track-hero-container .content::before { content: none !important; }`).
+
+### B. Mandatory History-Back & Re-entry Test Case (`TC-NAV-BACK`)
+Whenever testing interactive CTAs, forms, or page transitions:
+1. **Initial State:** Verify pristine resting appearance and computed styles before click across both Dark and Light themes.
+2. **Animation Settlement:** Verify animations play fully and settle smoothly before navigation takes place.
+3. **Route Entry:** Verify target route loads with 0 console errors.
+4. **History-Back Sweep:** Return to the originating route using **both**:
+   - The UI back button (e.g. "Back to Overview")
+   - The browser history back action (`page.goBack()`)
+5. **Computed Style Pollution Check:** Inspect computed styles of the originating element to confirm no deferred styles from the target route leaked into it.
+6. **Re-trigger Verification:** Click the CTA a second time to ensure it re-animates cleanly without race conditions or stuck state.
+
+
 

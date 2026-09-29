@@ -14,11 +14,25 @@ import {
 
 import { useSettingsStore } from '../store/useSettingsStore';
 
-// Web Audio sound generator for haptic engagement
+// Web Audio sound generator (Lazy Shared Singleton to prevent audio thread memory leaks)
+let sharedAudioCtx: AudioContext | null = null;
+function getAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
+  if (!sharedAudioCtx) {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioCtx) sharedAudioCtx = new AudioCtx();
+  }
+  if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+    sharedAudioCtx.resume().catch(() => {});
+  }
+  return sharedAudioCtx;
+}
+
 function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boolean) {
   if (!enabled) return;
   try {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const ctx = getAudioContext();
+    if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     

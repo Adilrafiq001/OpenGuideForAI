@@ -85,12 +85,19 @@ export function HeroPhysicsStage({
 
   return (
     <section className="relative pt-28 pb-16 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center text-center overflow-visible">
-      {/* Background Subtle Gradient Glows (GPU Accelerated, pointer-events-none) */}
+      {/* Hardware-Accelerated Zero-Blur Radial Ambient Glows (Compositor-Safe) */}
       <div 
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] sm:w-[850px] sm:h-[450px] rounded-full blur-[120px] opacity-15 pointer-events-none will-change-transform"
-        style={{ backgroundColor: currentThemeInfo.accent }}
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] sm:w-[850px] sm:h-[450px] rounded-full opacity-15 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at center, ${currentThemeInfo.accent} 0%, transparent 70%)`
+        }}
       />
-      <div className="absolute top-1/3 left-1/3 w-[400px] h-[250px] rounded-full blur-[100px] bg-emerald-500/10 pointer-events-none" />
+      <div 
+        className="absolute top-1/3 left-1/3 w-[400px] h-[250px] rounded-full opacity-10 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, #10b981 0%, transparent 70%)'
+        }}
+      />
 
       {/* 1. Eyebrow Badge */}
       <motion.div

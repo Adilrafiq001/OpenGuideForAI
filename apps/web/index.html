@@ -25,43 +25,55 @@
             var legacy = localStorage.getItem('openguide_theme');
             if (legacy) theme = legacy;
           }
+          var lightThemes = ['pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream', 'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial'];
           document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.setAttribute('data-theme-mode', lightThemes.indexOf(theme) !== -1 ? 'light' : 'dark');
 
           var themeBgs = {
+            'pure-paper': '#ffffff',
+            'e-ink-papyrus': '#fbf8f2',
+            'claude-light': '#faf6f0',
+            'linear-light': '#f8f9fa',
+            'notion-cream': '#faf8f5',
+            'github-light': '#ffffff',
+            'swiss-modernist': '#fcfcfc',
+            'solarized-light': '#fdf6e3',
+            'nordic-fjord': '#f1f5f9',
+            'matcha-ceremonial': '#f3f6f1',
             'obsidian': '#050505',
-            'midnight': '#080c14',
-            'cyberpunk': '#0d0818',
+            'claude-dark': '#141210',
+            'linear-dark': '#0d0e15',
+            'cursor-dark': '#080c14',
+            'cyberpunk-neon': '#0b0714',
+            'github-dark': '#161b22',
+            'monokai-pro': '#1a191e',
             'nord-dark': '#1e222a',
             'dracula': '#191a21',
-            'tokyo-night': '#1a1b26',
-            'monokai': '#272822',
-            'gruvbox-dark': '#1d2021',
-            'catppuccin-dark': '#1e1e2e',
-            'crimson': '#140508',
-            'pure-paper': '#ffffff',
-            'solarized-light': '#fdf6e3',
-            'github-light': '#ffffff',
-            'nord-light': '#eceff4',
-            'emerald-light': '#f0fdf4',
-            'warm-cream': '#fdfbf7',
-            'lavender-light': '#faf5ff',
-            'peach-dawn': '#fff7ed',
-            'rose-pine-dawn': '#faf4ed',
-            'cyber-light': '#f8fafc'
+            'circadian-amber': '#0a0908'
           };
           var bg = themeBgs[theme] || '#050505';
 
           var themeTextColors = {
-            'pure-paper': '#0f172a',
+            'pure-paper': '#111111',
+            'e-ink-papyrus': '#1c1815',
+            'claude-light': '#1e140d',
+            'linear-light': '#1a1d20',
+            'notion-cream': '#1c1917',
+            'github-light': '#1f2328',
+            'swiss-modernist': '#09090b',
             'solarized-light': '#073642',
-            'github-light': '#1e293b',
-            'nord-light': '#2e3440',
-            'emerald-light': '#064e3b',
-            'warm-cream': '#292524',
-            'lavender-light': '#3b0764',
-            'peach-dawn': '#431407',
-            'rose-pine-dawn': '#575279',
-            'cyber-light': '#0f172a'
+            'nordic-fjord': '#0f172a',
+            'matcha-ceremonial': '#142918',
+            'obsidian': '#ffffff',
+            'claude-dark': '#f5f0ea',
+            'linear-dark': '#f1f2f6',
+            'cursor-dark': '#f8fafc',
+            'cyberpunk-neon': '#fdf2f8',
+            'github-dark': '#f0f6fc',
+            'monokai-pro': '#fcfcfa',
+            'nord-dark': '#eceff4',
+            'dracula': '#f8f8f2',
+            'circadian-amber': '#fef3c7'
           };
           var textColor = themeTextColors[theme] || '#f8fafc';
 

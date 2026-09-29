@@ -39,6 +39,11 @@ This skill synthesizes all major premium UI/UX guidelines to create a high-agenc
   - Include 5 Card Archetypes: The Intelligent List, The Command Input, Live Status, Wide Data Stream, Contextual UI.
 - **Interactive UI Cycles:** Always implement full interaction cycles: Skeletal loaders, Empty States, Inline Errors, and Tactile `:active` feedback (scale-[0.98]).
 - **Icons:** Use exclusively `@phosphor-icons/react` or `@radix-ui/react-icons`. BANNED: Emojis in UI.
+- **Mechanical, Capsule & Glow Craft Standards:**
+  - **Zero Rectangular Blur Halos:** High blur filters (`filter: blur(...)`) must NEVER be enclosed within an ancestor with `overflow: hidden` unless both share identical curved border-radii (`border-radius: var(--rounded-max)` or `rounded-full`). Glows must use concentric pill border-radii and smooth radial gradients (`radial-gradient(ellipse at center, ...)`) rather than flat-edged linear gradients or clipped rectangular boxes.
+  - **Light Theme Contrast Calibration:** Translucent glass capsules must adapt background gradients and text colors in light themes to guarantee WCAG AAA contrast (minimum 7:1 ratio). In light themes, text must use dark slate ink (`#0f172a`) rather than washed-out white text.
+  - **Route-Aware Component Lifecycle Reset:** Any interactive element with an opening/closing animation lifecycle MUST bind to `location.pathname` / `location.key` via `useLocation` (or `pageshow` / `popstate`) to guarantee an instant return to the idle resting state upon navigation re-entry.
+  - **Multi-Stage Spring Settlement:** Multi-stage spring animations must be afforded adequate settlement time (~2,000–2,200ms) before route unmounting, so learners can perceive and appreciate the completed state.
 
 ## 5. Execution Routine
 1. Inspect the brief and current aesthetics (landing vs dashboard).

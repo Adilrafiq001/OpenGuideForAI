@@ -1,14 +1,13 @@
 /* ==========================================================================
-   24 WORLD-CLASS THEMES (6 DARK, 6 LIGHT, 12 SPECIAL RESEARCH-BASED)
+   20 WORLD-CLASS SPECIALIZED THEMES (10 LIGHT, 10 DARK)
    Strict WCAG AAA Contrast & Human Visual Physiology Optimization
+   Inspired by Fine Paper Ergonomics & Premier Developer Tools
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   6 CURATED DARK THEMES
+   DEFAULT FALLBACK BASELINE (:root defined first, lowest specificity)
    -------------------------------------------------------------------------- */
-
-/* 1. Obsidian Black (Default True Black & Matrix Emerald) */
-:root, [data-theme="obsidian"] {
+:root {
   --bg-primary: #050505;
   --bg-secondary: #0f0f12;
   --bg-tertiary: #1a1a20;
@@ -17,247 +16,74 @@
   --text-secondary: #a1a1aa;
   --accent: #10b981;
   --accent-transparent: rgba(16, 185, 129, 0.2);
+
+  /* Direct Bridge to Tailwind / Component tokens */
+  --color-primary: var(--bg-primary);
+  --color-secondary: var(--bg-secondary);
+  --color-tertiary: var(--bg-tertiary);
+  --color-border: var(--border-color);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-trans: var(--accent-transparent);
 }
 
-/* 2. Midnight Slate (Deep Navy & Electric Indigo) */
-[data-theme="midnight"] {
-  --bg-primary: #080c14;
-  --bg-secondary: #0f172a;
-  --bg-tertiary: #1e293b;
-  --border-color: rgba(148, 163, 184, 0.18);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent: #6366f1;
-  --accent-transparent: rgba(99, 102, 241, 0.25);
+html[data-theme-mode="light"] {
+  color-scheme: light;
 }
 
-/* 3. Cyberpunk Neon (Deep Violet & Hot Neon Fuchsia) */
-[data-theme="cyberpunk"] {
-  --bg-primary: #0d0818;
-  --bg-secondary: #170e2b;
-  --bg-tertiary: #271747;
-  --border-color: rgba(244, 63, 94, 0.25);
-  --text-primary: #fdf4ff;
-  --text-secondary: #d8b4fe;
-  --accent: #f43f5e;
-  --accent-transparent: rgba(244, 63, 94, 0.22);
-}
-
-/* 4. Nordic Arctic (Calm Glacial Charcoal & Teal) */
-[data-theme="nord-dark"] {
-  --bg-primary: #1e222a;
-  --bg-secondary: #282c34;
-  --bg-tertiary: #353b45;
-  --border-color: rgba(136, 192, 208, 0.22);
-  --text-primary: #eceff4;
-  --text-secondary: #d8dee9;
-  --accent: #88c0d0;
-  --accent-transparent: rgba(136, 192, 208, 0.2);
-}
-
-/* 5. Dracula Gothic (Gothic Charcoal & Radiant Orchid Pink) */
-[data-theme="dracula"] {
-  --bg-primary: #191a21;
-  --bg-secondary: #21222c;
-  --bg-tertiary: #282a36;
-  --border-color: rgba(98, 114, 164, 0.35);
-  --text-primary: #f8f8f2;
-  --text-secondary: #bdc3c7;
-  --accent: #ff79c6;
-  --accent-transparent: rgba(255, 121, 198, 0.25);
-}
-
-/* 6. Tokyo Night (Metropolis Dusk & Vivid Sky Blue) */
-[data-theme="tokyo-night"] {
-  --bg-primary: #13141c;
-  --bg-secondary: #1a1b26;
-  --bg-tertiary: #24283b;
-  --border-color: rgba(122, 162, 247, 0.22);
-  --text-primary: #c0caf5;
-  --text-secondary: #9aa5ce;
-  --accent: #7aa2f7;
-  --accent-transparent: rgba(122, 162, 247, 0.2);
+html[data-theme-mode="dark"] {
+  color-scheme: dark;
 }
 
 /* --------------------------------------------------------------------------
-   6 CURATED LIGHT THEMES
+   10 CALIBRATED LIGHT THEMES
    -------------------------------------------------------------------------- */
 
-/* 7. Pure Paper (Archival Museum White & Jet Black Ink) */
-[data-theme="pure-paper"] {
+/* 1. Archival Fine Paper (Archival Museum White & Jet Black Ink) */
+html[data-theme="pure-paper"], [data-theme="pure-paper"] {
   --bg-primary: #ffffff;
-  --bg-secondary: #f4f4f5;
-  --bg-tertiary: #e4e4e7;
+  --bg-secondary: #f4f4f6;
+  --bg-tertiary: #e5e5ea;
   --border-color: rgba(0, 0, 0, 0.12);
   --text-primary: #111111;
   --text-secondary: #4b5563;
   --accent: #0d9488;
   --accent-transparent: rgba(13, 148, 136, 0.15);
+
+  --color-primary: #ffffff;
+  --color-secondary: #f4f4f6;
+  --color-tertiary: #e5e5ea;
+  --color-border: rgba(0, 0, 0, 0.12);
+  --color-text-primary: #111111;
+  --color-text-secondary: #4b5563;
+  --color-accent: #0d9488;
+  --color-accent-trans: rgba(13, 148, 136, 0.15);
 }
 
-/* 8. Solarized Light (Mathematical Precision Light Lab) */
-[data-theme="solarized-light"] {
-  --bg-primary: #fdf6e3;
-  --bg-secondary: #eee8d5;
-  --bg-tertiary: #e0d9c4;
-  --border-color: rgba(38, 139, 210, 0.2);
-  --text-primary: #073642;
-  --text-secondary: #3b5359;
-  --accent: #2aa198;
-  --accent-transparent: rgba(42, 161, 152, 0.2);
-}
-
-/* 9. GitHub Light (High-Density Engineering Canvas) */
-[data-theme="github-light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f6f8fa;
-  --bg-tertiary: #eaeef2;
-  --border-color: rgba(31, 35, 40, 0.15);
-  --text-primary: #1f2328;
-  --text-secondary: #4b535d;
-  --accent: #0969da;
-  --accent-transparent: rgba(9, 105, 218, 0.15);
-}
-
-/* 10. Nord Snow (Pristine Arctic Snow & Slate) */
-[data-theme="nord-light"] {
-  --bg-primary: #eceff4;
-  --bg-secondary: #e5e9f0;
-  --bg-tertiary: #d8dee9;
-  --border-color: rgba(94, 129, 172, 0.25);
-  --text-primary: #2e3440;
-  --text-secondary: #434c5e;
-  --accent: #5e81ac;
-  --accent-transparent: rgba(94, 129, 172, 0.2);
-}
-
-/* 11. Warm Cream (Organic Warm Editorial Cream & Bronze) */
-[data-theme="warm-cream"] {
-  --bg-primary: #faf8f5;
-  --bg-secondary: #f3efe6;
-  --bg-tertiary: #e7dfd1;
-  --border-color: rgba(217, 119, 6, 0.2);
-  --text-primary: #1c1917;
-  --text-secondary: #57534e;
-  --accent: #d97706;
-  --accent-transparent: rgba(217, 119, 6, 0.18);
-}
-
-/* 12. Rosé Pine Dawn (Warm Nordic Daylight & Plum) */
-[data-theme="rose-pine-dawn"] {
-  --bg-primary: #faf4ed;
-  --bg-secondary: #fffaf3;
-  --bg-tertiary: #f2e9de;
-  --border-color: rgba(40, 105, 131, 0.2);
-  --text-primary: #575279;
-  --text-secondary: #484469;
-  --accent: #286983;
-  --accent-transparent: rgba(40, 105, 131, 0.15);
-}
-
-/* --------------------------------------------------------------------------
-   12 SPECIAL RESEARCH-BASED THEMES (6 DARK, 6 LIGHT BALANCED)
-   Human Visual Physiology, Circadian Photobiology & Cognitive Ergonomics
-   -------------------------------------------------------------------------- */
-
-/* 13. Circadian Amber CRT (Dark - Melatonin-Preserving Zero Blue Light) */
-[data-theme="circadian-amber"] {
-  --bg-primary: #0a0908;
-  --bg-secondary: #15120e;
-  --bg-tertiary: #241e17;
-  --border-color: rgba(245, 158, 11, 0.25);
-  --text-primary: #fef3c7;
-  --text-secondary: #d97706;
-  --accent: #f59e0b;
-  --accent-transparent: rgba(245, 158, 11, 0.22);
-}
-
-/* 14. Mariana Bioluminescence (Dark - Scotopic Peak Sensitivity ~507nm) */
-[data-theme="mariana-bioluminescent"] {
-  --bg-primary: #040a12;
-  --bg-secondary: #081424;
-  --bg-tertiary: #0e213a;
-  --border-color: rgba(6, 182, 212, 0.25);
-  --text-primary: #e0f2fe;
-  --text-secondary: #38bdf8;
-  --accent: #06b6d4;
-  --accent-transparent: rgba(6, 182, 212, 0.22);
-}
-
-/* 15. Biophilic Forest Canopy (Dark - Attention Restoration Green) */
-[data-theme="biophilic-forest"] {
-  --bg-primary: #060d08;
-  --bg-secondary: #0d1a10;
-  --bg-tertiary: #162b1a;
-  --border-color: rgba(34, 197, 94, 0.25);
-  --text-primary: #f0fdf4;
-  --text-secondary: #86efac;
-  --accent: #22c55e;
-  --accent-transparent: rgba(34, 197, 94, 0.22);
-}
-
-/* 16. Shinjuku Cyberpunk Violet (Dark - Purkinje Shift High-Focal Contrast) */
-[data-theme="shinjuku-neon"] {
-  --bg-primary: #0b0714;
-  --bg-secondary: #150d24;
-  --bg-tertiary: #23143d;
-  --border-color: rgba(236, 72, 153, 0.25);
-  --text-primary: #fdf2f8;
-  --text-secondary: #f472b6;
-  --accent: #ec4899;
-  --accent-transparent: rgba(236, 72, 153, 0.22);
-}
-
-/* 17. Cosmic Solar Flare (Dark - Warm Low-Glare Arousal) */
-[data-theme="solar-flare"] {
-  --bg-primary: #0c0a09;
-  --bg-secondary: #171311;
-  --bg-tertiary: #271f1a;
-  --border-color: rgba(234, 88, 12, 0.25);
-  --text-primary: #fff7ed;
-  --text-secondary: #fb923c;
-  --accent: #ea580c;
-  --accent-transparent: rgba(234, 88, 12, 0.22);
-}
-
-/* 18. Ergonomic Monochromatic Graphite (Dark - Zero-Chroma Ocular Balance) */
-[data-theme="ergonomic-graphite"] {
-  --bg-primary: #121212;
-  --bg-secondary: #1c1c1c;
-  --bg-tertiary: #292929;
-  --border-color: rgba(255, 255, 255, 0.16);
-  --text-primary: #fafafa;
-  --text-secondary: #a3a3a3;
-  --accent: #e5e5e5;
-  --accent-transparent: rgba(255, 255, 255, 0.18);
-}
-
-/* 19. E-Ink Papyrus Reader (Light - Diffuse Cellulose Paper Reflection) */
-[data-theme="e-ink-papyrus"] {
+/* 2. E-Ink Papyrus Reader (Natural Papyrus & Walnut Bistre) */
+html[data-theme="e-ink-papyrus"], [data-theme="e-ink-papyrus"] {
   --bg-primary: #fbf8f2;
   --bg-secondary: #f3ece0;
-  --bg-tertiary: #e7dfd0;
+  --bg-tertiary: #e7decb;
   --border-color: rgba(133, 77, 14, 0.22);
   --text-primary: #1c1815;
   --text-secondary: #574c43;
   --accent: #854d0e;
   --accent-transparent: rgba(133, 77, 14, 0.18);
+
+  --color-primary: #fbf8f2;
+  --color-secondary: #f3ece0;
+  --color-tertiary: #e7decb;
+  --color-border: rgba(133, 77, 14, 0.22);
+  --color-text-primary: #1c1815;
+  --color-text-secondary: #574c43;
+  --color-accent: #854d0e;
+  --color-accent-trans: rgba(133, 77, 14, 0.18);
 }
 
-/* 20. Nordic Fjord Daylight (Light - 5500K Scotopic Daylight Balance) */
-[data-theme="nordic-fjord"] {
-  --bg-primary: #f1f5f9;
-  --bg-secondary: #e2e8f0;
-  --bg-tertiary: #cbd5e1;
-  --border-color: rgba(2, 132, 199, 0.22);
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --accent: #0284c7;
-  --accent-transparent: rgba(2, 132, 199, 0.18);
-}
-
-/* 21. Tuscan Terracotta Warmth (Light - Earth-Tone Parasympathetic Balance) */
-[data-theme="tuscan-terracotta"] {
+/* 3. Claude Warm Ivory (Anthropic Claude Parchment & Terracotta Flame) */
+html[data-theme="claude-light"], [data-theme="claude-light"] {
   --bg-primary: #faf6f0;
   --bg-secondary: #f0e8dc;
   --bg-tertiary: #e3d7c5;
@@ -266,22 +92,82 @@
   --text-secondary: #63391b;
   --accent: #c2410c;
   --accent-transparent: rgba(194, 65, 12, 0.18);
+
+  --color-primary: #faf6f0;
+  --color-secondary: #f0e8dc;
+  --color-tertiary: #e3d7c5;
+  --color-border: rgba(194, 65, 12, 0.22);
+  --color-text-primary: #1e140d;
+  --color-text-secondary: #63391b;
+  --color-accent: #c2410c;
+  --color-accent-trans: rgba(194, 65, 12, 0.18);
 }
 
-/* 22. Matcha Tea Ceremonial (Light - 520-560nm Calming Green Balance) */
-[data-theme="matcha-ceremonial"] {
-  --bg-primary: #f3f6f1;
-  --bg-secondary: #e4ebe0;
-  --bg-tertiary: #d3decf;
-  --border-color: rgba(21, 128, 61, 0.22);
-  --text-primary: #142918;
-  --text-secondary: #2f4f34;
-  --accent: #15803d;
-  --accent-transparent: rgba(21, 128, 61, 0.18);
+/* 4. Linear Precision Gray (Linear Quartz & Precision Indigo) */
+html[data-theme="linear-light"], [data-theme="linear-light"] {
+  --bg-primary: #f8f9fa;
+  --bg-secondary: #eef0f3;
+  --bg-tertiary: #dfe3e8;
+  --border-color: rgba(94, 106, 210, 0.2);
+  --text-primary: #1a1d20;
+  --text-secondary: #5f6368;
+  --accent: #5e6ad2;
+  --accent-transparent: rgba(94, 106, 210, 0.16);
+
+  --color-primary: #f8f9fa;
+  --color-secondary: #eef0f3;
+  --color-tertiary: #dfe3e8;
+  --color-border: rgba(94, 106, 210, 0.2);
+  --color-text-primary: #1a1d20;
+  --color-text-secondary: #5f6368;
+  --color-accent: #5e6ad2;
+  --color-accent-trans: rgba(94, 106, 210, 0.16);
 }
 
-/* 23. Swiss Bauhaus Modernist (Light - Müller-Brockmann Foveal Acuity) */
-[data-theme="swiss-modernist"] {
+/* 5. Notion Editorial Cream (Warm Editorial Cream & Espresso) */
+html[data-theme="notion-cream"], [data-theme="notion-cream"] {
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f3efe6;
+  --bg-tertiary: #e8e2d4;
+  --border-color: rgba(217, 119, 6, 0.2);
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --accent: #d97706;
+  --accent-transparent: rgba(217, 119, 6, 0.16);
+
+  --color-primary: #faf8f5;
+  --color-secondary: #f3efe6;
+  --color-tertiary: #e8e2d4;
+  --color-border: rgba(217, 119, 6, 0.2);
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-accent: #d97706;
+  --color-accent-trans: rgba(217, 119, 6, 0.16);
+}
+
+/* 6. GitHub Primer Light (Canonical GitHub Workbench & Primer Blue) */
+html[data-theme="github-light"], [data-theme="github-light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eaeef2;
+  --border-color: rgba(31, 35, 40, 0.15);
+  --text-primary: #1f2328;
+  --text-secondary: #4b535d;
+  --accent: #0969da;
+  --accent-transparent: rgba(9, 105, 218, 0.15);
+
+  --color-primary: #ffffff;
+  --color-secondary: #f6f8fa;
+  --color-tertiary: #eaeef2;
+  --color-border: rgba(31, 35, 40, 0.15);
+  --color-text-primary: #1f2328;
+  --color-text-secondary: #4b535d;
+  --color-accent: #0969da;
+  --color-accent-trans: rgba(9, 105, 218, 0.15);
+}
+
+/* 7. Swiss Bauhaus Modernist (Müller-Brockmann Alabaster & Klein Blue) */
+html[data-theme="swiss-modernist"], [data-theme="swiss-modernist"] {
   --bg-primary: #fcfcfc;
   --bg-secondary: #f4f4f5;
   --bg-tertiary: #e4e4e7;
@@ -290,16 +176,290 @@
   --text-secondary: #27272a;
   --accent: #2563eb;
   --accent-transparent: rgba(37, 99, 235, 0.18);
+
+  --color-primary: #fcfcfc;
+  --color-secondary: #f4f4f5;
+  --color-tertiary: #e4e4e7;
+  --color-border: rgba(37, 99, 235, 0.25);
+  --color-text-primary: #09090b;
+  --color-text-secondary: #27272a;
+  --color-accent: #2563eb;
+  --color-accent-trans: rgba(37, 99, 235, 0.18);
 }
 
-/* 24. Alpenglow Apricot Dawn (Light - Sunrise Spectrum Positive Valence) */
-[data-theme="alpenglow-apricot"] {
-  --bg-primary: #fdf6f0;
-  --bg-secondary: #f7eae0;
-  --bg-tertiary: #eed8cb;
-  --border-color: rgba(219, 39, 119, 0.22);
-  --text-primary: #24141e;
-  --text-secondary: #543246;
-  --accent: #db2777;
-  --accent-transparent: rgba(219, 39, 119, 0.18);
+/* 8. Solarized Light Precision (Mathematical CIELAB Light Precision) */
+html[data-theme="solarized-light"], [data-theme="solarized-light"] {
+  --bg-primary: #fdf6e3;
+  --bg-secondary: #eee8d5;
+  --bg-tertiary: #e0d8c3;
+  --border-color: rgba(38, 139, 210, 0.2);
+  --text-primary: #073642;
+  --text-secondary: #3b5359;
+  --accent: #2aa198;
+  --accent-transparent: rgba(42, 161, 152, 0.18);
+
+  --color-primary: #fdf6e3;
+  --color-secondary: #eee8d5;
+  --color-tertiary: #e0d8c3;
+  --color-border: rgba(38, 139, 210, 0.2);
+  --color-text-primary: #073642;
+  --color-text-secondary: #3b5359;
+  --color-accent: #2aa198;
+  --color-accent-trans: rgba(42, 161, 152, 0.18);
+}
+
+/* 9. Nordic Fjord Daylight (Scandinavian Fjord Blue & Crisp Daylight) */
+html[data-theme="nordic-fjord"], [data-theme="nordic-fjord"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --bg-tertiary: #cbd5e1;
+  --border-color: rgba(2, 132, 199, 0.22);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --accent: #0284c7;
+  --accent-transparent: rgba(2, 132, 199, 0.18);
+
+  --color-primary: #f1f5f9;
+  --color-secondary: #e2e8f0;
+  --color-tertiary: #cbd5e1;
+  --color-border: rgba(2, 132, 199, 0.22);
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-accent: #0284c7;
+  --color-accent-trans: rgba(2, 132, 199, 0.18);
+}
+
+/* 10. Matcha Tea Ceremonial (Pale Matcha & Deep Forest Ink) */
+html[data-theme="matcha-ceremonial"], [data-theme="matcha-ceremonial"] {
+  --bg-primary: #f3f6f1;
+  --bg-secondary: #e4ebe0;
+  --bg-tertiary: #d3decf;
+  --border-color: rgba(21, 128, 61, 0.22);
+  --text-primary: #142918;
+  --text-secondary: #2f4f34;
+  --accent: #15803d;
+  --accent-transparent: rgba(21, 128, 61, 0.18);
+
+  --color-primary: #f3f6f1;
+  --color-secondary: #e4ebe0;
+  --color-tertiary: #d3decf;
+  --color-border: rgba(21, 128, 61, 0.22);
+  --color-text-primary: #142918;
+  --color-text-secondary: #2f4f34;
+  --color-accent: #15803d;
+  --color-accent-trans: rgba(21, 128, 61, 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   10 CALIBRATED DARK THEMES
+   -------------------------------------------------------------------------- */
+
+/* 11. Obsidian Deep Space (Default True Black & Matrix Emerald) */
+html[data-theme="obsidian"], [data-theme="obsidian"] {
+  --bg-primary: #050505;
+  --bg-secondary: #0f0f12;
+  --bg-tertiary: #1a1a20;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --accent: #10b981;
+  --accent-transparent: rgba(16, 185, 129, 0.2);
+
+  --color-primary: #050505;
+  --color-secondary: #0f0f12;
+  --color-tertiary: #1a1a20;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-accent: #10b981;
+  --color-accent-trans: rgba(16, 185, 129, 0.2);
+}
+
+/* 12. Claude Obsidian Warm (Anthropic Claude Charcoal & Terracotta Core) */
+html[data-theme="claude-dark"], [data-theme="claude-dark"] {
+  --bg-primary: #141210;
+  --bg-secondary: #1e1b18;
+  --bg-tertiary: #2a2622;
+  --border-color: rgba(217, 107, 39, 0.25);
+  --text-primary: #f5f0ea;
+  --text-secondary: #b3a99c;
+  --accent: #d96b27;
+  --accent-transparent: rgba(217, 107, 39, 0.22);
+
+  --color-primary: #141210;
+  --color-secondary: #1e1b18;
+  --color-tertiary: #2a2622;
+  --color-border: rgba(217, 107, 39, 0.25);
+  --color-text-primary: #f5f0ea;
+  --color-text-secondary: #b3a99c;
+  --color-accent: #d96b27;
+  --color-accent-trans: rgba(217, 107, 39, 0.22);
+}
+
+/* 13. Linear Velvet Midnight (Linear Velvet Obsidian & Ultraviolet) */
+html[data-theme="linear-dark"], [data-theme="linear-dark"] {
+  --bg-primary: #0d0e15;
+  --bg-secondary: #151722;
+  --bg-tertiary: #1e2230;
+  --border-color: rgba(99, 102, 241, 0.22);
+  --text-primary: #f1f2f6;
+  --text-secondary: #94a3b8;
+  --accent: #6366f1;
+  --accent-transparent: rgba(99, 102, 241, 0.22);
+
+  --color-primary: #0d0e15;
+  --color-secondary: #151722;
+  --color-tertiary: #1e2230;
+  --color-border: rgba(99, 102, 241, 0.22);
+  --color-text-primary: #f1f2f6;
+  --color-text-secondary: #94a3b8;
+  --color-accent: #6366f1;
+  --color-accent-trans: rgba(99, 102, 241, 0.22);
+}
+
+/* 14. Cursor Midnight Charcoal (Cursor AI Midnight Charcoal & Electric Cyan) */
+html[data-theme="cursor-dark"], [data-theme="cursor-dark"] {
+  --bg-primary: #080c14;
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #1e293b;
+  --border-color: rgba(6, 182, 212, 0.25);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent: #06b6d4;
+  --accent-transparent: rgba(6, 182, 212, 0.22);
+
+  --color-primary: #080c14;
+  --color-secondary: #0f172a;
+  --color-tertiary: #1e293b;
+  --color-border: rgba(6, 182, 212, 0.25);
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-accent: #06b6d4;
+  --color-accent-trans: rgba(6, 182, 212, 0.22);
+}
+
+/* 15. Shinjuku Cyberpunk Neon (Velvet Violet & Laser Electric Magenta) */
+html[data-theme="cyberpunk-neon"], [data-theme="cyberpunk-neon"] {
+  --bg-primary: #0b0714;
+  --bg-secondary: #150d24;
+  --bg-tertiary: #221538;
+  --border-color: rgba(236, 72, 153, 0.25);
+  --text-primary: #fdf2f8;
+  --text-secondary: #f472b6;
+  --accent: #ec4899;
+  --accent-transparent: rgba(236, 72, 153, 0.22);
+
+  --color-primary: #0b0714;
+  --color-secondary: #150d24;
+  --color-tertiary: #221538;
+  --color-border: rgba(236, 72, 153, 0.25);
+  --color-text-primary: #fdf2f8;
+  --color-text-secondary: #f472b6;
+  --color-accent: #ec4899;
+  --color-accent-trans: rgba(236, 72, 153, 0.22);
+}
+
+/* 16. GitHub Dark Dimmed (GitHub Dimmed Slate & Commit Emerald) */
+html[data-theme="github-dark"], [data-theme="github-dark"] {
+  --bg-primary: #161b22;
+  --bg-secondary: #21262d;
+  --bg-tertiary: #30363d;
+  --border-color: rgba(240, 246, 252, 0.15);
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --accent: #2ea043;
+  --accent-transparent: rgba(46, 160, 67, 0.2);
+
+  --color-primary: #161b22;
+  --color-secondary: #21262d;
+  --color-tertiary: #30363d;
+  --color-border: rgba(240, 246, 252, 0.15);
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #8b949e;
+  --color-accent: #2ea043;
+  --color-accent-trans: rgba(46, 160, 67, 0.2);
+}
+
+/* 17. Monokai Pro Octagon (Monokai Pro Charcoal & Amber Gold) */
+html[data-theme="monokai-pro"], [data-theme="monokai-pro"] {
+  --bg-primary: #1a191e;
+  --bg-secondary: #222129;
+  --bg-tertiary: #2d2c36;
+  --border-color: rgba(255, 216, 102, 0.22);
+  --text-primary: #fcfcfa;
+  --text-secondary: #939293;
+  --accent: #ffd866;
+  --accent-transparent: rgba(255, 216, 102, 0.2);
+
+  --color-primary: #1a191e;
+  --color-secondary: #222129;
+  --color-tertiary: #2d2c36;
+  --color-border: rgba(255, 216, 102, 0.22);
+  --color-text-primary: #fcfcfa;
+  --color-text-secondary: #939293;
+  --color-accent: #ffd866;
+  --color-accent-trans: rgba(255, 216, 102, 0.2);
+}
+
+/* 18. Nordic Arctic Frost (Scandinavian Polar Slate & Glacial Teal) */
+html[data-theme="nord-dark"], [data-theme="nord-dark"] {
+  --bg-primary: #1e222a;
+  --bg-secondary: #282c34;
+  --bg-tertiary: #353b45;
+  --border-color: rgba(136, 192, 208, 0.22);
+  --text-primary: #eceff4;
+  --text-secondary: #d8dee9;
+  --accent: #88c0d0;
+  --accent-transparent: rgba(136, 192, 208, 0.2);
+
+  --color-primary: #1e222a;
+  --color-secondary: #282c34;
+  --color-tertiary: #353b45;
+  --color-border: rgba(136, 192, 208, 0.22);
+  --color-text-primary: #eceff4;
+  --color-text-secondary: #d8dee9;
+  --color-accent: #88c0d0;
+  --color-accent-trans: rgba(136, 192, 208, 0.2);
+}
+
+/* 19. Dracula Cult Gothic (Gothic Charcoal & Radiant Orchid Pink) */
+html[data-theme="dracula"], [data-theme="dracula"] {
+  --bg-primary: #191a21;
+  --bg-secondary: #21222c;
+  --bg-tertiary: #282a36;
+  --border-color: rgba(98, 114, 164, 0.35);
+  --text-primary: #f8f8f2;
+  --text-secondary: #bdc3c7;
+  --accent: #ff79c6;
+  --accent-transparent: rgba(255, 121, 198, 0.25);
+
+  --color-primary: #191a21;
+  --color-secondary: #21222c;
+  --color-tertiary: #282a36;
+  --color-border: rgba(98, 114, 164, 0.35);
+  --color-text-primary: #f8f8f2;
+  --color-text-secondary: #bdc3c7;
+  --color-accent: #ff79c6;
+  --color-accent-trans: rgba(255, 121, 198, 0.25);
+}
+
+/* 20. Circadian Amber CRT (Amber Phosphor & Zero Blue Photobiology) */
+html[data-theme="circadian-amber"], [data-theme="circadian-amber"] {
+  --bg-primary: #0a0908;
+  --bg-secondary: #15120e;
+  --bg-tertiary: #231e17;
+  --border-color: rgba(245, 158, 11, 0.25);
+  --text-primary: #fef3c7;
+  --text-secondary: #d97706;
+  --accent: #f59e0b;
+  --accent-transparent: rgba(245, 158, 11, 0.2);
+
+  --color-primary: #0a0908;
+  --color-secondary: #15120e;
+  --color-tertiary: #231e17;
+  --color-border: rgba(245, 158, 11, 0.25);
+  --color-text-primary: #fef3c7;
+  --color-text-secondary: #d97706;
+  --color-accent: #f59e0b;
+  --color-accent-trans: rgba(245, 158, 11, 0.2);
 }

@@ -31,7 +31,7 @@ export const InitializeWorkspaceButton: React.FC<InitializeWorkspaceButtonProps>
   };
 
   return (
-    <div className={`inline-flex flex-col items-center ${className}`}>
+    <div className={`workspace-cta-container inline-flex flex-col items-center ${className}`}>
       <label htmlFor="init-mech-button" className="area" onClick={handleClick}>
         <input 
           type="checkbox" 

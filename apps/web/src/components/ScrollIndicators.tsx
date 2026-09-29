@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 export const ScrollProgressBar: React.FC = () => {
-  const [progress, setProgress] = useState(0);
+  const barRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ticking = false;
@@ -12,7 +12,9 @@ export const ScrollProgressBar: React.FC = () => {
           const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
           const currentScroll = window.scrollY;
           const p = totalHeight > 0 ? Math.min(1, Math.max(0, currentScroll / totalHeight)) : 0;
-          setProgress(p);
+          if (barRef.current) {
+            barRef.current.style.transform = `scaleX(${p})`;
+          }
           ticking = false;
         });
         ticking = true;
@@ -26,10 +28,11 @@ export const ScrollProgressBar: React.FC = () => {
 
   return (
     <div
+      ref={barRef}
       data-testid="scroll-progress-bar"
       className="fixed top-0 left-0 right-0 h-[2.5px] z-[120] pointer-events-none origin-left"
       style={{
-        transform: `scaleX(${progress})`,
+        transform: 'scaleX(0)',
         background: 'linear-gradient(90deg, var(--color-accent) 0%, #38bdf8 50%, #a855f7 100%)',
         boxShadow: '0 0 10px var(--color-accent)',
         willChange: 'transform'
@@ -40,18 +43,28 @@ export const ScrollProgressBar: React.FC = () => {
 
 export const ScrollToTopButton: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const percentRef = React.useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     let ticking = false;
+    let prevScrolled = false;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
           const currentScroll = window.scrollY;
           const p = totalHeight > 0 ? Math.min(1, Math.max(0, currentScroll / totalHeight)) : 0;
-          setScrollProgress(p);
-          setIsScrolled(currentScroll > 24);
+          
+          if (percentRef.current) {
+            percentRef.current.textContent = `${Math.round(p * 100)}%`;
+          }
+
+          const scrolled = currentScroll > 24;
+          if (scrolled !== prevScrolled) {
+            prevScrolled = scrolled;
+            setIsScrolled(scrolled);
+          }
+
           ticking = false;
         });
         ticking = true;
@@ -76,7 +89,7 @@ export const ScrollToTopButton: React.FC = () => {
         title="Smooth scroll to top"
       >
         <ArrowUp size={13} className="text-[var(--color-accent)] group-hover:-translate-y-0.5 transition-transform" />
-        <span className="font-semibold">{Math.round(scrollProgress * 100)}%</span>
+        <span ref={percentRef} className="font-semibold">0%</span>
         <span className="opacity-40">|</span>
         <span>Top</span>
       </button>

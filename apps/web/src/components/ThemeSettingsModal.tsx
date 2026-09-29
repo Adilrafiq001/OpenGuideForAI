@@ -18,6 +18,7 @@ import {
 } from '@phosphor-icons/react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { THEMES_DATA, type ThemeInfo } from '../data/themesData';
+import { ThemeSwitch } from './ThemeSwitch';
 
 interface ThemeSettingsModalProps {
   isOpen: boolean;
@@ -72,18 +73,13 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     resetDefaults
   } = useSettingsStore();
   const [activeTab, setActiveTab] = useState<'themes' | 'preferences'>(initialTab);
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'Special Themes' | 'Dark Themes' | 'Light Themes'>('Special Themes');
+  const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
+  const [activeMode, setActiveMode] = useState<'dark' | 'light'>(activeThemeInfo.mode || 'dark');
   const [hoveredTheme, setHoveredTheme] = useState<ThemeInfo | null>(null);
   const [resetConfirmed, setResetConfirmed] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
 
-  const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const displayedTheme = hoveredTheme || activeThemeInfo;
-
-  const specialCount = THEMES_DATA.filter(t => t.category === 'Special Themes').length;
-  const darkCount = THEMES_DATA.filter(t => t.category === 'Dark Themes').length;
-  const lightCount = THEMES_DATA.filter(t => t.category === 'Light Themes').length;
-
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -101,10 +97,13 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     }
   }, [isOpen, initialTab]);
 
-  const filteredThemes = THEMES_DATA.filter(t => {
-    if (categoryFilter === 'all') return true;
-    return t.category === categoryFilter;
-  });
+  useEffect(() => {
+    if (isOpen) {
+      setActiveMode(activeThemeInfo.mode || 'dark');
+    }
+  }, [isOpen, activeThemeInfo.mode]);
+
+  const filteredThemes = THEMES_DATA.filter(t => t.mode === activeMode);
 
   return (
     <AnimatePresence>
@@ -131,10 +130,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             <div className="px-6 py-5 border-b border-[var(--color-border,rgba(255,255,255,0.1))] flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-200"
                   style={{ 
-                    backgroundColor: `${displayedTheme.accent}20`,
-                    color: displayedTheme.accent
+                    backgroundColor: `${activeThemeInfo.accent}20`,
+                    color: activeThemeInfo.accent
                   }}
                 >
                   <Palette weight="duotone" size={22} />
@@ -169,8 +168,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     : 'text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]/30'
                 }`}
                 style={activeTab === 'themes' ? {
-                  backgroundColor: displayedTheme.accent,
-                  color: getContrastColor(displayedTheme.accent)
+                  backgroundColor: activeThemeInfo.accent,
+                  color: getContrastColor(activeThemeInfo.accent)
                 } : {}}
               >
                 <Palette size={16} />
@@ -185,8 +184,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     : 'text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]/30'
                 }`}
                 style={activeTab === 'preferences' ? {
-                  backgroundColor: displayedTheme.accent,
-                  color: getContrastColor(displayedTheme.accent)
+                  backgroundColor: activeThemeInfo.accent,
+                  color: getContrastColor(activeThemeInfo.accent)
                 } : {}}
               >
                 <Sliders size={16} />
@@ -198,54 +197,48 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             {activeTab === 'themes' ? (
               <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
                 
-                {/* Left: Theme list with category tabs */}
-                <div className="flex-1 flex flex-col border-r border-[var(--color-border,rgba(255,255,255,0.08))] overflow-hidden">
+                {/* Left: Theme list with Day/Night toggle switch */}
+                <div className="flex-1 flex flex-col border-r border-[var(--color-border)] overflow-hidden">
                   
-                  {/* Category Filter Pills */}
-                  <div className="px-6 py-3 bg-[var(--color-primary)]/20 flex flex-wrap items-center gap-2 border-b border-[var(--color-border,rgba(255,255,255,0.05))]">
-                    <button
-                      onClick={() => setCategoryFilter('Special Themes')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
-                        categoryFilter === 'Special Themes'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
-                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                      }`}
-                    >
-                      <Sparkle size={13} className="text-[var(--color-accent)]" />
-                      Special ({specialCount})
-                    </button>
-                    <button
-                      onClick={() => setCategoryFilter('Dark Themes')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
-                        categoryFilter === 'Dark Themes'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
-                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                      }`}
-                    >
-                      <Moon size={13} />
-                      Dark ({darkCount})
-                    </button>
-                    <button
-                      onClick={() => setCategoryFilter('Light Themes')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
-                        categoryFilter === 'Light Themes'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
-                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                      }`}
-                    >
-                      <Sun size={13} />
-                      Light ({lightCount})
-                    </button>
-                    <button
-                      onClick={() => setCategoryFilter('all')}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-                        categoryFilter === 'all'
-                          ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-bold'
-                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                      }`}
-                    >
-                      All ({THEMES_DATA.length})
-                    </button>
+                  {/* Mode Switch & Status Toolbar */}
+                  <div className="px-6 py-3.5 bg-[var(--color-primary)]/40 flex items-center justify-between border-b border-[var(--color-border)]">
+                    <div className="flex items-center gap-3.5">
+                      <ThemeSwitch 
+                        isDark={activeMode === 'dark'} 
+                        onToggle={() => {
+                          const nextMode = activeMode === 'dark' ? 'light' : 'dark';
+                          setActiveMode(nextMode);
+                          const targetTheme = THEMES_DATA.find(t => t.mode === nextMode);
+                          if (targetTheme) {
+                            setTheme(targetTheme.id);
+                          }
+                        }} 
+                      />
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-1.5">
+                          {activeMode === 'dark' ? (
+                            <Moon size={13} className="text-indigo-400" weight="fill" />
+                          ) : (
+                            <Sun size={13} className="text-amber-500" weight="fill" />
+                          )}
+                          <span className="text-xs font-bold tracking-tight text-[var(--color-text-primary)]">
+                            {activeMode === 'dark' ? 'Dark Themes' : 'Light Themes'}
+                          </span>
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] font-semibold">
+                            10
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-[var(--color-text-secondary)]">
+                          {activeMode === 'dark' 
+                            ? 'Curated IDE & Deep Focus Palettes' 
+                            : 'Fine Linen Paper, Papyrus & Daylight Workspaces'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-[10px] font-mono text-[var(--color-text-secondary)] tracking-wider uppercase hidden sm:inline-block">
+                      Day / Night Mode
+                    </span>
                   </div>
 
 
@@ -255,21 +248,25 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       const isSelected = theme === t.id;
 
                       return (
-                        <div
+                        <button
+                          type="button"
                           key={t.id}
                           onMouseEnter={() => setHoveredTheme(t)}
                           onMouseLeave={() => setHoveredTheme(null)}
-                          onClick={() => setTheme(t.id)}
-                          className={`group w-full p-3 rounded-2xl cursor-pointer transition-all duration-200 border flex items-center justify-between ${
+                          onClick={() => {
+                            setTheme(t.id);
+                            setActiveMode(t.mode);
+                          }}
+                          className={`group w-full p-3 rounded-2xl cursor-pointer transition-all duration-200 border flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                             isSelected
-                              ? 'border-[var(--color-accent,#10b981)] bg-[var(--color-accent-trans,rgba(16,185,129,0.12))] shadow-md'
-                              : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/10'
+                              ? 'border-[var(--color-accent)] bg-[var(--color-accent-trans,rgba(16,185,129,0.12))] shadow-md'
+                              : 'border-[var(--color-border)] bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)]/80 hover:border-[var(--color-accent)]/50'
                           }`}
                         >
                           <div className="flex items-center gap-4">
                             {/* Color Swatch Preview: Dual Ring & Accent Core */}
                             <div 
-                              className="relative w-8 h-8 rounded-full border border-white/20 shadow-inner flex items-center justify-center shrink-0 overflow-hidden"
+                              className="relative w-8 h-8 rounded-full border border-black/15 dark:border-white/20 shadow-inner flex items-center justify-center shrink-0 overflow-hidden"
                               style={{ backgroundColor: t.bg }}
                             >
                               {/* Left half surface, right half bg */}
@@ -279,28 +276,23 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                               />
                               {/* Accent dot center */}
                               <div 
-                                className="relative z-10 w-3.5 h-3.5 rounded-full shadow-lg ring-1 ring-white/30"
+                                className="relative z-10 w-3.5 h-3.5 rounded-full shadow-lg ring-1 ring-black/20 dark:ring-white/30"
                                 style={{ backgroundColor: t.accent }}
                               />
                             </div>
 
                             <div className="flex flex-col text-left">
                               <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm text-[var(--color-text-primary,#fff)]">
+                                <span className="font-semibold text-sm text-[var(--color-text-primary)]">
                                   {t.name}
                                 </span>
-                                {t.category === 'Special Themes' && (
-                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-mono font-bold tracking-wider">
-                                    {t.subCategory === 'Dark' ? 'SPECIAL • DARK' : 'SPECIAL • LIGHT'}
-                                  </span>
-                                )}
-                                {t.category === 'Light Themes' && (
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono">
-                                    LIGHT
+                                {t.toolInspiration && (
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] font-mono tracking-wide">
+                                    {t.toolInspiration}
                                   </span>
                                 )}
                               </div>
-                              <span className="text-xs text-[var(--color-text-secondary,#a1a1aa)]">
+                              <span className="text-xs text-[var(--color-text-secondary)]">
                                 {t.description}
                               </span>
                             </div>
@@ -327,26 +319,26 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                                 <Check weight="bold" size={14} />
                               </div>
                             ) : (
-                              <div className="w-6 h-6 rounded-full border border-white/10 group-hover:border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Check size={12} className="text-white/40" />
+                              <div className="w-6 h-6 rounded-full border border-[var(--color-border)] group-hover:border-[var(--color-accent)]/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Check size={12} className="text-[var(--color-text-secondary)]" />
                               </div>
                             )}
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
                 </div>
 
                 {/* Right: Live Interactive Theme Inspector / Preview */}
-                <div className="w-full md:w-80 bg-black/40 p-6 flex flex-col justify-between overflow-y-auto">
+                <div className="w-full md:w-80 bg-[var(--color-secondary)]/90 border-t md:border-t-0 md:border-l border-[var(--color-border)] p-6 flex flex-col justify-between overflow-y-auto">
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
+                      <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)]">
                         <Eye size={15} />
                         <span>Live Color Inspector</span>
                       </div>
-                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-white/10 text-white">
+                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)]">
                         {hoveredTheme ? 'Hover Preview' : 'Active Theme'}
                       </span>
                     </div>
@@ -476,8 +468,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     {/* Font Size Control */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold">Font Size</span>
-                        <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-[var(--color-accent,#10b981)]">
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Font Size</span>
+                        <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[var(--color-secondary)] text-[var(--color-accent)] border border-[var(--color-border)]">
                           {fontSize}px
                         </span>
                       </div>
@@ -487,7 +479,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         max="22" 
                         value={fontSize}
                         onChange={(e) => setFontSize(Number(e.target.value))}
-                        className="w-full accent-[var(--color-accent,#10b981)] cursor-pointer h-1.5 bg-neutral-700 rounded-lg appearance-none"
+                        className="w-full accent-[var(--color-accent)] cursor-pointer h-1.5 bg-[var(--color-tertiary)] border border-[var(--color-border)] rounded-lg appearance-none"
                       />
                       <div className="flex gap-2">
                         {[12, 14, 16, 18].map(size => (
@@ -496,8 +488,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             onClick={() => setFontSize(size)}
                             className={`flex-1 py-1 rounded-lg text-[10px] font-mono border transition-all ${
                               fontSize === size 
-                                ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                                : 'border-transparent bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                             }`}
                           >
                             {size}px
@@ -507,19 +499,19 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </div>
 
                     {/* Tab Size & Indentation */}
-                    <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold">Indentation (Tab Size)</span>
-                        <span className="font-mono text-xs text-neutral-400">{tabSize} Spaces</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Indentation (Tab Size)</span>
+                        <span className="font-mono text-xs text-[var(--color-text-secondary)]">{tabSize} Spaces</span>
                       </div>
-                      <p className="text-[11px] text-neutral-400">Standard indentation width for Python code blocks.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Standard indentation width for Python code blocks.</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setTabSize(2)}
                           className={`flex-1 py-1.5 rounded-xl text-xs font-medium border transition-all ${
                             tabSize === 2
-                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                              : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                              ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
                           2 Spaces (Clean)
@@ -528,8 +520,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           onClick={() => setTabSize(4)}
                           className={`flex-1 py-1.5 rounded-xl text-xs font-medium border transition-all ${
                             tabSize === 4
-                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                              : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                              ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
                           4 Spaces (PEP 8)
@@ -541,8 +533,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   {/* Line Numbers, Word Wrap, Minimap Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {/* Line Numbers */}
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-2">
-                      <span className="text-xs font-semibold block">Line Numbers</span>
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2">
+                      <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Line Numbers</span>
                       <div className="flex gap-1">
                         {(['on', 'off', 'relative'] as const).map(mode => (
                           <button
@@ -550,8 +542,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             onClick={() => setLineNumbers(mode)}
                             className={`flex-1 py-1 rounded-lg text-[10px] font-mono uppercase transition-all ${
                               lineNumbers === mode
-                                ? 'bg-[var(--color-accent,#10b981)] text-black font-bold shadow-sm'
-                                : 'bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                                ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
+                                : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border)]'
                             }`}
                           >
                             {mode}
@@ -561,15 +553,15 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </div>
 
                     {/* Word Wrap */}
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">Code Word Wrap</span>
-                        <span className="text-[10px] text-neutral-400">Soft wrap long lines</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Code Word Wrap</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Soft wrap long lines</span>
                       </div>
                       <button
                         onClick={() => setWordWrap(!wordWrap)}
                         className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          wordWrap ? 'bg-[var(--color-accent,#10b981)]' : 'bg-neutral-800'
+                          wordWrap ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${wordWrap ? 'translate-x-4.5' : 'translate-x-0'}`} />
@@ -577,15 +569,15 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </div>
 
                     {/* Minimap */}
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">Code Minimap</span>
-                        <span className="text-[10px] text-neutral-400">Bird's-eye code view</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Code Minimap</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Bird's-eye code view</span>
                       </div>
                       <button
                         onClick={() => setMinimap(!minimap)}
                         className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          minimap ? 'bg-[var(--color-accent,#10b981)]' : 'bg-neutral-800'
+                          minimap ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${minimap ? 'translate-x-4.5' : 'translate-x-0'}`} />
@@ -603,12 +595,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* WASM Heap Allocation */}
-                    <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold">WASM Heap Allocation</span>
-                        <span className="font-mono text-xs text-[var(--color-accent,#10b981)] font-bold">{wasmHeapMb} MB</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">WASM Heap Allocation</span>
+                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold">{wasmHeapMb} MB</span>
                       </div>
-                      <p className="text-[11px] text-neutral-400">Total virtual memory reserved for in-browser CPython runtime.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Total virtual memory reserved for in-browser CPython runtime.</p>
                       <div className="flex gap-2">
                         {[
                           { mb: 512, label: '512 MB (Fast)' },
@@ -620,8 +612,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             onClick={() => setWasmHeapMb(opt.mb)}
                             className={`flex-1 py-1.5 rounded-xl text-[11px] font-mono border transition-all ${
                               wasmHeapMb === opt.mb
-                                ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                                : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                             }`}
                           >
                             {opt.label}
@@ -631,19 +623,19 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </div>
 
                     {/* Execution Trigger Mode */}
-                    <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold">Execution Trigger</span>
-                        <span className="font-mono text-xs text-neutral-400">{autoRun ? 'Auto' : 'Manual'}</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Execution Trigger</span>
+                        <span className="font-mono text-xs text-[var(--color-text-secondary)]">{autoRun ? 'Auto' : 'Manual'}</span>
                       </div>
-                      <p className="text-[11px] text-neutral-400">How Python code executes in the interactive lessons.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">How Python code executes in the interactive lessons.</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setAutoRun(false)}
                           className={`flex-1 py-1.5 rounded-xl text-xs font-medium border transition-all ${
                             !autoRun
-                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                              : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                              ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
                           Manual (Ctrl+Enter)
@@ -652,8 +644,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           onClick={() => setAutoRun(true)}
                           className={`flex-1 py-1.5 rounded-xl text-xs font-medium border transition-all ${
                             autoRun
-                              ? 'bg-[var(--color-accent,#10b981)]/20 border-[var(--color-accent,#10b981)] text-[var(--color-accent,#10b981)] font-bold'
-                              : 'border-white/5 bg-[var(--color-secondary,rgba(255,255,255,0.05))] text-neutral-400 hover:text-white'
+                              ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                              : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
                           Auto-Run on Pause
@@ -664,55 +656,55 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
                   {/* Bracket Pairs & IntelliSense & Sound FX & Keybindings */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">Bracket Pairs</span>
-                        <span className="text-[10px] text-neutral-400">Colorize matching {}</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Bracket Pairs</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Colorize matching {'{}'}</span>
                       </div>
                       <button
                         onClick={() => setBracketPairs(!bracketPairs)}
                         className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          bracketPairs ? 'bg-[var(--color-accent,#10b981)]' : 'bg-neutral-800'
+                          bracketPairs ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${bracketPairs ? 'translate-x-4.5' : 'translate-x-0'}`} />
                       </button>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">IntelliSense</span>
-                        <span className="text-[10px] text-neutral-400">Live code suggestions</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">IntelliSense</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Live code suggestions</span>
                       </div>
                       <button
                         onClick={() => setCodeCompletion(!codeCompletion)}
                         className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          codeCompletion ? 'bg-[var(--color-accent,#10b981)]' : 'bg-neutral-800'
+                          codeCompletion ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${codeCompletion ? 'translate-x-4.5' : 'translate-x-0'}`} />
                       </button>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">Keybindings</span>
-                        <span className="text-[10px] text-neutral-400">{vimMode ? 'Vim Mode' : 'Standard'}</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Keybindings</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">{vimMode ? 'Vim Mode' : 'Standard'}</span>
                       </div>
                       <button
                         onClick={() => setVimMode(!vimMode)}
                         className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition-all ${
-                          vimMode ? 'bg-amber-400 text-black shadow-sm' : 'bg-neutral-800 text-neutral-400'
+                          vimMode ? 'bg-amber-400 text-black shadow-sm' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
                         }`}
                       >
                         {vimMode ? 'VIM' : 'DEFAULT'}
                       </button>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
-                        <span className="text-xs font-semibold block">Audio Feedback</span>
-                        <span className="text-[10px] text-neutral-400">Run chimes</span>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Audio Feedback</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Run chimes</span>
                       </div>
                       <button
                         onClick={() => {
@@ -734,7 +726,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           }
                         }}
                         className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          soundFx ? 'bg-[var(--color-accent,#10b981)]' : 'bg-neutral-800'
+                          soundFx ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${soundFx ? 'translate-x-4.5' : 'translate-x-0'}`} />

@@ -44,11 +44,11 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
 
   useEffect(() => {
     let timer: any;
-    if (blurtPhase === 'study' && countdown > 0) {
+    if (activeTab === 'blurting' && blurtPhase === 'study' && countdown > 0) {
       timer = setInterval(() => setCountdown(c => c - 1), 1000);
     }
     return () => clearInterval(timer);
-  }, [blurtPhase, countdown]);
+  }, [activeTab, blurtPhase, countdown]);
 
   // Feynman State
   const [selectedFeynman, setSelectedFeynman] = useState<FeynmanChallenge>(FEYNMAN_CHALLENGES[0]);

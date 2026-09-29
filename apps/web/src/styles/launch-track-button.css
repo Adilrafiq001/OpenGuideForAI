@@ -1,10 +1,10 @@
-/* Launch Track 0 Mechanical Hero Action Button — Calibrated & Proportional */
+/* Launch Track 0 Mechanical Hero Button */
 .launch-track-hero-container {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
+  height: 52px;
   vertical-align: middle;
 }
 
@@ -13,47 +13,48 @@
   --ease-elastic-2: cubic-bezier(0.5, -1, 0.3, 0.8);
   --primary: #ff8800;
   --rounded-max: 100px;
-  --rounded-min: 8px;
-  --h: 48px;
+  --rounded-min: 10px;
+  --h: 52px;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-.launch-track-hero-btn {
+.launch-track-hero-container .area-wrapper {
   position: relative;
-  display: inline-flex;
-  align-items: center;
+  padding: 0;
   cursor: pointer;
   user-select: none;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
   outline: none;
-  font: inherit;
+  border-radius: var(--rounded-max);
 }
 
-.launch-track-hero-btn:hover .wrapper {
+.launch-track-hero-container .area-wrapper:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+/* Hover lift */
+.launch-track-hero-container .area-wrapper:hover .wrapper {
   transform: translateY(0) scale(1);
 }
 
-.launch-track-hero-btn:hover .case .mask {
+.launch-track-hero-container .area-wrapper:hover .case .mask {
   box-shadow:
-    inset 6px -10px 12px -8px black,
-    inset 8px -12px 10px -10px white,
-    0 15px 35px -5px rgba(0, 0, 0, 0.8);
+    inset 8px -15px 15px -10px black,
+    inset 10px -17px 12px -12px white,
+    0 20px 50px -5px #111;
 }
 
-.launch-track-hero-btn:hover .part-2 .glass {
+.launch-track-hero-container .area-wrapper:hover .part-2 .glass {
   box-shadow:
     inset 0 0 7px -4px white,
-    inset 0 -8px 8px -6px rgba(255, 255, 255, 0.4),
-    inset 6px -12px 12px -8px black,
-    inset 6px -8px 10px -10px white,
-    0 15px 35px -5px rgba(0, 0, 0, 0.8);
+    inset 0 -10px 10px -8px rgba(255, 255, 255, 0.4),
+    inset 8px -15px 15px -10px black,
+    inset 8px -10px 12px -12px white,
+    0 20px 50px -5px #111;
 }
 
 .launch-track-hero-container svg {
@@ -61,75 +62,91 @@
 }
 
 .launch-track-hero-container .wrapper {
-  display: inline-flex;
-  align-items: center;
+  display: block;
   border-radius: var(--rounded-max);
   position: relative;
   z-index: 2;
-  transition: transform 0.4s var(--ease-elastic);
-  transform: translateY(-1px) scale(1);
+  transition: all 0.6s var(--ease-elastic);
+  transform: translateY(-2px) scale(1.01);
 }
 
-.launch-track-hero-container .button-btn {
+.launch-track-hero-container .wrapper input {
+  position: absolute;
   background: transparent;
-  display: inline-flex;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+  pointer-events: none;
+  user-select: none;
+  outline: none;
+}
+
+/* ---- BUTTON ELEMENT ---- */
+.launch-track-hero-container .button {
+  background: transparent;
+  display: flex;
   align-items: center;
   border: none;
   padding: 0;
   margin: 0;
   height: var(--h);
-  cursor: pointer;
   outline: none;
+  cursor: pointer;
 }
 
-.launch-track-hero-container .button-btn::before {
+/* Golden glow pseudo-elements (behind glass) */
+.launch-track-hero-container .button::before {
   content: "";
   top: 0;
   bottom: 0;
-  left: 20%;
-  width: 70%;
-  height: 100%;
+  left: 18%;
+  width: 78%;
+  height: 96%;
   margin: auto;
-  border-radius: 0 50% 50% 0;
+  border-radius: var(--rounded-max);
   position: absolute;
   pointer-events: none;
-  background: var(--primary);
-  background: linear-gradient(
-    to right,
+  background: radial-gradient(
+    ellipse at 50% 50%,
     var(--primary) 0%,
-    transparent 100%
+    rgba(255, 136, 0, 0.6) 45%,
+    transparent 75%
   );
   z-index: 1;
   filter: blur(20px);
   mix-blend-mode: color-dodge;
-  transition: all 0.8s ease 0.2s;
+  transition: opacity 0.4s ease;
   opacity: 0;
 }
 
-.launch-track-hero-container .button-btn::after {
+.launch-track-hero-container .button::after {
   content: "";
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   top: 0;
   bottom: 0;
-  left: 24%;
+  left: 25%;
   margin: auto;
   border-radius: 50%;
   position: absolute;
   pointer-events: none;
   background: var(--primary);
   z-index: 2;
-  filter: blur(12px);
+  filter: blur(14px);
   mix-blend-mode: color-dodge;
-  transition: all 0.8s ease 0.2s;
+  transition: opacity 0.4s ease;
   opacity: 0;
 }
 
+/* ---- PART 1: Mechanical Case + Screws ---- */
 .launch-track-hero-container .part-1 {
   position: relative;
   z-index: 1;
   height: var(--h);
-  width: 52px;
+  width: 56px;
   border-radius: var(--rounded-max) var(--rounded-min) var(--rounded-min) var(--rounded-max);
 }
 
@@ -147,13 +164,14 @@
   bottom: 0;
   right: 0;
   content: "";
-  width: 1.5px;
+  width: 1px;
   background: white;
-  box-shadow: 1px 0 8px 2px #ffa600;
+  box-shadow: 1px 0 10px 3px #ffa600;
   border-radius: 50%;
-  height: 0%;
+  height: 100%;
+  transform: scaleY(0);
   margin: auto;
-  animation: launch-btn-line 1.8s ease infinite;
+  animation: 1.8s line ease infinite;
 }
 
 .launch-track-hero-container .part-1 .screw {
@@ -164,7 +182,7 @@
   margin: auto;
   z-index: -1;
   overflow: hidden;
-  padding: 4px 0;
+  padding: 6px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +191,7 @@
 
 .launch-track-hero-container .part-1 .screw svg {
   width: auto;
-  height: 38px;
+  height: 42px;
 }
 
 .launch-track-hero-container .part-1 .screw svg g {
@@ -184,12 +202,13 @@
   color: #8e8c8b;
 }
 
+/* Case: default position is slid open (translateX(-30px)) */
 .launch-track-hero-container .part-1 .case {
   height: var(--h);
-  width: 52px;
+  width: 56px;
   border-radius: inherit;
-  transform: translateX(-26px);
-  transition: all 0.8s var(--ease-elastic);
+  transform: translateX(-30px);
+  transition: all 0.9s var(--ease-elastic);
 }
 
 .launch-track-hero-container .part-1 .case .mask {
@@ -197,29 +216,25 @@
   overflow: hidden;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    to bottom,
-    #2c2e31 0%,
-    #31343e 20%,
-    #212329 100%
-  );
+  background: linear-gradient(to bottom, #7a828e 0%, #474d58 35%, #20242b 75%, #15181c 100%);
   box-shadow:
-    inset 6px -10px 12px -8px black,
-    inset 8px -12px 10px -10px white,
-    0 15px 35px -5px rgba(0, 0, 0, 0.7);
-  transition: all 0.8s var(--ease-elastic);
+    inset 1px 1px 2px rgba(255, 255, 255, 0.45),
+    inset -1px -2px 3px rgba(0, 0, 0, 0.7),
+    0 12px 30px -5px rgba(0, 0, 0, 0.35);
+  transition: all 0.9s var(--ease-elastic);
 }
 
 .launch-track-hero-container .part-1 .case .mask::before {
   content: "";
   position: absolute;
   border-radius: inherit;
-  left: 25%;
-  top: 20%;
+  left: 20%;
+  top: 15%;
   width: 100%;
-  height: 30%;
-  background: white;
-  filter: blur(8px);
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  filter: blur(5px);
+  opacity: 0.4;
 }
 
 .launch-track-hero-container .part-1 .case .mask::after {
@@ -233,15 +248,16 @@
   mix-blend-mode: overlay;
 }
 
+/* ---- PART 2: Glass Capsule ---- */
 .launch-track-hero-container .part-2 {
   position: relative;
   height: var(--h);
-  width: 196px;
+  width: 210px;
   border-radius: var(--rounded-min) var(--rounded-max) var(--rounded-max) var(--rounded-min);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.5s ease;
+  transition: all 0.6s ease;
 }
 
 .launch-track-hero-container .part-2 .glass {
@@ -249,21 +265,21 @@
   overflow: hidden;
   height: 100%;
   width: 100%;
-  transition: all 0.8s var(--ease-elastic);
+  transition: all 0.9s var(--ease-elastic);
   border-radius: inherit;
-  border-left: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 1px solid rgba(0, 0, 0, 0.5);
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(0, 0, 0, 0.55) 100%
+    #232832 0%,
+    #161920 35%,
+    #0d0f14 70%,
+    #060709 100%
   );
   box-shadow:
-    inset 0 0 6px -3px white,
-    inset 0 -8px 8px -6px rgba(255, 255, 255, 0.35),
-    inset 6px -12px 12px -8px black,
-    inset 6px -8px 10px -10px white,
-    0 15px 35px -5px rgba(0, 0, 0, 0.8);
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.45),
+    0 12px 30px -5px rgba(0, 0, 0, 0.25);
 }
 
 .launch-track-hero-container .part-2 .glass::before {
@@ -271,12 +287,12 @@
   position: absolute;
   left: 0;
   top: 10%;
-  right: 12%;
-  height: 65%;
-  border-radius: 0 20px 0 0;
+  right: 14%;
+  height: 70%;
+  border-radius: 0 25px 0 0;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.12) 0%,
     rgba(255, 255, 255, 0) 60%
   );
 }
@@ -285,12 +301,12 @@
   content: "";
   position: absolute;
   left: 0;
-  bottom: 12%;
+  bottom: 15%;
   right: 5%;
-  height: 70%;
-  border-radius: 0 24px 24px 0;
-  box-shadow: inset -2px -5px 4px -4px rgba(255, 255, 255, 0.8);
-  filter: blur(2.5px);
+  height: 75%;
+  border-radius: 0 30px 30px 0;
+  box-shadow: inset -2px -6px 5px -5px rgba(255, 255, 255, 0.8);
+  filter: blur(3px);
 }
 
 .launch-track-hero-container .glass-reflex {
@@ -300,53 +316,28 @@
   border-radius: 0 50% 50% 0;
   background: linear-gradient(
     to right,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.18) 100%
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.2) 100%
   );
   transform: translateX(-115%) skewX(30deg);
-}
-
-.launch-track-hero-container .glass-noise {
-  position: absolute;
-  inset: 0;
-  opacity: 0.15;
-  pointer-events: none;
 }
 
 .launch-track-hero-container .path-glass {
   position: absolute;
   inset: 0;
-  height: var(--h);
-  width: 196px;
-  transition: opacity 0.5s linear;
+  transition: opacity 0.4s ease;
   opacity: 0;
+  width: 210px;
+  height: var(--h);
 }
 
 .launch-track-hero-container .path-glass path {
   stroke-dashoffset: 430;
   stroke-dasharray: 430 430;
-  animation: launch-btn-path-glass 1.4s ease infinite;
+  animation: 1.4s path-glass ease infinite;
 }
 
-@keyframes launch-btn-path-glass {
-  0% {
-    stroke-dasharray: 430 430;
-    color: #45f8f8;
-    opacity: 1;
-    filter: blur(2px);
-  }
-  50% {
-    stroke-dasharray: 860 430;
-    opacity: 1;
-    filter: blur(3px);
-  }
-  100% {
-    stroke-dasharray: 860 430;
-    color: var(--primary);
-    opacity: 0;
-  }
-}
-
+/* Filaments */
 .launch-track-hero-container .filament {
   position: absolute;
   left: 4px;
@@ -354,9 +345,9 @@
   bottom: 0;
   margin: auto;
   width: auto;
-  height: 20px;
-  stroke-width: 1.8px;
-  opacity: 0.25;
+  height: 22px;
+  stroke-width: 2px;
+  opacity: 0.3;
 }
 
 .launch-track-hero-container .filament path {
@@ -369,12 +360,12 @@
 
 .launch-track-hero-container .filament-blur {
   opacity: 0;
-  filter: blur(6px);
+  filter: blur(7px);
   color: rgb(255, 208, 0);
-  stroke-width: 7px;
+  stroke-width: 9px;
 }
 
-/* Typography Inside Glass Capsule */
+/* ---- TEXT INSIDE GLASS ---- */
 .launch-track-hero-container .content {
   position: absolute;
   inset: 0;
@@ -384,32 +375,47 @@
   pointer-events: none;
 }
 
+/* Guard against any external pseudo-element collision */
+.launch-track-hero-container .content::before,
+.launch-track-hero-container .content::after {
+  content: none !important;
+  display: none !important;
+}
+
 .launch-track-hero-container .text {
   transition: all 0.3s ease;
+  transform: translateY(-2px);
   display: flex;
   align-items: center;
   justify-content: center;
+  letter-spacing: 0.12em;
   position: absolute;
   inset: 0;
-  padding-left: 12px;
-  padding-right: 6px;
+  padding-left: 10px;
+  padding-right: 4px;
   font-family: var(--font-mono, 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace);
-  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  pointer-events: none;
 }
 
 .launch-track-hero-container .text span {
   display: inline-block;
   color: transparent;
   position: relative;
-  min-width: 7.2px;
+  min-width: 8px;
   text-align: center;
-  line-height: 1;
 }
 
+.launch-track-hero-container .text.state-1 span:nth-child(6),
+.launch-track-hero-container .text.state-1 span:nth-child(11) {
+  margin-right: 6px;
+}
+
+.launch-track-hero-container .text.state-2 span:nth-child(4),
+.launch-track-hero-container .text.state-2 span:nth-child(6) {
+  margin-right: 6px;
+}
+
+/* Both pseudo-elements render character via data-label */
 .launch-track-hero-container .text span::before,
 .launch-track-hero-container .text span::after {
   content: attr(data-label);
@@ -418,192 +424,199 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11.5px;
+  font-size: 12px;
   font-family: inherit;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
+/* ::before = animation-in target, starts hidden */
 .launch-track-hero-container .text span::before {
   opacity: 0;
   transform: translateY(-100%);
 }
 
-/* State 1: "Launch Track 0" */
-.launch-track-hero-container .text.state-1 span::after {
+/* ::after = resting visible text */
+.launch-track-hero-container .text span::after {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* State 2: "Time To Shine" */
-.launch-track-hero-container .text.state-2 span::before,
-.launch-track-hero-container .text.state-2 span::after {
-  opacity: 0;
-  color: #ffc4af;
-}
-
-/* Hover Micro-Interaction on State 1 (Idle) */
-.launch-track-hero-btn.is-idle:hover .button-btn .text.state-1 span::before {
-  animation: launch-btn-char-in 0.8s ease calc(var(--i) * 0.025s) forwards;
-}
-
-.launch-track-hero-btn.is-idle:hover .button-btn .text.state-1 span::after {
-  opacity: 0;
-  animation: launch-btn-char-out 0.8s ease calc(var(--i) * 0.025s) backwards;
-}
-
-.launch-track-hero-btn.is-idle:hover .button-btn .glass-reflex {
-  animation: launch-btn-reflex 0.6s ease;
-}
-
 /* =========================================================================
-   IDLE STATE (Default: Case Closed, Ready to Launch)
+   CHECKED STATE (Default: Case Closed, Ready to Launch)
    ========================================================================= */
-.launch-track-hero-btn.is-idle .button-btn .part-1 .case {
+
+/* Force glow OFF in checked state */
+.launch-track-hero-container .area-wrapper input:checked ~ .button::before,
+.launch-track-hero-container .area-wrapper input:checked ~ .button::after {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+}
+
+.launch-track-hero-container .area-wrapper input:checked ~ .button .path-glass {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+}
+
+/* Case slides closed */
+.launch-track-hero-container .area-wrapper input:checked ~ .button .part-1 .case {
   transform: translateX(0px);
-  transition: all 1s var(--ease-elastic-2);
+  transition: all 1.25s var(--ease-elastic-2);
 }
 
-.launch-track-hero-btn.is-idle .button-btn .part-1 .screw g {
-  animation: launch-btn-pulse-out 0.8s ease calc((5 - var(--i)) * 0.15s) backwards;
+/* Filaments OFF */
+.launch-track-hero-container .area-wrapper input:checked ~ .button .filament.filament-on,
+.launch-track-hero-container .area-wrapper input:checked ~ .button .filament.filament-blur {
+  opacity: 0 !important;
+  transition: opacity 0.4s ease;
 }
 
-.launch-track-hero-btn.is-idle .button-btn .part-1 .screw .dot {
-  animation: launch-btn-dot-out 0.7s ease calc((3 - var(--i)) * 0.15s) forwards;
+.launch-track-hero-container .area-wrapper input:checked ~ .button .filament path {
+  transition-delay: 0.6s;
 }
 
-.launch-track-hero-btn.is-idle .button-btn .text.state-1 {
-  display: flex;
-  opacity: 1;
+/* Screw animations in checked state */
+.launch-track-hero-container .area-wrapper input:checked ~ .button .part-1 .screw g {
+  animation: pulse-out 0.8s ease calc((5 - var(--i)) * 0.2s) backwards;
 }
 
-.launch-track-hero-btn.is-idle .button-btn .text.state-2 {
-  display: none;
+.launch-track-hero-container .area-wrapper input:checked ~ .button .part-1 .screw .dot {
+  animation: dot-out 0.7s ease calc((3 - var(--i)) * 0.15s) forwards;
+}
+
+/* State 2 hidden in checked state */
+.launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 span::before,
+.launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 span::after {
+  opacity: 0 !important;
+}
+
+/* ---- HOVER (checked only) ---- */
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button::before,
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button::after,
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button .path-glass {
+  opacity: 1 !important;
+}
+
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button .filament path {
+  stroke-dasharray: 100 0;
+}
+
+.launch-track-hero-container .area-wrapper:hover .button .part-1 .line {
+  opacity: 0;
+}
+
+.launch-track-hero-container .area-wrapper:hover .glass-reflex {
+  animation: reflex 0.6s ease;
+}
+
+/* Hover text bounce (checked state only) */
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button .text.state-1 span::before {
+  animation: char-in 1s ease calc(var(--i) * 0.03s) forwards;
+}
+
+.launch-track-hero-container .area-wrapper:hover input:checked ~ .button .text.state-1 span::after {
+  animation: char-out 1.3s ease calc(var(--i) * 0.04s) backwards;
 }
 
 /* =========================================================================
-   OPENING STATE (Triggered on Click: Case Opens, Filament Lights Up, State 2)
+   UNCHECKED STATE (Click: Case Opens, Filament Lights, State 2 Text)
    ========================================================================= */
-.launch-track-hero-btn.is-opening .button-btn .part-1 .case {
-  transform: translateX(-26px);
-  transition: all 1s var(--ease-elastic);
+
+/* Case slides open */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .part-1 .case {
+  transform: translateX(-30px);
+  transition: all 0.9s var(--ease-elastic);
 }
 
-.launch-track-hero-btn.is-opening .button-btn::before,
-.launch-track-hero-btn.is-opening .button-btn::after,
-.launch-track-hero-btn.is-opening .button-btn .path-glass {
-  opacity: 1;
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .part-1 .line::before {
+  box-shadow: 1px 0 10px 3px rgba(255, 220, 145, 0.4);
+  background: rgb(140, 140, 140);
 }
 
-.launch-track-hero-btn.is-opening .button-btn .filament-on {
-  opacity: 1;
+/* Screw pulse animations */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .part-1 .screw g {
+  animation: pulse 0.8s ease calc(var(--i) * 0.1s) backwards;
+}
+
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .part-1 .screw .dot {
+  animation: dot 0.7s ease calc(var(--i) * 0.15s) backwards;
+}
+
+/* Golden glow ON */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button::before,
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button::after,
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .path-glass {
+  opacity: 1 !important;
+}
+
+/* Filaments ignite */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .filament.filament-on {
+  opacity: 1 !important;
   stroke-dasharray: 100 0;
   transition: all 0.6s ease 0.2s;
 }
 
-.launch-track-hero-btn.is-opening .button-btn .filament-blur {
-  opacity: 1;
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .filament.filament-blur {
+  opacity: 1 !important;
+  transition: opacity 0.6s ease 0.2s;
 }
 
-.launch-track-hero-btn.is-opening .button-btn .part-1 .line {
-  opacity: 0;
-}
-
-.launch-track-hero-btn.is-opening .button-btn .glass-reflex {
-  animation: launch-btn-reflex 0.6s ease;
-}
-
-.launch-track-hero-btn.is-opening .button-btn .part-1 .screw g {
-  animation: launch-btn-pulse 0.8s ease calc(var(--i) * 0.1s) backwards;
-}
-
-.launch-track-hero-btn.is-opening .button-btn .part-1 .screw .dot {
-  animation: launch-btn-dot 0.7s ease calc(var(--i) * 0.15s) backwards;
-}
-
-/* State 1 transitions OUT */
-.launch-track-hero-btn.is-opening .button-btn .text.state-1 {
-  opacity: 0;
-  transition: opacity 0.4s ease 0.3s;
-}
-
-.launch-track-hero-btn.is-opening .button-btn .text.state-1 span::before,
-.launch-track-hero-btn.is-opening .button-btn .text.state-1 span::after {
+/* State 1 text fades out */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-1 span::before,
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-1 span::after {
   opacity: 0 !important;
-  animation: launch-btn-char-out 0.6s ease calc(var(--i) * 0.025s) forwards !important;
+  animation: char-out 1.3s ease calc(var(--i) * 0.04s) backwards;
 }
 
-/* State 2 ("Time To Shine") springs IN and stays glowing */
-.launch-track-hero-btn.is-opening .button-btn .text.state-2 {
-  display: flex;
-  opacity: 1;
-}
-
-.launch-track-hero-btn.is-opening .button-btn .text.state-2 span::before {
+/* State 2 "Time To Shine" springs in */
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-2 span::before {
   opacity: 1 !important;
   color: #fff;
   text-shadow: 0 0 10px #ffaa00, 0 0 20px #ff6600;
-  animation: launch-btn-char-in 0.8s ease calc(0.2s + var(--i) * 0.03s) forwards !important;
+  animation: char-in 1s ease calc(0.2s + var(--i) * 0.03s) forwards;
 }
 
-/* Keyframes */
-@keyframes launch-btn-line {
-  0% {
-    height: 0%;
-    opacity: 1;
-  }
-  50% {
-    height: 100%;
-    opacity: 1;
-  }
-  100% {
-    height: 140%;
-    opacity: 0;
-  }
+/* =========================================================================
+   KEYFRAMES
+   ========================================================================= */
+@keyframes line {
+  0% { transform: scaleY(0); opacity: 1; }
+  50% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1.3); opacity: 0; }
 }
 
-@keyframes launch-btn-dot {
-  30% {
-    color: var(--primary);
-    filter: blur(2px);
-  }
+@keyframes dot {
+  30% { color: var(--primary); filter: blur(2px); }
 }
 
-@keyframes launch-btn-dot-out {
-  40% {
-    color: white;
-    filter: blur(2px);
-  }
+@keyframes dot-out {
+  40% { color: white; filter: blur(2px); }
 }
 
-@keyframes launch-btn-pulse {
-  30% {
-    transform: scaleY(0.8);
-  }
+@keyframes pulse {
+  30% { transform: scaleY(0.8); }
 }
 
-@keyframes launch-btn-pulse-out {
-  40% {
-    transform: scaleY(0.8);
-  }
+@keyframes pulse-out {
+  40% { transform: scaleY(0.8); }
 }
 
-@keyframes launch-btn-char-in {
+@keyframes char-in {
   0% {
     opacity: 0;
-    transform: scale(2) translateY(-40%);
-    filter: blur(6px);
+    transform: scale(10) translateX(-25%);
+    filter: blur(10px);
     color: rgb(0, 251, 255);
   }
-  30% {
-    transform: translateY(-10%);
+  25% {
+    transform: translateY(-15%);
     opacity: 1;
     filter: blur(1px);
     color: var(--primary);
   }
-  60% {
-    transform: translateY(4%);
+  50% {
+    transform: translateY(7%);
     opacity: 1;
     filter: blur(0);
   }
@@ -614,51 +627,153 @@
   }
 }
 
-@keyframes launch-btn-char-out {
+@keyframes char-out {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-70%); opacity: 0; filter: blur(4px); }
+}
+
+@keyframes reflex {
+  0% { transform: translateX(-115%); }
+  100% { transform: translateX(140%); }
+}
+
+@keyframes path-glass {
   0% {
-    transform: translateY(0);
+    stroke-dasharray: 430 430;
+    color: greenyellow;
+    opacity: 1;
+  }
+  50% {
+    stroke-dasharray: 860 430;
     opacity: 1;
   }
   100% {
-    transform: translateY(-60%);
+    stroke-dasharray: 860 430;
+    color: var(--primary);
     opacity: 0;
-    filter: blur(3px);
   }
 }
 
-@keyframes launch-btn-reflex {
-  0% {
-    transform: translateX(-115%);
-  }
-  100% {
-    transform: translateX(140%);
-  }
-}
-
-/* Ambient Back Glow Behind Button */
+/* =========================================================================
+   BACKGROUND ATMOSPHERE (smooth concentric pill glow, zero rectangle halo)
+   ========================================================================= */
 .launch-track-hero-container .bg {
   position: absolute;
-  inset: -10px -20px;
+  inset: -6px;
   pointer-events: none;
   z-index: 0;
+  border-radius: var(--rounded-max);
+  background: radial-gradient(
+    ellipse at 65% 50%,
+    rgba(255, 136, 0, 0.28) 0%,
+    rgba(255, 136, 0, 0.08) 50%,
+    transparent 75%
+  );
+  filter: blur(16px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 .launch-track-hero-container .bg::before {
   content: "";
-  border-radius: 50%;
   position: absolute;
-  right: 10%;
-  top: 10%;
-  width: 50%;
-  height: 80%;
-  background-color: var(--primary);
-  filter: blur(60px);
-  opacity: 0.15;
-  transition: opacity 0.5s ease;
+  inset: 2px;
+  border-radius: var(--rounded-max);
+  background: radial-gradient(
+    ellipse at 75% 50%,
+    rgba(255, 180, 50, 0.35) 0%,
+    transparent 60%
+  );
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
-.launch-track-hero-container:hover .bg::before,
-.launch-track-hero-container:has(.is-opening) .bg::before {
-  opacity: 0.35;
-  filter: blur(50px);
+/* Ambient glow activates smoothly on hover */
+.launch-track-hero-container .area:hover .bg,
+.launch-track-hero-container .area:hover .bg::before,
+.launch-track-hero-container .area-wrapper:focus-visible ~ .bg {
+  opacity: 1;
 }
+
+/* =========================================================================
+   LIGHT THEMES CALIBRATION (Original Metallic Steel & Smoked Glass Instrument)
+   Consistent hardware aesthetic matching reference across all themes
+   ========================================================================= */
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .part-1 .case .mask {
+  background: linear-gradient(to bottom, #7a828e 0%, #474d58 35%, #20242b 75%, #15181c 100%) !important;
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.45),
+    inset -1px -2px 3px rgba(0, 0, 0, 0.7),
+    0 10px 25px -4px rgba(15, 23, 42, 0.22) !important;
+}
+
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .part-1 .case .mask::before {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%) !important;
+  filter: blur(5px) !important;
+  opacity: 0.4 !important;
+}
+
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .part-2 .glass {
+  background: linear-gradient(
+    to bottom,
+    #232832 0%,
+    #161920 35%,
+    #0d0f14 70%,
+    #060709 100%
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.5) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.45),
+    0 10px 25px -4px rgba(15, 23, 42, 0.22) !important;
+}
+
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .part-2 .glass::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0) 60%
+  ) !important;
+}
+
+/* State 1: Luminous White Typography */
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .text.state-1 span::before,
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .text.state-1 span::after {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* State 2: Luminous White-Hot Text with Amber Halo & Zero Ghosting */
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-2 span::before {
+  color: #fff !important;
+  text-shadow: 0 0 10px #ffaa00, 0 0 20px #ff6600 !important;
+}
+
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-2 span::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Filaments: Default copper wire, igniting to white-hot on click */
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .filament path {
+  stroke: #ffc4af;
+  opacity: 0.5;
+}
+
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .filament.filament-on path {
+  stroke: white;
+  opacity: 1;
+}
+
+/* Smooth Ambient Diffusion on Light Themes */
+:is([data-theme-mode="light"], [data-theme="pure-paper"], [data-theme="e-ink-papyrus"], [data-theme="claude-light"], [data-theme="linear-light"], [data-theme="notion-cream"], [data-theme="github-light"], [data-theme="swiss-modernist"], [data-theme="solarized-light"], [data-theme="nordic-fjord"], [data-theme="matcha-ceremonial"]) .launch-track-hero-container .bg {
+  background: radial-gradient(
+    ellipse at 65% 50%,
+    rgba(255, 136, 0, 0.3) 0%,
+    rgba(255, 136, 0, 0.08) 50%,
+    transparent 75%
+  ) !important;
+}
+

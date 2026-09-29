@@ -38,30 +38,88 @@ export const track0: Track = {
           title: 'Hello, World! & The CPython WASM Sandbox',
           subtitle: 'The Lingua Franca of Artificial Intelligence',
           firstPrinciplesIntuition: 'Why do we write Python instead of C++ or JavaScript for AI? Python is the universal steering wheel for AI systems: fast to write, deeply expressive, and backed by a global ecosystem. In OpenGuide, Python executes natively in your browser via WebAssembly (Pyodide)—$0 server fees and zero local setup.',
-          content: 'Run your first Python code inside the browser sandbox. The `print()` function writes text directly to the standard output stream (stdout), which our Web Worker captures and displays in the terminal.',
-          initialCode: 'print("Hello, World! Running natively in browser.")',
-          expectedOutput: 'Hello, World! Running natively in browser.',
-          hint: 'Click "Run Code" or press Ctrl+Enter to execute the code in your browser Web Worker.'
+          content: 'Initialize your browser sandbox by defining a standard greeting string and writing it to standard output (stdout). Complete the code below to pass the automated Pyodide unit test.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.1
+# Objective: Initialize Standard Output in Browser WASM Runtime
+# ============================================================
+
+# TODO: Step 1 - Define the message variable with the exact text:
+# "Hello, World! Running natively in browser."
+message = "Hello, World! Running natively in browser."
+
+# TODO: Step 2 - Use print() to write the message to stdout
+print(message)
+
+# ============================================================
+# Automated Unit Test Verification (Pyodide Test Harness)
+# ============================================================
+assert message == "Hello, World! Running natively in browser.", (
+    f"Expected 'Hello, World! Running natively in browser.', got '{message}'"
+)
+print("✓ [TEST PASSED] CPython stdout stream successfully verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] CPython stdout stream successfully verified.',
+          hint: 'Define message = "Hello, World! Running natively in browser." and call print(message).'
         },
         {
           id: 'lesson-0-1-2',
           title: 'Standard Streams & Dynamic Prompt Formatting',
           subtitle: 'Constructing Flexible Inputs for Machine Intelligence',
           firstPrinciplesIntuition: 'In production AI engineering, prompts are almost never static strings. We inject user context, retrieved document chunks, and guardrail constraints dynamically using f-strings (formatted strings).',
-          content: 'Combine variables into a dynamic AI prompt template using Python f-strings. Notice how the values are cleanly interpolated before being written to stdout.',
-          initialCode: 'topic = "Vector Embeddings"\naudience = "a beginner"\nprompt = f"Explain {topic} in one plain sentence for {audience}."\nprint(prompt)',
-          expectedOutput: 'Explain Vector Embeddings in one plain sentence for a beginner.',
-          hint: 'Ensure your f-string matches the exact variables defined above.'
+          content: 'Combine dynamic variables into an AI prompt template using Python f-strings. Complete the prompt interpolation to satisfy the automated test assertion.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.2
+# Objective: Dynamic Prompt Engineering with Python f-strings
+# ============================================================
+
+topic = "Vector Embeddings"
+audience = "a beginner"
+
+# TODO: Construct a formatted prompt using an f-string:
+# "Explain {topic} in one plain sentence for {audience}."
+prompt = f"Explain {topic} in one plain sentence for {audience}."
+
+print(prompt)
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+expected_prompt = "Explain Vector Embeddings in one plain sentence for a beginner."
+assert prompt == expected_prompt, f"Expected '{expected_prompt}', got '{prompt}'"
+print("✓ [TEST PASSED] Dynamic prompt template verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Dynamic prompt template verified.',
+          hint: 'Use prompt = f"Explain {topic} in one plain sentence for {audience}."'
         },
         {
           id: 'lesson-0-1-3',
           title: 'Web Worker Non-Blocking Execution',
           subtitle: 'Keeping the User Interface Fluid at 60 FPS',
           firstPrinciplesIntuition: 'Heavy matrix calculations and token processing take CPU time. If run on the main browser thread, the UI freezes and buttons stop clicking. That is why OpenGuide executes Python inside a dedicated Web Worker thread.',
-          content: 'Simulate processing 1,000 vector coordinates in the background. The Web Worker streams telemetry directly to the X-Ray Debug Lens without dropping a single animation frame on the main thread.',
-          initialCode: 'items_processed = 1000\nprint(f"Processed {items_processed} vector coordinates in background.")',
-          expectedOutput: 'Processed 1000 vector coordinates in background.',
-          hint: 'Inspect the X-Ray Debug Lens at the top right to view worker execution duration in milliseconds.'
+          content: 'Calculate processing metrics across a batch of 1,000 3D vector coordinates (3 coordinates each: x, y, z) without blocking the browser UI thread.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.1.3
+# Objective: Non-Blocking Web Worker Vector Telemetry
+# ============================================================
+
+# TODO: Step 1 - Set the total batch count to 1000 items
+batch_count = 1000
+
+# TODO: Step 2 - Compute total processed coordinates (each point has 3 coordinates: x, y, z)
+total_coordinates = batch_count * 3
+
+print(f"Processed {batch_count} vectors ({total_coordinates} coordinates) in Web Worker.")
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert batch_count == 1000, f"Expected batch_count to be 1000, got {batch_count}"
+assert total_coordinates == 3000, f"Expected total_coordinates to be 3000, got {total_coordinates}"
+print("✓ [TEST PASSED] Background Web Worker simulation complete.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Background Web Worker simulation complete.',
+          hint: 'Set batch_count = 1000 and total_coordinates = batch_count * 3.'
         }
       ]
     },
@@ -75,30 +133,107 @@ export const track0: Track = {
           title: 'Variables, Lists & Vector Primitives',
           subtitle: 'The Mathematical Anatomy of an Embedding',
           firstPrinciplesIntuition: 'What is an "embedding vector"? Strip away the buzzwords: it is simply a list of floating-point numbers representing coordinates in multi-dimensional space, just like GPS coordinates (latitude, longitude) represent locations on Earth.',
-          content: 'Define a 3-dimensional vector coordinate and inspect its dimensions using the built-in `len()` function.',
-          initialCode: 'vector_point = [0.24, -0.89, 0.51]\ndimensions = len(vector_point)\nprint(f"Dimensions: {dimensions} | Vector: {vector_point}")',
-          expectedOutput: 'Dimensions: 3 | Vector: [0.24, -0.89, 0.51]',
-          hint: 'Vectors in real frontier LLMs typically have 1,536 or 3,072 dimensions, but the math is identical to this 3D list.'
+          content: 'Define a 3-dimensional vector coordinate [0.24, -0.89, 0.51], calculate its Euclidean magnitude (norm), and verify its dimensions.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.1
+# Objective: Vector Coordinate Primitives & Euclidean Norm
+# ============================================================
+
+# TODO: Step 1 - Define the 3D embedding coordinate list: [0.24, -0.89, 0.51]
+vector_point = [0.24, -0.89, 0.51]
+
+# TODO: Step 2 - Compute dimensions using len()
+dimensions = len(vector_point)
+
+# TODO: Step 3 - Compute the vector magnitude (norm) = sqrt(x^2 + y^2 + z^2)
+magnitude = sum(x**2 for x in vector_point) ** 0.5
+
+print(f"Dimensions: {dimensions} | Magnitude: {round(magnitude, 4)}")
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert len(vector_point) == 3, f"Expected 3 dimensions, got {len(vector_point)}"
+assert vector_point == [0.24, -0.89, 0.51], "Vector point values do not match requirements."
+assert round(magnitude, 3) == 1.053, f"Expected magnitude ≈ 1.053, got {magnitude}"
+print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Vector primitives & geometric norm verified.',
+          hint: 'Calculate magnitude with sum(x**2 for x in vector_point) ** 0.5.'
         },
         {
           id: 'lesson-0-2-2',
           title: 'Dictionaries & Structured Message Serialization',
           subtitle: 'The Universal Language of LLM APIs',
-          firstPrinciplesIntuition: 'All frontier LLMs (Claude, GPT-4, Gemini) speak JSON over the wire. Python dictionaries map 1-to-1 to JSON objects. To communicate with any AI API, you convert dictionaries to JSON strings using `json.dumps()`.',
-          content: 'Construct a structured chat message dictionary with `role` and `content` keys, then serialize it into standard JSON format.',
-          initialCode: 'import json\n\nmessage = {\n    "role": "user",\n    "content": "What is an embedding?"\n}\n\njson_string = json.dumps(message)\nprint(json_string)',
-          expectedOutput: '{"role": "user", "content": "What is an embedding?"}',
-          hint: 'JSON requires double quotes around keys and strings. `json.dumps()` handles this automatically.'
+          firstPrinciplesIntuition: 'All frontier LLMs (Claude, GPT-4, Gemini) speak JSON over the wire. Python dictionaries map 1-to-1 to JSON objects. To communicate with any AI API, you convert dictionaries to JSON strings using json.dumps().',
+          content: 'Construct a structured chat message dictionary with role="user" and content="What is an embedding?", then serialize it into a valid JSON string.',
+          initialCode: `import json
+
+# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.2
+# Objective: Structured Chat Message Serialization
+# ============================================================
+
+# TODO: Step 1 - Construct the message dictionary with 'role' and 'content' keys
+message = {
+    "role": "user",
+    "content": "What is an embedding?"
+}
+
+# TODO: Step 2 - Serialize the message dictionary into a JSON string using json.dumps()
+json_string = json.dumps(message)
+
+print("Serialized JSON Payload:")
+print(json_string)
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+parsed = json.loads(json_string)
+assert parsed.get("role") == "user", "Message role must be 'user'"
+assert parsed.get("content") == "What is an embedding?", "Content must be 'What is an embedding?'"
+print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Structured JSON chat serialization verified.',
+          hint: 'Set message["role"] = "user" and message["content"] = "What is an embedding?".'
         },
         {
           id: 'lesson-0-2-3',
           title: 'Parsing & Validating Structured Output (Tool Calling)',
           subtitle: 'How AI Agents Choose and Execute External Tools',
-          firstPrinciplesIntuition: 'When an AI agent decides to query a database or search the web, it emits structured JSON. Your application must parse that JSON string back into a Python object using `json.loads()` and invoke the requested action.',
-          content: 'Parse a simulated LLM tool-calling payload and format a clean execution call using its extracted parameters.',
-          initialCode: 'import json\n\nraw_tool_call = \'{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}\'\nparsed = json.loads(raw_tool_call)\n\nprint(f"Calling: {parsed[\'tool\']}(query=\'{parsed[\'query\']}\', top_k={parsed[\'top_k\']})")',
-          expectedOutput: "Calling: vector_search(query='cosine similarity', top_k=3)",
-          hint: 'Use single quotes inside double-quoted f-strings to avoid syntax collisions.'
+          firstPrinciplesIntuition: 'When an AI agent decides to query a database or search the web, it emits structured JSON. Your application must parse that JSON string back into a Python object using json.loads() and invoke the requested action.',
+          content: 'Parse a simulated LLM tool-calling payload and extract its execution parameters defensively.',
+          initialCode: `import json
+
+# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.2.3
+# Objective: Defensive Parsing of AI Agent Tool Calls
+# ============================================================
+
+raw_tool_call = '{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}'
+
+# TODO: Step 1 - Parse raw_tool_call JSON into a Python dictionary using json.loads()
+call = json.loads(raw_tool_call)
+
+# TODO: Step 2 - Extract tool name, query, and top_k parameters
+tool_name = call.get("tool", "")
+query = call.get("query", "")
+top_k = call.get("top_k", 0)
+
+execution_signature = f"Calling: {tool_name}(query='{query}', top_k={top_k})"
+print(execution_signature)
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert tool_name == "vector_search", "Tool name must be 'vector_search'"
+assert query == "cosine similarity", "Query must be 'cosine similarity'"
+assert top_k == 3, "top_k must be 3"
+assert execution_signature == "Calling: vector_search(query='cosine similarity', top_k=3)"
+print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Agent tool calling dispatch verified.',
+          hint: 'Use call = json.loads(raw_tool_call) and call.get().'
         }
       ]
     },
@@ -112,30 +247,110 @@ export const track0: Track = {
           title: 'Tokenization Mechanics & Byte-Pair Encoding',
           subtitle: 'How Models Slice Human Language into Numbers',
           firstPrinciplesIntuition: 'AI models do not see words or letters. They process "tokens"—common clusters of characters learned via Byte-Pair Encoding (BPE). As a general rule of thumb in English, 1 word is approximately 1.33 tokens (or 1 token ≈ 4 characters).',
-          content: 'Estimate the token count of a sentence by analyzing its word count and applying the standard 1.33 multiplier ratio.',
-          initialCode: 'sentence = "OpenGuide makes AI engineering intuitive"\nwords = sentence.split()\nestimated_tokens = int(len(words) * 1.33)\n\nprint(f"Word count: {len(words)} | Estimated tokens: {estimated_tokens}")',
-          expectedOutput: 'Word count: 5 | Estimated tokens: 6',
-          hint: '5 words * 1.33 = 6.65, which rounds down to 6 using `int()`.'
+          content: 'Estimate the token count of a sentence using both the BPE word multiplier (1.33x) and the character length rule of thumb (1 token ≈ 4 characters).',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.1
+# Objective: Token Estimation & Byte-Pair Encoding Heuristics
+# ============================================================
+
+sentence = "OpenGuide makes AI engineering intuitive"
+
+# TODO: Step 1 - Split the sentence into words using sentence.split()
+words = sentence.split()
+
+# TODO: Step 2 - Calculate estimated tokens using int(len(words) * 1.33)
+estimated_tokens = int(len(words) * 1.33)
+
+# TODO: Step 3 - Calculate character-based estimate using round(len(sentence) / 4)
+char_tokens = round(len(sentence) / 4)
+
+print(f"Words: {len(words)} | BPE Word Est: {estimated_tokens} | Char Est: {char_tokens}")
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert len(words) == 5, f"Expected 5 words, got {len(words)}"
+assert estimated_tokens == 6, f"Expected 6 tokens (5 * 1.33 = 6.65 -> int 6), got {estimated_tokens}"
+assert char_tokens == 10, f"Expected 10 char tokens (41 chars / 4 ≈ 10), got {char_tokens}"
+print("✓ [TEST PASSED] Token estimation heuristics verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Token estimation heuristics verified.',
+          hint: 'Use sentence.split(), int(len(words) * 1.33), and round(len(sentence) / 4).'
         },
         {
           id: 'lesson-0-3-2',
           title: 'System Prompts vs User Prompts',
           subtitle: 'Role Separation & Prompt Injection Defense',
           firstPrinciplesIntuition: 'A system prompt defines the AI persona, rules, and security boundaries. The user prompt provides the dynamic question. Separating roles prevents users from overriding core instructions.',
-          content: 'Iterate through a multi-turn conversation list containing both `system` and `user` messages, printing each message with its uppercase role prefix.',
-          initialCode: 'conversation = [\n    {"role": "system", "content": "You are a concise AI teacher."},\n    {"role": "user", "content": "What is cosine similarity?"}\n]\n\nfor msg in conversation:\n    print(f"[{msg[\'role\'].upper()}]: {msg[\'content\']}")',
-          expectedOutput: "[SYSTEM]: You are a concise AI teacher.\n[USER]: What is cosine similarity?",
-          hint: 'Use `msg["role"].upper()` to display SYSTEM and USER in uppercase brackets.'
+          content: 'Format a multi-turn conversation list containing both system and user messages, rendering each turn with an uppercase role header.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.2
+# Objective: Role Separation & Prompt Injection Guardrails
+# ============================================================
+
+# TODO: Step 1 - Define a conversation with system instructions and user inquiry
+conversation = [
+    {"role": "system", "content": "You are a concise AI teacher."},
+    {"role": "user", "content": "What is cosine similarity?"}
+]
+
+# TODO: Step 2 - Format each turn as "[ROLE]: Content"
+formatted_dialogue = []
+for msg in conversation:
+    role_tag = msg["role"].upper()
+    formatted_dialogue.append(f"[{role_tag}]: {msg['content']}")
+
+rendered = "\\n".join(formatted_dialogue)
+print(rendered)
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert len(formatted_dialogue) == 2, "Conversation should have 2 turns"
+assert formatted_dialogue[0] == "[SYSTEM]: You are a concise AI teacher."
+assert formatted_dialogue[1] == "[USER]: What is cosine similarity?"
+print("✓ [TEST PASSED] Multi-turn role separation verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Multi-turn role separation verified.',
+          hint: 'Use msg["role"].upper() inside an f-string.'
         },
         {
           id: 'lesson-0-3-3',
           title: 'Temperature & Sampling Distribution Simulation',
           subtitle: 'Controlling Randomness from Greedy Argmax to High Entropy',
           firstPrinciplesIntuition: 'What does "Temperature" actually do? At T=0, the model is completely deterministic—it always picks the highest probability token (argmax). At higher temperatures, probability distributions flatten, allowing less probable tokens to be chosen for creative exploration.',
-          content: 'Write a sampling simulator that returns "deterministic" when temperature is low (< 0.3) and "creative" when temperature is high, testing both conditions.',
-          initialCode: 'def simulate_token_sampling(temperature):\n    if temperature < 0.3:\n        return "deterministic"\n    return "creative"\n\nt_low = simulate_token_sampling(0.1)\nt_high = simulate_token_sampling(0.9)\nprint(f"Low Temp: {t_low} | High Temp: {t_high}")',
-          expectedOutput: 'Low Temp: deterministic | High Temp: creative',
-          hint: 'Notice how temperature transforms the output from predictable to exploratory.'
+          content: 'Write a sampling simulator function that returns "greedy_argmax" when temperature is below 0.3, "balanced_sampling" for moderate values, and "high_entropy_creative" for high temperature.',
+          initialCode: `# ============================================================
+# OpenGuide AI Studio // Track 0 - Lab 0.3.3
+# Objective: Temperature & Sampling Distribution Simulation
+# ============================================================
+
+def simulate_token_sampling(temperature: float) -> str:
+    # TODO: Step 1 - If temperature is below 0.3, return "greedy_argmax"
+    if temperature < 0.3:
+        return "greedy_argmax"
+    # TODO: Step 2 - If temperature is between 0.3 and 0.8 (inclusive), return "balanced_sampling"
+    elif temperature <= 0.8:
+        return "balanced_sampling"
+    # TODO: Step 3 - If temperature is above 0.8, return "high_entropy_creative"
+    return "high_entropy_creative"
+
+t0 = simulate_token_sampling(0.0)
+t5 = simulate_token_sampling(0.5)
+t9 = simulate_token_sampling(0.95)
+
+print(f"T=0.0: {t0} | T=0.5: {t5} | T=0.95: {t9}")
+
+# ============================================================
+# Automated Unit Test Verification
+# ============================================================
+assert simulate_token_sampling(0.1) == "greedy_argmax", "Low temp must be greedy_argmax"
+assert simulate_token_sampling(0.7) == "balanced_sampling", "Mid temp must be balanced_sampling"
+assert simulate_token_sampling(1.2) == "high_entropy_creative", "High temp must be high_entropy_creative"
+print("✓ [TEST PASSED] Temperature distribution simulation verified.")
+`,
+          expectedOutput: '✓ [TEST PASSED] Temperature distribution simulation verified.',
+          hint: 'Return "greedy_argmax", "balanced_sampling", or "high_entropy_creative" based on temperature.'
         }
       ]
     }

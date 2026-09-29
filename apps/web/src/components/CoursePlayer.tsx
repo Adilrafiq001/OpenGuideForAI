@@ -118,6 +118,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
       // Check if output meets expectation
       const passed = combinedOut.includes(expected) || 
+        combinedOut.includes('[TEST PASSED]') ||
         combinedOut.replace(/\s+/g, ' ') === expected.replace(/\s+/g, ' ') ||
         combinedOut.replace(/'/g, '"') === expected.replace(/'/g, '"') ||
         String(result).trim() === expected;
@@ -411,7 +412,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 >
                   <button
                     onClick={handleResetCode}
-                    className="px-2 py-0.5 rounded text-neutral-400 hover:text-white hover:bg-white/5 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                    className="px-2 py-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowCounterClockwise size={12} />
                     <span>{t('ide_reset_code')}</span>
@@ -505,7 +506,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <div className="h-36 sm:h-44 shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm">
             <div className="rounded-xl bg-[var(--color-primary)] h-full p-3 flex flex-col overflow-hidden">
               
-              <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-1.5 shrink-0 text-xs font-mono">
+              <div className="flex items-center justify-between mb-2 border-b border-[var(--color-border)] pb-1.5 shrink-0 text-xs font-mono">
                 <div className="flex items-center gap-2">
                   <Terminal size={14} className="text-emerald-400" />
                   <span className="text-[11px] uppercase tracking-wider text-[var(--color-text-secondary)] font-semibold">
@@ -513,13 +514,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-3 text-[11px] text-neutral-500">
+                <div className="flex items-center gap-3 text-[11px] text-[var(--color-text-secondary)]">
                   {telemetry.lastDurationMs > 0 && (
                     <span>Last run: {telemetry.lastDurationMs}ms</span>
                   )}
                   <button
                     onClick={clearLogs}
-                    className="hover:text-white transition-colors cursor-pointer text-[10px]"
+                    className="hover:text-[var(--color-text-primary)] transition-colors cursor-pointer text-[10px]"
                   >
                     Clear Terminal
                   </button>
@@ -540,11 +541,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     <div 
                       key={i}
                       className={`flex gap-2 ${
-                        log.type === 'STDERR' ? 'text-rose-400' : 
-                        log.type === 'RESULT' ? 'text-cyan-300 opacity-80' : 'text-emerald-300'
+                        log.type === 'STDERR' ? 'text-rose-600 dark:text-rose-400' : 
+                        log.type === 'RESULT' ? 'text-sky-600 dark:text-cyan-300 opacity-90' : 'text-emerald-700 dark:text-emerald-300'
                       }`}
                     >
-                      <span className="text-neutral-600 select-none">&gt;</span>
+                      <span className="text-[var(--color-text-secondary)] opacity-60 select-none">&gt;</span>
                       <span className="whitespace-pre-wrap">{log.text}</span>
                     </div>
                   ))

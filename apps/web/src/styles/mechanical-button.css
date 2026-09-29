@@ -1,5 +1,5 @@
-/* 3D Mechanical Button - Exact ARD Physics & Mechanical Implementation */
-.area {
+/* 3D Mechanical Button - Exact ARD Physics & Mechanical Implementation (Scoped to .workspace-cta-container) */
+.workspace-cta-container .area {
   --ease: cubic-bezier(0.5, 0, 0.3, 1);
   --ease-elastic: cubic-bezier(0.5, 2, 0.3, 0.8);
   --radius: 26px;
@@ -11,7 +11,7 @@
   display: inline-block;
 }
 
-.area input {
+.workspace-cta-container .area input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -19,7 +19,7 @@
   pointer-events: none;
 }
 
-.button {
+.workspace-cta-container .button {
   outline: none;
   cursor: pointer;
   border: 0;
@@ -47,8 +47,8 @@
   letter-spacing: 1.5px;
 }
 
-.button::before,
-.button::after {
+.workspace-cta-container .button::before,
+.workspace-cta-container .button::after {
   content: "";
   border-radius: 50%;
   width: 100px;
@@ -70,21 +70,21 @@
   }
 }
 
-.button:after {
+.workspace-cta-container .button:after {
   transform: scale(0);
   animation: pulse-out 3s var(--ease-elastic) infinite;
 }
 
-.button:before,
-.area input:not(:checked) ~ .button::after {
+.workspace-cta-container .button:before,
+.workspace-cta-container .area input:not(:checked) ~ .button::after {
   opacity: 0;
 }
 
-.area input:not(:checked) ~ .button::before {
+.workspace-cta-container .area input:not(:checked) ~ .button::before {
   opacity: 1;
 }
 
-.wrap {
+.workspace-cta-container .wrap {
   border-radius: calc(var(--radius) * 0.85);
   inset: 0;
   padding: 0;
@@ -98,7 +98,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.area input:not(:checked) ~ .button .wrap {
+.workspace-cta-container .area input:not(:checked) ~ .button .wrap {
   animation: cover-open 0.9s ease forwards;
 }
 
@@ -136,7 +136,7 @@
   }
 }
 
-.reflex {
+.workspace-cta-container .reflex {
   position: absolute;
   z-index: 9;
   inset: 0;
@@ -144,7 +144,7 @@
   border-radius: inherit;
 }
 
-.reflex:before {
+.workspace-cta-container .reflex:before {
   content: "";
   position: absolute;
   width: 300px;
@@ -162,11 +162,11 @@
   transition: all 0.7s var(--ease);
 }
 
-.area:hover .reflex:before {
+.workspace-cta-container .area:hover .reflex:before {
   transform: translate(192%, 0) skew(-30deg);
 }
 
-.path {
+.workspace-cta-container .path {
   position: absolute;
   left: 50%;
   top: 87%;
@@ -179,7 +179,7 @@
   stroke-width: 2px;
 }
 
-.area input:not(:checked) ~ .button .path {
+.workspace-cta-container .area input:not(:checked) ~ .button .path {
   animation: path-out 1.2s ease forwards;
 }
 
@@ -207,7 +207,7 @@
   }
 }
 
-.wave {
+.workspace-cta-container .wave {
   position: absolute;
   margin: auto;
   transition: all 0.5s ease;
@@ -221,8 +221,8 @@
   pointer-events: none;
 }
 
-.wave::before,
-.wave::after {
+.workspace-cta-container .wave::before,
+.workspace-cta-container .wave::after {
   content: "";
   position: absolute;
   border-radius: inherit;
@@ -234,11 +234,11 @@
   animation: wave 1.5s linear infinite;
 }
 
-.wave::after {
+.workspace-cta-container .wave::after {
   animation-delay: 0.4s;
 }
 
-.area input:not(:checked) ~ .button .wave {
+.workspace-cta-container .area input:not(:checked) ~ .button .wave {
   opacity: 1;
 }
 
@@ -260,7 +260,7 @@
   }
 }
 
-.content {
+.workspace-cta-container .content {
   pointer-events: none;
   display: flex;
   align-items: center;
@@ -275,8 +275,8 @@
   border-radius: calc(var(--radius) * 0.85);
 }
 
-.content::before,
-.content::after {
+.workspace-cta-container .content::before,
+.workspace-cta-container .content::after {
   content: "";
   inset: 0px;
   position: absolute;
@@ -285,13 +285,13 @@
   z-index: -1;
 }
 
-.content::before {
+.workspace-cta-container .content::before {
   filter: blur(2px);
   top: -2px;
   background: linear-gradient(to bottom, #dde0e1 30%, #aeb2b8 90%);
 }
 
-.content::after {
+.workspace-cta-container .content::after {
   box-shadow:
     inset 0 -7px 1px 0 rgba(40, 70, 100, 0.2),
     inset 0 -4px 1px 0 rgba(40, 70, 100, 0.4),
@@ -299,7 +299,7 @@
     inset 0 -3px 0 0 white;
 }
 
-.text {
+.workspace-cta-container .text {
   transition: all 0.3s ease;
   transform: translateY(-2px);
   display: flex;
@@ -309,18 +309,18 @@
   inset: 0;
 }
 
-.text span {
+.workspace-cta-container .text span {
   display: block;
   color: transparent;
   position: relative;
 }
 
-.text.state-1 span:nth-child(3) {
+.workspace-cta-container .text.state-1 span:nth-child(3) {
   margin-right: 0px;
 }
 
-.text span::before,
-.text span::after {
+.workspace-cta-container .text span::before,
+.workspace-cta-container .text span::after {
   content: attr(data-label);
   position: absolute;
   left: 0;
@@ -328,29 +328,29 @@
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
-.text span::before {
+.workspace-cta-container .text span::before {
   opacity: 0;
   transform: translateY(-100%);
 }
 
-.text.state-2 span::before,
-.text.state-2 span::after {
+.workspace-cta-container .text.state-2 span::before,
+.workspace-cta-container .text.state-2 span::after {
   color: #6b99b0;
 }
 
-.area input:checked ~ .button .text.state-2 span {
+.workspace-cta-container .area input:checked ~ .button .text.state-2 span {
   filter: blur(5px);
 }
 
-.area:hover .text span::before {
+.workspace-cta-container .area:hover .text span::before {
   animation: char-in 0.8s ease calc(var(--i) * 0.04s) forwards;
 }
 
-.area:hover .text span::after,
-.area input:not(:checked) ~ .button .text.state-1 span::before,
-.area input:not(:checked) ~ .button .text.state-1 span::after,
-.area input:checked ~ .button .text.state-2 span::before,
-.area input:checked ~ .button .text.state-2 span::after {
+.workspace-cta-container .area:hover .text span::after,
+.workspace-cta-container .area input:not(:checked) ~ .button .text.state-1 span::before,
+.workspace-cta-container .area input:not(:checked) ~ .button .text.state-1 span::after,
+.workspace-cta-container .area input:checked ~ .button .text.state-2 span::before,
+.workspace-cta-container .area input:checked ~ .button .text.state-2 span::after {
   opacity: 0;
   animation: char-out 1.2s ease calc(var(--i) * 0.04s) backwards;
 }
@@ -398,35 +398,35 @@
   }
 }
 
-.area:hover .button {
+.workspace-cta-container .area:hover .button {
   transition:
     all 0.6s var(--ease-elastic),
     background 1s ease;
   transform: rotateX(0deg) translateY(5px);
 }
 
-.area:hover .content::before {
+.workspace-cta-container .area:hover .content::before {
   transform: scale(0.97, 0.92);
 }
 
-.area:active .button {
+.workspace-cta-container .area:active .button {
   transform: rotateX(0deg) translateY(8px);
 }
 
-.area:active .wrap {
+.workspace-cta-container .area:active .wrap {
   transform: scale(1) translate(0);
 }
 
-.area:active .wave {
+.workspace-cta-container .area:active .wave {
   opacity: 0;
 }
 
-.area:active .content::before {
+.workspace-cta-container .area:active .content::before {
   filter: blur(13px);
   transform: scaleX(0.95);
 }
 
-.sparks {
+.workspace-cta-container .sparks {
   pointer-events: none;
   position: absolute;
   margin: auto;
@@ -438,7 +438,7 @@
   opacity: 0;
 }
 
-.sparks path {
+.workspace-cta-container .sparks path {
   stroke-width: 5px;
   stroke-dasharray: 30 150;
   stroke-dashoffset: 30;
@@ -457,16 +457,16 @@
   }
 }
 
-.area input:not(:checked) ~ .button .gears,
-.area input:not(:checked) ~ .button .sparks {
+.workspace-cta-container .area input:not(:checked) ~ .button .gears,
+.workspace-cta-container .area input:not(:checked) ~ .button .sparks {
   opacity: 1;
 }
 
-.area input:not(:checked) ~ .button .sparks {
+.workspace-cta-container .area input:not(:checked) ~ .button .sparks {
   transition: all 1.5s ease;
 }
 
-.gears {
+.workspace-cta-container .gears {
   overflow: hidden;
   border-radius: inherit;
   opacity: 0;
@@ -476,7 +476,7 @@
   transition: all 1s ease;
 }
 
-.gears svg {
+.workspace-cta-container .gears svg {
   width: 80%;
   fill: #49b9c2;
   top: 50%;
@@ -485,31 +485,31 @@
   left: 43%;
 }
 
-.gears svg path {
+.workspace-cta-container .gears svg path {
   transform-origin: center;
   transform-box: fill-box;
 }
 
-.gears svg .shadow {
+.workspace-cta-container .gears svg .shadow {
   fill: rgba(36, 113, 125, 0.2);
   translate: 2px 8px;
 }
 
-.gears svg .small {
+.workspace-cta-container .gears svg .small {
   animation: spin 2.5s infinite linear;
 }
 
-.gears svg .medium {
+.workspace-cta-container .gears svg .medium {
   animation: spin reverse 3.75s infinite linear;
 }
 
-.gears svg .large {
+.workspace-cta-container .gears svg .large {
   translate: 3px -6px;
   animation: spin 5s infinite linear;
 }
 
-.gears::before,
-.gears::after {
+.workspace-cta-container .gears::before,
+.workspace-cta-container .gears::after {
   content: "";
   position: absolute;
   border-radius: 50%;
@@ -520,11 +520,11 @@
   box-shadow: inset 0px 2px rgba(0, 0, 0, 0.2);
 }
 
-.gears::before {
+.workspace-cta-container .gears::before {
   left: 12px;
 }
 
-.gears::after {
+.workspace-cta-container .gears::after {
   right: 12px;
 }
 
