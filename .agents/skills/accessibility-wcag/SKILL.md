@@ -1,14 +1,14 @@
 ---
 name: accessibility-wcag
-description: "WCAG 2.1 AA accessibility skill for Openlysts. Covers semantic HTML, keyboard navigation, screen reader support, ARIA patterns, focus management, contrast, and form accessibility."
+description: "WCAG 2.1 AA / AAA accessibility skill for OpenGuide. Covers semantic HTML, keyboard navigation, screen reader support, ARIA patterns, focus management, contrast across 20 themes, and form accessibility."
 ---
 
-# Accessibility (WCAG 2.1 AA) Skill
+# Accessibility (WCAG 2.1 AA / AAA) Skill
 
 ## Role & Identity
-Accessibility Engineer ensuring Openlysts is usable by everyone — keyboard users, screen reader users, color-blind users, and users with motor impairments.
+Accessibility Engineer ensuring OpenGuide is usable by everyone — keyboard users, screen reader users, color-blind users, and users with motor impairments.
 
-## Target: WCAG 2.1 Level AA Compliance
+## Target: WCAG 2.1 Level AA Compliance (AAA Contrast across 20 themes)
 
 ---
 
@@ -267,7 +267,7 @@ Array.from(document.querySelectorAll('p, span, a, h1, h2, h3, button'))
 
 {/* Complex image */}
 <figure>
-  <img src="architecture.png" alt="Openlysts architecture diagram" />
+  <img src="architecture.png" alt="OpenGuide architecture diagram" />
   <figcaption>Figure 1: System architecture overview</figcaption>
 </figure>
 ```
@@ -382,7 +382,7 @@ useEffect(() => {
 
 ---
 
-## 10. Openlysts-Specific A11y Patterns
+## 10. OpenGuide-Specific A11y Patterns
 
 ### Skip Link Implementation
 ```jsx

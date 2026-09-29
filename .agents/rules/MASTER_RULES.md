@@ -1,4 +1,4 @@
-﻿# Project Constraints
+# Project Constraints
 
 1. **$0 forever:** No paid services, no credit card required for learners or maintainers.
 2. **Local-first:** Progress lives in the browser (IndexedDB) by default.
@@ -48,7 +48,7 @@
 3. **Verify:** Check external dependencies, pricing, limits, and record dated sources.
 # Accessibility Standards Rule
 
-Every UI component in Openlysts MUST meet WCAG 2.1 Level AA. No exceptions.
+Every UI component in OpenGuide MUST meet WCAG 2.1 Level AA (with WCAG AAA contrast calibrated across all 20 themes). No exceptions.
 
 ---
 
@@ -280,36 +280,44 @@ the template-page and style-page passes cannot disagree.
 - Keyboard testing for all interactive elements
 # Code Conventions Rule
 
-Every code file in Openlysts MUST follow these conventions. No exceptions.
+Every code file in OpenGuide MUST follow these conventions. No exceptions.
 
 ## File Organization
 
-### JavaScript/JSX Files
-```javascript
-// 1. Imports (grouped, sorted)
-import { Router } from 'express';          // External packages
-import { db } from '../db/index.js';        // Internal modules
-import { ROLES } from '../auth/constants.js'; // Project constants
+### TypeScript/React Files (`.tsx`, `.ts`)
+```typescript
+// 1. External packages
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// 2. Constants
-const MAX_RETRIES = 3;
+// 2. Internal modules & stores
+import { useCurriculumStore } from '../store/curriculumStore';
+import { runPythonWorker } from '../workers/pyodideClient';
 
-// 3. Exported functions/classes
-export async function myFunction(req, res) { }
+// 3. Types and interfaces
+import type { Track, Lesson, ExecutionResult } from '../types/curriculum';
 
-// 4. Internal helpers
-function helperFunction() { }
+// 4. Constants
+const MAX_EXECUTION_TIMEOUT_MS = 15000;
 
-// 5. Default export (for route files)
-export default router;
+// 5. Component / Main exported function
+export const TrackBriefing: React.FC<TrackBriefingProps> = ({ trackId }) => {
+  return <div>{/* JSX */}</div>;
+};
+
+// 6. Internal helpers
+function calculateProgress(completed: number, total: number): number {
+  return total > 0 ? Math.round((completed / total) * 100) : 0;
+}
 ```
 
 ### Import Order (enforced)
-1. External packages (`express`, `react`, `zod`)
-2. Node built-ins (`crypto`, `path`, `fs`)
-3. Internal modules (`../db/`, `../auth/`, `../services/`)
-4. Constants (`../auth/constants.js`)
-5. Types (if TypeScript)
+1. External packages (`react`, `framer-motion`, `lucide-react`)
+2. Internal stores & state (`../store/`)
+3. Internal components & hooks (`../components/`, `../hooks/`)
+4. Data definitions & content (`../data/`)
+5. Types and interfaces (`../types/`)
+6. Styles and CSS imports (`../styles/`)
 
 **NEVER** mix import groups or use random ordering.
 
@@ -319,16 +327,16 @@ export default router;
 
 | Element | Convention | Example |
 |---|---|---|
-| Files (components) | PascalCase | `RepoCard.jsx`, `DiscoverPage.jsx` |
-| Files (utilities) | camelCase | `api.js`, `syncOutbox.js` |
-| Files (server routes) | camelCase | `auth.js`, `admin.js`, `entities.js` |
-| Functions | camelCase | `searchEntities()`, `hashPassword()` |
-| React Components | PascalCase | `RepoCard`, `ErrorBoundary` |
-| Constants | UPPER_SNAKE_CASE | `MAX_ATTEMPTS`, `AUDIT_ACTIONS` |
-| DB tables | PascalCase (quoted) | `"Repository"`, `"User"` |
-| DB columns | snake_case | `created_date`, `user_id` |
-| CSS classes | Tailwind utility | `className="text-sm font-bold"` |
-| CSS variables | kebab-style | `--background`, `--foreground` |
+| Files (components) | PascalCase (`.tsx`) | `HeroStudio.tsx`, `CommandDock.tsx` |
+| Files (hooks) | camelCase (`.ts`) | `useTheme.ts`, `usePyodide.ts` |
+| Files (utilities) | camelCase (`.ts`) | `pyodideClient.ts`, `offlineKnowledge.ts` |
+| Files (curriculum data) | camelCase (`.ts`) | `track0.ts`, `track1.ts` |
+| React Components | PascalCase | `HeroStudio`, `InitializeWorkspaceButton` |
+| Functions & hooks | camelCase | `runPythonCode()`, `useCurriculumStore()` |
+| Constants | UPPER_SNAKE_CASE | `MAX_TIMEOUT_MS`, `DEFAULT_THEME` |
+| IndexedDB stores | camelCase | `userProgress`, `workspaceFiles` |
+| CSS classes | Semantic + utility | `className="og-button flex items-center"` |
+| CSS variables (tokens) | kebab-case | `--color-text-primary`, `--color-secondary` |
 
 ---
 
@@ -458,132 +466,54 @@ try { await riskyOp(); } catch (e) { console.error(e); }  // GOOD
 - ESLint config (`eslint.config.js`) enforces most rules
 - `npm run lint` must pass before commit
 - `npm run lint:fix` for auto-fixable issues
-# Git Push Workflow - Openlysts
+# Git Push Workflow - OpenGuide
 
 ## Remote Setup
 
 | Remote | URL | Purpose |
 |--------|-----|---------|
-| `origin` | `https://github.com/openlysts/Openlysts.git` | **Primary repo** - production code |
+| `origin` | `https://github.com/sheenhatt/OpenGuideForAI.git` | **Primary repo** - OpenGuide production code |
 
-**No backup remote.** Only one git account, one remote.
+**Single remote:** `origin`. Active development branch: `main`.
 
-## Branch Strategy
+## Branch Strategy & Author Identity
 
-```
-experimental â†’ dev â†’ main
-     â†‘           â†‘       â†‘
-  Development  Staging  Production
-```
-
-| Branch | Purpose | Push Default |
-|--------|---------|-------------|
-| `experimental` | Feature development, active work | âœ… **Always** (default push target) |
-| `dev` | Integration testing | Only when user says "all branches" |
-| `main` | Production deploy | Only when user says "all branches" |
-
-## Push Rules - The Golden Rule
-
-### Default: Push to `experimental` ONLY
-
-When user says **"push to git"**, **"push it"**, or any generic push command:
-
-```
-git push origin experimental
-```
-
-That's it. Only `experimental`. Nothing else.
-
-### Explicit: Push to ALL branches
-
-**ONLY** when user explicitly says **"push to all branches"**, **"sync all branches"**, or **"push to main too"**:
-
-```
-# 1. Push experimental
-git push origin experimental
-
-# 2. Merge to dev
-git checkout dev
-git merge experimental --ff-only
-git push origin dev
-
-# 3. Merge to main
-git checkout main
-git merge dev --ff-only
-git push origin main
-
-# 4. Return to experimental
-git checkout experimental
-```
-
-### Push to specific branch
-
-When user says **"push to main"** or **"push to dev"**:
-
-```
-git push origin <branch-name>
-```
-
-## User Command Mapping
-
-| User Command | Action |
-|-------------|--------|
-| "Push to git" | `git push origin experimental` |
-| "Push it" | `git push origin experimental` |
-| "Push to experimental" | `git push origin experimental` |
-| "Push to all branches" | Push experimental â†’ merge+push dev â†’ merge+push main |
-| "Sync all branches" | Same as "push to all branches" |
-| "Push to main" | `git push origin main` |
-| "Push to dev" | `git push origin dev` |
+- **Active Development Branch:** `main`
+- **Commit Author & Committer:** `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`
+- **Commit Format:** Conventional Commits (`feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`)
+- **Zero AI Attribution:** NEVER include `Co-Authored-By:`, `Generated with...`, or any AI tool footers in commit messages or PRs.
 
 ## Push Protocol
 
-### Step 1: Pre-Push Checks
+### Step 1: Pre-Push Verification
 ```bash
-# Always verify before pushing
-npm run build         # Build succeeds
-npm run typecheck     # Type safety (if applicable)
-npm run lint          # Code quality (if applicable)
+# 1. Typecheck and lint pass
+npm run lint
+
+# 2. Production build succeeds
+npm run build
+
+# 3. Clean as you go: verify transient test screenshots and logs are cleaned
 ```
 
 ### Step 2: Commit with Conventional Format
-```
-<type>(<scope>): <description>
-
-Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build
-```
-
-### Step 3: Push
 ```bash
-git push origin experimental
+git add .
+git commit -m "feat(scope): descriptive change"
 ```
 
-### Step 4: If All Branches Requested
+### Step 3: Push to Origin
 ```bash
-# Merge chain: experimental â†’ dev â†’ main
-git checkout dev && git merge experimental --ff-only && git push origin dev
-git checkout main && git merge dev --ff-only && git push origin main
-git checkout experimental
+git push origin main
 ```
 
 ## Safety Rules
 
-1. **Never force push to `main`**, unless explicitly authorized
-2. **Always verify build passes** before pushing to `main`
-3. **Always run tests** before pushing to `dev`
-4. **Commit before push** - never push unstaged changes
-5. **Check branch** - confirm which branch before pushing
-6. **Default is experimental** - never push to dev/main without explicit request
-7. **No Co-Authored-By lines** - commits show only the account holder's name
-
-## Forbidden
-
-- NEVER add `Co-Authored-By: Codebuff` or any bot attribution to commits
-- NEVER add `Generated with Codebuff` or similar footers
-- NEVER push to `main` without explicit user permission
-- NEVER push to `dev` without explicit user permission
-- NEVER force push without explicit authorization
-- NEVER commit `.env`, secrets, or credentials
+1. **Always verify build passes** (`npm run build`) before pushing.
+2. **Commit before push** - never leave untracked junk or broken state.
+3. **Clean As You Go** - delete temporary test screenshots (`.playwright-mcp/`), `test-results/`, and temporary logs before commit.
+4. **No AI attribution lines** - commit author is strictly `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+5. **Never commit secrets** - no API keys, tokens, or `.env` files in git history.
 
 ## Emergency Rollback
 
@@ -593,23 +523,19 @@ git reset --soft HEAD~1
 
 # Rollback to specific commit
 git reset --hard <commit-hash>
-
-# Push rollback
-git push origin experimental --force-with-lease
 ```
+
 # Git Workflow Standards Rule
 
-Every Git operation in Openlysts MUST follow these standards. No exceptions.
+Every Git operation in OpenGuide MUST follow these standards. No exceptions.
 
 ---
 
 ## 1. Branch Strategy
 
-```
-experimental â†’ dev â†’ main
-     â†‘           â†‘       â†‘
-  Development  Staging  Production
-```
+- **Primary Branch:** `main` (active development and releases)
+- **Deployment Target:** Cloudflare Pages / Static CDN
+
 
 | Branch | Purpose | Deploy | Merge Direction |
 |---|---|---|---|
@@ -681,40 +607,19 @@ git diff --cached | grep -i "password\|secret\|token\|key" | grep -v "process.en
 
 ## 4. Deployment Protocol
 
-### Deploy to Production
-```bash
-# 1. Commit on experimental
-git add .
-git commit -m "feat/fix: description"
-git push origin experimental
-
-# 2. Sync branches
-git checkout dev
-git merge experimental --ff-only || git merge experimental
-git push origin dev
-
-git checkout main
-git merge dev --ff-only || git merge dev
-git push origin main
-
-# 3. Deploy from main
-git checkout main
-npx vercel --prod --yes --force
-
-# 4. Verify
-curl -s https://openlysts.vercel.app/api/health
-
-# 5. Return to working branch
-git checkout experimental
-```
+### Deploy Static SPA
+1. Verify production build passes (`npm run build`).
+2. Verify all Playwright MCP tests pass on local build.
+3. Clean transient test screenshots from `.playwright-mcp/` and `test-results/`.
+4. Commit changes with conventional commit format.
+5. Push to `origin main`.
+6. Cloudflare Pages automatically builds and deploys static assets.
 
 ### Rollback
 ```bash
 git checkout main
 git revert HEAD
 git push origin main
-npx vercel --prod --yes --force
-git checkout experimental
 ```
 
 ---
@@ -835,29 +740,16 @@ that touches this project MUST keep a live preview running and registered.
 
 ## Setup (per session, before any report)
 
-1. Free the ports, then boot BOTH servers from the repo root:
-   ```bash
-   PORT=3001 node server/index.js > /tmp/server-3001.log 2>&1 &   # backend (prod-mode)
-   npx vite --port 5173 --strictPort > /tmp/vite-5173.log 2>&1 &  # frontend (HMR)
-   ```
-2. Wait for `curl -s http://localhost:5173/` to return 200 (Vite can take ~10s).
-3. `register_preview` with `url: http://localhost:5173/` and `pid:` = the PID
-   listening on **5173** (find via `netstat -ano | grep :5173`). Backend PID is
-   not the preview PID.
-4. After ANY code change: verify in the preview before claiming PASS. Vite HMR
-   picks up frontend edits; **restart the backend** (`:3001`) after server-side
-   edits or your verification runs stale code.
+1. Free the ports, then 4. After ANY code change: verify in the preview before claiming PASS. Vite HMR
+   picks up frontend edits; verify the live app at `http://localhost:5173`.
 
 ## Notes
 
-- The backend must be up before UI QA: the Vite dev server proxies `/api` to :3001.
-- Freebuff restarts kill background processes, re-run setup at the start of
-  every session; never assume servers survived.
-- Physical verification (DOM/network/console) happens through the registered
-  preview, per AGENTS.md [BROWSER].
+- OpenGuide is a client-side SPA with in-browser Pyodide WASM runtime; no separate backend server required.
+- Physical verification (DOM/network/console) happens through Playwright MCP, per AGENTS.md [BROWSER].
 # Performance Budget Rule
 
-Every feature in Openlysts MUST meet these performance budgets. No exceptions.
+Every feature in OpenGuide MUST meet these performance budgets. No exceptions.
 
 ---
 
@@ -865,16 +757,15 @@ Every feature in Openlysts MUST meet these performance budgets. No exceptions.
 
 | Asset | Budget (gzipped) | Action if exceeded |
 |---|---|---|
-| Total JS | â‰¤ 300KB | Code split, remove unused deps |
-| Total CSS | â‰¤ 50KB | Purge unused Tailwind classes |
-| Initial load JS | â‰¤ 150KB | Lazy load non-critical routes |
-| Total images/page | â‰¤ 500KB | Compress, lazy load, use WebP |
-| Single JS chunk | â‰¤ 100KB | Split into smaller chunks |
+| Total JS | ≤ 350KB (excluding on-demand Pyodide wheels) | Code split, remove unused deps |
+| Total CSS | ≤ 50KB | Purge unused CSS rules |
+| Initial load JS | ≤ 150KB | Lazy load non-critical routes |
+| Total images/page | ≤ 500KB | Compress, lazy load, use WebP |
+| Single JS chunk | ≤ 100KB | Split into smaller chunks |
 
 ### Check
 ```bash
-du -sh dist/assets/*.js | sort -rh
-npx vite-bundle-visualizer
+npm run build
 ```
 
 ---
@@ -883,11 +774,11 @@ npx vite-bundle-visualizer
 
 | Metric | Target | Maximum |
 |---|---|---|
-| LCP (Largest Contentful Paint) | â‰¤ 2.5s | 4.0s |
-| INP (Interaction to Next Paint) | â‰¤ 200ms | 500ms |
-| CLS (Cumulative Layout Shift) | â‰¤ 0.1 | 0.25 |
-| FCP (First Contentful Paint) | â‰¤ 1.8s | 3.0s |
-| TTFB (Time to First Byte) | â‰¤ 800ms | 1800ms |
+| LCP (Largest Contentful Paint) | ≤ 2.5s | 4.0s |
+| INP (Interaction to Next Paint) | ≤ 200ms | 500ms |
+| CLS (Cumulative Layout Shift) | ≤ 0.1 | 0.25 |
+| FCP (First Contentful Paint) | ≤ 1.8s | 3.0s |
+| TTFB (Time to First Byte) | ≤ 800ms | 1800ms |
 
 ### Check
 ```javascript
@@ -902,32 +793,20 @@ console.log('LCP:', perf.domContentLoadedEventEnd - perf.startTime);
 
 | Metric | Budget | Action |
 |---|---|---|
-| DOM nodes per page | â‰¤ 2000 | Virtual scroll, lazy load |
-| Images per page | â‰¤ 20 | Lazy load offscreen |
-| Scripts per page | â‰¤ 5 | Bundle, code split |
-| Stylesheets per page | â‰¤ 3 | Combine, purge |
-
-### Check
-```javascript
-document.querySelectorAll('*').length  // DOM nodes
-document.querySelectorAll('img').length  // Images
-document.querySelectorAll('script[src]').length  // Scripts
-```
+| DOM nodes per page | ≤ 2000 | Virtual scroll, lazy load |
+| Images per page | ≤ 20 | Lazy load offscreen |
+| Scripts per page | ≤ 5 | Bundle, code split |
+| Stylesheets per page | ≤ 3 | Combine, purge |
 
 ---
 
-## 4. Memory Budget
+## 4. Memory & Web Worker Budget
 
 | Metric | Budget | Action |
 |---|---|---|
-| JS heap size | â‰¤ 50MB | Fix memory leaks |
-| Three.js draw calls | â‰¤ 5 | Merge geometries |
+| JS heap size | ≤ 80MB | Fix memory leaks, dispose Web Workers |
+| Web Worker watchdog timeout | ≤ 15s | Terminate infinite Python loops |
 | Event listeners | Clean on unmount | useEffect cleanup |
-
-### Check
-```javascript
-performance.memory?.usedJSHeapSize / 1024 / 1024  // MB
-```
 
 ---
 
@@ -935,9 +814,16 @@ performance.memory?.usedJSHeapSize / 1024 / 1024  // MB
 
 | Metric | Budget | Action |
 |---|---|---|
-| API calls per page load | â‰¤ 5 | Batch, prefetch |
-| Total transfer per page | â‰¤ 1MB | Compress, cache |
-| Third-party requests | â‰¤ 3 | Remove unused |
+| Paid API calls | 0 ($0 Rule) | Only user BYOK keys allow frontier calls |
+| Third-party requests | ≤ 3 | CDN assets for Pyodide and fonts only |
+
+---
+
+## 6. Enforcement
+
+- Check bundle size before every deploy
+- Monitor 60 FPS transitions and memory footprint
+- Alert if any budget is exceeded‰¤ 3 | Remove unused |
 
 ---
 
@@ -959,234 +845,74 @@ performance.memory?.usedJSHeapSize / 1024 / 1024  // MB
 - Alert if any budget is exceeded
 # Security Standards Rule
 
-Every security-sensitive code in Openlysts MUST follow these standards. No exceptions.
+Every security-sensitive feature and data flow in OpenGuide MUST follow these standards. No exceptions.
 
 ---
 
-## 1. Authentication
+## 1. BYOK (Bring Your Own Key) Security
 
-### Password Rules
-- Hash with bcrypt, minimum 12 rounds
-- Never store plaintext passwords
-- Never log password values
-- Validate strength: 8+ chars, uppercase, lowercase, number
-- Use `crypto.randomBytes(32)` for tokens (not `Math.random()`)
-
-### Token Rules
-- Hash tokens before storing (SHA-256)
-- Store raw token in DB, hash in lookup
-- Tokens must expire: verification 24h, reset 1h
-- Tokens must be single-use (mark `used = 1`)
-- Never log token values
-
-### Session Rules
-- httpOnly cookies (not accessible via JavaScript)
-- secure cookies in production (HTTPS only)
-- sameSite: 'lax' (CSRF protection)
-- Regenerate session ID on login (prevent fixation)
-- Destroy session on logout
-- Max age: 7 days
+OpenGuide operates on a strict **$0 rule** (no paid external APIs or paid backend infrastructure hosted by OpenGuide). When learners use frontier LLMs:
+- **Client-Side Only:** User API keys are stored exclusively in the client's browser (`localStorage` / `IndexedDB`).
+- **Zero Server Exfiltration:** API keys are NEVER sent to any OpenGuide server or intermediate proxy.
+- **Direct Transport:** When BYOK is enabled, network requests travel directly from the user's browser to the official provider endpoint using TLS.
+- **Key Masking:** In the UI, API keys must be masked (e.g., `sk-...xxxx`) and never logged in console or analytics.
 
 ---
 
-## 2. Secrets Management
+## 2. Web Worker & WASM Isolation (Pyodide)
 
-### Never in Code
-```bash
-# Scan for hardcoded secrets
-grep -rn "ghp_\|sk-\|password.*=\|secret.*=" --include="*.js" src/ server/ | grep -v "process.env"
-```
-
-### Environment Variables
-```javascript
-// GOOD: Read from environment
-const apiKey = process.env.GITHUB_TOKEN;
-
-// BAD: Hardcoded
-const apiKey = 'ghp_1234567890';
-```
-
-### .gitignore Rules
-```
-.env
-.env.local
-.env.*.local
-*.pem
-*.key
-```
+All user-submitted and curriculum Python code runs in-browser via Pyodide:
+- **Dedicated Web Worker:** Python execution NEVER runs on the main UI thread. It executes in an isolated Web Worker.
+- **Watchdog Timeout:** Infinite loops or blocking computations are guarded by a client-side execution watchdog (default 15 seconds) that terminates and re-spawns the worker if necessary.
+- **File System Sandboxing:** Pyodide operates within its in-memory virtual filesystem (Emscripten MEMFS), preventing unauthorized access to local client storage.
+- **Network Isolation:** Python code inside the Web Worker is restricted from making arbitrary external network calls.
 
 ---
 
-## 3. Input Validation
+## 3. Secrets Management & Zero Junk
 
-### Validate Everything
-```javascript
-// Zod schema (preferred)
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(128),
-  name: z.string().min(1).max(100),
-});
-
-// Manual validation (simple cases)
-if (!email || !password) {
-  return res.status(400).json({ error: true, message: 'Required fields missing.' });
-}
-```
-
-### Sanitize Output
-```javascript
-import DOMPurify from 'dompurify';
-
-// Sanitize markdown/HTML output
-const clean = DOMPurify.sanitize(userContent);
-```
-
-### Reject Unexpected Fields
-```javascript
-// Zod strict mode
-const schema = z.object({ name: z.string() }).strict();
-// Rejects { name: "test", evil: "payload" }
-```
+- **No Secrets in Code:** Never hardcode API keys, personal access tokens, or private endpoints.
+- **Git Hygiene:** No `.env`, `.env.local`, or secret tokens in git history.
+- **Clean As You Go:** Delete all test recordings, screenshots, and temporary traces immediately upon task completion.
 
 ---
 
-## 4. Authorization
+## 4. Input Validation & XSS Prevention
 
-### Always Check Ownership
-```javascript
-// GOOD: Verify user owns the resource
-const { rows } = await db.query(
-  'SELECT * FROM "Bookmark" WHERE id = $1 AND user_id = $2',
-  [bookmarkId, req.user.id]
-);
-if (rows.length === 0) return res.status(404).json({ error: true, message: 'Not found.' });
-
-// BAD: Trust client-provided user ID
-const { rows } = await db.query('SELECT * FROM "Bookmark" WHERE id = $1', [bookmarkId]);
-```
-
-### Admin Protection
-```javascript
-// Prevent last admin from demoting themselves
-async function checkFinalAdminProtection(userId) {
-  const { rows } = await db.query(
-    'SELECT COUNT(*) as count FROM "User" WHERE role = $1',
-    [ROLES.ADMIN]
-  );
-  if (parseInt(rows[0].count) <= 1) {
-    return { error: true, message: 'Cannot modify the last admin.' };
-  }
-  return null;
-}
-```
+- **React DOM Escaping:** Standard JSX curly-brace interpolation (`{content}`) is used to automatically escape HTML entities.
+- **DOMPurify Sanitization:** Any dynamic HTML or rendered Markdown (curriculum lessons, challenge descriptions, math formulas) MUST be passed through `DOMPurify.sanitize()` before being injected into the DOM.
+- **Strict Data Schemas:** Use TypeScript interfaces and schema validation when importing or restoring curriculum progress, workspace files, or state from IndexedDB.
 
 ---
 
-## 5. Rate Limiting
+## 5. Local Storage & IndexedDB Security
 
-### Required On
-| Endpoint | Limit | Window |
-|---|---|---|
-| Login | 5 attempts | 15 min |
-| Register | 3 attempts | 15 min |
-| Password reset request | 3 attempts | 15 min |
-| Password reset execute | 10 attempts/token | 15 min |
-| 2FA verification | 5 attempts | 15 min |
-
-### Implementation
-```javascript
-import rateLimit from 'express-rate-limit';
-
-const loginRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: { error: true, message: 'Too many attempts. Try again later.' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-```
+- **Origin Isolation:** User learning progress, custom workspace files, and preferences reside in IndexedDB scoped strictly to the OpenGuide domain origin.
+- **Data Integrity:** Gracefully handle corrupted local state; provide an in-app workspace reset trigger if database versioning or stores become inconsistent.
+- **Privacy First:** OpenGuide collects zero unauthorized telemetry or personal identifiers.
 
 ---
 
-## 6. CSRF Protection
+## 6. Content Security Policy (CSP)
 
-- SameSite cookies provide CSRF protection
-- OAuth state parameter prevents CSRF on callbacks
-- No additional CSRF tokens needed for cookie-based auth with SameSite
-
----
-
-## 7. XSS Prevention
-
-### React Auto-Escapes
-```jsx
-// React automatically escapes JSX content
-<div>{userInput}</div>  // SAFE: escapes <script> tags
-
-// DANGEROUS: Only use with trusted content
-<div dangerouslySetInnerHTML={{ __html: trustedHtml }} />
-```
-
-### Sanitize Before Rendering
-```javascript
-import DOMPurify from 'dompurify';
-const clean = DOMPurify.sanitize(userContent);
-```
+For static CDN / Cloudflare Pages hosting, configure headers:
+- `default-src 'self';`
+- `script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net;` (required for Pyodide WASM runtime)
+- `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;`
+- `font-src 'self' https://fonts.gstatic.com;`
+- `connect-src 'self' https://cdn.jsdelivr.net https://pypi.org https://files.pythonhosted.org;`
+- `object-src 'none';`
+- `frame-ancestors 'none';`
 
 ---
 
-## 8. SQL Injection Prevention
+## 7. Enforcement
 
-- ALWAYS use parameterized queries (`$1`, `$2`)
-- NEVER concatenate user input into SQL strings
-- ALWAYS double-quote table names
-- Use Zod validation before queries
+- Security review required for any code touching BYOK keys or Web Workers
+- `npm audit` must pass with 0 high/critical vulnerabilities
+- Zero secrets committed
+- $0 rule strictly verified (zero unauthorized paid backend calls)
 
----
-
-## 9. Security Headers
-
-```javascript
-import helmet from 'helmet';
-
-app.use(helmet());
-// Adds: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection,
-//        Strict-Transport-Security, Content-Security-Policy, etc.
-```
-
----
-
-## 10. Audit Logging
-
-### Log Every Security Event
-```javascript
-await logAuditEvent({
-  actorId: userId,
-  action: AUDIT_ACTIONS.USER_LOGIN,
-  ...getRequestMeta(req),
-  metadata: { provider: 'local' },
-});
-```
-
-### Events to Log
-- Login success/failure
-- Registration
-- Password change/reset
-- Session create/destroy
-- Admin user management
-- OAuth login
-- MFA setup/verify
-
----
-
-## Enforcement
-
-- Security review required for auth-related changes
-- `npm audit` must pass (0 vulnerabilities)
-- No secrets in code (grep scan)
-- All auth endpoints rate-limited
-- All queries parameterized
 # SKILL ROUTER - TASK-TO-SKILL MAP
 
 > **STATUS: PERMANENT PROJECT RULE, ALWAYS-ON.**
@@ -1322,14 +1048,13 @@ TOOL: git hooks enforce attribution and remote rules automatically
 
 ## Skills NOT to Load Unless Explicitly Asked
 
-The following skills exist in the archive but are irrelevant to OpenStencil's
-current stack (no backend, no DB, no React, no deployment, no CI/CD):
+The following skills exist in the archive but are irrelevant to OpenGuide's
+current stack (static SPA with local-first IndexedDB and in-browser Pyodide WASM, no external paid backend, no SQL database):
 
 ```
 backend-api-integration, cicd-pipeline, cost-infra-efficiency, email-smtp,
 error-resilience, feature-flags, load-testing, monitoring-observability,
-oauth-auth-flows, postgresql-db-engineering, pwa-offline-first, react-bits,
-shipping-and-launch, ask-sonner, threejs-backgrounds, shaders-effects,
+oauth-auth-flows, postgresql-db-engineering, shipping-and-launch, ask-sonner,
 pick-ui-library, write-swift, agent-browser, git-release-workflow,
 finishing-a-development-branch
 ```
@@ -1348,14 +1073,14 @@ finishing-a-development-branch
 ## Global Plugins - What to Ignore
 
 These global plugins are installed machine-wide but are **irrelevant to
-OpenStencil** (excluded via `.agents/plugins.json`). Do NOT activate their
+OpenGuide** (excluded via `.agents/plugins.json`). Do NOT activate their
 skills even if their descriptions seem to match a keyword:
 
 | Plugin | Why Irrelevant |
 |--------|---------------|
-| `data-agent-kit-plugin` | BigQuery, Dataflow, dbt, Spark, GCS, no GCP in this project |
-| `gemini-api` | Gemini API client code, no API calls in this project |
-| `google-antigravity-sdk` | AGY agent framework, no AGY agents in this project |
+| `data-agent-kit-plugin` | BigQuery, Dataflow, dbt, Spark, GCS - no GCP in this project |
+| `gemini-api` | Paid Gemini API client code - $0 rule forbids paid external APIs without user BYOK |
+| `google-antigravity-sdk` | AGY agent framework - no AGY agents in this project |
 
 These global plugins ARE relevant and may be used:
 
@@ -1370,9 +1095,9 @@ These global skills (in `~/.gemini/config/skills/`) are irrelevant:
 
 | Skill | Why |
 |-------|-----|
-| `best-qa-team` / `openlyst-qa-tester` | Openlysts project, not OpenStencil |
-| `human_QA` | Generic QA, use `human-audit` instead |
-| `vercel-optimize` | No Vercel deployment |
+| `best-qa-team` / `openlyst-qa-tester` | Replaced by OpenGuide Testing Standards (`.agents/rules/testing-standards.md`) |
+| `human_QA` | Generic QA, use Playwright MCP physical testing instead |
+| `vercel-optimize` | No Vercel deployment (targeted to Cloudflare Pages static CDN) |
 | `task-observer` | Generic task observation |
 
 ## MCP Servers - What to Ignore
@@ -1380,12 +1105,12 @@ These global skills (in `~/.gemini/config/skills/`) are irrelevant:
 | Server | Status |
 |--------|--------|
 | `gemini-api-docs` | Ignore, no Gemini API code in this project |
-| `chrome-devtools-mcp` | Use ONLY for DevTools-specific debugging, not general QA |
-| `playwright` | Available for ad-hoc use; `browser-check.mjs` is the gate |
-| `reticle` | **Primary** interactive verification tool |
+| `chrome-devtools-mcp` | Use ONLY for DevTools-specific debugging, not general browser QA |
+| `playwright` | **Primary** browser testing tool (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`) |
+
 # Testing Standards Rule
 
-Every feature in Openlysts MUST be tested before deployment. No exceptions.
+Every feature in OpenGuide MUST be tested before deployment. No exceptions.
 
 ---
 
@@ -1393,119 +1118,102 @@ Every feature in Openlysts MUST be tested before deployment. No exceptions.
 
 | Type | Tool | When |
 |---|---|---|
-| Unit tests | Node.js test runner | Business logic, utilities |
-| Integration tests | Node.js + API calls | API endpoints |
-| E2E tests | Playwright MCP | Full user flows |
-| Visual tests | Playwright screenshots | UI rendering |
-| Security tests | Manual + curl | Auth, injection, XSS |
+| Unit tests | Vitest / Node.js test runner | Business logic, utilities, curriculum parsing |
+| In-browser runtime tests | Pyodide Web Worker | Python execution, stdout/stderr, execution timeouts |
+| E2E tests | Playwright MCP | Full user journeys, theme switching, route navigation |
+| Visual & contrast tests | Playwright screenshots & DOM eval | 20 themes (10 dark, 10 light) AAA contrast verification |
+| Local storage / Offline tests | IndexedDB / ServiceWorker tests | Offline availability, progress persistence, workspace state |
+| Security tests | Manual + script validation | BYOK key isolation, Web Worker sandboxing, XSS sanitization |
 
 ---
 
 ## 2. E2E Testing Protocol
 
 ### Physical Browser Testing (MANDATORY)
-- Use Playwright MCP tools ONLY (`browser_click`, `browser_navigate`, etc.)
-- NEVER use `npx playwright test` CLI
+- Use Playwright MCP tools ONLY (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`)
 - NEVER use `browser_subagent`
-- Take screenshots after EVERY major action
+- Check DOM rendering, visual/responsive behavior, interactions, routes, buttons, and dialogs
 - Check console errors after EVERY navigation
+- Physically verify before marking tasks complete
 
-### Test Coverage Required
-| Area | Minimum Tests |
-|---|---|
-| Welcome page | 3 (load, animation, meta) |
-| Discover page | 5 (load, search, filters, pagination, error) |
-| Auth flows | 6 (register, login, logout, OAuth, 2FA, reset) |
-| Profile | 3 (load, edit, save) |
-| Settings | 3 (load, toggle, save) |
-| Admin | 3 (guard, dashboard, user mgmt) |
-| Responsive | 3 (mobile, tablet, desktop) |
-| Accessibility | 3 (keyboard, screen reader, contrast) |
-| Security | 3 (XSS, SQLi, CSRF) |
-| Error handling | 3 (API failure, offline, timeout) |
+### Test Coverage Required (OpenGuide Core Architecture)
+| Area | Minimum Tests | Focus Details |
+|---|---|---|
+| Welcome / Landing Studio | 4 | Load, Hero spatial physics/tilt, live math canvas, responsive layout |
+| Curriculum & Tracks | 5 | Track index load, Track 0/1/2 navigation, module briefings, challenge state, progress persistence |
+| In-Browser Pyodide IDE | 5 | Worker init, CPython execution, stdout/stderr capture, syntax error handling, infinite loop timeout |
+| Local-First Persistence | 3 | IndexedDB save/load, lesson completion status, reset workspace |
+| Theme System & Contrast | 5 | 20 themes (10 Dark, 10 Light), WCAG AAA contrast, semantic CSS tokens, light-theme text readability |
+| Command Dock & Controls | 4 | Dock floating/docking, theme picker, sound toggle, X-Ray lens toggle, offline copilot trigger |
+| Multi-Language i18n | 4 | Language switch (`en`, `es`, `zh`, `hi`, `fr`, `de`), English default, script-safe line heights |
+| First Principles & Modals | 4 | Modal open/close, search intuition, keyboard Escape, high-contrast text across themes |
+| Offline Copilot & 404 Duck | 4 | 404 duck animation, offline copilot query response, $0 rule compliance, 100% offline |
+| Responsive & Accessibility | 4 | Mobile (375px), Tablet (768px), Desktop (1440px), keyboard focus navigation (`:focus-visible`) |
 
 ---
 
 ## 3. Test Execution Order
 
 ```
-TC-001 â†’ TC-002 â†’ TC-003 â†’ ... â†’ TC-N
+TC-001 → TC-002 → TC-003 → ... → TC-N
 ```
 
 - NEVER skip tests
 - NEVER mark as "assumed pass"
 - ALWAYS execute sequentially
-- ALWAYS record evidence (screenshots, console logs)
+- ALWAYS record physical evidence (Playwright DOM evaluation, console logs)
 
 ---
 
 ## 4. Failure Protocol
 
 When a test fails:
-1. **Reproduce** - confirm the failure
-2. **Diagnose** - identify root cause
-3. **Fix** - implement minimal fix
-4. **Verify** - physically confirm fix works
-5. **Regression** - re-run failed test + adjacent tests
+1. **Reproduce** - confirm the failure with exact reproduction steps
+2. **Diagnose** - identify root cause in code or state
+3. **Fix** - implement minimal, surgical fix
+4. **Verify** - physically confirm fix works via Playwright MCP
+5. **Regression** - re-run failed test + affected adjacent areas
 6. **Continue** - proceed to next test
 
 NEVER suppress, skip, or ignore failures.
 
 ---
 
-## 5. API Testing
+## 5. Client Runtime & Worker Testing
 
 ```bash
-# Health check
-curl -s http://localhost:3001/api/health
+# 1. Typecheck and lint pass
+npm run lint
 
-# Search
-curl -s "http://localhost:3001/api/entities/Repository/list"
+# 2. Production build bundle validation
+npm run build
 
-# Auth (unauthorized)
-curl -s http://localhost:3001/api/admin/telemetry  # Should return 401
-
-# Auth (login)
-curl -s -X POST http://localhost:3001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"wrong"}'
+# 3. Verify Pyodide Web Worker assets load without CORS/MIME errors
+# 4. Verify Dexie / IndexedDB schema migrations and database stores
 ```
 
 ---
 
-## 6. Security Testing
+## 6. Security & Isolation Testing
 
-```bash
-# SQL Injection
-curl -s "http://localhost:3001/api/entities/Repository/filter" \
-  -X POST -H "Content-Type: application/json" \
-  -d '{"where":{"name":"'\'' OR 1=1 --"}}'
-
-# XSS
-curl -s "http://localhost:5173/search?q=<script>alert(1)</script>"
-
-# Rate limiting
-for i in $(seq 1 10); do
-  curl -s -o /dev/null -w "%{http_code}\n" \
-    -X POST http://localhost:3001/api/auth/login \
-    -H "Content-Type: application/json" \
-    -d '{"email":"test@test.com","password":"wrong","turnstileToken":"test"}'
-done
-```
+- **BYOK Isolation:** Verify user-provided API keys (if configured) reside strictly in client-side storage and are NEVER transmitted to unauthorized endpoints.
+- **Worker Sandbox:** Verify long-running or malicious Python execution in Pyodide is terminated by the worker watchdog without locking the main UI thread.
+- **XSS Prevention:** Verify all lesson Markdown rendering and dynamic user inputs are safely escaped and sanitized via DOMPurify.
+- **$0 Rule Audit:** Verify zero unexpected network calls to paid cloud backends or unauthorized external services.
 
 ---
 
 ## 7. Performance Testing
 
 ```javascript
-// DOM node count
-document.querySelectorAll('*').length  // Should be â‰¤ 2000
+// DOM node count (should remain lean)
+document.querySelectorAll('*').length  // Target: ≤ 2000
 
-// Memory after navigation
-performance.memory?.usedJSHeapSize / 1024 / 1024  // Should not grow unboundedly
+// Memory footprint after multiple track navigations
+performance.memory?.usedJSHeapSize / 1024 / 1024  // Target: No unbounded memory leaks
 
-// Load time
-performance.getEntriesByType('navigation')[0].loadEventEnd  // Should be < 3000ms
+// Navigation load timing
+performance.getEntriesByType('navigation')[0].loadEventEnd  // Target: < 2500ms
 ```
 
 ---
@@ -1515,17 +1223,25 @@ performance.getEntriesByType('navigation')[0].loadEventEnd  // Should be < 3000m
 After every test run, document:
 - Test case ID and description
 - Pass/fail status
-- Evidence (screenshot path, console output)
+- Evidence (Playwright MCP evaluation, console output)
 - Root cause for failures
 - Fix applied (if any)
-
-Store in `QA_Audit/` directory.
 
 ---
 
 ## 9. Enforcement
 
 - E2E tests must pass before deploy
-- Security tests must pass before deploy
-- Performance must be within budget
+- Security and BYOK isolation tests must pass before deploy
+- Performance must be within budget (< 2.5s load, 60 FPS transitions)
 - All failures must be fixed or documented
+
+---
+
+## 10. Clean As You Go & Project Hygiene (Mandatory)
+
+- Zero junk sitting in the project repository.
+- Transient test screenshots in `.playwright-mcp/`, test outputs in `test-results/`, and temporary debug logs MUST be immediately cleaned up once verification is completed and tests pass.
+- Never commit test screenshots, traces, or runtime dumps to version control.
+- Maintain a clean, pristine, and tidy file tree at all times.
+

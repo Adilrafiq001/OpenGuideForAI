@@ -1,22 +1,13 @@
 # Git Workflow Standards Rule
 
-Every Git operation in Openlysts MUST follow these standards. No exceptions.
+Every Git operation in OpenGuide MUST follow these standards. No exceptions.
 
 ---
 
 ## 1. Branch Strategy
 
-```
-experimental → dev → main
-     ↑           ↑       ↑
-  Development  Staging  Production
-```
-
-| Branch | Purpose | Deploy | Merge Direction |
-|---|---|---|---|
-| `experimental` | Active development | None | → dev |
-| `dev` | Staging | Vercel preview | → main |
-| `main` | Production | Vercel production | |
+- **Primary Branch:** `main` (active development and releases)
+- **Deployment Target:** Cloudflare Pages / Static CDN
 
 ---
 
@@ -34,89 +25,55 @@ experimental → dev → main
 ### Types
 | Type | When |
 |---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `chore` | Maintenance, deps, config |
+| `feat` | New feature (e.g., Track 1 curriculum, 3D mechanical button, Copilot) |
+| `fix` | Bug fix (e.g., light-theme contrast, Pyodide worker message handling) |
+| `chore` | Maintenance, dependencies, config |
 | `docs` | Documentation only |
-| `refactor` | Code restructuring (no feature change) |
-| `test` | Adding tests |
-| `style` | Formatting, no code change |
-| `perf` | Performance improvement |
-| `ci` | CI/CD changes |
-| `revert` | Reverting a commit |
+| `refactor` | Code restructuring without feature changes |
+| `test` | Adding or updating tests |
+| `style` | Formatting, CSS variables, tokens |
+| `perf` | Performance improvement (e.g., worker offload, memory optimization) |
 
 ### Examples
 ```
-feat(auth): add account lockout after 5 failed logins
-fix(discover): resolve React duplicate-copy crash in Popover
-chore(deps): remove unused lodash dependency
-docs(readme): update setup instructions
-refactor(api): extract rate limiter to shared module
+feat(curriculum): scaffold Phase 2 Track 1 Vector Space modules
+fix(theme): restore WCAG AAA contrast for text on light themes
+perf(pyodide): offload Python execution to dedicated Web Worker
+docs(roadmap): update Phase 2 progress and track checklist
 ```
 
 ### Rules
 - Use imperative mood: "add" not "added"
 - Keep subject line under 72 characters
-- Reference issue numbers when applicable: `fix(auth): resolve #123`
-- NEVER use generic messages: "update", "fix", "changes"
+- Author must be strictly `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`
+- Zero AI attribution tags or bot footers (`Co-Authored-By`, `Generated with`)
 
 ---
 
 ## 3. Pre-Commit Checklist
 
 ```bash
-# 1. Build passes
-npm run build
-
-# 2. Lint passes
+# 1. Typecheck and lint pass
 npm run lint
 
-# 3. No console.log in production code
-grep -rn "console.log" server/ src/ | grep -v "console.error\|console.warn\|if.*dev"
+# 2. Production build succeeds
+npm run build
 
-# 4. No secrets committed
-git diff --cached | grep -i "password\|secret\|token\|key" | grep -v "process.env"
+# 3. Clean as you go: zero test screenshots or junk left in repository
+# 4. Zero secrets committed (no BYOK API keys, tokens, or .env files)
 ```
 
 ---
 
 ## 4. Deployment Protocol
 
-### Deploy to Production
-```bash
-# 1. Commit on experimental
-git add .
-git commit -m "feat/fix: description"
-git push origin experimental
-
-# 2. Sync branches
-git checkout dev
-git merge experimental --ff-only || git merge experimental
-git push origin dev
-
-git checkout main
-git merge dev --ff-only || git merge dev
-git push origin main
-
-# 3. Deploy from main
-git checkout main
-npx vercel --prod --yes --force
-
-# 4. Verify
-curl -s https://openlysts.vercel.app/api/health
-
-# 5. Return to working branch
-git checkout experimental
-```
-
-### Rollback
-```bash
-git checkout main
-git revert HEAD
-git push origin main
-npx vercel --prod --yes --force
-git checkout experimental
-```
+### Deploy Static SPA
+1. Verify production build passes (`npm run build`).
+2. Verify all Playwright MCP tests pass on local build.
+3. Clean transient test screenshots from `.playwright-mcp/` and `test-results/`.
+4. Commit changes with conventional commit format.
+5. Push to `origin main`.
+6. Cloudflare Pages automatically builds and deploys static assets.
 
 ---
 

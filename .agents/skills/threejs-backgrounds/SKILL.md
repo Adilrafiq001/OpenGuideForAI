@@ -1,11 +1,11 @@
 ---
 name: threejs-backgrounds
-description: "Guidelines for safely adding, modifying, and cleaning up 3D WebGL backgrounds in Openlyst to prevent memory leaks and maintain 60FPS."
+description: "Guidelines for safely adding, modifying, and cleaning up 3D WebGL backgrounds in OpenGuide to prevent memory leaks and maintain 60FPS."
 ---
 
 # 3D Background Management Protocol
 
-Openlyst utilizes a unified Three.js background system (`src/components/openlyst/ThreeBackground.jsx`) that instantly switches between 10+ visual designs based on user settings. To ensure the application remains "super snappy," you must follow these strict WebGL guidelines.
+OpenGuide utilizes a unified Three.js background system that instantly switches between visual designs based on user settings. To ensure the application remains "super snappy," you must follow these strict WebGL guidelines.
 
 ## 1. Memory Management (Zero Leaks)
 Every time the user switches a background, the previous scene is destroyed. If you add a new background type, you MUST push all its Geometries and Materials to the cleanup arrays.

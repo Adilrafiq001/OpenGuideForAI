@@ -1,129 +1,51 @@
-# Git Push Workflow - Openlysts
+# Git Push Workflow - OpenGuide
 
 ## Remote Setup
 
 | Remote | URL | Purpose |
 |--------|-----|---------|
-| `origin` | `https://github.com/openlysts/Openlysts.git` | **Primary repo** - production code |
+| `origin` | `https://github.com/sheenhatt/OpenGuideForAI.git` | **Primary repo** - OpenGuide production code |
 
-**No backup remote.** Only one git account, one remote.
+**Single remote:** `origin`. Active development branch: `main`.
 
-## Branch Strategy
+## Branch Strategy & Author Identity
 
-```
-experimental → dev → main
-     ↑           ↑       ↑
-  Development  Staging  Production
-```
-
-| Branch | Purpose | Push Default |
-|--------|---------|-------------|
-| `experimental` | Feature development, active work | ✅ **Always** (default push target) |
-| `dev` | Integration testing | Only when user says "all branches" |
-| `main` | Production deploy | Only when user says "all branches" |
-
-## Push Rules - The Golden Rule
-
-### Default: Push to `experimental` ONLY
-
-When user says **"push to git"**, **"push it"**, or any generic push command:
-
-```
-git push origin experimental
-```
-
-That's it. Only `experimental`. Nothing else.
-
-### Explicit: Push to ALL branches
-
-**ONLY** when user explicitly says **"push to all branches"**, **"sync all branches"**, or **"push to main too"**:
-
-```
-# 1. Push experimental
-git push origin experimental
-
-# 2. Merge to dev
-git checkout dev
-git merge experimental --ff-only
-git push origin dev
-
-# 3. Merge to main
-git checkout main
-git merge dev --ff-only
-git push origin main
-
-# 4. Return to experimental
-git checkout experimental
-```
-
-### Push to specific branch
-
-When user says **"push to main"** or **"push to dev"**:
-
-```
-git push origin <branch-name>
-```
-
-## User Command Mapping
-
-| User Command | Action |
-|-------------|--------|
-| "Push to git" | `git push origin experimental` |
-| "Push it" | `git push origin experimental` |
-| "Push to experimental" | `git push origin experimental` |
-| "Push to all branches" | Push experimental → merge+push dev → merge+push main |
-| "Sync all branches" | Same as "push to all branches" |
-| "Push to main" | `git push origin main` |
-| "Push to dev" | `git push origin dev` |
+- **Active Development Branch:** `main`
+- **Commit Author & Committer:** `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`
+- **Commit Format:** Conventional Commits (`feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`)
+- **Zero AI Attribution:** NEVER include `Co-Authored-By:`, `Generated with...`, or any AI tool footers in commit messages or PRs.
 
 ## Push Protocol
 
-### Step 1: Pre-Push Checks
+### Step 1: Pre-Push Verification
 ```bash
-# Always verify before pushing
-npm run build         # Build succeeds
-npm run typecheck     # Type safety (if applicable)
-npm run lint          # Code quality (if applicable)
+# 1. Typecheck and lint pass
+npm run lint
+
+# 2. Production build succeeds
+npm run build
+
+# 3. Clean as you go: verify transient test screenshots and logs are cleaned
 ```
 
 ### Step 2: Commit with Conventional Format
-```
-<type>(<scope>): <description>
-
-Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build
-```
-
-### Step 3: Push
 ```bash
-git push origin experimental
+git add .
+git commit -m "feat(scope): descriptive change"
 ```
 
-### Step 4: If All Branches Requested
+### Step 3: Push to Origin
 ```bash
-# Merge chain: experimental → dev → main
-git checkout dev && git merge experimental --ff-only && git push origin dev
-git checkout main && git merge dev --ff-only && git push origin main
-git checkout experimental
+git push origin main
 ```
 
 ## Safety Rules
 
-1. **Never force push to `main`**, unless explicitly authorized
-2. **Always verify build passes** before pushing to `main`
-3. **Always run tests** before pushing to `dev`
-4. **Commit before push** - never push unstaged changes
-5. **Check branch** - confirm which branch before pushing
-6. **Default is experimental** - never push to dev/main without explicit request
-7. **No Co-Authored-By lines** - commits show only the account holder's name
-
-## Forbidden
-
-- NEVER add `Co-Authored-By: Codebuff` or any bot attribution to commits
-- NEVER add `Generated with Codebuff` or similar footers
-- NEVER push to `main` without explicit user permission
-- NEVER push to `dev` without explicit user permission
-- NEVER force push without explicit authorization
-- NEVER commit `.env`, secrets, or credentials
+1. **Always verify build passes** (`npm run build`) before pushing.
+2. **Commit before push** - never leave untracked junk or broken state.
+3. **Clean As You Go** - delete temporary test screenshots (`.playwright-mcp/`), `test-results/`, and temporary logs before commit.
+4. **No AI attribution lines** - commit author is strictly `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+5. **Never commit secrets** - no API keys, tokens, or `.env` files in git history.
 
 ## Emergency Rollback
 
@@ -133,7 +55,4 @@ git reset --soft HEAD~1
 
 # Rollback to specific commit
 git reset --hard <commit-hash>
-
-# Push rollback
-git push origin experimental --force-with-lease
 ```

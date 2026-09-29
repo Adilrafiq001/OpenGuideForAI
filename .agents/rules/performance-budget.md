@@ -1,6 +1,6 @@
 # Performance Budget Rule
 
-Every feature in Openlysts MUST meet these performance budgets. No exceptions.
+Every feature in OpenGuide MUST meet these performance budgets. No exceptions.
 
 ---
 
@@ -8,16 +8,15 @@ Every feature in Openlysts MUST meet these performance budgets. No exceptions.
 
 | Asset | Budget (gzipped) | Action if exceeded |
 |---|---|---|
-| Total JS | ≤ 300KB | Code split, remove unused deps |
-| Total CSS | ≤ 50KB | Purge unused Tailwind classes |
+| Total JS | ≤ 350KB (excluding on-demand Pyodide wheels) | Code split, remove unused deps |
+| Total CSS | ≤ 50KB | Purge unused CSS rules |
 | Initial load JS | ≤ 150KB | Lazy load non-critical routes |
 | Total images/page | ≤ 500KB | Compress, lazy load, use WebP |
 | Single JS chunk | ≤ 100KB | Split into smaller chunks |
 
 ### Check
 ```bash
-du -sh dist/assets/*.js | sort -rh
-npx vite-bundle-visualizer
+npm run build
 ```
 
 ---
@@ -50,27 +49,15 @@ console.log('LCP:', perf.domContentLoadedEventEnd - perf.startTime);
 | Scripts per page | ≤ 5 | Bundle, code split |
 | Stylesheets per page | ≤ 3 | Combine, purge |
 
-### Check
-```javascript
-document.querySelectorAll('*').length  // DOM nodes
-document.querySelectorAll('img').length  // Images
-document.querySelectorAll('script[src]').length  // Scripts
-```
-
 ---
 
-## 4. Memory Budget
+## 4. Memory & Web Worker Budget
 
 | Metric | Budget | Action |
 |---|---|---|
-| JS heap size | ≤ 50MB | Fix memory leaks |
-| Three.js draw calls | ≤ 5 | Merge geometries |
+| JS heap size | ≤ 80MB | Fix memory leaks, dispose Web Workers |
+| Web Worker watchdog timeout | ≤ 15s | Terminate infinite Python loops |
 | Event listeners | Clean on unmount | useEffect cleanup |
-
-### Check
-```javascript
-performance.memory?.usedJSHeapSize / 1024 / 1024  // MB
-```
 
 ---
 
@@ -78,25 +65,14 @@ performance.memory?.usedJSHeapSize / 1024 / 1024  // MB
 
 | Metric | Budget | Action |
 |---|---|---|
-| API calls per page load | ≤ 5 | Batch, prefetch |
-| Total transfer per page | ≤ 1MB | Compress, cache |
-| Third-party requests | ≤ 3 | Remove unused |
+| Paid API calls | 0 ($0 Rule) | Only user BYOK keys allow frontier calls |
+| Third-party requests | ≤ 3 | CDN assets for Pyodide and fonts only |
 
 ---
 
-## 6. Serverless Budget
-
-| Metric | Budget | Action |
-|---|---|---|
-| Function execution time | ≤ 10s (Hobby) | Optimize queries |
-| Function bundle size | ≤ 5MB | Remove heavy deps |
-| Cold start time | ≤ 2s | Keep warm with cron |
-
----
-
-## 7. Enforcement
+## 6. Enforcement
 
 - Check bundle size before every deploy
-- Monitor Core Web Vitals in production
-- Review memory usage during code review
+- Monitor 60 FPS transitions and memory footprint
 - Alert if any budget is exceeded
+

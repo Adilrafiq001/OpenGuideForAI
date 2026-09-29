@@ -133,14 +133,13 @@ TOOL: git hooks enforce attribution and remote rules automatically
 
 ## Skills NOT to Load Unless Explicitly Asked
 
-The following skills exist in the archive but are irrelevant to OpenStencil's
-current stack (no backend, no DB, no React, no deployment, no CI/CD):
+The following skills exist in the archive but are irrelevant to OpenGuide's
+current stack (static SPA with local-first IndexedDB and in-browser Pyodide WASM, no external paid backend, no SQL database):
 
 ```
 backend-api-integration, cicd-pipeline, cost-infra-efficiency, email-smtp,
 error-resilience, feature-flags, load-testing, monitoring-observability,
-oauth-auth-flows, postgresql-db-engineering, pwa-offline-first, react-bits,
-shipping-and-launch, ask-sonner, threejs-backgrounds, shaders-effects,
+oauth-auth-flows, postgresql-db-engineering, shipping-and-launch, ask-sonner,
 pick-ui-library, write-swift, agent-browser, git-release-workflow,
 finishing-a-development-branch
 ```
@@ -149,24 +148,21 @@ finishing-a-development-branch
 
 | Task | Primary Tool | Secondary Tool |
 |------|-------------|----------------|
-| Interactive page verification | **Reticle** (`act_and_wait`, `assert`) | |
-| Layout/contrast/touch measurement | **browser-check.mjs** | |
-| Regression after code changes | **Reticle** (`verify` action) | browser-check.mjs |
-| Ad-hoc page inspection | **Reticle** (`look`, `observe`) | Playwright MCP |
-| Accessibility audit | **browser-check.mjs** (5 modes) | Chrome DevTools MCP |
-| Performance measurement | **qa:perf** (shipped bytes) | |
+| Physical browser testing & DOM verification | **Playwright MCP** (`browser_navigate`, `browser_click`, `browser_evaluate`) | Chrome DevTools MCP |
+| Visual UI screenshots & contrast | **Playwright MCP** (`browser_take_screenshot`) | |
+| Accessibility & DevTools inspection | **Chrome DevTools MCP** / Playwright MCP | |
 
 ## Global Plugins - What to Ignore
 
 These global plugins are installed machine-wide but are **irrelevant to
-OpenStencil** (excluded via `.agents/plugins.json`). Do NOT activate their
+OpenGuide** (excluded via `.agents/plugins.json`). Do NOT activate their
 skills even if their descriptions seem to match a keyword:
 
 | Plugin | Why Irrelevant |
 |--------|---------------|
-| `data-agent-kit-plugin` | BigQuery, Dataflow, dbt, Spark, GCS, no GCP in this project |
-| `gemini-api` | Gemini API client code, no API calls in this project |
-| `google-antigravity-sdk` | AGY agent framework, no AGY agents in this project |
+| `data-agent-kit-plugin` | BigQuery, Dataflow, dbt, Spark, GCS - no GCP in this project |
+| `gemini-api` | Paid Gemini API client code - $0 rule forbids paid external APIs without user BYOK |
+| `google-antigravity-sdk` | AGY agent framework - no AGY agents in this project |
 
 These global plugins ARE relevant and may be used:
 
@@ -181,9 +177,9 @@ These global skills (in `~/.gemini/config/skills/`) are irrelevant:
 
 | Skill | Why |
 |-------|-----|
-| `best-qa-team` / `openlyst-qa-tester` | Openlysts project, not OpenStencil |
-| `human_QA` | Generic QA, use `human-audit` instead |
-| `vercel-optimize` | No Vercel deployment |
+| `best-qa-team` / `openlyst-qa-tester` | Replaced by OpenGuide Testing Standards (`.agents/rules/testing-standards.md`) |
+| `human_QA` | Generic QA, use Playwright MCP physical testing instead |
+| `vercel-optimize` | No Vercel deployment (targeted to Cloudflare Pages static CDN) |
 | `task-observer` | Generic task observation |
 
 ## MCP Servers - What to Ignore
@@ -191,6 +187,6 @@ These global skills (in `~/.gemini/config/skills/`) are irrelevant:
 | Server | Status |
 |--------|--------|
 | `gemini-api-docs` | Ignore, no Gemini API code in this project |
-| `chrome-devtools-mcp` | Use ONLY for DevTools-specific debugging, not general QA |
-| `playwright` | Available for ad-hoc use; `browser-check.mjs` is the gate |
-| `reticle` | **Primary** interactive verification tool |
+| `chrome-devtools-mcp` | Use ONLY for DevTools-specific debugging, not general browser QA |
+| `playwright` | **Primary** browser testing tool (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`) |
+

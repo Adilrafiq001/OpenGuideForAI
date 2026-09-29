@@ -1,230 +1,70 @@
 # Security Standards Rule
 
-Every security-sensitive code in Openlysts MUST follow these standards. No exceptions.
+Every security-sensitive feature and data flow in OpenGuide MUST follow these standards. No exceptions.
 
 ---
 
-## 1. Authentication
+## 1. BYOK (Bring Your Own Key) Security
 
-### Password Rules
-- Hash with bcrypt, minimum 12 rounds
-- Never store plaintext passwords
-- Never log password values
-- Validate strength: 8+ chars, uppercase, lowercase, number
-- Use `crypto.randomBytes(32)` for tokens (not `Math.random()`)
-
-### Token Rules
-- Hash tokens before storing (SHA-256)
-- Store raw token in DB, hash in lookup
-- Tokens must expire: verification 24h, reset 1h
-- Tokens must be single-use (mark `used = 1`)
-- Never log token values
-
-### Session Rules
-- httpOnly cookies (not accessible via JavaScript)
-- secure cookies in production (HTTPS only)
-- sameSite: 'lax' (CSRF protection)
-- Regenerate session ID on login (prevent fixation)
-- Destroy session on logout
-- Max age: 7 days
+OpenGuide operates on a strict **$0 rule** (no paid external APIs or paid backend infrastructure hosted by OpenGuide). When learners use frontier LLMs:
+- **Client-Side Only:** User API keys are stored exclusively in the client's browser (`localStorage` / `IndexedDB`).
+- **Zero Server Exfiltration:** API keys are NEVER sent to any OpenGuide server or intermediate proxy.
+- **Direct Transport:** When BYOK is enabled, network requests travel directly from the user's browser to the official provider endpoint (e.g. `api.openai.com`, `generativelanguage.googleapis.com`) using TLS.
+- **Key Masking:** In the UI, API keys must be masked (e.g., `sk-...xxxx`) and never logged in console or analytics.
 
 ---
 
-## 2. Secrets Management
+## 2. Web Worker & WASM Isolation (Pyodide)
 
-### Never in Code
-```bash
-# Scan for hardcoded secrets
-grep -rn "ghp_\|sk-\|password.*=\|secret.*=" --include="*.js" src/ server/ | grep -v "process.env"
-```
-
-### Environment Variables
-```javascript
-// GOOD: Read from environment
-const apiKey = process.env.GITHUB_TOKEN;
-
-// BAD: Hardcoded
-const apiKey = 'ghp_1234567890';
-```
-
-### .gitignore Rules
-```
-.env
-.env.local
-.env.*.local
-*.pem
-*.key
-```
+All user-submitted and curriculum Python code runs in-browser via Pyodide:
+- **Dedicated Web Worker:** Python execution NEVER runs on the main UI thread. It executes in an isolated Web Worker.
+- **Watchdog Timeout:** Infinite loops or blocking computations are guarded by a client-side execution watchdog (default 15 seconds) that terminates and re-spawns the worker if necessary.
+- **File System Sandboxing:** Pyodide operates within its in-memory virtual filesystem (Emscripten MEMFS), preventing unauthorized access to local client storage.
+- **Network Isolation:** Python code inside the Web Worker is restricted from making arbitrary external network calls.
 
 ---
 
-## 3. Input Validation
+## 3. Secrets Management & Zero Junk
 
-### Validate Everything
-```javascript
-// Zod schema (preferred)
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(128),
-  name: z.string().min(1).max(100),
-});
-
-// Manual validation (simple cases)
-if (!email || !password) {
-  return res.status(400).json({ error: true, message: 'Required fields missing.' });
-}
-```
-
-### Sanitize Output
-```javascript
-import DOMPurify from 'dompurify';
-
-// Sanitize markdown/HTML output
-const clean = DOMPurify.sanitize(userContent);
-```
-
-### Reject Unexpected Fields
-```javascript
-// Zod strict mode
-const schema = z.object({ name: z.string() }).strict();
-// Rejects { name: "test", evil: "payload" }
-```
+- **No Secrets in Code:** Never hardcode API keys, personal access tokens, or private endpoints.
+- **Git Hygiene:** No `.env`, `.env.local`, or secret tokens in git history.
+- **Pre-Commit Scan:** Ensure diffs are free from secret patterns (`sk-`, `ghp_`, tokens).
+- **Clean As You Go:** Delete all test recordings, screenshots, and temporary traces immediately upon task completion.
 
 ---
 
-## 4. Authorization
+## 4. Input Validation & XSS Prevention
 
-### Always Check Ownership
-```javascript
-// GOOD: Verify user owns the resource
-const { rows } = await db.query(
-  'SELECT * FROM "Bookmark" WHERE id = $1 AND user_id = $2',
-  [bookmarkId, req.user.id]
-);
-if (rows.length === 0) return res.status(404).json({ error: true, message: 'Not found.' });
-
-// BAD: Trust client-provided user ID
-const { rows } = await db.query('SELECT * FROM "Bookmark" WHERE id = $1', [bookmarkId]);
-```
-
-### Admin Protection
-```javascript
-// Prevent last admin from demoting themselves
-async function checkFinalAdminProtection(userId) {
-  const { rows } = await db.query(
-    'SELECT COUNT(*) as count FROM "User" WHERE role = $1',
-    [ROLES.ADMIN]
-  );
-  if (parseInt(rows[0].count) <= 1) {
-    return { error: true, message: 'Cannot modify the last admin.' };
-  }
-  return null;
-}
-```
+- **React DOM Escaping:** Standard JSX curly-brace interpolation (`{content}`) is used to automatically escape HTML entities.
+- **DOMPurify Sanitization:** Any dynamic HTML or rendered Markdown (curriculum lessons, challenge descriptions, math formulas) MUST be passed through `DOMPurify.sanitize()` before being injected into the DOM.
+- **Strict Data Schemas:** Use TypeScript interfaces and schema validation when importing or restoring curriculum progress, workspace files, or state from IndexedDB.
 
 ---
 
-## 5. Rate Limiting
+## 5. Local Storage & IndexedDB Security
 
-### Required On
-| Endpoint | Limit | Window |
-|---|---|---|
-| Login | 5 attempts | 15 min |
-| Register | 3 attempts | 15 min |
-| Password reset request | 3 attempts | 15 min |
-| Password reset execute | 10 attempts/token | 15 min |
-| 2FA verification | 5 attempts | 15 min |
-
-### Implementation
-```javascript
-import rateLimit from 'express-rate-limit';
-
-const loginRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: { error: true, message: 'Too many attempts. Try again later.' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-```
+- **Origin Isolation:** User learning progress, custom workspace files, and preferences reside in IndexedDB scoped strictly to the OpenGuide domain origin.
+- **Data Integrity:** Gracefully handle corrupted local state; provide an in-app workspace reset trigger if database versioning or stores become inconsistent.
+- **Privacy First:** OpenGuide collects zero unauthorized telemetry or personal identifiers.
 
 ---
 
-## 6. CSRF Protection
+## 6. Content Security Policy (CSP)
 
-- SameSite cookies provide CSRF protection
-- OAuth state parameter prevents CSRF on callbacks
-- No additional CSRF tokens needed for cookie-based auth with SameSite
-
----
-
-## 7. XSS Prevention
-
-### React Auto-Escapes
-```jsx
-// React automatically escapes JSX content
-<div>{userInput}</div>  // SAFE: escapes <script> tags
-
-// DANGEROUS: Only use with trusted content
-<div dangerouslySetInnerHTML={{ __html: trustedHtml }} />
-```
-
-### Sanitize Before Rendering
-```javascript
-import DOMPurify from 'dompurify';
-const clean = DOMPurify.sanitize(userContent);
-```
+For static CDN / Cloudflare Pages hosting, configure headers:
+- `default-src 'self';`
+- `script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net;` (required for Pyodide WASM runtime)
+- `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;`
+- `font-src 'self' https://fonts.gstatic.com;`
+- `connect-src 'self' https://cdn.jsdelivr.net https://pypi.org https://files.pythonhosted.org;` (for Pyodide wheels)
+- `object-src 'none';`
+- `frame-ancestors 'none';`
 
 ---
 
-## 8. SQL Injection Prevention
+## 7. Enforcement
 
-- ALWAYS use parameterized queries (`$1`, `$2`)
-- NEVER concatenate user input into SQL strings
-- ALWAYS double-quote table names
-- Use Zod validation before queries
-
----
-
-## 9. Security Headers
-
-```javascript
-import helmet from 'helmet';
-
-app.use(helmet());
-// Adds: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection,
-//        Strict-Transport-Security, Content-Security-Policy, etc.
-```
-
----
-
-## 10. Audit Logging
-
-### Log Every Security Event
-```javascript
-await logAuditEvent({
-  actorId: userId,
-  action: AUDIT_ACTIONS.USER_LOGIN,
-  ...getRequestMeta(req),
-  metadata: { provider: 'local' },
-});
-```
-
-### Events to Log
-- Login success/failure
-- Registration
-- Password change/reset
-- Session create/destroy
-- Admin user management
-- OAuth login
-- MFA setup/verify
-
----
-
-## Enforcement
-
-- Security review required for auth-related changes
-- `npm audit` must pass (0 vulnerabilities)
-- No secrets in code (grep scan)
-- All auth endpoints rate-limited
-- All queries parameterized
+- Security review required for any code touching BYOK keys or Web Workers
+- `npm audit` must pass with 0 high/critical vulnerabilities
+- Zero secrets committed
+- $0 rule strictly verified (zero unauthorized paid backend calls)

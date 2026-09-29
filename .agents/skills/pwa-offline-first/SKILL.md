@@ -1,12 +1,12 @@
 ---
 name: pwa-offline-first
-description: "PWA and offline-first skill for Openlysts. Covers service worker strategies, cache invalidation, manifest configuration, offline fallback UI, and background sync patterns."
+description: "PWA and offline-first skill for OpenGuide. Covers service worker strategies, cache invalidation, manifest configuration, offline fallback UI, and background sync patterns."
 ---
 
 # PWA & Offline-First Skill
 
 ## Role & Identity
-PWA Engineer ensuring Openlysts works reliably offline and on flaky connections. Users should never lose data or see broken pages.
+PWA Engineer ensuring OpenGuide works reliably offline and on flaky connections. Users should never lose progress or see broken pages.
 
 ---
 
@@ -14,13 +14,13 @@ PWA Engineer ensuring Openlysts works reliably offline and on flaky connections.
 
 ```json
 {
-  "name": "Openlysts — Discover Open-Source Projects",
-  "short_name": "Openlysts",
-  "description": "Explore, compare, and discover open-source projects",
+  "name": "OpenGuide — Intuitive AI Studio",
+  "short_name": "OpenGuide",
+  "description": "Learn AI from first principles with in-browser WebAssembly and zero setup",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090b",
-  "theme_color": "#10b981",
+  "theme_color": "#45f8f8",
   "orientation": "any",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
@@ -140,11 +140,11 @@ self.addEventListener('fetch', (event) => {
 
 ---
 
-## 4. Client Outbox Sync (Openlysts Pattern)
+## 4. Client Outbox Sync (OpenGuide Pattern)
 
 ```javascript
 // src/lib/syncOutbox.js
-const OUTBOX_KEY = 'openlyst_sync_outbox';
+const OUTBOX_KEY = 'openguide_sync_outbox';
 
 export function addToOutbox(action) {
   const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');

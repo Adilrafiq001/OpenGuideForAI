@@ -1,35 +1,44 @@
 # Code Conventions Rule
 
-Every code file in Openlysts MUST follow these conventions. No exceptions.
+Every code file in OpenGuide MUST follow these conventions. No exceptions.
 
 ## File Organization
 
-### JavaScript/JSX Files
-```javascript
-// 1. Imports (grouped, sorted)
-import { Router } from 'express';          // External packages
-import { db } from '../db/index.js';        // Internal modules
-import { ROLES } from '../auth/constants.js'; // Project constants
+### TypeScript/React Files (`.tsx`, `.ts`)
+```typescript
+// 1. External packages
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// 2. Constants
-const MAX_RETRIES = 3;
+// 2. Internal modules & stores
+import { useCurriculumStore } from '../store/curriculumStore';
+import { runPythonWorker } from '../workers/pyodideClient';
 
-// 3. Exported functions/classes
-export async function myFunction(req, res) { }
+// 3. Types and interfaces
+import type { Track, Lesson, ExecutionResult } from '../types/curriculum';
 
-// 4. Internal helpers
-function helperFunction() { }
+// 4. Constants
+const MAX_EXECUTION_TIMEOUT_MS = 15000;
 
-// 5. Default export (for route files)
-export default router;
+// 5. Component / Main exported function
+export const TrackBriefing: React.FC<TrackBriefingProps> = ({ trackId }) => {
+  // Hook logic
+  return <div>{/* JSX */}</div>;
+};
+
+// 6. Internal helpers
+function calculateProgress(completed: number, total: number): number {
+  return total > 0 ? Math.round((completed / total) * 100) : 0;
+}
 ```
 
 ### Import Order (enforced)
-1. External packages (`express`, `react`, `zod`)
-2. Node built-ins (`crypto`, `path`, `fs`)
-3. Internal modules (`../db/`, `../auth/`, `../services/`)
-4. Constants (`../auth/constants.js`)
-5. Types (if TypeScript)
+1. External packages (`react`, `framer-motion`, `lucide-react`)
+2. Internal stores & state (`../store/`)
+3. Internal components & hooks (`../components/`, `../hooks/`)
+4. Data definitions & content (`../data/`)
+5. Types and interfaces (`../types/`)
+6. Styles and CSS imports (`../styles/`)
 
 **NEVER** mix import groups or use random ordering.
 
@@ -39,56 +48,54 @@ export default router;
 
 | Element | Convention | Example |
 |---|---|---|
-| Files (components) | PascalCase | `RepoCard.jsx`, `DiscoverPage.jsx` |
-| Files (utilities) | camelCase | `api.js`, `syncOutbox.js` |
-| Files (server routes) | camelCase | `auth.js`, `admin.js`, `entities.js` |
-| Functions | camelCase | `searchEntities()`, `hashPassword()` |
-| React Components | PascalCase | `RepoCard`, `ErrorBoundary` |
-| Constants | UPPER_SNAKE_CASE | `MAX_ATTEMPTS`, `AUDIT_ACTIONS` |
-| DB tables | PascalCase (quoted) | `"Repository"`, `"User"` |
-| DB columns | snake_case | `created_date`, `user_id` |
-| CSS classes | Tailwind utility | `className="text-sm font-bold"` |
-| CSS variables | kebab-style | `--background`, `--foreground` |
+| Files (components) | PascalCase (`.tsx`) | `HeroStudio.tsx`, `CommandDock.tsx` |
+| Files (hooks) | camelCase (`.ts`) | `useTheme.ts`, `usePyodide.ts` |
+| Files (utilities) | camelCase (`.ts`) | `pyodideClient.ts`, `offlineKnowledge.ts` |
+| Files (curriculum data) | camelCase (`.ts`) | `track0.ts`, `track1.ts` |
+| React Components | PascalCase | `HeroStudio`, `InitializeWorkspaceButton` |
+| Functions & hooks | camelCase | `runPythonCode()`, `useCurriculumStore()` |
+| Constants | UPPER_SNAKE_CASE | `MAX_TIMEOUT_MS`, `DEFAULT_THEME` |
+| IndexedDB stores | camelCase | `userProgress`, `workspaceFiles` |
+| CSS classes | Semantic + utility | `className="og-button flex items-center"` |
+| CSS variables (tokens) | kebab-case | `--color-text-primary`, `--color-secondary` |
 
 ---
 
 ## Comment Standards
 
 ### When to Comment
-```javascript
+```typescript
 // GOOD: Explain WHY, not WHAT
-// Neon serverless requires small pool sizes to avoid connection limits
-const pool = new Pool({ max: 5 });
+// Web Worker requires isolated script context to prevent Pyodide WASM from blocking main UI thread
+const worker = new Worker(new URL('../workers/pyodide.worker.ts', import.meta.url), { type: 'module' });
 
-// GOOD: Complex business logic
-// Rate limit uses sliding window: 5 attempts per 15 minutes
-// Resets when lockout expires
-function checkRateLimit(key) { }
+// GOOD: Document math or physics formulas
+// Spring physics tuned for Emil Kowalski tactile fluidity (stiffness: 280, damping: 22)
+const springConfig = { stiffness: 280, damping: 22 };
 
 // BAD: Restating the code
-// Delete the user
-await db.delete(user);  // DON'T DO THIS
+// Set state to true
+setIsOpen(true); // DON'T DO THIS
 ```
 
 ### Comment Format
-```javascript
+```typescript
 // ─── Section Header ─────────────────────────────────────────────────
 // Descriptive section comment
 
 // Inline comment for non-obvious logic
-const result = await query(); // Silent fail for non-critical operation
+const result = await executeLocalWasm(); // Run in client WASM sandbox ($0 rule)
 ```
 
 ### JSDoc for Exported Functions
-```javascript
+```typescript
 /**
- * Search repositories by keyword with pagination.
- * @param {string} query - Search term
- * @param {number} page - Page number (1-indexed)
- * @param {number} limit - Results per page (max 100)
- * @returns {Promise<{repos: Array, total: number}>}
+ * Executes a Python script asynchronously in the Pyodide Web Worker.
+ * @param code - The Python source code to execute.
+ * @param timeoutMs - Watchdog timeout in milliseconds before termination.
+ * @returns Promise resolving to execution stdout, stderr, and return status.
  */
-export async function searchRepos(query, page = 1, limit = 20) { }
+export async function executePython(code: string, timeoutMs: number = 10000): Promise<ExecutionResult> { }
 ```
 
 ---
@@ -105,39 +112,37 @@ export async function searchRepos(query, page = 1, limit = 20) { }
 ### Log Format
 ```javascript
 // ALWAYS include service prefix
-console.error('[AUTH] Login error:', err.message);
-console.error('[DB] Migration failed:', e.message);
-console.error('[ADMIN] Telemetry error:', err.message);
+console.error('[PYODIDE] Worker failed:', err.message);
+console.error('[INDEXEDDB] Storage transaction failed:', e.message);
+console.error('[COPILOT] Offline inference error:', err.message);
 
 // NEVER log sensitive data
-console.log(user.password);     // BAD
-console.log(user.email);        // OK (non-sensitive identifier)
-console.log(req.body);          // BAD (may contain passwords)
+console.log(apiKey);            // BAD (BYOK key leakage)
+console.log(userCode);          // OK in dev mode only
 ```
 
 ### Forbidden Logs in Production
-- `console.log(req.body)`, may contain passwords, tokens
-- `console.log(password)`, secrets
-- `console.log(sessionID)`, session fixation risk
-- `console.log(token)`, token leakage
+- `console.log(apiKey)`, user BYOK keys
+- `console.log(secret)`, credentials or tokens
+- Raw dumps of internal state in production builds
 
 ---
 
 ## Formatting Rules
 
 ### Indentation
-- 2 spaces (enforced by ESLint)
+- 2 spaces
 - No tabs
 
 ### Semicolons
-- Always use semicolons (enforced by ESLint)
+- Always use semicolons
 
 ### Quotes
-- Single quotes for strings: `'hello'`
+- Single quotes for TypeScript/JS strings: `'hello'`
 - Template literals for interpolation: `` `${name}` ``
 
 ### Trailing Commas
-- Always use trailing commas (enforced by ESLint)
+- Always use trailing commas
 
 ### Line Length
 - Max 100 characters (soft limit)
@@ -147,7 +152,7 @@ console.log(req.body);          // BAD (may contain passwords)
 
 ## Forbidden Patterns
 
-```javascript
+```typescript
 // NEVER use var
 var x = 1;  // BAD
 
@@ -159,16 +164,16 @@ if (x === null) { }  // GOOD
 eval(userInput);  // SECURITY RISK
 new Function(code);  // SECURITY RISK
 
-// NEVER use process.exit() in serverless
-process.exit(1);  // BAD in Vercel functions
+// NEVER block the main thread with heavy compute
+while (computeIntense) { }  // BAD: Offload to Web Worker (Pyodide)
 
 // NEVER hardcode secrets
 const API_KEY = 'sk-12345';  // BAD
-const API_KEY = process.env.API_KEY;  // GOOD
+const API_KEY = userByokKey;  // GOOD: Sourced securely from user BYOK store
 
 // NEVER suppress errors silently
 try { await riskyOp(); } catch (e) { }  // BAD
-try { await riskyOp(); } catch (e) { console.error(e); }  // GOOD
+try { await riskyOp(); } catch (e) { console.error('[MODULE]', e); }  // GOOD
 ```
 
 ---

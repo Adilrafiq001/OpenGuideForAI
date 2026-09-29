@@ -1,0 +1,333 @@
+/* 3D Mechanical Initialize Workspace Button By ARD */
+.mech-area {
+  --ease: cubic-bezier(0.5, 0, 0.3, 1);
+  --ease-elastic: cubic-bezier(0.5, 2, 0.3, 0.8);
+  --radius: 26px;
+  --primary: var(--color-accent, #45f8f8);
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.6s var(--ease-elastic);
+  display: inline-block;
+}
+
+.mech-area input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.mech-button {
+  outline: none;
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius);
+  position: relative;
+  width: 270px;
+  height: 74px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition:
+    background-color 2s linear,
+    box-shadow 0.5s ease,
+    transform 0.6s ease;
+  transform: rotateX(4deg);
+  background: var(--primary);
+  box-shadow:
+    inset 0 0 30px rgba(34, 124, 136, 0.8),
+    0 5px 10px -2px rgba(0, 10, 20, 0.5),
+    0 40px 30px -15px rgba(10, 20, 30, 0.3),
+    inset 0 -2px 0 -1px #484e60,
+    inset 0 0 2px 4px #888ea3;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.mech-button::before,
+.mech-button::after {
+  content: "";
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background: white;
+  position: absolute;
+  display: block;
+  filter: blur(40px);
+  mix-blend-mode: plus-lighter;
+  margin: auto;
+  inset: 0;
+  top: 10px;
+  transition: all 1s ease;
+}
+
+@keyframes mech-pulse-out {
+  40% {
+    transform: scale(1);
+  }
+}
+
+.mech-button::after {
+  transform: scale(0);
+  animation: mech-pulse-out 3s var(--ease-elastic) infinite;
+}
+
+.mech-button::before,
+.mech-area input:not(:checked) ~ .mech-button::after {
+  opacity: 0;
+}
+
+.mech-area input:not(:checked) ~ .mech-button::before {
+  opacity: 1;
+}
+
+.mech-wrap {
+  border-radius: calc(var(--radius) * 0.85);
+  inset: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #2b3945 0%, #15202b 50%, #0d151c 100%);
+  position: absolute;
+  transform-origin: top;
+  transform: scale(0.99, 1) translate(0px, -7px);
+  transition: all 0.7s ease;
+  animation: mech-cover-close 0.9s ease forwards;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mech-area input:not(:checked) ~ .mech-button .mech-wrap {
+  animation: mech-cover-open 0.9s ease forwards;
+}
+
+@keyframes mech-cover-open {
+  0% {
+    transform: translate3d(0, -7px, 10px);
+    box-shadow: none;
+  }
+  20% {
+    transform: translate3d(0, 0, 10px);
+  }
+  80% {
+    transform: translate3d(0, 0, 10px) rotateY(0) rotateX(74deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 10px) rotateY(0) rotateX(70deg);
+    box-shadow:
+      rgb(121, 133, 147) 0px 5px 1px -1px,
+      rgb(77, 97, 118) 0px 9px 0 -2px,
+      rgb(0, 0, 0) 0px 60px 40px -30px;
+  }
+}
+
+@keyframes mech-cover-close {
+  from {
+    transform: translate3d(0px, 0px, 10px) rotateY(0) rotateX(70deg);
+    box-shadow:
+      0 5px 1px -1px #798593,
+      0 10px 0px -1px #4d6176,
+      0 60px 40px -30px black;
+  }
+  to {
+    transform: scale(0.99, 1) translate3d(0px, -7px, 10px);
+    box-shadow: none;
+  }
+}
+
+.mech-reflex {
+  position: absolute;
+  z-index: 9;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.mech-reflex::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  background: linear-gradient(
+    to right,
+    rgba(221, 249, 255, 0.2) 10%,
+    rgba(221, 245, 255, 0.5) 60%,
+    rgba(221, 246, 255, 0.4) 60%,
+    rgba(221, 255, 254, 0.2) 90%
+  );
+  top: -40%;
+  bottom: -40%;
+  left: -132%;
+  transform: translateX(0) skew(-30deg);
+  transition: all 0.7s var(--ease);
+}
+
+.mech-area:hover .mech-reflex::before {
+  transform: translate(192%, 0) skew(-30deg);
+}
+
+.mech-wave {
+  position: absolute;
+  margin: auto;
+  transition: all 0.5s ease;
+  border-radius: 70px;
+  width: 110%;
+  height: 150%;
+  left: 50%;
+  top: 56%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mech-wave::before,
+.mech-wave::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  border-bottom: 3px solid white;
+  border-top: 3px solid white;
+  filter: blur(3px);
+  inset: 0;
+  transform: translate(50%);
+  animation: mech-wave 1.5s linear infinite;
+}
+
+.mech-wave::after {
+  animation-delay: 0.4s;
+}
+
+.mech-area input:not(:checked) ~ .mech-button .mech-wave {
+  opacity: 1;
+}
+
+@keyframes mech-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+    box-shadow: 0 0 30px white;
+  }
+  35% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+    box-shadow: 0 0 100px var(--primary);
+  }
+}
+
+.mech-content {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: relative;
+  height: 100%;
+  gap: 10px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-radius: calc(var(--radius) * 0.85);
+}
+
+.mech-content::before,
+.mech-content::after {
+  content: "";
+  inset: 0px;
+  position: absolute;
+  transition: all 1s var(--ease);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.mech-content::before {
+  filter: blur(2px);
+  top: -2px;
+  background: linear-gradient(to bottom, #dde0e1 30%, #aeb2b8 90%);
+}
+
+.mech-content::after {
+  box-shadow:
+    inset 0 -7px 1px 0 rgba(40, 70, 100, 0.2),
+    inset 0 -4px 1px 0 rgba(40, 70, 100, 0.4),
+    inset 0 -2px 0 0 rgba(20, 40, 60, 0.6),
+    inset 0 -3px 0 0 white;
+}
+
+.mech-text {
+  transition: all 0.3s ease;
+  transform: translateY(-2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.mech-text span {
+  display: block;
+  color: #1a2a3a;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.mech-area:hover .mech-button {
+  transition:
+    all 0.6s var(--ease-elastic),
+    background 1s ease;
+  transform: rotateX(0deg) translateY(5px);
+}
+
+.mech-area:active .mech-button {
+  transform: rotateX(0deg) translateY(8px);
+}
+
+.mech-gears {
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0;
+  position: absolute;
+  inset: 4px;
+  bottom: 1px;
+  transition: all 1s ease;
+  pointer-events: none;
+}
+
+.mech-area input:not(:checked) ~ .mech-button .mech-gears {
+  opacity: 1;
+}
+
+.mech-gears svg {
+  width: 80%;
+  fill: #49b9c2;
+  top: 50%;
+  position: relative;
+  transform: translate(-50%, -50%);
+  left: 43%;
+}
+
+.mech-gear-small {
+  animation: mech-spin 2.5s infinite linear;
+  transform-origin: center;
+}
+
+.mech-gear-medium {
+  animation: mech-spin reverse 3.75s infinite linear;
+  transform-origin: center;
+}
+
+.mech-gear-large {
+  animation: mech-spin 5s infinite linear;
+  transform-origin: center;
+}
+
+@keyframes mech-spin {
+  to {
+    transform: rotate(359deg);
+  }
+}

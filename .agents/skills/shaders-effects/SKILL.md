@@ -1,6 +1,6 @@
 ---
 name: shaders-effects
-description: "Guidelines and implementation recipes for designing, adapting, and integrating interactive WebGL/WebGPU and GLSL shaders inspired by Shaders.com into Openlysts without memory leaks."
+description: "Guidelines and implementation recipes for designing, adapting, and integrating interactive WebGL/WebGPU and GLSL shaders inspired by Shaders.com into OpenGuide without memory leaks."
 ---
 
 # Shaders & GLSL Visual Effects Skill
@@ -19,7 +19,7 @@ When requested to build cutting-edge shader visuals, liquid metal backgrounds, c
 
 ---
 
-## 2. Integration Rules for Openlysts
+## 2. Integration Rules for OpenGuide
 
 ### A. Strict Zero-Memory-Leak Protocol
 Every shader mesh, custom material (`THREE.ShaderMaterial` / `THREE.RawShaderMaterial`), uniform texture, and geometry MUST be tracked and cleanly disposed when unmounted or switched:
@@ -101,7 +101,7 @@ export const liquidNoiseShader = {
       
       float n = noise(st * 3.0 + vec2(uTime * 0.1, uTime * 0.15) + wave);
       
-      // Openlysts Palette: Dark background (#09090b) with subtle cyan/indigo glow
+      // OpenGuide Palette: Dark background (#09090b) with subtle cyan/indigo glow
       vec3 bg = vec3(0.035, 0.035, 0.043);
       vec3 cyanAccent = vec3(0.05, 0.45, 0.65);
       vec3 violetAccent = vec3(0.35, 0.15, 0.65);

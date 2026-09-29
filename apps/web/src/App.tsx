@@ -7,8 +7,11 @@ import { SpatialHolodeck } from './pages/SpatialHolodeck';
 import { CommandDock } from './components/CommandDock';
 import { ThemeSettingsModal } from './components/ThemeSettingsModal';
 import { HelpModal } from './components/HelpModal';
+import { OfflineAICopilot } from './components/OfflineAICopilot';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { useSettingsStore } from './store/useSettingsStore';
 import { track0 } from './data/track0';
+import { track1 } from './data/track1';
 import './App.css';
 
 function App() {
@@ -16,6 +19,7 @@ function App() {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
 
   // Synchronize data-theme on root HTML document element
   useEffect(() => {
@@ -40,7 +44,11 @@ function App() {
           <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
           <Route path="/track/0" element={<CoursePlayer track={track0} />} />
           <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
+          <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+          <Route path="/track/1" element={<CoursePlayer track={track1} />} />
+          <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
           <Route path="/holodeck" element={<SpatialHolodeck />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         {/* Global Floating Magnification Dock */}
@@ -48,6 +56,7 @@ function App() {
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
           onOpenHelp={() => setIsHelpModalOpen(true)}
+          onOpenCopilot={() => setIsCopilotOpen(true)}
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}
@@ -61,6 +70,12 @@ function App() {
         <HelpModal 
           isOpen={isHelpModalOpen}
           onClose={() => setIsHelpModalOpen(false)}
+        />
+
+        {/* In-House Offline AI Copilot ($0, 100% Client-Side) */}
+        <OfflineAICopilot 
+          isOpen={isCopilotOpen}
+          onClose={() => setIsCopilotOpen(false)}
         />
       </div>
     </Router>

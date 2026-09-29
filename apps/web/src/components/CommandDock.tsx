@@ -11,7 +11,8 @@ import {
   Eye,
   Brain,
   Glasses,
-  Target
+  Target,
+  Sparkles
 } from 'lucide-react';
 import { MagnificationDock, type DockItemData } from './MagnificationDock';
 
@@ -19,9 +20,10 @@ interface CommandDockProps {
   onOpenThemes?: () => void;
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
+  onOpenCopilot?: () => void;
 }
 
-export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: CommandDockProps) {
+export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenCopilot }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isEngine = location.pathname === '/track/0' || location.pathname === '/track/0/engine';
@@ -82,6 +84,11 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       icon: <Glasses size={20} className={location.pathname === '/holodeck' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Spatial Holodeck (3D/VR)',
       onClick: () => navigate('/holodeck')
+    },
+    {
+      icon: <Sparkles size={20} className="text-[#45f8f8]" />,
+      label: 'Offline AI Copilot ($0)',
+      onClick: () => onOpenCopilot?.()
     },
     {
       icon: <Palette size={20} className="text-[var(--color-text-secondary)]" />,

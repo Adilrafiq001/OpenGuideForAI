@@ -70,7 +70,18 @@
   - **Innovative Horizontal Scroll Edge Fade Masks (`.scroll-mask-x`, `.momentum-scroll-x`):** Designed CSS `mask-image` gradient edge fade utilities and inertia scrolling on horizontal chip carousels (Spatial Holodeck vector chips, Studio Console tabs, and code previews), preventing harsh cutoff edges.
   - **Comprehensive 13-Suite Playwright E2E Automation Regression Suite (`app-full-regression.spec.ts`):** Expanded from 10 to 13 exhaustive test suites, adding Test 11 (Spatial Holodeck light theme text contrast and element visibility), Test 12 (Universal vertical scroll physics, nano-bar progress, and scroll-to-top affordance), and Test 13 (Horizontal scroll containers, momentum, and edge fade masks). 100% test pass rate (13/13 passed) in 1.2m with 0 errors.
 
-**Next:** Phase 2 interactive coding challenges within Track 1 (Embeddings & Cosine Mathematics).
+- **Governance & Rules Modernization & Legacy Cleanup (Complete):**
+  - **Complete Openlysts Purge:** Completely eradicated legacy full-stack SaaS references, server auth, PostgreSQL dependencies, and obsolete admin tables from `AGENTS.md` (both workspace and global `~/.gemini/config/AGENTS.md`), replacing them with OpenGuide's client-side, $0 BYOK, Pyodide WASM, and 20-theme test coverage matrix.
+  - **Mandatory "Clean As You Go" Policy:** Enforced immediate deletion of transient test screenshots (`.playwright-mcp/`), `test-results/`, and temporary logs upon passing tests, ensuring pristine repository tree hygiene.
+  - **Light Theme Contrast & Legibility Overhaul:** Converted all remaining hardcoded white/gray styles in `FirstPrinciplesModal.tsx` and `HelpModal.tsx` to semantic CSS custom properties (`var(--color-text-primary)`, `var(--color-text-secondary)`, `var(--color-secondary)`, `var(--color-border)`), achieving >16:1 WCAG AAA contrast on light themes like `pure-paper` and `solarized-light`.
+  - **3D Mechanical "Initialize Workspace Now" Button (`InitializeWorkspaceButton.tsx`, `mechanical-button.css`):** Built tactile 3D mechanical button featuring 3D animated flap cover, energy waves, spinning brass gears, and engraved typography, embedded directly into `TrackBriefing.tsx`.
+  - **Animated 404 Error Page (`NotFoundPage.tsx`, `not-found.css`):** Implemented interactive 404 page featuring mechanical animated duck, orbital backdrop, and launchpad return action wired to `path="*"`.
+  - **In-House Offline AI Copilot (`OfflineAICopilot.tsx`, `offlineKnowledge.ts`, `offline-copilot.css`):** Designed 100% in-browser offline AI Copilot with animated tracking eyes, neon-glass aesthetics, fuzzy first-principles knowledge search, code copy triggers, and $0 Rule hardware-isolation compliance, accessible via the Command Dock.
+  - **Phase 2 Track 1 Curriculum (`track1.ts`):** Scaffolded 3 interactive modules and 6 exercises covering High-Dimensional Geometry, Vector Normalization, Dot Products, Cosine Similarity vs. Euclidean Distance, and In-Memory Semantic Vector Search.
+  - **Physical Verification via Playwright MCP:** Physically verified 404 duck page, 3D mechanical button navigation to Pyodide IDE, Offline AI Copilot launch and search, Track 1 routing, and light-theme contrast on live browser with 0 errors and a clean production build (`npm run build`).
+
+**Next:** Deepen Phase 2 Track 1 interactive coding visualizations and vector hyper-space canvas.
 **Attribution:** Architected & Designed by Adil Rafiq Dar (ARD).
+
 
 

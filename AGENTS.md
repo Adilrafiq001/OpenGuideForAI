@@ -56,4 +56,6 @@
 - **Language / i18n:** Multi-language persistent store (`en`, `es`, `zh`, `hi`, `fr`, `de`). Script-safe responsive line heights (avoid vertical text collisions in Devanagari, CJK, etc.).
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
 - **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+- **Clean As You Go & Project Hygiene (Mandatory Rule):** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (such as temporary screenshots in `.playwright-mcp/`, `test-results/`, and temporary log files) as we advance to subsequent tasks. Maintain a strictly clean, neat, and tidy project directory tree at all times.
 - **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`.
+

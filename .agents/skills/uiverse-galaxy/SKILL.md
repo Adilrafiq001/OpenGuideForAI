@@ -1,6 +1,6 @@
 ---
 name: uiverse-galaxy
-description: "Guidelines and implementation recipes for sourcing, adapting, and integrating 3,000+ open-source CSS/HTML/Tailwind UI elements from Uiverse.io (github.com/uiverse-io/galaxy) into Openlysts."
+description: "Guidelines and implementation recipes for sourcing, adapting, and integrating 3,000+ open-source CSS/HTML/Tailwind UI elements from Uiverse.io (github.com/uiverse-io/galaxy) into OpenGuide."
 ---
 
 # Uiverse Galaxy UI Elements Skill
@@ -21,16 +21,16 @@ Uiverse provides raw CSS/HTML and Tailwind snippets across core categories:
 
 ---
 
-## 2. Adaptation Protocol for Openlysts
+## 2. Adaptation Protocol for OpenGuide
 
 When lifting components from Uiverse:
 
-### A. Theme Harmonization (Dark Mode & Palette Alignment)
-- Standardize colors to Openlysts dark theme tokens:
-  - Backgrounds: `#09090b` (zinc-950), `#121215`, `#18181b` (zinc-900).
-  - Borders: `#27272a` (zinc-800) with subtle alpha hover highlights (`rgba(255,255,255,0.08)`).
-  - Accents: Openlysts cyan/indigo/emerald/violet primary highlights (`#38bdf8`, `#6366f1`, `#10b981`, `#a855f7`).
-  - Text: `#fafafa` (primary), `#a1a1aa` (muted), `#71717a` (subtle).
+### A. Theme Harmonization (20 Themes & Token Alignment)
+- Standardize colors to OpenGuide semantic CSS tokens:
+  - Backgrounds: `var(--color-bg)`, `var(--color-surface)`, `var(--color-secondary)`.
+  - Borders: `var(--color-border)` with subtle alpha hover highlights (`rgba(255,255,255,0.08)`).
+  - Accents: OpenGuide cyan/indigo/emerald/violet primary highlights (`#38bdf8`, `#6366f1`, `#10b981`, `#a855f7`).
+  - Text: `var(--color-text-primary)`, `var(--color-text-secondary)`. WCAG AAA contrast mandatory.
 
 ### B. Accessibility & React Compliance
 1. **Semantic Elements**: Convert raw `<div>` buttons into real `<button>` elements with `type="button"|"submit"`.

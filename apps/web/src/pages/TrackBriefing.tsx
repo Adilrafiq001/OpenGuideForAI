@@ -11,6 +11,7 @@ import { useSettingsStore } from '../store/useSettingsStore';
 import { THEMES_DATA } from '../data/themesData';
 import { track0 } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
+import { InitializeWorkspaceButton } from '../components/InitializeWorkspaceButton';
 
 interface TrackBriefingProps {
   onOpenThemes?: () => void;
@@ -275,6 +276,24 @@ export function TrackBriefing({ onOpenThemes }: TrackBriefingProps) {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Mechanical Workspace Initialization Banner */}
+        <div className="p-8 md:p-12 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-center flex flex-col items-center justify-center relative overflow-hidden shadow-xl mb-12">
+          <div 
+            className="absolute top-0 left-0 right-0 h-1"
+            style={{ backgroundColor: currentThemeInfo.accent }}
+          />
+          <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
+            Ready to Begin Track 0?
+          </h2>
+          <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
+            Engage the in-browser CPython WebAssembly runtime. Zero cloud cost, 100% offline privacy, and zero installation required.
+          </p>
+          <InitializeWorkspaceButton
+            onClick={() => navigate('/track/0/engine')}
+            label="Initialize Workspace Now"
+          />
         </div>
 
       </main>

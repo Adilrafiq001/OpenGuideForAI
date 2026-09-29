@@ -1,6 +1,6 @@
 # Accessibility Standards Rule
 
-Every UI component in Openlysts MUST meet WCAG 2.1 Level AA. No exceptions.
+Every UI component in OpenGuide MUST meet WCAG 2.1 Level AA (with WCAG AAA contrast calibrated across all 20 themes). No exceptions.
 
 ---
 
