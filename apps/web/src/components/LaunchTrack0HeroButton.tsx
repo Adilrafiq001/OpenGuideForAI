@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/launch-track-button.css';
 
 interface LaunchTrack0HeroButtonProps {
@@ -6,21 +6,41 @@ interface LaunchTrack0HeroButtonProps {
 }
 
 export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ onLaunch }) => {
+  // Default is true (case closed, state-1 "Launch Track 0" active)
+  const [isChecked, setIsChecked] = useState(true);
   const [isOpening, setIsOpening] = useState(false);
 
-  const handleClick = (e: React.MouseEvent) => {
+  // Reset when mounted or on back navigation
+  useEffect(() => {
+    setIsChecked(true);
+    setIsOpening(false);
+  }, []);
+
+  const handleTrigger = (e: React.MouseEvent) => {
     e.preventDefault();
     if (isOpening) return;
 
-    setIsOpening(true);
+    if (isChecked) {
+      // Transition from closed (checked) to open (unchecked)
+      setIsChecked(false);
+      setIsOpening(true);
 
-    // Wait until animation is fully opened and completed with "Time To Shine" before redirecting
-    setTimeout(() => {
+      // Wait until animation is fully completed with "Time To Shine" before redirecting
+      setTimeout(() => {
+        onLaunch();
+        // Reset state buffer so if user navigates back via browser history, it is immediately clickable again
+        setTimeout(() => {
+          setIsOpening(false);
+          setIsChecked(true);
+        }, 1000);
+      }, 1450);
+    } else {
+      // If already opened, launch directly
       onLaunch();
-    }, 1450);
+    }
   };
 
-  // State 1: "Launch Track 0"
+  // State 1: "Launch Track 0" (12 characters with spacing)
   const state1Chars = [
     { char: 'L', idx: 1 },
     { char: 'a', idx: 2 },
@@ -36,7 +56,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
     { char: '0', idx: 12 }
   ];
 
-  // State 2: "Time To Shine"
+  // State 2: "Time To Shine" (11 characters with spacing)
   const state2Chars = [
     { char: 'T', idx: 1 },
     { char: 'i', idx: 2 },
@@ -54,14 +74,20 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
   return (
     <div className="launch-track-hero-container">
       <div className="area">
-        <label className={`area-wrapper ${isOpening ? 'is-opening' : ''}`}>
+        <div className="bg" aria-hidden="true" />
+        <label className="area-wrapper" onClick={handleTrigger}>
           <div className="wrapper">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={() => {}}
+              aria-label="Launch Track 0"
+            />
             <button
               type="button"
-              onClick={handleClick}
               className="button-btn"
-              aria-label="Launch Track 0"
-              title="Launch Track 0"
+              tabIndex={-1}
+              aria-hidden="true"
             >
               <div className="part-1">
                 <div className="case">
@@ -69,7 +95,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                   <div className="line" />
                 </div>
                 <div className="screw">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 115 126" height={52} width={48}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 115 126" height={38} width={36}>
                     <g style={{ ['--i' as any]: 1 }} className="g-1">
                       <path strokeLinejoin="round" strokeLinecap="round" strokeMiterlimit={10} strokeWidth={2} stroke="#262626" fill="url(#paint_linear_steel_hero)" d="M91.4371 119V7C91.4371 3.686 94.1231 1 97.4371 1H107.617C110.931 1 113.617 3.686 113.617 7V119C113.617 122.314 110.931 125 107.617 125H97.4371C94.1231 125 91.4371 122.314 91.4371 119Z" />
                       <path fillOpacity="0.4" fill="#262626" d="M94 6C94 3.79086 95.7909 2 98 2H109C111.209 2 113 3.79086 113 6V88.2727C113 89.2267 112.227 90 111.273 90C101.733 90 94 82.2667 94 72.7273V6Z" />
@@ -95,10 +121,10 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                     </g>
                     <defs>
                       <linearGradient gradientUnits="userSpaceOnUse" y2={125} x2={105.425} y1={1} x1={105.425} id="paint_linear_steel_hero">
-                        <stop stopColor="#7A7A7A" offset="0.100962" />
-                        <stop stopColor="#EEEEEE" offset="0.3125" />
-                        <stop stopColor="#787878" offset="0.596154" />
-                        <stop stopColor="#666666" offset="0.798077" />
+                        <stop stopColor="#7A7A7A" offset="0.1" />
+                        <stop stopColor="#EEEEEE" offset="0.31" />
+                        <stop stopColor="#787878" offset="0.6" />
+                        <stop stopColor="#666666" offset="0.8" />
                         <stop stopColor="#9E9E9E" offset={1} />
                       </linearGradient>
                     </defs>
@@ -106,20 +132,20 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                 </div>
               </div>
               <div className="part-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 190 76" height={68} width={190} className="path-glass">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 190 76" height={48} width={196} className="path-glass">
                   <path stroke="currentColor" d="M0 0.5C0 0.5 149 0.5 156.5 0.5C164 0.5 189 8.5 189 37.5C189 66.5 164 75.5 157.5 75.5C151 75.5 1 75.5 1 75.5" />
                 </svg>
                 <div className="glass">
                   <div className="glass-reflex" />
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={42} width={40} className="filament">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={20} width={24} className="filament">
                     <path stroke="#ffc4af" d="M32.5 26.1085C32.5 26.1085 32 5.90019 38.5 2.10852C45 -1.68315 49 5.10852 47.5 9.60852C46 14.1085 39.5 17.1085 21 18.1085C13.667 18.5049 6.49118 18.0371 0.5 17.328" />
                     <path stroke="#ffc4af" d="M32.5 26C32.5 26 32 46.2083 38.5 50C45 53.7917 49 47 47.5 42.5C46 38 39.5 35 21 34C13.667 33.6036 6.49118 34.0714 0.5 34.7805" />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={42} width={40} className="filament filament-on">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={20} width={24} className="filament filament-on">
                     <path stroke="white" d="M32.5 26.1085C32.5 26.1085 32 5.90019 38.5 2.10852C45 -1.68315 49 5.10852 47.5 9.60852C46 14.1085 39.5 17.1085 21 18.1085C13.667 18.5049 6.49118 18.0371 0.5 17.328" />
                     <path stroke="white" d="M32.5 26C32.5 26 32 46.2083 38.5 50C45 53.7917 49 47 47.5 42.5C46 38 39.5 35 21 34C13.667 33.6036 6.49118 34.0714 0.5 34.7805" />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={42} width={40} className="filament filament-blur filament-on">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 49 52" height={20} width={24} className="filament filament-blur filament-on">
                     <path stroke="currentColor" d="M32.5 26.1085C32.5 26.1085 32 5.90019 38.5 2.10852C45 -1.68315 49 5.10852 47.5 9.60852C46 14.1085 39.5 17.1085 21 18.1085C13.667 18.5049 6.49118 18.0371 0.5 17.328" />
                     <path stroke="currentColor" d="M32.5 26C32.5 26 32 46.2083 38.5 50C45 53.7917 49 47 47.5 42.5C46 38 39.5 35 21 34C13.667 33.6036 6.49118 34.0714 0.5 34.7805" />
                   </svg>
