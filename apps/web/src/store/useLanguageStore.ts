@@ -86,6 +86,10 @@ export const useLanguageStore = create<LanguageStoreState>((set, get) => ({
       first_principles_label: 'hero_first_principles_label',
       exploreAllQuestions: 'hero_explore_questions',
       explore_all_questions: 'hero_explore_questions',
+      pathwaysHeading: 'pathways_heading',
+      pathwaysSubtitle: 'pathways_subtitle',
+      freeStackHeading: 'free_stack_heading',
+      freeStackSubtitle: 'free_stack_subtitle',
     };
     const lookupKey = aliases[key] || key;
     const snakeKey = lookupKey.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);

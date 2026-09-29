@@ -11,17 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Enable Corepack
+      run: corepack enable
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
+        cache: 'yarn'
     
     - name: Install dependencies
-      run: npm ci
+      run: yarn install --immutable
 
     - name: Run lint
-      run: npm run lint
+      run: yarn lint
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
@@ -37,14 +39,16 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v4
+    - name: Enable Corepack
+      run: corepack enable
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
+        cache: 'yarn'
     - name: Install dependencies
-      run: npm ci
+      run: yarn install --immutable
     - name: Build web
-      run: npm run build --workspace=apps/web
+      run: yarn build
     # Deployment to Cloudflare Pages relies on Cloudflare's direct GitHub integration
     # for zero-cost seamless setup, as per architecture. No action needed here beyond building to verify.

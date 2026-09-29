@@ -119,7 +119,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
           </div>
 
           {/* Concept Chips */}
-          <div className="flex gap-2.5 overflow-x-auto pb-2 custom-scrollbar">
+          <div className="flex gap-2.5 overflow-x-auto pb-2 custom-scrollbar momentum-scroll-x scroll-mask-x px-2" data-testid="pareto-chips-scroll">
             {PARETO_CONCEPTS.map(c => (
               <button
                 key={c.id}

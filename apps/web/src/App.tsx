@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
-import { TrackBriefing } from './pages/TrackBriefing';
-import { CoursePlayer } from './components/CoursePlayer';
-import { SpatialHolodeck } from './pages/SpatialHolodeck';
 import { CommandDock } from './components/CommandDock';
-import { ThemeSettingsModal } from './components/ThemeSettingsModal';
-import { HelpModal } from './components/HelpModal';
 import { AbbyChatbot } from './components/AbbyChatbot';
-import { NotFoundPage } from './pages/NotFoundPage';
 import { useSettingsStore } from './store/useSettingsStore';
 import { track0 } from './data/track0';
 import { track1 } from './data/track1';
 import './App.css';
+
+import { ThemeSettingsModal } from './components/ThemeSettingsModal';
+import { HelpModal } from './components/HelpModal';
+
+// Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
+const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
+const CoursePlayer = lazy(() => import('./components/CoursePlayer').then(m => ({ default: m.CoursePlayer })));
+const SpatialHolodeck = lazy(() => import('./pages/SpatialHolodeck').then(m => ({ default: m.SpatialHolodeck })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
   const { theme } = useSettingsStore();
@@ -38,17 +41,19 @@ function App() {
   return (
     <Router>
       <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
-        <Routes>
-          <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} />} />
-          <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-          <Route path="/track/0" element={<CoursePlayer track={track0} />} />
-          <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
-          <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-          <Route path="/track/1" element={<CoursePlayer track={track1} />} />
-          <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
-          <Route path="/holodeck" element={<SpatialHolodeck />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-screen bg-[var(--color-primary)]" />}>
+          <Routes>
+            <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} />} />
+            <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+            <Route path="/track/0" element={<CoursePlayer track={track0} />} />
+            <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
+            <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+            <Route path="/track/1" element={<CoursePlayer track={track1} />} />
+            <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
+            <Route path="/holodeck" element={<SpatialHolodeck />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
 
         {/* Global Floating Magnification Dock */}
         <CommandDock 

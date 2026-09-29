@@ -135,3 +135,15 @@ After every test run, document:
 - Never commit test screenshots, traces, or runtime dumps to version control.
 - Maintain a clean, pristine, and tidy file tree at all times.
 
+---
+
+## 11. Holistic Visual & UI/UX Inspection Standard (Mandatory)
+
+Whenever inspecting visual artifacts or testing UI changes:
+1. **Total Viewport Sweep:** Do NOT look only at the localized element under test. Examine the entire viewport, including adjacent headers, docks, badges, typography, cards, margins, contrast, and alignment.
+2. **Text Integrity & Translation Verification:** Ensure no raw translation keys (e.g. `pathwaysSubtitle`), broken templates, missing labels, duplicate tokens (e.g. `[3D] 3D`), or legacy brand mentions (`Openlysts`) appear in any rendered component.
+3. **Scrollbar & Overflow Polish:** Verify horizontal containers have smooth momentum scrolling and edge fades without crude default browser arrow buttons.
+4. **Contrast & Theme Harmony:** Verify legibility across both extreme dark and bright light themes (WCAG AAA standard).
+5. **Immediate Regression Cataloging:** If ANY visual misalignment, overflow, clip, or styling defect is spotted during inspection—even if unrelated to the current target feature—it must be immediately documented, converted into a regression test case, and resolved before declaring production readiness.
+
+

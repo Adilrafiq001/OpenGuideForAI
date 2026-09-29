@@ -11,6 +11,63 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>OpenGuide — AI Engineering Studio</title>
+    <script>
+      (function() {
+        try {
+          var theme = 'obsidian';
+          var raw = localStorage.getItem('openguide-settings');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.state && parsed.state.theme) {
+              theme = parsed.state.theme;
+            }
+          } else {
+            var legacy = localStorage.getItem('openguide_theme');
+            if (legacy) theme = legacy;
+          }
+          document.documentElement.setAttribute('data-theme', theme);
+
+          var themeBgs = {
+            'obsidian': '#050505',
+            'midnight': '#080c14',
+            'cyberpunk': '#0d0818',
+            'nord-dark': '#1e222a',
+            'dracula': '#191a21',
+            'tokyo-night': '#1a1b26',
+            'monokai': '#272822',
+            'gruvbox-dark': '#1d2021',
+            'catppuccin-dark': '#1e1e2e',
+            'crimson': '#140508',
+            'pure-paper': '#ffffff',
+            'solarized-light': '#fdf6e3',
+            'github-light': '#ffffff',
+            'nord-light': '#eceff4',
+            'emerald-light': '#f0fdf4',
+            'warm-cream': '#fdfbf7',
+            'lavender-light': '#faf5ff',
+            'peach-dawn': '#fff7ed',
+            'rose-pine-dawn': '#faf4ed',
+            'cyber-light': '#f8fafc'
+          };
+          var bg = themeBgs[theme] || '#050505';
+          document.documentElement.style.backgroundColor = bg;
+
+          var savedLang = localStorage.getItem('openguide_lang') || 'en';
+          document.documentElement.setAttribute('lang', savedLang);
+          if (savedLang === 'ur' || savedLang === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');
+            document.documentElement.classList.add('rtl-active');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      html, body, #root {
+        background-color: var(--bg-primary, #050505);
+        color: var(--text-primary, #f3f4f6);
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body class="overflow-x-hidden antialiased">
     <div id="root"></div>

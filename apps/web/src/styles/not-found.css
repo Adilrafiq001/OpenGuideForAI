@@ -13,10 +13,10 @@
 .not-found-card {
   --bg-color: var(--color-secondary, #1e1e24);
   --bg-gradient: linear-gradient(135deg, var(--color-secondary, #1e1e24) 0%, var(--color-surface, #2a2a35) 100%);
-  --duck-body: #f4f4f5;
-  --duck-wing: #e4e4e7;
-  --duck-beak: #ff3b30;
-  --duck-feet: #ff9f0a;
+  --duck-body: #ffd1dc;
+  --duck-wing: #fbb6ce;
+  --duck-beak: #fb7185;
+  --duck-feet: #f472b6;
   --duck-eye: #18181b;
 
   --base-speed: 1s;
@@ -205,7 +205,7 @@
   top: -95%;
   transform: translate(-50%, 0.02rem) rotate(-6deg);
   border-radius: 50%;
-  border-bottom: 1rem solid #e4e4e7;
+  border-bottom: 1rem solid var(--duck-wing);
 }
 
 .duck__wing {

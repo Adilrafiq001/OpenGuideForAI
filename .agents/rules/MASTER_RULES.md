@@ -1097,7 +1097,7 @@ These global skills (in `~/.gemini/config/skills/`) are irrelevant:
 
 | Skill | Why |
 |-------|-----|
-| `best-qa-team` / `openlyst-qa-tester` | Replaced by OpenGuide Testing Standards (`.agents/rules/testing-standards.md`) |
+| `best-qa-team` / `legacy-qa-tester` | Replaced by OpenGuide Testing Standards (`.agents/rules/testing-standards.md`) |
 | `human_QA` | Generic QA, use Playwright MCP physical testing instead |
 | `vercel-optimize` | No Vercel deployment (targeted to Cloudflare Pages static CDN) |
 | `task-observer` | Generic task observation |
