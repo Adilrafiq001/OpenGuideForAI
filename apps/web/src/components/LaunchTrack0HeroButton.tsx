@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/launch-track-button.css';
 
 interface LaunchTrack0HeroButtonProps {
@@ -6,38 +6,64 @@ interface LaunchTrack0HeroButtonProps {
 }
 
 export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ onLaunch }) => {
-  // Default is true (case closed, state-1 "Launch Track 0" active)
-  const [isChecked, setIsChecked] = useState(true);
   const [isOpening, setIsOpening] = useState(false);
+  const isOpeningRef = useRef(false);
+  const timerRef = useRef<number | null>(null);
 
-  // Reset when mounted or on back navigation
-  useEffect(() => {
-    setIsChecked(true);
+  // Dedicated reset function that guarantees returning to pristine resting state
+  const resetToIdle = () => {
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    isOpeningRef.current = false;
     setIsOpening(false);
+  };
+
+  useEffect(() => {
+    // Ensure clean state on mount
+    resetToIdle();
+
+    // Listen for back/forward cache restores and popstate events
+    const handlePageShow = () => {
+      resetToIdle();
+    };
+    const handlePopState = () => {
+      resetToIdle();
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current);
+      }
+      window.removeEventListener('pageshow', handlePageShow);
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
   const handleTrigger = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (isOpening) return;
+    e.stopPropagation();
 
-    if (isChecked) {
-      // Transition from closed (checked) to open (unchecked)
-      setIsChecked(false);
-      setIsOpening(true);
+    // If already in opening animation, strictly guard against duplicate clicks
+    if (isOpeningRef.current) return;
 
-      // Wait until animation is fully completed with "Time To Shine" before redirecting
-      setTimeout(() => {
-        onLaunch();
-        // Reset state buffer so if user navigates back via browser history, it is immediately clickable again
-        setTimeout(() => {
-          setIsOpening(false);
-          setIsChecked(true);
-        }, 1000);
-      }, 1450);
-    } else {
-      // If already opened, launch directly
+    isOpeningRef.current = true;
+    setIsOpening(true);
+
+    // Give exactly 1500ms for:
+    // 1. Steel case slides open (-26px)
+    // 2. Vacuum filament lights up and glows
+    // 3. Screws and dots pulse
+    // 4. "Time To Shine" springs in with golden luminescence
+    timerRef.current = window.setTimeout(() => {
       onLaunch();
-    }
+      // Reset state buffer so if user navigates back via browser history, it is immediately ready
+      resetToIdle();
+    }, 1500);
   };
 
   // State 1: "Launch Track 0" (12 characters with spacing)
@@ -75,20 +101,14 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
     <div className="launch-track-hero-container">
       <div className="area">
         <div className="bg" aria-hidden="true" />
-        <label className="area-wrapper" onClick={handleTrigger}>
+        <button
+          type="button"
+          className={`launch-track-hero-btn ${isOpening ? 'is-opening' : 'is-idle'}`}
+          onClick={handleTrigger}
+          aria-label="Launch Track 0"
+        >
           <div className="wrapper">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={() => {}}
-              aria-label="Launch Track 0"
-            />
-            <button
-              type="button"
-              className="button-btn"
-              tabIndex={-1}
-              aria-hidden="true"
-            >
+            <div className="button-btn">
               <div className="part-1">
                 <div className="case">
                   <div className="mask" />
@@ -183,9 +203,9 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                   </span>
                 </div>
               </div>
-            </button>
+            </div>
           </div>
-        </label>
+        </button>
       </div>
     </div>
   );
