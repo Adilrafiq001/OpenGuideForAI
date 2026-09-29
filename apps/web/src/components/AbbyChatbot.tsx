@@ -1,16 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Paperclip, 
-  LayoutGrid, 
-  Globe, 
-  Send, 
-  X, 
-  Minus, 
-  Sparkles, 
-  Copy, 
-  Check, 
-  Settings2
-} from 'lucide-react';
+import { Settings, X, Copy, Check } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
 import '../styles/abby-chatbot.css';
@@ -30,19 +19,17 @@ interface AbbyChatbotProps {
 
 export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
-  const [isThinking, setIsThinking] = useState(false);
+  const [query, setQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [showPromptsModal, setShowPromptsModal] = useState(false);
 
-  const { byokApiKey, byokProvider, byokModel } = useSettingsStore();
+  const { byokApiKey, byokProvider } = useSettingsStore();
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 'welcome-1',
+      id: 'welcome',
       role: 'assistant',
-      content: "Hi! I'm **Abby**, your offline guide for OpenGuide. Ask me anything about our tracks, Python WebAssembly, local-first architecture, vectors, or shortcuts!",
-      takeaway: "100% in-browser offline intelligence • Zero cloud compute costs",
+      content: "Hi, I am Abby, your offline guide for OpenGuide. Ask me anything about our tracks, in-browser WebAssembly, vector math, or keyboard shortcuts!",
+      takeaway: "100% in-browser offline intelligence • Zero cloud costs",
       timestamp: 'Just now'
     }
   ]);
@@ -50,18 +37,12 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-scroll to bottom of messages
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom();
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isOpen, isThinking]);
+  }, [messages, isOpen]);
 
-  // Focus textarea when opened
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => textareaRef.current?.focus(), 150);
@@ -74,19 +55,16 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const generateOfflineResponse = (query: string): { content: string; codeSnippet?: string; takeaway?: string } => {
-    const qLower = query.toLowerCase();
-    const results = searchOfflineKnowledge(query);
+  const generateOfflineResponse = (userQuery: string): { content: string; codeSnippet?: string; takeaway?: string } => {
+    const qLower = userQuery.toLowerCase();
+    const results = searchOfflineKnowledge(userQuery);
 
-    // Direct knowledge hits
     if (results.length > 0) {
       const top = results[0];
       let responseText = `${top.summary}\n\n${top.explanation}`;
-      
       if (results.length > 1) {
-        responseText += `\n\n*Related concepts to explore:* ${results.slice(1, 3).map(r => r.title).join(', ')}`;
+        responseText += `\n\n*Related concepts:* ${results.slice(1, 3).map(r => r.title).join(', ')}`;
       }
-
       return {
         content: responseText,
         codeSnippet: top.codeSnippet,
@@ -94,18 +72,17 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       };
     }
 
-    // Contextual fallback logic
     if (qLower.includes('track 0') || qLower.includes('zero') || qLower.includes('start')) {
       return {
-        content: "**Track 0: Absolute Zero** teaches you foundational AI programming completely in your browser. You run CPython 3.12 via Pyodide compiled to WebAssembly. You'll master Python tensors, linear operations, and array transformations with zero cloud costs!",
-        codeSnippet: "# Track 0 Web Worker Execution:\nimport sys\nprint(f'Python {sys.version.split()[0]} running in browser WASM!')",
+        content: "**Track 0: Absolute Zero** teaches foundational AI programming directly inside your browser. You run CPython 3.12 via Pyodide compiled to WebAssembly. Master tensors, linear algebra, and data pipelines with zero cloud dependencies!",
+        codeSnippet: "# Track 0 In-Browser Execution:\nimport sys\nprint(f'Python {sys.version.split()[0]} running in browser WASM!')",
         takeaway: "Instant zero-setup Python learning without Docker or cloud bills."
       };
     }
 
     if (qLower.includes('track 1') || qLower.includes('vector') || qLower.includes('embedding')) {
       return {
-        content: "**Track 1: Vector Spaces & High-Dimensional Geometry** introduces vector embeddings, inner product math, cosine similarity, and in-memory vector search engines from scratch without third-party libraries.",
+        content: "**Track 1: Vector Spaces & High-Dimensional Geometry** introduces embeddings, dot product math, cosine similarity, and in-memory vector indexing from scratch without external libraries.",
         codeSnippet: "import math\n\ndef cosine_similarity(u, v):\n    dot = sum(a * b for a, b in zip(u, v))\n    norm_u = math.sqrt(sum(a * a for a in u))\n    norm_v = math.sqrt(sum(b * b for b in v))\n    return dot / (norm_u * norm_v)\n\nprint('Similarity:', cosine_similarity([1, 2], [2, 4])) # 1.0",
         takeaway: "Vectors quantify semantic meaning as directional angles in hyperspace."
       };
@@ -113,120 +90,44 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
     if (qLower.includes('theme') || qLower.includes('color') || qLower.includes('contrast')) {
       return {
-        content: "OpenGuide features **20 calibrated themes** (10 Dark & 10 Light), each verified for WCAG AAA contrast ratio (>7:1). You can toggle them in the Color Themes dock item, in Settings, or via the `Ctrl+T` shortcut!",
+        content: "OpenGuide features **20 calibrated themes** (10 Dark & 10 Light), each verified for WCAG AAA contrast ratio (>7:1). Switch them using the Color Themes dock item, in Settings, or via the `Ctrl+T` shortcut!",
         takeaway: "Universal accessibility across light and dark workspaces."
       };
     }
 
-    if (qLower.includes('holodeck') || qLower.includes('3d') || qLower.includes('vr')) {
-      return {
-        content: "The **Spatial Holodeck** (`/holodeck`) is our immersive 3D/WebXR laboratory. It lets you visually walk through multi-dimensional vector embeddings and neural synapse activations in real-time WebGL and Quest / Vision Pro VR!",
-        takeaway: "Spatial immersion translates abstract high-dimensional math into physical intuition."
-      };
-    }
-
-    if (qLower.includes('rule') || qLower.includes('$0') || qLower.includes('free') || qLower.includes('cost')) {
-      return {
-        content: "The **$0 Rule** is OpenGuide's hard architectural guarantee: zero paid backend servers and zero subscriptions. All computations (CPython WebAssembly, Pyodide, Web Workers, Dexie IndexedDB) execute locally on your device for absolute lifetime privacy and zero fees.",
-        takeaway: "$0 cloud compute forever. Your code and data never leave your browser."
-      };
-    }
-
     return {
-      content: `I searched my local knowledge base for **"${query}"**, but didn't find an exact match.\n\nHere are some things you can ask me about:\n- **$0 Rule & Architecture** — How we execute Python client-side\n- **Track 0 & Track 1** — WebAssembly, Python basics, and Vector Embeddings\n- **Mathematical Intuition** — Dot products, cosine similarity, matrix math\n- **Themes & Shortcuts** — 20 themes and developer productivity\n\n*Tip:* To ask broader questions, add your personal API key in Settings (BYOK)!`,
-      takeaway: "Ask about tracks, Pyodide WASM, vectors, or shortcuts."
+      content: `I've analyzed your question: "${userQuery}". OpenGuide is a 100% client-side AI engineering studio running Python WebAssembly locally in your browser. You can explore Track 0 for foundational linear algebra or configure an optional BYOK key in Settings for frontier models.`,
+      takeaway: "Local-First Architecture • Pure client-side computation"
     };
   };
 
-  const handleSend = async (textToSend?: string) => {
-    const query = (textToSend || input).trim();
-    if (!query || isThinking) return;
+  const handleSend = () => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
 
-    const userMessage: Message = {
+    const userMsg: Message = {
       id: `user-${Date.now()}`,
       role: 'user',
-      content: query,
-      timestamp: 'Now'
+      content: trimmed,
+      timestamp: 'Just now'
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    setIsThinking(true);
+    setMessages(prev => [...prev, userMsg]);
+    setQuery('');
 
-    // Check if BYOK is configured
-    if (byokApiKey && byokApiKey.trim().length > 5) {
-      try {
-        let endpoint = 'https://openrouter.ai/api/v1/chat/completions';
-        let headers: Record<string, string> = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${byokApiKey}`
-        };
-
-        if (byokProvider === 'openai') {
-          endpoint = 'https://api.openai.com/v1/chat/completions';
-        } else if (byokProvider === 'anthropic') {
-          endpoint = 'https://api.anthropic.com/v1/messages';
-          headers['x-api-key'] = byokApiKey;
-          headers['anthropic-version'] = '2023-06-01';
-        }
-
-        const model = byokModel || (byokProvider === 'openai' ? 'gpt-4o-mini' : 'google/gemini-2.5-flash');
-
-        const systemPrompt = `You are Abby, the friendly, first-principles AI assistant for OpenGuide.
-OpenGuide is a local-first platform teaching AI engineering with zero cloud dependencies ($0 rule), running CPython via WebAssembly/Pyodide.
-Answer the user's question clearly, concisely, with intuitive first-principles explanations and code snippets where relevant.`;
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            model,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: query }
-            ]
-          })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const replyText = data.choices?.[0]?.message?.content || data.content?.[0]?.text;
-          if (replyText) {
-            setMessages(prev => [
-              ...prev,
-              {
-                id: `assistant-${Date.now()}`,
-                role: 'assistant',
-                content: replyText,
-                takeaway: `Answered via BYOK (${model})`,
-                timestamp: 'Just now'
-              }
-            ]);
-            setIsThinking(false);
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn('BYOK call failed, falling back to offline engine:', err);
-      }
-    }
-
-    // Offline simulation delay (250-400ms for natural feel)
+    // Answer via offline knowledge base
     setTimeout(() => {
-      const { content, codeSnippet, takeaway } = generateOfflineResponse(query);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content,
-          codeSnippet,
-          takeaway,
-          timestamp: 'Just now'
-        }
-      ]);
-      setIsThinking(false);
-    }, 320);
+      const response = generateOfflineResponse(trimmed);
+      const assistantMsg: Message = {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant',
+        content: response.content,
+        codeSnippet: response.codeSnippet,
+        takeaway: response.takeaway,
+        timestamp: 'Just now'
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    }, 250);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -236,265 +137,213 @@ Answer the user's question clearly, concisely, with intuitive first-principles e
     }
   };
 
-  const quickPrompts = [
-    'What is the $0 rule?',
-    'How does Pyodide run in my browser?',
-    'Explain Track 1 Vector Embeddings',
-    'How do I switch between 20 themes?',
-    'What is the 80/20 Psychology Accelerator?'
-  ];
+  const handleQuickPrompt1 = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuery("What is Track 0: Absolute Zero?");
+    textareaRef.current?.focus();
+  };
+
+  const handleQuickPrompt2 = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuery("How does in-browser Pyodide WebAssembly work?");
+    textareaRef.current?.focus();
+  };
+
+  const handleSettingsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onOpenSettings?.();
+  };
+
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsOpen(false);
+  };
 
   return (
-    <>
-      {/* ── Pre-Click Floating Squircle Widget (Image 3) ── */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="abby-floating-trigger"
-          aria-label="Open Abby AI Assistant"
-          id="abby-chatbot-trigger"
-          title="Chat with Abby (Offline AI Assistant)"
-        >
-          <div className="abby-eyes-container">
-            <div className="abby-happy-eye" />
-            <div className="abby-happy-eye" />
-          </div>
-          <span className="abby-trigger-badge">
-            Abby • Offline AI
-          </span>
-        </button>
-      )}
+    <div className={`abby-floating-anchor ${isOpen ? 'is-open' : ''}`} id="abby-copilot">
+      <div className={`container-ai-input ${isOpen ? 'is-open' : ''}`}>
+        {/* 15 3D Mouse Hover Tilt Areas */}
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={() => setIsOpen(true)} />
 
-      {/* ── Post-Click Sleek Chat Window (Image 4) ── */}
-      {isOpen && (
-        <div 
-          className="abby-chat-window" 
-          role="dialog" 
-          aria-label="Abby AI Assistant"
-          id="abby-chatbot-window"
-        >
-          {/* Header */}
-          <div className="abby-chat-header">
-            <div className="abby-header-brand">
-              <div className="abby-mini-avatar">
-                <div className="flex gap-1.5 items-center justify-center">
-                  <div className="abby-mini-eye" />
-                  <div className="abby-mini-eye" />
-                </div>
+        <label className={`container-wrap ${isOpen ? 'is-open' : ''}`}>
+          <input 
+            type="checkbox" 
+            checked={isOpen} 
+            onChange={(e) => setIsOpen(e.target.checked)} 
+            id="abby-toggle-checkbox"
+            aria-label="Toggle Abby AI Copilot"
+          />
+          <div className="card">
+            {/* Background 4-Ball Rotating Pastel Mesh Aura */}
+            <div className="background-blur-balls">
+              <div className="balls">
+                <span className="ball rosa" />
+                <span className="ball violet" />
+                <span className="ball green" />
+                <span className="ball cyan" />
               </div>
-              <div>
-                <div className="abby-header-title">
-                  <span>Abby</span>
-                  <span className={`abby-status-pill ${byokApiKey ? 'byok' : 'offline'}`}>
-                    {byokApiKey ? 'BYOK Frontier' : '100% Offline'}
-                  </span>
+            </div>
+
+            {/* Content Card with Dual-State Blinking & Smiling Eyes */}
+            <div className="content-card">
+              <div className="background-blur-card">
+                <div className="eyes">
+                  <span className="eye" />
+                  <span className="eye" />
                 </div>
-                <div className="abby-header-subtitle">
-                  OpenGuide Assistant • $0 Forever
+                <div className="eyes happy">
+                  <svg fill="none" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M8.28386 16.2843C8.9917 15.7665 9.8765 14.731 12 14.731C14.1235 14.731 15.0083 15.7665 15.7161 16.2843C17.8397 17.8376 18.7542 16.4845 18.9014 15.7665C19.4323 13.1777 17.6627 11.1066 17.3088 10.5888C16.3844 9.23666 14.1235 8 12 8C9.87648 8 7.61556 9.23666 6.69122 10.5888C6.33728 11.1066 4.56771 13.1777 5.09858 15.7665C5.24582 16.4845 6.16034 17.8376 8.28386 16.2843Z" />
+                  </svg>
+                  <svg fill="none" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M8.28386 16.2843C8.9917 15.7665 9.8765 14.731 12 14.731C14.1235 14.731 15.0083 15.7665 15.7161 16.2843C17.8397 17.8376 18.7542 16.4845 18.9014 15.7665C19.4323 13.1777 17.6627 11.1066 17.3088 10.5888C16.3844 9.23666 14.1235 8 12 8C9.87648 8 7.61556 9.23666 6.69122 10.5888C6.33728 11.1066 4.56771 13.1777 5.09858 15.7665C5.24582 16.4845 6.16034 17.8376 8.28386 16.2843Z" />
+                  </svg>
                 </div>
               </div>
             </div>
 
-            <div className="abby-header-actions">
-              {onOpenSettings && (
-                <button
-                  onClick={onOpenSettings}
-                  className="abby-header-btn"
-                  title="Configure BYOK Frontier Key in Settings"
-                  aria-label="Settings"
-                >
-                  <Settings2 size={16} />
-                </button>
-              )}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="abby-header-btn"
-                title="Minimize Abby"
-                aria-label="Minimize"
-              >
-                <Minus size={16} />
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="abby-header-btn"
-                title="Close Abby"
-                aria-label="Close"
-              >
-                <X size={16} />
-              </button>
-            </div>
-          </div>
-
-          {/* Messages Stream */}
-          <div className="abby-messages-container">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`abby-msg ${msg.role}`}>
-                {msg.role === 'assistant' && (
-                  <div className="abby-mini-avatar !w-7 !h-7 mt-0.5 flex-shrink-0">
-                    <div className="flex gap-1 items-center justify-center">
-                      <div className="w-1.5 h-1 border-t-2 border-l-2 border-r-2 border-white rounded-t-sm" />
-                      <div className="w-1.5 h-1 border-t-2 border-l-2 border-r-2 border-white rounded-t-sm" />
-                    </div>
+            {/* Post-Click Chat Interface */}
+            <div className="container-ai-chat" onClick={(e) => e.stopPropagation()}>
+              <div className="chat">
+                {/* Header with Title & Controls */}
+                <div className="abby-chat-header">
+                  <div className="abby-chat-header-title">
+                    <div className="abby-avatar-badge">✦</div>
+                    <span className="abby-name">Abby</span>
+                    <span className="abby-status-tag">
+                      {byokApiKey ? `BYOK (${byokProvider})` : 'Offline Guide'}
+                    </span>
                   </div>
-                )}
-                
-                <div className={msg.role === 'user' ? 'abby-bubble-user' : 'abby-bubble-assistant'}>
-                  <div className="whitespace-pre-wrap">{msg.content}</div>
-
-                  {msg.codeSnippet && (
-                    <div className="relative mt-2">
-                      <pre className="abby-code-block">{msg.codeSnippet}</pre>
-                      <button
-                        onClick={() => handleCopy(msg.id, msg.codeSnippet!)}
-                        className="absolute top-2 right-2 p-1 rounded bg-neutral-800/80 hover:bg-neutral-700 text-neutral-300 border border-white/10"
-                        title="Copy code"
-                      >
-                        {copiedId === msg.id ? (
-                          <Check size={12} className="text-emerald-400" />
-                        ) : (
-                          <Copy size={12} />
-                        )}
-                      </button>
-                    </div>
-                  )}
-
-                  {msg.takeaway && (
-                    <div className="mt-2 pt-2 border-t border-black/5 flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
-                      <Sparkles size={13} className="flex-shrink-0 text-emerald-500" />
-                      <span>{msg.takeaway}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {/* Quick Prompt Chips (on start or when requested) */}
-            {messages.length <= 2 && (
-              <div className="pt-2">
-                <div className="text-[11px] font-semibold text-neutral-500 mb-1 flex items-center gap-1">
-                  <Sparkles size={12} />
-                  <span>Suggested Prompts:</span>
-                </div>
-                <div className="abby-chips-container">
-                  {quickPrompts.map((p, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleSend(p)}
-                      className="abby-prompt-chip"
+                  <div className="abby-header-actions">
+                    <button 
+                      type="button" 
+                      onClick={handleSettingsClick} 
+                      className="abby-icon-btn" 
+                      title="Settings & BYOK Model"
+                      aria-label="Settings"
                     >
-                      {p}
+                      <Settings size={14} />
                     </button>
+                    <button 
+                      type="button" 
+                      onClick={handleClose} 
+                      className="abby-icon-btn" 
+                      title="Minimize Abby"
+                      aria-label="Minimize"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Conversation History */}
+                <div className="abby-messages-container">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`abby-message-bubble ${msg.role}`}>
+                      <div>{msg.content}</div>
+                      {msg.codeSnippet && (
+                        <div className="relative group">
+                          <pre className="abby-code-block">{msg.codeSnippet}</pre>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(msg.id, msg.codeSnippet!)}
+                            className="absolute top-1.5 right-1.5 p-1 rounded bg-black/40 text-slate-300 hover:text-white transition-colors"
+                            title="Copy snippet"
+                          >
+                            {copiedId === msg.id ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                          </button>
+                        </div>
+                      )}
+                      {msg.takeaway && (
+                        <div className="abby-takeaway-chip">
+                          ✦ {msg.takeaway}
+                        </div>
+                      )}
+                    </div>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Thinking Indicator */}
-            {isThinking && (
-              <div className="abby-msg assistant">
-                <div className="abby-typing-dots">
-                  <div className="abby-dot" />
-                  <div className="abby-dot" />
-                  <div className="abby-dot" />
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* ── Input Card (Image 4 replica) ── */}
-          <div className="abby-input-card">
-            <div className="abby-input-frame">
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Imagine Something...✦°"
-                className="abby-textarea"
-                rows={2}
-                id="abby-chat-input"
-              />
-
-              {/* Bottom Toolbar inside Frame */}
-              <div className="abby-toolbar">
-                <div className="abby-toolbar-tools">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setInput(prev => (prev ? `${prev} [Context: OpenGuide App]` : 'Summarize the architecture of OpenGuide'));
-                      textareaRef.current?.focus();
-                    }}
-                    className="abby-tool-btn"
-                    title="Attach App Context"
-                    aria-label="Attach context"
-                  >
-                    <Paperclip size={18} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPromptsModal(!showPromptsModal)}
-                    className="abby-tool-btn"
-                    title="Browse Suggested Prompts"
-                    aria-label="Suggested prompts"
-                  >
-                    <LayoutGrid size={18} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={onOpenSettings}
-                    className="abby-tool-btn"
-                    title={byokApiKey ? 'BYOK Frontier Web Active (Click to edit)' : '100% Offline (Click to add BYOK key)'}
-                    aria-label="Web & BYOK Status"
-                  >
-                    <Globe size={18} className={byokApiKey ? 'text-purple-500' : 'text-emerald-500'} />
-                  </button>
+                  <div ref={messagesEndRef} />
                 </div>
 
-                {/* Gradient Send Button */}
-                <button
-                  type="button"
-                  onClick={() => handleSend()}
-                  disabled={!input.trim() || isThinking}
-                  className="abby-send-btn"
-                  title="Send message (Enter)"
-                  aria-label="Send message"
-                  id="abby-send-button"
-                >
-                  <Send size={16} />
-                </button>
+                {/* Textarea Input Container */}
+                <div className="chat-bot">
+                  <textarea 
+                    ref={textareaRef}
+                    placeholder="Imagine Something...✦˚" 
+                    name="chat_bot" 
+                    id="chat_bot" 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+
+                {/* Action Options & 3D Gradient Submit Button */}
+                <div className="options">
+                  <div className="btns-add">
+                    <button 
+                      type="button" 
+                      onClick={handleQuickPrompt1}
+                      title="Quick prompt: Track 0"
+                      aria-label="Quick prompt Track 0"
+                    >
+                      <svg viewBox="0 0 24 24" height={20} width={20} xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" fill="none" />
+                      </svg>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={handleQuickPrompt2}
+                      title="Quick prompt: Pyodide WASM"
+                      aria-label="Quick prompt Pyodide WASM"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm0 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm0-8h6m-3-3v6" />
+                      </svg>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={handleSettingsClick}
+                      title="Configure Model & BYOK"
+                      aria-label="Settings & BYOK"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-2.29-2.333A17.9 17.9 0 0 1 8.027 13H4.062a8.01 8.01 0 0 0 5.648 6.667M10.03 13c.151 2.439.848 4.73 1.97 6.752A15.9 15.9 0 0 0 13.97 13zm9.908 0h-3.965a17.9 17.9 0 0 1-1.683 6.667A8.01 8.01 0 0 0 19.938 13M4.062 11h3.965A17.9 17.9 0 0 1 9.71 4.333A8.01 8.01 0 0 0 4.062 11m5.969 0h3.938A15.9 15.9 0 0 0 12 4.248A15.9 15.9 0 0 0 10.03 11m4.259-6.667A17.9 17.9 0 0 1 15.973 11h3.965a8.01 8.01 0 0 0-5.648-6.667" />
+                      </svg>
+                    </button>
+                  </div>
+                  <button 
+                    className="btn-submit" 
+                    type="button" 
+                    onClick={handleSend}
+                    title="Submit Question"
+                    aria-label="Submit Question"
+                  >
+                    <i>
+                      <svg viewBox="0 0 512 512">
+                        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" fill="currentColor" />
+                      </svg>
+                    </i>
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Quick Prompts Picker Dropdown if toggled */}
-            {showPromptsModal && (
-              <div className="mt-2 p-2.5 rounded-xl bg-neutral-100 border border-neutral-200 text-xs space-y-1.5 animate-fadeIn">
-                <div className="font-semibold text-neutral-700 flex justify-between items-center">
-                  <span>Quick In-App Topics:</span>
-                  <button onClick={() => setShowPromptsModal(false)} className="text-neutral-400 hover:text-neutral-600">✕</button>
-                </div>
-                <div className="grid grid-cols-1 gap-1">
-                  {quickPrompts.map((p, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setShowPromptsModal(false);
-                        handleSend(p);
-                      }}
-                      className="text-left px-2 py-1.5 rounded-lg hover:bg-white text-neutral-700 transition-colors"
-                    >
-                      ✦ {p}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
-        </div>
-      )}
-    </>
+        </label>
+      </div>
+    </div>
   );
 };

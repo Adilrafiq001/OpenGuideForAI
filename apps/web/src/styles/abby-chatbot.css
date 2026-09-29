@@ -1,236 +1,358 @@
 /* Abby Standalone Offline AI Chatbot Styles
-   Designed per user specifications with pastel aura, animated happy eyes, and Image 4 card UI */
+   Exact 3D Mouse Tracking Tilt, Rotating Pastel Aura Balls, Dual-State Eyes, and Interactive Chat Interface */
 
-/* ── Pre-Click Floating Squircle Widget (Image 3) ── */
-.abby-floating-trigger {
+.abby-floating-anchor {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 95;
-  width: 68px;
-  height: 68px;
-  border-radius: 24px;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  padding: 0;
+  pointer-events: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  /* Pastel mesh aura background (matching Image 3) */
-  background: 
-    radial-gradient(circle at 25% 25%, #ff9acb 0%, rgba(255, 154, 203, 0) 55%),
-    radial-gradient(circle at 80% 20%, #c5a4ff 0%, rgba(197, 164, 255, 0) 50%),
-    radial-gradient(circle at 75% 80%, #36e0dd 0%, rgba(54, 224, 221, 0) 60%),
-    radial-gradient(circle at 20% 80%, #6de5b8 0%, rgba(109, 229, 184, 0) 55%),
-    linear-gradient(135deg, #ffd1e3 0%, #d8c3ff 45%, #88f1ee 100%);
-  box-shadow: 
-    0 12px 32px -4px rgba(54, 224, 221, 0.45),
-    0 8px 18px -4px rgba(216, 195, 255, 0.45),
-    0 2px 6px rgba(0, 0, 0, 0.08),
-    inset 0 1px 2px rgba(255, 255, 255, 0.8),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
-@keyframes abby-float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+.abby-floating-anchor:has(.is-open),
+.abby-floating-anchor.is-open {
+  z-index: 120;
 }
 
-.abby-floating-trigger:hover {
-  transform: translateY(-8px) scale(1.08);
-  box-shadow: 
-    0 20px 42px -6px rgba(54, 224, 221, 0.6),
-    0 12px 24px -4px rgba(216, 195, 255, 0.6),
-    0 0 25px 2px rgba(255, 154, 203, 0.4),
-    inset 0 1px 3px rgba(255, 255, 255, 0.9);
+.container-ai-input {
+  --perspective: 800px;
+  --translateY: 18px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  transform-style: preserve-3d;
+  width: 62px;
+  height: 62px;
+  pointer-events: none;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.abby-floating-trigger:active {
-  transform: translateY(0px) scale(0.96);
-  transition: transform 0.15s ease;
+.container-ai-input.is-open {
+  width: 330px;
+  height: 430px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
 }
 
-/* Happy Smiling Curved Eyes (^ ^) */
-.abby-eyes-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+.container-ai-input .area {
+  position: relative;
   width: 100%;
   height: 100%;
+  z-index: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.container-ai-input.is-open .area {
   pointer-events: none;
 }
 
-.abby-happy-eye {
-  width: 16px;
-  height: 10px;
-  border-top: 4px solid #ffffff;
-  border-left: 4px solid #ffffff;
-  border-right: 4px solid #ffffff;
-  border-bottom: 0px solid transparent;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  transition: transform 0.25s ease, height 0.25s ease;
-}
-
-.abby-floating-trigger:hover .abby-happy-eye {
-  transform: scaleY(1.2);
-}
-
-/* Tooltip Badge on Hover */
-.abby-trigger-badge {
-  position: absolute;
-  top: -34px;
-  right: 50%;
-  transform: translateX(50%);
-  padding: 4px 10px;
-  border-radius: 12px;
-  background: rgba(15, 20, 28, 0.88);
-  backdrop-filter: blur(8px);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.abby-floating-trigger:hover .abby-trigger-badge {
-  opacity: 1;
-  transform: translateX(50%) translateY(-2px);
-}
-
-/* ── Post-Click Sleek Chat Window (Image 4) ── */
-.abby-chat-window {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 100;
-  width: 440px;
-  max-width: calc(100vw - 32px);
-  height: 600px;
-  max-height: calc(100vh - 48px);
-  border-radius: 28px;
-  background: #ffffff;
-  color: #1a1a24;
+.container-wrap {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 9;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.container-wrap:hover {
+  padding: 0;
+}
+
+.container-wrap:active:not(.is-open) {
+  transform: translateX(-50%) translateY(-50%) scale(0.95);
+}
+
+.container-wrap:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-55%);
+  width: 62px;
+  height: 58px;
+  background-color: rgba(222, 223, 224, 0.45);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.container-wrap:hover:after {
+  transform: translateX(-50%) translateY(-50%);
+  height: 62px;
+}
+
+.container-ai-input.is-open .container-wrap:after {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.container-wrap input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.container-wrap input:checked + .card .eyes {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.container-wrap input:checked + .card .content-card {
+  width: 330px;
+  height: 430px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
+  border-radius: 20px;
+}
+
+.container-wrap input:checked + .card .background-blur-balls {
+  border-radius: 20px;
+}
+
+.container-wrap input:checked + .card .container-ai-chat {
+  opacity: 1;
+  visibility: visible;
+  z-index: 99999;
+  pointer-events: auto;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: all 0.6s ease;
+  border-radius: 3rem;
+  display: flex;
+  align-items: center;
+  transform: translateZ(50px);
+  justify-content: center;
+  position: relative;
+}
+
+.container-ai-input.is-open .card {
+  transform: none !important;
+}
+
+.card:hover {
+  box-shadow:
+    0 10px 40px rgba(0, 0, 60, 0.25),
+    inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.background-blur-balls {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.88);
   overflow: hidden;
-  box-shadow: 
-    0 25px 60px -15px rgba(10, 20, 40, 0.22),
-    0 10px 25px -5px rgba(54, 224, 221, 0.25),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
-  /* Gorgeous subtle pastel border aura */
-  border: 2px solid transparent;
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
-  background-image: 
-    linear-gradient(#ffffff, #ffffff),
-    linear-gradient(135deg, #ff9acb 0%, #c5a4ff 35%, #36e0dd 70%, #6de5b8 100%);
-  animation: abby-window-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes abby-window-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.94);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0px) scale(1);
-  }
+.balls {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  animation: rotate-background-balls 10s linear infinite;
+  width: 100%;
+  height: 100%;
 }
 
-/* Header */
+.container-wrap:hover .balls {
+  animation-play-state: paused;
+}
+
+.background-blur-balls .ball {
+  width: 2.2rem;
+  height: 2.2rem;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(12px);
+}
+
+.background-blur-balls .ball.violet {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #9147ff;
+}
+
+.background-blur-balls .ball.green {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #34d399;
+}
+
+.background-blur-balls .ball.rosa {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: #ec4899;
+}
+
+.background-blur-balls .ball.cyan {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #05e0f5;
+}
+
+.content-card {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.background-blur-card {
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyes {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform: translateX(-50%) translateY(50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  gap: 7px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.eyes .eye {
+  width: 8px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 6px;
+  animation: animate-eyes 10s infinite linear;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.eyes.happy {
+  display: none;
+  color: #fff;
+  gap: 0;
+}
+
+.eyes.happy svg {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+}
+
+.container-wrap:hover .eyes .eye {
+  display: none;
+}
+
+.container-wrap:hover .eyes.happy {
+  display: flex;
+}
+
+.container-ai-chat {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.container-wrap .card .chat {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-radius: 18px;
+  width: 100%;
+  height: 100%;
+  padding: 8px 10px 10px;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #1a202c;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Chat Header */
 .abby-chat-header {
-  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 4px 6px 8px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
 }
 
-.abby-header-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.abby-mini-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
-  background: 
-    radial-gradient(circle at 25% 25%, #ff9acb 0%, rgba(255, 154, 203, 0) 55%),
-    radial-gradient(circle at 80% 20%, #c5a4ff 0%, rgba(197, 164, 255, 0) 50%),
-    radial-gradient(circle at 75% 80%, #36e0dd 0%, rgba(54, 224, 221, 0) 60%),
-    linear-gradient(135deg, #ffd1e3 0%, #d8c3ff 45%, #88f1ee 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(54, 224, 221, 0.3);
-  flex-shrink: 0;
-}
-
-.abby-mini-eye {
-  width: 8px;
-  height: 5px;
-  border-top: 2.5px solid #ffffff;
-  border-left: 2.5px solid #ffffff;
-  border-right: 2.5px solid #ffffff;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.abby-header-title {
+.abby-chat-header-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #111827;
-  letter-spacing: -0.2px;
 }
 
-.abby-status-pill {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 9999px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.abby-status-pill.offline {
-  background: rgba(16, 185, 129, 0.12);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.abby-status-pill.byok {
-  background: rgba(139, 92, 246, 0.12);
-  color: #7c3aed;
-  border: 1px solid rgba(139, 92, 246, 0.25);
-}
-
-.abby-header-subtitle {
+.abby-avatar-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ec4899 0%, #9147ff 50%, #05e0f5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
   font-size: 11px;
-  color: #6b7280;
-  margin-top: 1px;
+  font-weight: 700;
+}
+
+.abby-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a202c;
+  letter-spacing: -0.3px;
+}
+
+.abby-status-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  font-weight: 500;
 }
 
 .abby-header-actions {
@@ -239,57 +361,54 @@
   gap: 4px;
 }
 
-.abby-header-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
+.abby-icon-btn {
+  background: transparent;
+  border: none;
+  color: #718096;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
-  background: transparent;
-  border: none;
-  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.abby-header-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #111827;
+.abby-icon-btn:hover {
+  background: #f1f5f9;
+  color: #1a202c;
 }
 
-/* Chat Messages Viewport */
+/* Chat Messages Scroll Container */
 .abby-messages-container {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 20px;
+  padding: 8px 4px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  scroll-behavior: smooth;
-  background: #fbfbfd;
+  gap: 8px;
+  min-height: 0;
 }
 
-/* Custom minimal scrollbar */
 .abby-messages-container::-webkit-scrollbar {
   width: 5px;
 }
+
 .abby-messages-container::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
+  background: #e2e8f0;
   border-radius: 4px;
 }
 
-/* Message Bubbles */
-.abby-msg {
-  display: flex;
-  gap: 10px;
-  max-width: 88%;
-  font-size: 13.5px;
-  line-height: 1.55;
-  animation: abby-fade-in 0.25s ease-out;
+.abby-message-bubble {
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  max-width: 90%;
+  animation: abby-bubble-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes abby-fade-in {
+@keyframes abby-bubble-in {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -300,209 +419,295 @@
   }
 }
 
-.abby-msg.user {
+.abby-message-bubble.user {
   align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.abby-msg.assistant {
-  align-self: flex-start;
-}
-
-.abby-bubble-user {
-  padding: 10px 15px;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  background: linear-gradient(135deg, #9147ff 0%, #3b82f6 100%);
   color: #ffffff;
-  border-radius: 18px 18px 4px 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-bottom-right-radius: 4px;
 }
 
-.abby-bubble-assistant {
-  padding: 12px 16px;
-  background: #ffffff;
-  color: #1f2937;
-  border-radius: 18px 18px 18px 4px;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-}
-
-.abby-bubble-assistant p {
-  margin-bottom: 8px;
-}
-.abby-bubble-assistant p:last-child {
-  margin-bottom: 0;
+.abby-message-bubble.assistant {
+  align-self: flex-start;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  border-bottom-left-radius: 4px;
 }
 
 .abby-code-block {
-  margin: 8px 0;
-  padding: 10px 12px;
-  background: #181820;
-  color: #45f8f8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 12px;
-  border-radius: 10px;
-  overflow-x: auto;
-  position: relative;
-}
-
-/* Prompt Chips */
-.abby-chips-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.abby-prompt-chip {
-  padding: 6px 12px;
-  border-radius: 9999px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  color: #374151;
-  font-size: 11.5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.abby-prompt-chip:hover {
-  background: linear-gradient(135deg, rgba(255, 154, 203, 0.15) 0%, rgba(54, 224, 221, 0.15) 100%);
-  border-color: rgba(54, 224, 221, 0.5);
-  color: #0f172a;
-  transform: translateY(-1px);
-}
-
-/* Typing Indicator */
-.abby-typing-dots {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 10px 14px;
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 18px 18px 18px 4px;
-  width: fit-content;
-}
-
-.abby-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #9ca3af;
-  animation: abby-dot-pulse 1.4s infinite ease-in-out both;
-}
-
-.abby-dot:nth-child(1) { animation-delay: -0.32s; }
-.abby-dot:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes abby-dot-pulse {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1); opacity: 1; background: #36e0dd; }
-}
-
-/* ── Input Box (Exact Image 4 replica) ── */
-.abby-input-card {
-  padding: 14px 16px;
-  background: #ffffff;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.abby-input-frame {
-  background: #ffffff;
-  border: 1.5px solid rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
-  padding: 12px 14px 10px 14px;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.abby-input-frame:focus-within {
-  border-color: rgba(54, 224, 221, 0.8);
-  box-shadow: 0 4px 20px -2px rgba(54, 224, 221, 0.2);
-}
-
-.abby-textarea {
-  width: 100%;
-  min-height: 48px;
-  max-height: 120px;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #111827;
-  font-size: 14px;
-  line-height: 1.5;
-  resize: none;
-  font-family: inherit;
-}
-
-.abby-textarea::placeholder {
-  color: #9ca3af;
-  font-weight: 500;
-}
-
-/* Bottom Toolbar inside Input Card (Image 4) */
-.abby-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-top: 6px;
-  padding-top: 6px;
-}
-
-.abby-toolbar-tools {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.abby-tool-btn {
-  color: #9ca3af;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
+  background: #0f172a;
+  color: #38bdf8;
+  padding: 6px 8px;
   border-radius: 8px;
+  font-family: monospace;
+  font-size: 11px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.abby-takeaway-chip {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: #9147ff;
+  background: rgba(145, 71, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* User's Exact Chatbot Textarea & Options Styling (Refined Compact Craft) */
+.container-wrap .card .chat .chat-bot {
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease, transform 0.15s ease;
+  height: 48px;
+  min-height: 48px;
+  transition: all 0.3s ease;
+  margin-top: 4px;
 }
 
-.abby-tool-btn:hover {
-  color: #4b5563;
-  transform: translateY(-1px);
-}
-
-/* Gradient Send Button (Image 4) */
-.abby-send-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
+.card .chat .chat-bot textarea {
+  background-color: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  height: 100%;
+  color: #334155;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 400;
+  padding: 6px 8px;
+  resize: none;
   outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.card .chat .chat-bot textarea::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+}
+
+.card .chat .chat-bot textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card .chat .chat-bot textarea::-webkit-scrollbar-thumb {
+  background: #dedfe0;
+  border-radius: 4px;
+}
+
+.card .chat .chat-bot textarea::-webkit-scrollbar-thumb:hover {
+  background: #8b8b8b;
+  cursor: pointer;
+}
+
+.card .chat .chat-bot textarea::placeholder {
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.card .chat .chat-bot textarea:focus {
+  border-color: #9147ff;
+  background-color: #ffffff;
+}
+
+.card .chat .chat-bot textarea:focus::placeholder {
+  color: #64748b;
+}
+
+.card .chat .options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 1px 1px;
+}
+
+.card .chat .options button {
+  transition: all 0.3s ease;
+}
+
+.card .chat .options .btns-add {
+  display: flex;
+  gap: 6px;
+}
+
+.card .chat .options .btns-add button {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #64748b;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.card .chat .options .btns-add button:hover {
+  transform: translateY(-2px);
+  color: #9147ff;
+  border-color: #c084fc;
+  background-color: rgba(145, 71, 255, 0.08);
+}
+
+.card .chat .options .btn-submit {
+  display: flex;
+  padding: 2px;
+  background-image: linear-gradient(to top, #ff4141, #9147ff, #3b82f6);
+  border-radius: 8px;
+  box-shadow: inset 0 4px 2px -2px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  opacity: 0.9;
+  transition: all 0.15s ease;
+}
+
+.card .chat .options .btn-submit i {
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  backdrop-filter: blur(3px);
   color: #ffffff;
-  /* Smooth coral-to-violet gradient per Image 4 */
-  background: linear-gradient(135deg, #ff6080 0%, #a259ff 50%, #6875f5 100%);
-  box-shadow: 0 4px 14px rgba(162, 89, 255, 0.4);
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.abby-send-btn:hover:not(:disabled) {
-  transform: scale(1.08) translateY(-1px);
-  box-shadow: 0 6px 18px rgba(162, 89, 255, 0.55);
+.card .chat .options .btn-submit svg {
+  transition: all 0.3s ease;
+  width: 15px;
+  height: 15px;
 }
 
-.abby-send-btn:active:not(:disabled) {
-  transform: scale(0.95);
+.card .chat .options .btn-submit:hover {
+  opacity: 1;
 }
 
-.abby-send-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  box-shadow: none;
+.card .chat .options .btn-submit:hover svg {
+  color: #f3f6fd;
+  filter: drop-shadow(0 0 5px #ffffff);
+}
+
+.card .chat .options .btn-submit:focus svg {
+  color: #f3f6fd;
+  filter: drop-shadow(0 0 5px #ffffff);
+  transform: scale(1.2) rotate(45deg) translateX(-2px) translateY(1px);
+}
+
+.card .chat .options .btn-submit:active {
+  transform: scale(0.92);
+}
+
+/* 15 Area 3D Mouse Hover Transforms */
+.area:nth-child(15):hover ~ .container-wrap .card,
+.area:nth-child(15):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(-15deg) rotateY(15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(14):hover ~ .container-wrap .card,
+.area:nth-child(14):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(-15deg) rotateY(7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(13):hover ~ .container-wrap .card,
+.area:nth-child(13):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(-15deg) rotateY(0)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(12):hover ~ .container-wrap .card,
+.area:nth-child(12):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(-15deg) rotateY(-7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(11):hover ~ .container-wrap .card,
+.area:nth-child(11):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(-15deg) rotateY(-15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+
+.area:nth-child(10):hover ~ .container-wrap .card,
+.area:nth-child(10):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(0) rotateY(15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(9):hover ~ .container-wrap .card,
+.area:nth-child(9):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(0) rotateY(7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(8):hover ~ .container-wrap .card,
+.area:nth-child(8):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(0) rotateY(0)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(7):hover ~ .container-wrap .card,
+.area:nth-child(7):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(0) rotateY(-7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(6):hover ~ .container-wrap .card,
+.area:nth-child(6):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(0) rotateY(-15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+
+.area:nth-child(5):hover ~ .container-wrap .card,
+.area:nth-child(5):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(15deg) rotateY(15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(4):hover ~ .container-wrap .card,
+.area:nth-child(4):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(15deg) rotateY(7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(3):hover ~ .container-wrap .card,
+.area:nth-child(3):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(15deg) rotateY(0)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(2):hover ~ .container-wrap .card,
+.area:nth-child(2):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(15deg) rotateY(-7deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+.area:nth-child(1):hover ~ .container-wrap .card,
+.area:nth-child(1):hover ~ .container-wrap .eyes .eye {
+  transform: perspective(var(--perspective)) rotateX(15deg) rotateY(-15deg)
+    translateZ(var(--translateY)) scale3d(1, 1, 1);
+}
+
+@keyframes rotate-background-balls {
+  from {
+    transform: translateX(-50%) translateY(-50%) rotate(360deg);
+  }
+  to {
+    transform: translateX(-50%) translateY(-50%) rotate(0);
+  }
+}
+
+@keyframes animate-eyes {
+  0%, 45% {
+    height: 18px;
+  }
+  48% {
+    height: 4px;
+  }
+  50% {
+    height: 18px;
+  }
+  95% {
+    height: 18px;
+  }
+  98% {
+    height: 4px;
+  }
+  100% {
+    height: 18px;
+  }
 }

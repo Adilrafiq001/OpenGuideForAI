@@ -28,7 +28,6 @@ import { FirstPrinciplesModal } from '../components/FirstPrinciplesModal';
 import { CognitiveAccelerator } from '../components/CognitiveAccelerator';
 import { Tooltip } from '../components/Tooltip';
 import { HeroPhysicsStage } from '../components/HeroPhysicsStage';
-import { OfflineAIChatbotWidget } from '../components/OfflineAIChatbotWidget';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
@@ -876,21 +875,33 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
       {/* SECTION 5: THE SYNAPSE LOUNGE (Neuro-Plasticity Lab & Mind Sharpeners) */}
       <SynapseLounge />
 
-      {/* SECTION 6: IN-HOUSE OFFLINE AI ASSISTANT (100% In-Browser • $0 Rule • Hardware-Isolated) */}
+      {/* SECTION 6: IN-HOUSE OFFLINE AI ASSISTANT (Explore the Offline AI Copilot: Abby) */}
       <section id="offline-ai-studio" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)] text-center relative overflow-hidden">
         <div className="max-w-2xl mx-auto mb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs font-bold mb-4 shadow-sm">
             <Sparkles size={14} />
-            <span>100% In-House AI Intelligence</span>
+            <span>Explore the Offline AI Copilot: Abby</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-[var(--color-text-primary)] mb-4 tracking-tight">
-            Ask OpenGuide Offline Copilot
+            Meet Abby, Your Offline AI Copilot
           </h2>
-          <p className="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
-            No API keys required. Zero paid third-party endpoints. Hover to experience the 3D synaptic reaction, click to expand, and ask anything about vector spaces, WASM sandboxing, or studio shortcuts.
+          <p className="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed mb-8">
+            Click on Abby floating at the bottom-right corner anytime to ask anything about tracks, in-browser Pyodide WASM, vector databases, or studio shortcuts. 100% private, zero cloud bills, with optional BYOK support in Settings.
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              const el = document.getElementById('abby-toggle-checkbox') as HTMLInputElement | null;
+              if (el && !el.checked) {
+                el.click();
+              }
+            }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm shadow-lg hover:shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          >
+            <span>Ask Abby Now</span>
+            <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-mono">Offline</span>
+          </button>
         </div>
-        <OfflineAIChatbotWidget />
       </section>
 
       {/* Editorial Footer / Specification (No Repo URL / Embargo Protected) */}
@@ -964,10 +975,10 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         </div>
       </footer>
 
-      {/* Floating Scroll Velocity & To-Top Pill */}
+      {/* Floating Scroll Velocity & To-Top Pill (Cleanly stacked above Abby floating mascot) */}
       <div 
         data-testid="scroll-to-top-container"
-        className={`fixed bottom-24 sm:bottom-8 right-6 z-40 transition-all duration-300 transform pointer-events-auto ${
+        className={`fixed bottom-[92px] right-6 z-40 transition-all duration-300 transform pointer-events-auto ${
           isScrolled ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95 pointer-events-none'
         }`}
       >

@@ -108,7 +108,7 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-4 right-6 z-[100]">
+      <div className="fixed bottom-4 left-6 z-[100]">
         <button
           onClick={() => setIsMinimized(false)}
           className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--color-secondary)]/90 backdrop-blur-md border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xl hover:border-[var(--color-accent)] transition-all cursor-pointer"
