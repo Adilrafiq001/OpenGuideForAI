@@ -2,7 +2,7 @@ export const ur: Record<string, string> = {
   // Navigation
   nav_tracks: 'ٹریکس',
   nav_curriculum: 'نصاب',
-  nav_holodeck: 'اسپیشل ہولوڈیک [3D]',
+  nav_holodeck: 'اسپیشل ہولوڈیک',
   nav_labs_science: 'لیبز اور سائنس',
   nav_first_principles: 'بنیادی اصول میٹرکس',
   nav_cognitive_accelerator: 'علمی ایکسلریٹر',

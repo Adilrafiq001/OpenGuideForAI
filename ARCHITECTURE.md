@@ -30,6 +30,9 @@
 - **In-App Free Courses Studio (`FreeCoursesModal`):** Security-hardened in-app studio (`youtube-nocookie.com` with sandboxed iframes) featuring 8 Karpathy lectures, interactive chapter timestamp seekers, real-time searchable transcripts, 1-click Markdown/Text exports, and runnable Python autograd code snippets.
 - **Four Tools. Zero Subscriptions. Setup Engine (`FreeToolsModal`):** Idiot-proof, step-by-step setup guides across Memory, Glue, Compute, and Hosting with 2026 quota caveats, working code, and smoke tests.
 - **Responsive Header Layout Architecture:** Unified header architecture with adaptive collapsing (`Tracks ▾` dropdown on desktop, `Launch Track 0` primary CTA, responsive `BrandLogo`, and zero horizontal collisions from 375px to 1440px).
+- **Agency-Grade Studio Footer Architecture (`StudioFooter`):** Comprehensive footer subsystem with 4-column dynamic sitemap, WASM kernel status telemetry, local-first newsletter dispatch, interactive Legal modal (5 policy tabs), Contact & Inquiries modal, and release changelog.
+- **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
+- **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 36-lab completion validation, sample preview mode, and zero-leak client-side name stamping for PDF/print export.
 - **Testing:** Playwright MCP for physical browser inspection and automated regression tests (20 comprehensive suites).
 
 ## Monorepo Modules

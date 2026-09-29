@@ -46,7 +46,7 @@ function App() {
       <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <Suspense fallback={<div className="min-h-screen bg-[var(--color-primary)]" />}>
           <Routes>
-            <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} />} />
+            <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} />} />
             <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
             <Route path="/track/0" element={<CoursePlayer track={track0} />} />
             <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />

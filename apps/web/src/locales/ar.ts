@@ -2,7 +2,7 @@ export const ar: Record<string, string> = {
   // Navigation
   nav_tracks: 'المسارات',
   nav_curriculum: 'المنهج',
-  nav_holodeck: 'الهولوديك المكاني [3D]',
+  nav_holodeck: 'الهولوديك المكاني',
   nav_labs_science: 'المختبرات والعلوم',
   nav_first_principles: 'مصفوفة المبادئ الأولى',
   nav_cognitive_accelerator: 'المسرع المعرفي',

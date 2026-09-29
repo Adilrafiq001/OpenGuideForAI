@@ -2,7 +2,7 @@ export const zh: Record<string, string> = {
   // Navigation
   nav_tracks: '学习路线',
   nav_curriculum: '课程架构',
-  nav_holodeck: '全息空间站 [3D]',
+  nav_holodeck: '全息空间站',
   nav_labs_science: '实验与科学',
   nav_first_principles: '第一性原理矩阵',
   nav_cognitive_accelerator: '认知加速器',

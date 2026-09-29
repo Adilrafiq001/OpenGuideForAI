@@ -2,7 +2,7 @@ export const ru: Record<string, string> = {
   // Navigation
   nav_tracks: 'Треки',
   nav_curriculum: 'Программа',
-  nav_holodeck: 'Голодек [3D]',
+  nav_holodeck: 'Голодек',
   nav_labs_science: 'Лаборатории и Наука',
   nav_first_principles: 'Матрица Первых Принципов',
   nav_cognitive_accelerator: 'Когнитивный Акселератор',

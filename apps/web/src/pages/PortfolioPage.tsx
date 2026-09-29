@@ -60,6 +60,7 @@ export function PortfolioPage() {
   const [verificationHash, setVerificationHash] = useState<string>('Computing verification signature...');
   const [copiedHash, setCopiedHash] = useState(false);
   const [selectedTrackFilter, setSelectedTrackFilter] = useState<'all' | '0' | '1' | '2' | '3'>('all');
+  const [showSamplePreview, setShowSamplePreview] = useState(false);
 
   // Build uniform track structure
   const allTracks: TrackMetadata[] = useMemo(() => {
@@ -98,6 +99,8 @@ export function PortfolioPage() {
   const totalCurriculumLabs = 36;
   const completedCount = completedLessonIds.length;
   const progressPercent = Math.min(100, Math.round((completedCount / totalCurriculumLabs) * 100));
+  const isCertified = completedCount >= totalCurriculumLabs;
+  const canViewCertificate = isCertified || showSamplePreview;
 
   // Save student name to localStorage
   const handleNameChange = (name: string) => {
@@ -416,31 +419,129 @@ export function PortfolioPage() {
 
         {/* SECTION: Cryptographic Certificate & Verification Seal */}
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">
-                Official Completion Certificate
-              </h2>
-              <span className="text-xs text-[var(--color-text-secondary)]">
-                Instant digital proof verified by client-side WebCrypto
-              </span>
-            </div>
+          {!canViewCertificate ? (
+            /* LOCKED MILESTONE CARD: Shown when < 36 labs completed */
+            <div className="rounded-3xl bg-[var(--color-secondary)] border-2 border-[var(--color-border)] p-8 sm:p-12 shadow-xl relative overflow-hidden">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+                <div className="space-y-3 max-w-2xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 text-xs font-mono font-bold uppercase tracking-wider">
+                    <Lock size={13} />
+                    <span>Locked Milestone • Requires 36 / 36 Labs</span>
+                  </div>
 
-            {/* Student Name Editor */}
-            <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] w-full sm:w-auto">
-              <User size={16} className="text-[var(--color-accent)] ml-2" />
-              <input
-                type="text"
-                value={studentName}
-                onChange={(e) => handleNameChange(e.target.value)}
-                placeholder="Enter Recipient Name..."
-                className="bg-transparent border-none outline-none text-xs font-mono text-[var(--color-text-primary)] px-2 py-1 w-full sm:w-64"
-              />
-            </div>
-          </div>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--color-text-primary)] font-serif">
+                    Certificate of Engineering Mastery
+                  </h2>
 
-          {/* THE CERTIFICATE CANVAS (Architectural & Printable) */}
-          <div className="certificate-container relative rounded-3xl bg-[var(--color-secondary)]/90 border-2 border-[var(--color-border)] p-8 sm:p-14 shadow-2xl overflow-hidden">
+                  <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                    This official cryptographic proof is conferred upon completing all 36 interactive browser labs across Tracks 0, 1, 2, and 3. Upon 100% completion, this space unlocks your personalized document with high-resolution print and PDF export.
+                  </p>
+
+                  <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] font-mono">
+                    <ShieldCheck size={16} className="text-emerald-400 shrink-0" />
+                    <span>
+                      <strong className="text-[var(--color-text-primary)]">100% Client-Side Privacy:</strong> Your name is never sent to external servers or stored in any database ($0 Hard Constraint). It is stamped locally in-memory onto your cryptographic document.
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-full md:w-72 space-y-4 shrink-0 p-5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)]">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-[var(--color-text-secondary)]">Curriculum Progress:</span>
+                    <span className="font-bold text-[var(--color-accent)]">{completedCount} / {totalCurriculumLabs} Labs</span>
+                  </div>
+
+                  <div className="w-full bg-[var(--color-secondary)] rounded-full h-2.5 overflow-hidden border border-[var(--color-border)]">
+                    <div 
+                      className="bg-[var(--color-accent)] h-full transition-all duration-500 rounded-full"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+
+                  <div className="pt-2 flex flex-col gap-2">
+                    <button
+                      onClick={() => setShowSamplePreview(true)}
+                      className="w-full py-2.5 px-4 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-primary)] transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+                    >
+                      <span>Preview Watermarked Sample</span>
+                    </button>
+                    <button
+                      onClick={handleSimulateCompletion}
+                      className="w-full py-2 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-[11px] font-mono font-semibold text-emerald-400 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <CheckCircle size={13} />
+                      <span>Simulate 100% to Test Unlock</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* UNLOCKED / PREVIEW MODE */
+            <>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print bg-[var(--color-secondary)] p-4 sm:p-6 rounded-3xl border border-[var(--color-border)]">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    {isCertified ? (
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center gap-1">
+                        <CheckCircle size={12} /> 100% Curriculum Mastered
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold flex items-center gap-1">
+                        <Lock size={12} /> Sample Preview Mode ({completedCount}/36 Labs)
+                      </span>
+                    )}
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">
+                    Official Completion Certificate
+                  </h2>
+                  <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
+                    {isCertified 
+                      ? 'Congratulations, Engineer! Your name is applied locally onto the certificate below.'
+                      : 'Sample preview showing how your conferred document will appear upon completing all 36 labs.'}
+                  </p>
+                </div>
+
+                {/* Student Name Editor & Actions */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                  <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)]">
+                    <User size={16} className="text-[var(--color-accent)] ml-2 shrink-0" />
+                    <input
+                      type="text"
+                      value={studentName}
+                      onChange={(e) => handleNameChange(e.target.value)}
+                      placeholder="Enter Recipient Name..."
+                      className="bg-transparent border-none outline-none text-xs font-mono text-[var(--color-text-primary)] px-2 py-1 w-full sm:w-56"
+                    />
+                  </div>
+
+                  {!isCertified && (
+                    <button
+                      onClick={() => setShowSamplePreview(false)}
+                      className="px-3 py-2 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:bg-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] transition-all cursor-pointer"
+                    >
+                      Close Preview
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handlePrint}
+                    className="px-4 py-2 rounded-2xl bg-[var(--color-accent)] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Printer size={14} />
+                    <span>Print / PDF Export</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* THE CERTIFICATE CANVAS (Architectural & Printable) */}
+              <div className="certificate-container relative rounded-3xl bg-[var(--color-secondary)]/90 border-2 border-[var(--color-border)] p-8 sm:p-14 shadow-2xl overflow-hidden">
+                {/* Watermark badge if in sample preview */}
+                {!isCertified && (
+                  <div className="absolute top-6 right-6 z-20 pointer-events-none no-print border-2 border-dashed border-amber-500/60 bg-amber-500/15 text-amber-400 font-mono text-[10px] sm:text-xs px-3 py-1 rounded-lg uppercase tracking-widest font-bold">
+                    Sample Preview • 36 Labs Required
+                  </div>
+                )}
             {/* Guilloche Ornamental Border Simulation */}
             <div className="absolute inset-3 rounded-2xl border border-dashed border-[var(--color-accent)]/30 pointer-events-none" />
             <div className="absolute inset-5 rounded-xl border border-[var(--color-border)] pointer-events-none" />
@@ -550,6 +651,8 @@ export function PortfolioPage() {
 
             </div>
           </div>
+            </>
+          )}
         </div>
 
         {/* SECTION: Complete 36-Lab Transcript Audit */}

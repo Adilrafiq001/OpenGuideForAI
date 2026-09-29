@@ -2,7 +2,7 @@ export const ja: Record<string, string> = {
   // Navigation
   nav_tracks: 'トラック',
   nav_curriculum: 'カリキュラム',
-  nav_holodeck: '空間ホロデッキ [3D]',
+  nav_holodeck: '空間ホロデッキ',
   nav_labs_science: '実験と科学',
   nav_first_principles: '第一原理マトリックス',
   nav_cognitive_accelerator: '認知アクセラレーター',

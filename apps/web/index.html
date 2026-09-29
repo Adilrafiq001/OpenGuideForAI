@@ -50,7 +50,28 @@
             'cyber-light': '#f8fafc'
           };
           var bg = themeBgs[theme] || '#050505';
+
+          var themeTextColors = {
+            'pure-paper': '#0f172a',
+            'solarized-light': '#073642',
+            'github-light': '#1e293b',
+            'nord-light': '#2e3440',
+            'emerald-light': '#064e3b',
+            'warm-cream': '#292524',
+            'lavender-light': '#3b0764',
+            'peach-dawn': '#431407',
+            'rose-pine-dawn': '#575279',
+            'cyber-light': '#0f172a'
+          };
+          var textColor = themeTextColors[theme] || '#f8fafc';
+
           document.documentElement.style.backgroundColor = bg;
+          document.documentElement.style.color = textColor;
+
+          var styleEl = document.createElement('style');
+          styleEl.id = 'theme-pre-bootstrap';
+          styleEl.innerHTML = 'html, body, #root { background-color: ' + bg + ' !important; color: ' + textColor + ' !important; min-height: 100vh; } @keyframes ogPulse { 0%, 100% { opacity: 0.2; transform: scale(0.98); } 50% { opacity: 0.45; transform: scale(1.02); } }';
+          document.head.appendChild(styleEl);
 
           var savedLang = localStorage.getItem('openguide_lang') || 'en';
           document.documentElement.setAttribute('lang', savedLang);
@@ -63,14 +84,16 @@
     </script>
     <style>
       html, body, #root {
-        background-color: var(--bg-primary, #050505);
-        color: var(--text-primary, #f3f4f6);
         min-height: 100vh;
       }
     </style>
   </head>
   <body class="overflow-x-hidden antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <div id="og-pre-loader" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="width: 48px; height: 48px; border-radius: 14px; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; letter-spacing: -0.5px; font-family: monospace; animation: ogPulse 1.4s ease-in-out infinite;">OG</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

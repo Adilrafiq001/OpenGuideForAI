@@ -296,15 +296,15 @@ export function SynapseLounge() {
               <div className="p-6 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)] mb-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 
                 {/* SVG 2D Unit Circle Embeddings Radar */}
-                <div className="md:col-span-4 flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border border-white/5">
+                <div className="md:col-span-4 flex flex-col items-center justify-center p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-sm">
                   <svg width="140" height="140" className="overflow-visible">
                     {/* Radar Circles */}
-                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius} fill="none" stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
-                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius * 0.5} fill="none" stroke="rgba(255,255,255,0.06)" />
+                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius} fill="none" stroke="var(--color-border)" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <circle cx={circleCenter} cy={circleCenter} r={circleRadius * 0.5} fill="none" stroke="var(--color-border)" strokeWidth="1" opacity="0.6" />
                     
                     {/* Axes */}
-                    <line x1="15" y1={circleCenter} x2="125" y2={circleCenter} stroke="rgba(255,255,255,0.08)" />
-                    <line x1={circleCenter} y1="15" x2={circleCenter} y2="125" stroke="rgba(255,255,255,0.08)" />
+                    <line x1="15" y1={circleCenter} x2="125" y2={circleCenter} stroke="var(--color-border)" strokeWidth="1" opacity="0.8" />
+                    <line x1={circleCenter} y1="15" x2={circleCenter} y2="125" stroke="var(--color-border)" strokeWidth="1" opacity="0.8" />
                     
                     {/* Target Concept Vector (Emerald) */}
                     <line 
@@ -313,10 +313,10 @@ export function SynapseLounge() {
                       x2={targetX} 
                       y2={targetY} 
                       stroke="#10b981" 
-                      strokeWidth="2.5" 
+                      strokeWidth="3" 
                       strokeLinecap="round"
                     />
-                    <circle cx={targetX} cy={targetY} r="4" fill="#10b981" />
+                    <circle cx={targetX} cy={targetY} r="4.5" fill="#10b981" />
 
                     {/* Student Probe Vector (Cyan) */}
                     <line 
@@ -325,21 +325,21 @@ export function SynapseLounge() {
                       x2={probeX} 
                       y2={probeY} 
                       stroke="#06b6d4" 
-                      strokeWidth="2.5" 
+                      strokeWidth="3" 
                       strokeLinecap="round"
                     />
-                    <circle cx={probeX} cy={probeY} r="4" fill="#06b6d4" />
+                    <circle cx={probeX} cy={probeY} r="4.5" fill="#06b6d4" />
                     
                     {/* Origin */}
-                    <circle cx={circleCenter} cy={circleCenter} r="3" fill="#ffffff" />
+                    <circle cx={circleCenter} cy={circleCenter} r="3.5" fill="var(--color-text-primary)" />
                   </svg>
 
                   <div className="flex items-center gap-3 mt-3 text-[10px] font-mono">
-                    <span className="flex items-center gap-1 text-emerald-400">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> Target (45°)
+                    <span className="flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> Target (45°)
                     </span>
-                    <span className="flex items-center gap-1 text-cyan-400">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block" /> Probe ({probeAngle}°)
+                    <span className="flex items-center gap-1 font-bold text-cyan-600 dark:text-cyan-400">
+                      <span className="w-2 h-2 rounded-full bg-cyan-500 inline-block" /> Probe ({probeAngle}°)
                     </span>
                   </div>
                 </div>
@@ -348,7 +348,7 @@ export function SynapseLounge() {
                 <div className="md:col-span-8 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-wider block">
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-wider block font-semibold">
                         Interactive Embedding Probe
                       </span>
                       <h4 className="text-sm font-bold text-[var(--color-text-primary)]">
@@ -357,10 +357,10 @@ export function SynapseLounge() {
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase block">
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase block font-semibold">
                         Cosine Metric
                       </span>
-                      <span className={`text-base font-mono font-bold ${isAngleAligned ? 'text-emerald-400' : 'text-neutral-300'}`}>
+                      <span className={`text-base font-mono font-bold ${isAngleAligned ? 'text-emerald-600 dark:text-emerald-400' : 'text-[var(--color-text-primary)]'}`}>
                         cos(Δθ) = {cosineSim.toFixed(3)}
                       </span>
                     </div>
@@ -497,7 +497,7 @@ export function SynapseLounge() {
                       className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                         targetGate === gate 
                           ? 'bg-[var(--color-accent)] text-black' 
-                          : 'bg-white/5 text-neutral-400 hover:text-white'
+                          : 'bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]'
                       }`}
                     >
                       {gate} GATE
@@ -510,7 +510,7 @@ export function SynapseLounge() {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 {/* Synaptic Weights Control (Left) */}
                 <div className="md:col-span-6 space-y-4 p-5 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)]">
-                  <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block mb-2">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] block mb-2 font-semibold">
                     Adjust Synaptic Weights & Activation Bias
                   </span>
 
@@ -543,7 +543,7 @@ export function SynapseLounge() {
                             className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
                               neuronWeights.w1 === w
                                 ? 'bg-[var(--color-accent)] text-black font-bold'
-                                : 'border-white/5 bg-white/5 text-neutral-400'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                             }`}
                           >
                             {w}
@@ -582,7 +582,7 @@ export function SynapseLounge() {
                             className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
                               neuronWeights.w2 === w
                                 ? 'bg-[var(--color-accent)] text-black font-bold'
-                                : 'border-white/5 bg-white/5 text-neutral-400'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                             }`}
                           >
                             {w}
@@ -621,7 +621,7 @@ export function SynapseLounge() {
                             className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-all ${
                               neuronWeights.bias === b
                                 ? 'bg-[var(--color-accent)] text-black font-bold'
-                                : 'border-white/5 bg-white/5 text-neutral-400'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                             }`}
                           >
                             {b}
@@ -635,7 +635,7 @@ export function SynapseLounge() {
                 {/* Live Truth Table Verification (Right) */}
                 <div className="md:col-span-6 space-y-3 p-5 rounded-3xl bg-[var(--color-primary)] border border-[var(--color-border)]">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-semibold">
                       Live Truth Table Output
                     </span>
                     {allPassed && (

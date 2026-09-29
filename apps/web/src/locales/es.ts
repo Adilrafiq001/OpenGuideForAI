@@ -2,7 +2,7 @@ export const es: Record<string, string> = {
   // Navigation
   nav_tracks: 'Pistas',
   nav_curriculum: 'Plan de Estudios',
-  nav_holodeck: 'Holodeck Espacial [3D]',
+  nav_holodeck: 'Holodeck Espacial',
   nav_labs_science: 'Laboratorios y Ciencia',
   nav_first_principles: 'Matriz de Primeros Principios',
   nav_cognitive_accelerator: 'Acelerador Cognitivo',

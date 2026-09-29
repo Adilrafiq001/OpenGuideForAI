@@ -19,7 +19,7 @@ import {
   Cpu
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
-import { useLanguageStore, isNonLatinLanguage } from '../store/useLanguageStore';
+import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
 import { BrandLogo } from '../components/BrandLogo';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -33,9 +33,11 @@ import { HeroPhysicsStage } from '../components/HeroPhysicsStage';
 import { ScrollProgressBar, ScrollToTopButton } from '../components/ScrollIndicators';
 import { FreeCoursesModal } from '../components/FreeCoursesModal';
 import { FreeToolsModal } from '../components/FreeToolsModal';
+import { StudioFooter } from '../components/StudioFooter';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
+  onOpenHelp?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -48,7 +50,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingPage({ onOpenThemes }: LandingPageProps) {
+export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
   const navigate = useNavigate();
   const { theme } = useSettingsStore();
   const { language, t } = useLanguageStore();
@@ -260,7 +262,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
             <div className="hidden 2xl:flex">
               <Tooltip
                 position="bottom"
-                content="Spatial Holodeck [3D]"
+                content="Spatial Holodeck"
                 subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
               >
                 <button 
@@ -269,6 +271,7 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                 >
                   <Glasses size={14} className="opacity-70" />
                   <span>{t('nav_holodeck')}</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D</span>
                 </button>
               </Tooltip>
             </div>
@@ -327,8 +330,9 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
                           <Glasses size={14} className="text-cyan-400" />
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('nav_holodeck')}
+                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5">
+                            <span>{t('nav_holodeck')}</span>
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D & VR</span>
                           </div>
                           <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                             3D / WebXR neural topology holodeck
@@ -965,115 +969,177 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Track 0 (Playable Now) */}
+        {/* 4 Core Tracks Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Track 0: Absolute Zero */}
           <article 
             onClick={() => navigate('/track/0/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] rounded-[2rem] p-8 transition-all duration-300 flex flex-col justify-between shadow-xl"
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
           >
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <span 
-                  className="text-xs font-mono px-3 py-1 rounded-full border font-bold"
-                  style={{
-                    backgroundColor: `${currentThemeInfo.accent}15`,
-                    borderColor: `${currentThemeInfo.accent}40`,
-                    color: currentThemeInfo.accent
-                  }}
-                >
-                  {t('track0_badge')}
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-emerald-500/15 border-emerald-500/30 text-emerald-500">
+                  Track 00 • Active
                 </span>
                 <div 
-                  className="w-10 h-10 rounded-full border border-[var(--color-border)] group-hover:scale-110 flex items-center justify-center transition-all duration-300"
+                  className="w-8 h-8 rounded-full border border-[var(--color-border)] group-hover:scale-110 flex items-center justify-center transition-all duration-300"
                   style={{
                     backgroundColor: currentThemeInfo.accent,
                     color: accentTextColor
                   }}
                 >
-                  <ArrowUpRight size={20} />
+                  <ArrowUpRight size={16} />
                 </div>
               </div>
 
-              <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
-                {t('track0_title')}
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-emerald-500 transition-colors">
+                Track 0: Absolute Zero
               </h3>
               
-              <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                {t('track0_desc')}
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                In-browser CPython WebAssembly sandbox, standard streams, Python vector primitives, and token sampling mechanics.
               </p>
             </div>
 
-            <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-              <span>{t('track0_stats')}</span>
-              <span 
-                className="font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1"
-                style={{ color: currentThemeInfo.accent }}
-              >
-                {t('track0_cta')}
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 9 Labs</span>
+              <span className="font-semibold text-emerald-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
               </span>
             </div>
           </article>
 
-          {/* Track 1 (Embeddings) */}
-          <article className="bg-[var(--color-secondary)]/50 border border-[var(--color-border)] rounded-[2rem] p-8 flex flex-col justify-between opacity-80 hover:opacity-100 transition-opacity">
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-xs font-mono px-3 py-1 rounded-full bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]">
-                  {t('track1_badge')}
-                </span>
-                <span className="text-xs font-mono text-[var(--color-text-secondary)]">{t('track1_phase')}</span>
-              </div>
-
-              <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3">
-                {t('track1_title')}
-              </h3>
-              
-              <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                {t('track1_desc')}
-              </p>
-            </div>
-
-            <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-              <span>{t('track1_stats')}</span>
-              <span>{t('track1_cta')}</span>
-            </div>
-          </article>
-
-          {/* Spatial Holodeck (3D / WebXR / 2D Lean) */}
+          {/* Track 1: Embeddings & Vector Space */}
           <article 
-            onClick={() => navigate('/holodeck')}
-            className="group relative bg-gradient-to-br from-violet-950/20 via-[var(--color-secondary)] to-black/40 border border-violet-500/30 hover:border-violet-500/70 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] cursor-pointer"
+            onClick={() => navigate('/track/1/intro')}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-cyan-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
           >
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-xs font-mono px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-300 font-bold">
-                  {t('holodeck_badge')}
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-cyan-500/15 border-cyan-500/30 text-cyan-500">
+                  Track 01 • Active
                 </span>
-                <div className="w-10 h-10 rounded-full border border-violet-500/40 bg-violet-600/20 text-violet-300 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
-                  <Glasses size={20} />
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-cyan-500/10 text-cyan-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
                 </div>
               </div>
 
-              <h3 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-3 group-hover:text-violet-500 dark:group-hover:text-violet-300 transition-colors">
-                {t('holodeck_title')}
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-cyan-500 transition-colors">
+                Track 1: Embeddings
               </h3>
               
-              <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-6">
-                {t('holodeck_desc')}
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                High-dimensional geometry, Cosine Similarity math, semantic projections, and client-side vector search engines.
               </p>
             </div>
 
-            <div className="pt-6 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
-              <span className="flex items-center gap-1.5 text-violet-300">
-                <Sparkles size={13} />
-                {t('holodeck_stats')}
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 9 Labs</span>
+              <span className="font-semibold text-cyan-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
               </span>
-              <span className="text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold">
-                {t('holodeck_cta')}
+            </div>
+          </article>
+
+          {/* Track 2: Autonomous Agents & RAG */}
+          <article 
+            onClick={() => navigate('/track/2/intro')}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-violet-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-violet-500/15 border-violet-500/30 text-violet-400">
+                  Track 02 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-violet-500/10 text-violet-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-violet-400 transition-colors">
+                Track 2: Agents & RAG
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                Sliding-window context chunking, the ReAct loop (Reason-Act-Observe), MCP protocol, and multi-agent coordination.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 9 Labs</span>
+              <span className="font-semibold text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
+              </span>
+            </div>
+          </article>
+
+          {/* Track 3: Production Evals & Guardrails */}
+          <article 
+            onClick={() => navigate('/track/3/intro')}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-amber-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-amber-500/15 border-amber-500/30 text-amber-500">
+                  Track 03 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-amber-500/10 text-amber-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-amber-500 transition-colors">
+                Track 3: Production Evals
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                LLM-as-a-Judge rubrics, OWASP AI Top 10 security defenses, prompt injection canaries, and client WebGPU SLM runner.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 9 Labs</span>
+              <span className="font-semibold text-amber-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
               </span>
             </div>
           </article>
         </div>
+
+        {/* Panoramic Spatial Holodeck Showcase Banner */}
+        <article 
+          onClick={() => navigate('/holodeck')}
+          className="mt-6 group relative bg-gradient-to-r from-violet-950/25 via-[var(--color-secondary)] to-cyan-950/20 border border-violet-500/30 hover:border-violet-500/70 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.005] cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+        >
+          <div className="space-y-3 max-w-3xl">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-400 font-bold flex items-center gap-1.5">
+                <Glasses size={14} />
+                <span>Spatial Lab • 3D, WebXR & 2D Lean SVG</span>
+              </span>
+              <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase">
+                Hardware-Adaptive
+              </span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--color-text-primary)] group-hover:text-violet-400 transition-colors">
+              Universal Spatial Holodeck
+            </h3>
+
+            <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">
+              Explore 24 high-dimensional AI vectors in hardware-accelerated 3D WebGL, observe neural action potential signal propagation in real-time, and launch 6-DOF WebXR for Meta Quest or Apple Vision Pro. Includes $0 GPU 2D Lean SVG Mode for zero-lag execution on battery savers.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:items-end justify-between self-stretch shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-[var(--color-border)]">
+            <div className="w-12 h-12 rounded-2xl border border-violet-500/40 bg-violet-600/20 text-violet-300 group-hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-lg">
+              <Glasses size={24} />
+            </div>
+            <span className="text-xs font-mono font-bold text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 mt-4 sm:mt-0">
+              Launch Holodeck [3D] →
+            </span>
+          </div>
+        </article>
       </section>
 
       {/* SECTION 4: PSYCHOLOGY OF ACCELERATED LEARNING (Pareto 80/20, Blurting, Feynman, Drilling) */}
@@ -1113,76 +1179,14 @@ export function LandingPage({ onOpenThemes }: LandingPageProps) {
         </div>
       </section>
 
-      {/* Editorial Footer / Specification (No Repo URL / Embargo Protected) */}
-      <footer id="creator" className="relative pt-24 pb-16 px-6 md:px-12 border-t border-[var(--color-border)] max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-16 mb-20">
-          <div className="flex-1">
-            <h2 className={`text-6xl sm:text-7xl md:text-[8vw] font-black tracking-tighter text-[var(--color-text-primary)] mb-6 select-none ${
-              isNonLatinLanguage(language) ? 'leading-tight' : 'leading-[0.9]'
-            }`}>
-              LET'S<br />
-              <span style={{ color: currentThemeInfo.accent }}>BUILD.</span>
-            </h2>
-            
-            <p className="text-[var(--color-text-secondary)] text-base md:text-lg max-w-xl mb-8 leading-relaxed">
-              OpenGuide is dedicated to removing the black box from artificial intelligence. Built for absolute beginners who want to master AI engineering with $0 budget and zero gatekeeping.
-            </p>
-
-            <button
-              onClick={() => navigate('/track/0/intro')}
-              className="px-8 py-4 rounded-full font-bold text-sm tracking-wide uppercase transition-transform hover:scale-105 active:scale-95 shadow-xl flex items-center gap-2"
-              style={{
-                backgroundColor: currentThemeInfo.accent,
-                color: accentTextColor
-              }}
-            >
-              <span>{t('briefing_launch_btn')}</span>
-              <ArrowUpRight size={18} />
-            </button>
-          </div>
-
-          {/* Engine Specification Box (Replaces Old Repo Card) */}
-          <div className="flex flex-col gap-4 text-xs font-mono text-[var(--color-text-secondary)] w-full md:w-auto">
-            <div className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-3 min-w-[300px]">
-              <span 
-                className="font-bold uppercase tracking-wider block text-xs"
-                style={{ color: currentThemeInfo.accent }}
-              >
-                Engine Architecture & Spec
-              </span>
-              <div className="space-y-1.5 text-[11px] text-[var(--color-text-primary)]">
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-text-secondary)]">WASM Runtime:</span>
-                  <span>Pyodide CPython v0.26</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-text-secondary)]">Storage:</span>
-                  <span>IndexedDB Local-First</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-text-secondary)]">Cloud Cost:</span>
-                  <span className="text-emerald-500 font-bold">$0.00 / Zero Compute</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-text-secondary)]">Theme Engine:</span>
-                  <span>20 Calibrated Palettes</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-8 border-t border-[var(--color-border)] flex flex-col sm:flex-row justify-between items-center text-[var(--color-text-secondary)] text-xs gap-4">
-          <p>&copy; 2026 OpenGuide. {t('footer_credit')}.</p>
-          <div className="flex items-center gap-6">
-            <button onClick={onOpenThemes} className="hover:text-[var(--color-text-primary)] transition-colors">
-              {t('theme_settings_label')}
-            </button>
-            <span className="text-[var(--color-text-secondary)]">•</span>
-            <span className="font-mono">{t('footer_tagline')}</span>
-          </div>
-        </div>
-      </footer>
+      {/* Comprehensive Studio Footer */}
+      <StudioFooter
+        onOpenThemes={onOpenThemes}
+        onOpenHelp={onOpenHelp}
+        onOpenCourses={() => setIsCoursesModalOpen(true)}
+        onOpenTools={() => setIsToolsModalOpen(true)}
+        onOpenMatrix={() => setIsMatrixModalOpen(true)}
+      />
 
       {/* Floating Scroll Velocity & To-Top Pill (Isolated Leaf Component) */}
       <ScrollToTopButton />

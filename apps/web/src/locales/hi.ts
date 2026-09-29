@@ -2,7 +2,7 @@ export const hi: Record<string, string> = {
   // Navigation
   nav_tracks: 'ट्रैक्स',
   nav_curriculum: 'पाठ्यक्रम',
-  nav_holodeck: 'स्थानिक होलोडैक [3D]',
+  nav_holodeck: 'स्थानिक होलोडैक',
   nav_labs_science: 'लैब्स और विज्ञान',
   nav_first_principles: 'मौलिक सिद्धांत मैट्रिक्स',
   nav_cognitive_accelerator: 'संज्ञानात्मक त्वरक',
