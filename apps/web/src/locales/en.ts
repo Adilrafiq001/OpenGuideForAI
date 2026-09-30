@@ -138,11 +138,11 @@ export const en: Record<string, string> = {
   ide_terminal_ready: 'Interactive Pyodide Terminal • Ready',
   ide_xray_btn: 'X-Ray Debug Lens',
 
-  // Abby Chatbot
-  abby_title: 'Abby',
+  // Bluee Chatbot
+  abby_title: 'Bluee',
   abby_subtitle: 'Offline AI Guide',
-  abby_greeting: 'Hi, I am Abby, your offline guide for OpenGuide. Ask me anything about our tracks, in-browser WebAssembly, vector math, or keyboard shortcuts!',
-  abby_placeholder: 'Ask Abby about tracks, code, or AI concepts...',
+  abby_greeting: 'Hi, I am Bluee, your offline guide for OpenGuide. Ask me anything about our tracks, in-browser WebAssembly, vector math, or keyboard shortcuts!',
+  abby_placeholder: 'Ask Bluee about tracks, code, or AI concepts...',
   abby_suggestion_1: 'What is Track 0?',
   abby_suggestion_2: 'How does WASM Python work?',
   abby_suggestion_3: 'Explain Cosine Similarity',

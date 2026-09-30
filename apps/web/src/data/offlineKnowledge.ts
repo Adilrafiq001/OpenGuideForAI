@@ -22,27 +22,27 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'greeting-hello',
     keywords: ['hi', 'hello', 'hey', 'greetings', 'sup', 'yo', 'morning', 'afternoon', 'evening'],
-    title: 'Hello! I am Abby, Your OpenGuide Engineering Mentor',
+    title: 'Hello! I am Bluee, Your OpenGuide Engineering Mentor',
     category: 'conversational',
-    summary: 'Warm greetings from Abby, your client-side AI co-pilot and engineering mentor.',
-    explanation: 'Hello! I am Abby, your built-in AI engineering guide. I run 100% locally in your browser and have deep first-principles knowledge of all 5 curriculum tracks (45 interactive labs), Python WebAssembly internals, vector geometry, agentic state machines, and frontier attention mechanics. How can I help you build today?',
+    summary: 'Warm greetings from Bluee, your client-side AI co-pilot and engineering mentor.',
+    explanation: 'Hello! I am Bluee, your built-in AI engineering guide. I run 100% locally in your browser and have deep first-principles knowledge of all 5 curriculum tracks (45 interactive labs), Python WebAssembly internals, vector geometry, agentic state machines, and frontier attention mechanics. How can I help you build today?',
     takeaway: 'Ask me anything about AI architecture, code snippets, or curriculum concepts!'
   },
   {
     id: 'greeting-whoami',
-    keywords: ['who are you', 'what are you', 'who is abby', 'your name', 'about you', 'introduce yourself'],
-    title: 'About Abby: The OpenGuide Intelligent Assistant',
+    keywords: ['who are you', 'what are you', 'who is bluee', 'who is abby', 'your name', 'about you', 'introduce yourself'],
+    title: 'About Bluee: The OpenGuide Intelligent Assistant',
     category: 'conversational',
-    summary: 'Abby is OpenGuide’s native in-browser AI co-pilot, engineered with local-first intelligence.',
-    explanation: 'I am Abby, an AI engineering mentor crafted for OpenGuide by Adil Rafiq Dar (ARD). My core design principles are:\n1. Zero cloud cost ($0 Rule) via client-side intelligence\n2. First-principles mathematical clarity without vague hand-waving\n3. Practical Python & TypeScript code examples for every concept\n4. Dual-mode execution: offline knowledge engine + optional BYOK frontier model connections.',
+    summary: 'Bluee is OpenGuide’s native in-browser AI co-pilot, engineered with local-first intelligence.',
+    explanation: 'I am Bluee, an AI engineering mentor crafted for OpenGuide by Adil Rafiq Dar (ARD). My core design principles are:\n1. Zero cloud cost ($0 Rule) via client-side intelligence\n2. First-principles mathematical clarity without vague hand-waving\n3. Practical Python & TypeScript code examples for every concept\n4. Dual-mode execution: offline knowledge engine + optional BYOK frontier model connections.',
     takeaway: 'I am here to guide your transition from AI consumer to AI systems engineer.'
   },
   {
     id: 'greeting-help',
     keywords: ['help', 'what can you do', 'capabilities', 'features', 'how to use', 'commands'],
-    title: 'How Abby Can Help You Learn & Build',
+    title: 'How Bluee Can Help You Learn & Build',
     category: 'conversational',
-    summary: 'A quick overview of Abby’s capabilities and how to navigate OpenGuide.',
+    summary: 'A quick overview of Bluee’s capabilities and how to navigate OpenGuide.',
     explanation: 'You can ask me to:\n• Explain complex math (Attention Softmax, Cosine Similarity, RoPE, LoRA low-rank math)\n• Walk through any lab across Track 0 to Track 4\n• Debug Python code executing in the Pyodide WebAssembly worker\n• Explain OpenGuide’s architecture ($0 compute, Web Workers, IndexedDB, WebGPU)\n• Provide keyboard shortcuts (Ctrl+Enter to run, Alt+X for X-Ray lens)\n• Suggest next steps in your learning path.',
     takeaway: 'Try asking: "How does attention work?" or "Explain LoRA fine-tuning".'
   },

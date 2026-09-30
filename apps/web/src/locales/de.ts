@@ -133,11 +133,11 @@ export const de: Record<string, string> = {
   ide_terminal_ready: 'Interaktives Pyodide Terminal • Bereit',
   ide_xray_btn: 'X-Ray Debug-Linse',
 
-  // Abby Chatbot
-  abby_title: 'Abby',
+  // Bluee Chatbot
+  abby_title: 'Bluee',
   abby_subtitle: 'Offline-KI-Assistent',
-  abby_greeting: 'Hallo! Ich bin Abby, Ihre Offline-Begleiterin für OpenGuide. Fragen Sie mich nach Lernpfaden, WebAssembly im Browser, Vektormathematik oder Tastenkürzeln!',
-  abby_placeholder: 'Fragen Sie Abby nach Tracks, Code oder KI-Konzepten...',
+  abby_greeting: 'Hallo! Ich bin Bluee, Ihre Offline-Begleiterin für OpenGuide. Fragen Sie mich nach Lernpfaden, WebAssembly im Browser, Vektormathematik oder Tastenkürzeln!',
+  abby_placeholder: 'Fragen Sie Bluee nach Tracks, Code oder KI-Konzepten...',
   abby_suggestion_1: 'Was ist Track 0?',
   abby_suggestion_2: 'Wie funktioniert Python in WASM?',
   abby_suggestion_3: 'Erkläre Kosinus-Ähnlichkeit',

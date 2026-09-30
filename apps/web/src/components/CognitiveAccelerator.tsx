@@ -139,7 +139,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
           <div className="p-6 sm:p-8 rounded-3xl bg-[var(--color-primary)]/80 border border-emerald-500/30 space-y-6 relative overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold uppercase">
+                <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-600/30 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-300 font-bold uppercase">
                   {selectedPareto.governsPct}
                 </span>
                 <h4 className="text-2xl font-bold text-[var(--color-text-primary)] mt-2">{selectedPareto.title}</h4>
@@ -160,14 +160,14 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">Core Mathematical Formula</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-800 dark:text-emerald-400 font-bold">Core Mathematical Formula</span>
                 <div className="font-mono text-sm text-[var(--color-text-primary)] font-bold bg-[var(--color-primary)] p-2 rounded-lg">
                   {selectedPareto.coreFormula}
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400">First-Principles Plain Intuition</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-800 dark:text-cyan-400 font-bold">First-Principles Plain Intuition</span>
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                   {selectedPareto.plainIntuition}
                 </p>
@@ -175,9 +175,9 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
             </div>
 
             <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3 text-xs">
-              <Sparkles size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+              <Sparkles size={16} className="text-emerald-500 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-emerald-400">Targeted Diagnostic Exam Question:</strong>
+                <strong className="text-emerald-950 dark:text-emerald-400">Targeted Diagnostic Exam Question:</strong>
                 <p className="text-[var(--color-text-secondary)] mt-1">{selectedPareto.examQuestion}</p>
               </div>
             </div>
@@ -217,8 +217,8 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
             <div className="p-8 rounded-3xl bg-[var(--color-primary)]/80 border border-cyan-500/30 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Timer size={18} className="text-cyan-400" />
-                  <span className="text-xs font-mono uppercase text-cyan-300 font-bold">
+                  <Timer size={18} className="text-cyan-500" />
+                  <span className="text-xs font-mono uppercase text-cyan-950 dark:text-cyan-300 font-bold">
                     Focus Phase: 10-15s Memorization Window ({countdown}s remaining)
                   </span>
                 </div>

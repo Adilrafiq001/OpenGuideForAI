@@ -38,8 +38,8 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
       {
         element: '#abby-copilot',
         popover: {
-          title: '🤖 Abby AI Companion',
-          description: 'Your offline AI assistant! Push Abby across the screen to experience fluid spring momentum and corner jelly-bounce physics.'
+          title: '🤖 Bluee AI Companion',
+          description: 'Your offline AI assistant! Push Bluee across the screen to experience fluid spring momentum and corner jelly-bounce physics.'
         }
       }
     ] : [
@@ -67,7 +67,7 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
       {
         element: '#abby-copilot',
         popover: {
-          title: '🤖 Abby AI Copilot',
+          title: '🤖 Bluee AI Copilot',
           description: 'Draggable with interactive jelly-bounce physics! Powered by client-side WebGPU Small Language Models and offline knowledge.'
         }
       }

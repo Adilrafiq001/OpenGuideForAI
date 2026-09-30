@@ -685,18 +685,18 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
       {/* SECTION 5: THE SYNAPSE LOUNGE (Neuro-Plasticity Lab & Mind Sharpeners) */}
       <SynapseLounge />
 
-      {/* SECTION 6: IN-HOUSE OFFLINE AI ASSISTANT (Explore the Offline AI Copilot: Abby) */}
+      {/* SECTION 6: IN-HOUSE OFFLINE AI ASSISTANT (Explore the Offline AI Copilot: Bluee) */}
       <section id="offline-ai-studio" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)] text-center relative overflow-hidden">
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-800 dark:text-cyan-300 font-mono text-xs font-bold mb-4 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-600/30 dark:border-cyan-500/25 text-cyan-950 dark:text-cyan-300 font-mono text-xs font-bold mb-4 shadow-sm">
             <Bot size={14} />
-            <span>Explore the Offline AI Copilot: Abby</span>
+            <span>Explore the Offline AI Copilot: Bluee</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-[var(--color-text-primary)] mb-4 tracking-tight">
-            Meet Abby, Your Offline AI Copilot
+            Meet Bluee, Your Offline AI Copilot
           </h2>
           <p className="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed mb-8">
-            Click on Abby floating at the bottom-right corner anytime to ask anything about tracks, in-browser Pyodide WASM, vector databases, or studio shortcuts. 100% private, zero cloud bills, with optional BYOK support in Settings.
+            Click on Bluee floating at the bottom-right corner anytime to ask anything about tracks, in-browser Pyodide WASM, vector databases, or studio shortcuts. 100% private, zero cloud bills, with optional BYOK support in Settings.
           </p>
           <button
             type="button"
@@ -709,7 +709,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
             <Bot size={15} />
-            <span>Ask Abby Now</span>
+            <span>Ask Bluee Now</span>
             <span className="text-xs bg-[var(--color-primary)]/20 px-2 py-0.5 rounded-full font-mono">Offline</span>
           </button>
         </div>

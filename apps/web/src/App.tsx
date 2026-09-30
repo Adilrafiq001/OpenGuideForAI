@@ -258,7 +258,7 @@ function StudioAnnouncementPill({
           <span>OpenGuide v{CURRENT_STUDIO_VERSION} Live</span>
         </div>
         <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
-          Track 4, Mobile IDE Tabs, 50+ Abby answers
+          Track 4, Mobile IDE Tabs, 50+ Bluee answers
         </p>
       </div>
       <div className="flex items-center gap-1.5 shrink-0">

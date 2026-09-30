@@ -33,6 +33,7 @@ export interface CourseData {
     keyTakeaway: string;
     timestamps: { label: string; time: number; timeStr: string }[];
     transcript: string;
+    codeSnippet?: string;
   }[];
   syllabus?: {
     module: string;
@@ -74,7 +75,82 @@ Micrograd is a tiny Autograd engine that implements backpropagation over a dynam
 A neural network is simply a mathematical function that takes inputs, parameters (weights and biases), and produces predictions.
 During the forward pass, we compute intermediate values. Each Value object keeps track of its children and local derivatives.
 During the backward pass, we topological-sort the graph and call local derivative functions using the chain rule: dL/dx = dL/dy * dy/dx.
-Optimization is just stepping weights in the opposite direction of the gradient: w -= learning_rate * w.grad.`
+Optimization is just stepping weights in the opposite direction of the gradient: w -= learning_rate * w.grad.`,
+        codeSnippet: `# Andrej Karpathy: Micrograd Scalar Autograd Engine (Lecture 1)
+# Backpropagation from complete mathematical first principles.
+import math
+
+class Value:
+    """Stores a single scalar value and its gradient computed via recursive chain rule."""
+    def __init__(self, data, _children=(), _op=''):
+        self.data = float(data)
+        self.grad = 0.0
+        self._backward = lambda: None
+        self._prev = set(_children)
+        self._op = _op
+
+    def __repr__(self):
+        return f"Value(data={self.data:.4f}, grad={self.grad:.4f})"
+
+    def __add__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+        out = Value(self.data + other.data, (self, other), '+')
+        def _backward():
+            self.grad += 1.0 * out.grad
+            other.grad += 1.0 * out.grad
+        out._backward = _backward
+        return out
+
+    def __radd__(self, other):
+        return self + other
+
+    def __mul__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+        out = Value(self.data * other.data, (self, other), '*')
+        def _backward():
+            self.grad += other.data * out.grad
+            other.grad += self.data * out.grad
+        out._backward = _backward
+        return out
+
+    def __rmul__(self, other):
+        return self * other
+
+    def tanh(self):
+        x = self.data
+        t = (math.exp(2*x) - 1) / (math.exp(2*x) + 1)
+        out = Value(t, (self,), 'tanh')
+        def _backward():
+            # Derivative of tanh: d/dx[tanh(x)] = 1 - tanh(x)^2
+            self.grad += (1.0 - t**2) * out.grad
+        out._backward = _backward
+        return out
+
+    def backward(self):
+        # Topological sort order DAG traversal
+        topo = []
+        visited = set()
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(child)
+                topo.append(v)
+        build_topo(self)
+        self.grad = 1.0
+        for node in reversed(topo):
+            node._backward()
+
+# Quick execution test
+x1, x2 = Value(2.0), Value(0.0)
+w1, w2 = Value(-3.0), Value(1.0)
+b = Value(6.88137)
+n = (x1*w1 + x2*w2) + b
+o = n.tanh()
+o.backward()
+print(f"Output: {o.data:.4f}")
+print(f"dw1/dL: {w1.grad:.4f}, dw2/dL: {w2.grad:.4f}")
+`
       },
       {
         id: 'lec-2',
@@ -93,7 +169,45 @@ Optimization is just stepping weights in the opposite direction of the gradient:
 A character-level bigram model predicts the next character given only the immediately preceding character.
 We first build a 27x27 count matrix counting transitions.
 Then we rewrite this as a 1-layer neural network using one-hot encodings, weight matrix W, and softmax activation.
-We observe that the neural network and the count matrix converge to the exact same loss because they model the same probabilistic distribution.`
+We observe that the neural network and the count matrix converge to the exact same loss because they model the same probabilistic distribution.`,
+        codeSnippet: `# Andrej Karpathy: Makemore Part 1 - Bigram Language Model (Lecture 2)
+# Count matrix and single-layer neural network equivalence.
+import math
+
+words = ["emma", "olivia", "ava", "isabella", "sophia", "charlotte", "mia", "amelia"]
+chars = sorted(list(set(''.join(words))))
+stoi = {s: i+1 for i, s in enumerate(chars)}
+stoi['.'] = 0
+itos = {i: s for s, i in stoi.items()}
+vocab_size = len(itos)
+
+# 1. Bigram Transition Count Matrix N
+counts = [[0] * vocab_size for _ in range(vocab_size)]
+for w in words:
+    chs = ['.'] + list(w) + ['.']
+    for ch1, ch2 in zip(chs, chs[1:]):
+        counts[stoi[ch1]][stoi[ch2]] += 1
+
+# 2. Probability Matrix with Laplace Smoothing (+1)
+probs = []
+for row in counts:
+    total = sum(row) + vocab_size
+    probs.append([(c + 1) / total for c in row])
+
+# 3. Negative Log Likelihood (NLL) Loss Evaluation
+log_likelihood = 0.0
+n = 0
+for w in words:
+    chs = ['.'] + list(w) + ['.']
+    for ch1, ch2 in zip(chs, chs[1:]):
+        prob = probs[stoi[ch1]][stoi[ch2]]
+        log_likelihood += math.log(prob)
+        n += 1
+
+nll = -log_likelihood / n
+print(f"Vocab Size: {vocab_size}")
+print(f"Trained Bigram Negative Log Likelihood (Loss): {nll:.4f}")
+`
       },
       {
         id: 'lec-3',
@@ -111,7 +225,57 @@ We observe that the neural network and the count matrix converge to the exact sa
         transcript: `Here we scale our model from 1 character of context to N characters using a Multi-Layer Perceptron.
 Instead of sparse one-hot vectors, characters are mapped into a dense continuous embedding space.
 We concatenate previous character embeddings, pass them through a hidden layer with tanh non-linearity, and project to logits.
-We also introduce proper machine learning discipline: 80% train, 10% validation, and 10% test splits to guard against overfitting.`
+We also introduce proper machine learning discipline: 80% train, 10% validation, and 10% test splits to guard against overfitting.`,
+        codeSnippet: `# Andrej Karpathy: Makemore Part 2 - MLP (Bengio et al. 2003) (Lecture 3)
+# Dense continuous embeddings + Tanh hidden layer.
+import math
+import random
+
+# Architecture hyperparameters
+block_size = 3    # context length (3 characters to predict 4th)
+embed_dim = 2     # 2D character embedding space
+hidden_dim = 32   # number of neurons in hidden layer
+vocab_size = 27   # 26 letters + '.'
+
+# Initialize weights with small random values
+random.seed(42)
+C = [[random.gauss(0, 1) for _ in range(embed_dim)] for _ in range(vocab_size)]
+W1 = [[random.gauss(0, 0.2) for _ in range(hidden_dim)] for _ in range(block_size * embed_dim)]
+b1 = [0.01 for _ in range(hidden_dim)]
+W2 = [[random.gauss(0, 0.1) for _ in range(vocab_size)] for _ in range(hidden_dim)]
+b2 = [0.0 for _ in range(vocab_size)]
+
+def forward_step(context_indices):
+    # 1. Lookup and flatten embeddings
+    emb = []
+    for idx in context_indices:
+        emb.extend(C[idx])
+    
+    # 2. Hidden layer with tanh activation: h = tanh(emb @ W1 + b1)
+    h = []
+    for j in range(hidden_dim):
+        act = sum(emb[i] * W1[i][j] for i in range(len(emb))) + b1[j]
+        h.append(math.tanh(act))
+    
+    # 3. Logits projection: logits = h @ W2 + b2
+    logits = []
+    for k in range(vocab_size):
+        logit = sum(h[j] * W2[j][k] for j in range(hidden_dim)) + b2[k]
+        logits.append(logit)
+        
+    # 4. Softmax probabilities
+    max_l = max(logits)
+    exp_l = [math.exp(l - max_l) for l in logits]
+    sum_exp = sum(exp_l)
+    probs = [e / sum_exp for e in exp_l]
+    return probs
+
+sample_context = [1, 5, 12]  # e.g. 'a', 'e', 'l'
+pred_probs = forward_step(sample_context)
+print(f"MLP Context: {sample_context}")
+print(f"Predicted next-char distribution sum: {sum(pred_probs):.4f}")
+print(f"Top predicted token index: {pred_probs.index(max(pred_probs))}")
+`
       },
       {
         id: 'lec-4',
@@ -129,7 +293,55 @@ We also introduce proper machine learning discipline: 80% train, 10% validation,
         transcript: `Deep networks suffer from vanishing and exploding gradients when weights are initialized improperly.
 If pre-activations are too large, tanh saturates at -1 and 1, causing its derivative (1 - t^2) to become 0—killing the gradient.
 We derive Kaiming initialization to keep activation variance constant across layers.
-Then we implement Batch Normalization: standardizing activations across the mini-batch to have zero mean and unit variance.`
+Then we implement Batch Normalization: standardizing activations across the mini-batch to have zero mean and unit variance.`,
+        codeSnippet: `# Andrej Karpathy: Makemore Part 3 - BatchNorm & Kaiming Init (Lecture 4)
+# Batch Normalization standardizes activations across the mini-batch.
+import math
+
+class SimpleBatchNorm1d:
+    def __init__(self, dim, eps=1e-5, momentum=0.1):
+        self.eps = eps
+        self.momentum = momentum
+        self.gamma = [1.0] * dim  # learnable scale
+        self.beta = [0.0] * dim   # learnable shift
+        self.running_mean = [0.0] * dim
+        self.running_var = [1.0] * dim
+
+    def forward(self, batch, training=True):
+        """batch: list of samples, where each sample has length 'dim'"""
+        B = len(batch)
+        dim = len(self.gamma)
+        
+        if training:
+            # 1. Batch mean: mu = (1/B) * sum(x)
+            mean = [sum(batch[i][d] for i in range(B)) / B for d in range(dim)]
+            # 2. Batch variance: var = (1/B) * sum((x - mu)^2)
+            var = [sum((batch[i][d] - mean[d])**2 for i in range(B)) / B for d in range(dim)]
+            
+            # 3. Update running statistics for inference
+            for d in range(dim):
+                self.running_mean[d] = (1 - self.momentum) * self.running_mean[d] + self.momentum * mean[d]
+                self.running_var[d] = (1 - self.momentum) * self.running_var[d] + self.momentum * var[d]
+        else:
+            mean = self.running_mean
+            var = self.running_var
+            
+        # 4. Normalize and scale: y = gamma * (x - mu)/sqrt(var + eps) + beta
+        out = []
+        for i in range(B):
+            row = []
+            for d in range(dim):
+                x_hat = (batch[i][d] - mean[d]) / math.sqrt(var[d] + self.eps)
+                y = self.gamma[d] * x_hat + self.beta[d]
+                row.append(y)
+            out.append(row)
+        return out
+
+bn = SimpleBatchNorm1d(dim=3)
+sample_batch = [[1.2, 5.0, -2.1], [3.4, 4.2, -1.5], [0.8, 6.1, -3.0], [2.1, 5.3, -2.4]]
+normalized = bn.forward(sample_batch, training=True)
+print("Normalized Batch Mean Sample 0:", [round(v, 3) for v in normalized[0]])
+`
       },
       {
         id: 'lec-5',
@@ -145,7 +357,39 @@ Then we implement Batch Normalization: standardizing activations across the mini
         ],
         transcript: `In this masterclass, we write the exact analytical backward pass for every single PyTorch tensor operation.
 We derive how cross_entropy backpropagation simplifies to: probs - 1 at the target index.
-We work through the tensor calculus of broadcasting and matrix multiplication: if Y = X @ W, then dX = dY @ W.T and dW = X.T @ dY.`
+We work through the tensor calculus of broadcasting and matrix multiplication: if Y = X @ W, then dX = dY @ W.T and dW = X.T @ dY.`,
+        codeSnippet: `# Andrej Karpathy: Becoming a Backprop Ninja (Lecture 5)
+# Analytical backward pass for Cross-Entropy Loss without Autograd.
+import math
+
+def softmax_cross_entropy_forward_and_backward(logits, target_idx):
+    """
+    Computes exact loss and analytical derivative dlogits directly.
+    Mathematical derivation: dL/d(logit_i) = p_i - 1(i == target)
+    """
+    # 1. Forward pass (Softmax)
+    max_logit = max(logits)
+    exp_logits = [math.exp(l - max_logit) for l in logits]
+    sum_exp = sum(exp_logits)
+    probs = [e / sum_exp for e in exp_logits]
+    
+    # 2. Negative log likelihood loss: -log(p_target)
+    loss = -math.log(probs[target_idx])
+    
+    # 3. Analytical backward pass in a single line:
+    dlogits = [p for p in probs]
+    dlogits[target_idx] -= 1.0  # Subtract 1 at the correct target index!
+    
+    return loss, probs, dlogits
+
+logits = [2.0, 1.0, 0.1, 0.05]
+target = 0
+loss, probs, dlogits = softmax_cross_entropy_forward_and_backward(logits, target)
+print(f"Target Token: {target}")
+print(f"Loss: {loss:.4f}")
+print(f"Predicted Probability of Target: {probs[target]:.4f}")
+print(f"Analytical Gradient dLoss/dLogits: {[round(g, 4) for g in dlogits]}")
+`
       },
       {
         id: 'lec-6',
@@ -159,7 +403,37 @@ We work through the tensor calculus of broadcasting and matrix multiplication: i
           { label: 'Hierarchical multi-layer context processing', time: 3600, timeStr: '1:00:00' }
         ],
         transcript: `Instead of flattening all context tokens into a massive vector, WaveNet progressively aggregates consecutive tokens in pairs.
-This forms a hierarchical tree where each layer doubles the receptive field with minimal parameter explosion.`
+This forms a hierarchical tree where each layer doubles the receptive field with minimal parameter explosion.`,
+        codeSnippet: `# Andrej Karpathy: WaveNet Architecture & Consecutive Grouping (Lecture 6)
+# Hierarchical tree structure doubles receptive field layer by layer.
+
+def consecutive_grouping_forward(sequence_tokens, group_size=2):
+    """
+    WaveNet aggregates consecutive adjacent tokens.
+    Example: 8 tokens -> 4 pairs -> 2 pairs -> 1 root
+    """
+    layers_history = [sequence_tokens]
+    current = sequence_tokens
+    
+    while len(current) > 1:
+        # Group consecutive elements: [t0, t1], [t2, t3], ...
+        next_level = []
+        for i in range(0, len(current), group_size):
+            pair = current[i:i+group_size]
+            # In WaveNet, this pair is passed through a linear projection + non-linearity
+            aggregated = f"({'+'.join(str(p) for p in pair)})"
+            next_level.append(aggregated)
+        layers_history.append(next_level)
+        current = next_level
+        
+    return layers_history
+
+tokens = ["T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7"]
+tree = consecutive_grouping_forward(tokens)
+print("WaveNet Receptive Field Tree (8 tokens to 1 root):")
+for depth, stage in enumerate(tree):
+    print(f" Depth {depth} (Width {len(stage)}): {stage}")
+`
       },
       {
         id: 'lec-7',
@@ -178,7 +452,65 @@ This forms a hierarchical tree where each layer doubles the receptive field with
 Self-Attention is a communication mechanism: each token emits a Query ('what I seek') and a Key ('what I have').
 The dot product Q @ K.T yields an affinity matrix.
 We divide by sqrt(d_k) to prevent softmax saturation, apply causal lower-triangular masking, and multiply by Value vectors.
-Multi-head attention runs parallel attention subspaces, and residual connections allow gradients to flow unimpeded directly from output to input.`
+Multi-head attention runs parallel attention subspaces, and residual connections allow gradients to flow unimpeded directly from output to input.`,
+        codeSnippet: `# Andrej Karpathy: nanoGPT Causal Self-Attention from Scratch (Lecture 7)
+# Softmax((Q @ K.T) / sqrt(d_k) + Causal Mask) @ V
+import math
+
+def dot_product(v1, v2):
+    return sum(a * b for a, b in zip(v1, v2))
+
+def causal_self_attention_step(tokens_q, tokens_k, tokens_v, head_dim):
+    """
+    tokens_q, tokens_k, tokens_v: T vectors of dimension head_dim
+    Returns: T context-aware output vectors
+    """
+    T = len(tokens_q)
+    scale = 1.0 / math.sqrt(head_dim)
+    
+    # 1. Compute raw affinity scores: Score(i, j) = (Q_i dot K_j) * scale
+    scores = []
+    for i in range(T):
+        row = []
+        for j in range(T):
+            if j <= i:  # Causal mask: token i can ONLY attend to past tokens j <= i
+                score = dot_product(tokens_q[i], tokens_k[j]) * scale
+            else:
+                score = -1e9  # Mask future tokens with negative infinity
+            row.append(score)
+        scores.append(row)
+        
+    # 2. Softmax normalization across valid tokens
+    weights = []
+    for row in scores:
+        max_s = max(row)
+        exp_s = [math.exp(s - max_s) for s in row]
+        sum_e = sum(exp_s)
+        weights.append([e / sum_e for e in exp_s])
+        
+    # 3. Weighted aggregation of Value vectors: Output_i = sum(weights_ij * V_j)
+    out = []
+    for i in range(T):
+        acc = [0.0] * head_dim
+        for j in range(T):
+            w = weights[i][j]
+            for d in range(head_dim):
+                acc[d] += w * tokens_v[j][d]
+        out.append(acc)
+        
+    return out, weights
+
+# Test run with 3 tokens (e.g. ["The", "cat", "sat"])
+dim = 4
+Q = [[0.2, 0.1, 0.8, -0.4], [0.5, -0.3, 0.1, 0.9], [0.1, 0.7, -0.2, 0.3]]
+K = [[0.1, 0.2, 0.9, -0.3], [0.4, -0.2, 0.2, 0.8], [0.2, 0.6, -0.1, 0.4]]
+V = [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0]]
+
+outputs, attn_weights = causal_self_attention_step(Q, K, V, dim)
+print("nanoGPT Attention Matrix (Causal Mask Enforced):")
+for r in attn_weights:
+    print(" ", [round(w, 3) for w in r])
+`
       },
       {
         id: 'lec-8',
@@ -193,7 +525,51 @@ Multi-head attention runs parallel attention subspaces, and residual connections
           { label: 'Regex pattern splitting in GPT-2 and GPT-4 (cl100k_base)', time: 6300, timeStr: '1:45:00' }
         ],
         transcript: `Tokenization is the root cause of many mysterious LLM behaviors: why models struggle with simple spelling, why arithmetic fails, why non-English languages cost more tokens.
-We implement Byte Pair Encoding (BPE): starting with raw UTF-8 bytes (0-255), we iteratively find the most common adjacent pair of tokens and merge them into a single new token ID until our target vocabulary size is reached.`
+We implement Byte Pair Encoding (BPE): starting with raw UTF-8 bytes (0-255), we iteratively find the most common adjacent pair of tokens and merge them into a single new token ID until our target vocabulary size is reached.`,
+        codeSnippet: `# Andrej Karpathy: Byte Pair Encoding (BPE) Tokenizer from Scratch (Lecture 8)
+# Starting with raw UTF-8 bytes (0-255) and iteratively merging top pairs.
+
+def get_stats(ids):
+    """Count frequencies of all consecutive pairs."""
+    counts = {}
+    for pair in zip(ids, ids[1:]):
+        counts[pair] = counts.get(pair, 0) + 1
+    return counts
+
+def merge(ids, pair, idx):
+    """Replace all occurrences of pair with new token index idx."""
+    newids = []
+    i = 0
+    while i < len(ids):
+        if i < len(ids) - 1 and ids[i] == pair[0] and ids[i+1] == pair[1]:
+            newids.append(idx)
+            i += 2
+        else:
+            newids.append(ids[i])
+            i += 1
+    return newids
+
+text = "low lower newest widest lowest"
+# 1. Convert string to raw UTF-8 byte integers (0..255)
+tokens = list(text.encode("utf-8"))
+print(f"Original UTF-8 bytes length: {len(tokens)}")
+
+# 2. Iteratively train BPE merges for 5 rounds
+vocab_size = 256
+merges = {}
+for i in range(5):
+    stats = get_stats(tokens)
+    if not stats:
+        break
+    best_pair = max(stats, key=stats.get)
+    new_idx = vocab_size + i
+    tokens = merge(tokens, best_pair, new_idx)
+    merges[best_pair] = new_idx
+    print(f"Merge {i+1}: pair {best_pair} -> token ID {new_idx} (occurred {stats[best_pair]} times)")
+
+print(f"Compressed token sequence length: {len(tokens)}")
+print("Compression Ratio:", round(len(text.encode('utf-8')) / len(tokens), 2))
+`
       }
     ],
     codeSnippet: `# Andrej Karpathy's Micrograd Core Scalar Autograd
@@ -201,7 +577,7 @@ import math
 
 class Value:
     def __init__(self, data, _children=(), _op=''):
-        self.data = data
+        self.data = float(data)
         self.grad = 0.0
         self._backward = lambda: None
         self._prev = set(_children)
@@ -260,7 +636,43 @@ print(f"z = {z.data}, dz/dx = {x.grad}, dz/dy = {y.grad}")
     author: 'Hugging Face',
     badge: 'FREE CERT',
     desc: 'Comprehensive NLP, Audio, Vision, Deep RL, and AI Agents — hands-on code with certificates.',
-    type: 'curriculum',
+    type: 'youtube',
+    youtubeId: '00GKzGyWFEs',
+    lectures: [
+      {
+        id: 'hf-1',
+        title: 'Masterclass: Transformers, Tokenizers & Modern NLP Pipelines',
+        youtubeId: '00GKzGyWFEs',
+        duration: '48m',
+        keyTakeaway: 'The Transformers pipeline API abstracts tokenization, model forward pass, and post-processing into a single unified interface.',
+        timestamps: [
+          { label: 'Introduction to Hugging Face Ecosystem', time: 0, timeStr: '00:00' },
+          { label: 'Pipeline API & Task Specific Heads', time: 600, timeStr: '10:00' },
+          { label: 'Tokenizers, Subword encodings & Vocabs', time: 1440, timeStr: '24:00' },
+          { label: 'Fine-Tuning with Trainer API & Quantization', time: 2160, timeStr: '36:00' }
+        ],
+        transcript: `Welcome to the Hugging Face ecosystem masterclass!
+In this overview, we dissect how transformers operate end-to-end.
+The Pipeline API is the highest-level abstraction: it takes raw text, passes it through the matching AutoTokenizer to convert characters into token IDs, feeds the tensor through the model architecture, and post-processes logits with softmax into human-readable predictions.
+We also cover how open-source model weights can be quantized from FP32 down to 8-bit and 4-bit to execute directly on consumer hardware.`,
+        codeSnippet: `# Hugging Face Transformers & smolagents Example
+from transformers import pipeline
+
+# 1. Sentiment analysis in 2 lines
+classifier = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+result = classifier("OpenGuide runs 100% free with client-side Pyodide!")
+print("Sentiment:", result)
+
+# 2. Tokenizer Inspection
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+tokens = tokenizer.tokenize("AI Sovereign Studio")
+ids = tokenizer.convert_tokens_to_ids(tokens)
+print("Tokens:", tokens)
+print("Token IDs:", ids)
+`
+      }
+    ],
     syllabus: [
       {
         module: 'NLP Course',
@@ -313,7 +725,43 @@ print("Token IDs:", ids)
     author: 'Microsoft',
     badge: '18 LESSONS',
     desc: '18 comprehensive lessons taking you from text generation foundations to production RAG.',
-    type: 'curriculum',
+    type: 'youtube',
+    youtubeId: 'jIXdcNW_X_Y',
+    lectures: [
+      {
+        id: 'ms-genai-1',
+        title: 'Overview: Large Language Models, Prompting & Production RAG',
+        youtubeId: 'jIXdcNW_X_Y',
+        duration: '42m',
+        keyTakeaway: 'Vector embeddings enable semantic similarity search through geometric cosine distance rather than brittle keyword matching.',
+        timestamps: [
+          { label: 'GenAI Foundations & Core Concepts', time: 0, timeStr: '00:00' },
+          { label: 'Prompt Engineering & System Instruction Schemas', time: 720, timeStr: '12:00' },
+          { label: 'Embeddings & Vector Search Mechanics', time: 1440, timeStr: '24:00' },
+          { label: 'RAG Pipeline Architecture & Grounding', time: 2040, timeStr: '34:00' }
+        ],
+        transcript: `Welcome to Microsoft's Generative AI for Beginners course!
+Across these 18 lessons, you progress from basic prompting to enterprise-grade Retrieval Augmented Generation (RAG).
+We explore why system prompts and structured outputs are vital for engineering reliability.
+We delve into vector embeddings—translating unstructured text into points in multi-dimensional space, where geometric cosine similarity reflects semantic meaning.`,
+        codeSnippet: `# Microsoft GenAI: Semantic Vector Retrieval & Cosine Similarity
+import math
+
+def cosine_similarity(vec_a, vec_b):
+    dot = sum(a * b for a, b in zip(vec_a, vec_b))
+    norm_a = math.sqrt(sum(a * a for a in vec_a))
+    norm_b = math.sqrt(sum(b * b for b in vec_b))
+    return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
+
+query = [0.82, 0.15, 0.55]
+doc_1 = [0.80, 0.18, 0.52]  # Highly related
+doc_2 = [0.05, 0.95, 0.20]  # Unrelated
+
+print("Similarity Doc 1 (Matched):", round(cosine_similarity(query, doc_1), 4))
+print("Similarity Doc 2 (Divergent):", round(cosine_similarity(query, doc_2), 4))
+`
+      }
+    ],
     syllabus: [
       {
         module: 'Lessons 1-5',
@@ -366,7 +814,54 @@ print("Similarity Doc 2:", cosine_similarity(query, doc_2))
     author: 'Microsoft',
     badge: '8 LESSONS',
     desc: '8 hands-on architectural lessons building multi-agent systems and semantic kernels.',
-    type: 'curriculum',
+    type: 'youtube',
+    youtubeId: 'b_B_kL4iK8U',
+    lectures: [
+      {
+        id: 'ms-agents-1',
+        title: 'Masterclass: Autonomous AI Agents & Multi-Agent Collaboration',
+        youtubeId: 'b_B_kL4iK8U',
+        duration: '52m',
+        keyTakeaway: 'An AI Agent coordinates an LLM reasoning engine, memory scratchpad, and typed external tools bounded by execution limits.',
+        timestamps: [
+          { label: 'What is an AI Agent? (LLM + Tools + Loop)', time: 0, timeStr: '00:00' },
+          { label: 'ReAct Loop: Thought, Action, Observation', time: 780, timeStr: '13:00' },
+          { label: 'Multi-Agent Specialization & AutoGen', time: 1620, timeStr: '27:00' },
+          { label: 'Human-in-the-Loop & Guardrail Verification', time: 2400, timeStr: '40:00' }
+        ],
+        transcript: `Welcome to Microsoft's AI Agents for Beginners masterclass!
+An AI agent goes beyond static question answering by giving an LLM tools to affect its environment.
+The ReAct (Reasoning + Acting) loop allows the model to output a thought, trigger a function call, inspect the result (observation), and decide what step to take next.
+When tasks become complex, multi-agent networks split responsibilities: a Planner creates the roadmap, a Coder generates implementation, and an Evaluator runs tests to catch regressions.`,
+        codeSnippet: `# Microsoft AI Agents: ReAct Autonomous Agent Coordinator
+class ToolAgent:
+    def __init__(self, name, tools):
+        self.name = name
+        self.tools = tools
+        self.history = []
+
+    def run_step(self, task):
+        print(f"[{self.name}] Thinking about task: '{task}'...")
+        # Step 1: Select appropriate tool
+        tool_name = "calculator" if any(op in task for op in ["+", "-", "*", "/"]) else "search"
+        tool_fn = self.tools.get(tool_name)
+        
+        # Step 2: Act & Observe
+        result = tool_fn(task)
+        observation = f"Observed result from {tool_name}: {result}"
+        self.history.append((task, observation))
+        return observation
+
+tools = {
+    "calculator": lambda expr: "Result = 42.0",
+    "search": lambda query: "Found 3 relevant documentation pages."
+}
+
+agent = ToolAgent("CopilotAgent", tools)
+print(agent.run_step("Compute 14 * 3"))
+`
+      }
+    ],
     syllabus: [
       {
         module: 'Lesson 1-3',
@@ -414,7 +909,43 @@ print(code)
     author: 'Google x Kaggle',
     badge: 'FREE INTENSIVE',
     desc: 'Foundational models, embeddings, multimodal vision, agents, and production MLOps.',
-    type: 'curriculum',
+    type: 'youtube',
+    youtubeId: '4Wp9w_j6668',
+    lectures: [
+      {
+        id: 'gk-1',
+        title: 'Masterclass: Multimodal Models, Structured Schemas & Production MLOps',
+        youtubeId: '4Wp9w_j6668',
+        duration: '1h 05m',
+        keyTakeaway: 'Gemini flash models provide sub-second latency for structured data extraction and automated LLM-as-a-judge evaluations.',
+        timestamps: [
+          { label: 'Introduction to Gemini Models & Architecture', time: 0, timeStr: '00:00' },
+          { label: 'Enforcing Deterministic JSON Schemas', time: 900, timeStr: '15:00' },
+          { label: 'Multimodal Image and Document Understanding', time: 1920, timeStr: '32:00' },
+          { label: 'LLM-as-a-Judge Evaluation Benchmarks', time: 2880, timeStr: '48:00' }
+        ],
+        transcript: `Welcome to the Google x Kaggle 5-Day Gen AI Intensive!
+In this high-velocity curriculum, we master Gemini 2.5 Flash and open Gemma weights.
+You learn how to strictly constrain LLM responses using JSON Schemas so backends can parse data reliably without regex hacks.
+We explore multimodal processing—passing images, diagrams, and audio directly to the context window—and automate evaluation using LLM-as-a-Judge test suites.`,
+        codeSnippet: `# Google Gemini Structured Output & Schema Verification
+import json
+
+evaluation_schema = {
+    "type": "OBJECT",
+    "properties": {
+        "verdict": {"type": "STRING", "enum": ["PASS", "FAIL"]},
+        "score": {"type": "NUMBER"},
+        "rationale": {"type": "STRING"}
+    },
+    "required": ["verdict", "score", "rationale"]
+}
+
+print("Deterministic Schema for LLM-as-a-Judge:")
+print(json.dumps(evaluation_schema, indent=2))
+`
+      }
+    ],
     syllabus: [
       {
         module: 'Day 1 & 2',
@@ -466,7 +997,39 @@ print(json.dumps(schema, indent=2))
     author: 'DeepLearning.AI',
     badge: 'APPLIED CODE',
     desc: 'Built in partnership with OpenAI and Anthropic — high-density 1-hour applied masterclasses.',
-    type: 'curriculum',
+    type: 'youtube',
+    youtubeId: 'mEsleV16qdo',
+    lectures: [
+      {
+        id: 'dl-1',
+        title: 'Masterclass: Advanced Retrieval, Re-ranking & Agentic Systems',
+        youtubeId: 'mEsleV16qdo',
+        duration: '58m',
+        keyTakeaway: 'Two-stage retrieval (Bi-encoder retrieval + Cross-encoder re-ranking) and HyDE drastically improve RAG accuracy.',
+        timestamps: [
+          { label: 'Why Basic Vector Search Fails in Production', time: 0, timeStr: '00:00' },
+          { label: 'Hypothetical Document Embeddings (HyDE)', time: 840, timeStr: '14:00' },
+          { label: 'Cross-Encoder Re-Ranking Mechanics', time: 1740, timeStr: '29:00' },
+          { label: 'Evaluating Context Precision & Faithfulness', time: 2700, timeStr: '45:00' }
+        ],
+        transcript: `Welcome to DeepLearning.AI's applied short course masterclass with Andrew Ng!
+In production RAG systems, standard vector similarity search often retrieves noisy, irrelevant chunks.
+We demonstrate two breakthrough techniques:
+1. HyDE (Hypothetical Document Embeddings): generate a hypothetical ideal answer first, then use that to find matching passages.
+2. Cross-Encoder Re-Ranking: quickly retrieve the top 20 candidates with fast bi-encoder embeddings, then use a precise cross-encoder model to score (query, document) pairs directly.`,
+        codeSnippet: `# DeepLearning.AI Pattern: Cross-Encoder Re-Ranking Concept
+# Step 1: Broad bi-encoder vector search retrieves Top 20 candidates.
+# Step 2: Accurate cross-encoder scores (query, candidate) pairs to select Top 3.
+candidates = [
+    {"doc": "Python memory management and garbage collection", "score": 0.82},
+    {"doc": "Building RAG applications with vector databases", "score": 0.89},
+    {"doc": "Neural network backpropagation calculus", "score": 0.74}
+]
+re_ranked = sorted(candidates, key=lambda x: x["score"], reverse=True)
+print("Top Document Selected by Cross-Encoder:", re_ranked[0]["doc"])
+`
+      }
+    ],
     syllabus: [
       {
         module: 'Track A',
@@ -557,11 +1120,29 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
   }, [selectedCourseId]);
 
   const currentLecture = useMemo(() => {
-    if (currentCourse.type === 'youtube' && currentCourse.lectures) {
+    if (currentCourse.lectures && currentCourse.lectures.length > 0) {
       return currentCourse.lectures[selectedLectureIdx] || currentCourse.lectures[0];
+    }
+    if (currentCourse.youtubeId) {
+      return {
+        id: `${currentCourse.id}-main`,
+        title: currentCourse.title,
+        youtubeId: currentCourse.youtubeId,
+        duration: 'Masterclass',
+        keyTakeaway: currentCourse.desc,
+        timestamps: [
+          { label: 'Introduction & Foundations', time: 0, timeStr: '00:00' },
+          { label: 'Core Architecture Walkthrough', time: 900, timeStr: '15:00' },
+          { label: 'Hands-On Code Implementation', time: 1800, timeStr: '30:00' }
+        ],
+        transcript: `${currentCourse.title}\nBy ${currentCourse.author}\n\n${currentCourse.desc}\n\nKey Principles:\n${currentCourse.keyTakeaways.join('\n')}`,
+        codeSnippet: currentCourse.codeSnippet
+      };
     }
     return null;
   }, [currentCourse, selectedLectureIdx]);
+
+  const hasVideo = Boolean(currentLecture?.youtubeId);
 
   // Filtered transcript lines
   const filteredTranscript = useMemo(() => {
@@ -571,6 +1152,9 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     const lines = currentLecture.transcript.split('\n');
     return lines.filter(l => l.toLowerCase().includes(term)).join('\n');
   }, [currentLecture, transcriptSearch]);
+
+  // Active code snippet to display and copy
+  const activeCodeSnippet = currentLecture?.codeSnippet || currentCourse.codeSnippet;
 
   // Export Transcript handler
   const handleExportTranscript = (format: 'md' | 'txt') => {
@@ -596,7 +1180,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(currentCourse.codeSnippet);
+    navigator.clipboard.writeText(activeCodeSnippet);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
@@ -691,9 +1275,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                       <span className="font-bold truncate text-[var(--color-text-primary)]">
                         {course.title}
                       </span>
-                      {course.type === 'youtube' && (
-                        <Play size={10} className="text-red-400 shrink-0 ml-1" />
-                      )}
+                      <Play size={10} className="text-red-400 shrink-0 ml-1" />
                     </div>
                     <span className="text-[10px] text-[var(--color-text-secondary)] truncate">
                       {course.author}
@@ -703,10 +1285,10 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               </div>
 
               {/* YouTube Lectures Accordion (if selected course has lectures) */}
-              {currentCourse.type === 'youtube' && currentCourse.lectures && (
+              {currentCourse.lectures && currentCourse.lectures.length > 0 && (
                 <div className="mt-2 border-t border-[var(--color-border)] p-2">
                   <div className="px-2 py-1.5 text-[10px] font-mono text-[var(--color-text-secondary)] font-bold uppercase tracking-wider">
-                    Course Lectures ({currentCourse.lectures.length})
+                    Lectures ({currentCourse.lectures.length})
                   </div>
                   <div className="space-y-1 max-h-48 md:max-h-none overflow-y-auto">
                     {currentCourse.lectures.map((lec, idx) => (
@@ -740,7 +1322,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               {/* Studio Tabs */}
               <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
                 <div className="flex items-center gap-1 sm:gap-2">
-                  {currentCourse.type === 'youtube' && (
+                  {hasVideo && (
                     <button
                       onClick={() => setActiveTab('video')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
@@ -754,7 +1336,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     </button>
                   )}
 
-                  {currentCourse.type === 'youtube' && (
+                  {hasVideo && (
                     <button
                       onClick={() => setActiveTab('transcript')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
@@ -810,7 +1392,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 min-h-0">
                 
                 {/* 1. Video Player Tab */}
-                {activeTab === 'video' && currentCourse.type === 'youtube' && currentLecture && (
+                {activeTab === 'video' && hasVideo && currentLecture && (
                   <div className="space-y-4 max-w-4xl mx-auto">
                     {/* Security Hardened YouTube Player */}
                     <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black/90 border border-[var(--color-border)] shadow-xl">
@@ -923,7 +1505,9 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     <div className="flex items-center justify-between bg-[var(--color-secondary)] p-3 rounded-xl border border-[var(--color-border)]">
                       <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-text-secondary)]">
                         <Terminal size={14} className="text-emerald-400" />
-                        <span>First-Principles Python Implementation</span>
+                        <span className="font-semibold text-[var(--color-text-primary)]">
+                          {currentLecture ? `${currentLecture.title}` : 'First-Principles Python Implementation'}
+                        </span>
                       </div>
                       <button
                         onClick={handleCopyCode}
@@ -944,7 +1528,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     </div>
 
                     <pre className="p-4 sm:p-6 rounded-2xl bg-black/90 border border-[var(--color-border)] text-xs sm:text-sm font-mono text-emerald-400 overflow-x-auto leading-relaxed shadow-inner">
-                      <code>{currentCourse.codeSnippet}</code>
+                      <code>{activeCodeSnippet}</code>
                     </pre>
 
                     <div className="p-4 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-start gap-3">

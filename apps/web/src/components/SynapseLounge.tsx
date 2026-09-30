@@ -318,7 +318,7 @@ export function SynapseLounge() {
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/25 text-violet-400 text-xs font-mono font-bold uppercase tracking-wider">
             <Brain size={14} className="animate-pulse" />
-            <span>Neuro-Plasticity Lab • Diffuse Mode Consolidation</span>
+            <span>Interactive Visual Lab • See AI Math in Action</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)]">
@@ -326,7 +326,7 @@ export function SynapseLounge() {
           </h2>
 
           <p className="text-[var(--color-text-secondary)] text-sm md:text-base max-w-2xl leading-relaxed">
-            Intense syntax reading induces cognitive fatigue. Modern cognitive science shows that switching to spatial alignment and deductive logic games activates subconscious consolidation—solidifying AI mental models while sharpening working memory.
+            <strong className="text-[var(--color-text-primary)] font-semibold">Interactive Visual Lab: See AI Math in Action.</strong> See the math beneath AI come alive. Switch between interactive geometric visualizers to intuitively understand vector embeddings, single-neuron decision boundaries, and transformer attention routing before writing Python code.
           </p>
         </div>
 
@@ -401,6 +401,13 @@ export function SynapseLounge() {
         {activeGame === 'vector' && (
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div>
+              <div className="p-3 mb-4 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
+                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Words aren't magic to computers—they're coordinates on a high-dimensional map. When words share meaning, their arrows point in the same direction. Use the slider below to align the probe vector and see cosine similarity calculate live!
+                </span>
+              </div>
+
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-accent)] font-bold">
                   Round {vectorRoundIdx + 1} of {vectorRounds.length} • Spatial Proximity
@@ -600,6 +607,13 @@ export function SynapseLounge() {
         {activeGame === 'neuron' && (
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div>
+              <div className="p-3 mb-4 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
+                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Deep networks like GPT are made from millions of tiny decision switches called perceptrons. Each one computes <code className="text-emerald-400 font-mono">(Input₁ × W₁) + (Input₂ × W₂) + Bias</code>. Tune the weights and bias until your neuron accurately solves the truth table!
+                </span>
+              </div>
+
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-accent)] font-bold">
                   Single Perceptron Circuit • Target Gate: {targetGate}
@@ -803,6 +817,13 @@ export function SynapseLounge() {
         {activeGame === 'attention' && (
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div className="space-y-6">
+              <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
+                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Transformers don't read words one by one—they compute attention between every word pair simultaneously. The Softmax function turns dot products into percentages. Lower temperature (τ) makes attention sharp and decisive; higher temperature spreads it out.
+                </span>
+              </div>
+
               {/* Scenario Selector & Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">

@@ -111,7 +111,7 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     // Verify Abby chat window opened
     const abbyHeader = page.locator('.abby-chat-header').first();
     await expect(abbyHeader).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('.abby-name').first()).toHaveText('Abby');
+    await expect(page.locator('.abby-name').first()).toHaveText('Bluee');
 
     // Type query
     const textarea = page.locator('#chat_bot').first();

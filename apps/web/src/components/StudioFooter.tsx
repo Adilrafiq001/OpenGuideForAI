@@ -16,7 +16,8 @@ import {
   Cpu,
   Lock,
   ChevronRight,
-  Palette
+  Palette,
+  ExternalLink
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
@@ -89,12 +90,22 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (contactForm.message.trim()) {
+      const subject = encodeURIComponent(`[OpenGuide ${contactForm.category}] from ${contactForm.name || 'Engineer'}`);
+      const body = encodeURIComponent(
+        `Hi Adil,\n\n${contactForm.message}\n\n---\nSender: ${contactForm.name || 'Anonymous'}\nEmail: ${contactForm.email || 'Not provided'}\nCategory: ${contactForm.category}\nPlatform: OpenGuide AI Studio`
+      );
+      window.open(`mailto:adilrafiq001@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      try {
+        const stored = JSON.parse(localStorage.getItem('openguide_contact_messages') || '[]');
+        stored.push({ ...contactForm, timestamp: new Date().toISOString() });
+        localStorage.setItem('openguide_contact_messages', JSON.stringify(stored));
+      } catch {}
       setContactSubmitted(true);
       setTimeout(() => {
         setContactModalOpen(false);
         setContactSubmitted(false);
         setContactForm({ name: '', email: '', category: 'Feedback', message: '' });
-      }, 2500);
+      }, 3000);
     }
   };
 
@@ -189,7 +200,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
             </div>
 
             <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-              Stay synchronized with new in-browser labs, WebGPU kernels, and free tooling releases. Strict 0-spam policy; 100% private local subscription.
+              Stay synchronized with new in-browser labs, WebGPU kernels, and curriculum drops. 100% private local-first subscription stored safely in your browser without third-party ad trackers.
             </p>
 
             <form onSubmit={handleNewsletterSubmit} className="space-y-2">
@@ -422,9 +433,21 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
           <p className="text-[var(--color-text-primary)] font-sans font-semibold">
             © 2026 OpenGuide. AI Studio. All rights reserved.
           </p>
-          <p className="text-[11px]">
-            Architected & Built with first-principles craft by{' '}
-            <strong className="text-[var(--color-text-primary)] font-bold">Adil Rafiq Dar (ARD)</strong>.
+          <p className="text-[11px] flex items-center justify-center md:justify-start gap-1 flex-wrap">
+            <span>Architected & Built with</span>
+            <span className="inline-flex items-center text-red-500" title="Crafted with passion">
+              <svg 
+                viewBox="0 0 24 24" 
+                width="13" 
+                height="13" 
+                fill="currentColor" 
+                className="inline-block animate-pulse text-red-500"
+                aria-label="love"
+              >
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </span>
+            <span>by <strong className="text-[var(--color-text-primary)] font-bold">Adil Rafiq Dar</strong>.</span>
           </p>
         </div>
 
@@ -707,14 +730,22 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     <CheckCircle size={24} />
                   </div>
                   <h4 className="text-base font-bold text-[var(--color-text-primary)]">
-                    Message Logged Successfully
+                    Inquiry Dispatched Directly
                   </h4>
                   <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed max-w-sm mx-auto">
-                    Thank you for helping refine OpenGuide. As part of our client-side architecture, your inquiry has been recorded into the platform feedback queue.
+                    Your email client has been pre-filled addressed directly to founder & architect Adil Rafiq Dar (<span className="text-[var(--color-accent)] font-mono">adilrafiq001@gmail.com</span>), and your message has been recorded in your local browser ledger.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-4 text-xs font-mono">
+                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] leading-relaxed text-[var(--color-text-secondary)] font-sans">
+                    <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-semibold mb-1">
+                      <Sparkles size={13} />
+                      <span>Direct Founder Dispatch &amp; Open Issues</span>
+                    </div>
+                    Under OpenGuide's strict zero-cloud-overhead policy ($0 Rule), inquiries dispatch directly to architect Adil Rafiq Dar (<span className="font-mono text-[var(--color-accent)]">adilrafiq001@gmail.com</span>) via your email client, or can be tracked publicly on GitHub Issues.
+                  </div>
+
                   <div>
                     <label className="block text-[var(--color-text-secondary)] mb-1 font-semibold uppercase text-[10px]">
                       Your Name
@@ -772,21 +803,32 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     />
                   </div>
 
-                  <div className="pt-2 flex justify-end gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setContactModalOpen(false)}
-                      className="px-4 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-2">
+                    <a
+                      href="https://github.com/openguideforai/OpenGuideForAI/issues/new"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors inline-flex items-center gap-1.5 font-sans"
                     >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold flex items-center gap-1.5 cursor-pointer hover:opacity-90 active:scale-95 transition-all"
-                    >
-                      <Send size={13} />
-                      <span>Transmit Message</span>
-                    </button>
+                      <span>Public GitHub Issue</span>
+                      <ExternalLink size={12} />
+                    </a>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setContactModalOpen(false)}
+                        className="px-4 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold flex items-center gap-1.5 cursor-pointer hover:opacity-90 active:scale-95 transition-all"
+                      >
+                        <Send size={13} />
+                        <span>Send Email</span>
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}
@@ -833,14 +875,14 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <div className="space-y-2 border-l-2 border-[var(--color-accent)] pl-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 7–10: Production PWA, Attention Radar, 24 Themes & Abby Copilot
+                      Phase 7–10: Production PWA, Attention Radar, 24 Themes & Bluee Copilot
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
                       v2.5.0 • Active
                     </span>
                   </div>
                   <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    Offline PWA service worker with pre-caching, Cloudflare Pages immutable headers, 12 Special research-calibrated physiological themes (melatonin-preserving Circadian Amber, Scotopic Mariana, E-Ink Papyrus, Biophilic Forest), resizable Abby Copilot with deep domain intelligence and fluid Apple exit physics, Hero interactive mechanical button, and Synapse Lounge Transformer Attention Radar with dynamic Softmax temperature routing.
+                    Offline PWA service worker with pre-caching, Cloudflare Pages immutable headers, 12 Special research-calibrated physiological themes (melatonin-preserving Circadian Amber, Scotopic Mariana, E-Ink Papyrus, Biophilic Forest), resizable Bluee Copilot with deep domain intelligence and fluid Apple exit physics, Hero interactive mechanical button, and Synapse Lounge Transformer Attention Radar with dynamic Softmax temperature routing.
                   </p>
                 </div>
 

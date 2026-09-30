@@ -174,7 +174,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
           messages: [
             {
               role: 'system',
-              content: 'You are Abby, an encouraging, rigorous AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples.'
+              content: 'You are Bluee, an encouraging, rigorous AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples.'
             },
             ...messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
             { role: 'user', content: userQuery }
@@ -203,7 +203,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: `You are Abby, an encouraging, rigorous AI engineering mentor for OpenGuide. User query: ${userQuery}` }]
+            parts: [{ text: `You are Bluee, an encouraging, rigorous AI engineering mentor for OpenGuide. User query: ${userQuery}` }]
           }]
         })
       });
@@ -419,7 +419,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
               }
             }} 
             id="abby-toggle-checkbox"
-            aria-label="Toggle Abby AI Copilot"
+            aria-label="Toggle Bluee AI Copilot"
           />
           <div className="card">
             {/* Background 4-Ball Rotating Pastel Mesh Aura */}
@@ -485,7 +485,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                       type="button" 
                       onClick={handleClose} 
                       className="abby-icon-btn" 
-                      title="Minimize Abby"
+                      title="Minimize Bluee"
                       aria-label="Minimize"
                     >
                       <X size={15} />
@@ -495,10 +495,10 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
                 {/* Local WebGPU SLM Ingestion & Cache Banner */}
                 {!byokApiKey && (
-                  <div className="px-3.5 py-1.5 bg-slate-900/80 border-b border-slate-800 text-[11px] font-mono flex items-center justify-between text-slate-300 shrink-0">
+                  <div className="px-3.5 py-1.5 bg-[var(--color-primary)] border-b border-[var(--color-border)] text-[11px] font-mono flex items-center justify-between text-[var(--color-text-secondary)] shrink-0">
                     {isSlmCached ? (
-                      <span className="flex items-center gap-1.5 text-emerald-400">
-                        <Zap size={12} className="text-emerald-400 fill-emerald-400" />
+                      <span className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-400 font-semibold">
+                        <Zap size={12} className="text-emerald-500 fill-emerald-500" />
                         <span>SmolLM-135M Cached (100% Offline AI)</span>
                       </span>
                     ) : (

@@ -13,9 +13,10 @@ import {
   Menu,
   X,
   Settings,
+  ShieldCheck,
   Layers,
   Cpu,
-  ShieldCheck
+  BookOpen
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -323,7 +324,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
             id="header-theme-settings-btn"
             onClick={onOpenThemes}
             data-testid="header-theme-settings-btn"
-            className="flex items-center gap-2 px-3 py-1.5 min-h-[38px] sm:min-h-[44px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+            className="flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
             aria-label="Themes and Studio Settings"
           >
             <div 
@@ -349,7 +350,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           <button 
             onClick={() => startAppTour(false)}
             data-testid="header-quick-tour-btn"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] sm:min-h-[44px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            className="hidden sm:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
             aria-label="Start Quick Studio Tour"
           >
             <Sparkles size={13} className="text-[var(--color-accent)]" />
@@ -357,8 +358,59 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           </button>
         </Tooltip>
 
-        {/* Launch Track Button & Responsive Dropdown (visible on lg+) */}
-        <div className="hidden lg:flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Tracks Dropdown Selector (uniform h-9 Apple pill) */}
+        <div className="relative hidden lg:flex items-center shrink-0">
+          <button
+            onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
+            className="flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            aria-label="Select Learning Track"
+          >
+            <BookOpen size={14} className="text-[var(--color-accent)]" />
+            <span>Tracks ▾</span>
+          </button>
+          <AnimatePresence>
+            {isTracksMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl z-50 backdrop-blur-xl"
+              >
+                <div className="px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold border-b border-[var(--color-border)]">
+                  Available Learning Tracks
+                </div>
+                <div className="p-1 space-y-1">
+                  {[
+                    { id: '0', title: 'Track 0: Absolute Zero', path: '/track/0/intro', icon: Sparkles, badge: 'Beginner' },
+                    { id: '1', title: 'Track 1: Vectors', path: '/track/1/intro', icon: Layers, badge: 'Core Math' },
+                    { id: '2', title: 'Track 2: Agents', path: '/track/2/intro', icon: Cpu, badge: 'Applied AI' },
+                    { id: '3', title: 'Track 3: Evals', path: '/track/3/intro', icon: ShieldCheck, badge: 'Production' },
+                    { id: '4', title: 'Track 4: Frontier Attention', path: '/track/4/intro', icon: Brain, badge: 'Frontier' },
+                  ].map(trk => (
+                    <button
+                      key={trk.id}
+                      onClick={() => {
+                        setIsTracksMenuOpen(false);
+                        navigate(trk.path);
+                      }}
+                      className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-all flex items-center justify-between text-xs cursor-pointer group"
+                    >
+                      <span className="font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] truncate">
+                        {trk.title}
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                        {trk.badge}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Launch Track Button (visible on lg+) */}
+        <div className="hidden lg:flex items-center shrink-0">
           <Tooltip
             position="bottom"
             content="Track 0: Absolute Zero"
@@ -367,7 +419,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           >
             <button 
               onClick={() => navigate('/track/0/intro')}
-              className="px-3 sm:px-4 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
+              className="px-3.5 sm:px-4 h-9 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
               style={{
                 backgroundColor: currentThemeInfo.accent,
                 color: accentTextColor
@@ -377,105 +429,13 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
               <ChevronRight size={14} />
             </button>
           </Tooltip>
-
-          {/* Desktop Tracks Menu Dropdown (visible on lg+) */}
-          <div 
-            className="relative hidden lg:block"
-            onMouseEnter={() => setIsTracksMenuOpen(true)}
-            onMouseLeave={() => setIsTracksMenuOpen(false)}
-          >
-            <button
-              onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-              className="px-3 py-2 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] shadow-sm cursor-pointer shrink-0"
-              aria-expanded={isTracksMenuOpen}
-              aria-haspopup="true"
-              aria-label="Select Learning Track"
-            >
-              <Layers size={13} style={{ color: currentThemeInfo.accent }} />
-              <span>{t('nav_tracks')}</span>
-              <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            <AnimatePresence>
-              {isTracksMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                  className="absolute top-full right-0 pt-2 z-50 pointer-events-auto"
-                >
-                  <div className="w-64 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2.5 shadow-2xl backdrop-blur-2xl space-y-1">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-2.5 py-1 font-bold">
-                      Learning Tracks
-                    </div>
-
-                    <button
-                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/0/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Zap size={14} className="text-amber-400" />
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 0: Absolute Zero</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">WASM</span>
-                    </button>
-
-                    <button
-                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/1/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Layers size={14} className="text-emerald-400" />
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 1: Vectors</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
-                    </button>
-
-                    <button
-                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/2/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Cpu size={14} className="text-blue-400" />
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 2: Agents</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
-                    </button>
-
-                    <button
-                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/3/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <ShieldCheck size={14} className="text-purple-400" />
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 3: Evals</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
-                    </button>
-
-                    <button
-                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/4/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Sparkles size={14} className="text-rose-400" />
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 4: Frontier</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
         </div>
 
         {/* Mobile Menu Toggle Button */}
         <button
           onClick={onOpenDrawer || (() => setIsMobileMenuOpen(!isMobileMenuOpen))}
           data-testid="landing-header-menu-btn"
-          className="xl:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
+          className="xl:hidden h-9 w-9 flex items-center justify-center rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
           aria-label="Toggle navigation menu"
         >
           {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}

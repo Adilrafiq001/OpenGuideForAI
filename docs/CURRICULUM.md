@@ -27,7 +27,7 @@ Every module and curriculum milestone is anchored in three universal questions:
 ## Tracks & Progression
 
 ### Track 0: Absolute Zero
-**Goal:** Run first native Python script inside browser, understand tokens, JSON schemas, and command orchestration.
+**Goal:** Run first native Python script inside browser, understand tokens, JSON schemas, and command orchestration through warm, beginner-first layman analogies (kitchen recipes, invitations, toy cubbies, playground maps, grocery notes, syllables, house rules, and ice cream scoops).
 - **Module 0.1: In-Browser Execution & WebAssembly Runtime (Pillar 12)**
   - *Lesson 0.1.1:* Hello, World! & The In-Browser CPython WASM Sandbox (Pyodide v0.26 WebAssembly compilation, zero-install architecture).
   - *Lesson 0.1.2:* Standard Streams & Dynamic Prompt Formatting (Capturing stdout, formatted f-strings, LLM prompt templates).
@@ -155,10 +155,10 @@ Without altering the existing navigation, route structure, or module hierarchy, 
 
 ---
 
-## Cognitive Break Station: The Synapse Lounge
-- **Vector Hyper-Space Alignment:** Spatial proximity and embedding distance estimation.
+## Cognitive Break Station: The Synapse Lounge (Interactive Visual Lab)
+- **Vector Hyper-Space Alignment:** Spatial proximity and embedding distance estimation with plain-English intuition cards.
 - **Neural Gate Deductor:** Perceptron logic gates, synaptic weights, and Boolean truth table deduction.
-- **Context Window Squeeze:** Working memory token filtering and attention optimization.
+- **Transformer Attention Radar:** Interactive $Q \cdot K$ routing, scaling factor $\sqrt{d_k}$, and Softmax temperature controls.
 
 ---
 

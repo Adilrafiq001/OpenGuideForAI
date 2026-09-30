@@ -133,11 +133,11 @@ export const zh: Record<string, string> = {
   ide_terminal_ready: 'Pyodide 交互式终端 • 就绪',
   ide_xray_btn: 'X-Ray 深度透视镜头',
 
-  // Abby Chatbot
-  abby_title: '艾比 (Abby)',
+  // Bluee Chatbot
+  abby_title: 'Bluee (布鲁)',
   abby_subtitle: '离线 AI 助手',
-  abby_greeting: '你好！我是 Abby，OpenGuide 的离线智能向导。随时问我关于课程体系、浏览器 WebAssembly、向量数学或快捷键的问题！',
-  abby_placeholder: '向 Abby 提问课程、代码或 AI 概念...',
+  abby_greeting: '你好！我是 Bluee，OpenGuide 的离线智能向导。随时问我关于课程体系、浏览器 WebAssembly、向量数学或快捷键的问题！',
+  abby_placeholder: '向 Bluee 提问课程、代码或 AI 概念...',
   abby_suggestion_1: 'Track 0 包含哪些内容？',
   abby_suggestion_2: 'WASM Python 是如何运作的？',
   abby_suggestion_3: '什么是余弦相似度？',

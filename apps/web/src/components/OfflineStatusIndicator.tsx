@@ -40,8 +40,8 @@ export const OfflineStatusIndicator: React.FC = () => {
       <div
         className={`px-4 py-2 rounded-full text-xs font-medium flex items-center gap-2.5 shadow-xl backdrop-blur-md border ${
           isOffline
-            ? 'bg-amber-500/15 border-amber-500/30 text-amber-200 dark:text-amber-300 shadow-amber-950/20'
-            : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-200 dark:text-emerald-300 shadow-emerald-950/20'
+            ? 'bg-amber-500/15 border-amber-600/30 dark:border-amber-500/30 text-amber-950 dark:text-amber-300 shadow-amber-950/20'
+            : 'bg-emerald-500/15 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-300 shadow-emerald-950/20'
         }`}
       >
         {isOffline ? (

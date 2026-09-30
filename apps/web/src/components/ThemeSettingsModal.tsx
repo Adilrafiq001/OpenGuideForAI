@@ -15,7 +15,9 @@ import {
   TextT,
   Cube,
   Key,
-  Article
+  Article,
+  SpeakerHigh,
+  Code
 } from '@phosphor-icons/react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { THEMES_DATA, type ThemeInfo } from '../data/themesData';
@@ -108,6 +110,17 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose, isPeeking]);
+
+  // Lock outer page scrolling when settings modal is open (unlocked during peek mode)
+  useEffect(() => {
+    if (isOpen && !isPeeking) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen, isPeeking]);
 
   useEffect(() => {
     if (isOpen && initialTab) {
@@ -530,23 +543,23 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               </div>
             ) : (
               /* Editor & Environment Preferences Tab */
-              <div className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[60vh] custom-scrollbar text-[var(--color-text-primary,#ffffff)]" data-lenis-prevent="true">
+              <div className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[60vh] custom-scrollbar overscroll-contain text-[var(--color-text-primary,#ffffff)]" data-lenis-prevent="true">
                 
-                {/* Section 1: Typography & Editor Canvas */}
+                {/* Section 1: Typography & Interface Canvas */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
                     <TextT size={16} weight="bold" />
-                    <span>Typography & Code Canvas</span>
+                    <span>Typography & Interface Canvas</span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Display Size / Scale */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-[var(--color-text-primary)]">Interface Scale</span>
                         <span className="font-mono text-xs text-[var(--color-accent)] font-bold capitalize">{displaySize}</span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Optimizes touch targets and density across mobile & desktop.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Optimizes touch targets and density across mobile & desktop displays.</p>
                       <div className="flex gap-1.5">
                         {(['compact', 'default', 'large'] as const).map(size => (
                           <button
@@ -573,7 +586,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           {Math.round((modalOpacity ?? 0.85) * 100)}%
                         </span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Controls visibility of the live app behind this settings popup. 100% gives full live visibility without dimming.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Live app backdrop visibility. 100% gives full live visibility without dimming.</p>
                       <input 
                         type="range" 
                         min="0.2" 
@@ -614,8 +627,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           {editorFont === 'jetbrains-mono' ? 'JetBrains' : editorFont === 'fira-code' ? 'Fira Code' : editorFont === 'source-code-pro' ? 'Source Code' : editorFont === 'ibm-plex-mono' ? 'IBM Plex' : 'System'}
                         </span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Applies directly to Python CodeMirror editor.</p>
-                      <div className="grid grid-cols-2 gap-1.5">
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Engineered typography for code legibility and symbol clarity.</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                         {[
                           { id: 'jetbrains-mono', label: 'JetBrains Mono' },
                           { id: 'fira-code', label: 'Fira Code' },
@@ -647,6 +660,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           {fontSize}px
                         </span>
                       </div>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Base font size for interactive Python code editor.</p>
                       <input 
                         type="range" 
                         min="11" 
@@ -672,14 +686,49 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         ))}
                       </div>
                     </div>
+                  </div>
+                </div>
 
-                    {/* Tab Size & Indentation */}
-                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                {/* Section 2: Code Editor & Coding Aids */}
+                <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
+                  <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
+                    <Code size={16} weight="bold" />
+                    <span>Code Editor & Coding Aids</span>
+                  </div>
+
+                  {/* Top Row: Line Numbers & Indentation */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Line Numbers */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Line Numbers</span>
+                        <span className="font-mono text-[10px] uppercase font-bold text-[var(--color-accent)]">{lineNumbers}</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Gutter line numbering style in the code editor.</p>
+                      <div className="flex gap-1.5">
+                        {(['on', 'off', 'relative'] as const).map(mode => (
+                          <button
+                            key={mode}
+                            onClick={() => setLineNumbers(mode)}
+                            className={`flex-1 py-1.5 rounded-xl text-xs font-mono uppercase transition-all ${
+                              lineNumbers === mode
+                                ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
+                                : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border)]'
+                            }`}
+                          >
+                            {mode}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Indentation Width */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-[var(--color-text-primary)]">Indentation</span>
-                        <span className="font-mono text-xs text-[var(--color-text-secondary)]">{tabSize} Spaces</span>
+                        <span className="font-mono text-[10px] text-[var(--color-accent)] font-bold">{tabSize} Spaces</span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Standard indentation width for Python code blocks.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Standard Python indentation tab stop width.</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setTabSize(2)}
@@ -705,39 +754,37 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     </div>
                   </div>
 
-                  {/* Line Numbers, Word Wrap, Minimap Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {/* Line Numbers */}
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2">
-                      <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Line Numbers</span>
-                      <div className="flex gap-1">
-                        {(['on', 'off', 'relative'] as const).map(mode => (
-                          <button
-                            key={mode}
-                            onClick={() => setLineNumbers(mode)}
-                            className={`flex-1 py-1 rounded-lg text-[10px] font-mono uppercase transition-all ${
-                              lineNumbers === mode
-                                ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
-                                : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border)]'
-                            }`}
-                          >
-                            {mode}
-                          </button>
-                        ))}
+                  {/* 4-Card Balanced Toggle Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {/* Bracket Pairs */}
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
+                      <div>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Bracket Pairs</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Colorize matching {'{ } [ ]'}</span>
                       </div>
+                      <button
+                        onClick={() => setBracketPairs(!bracketPairs)}
+                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center shrink-0 cursor-pointer ${
+                          bracketPairs ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
+                        }`}
+                        aria-label="Toggle Bracket Pair Colorization"
+                      >
+                        <div className={`w-4 h-4 rounded-full bg-white transition-transform ${bracketPairs ? 'translate-x-4.5' : 'translate-x-0'}`} />
+                      </button>
                     </div>
 
                     {/* Word Wrap */}
                     <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
                         <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Code Word Wrap</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">Soft wrap long lines</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Soft wrap long code lines</span>
                       </div>
                       <button
                         onClick={() => setWordWrap(!wordWrap)}
-                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
+                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center shrink-0 cursor-pointer ${
                           wordWrap ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
+                        aria-label="Toggle Code Word Wrap"
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${wordWrap ? 'translate-x-4.5' : 'translate-x-0'}`} />
                       </button>
@@ -747,21 +794,69 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
                       <div>
                         <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Code Minimap</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">Bird's-eye code view</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Bird's-eye code overview</span>
                       </div>
                       <button
                         onClick={() => setMinimap(!minimap)}
-                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
+                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center shrink-0 cursor-pointer ${
                           minimap ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
                         }`}
+                        aria-label="Toggle Code Minimap"
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${minimap ? 'translate-x-4.5' : 'translate-x-0'}`} />
+                      </button>
+                    </div>
+
+                    {/* IntelliSense Autocomplete */}
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
+                      <div>
+                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">IntelliSense</span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)]">Live syntax suggestions</span>
+                      </div>
+                      <button
+                        onClick={() => setCodeCompletion(!codeCompletion)}
+                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center shrink-0 cursor-pointer ${
+                          codeCompletion ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
+                        }`}
+                        aria-label="Toggle IntelliSense Autocomplete"
+                      >
+                        <div className={`w-4 h-4 rounded-full bg-white transition-transform ${codeCompletion ? 'translate-x-4.5' : 'translate-x-0'}`} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Keybindings Card */}
+                  <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Editor Keybindings</span>
+                      <span className="text-[11px] text-[var(--color-text-secondary)]">Switch between standard browser IDE shortcuts and Vim modal navigation.</span>
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setVimMode(false)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                          !vimMode 
+                            ? 'bg-[var(--color-accent)] text-black shadow-sm' 
+                            : 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                        }`}
+                      >
+                        Standard
+                      </button>
+                      <button
+                        onClick={() => setVimMode(true)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                          vimMode 
+                            ? 'bg-amber-400 text-black shadow-sm' 
+                            : 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                        }`}
+                      >
+                        Vim Modal
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Section 2: Pyodide WASM Runtime & Execution */}
+                {/* Section 3: Pyodide WASM Runtime & Execution */}
                 <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
                   <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
                     <Cpu size={16} weight="bold" />
@@ -772,10 +867,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     {/* WASM Heap Allocation */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">WASM Heap Allocation</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">WASM Virtual Memory Heap</span>
                         <span className="font-mono text-xs text-[var(--color-accent)] font-bold">{wasmHeapMb} MB</span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Total virtual memory reserved for in-browser CPython runtime.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Total isolated virtual memory allocated to the CPython WebAssembly runtime.</p>
                       <div className="flex gap-2">
                         {[
                           { mb: 512, label: '512 MB (Fast)' },
@@ -803,7 +898,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         <span className="text-xs font-semibold text-[var(--color-text-primary)]">Execution Trigger</span>
                         <span className="font-mono text-xs text-[var(--color-text-secondary)]">{autoRun ? 'Auto' : 'Manual'}</span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">How Python code executes in the interactive lessons.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Control whether code runs automatically on pause or via explicit hotkey.</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setAutoRun(false)}
@@ -828,67 +923,29 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Bracket Pairs & IntelliSense & Sound FX & Keybindings */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Bracket Pairs</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">Colorize matching {'{}'}</span>
-                      </div>
-                      <button
-                        onClick={() => setBracketPairs(!bracketPairs)}
-                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          bracketPairs ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full bg-white transition-transform ${bracketPairs ? 'translate-x-4.5' : 'translate-x-0'}`} />
-                      </button>
-                    </div>
+                {/* Section 4: Sensory & Audio Feedback */}
+                <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
+                  <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
+                    <SpeakerHigh size={16} weight="bold" />
+                    <span>Sensory & Audio Feedback</span>
+                  </div>
 
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">IntelliSense</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">Live code suggestions</span>
-                      </div>
-                      <button
-                        onClick={() => setCodeCompletion(!codeCompletion)}
-                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          codeCompletion ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full bg-white transition-transform ${codeCompletion ? 'translate-x-4.5' : 'translate-x-0'}`} />
-                      </button>
-                    </div>
-
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Keybindings</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">{vimMode ? 'Vim Mode' : 'Standard'}</span>
-                      </div>
-                      <button
-                        onClick={() => setVimMode(!vimMode)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition-all ${
-                          vimMode ? 'bg-amber-400 text-black shadow-sm' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
-                        }`}
-                      >
-                        {vimMode ? 'VIM' : 'DEFAULT'}
-                      </button>
-                    </div>
-
-                    {/* Audio & Haptic Synthesizer Panel */}
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Audio Feedback Card */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
                         <div>
                           <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Audio Feedback</span>
-                          <span className="text-[10px] text-[var(--color-text-secondary)]">Synthesizer clicks & run chimes ($0 compute)</span>
+                          <span className="text-[11px] text-[var(--color-text-secondary)]">Synthesizer clicks & run chimes ($0 client compute)</span>
                         </div>
                         <div className="flex items-center gap-2">
                           {soundFx && (
                             <button
                               type="button"
                               onClick={() => playTactileSound('success')}
-                              className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
                               title="Test Sound Chime"
                             >
                               Test
@@ -912,32 +969,35 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       </div>
 
                       {soundFx && (
-                        <div className="flex items-center justify-between gap-3 pt-1 border-t border-[var(--color-border)]/50">
-                          <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">Volume ({Math.round(soundVolume * 100)}%)</span>
+                        <div className="flex items-center justify-between gap-3 pt-2 border-t border-[var(--color-border)]/50">
+                          <span className="text-[11px] font-mono text-[var(--color-text-secondary)]">Volume ({Math.round(soundVolume * 100)}%)</span>
                           <input 
-                            type="range"
-                            min="0.1"
-                            max="1.0"
-                            step="0.05"
-                            value={soundVolume}
-                            onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
-                            className="w-28 accent-[var(--color-accent)] cursor-pointer h-1.5"
-                            aria-label="Sound Volume"
+                            type="range" 
+                            min="0.1" 
+                            max="1.0" 
+                            step="0.05" 
+                            value={soundVolume} 
+                            onChange={(e) => setSoundVolume(parseFloat(e.target.value))} 
+                            className="w-32 accent-[var(--color-accent)] cursor-pointer h-1.5" 
+                            aria-label="Sound Volume" 
                           />
                         </div>
                       )}
+                    </div>
 
-                      <div className="flex items-center justify-between pt-1 border-t border-[var(--color-border)]/50">
+                    {/* Touch Haptics Card */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                      <div className="flex items-center justify-between">
                         <div>
                           <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Touch Haptics</span>
-                          <span className="text-[10px] text-[var(--color-text-secondary)]">Device vibration on mobile interactions</span>
+                          <span className="text-[11px] text-[var(--color-text-secondary)]">Tactile device vibration on mobile interactions</span>
                         </div>
                         <div className="flex items-center gap-2">
                           {hapticsEnabled && (
                             <button
                               type="button"
                               onClick={() => triggerHaptic('success')}
-                              className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
                               title="Test Vibration"
                             >
                               Test
@@ -963,7 +1023,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   </div>
                 </div>
 
-                {/* Section 3: Graphics & Spatial Compute Acceleration */}
+                {/* Section 5: Graphics & Spatial Compute Acceleration */}
                 <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
@@ -984,7 +1044,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       <span className="text-xs font-semibold">Active Compute & Rendering Profile</span>
                       <span className="font-mono text-xs text-[var(--color-accent,#10b981)] font-bold uppercase">{graphicsTier}</span>
                     </div>
-                    <p className="text-[11px] text-neutral-400">
+                    <p className="text-[11px] text-[var(--color-text-secondary)]">
                       Adaptively scales graphics between lightweight SVG (0% GPU) and hardware-accelerated 3D WebGL / WebXR.
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1011,12 +1071,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   </div>
                 </div>
 
-                {/* Section 4: Abby AI Assistant & Educational BYOK */}
+                {/* Section 6: Bluee AI Assistant & Educational BYOK */}
                 <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
                       <Key size={16} weight="bold" />
-                      <span>Abby AI Assistant & Educational BYOK</span>
+                      <span>Bluee AI Assistant & Educational BYOK</span>
                     </div>
                     <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
                       byokApiKey 
@@ -1029,7 +1089,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
                   <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
                     <p className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed">
-                      By default, <strong>Abby</strong> operates 100% offline in your browser at $0 cost using our local first-principles knowledge engine. You can optionally supply your own frontier API key below to unlock extended educational research and reasoning. Your keys stay strictly in your local browser storage.
+                      By default, <strong>Bluee</strong> operates 100% offline in your browser at $0 cost using our local first-principles knowledge engine. You can optionally supply your own frontier API key below to unlock extended educational research and reasoning. Your keys stay strictly in your local browser storage.
                     </p>
 
                     {/* Provider Selection */}

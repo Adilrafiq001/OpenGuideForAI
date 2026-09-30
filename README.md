@@ -92,7 +92,7 @@ graph LR
 | **Course Player IDE** | Segmented 3-tab mobile workspace (`[Study] [Code] [Output]`) with instant execution auto-switching | `Ctrl + Enter` |
 | **Spatial Holodeck** | 3D Three.js semantic embedding space with live Dual-Vector Cosine Probes & 6-DOF WebXR | `/holodeck` |
 | **Synapse Lounge** | Neuro-plasticity arcade: Vector Alignment Radar, Neural Logic Gates, Attention Sliders | `/synapse` |
-| **Abby AI Copilot** | 100% offline first-principles mentor with 50+ domain answers, zero cloud latency | Floating Mascot |
+| **Bluee AI Copilot** | 100% offline first-principles mentor with 50+ domain answers, zero cloud latency | Floating Mascot |
 | **X-Ray Debug Lens** | Live telemetry inspecting Pyodide AST, Web Worker memory heap, and IndexedDB state | `Alt + X` |
 | **Curated Goldmines** | Curated elite video lectures (Karpathy, 3Blue1Brown) with interactive timestamp seekers | Header Button |
 

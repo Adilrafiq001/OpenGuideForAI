@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "./styles/themes.css";
 
+/* Bind Tailwind v4 dark: variants strictly to data-theme-mode/class, never OS media query */
+@custom-variant dark (&:where([data-theme-mode="dark"], [data-theme-mode="dark"] *, .dark, .dark *));
+
 /* Custom fonts or base styles can go here if needed */
 @theme {
   --font-sans: "Satoshi", "Geist", "Inter", sans-serif;
@@ -121,47 +124,75 @@ body {
 /* Light Theme Contrast Calibration (WCAG AAA Compliance) */
 /* When in light mode, override low-contrast neon colors with high-contrast, accessible pigments */
 :root[data-theme-mode="light"], .light {
-  --color-emerald-contrast: #047857; /* emerald-700 */
-  --color-cyan-contrast: #0e7490;    /* cyan-700 */
-  --color-purple-contrast: #6b21a8;  /* purple-800 */
-  --color-amber-contrast: #b45309;   /* amber-700 */
-  --color-rose-contrast: #be123c;    /* rose-700 */
-  --color-blue-contrast: #1d4ed8;    /* blue-700 */
+  --color-emerald-contrast: #047857; /* emerald-700, WCAG AAA */
+  --color-cyan-contrast: #0c4a6e;    /* cyan-900 */
+  --color-purple-contrast: #581c87;  /* purple-900 */
+  --color-amber-contrast: #78350f;   /* amber-900 */
+  --color-rose-contrast: #881337;    /* rose-900 */
+  --color-blue-contrast: #1e3a8a;    /* blue-900 */
+  --color-stone-contrast: #1c1917;   /* stone-900 */
 }
 
+:root[data-theme-mode="light"] .text-emerald-200,
+:root[data-theme-mode="light"] .text-emerald-300,
 :root[data-theme-mode="light"] .text-emerald-400,
+.light .text-emerald-200,
+.light .text-emerald-300,
 .light .text-emerald-400 {
   color: var(--color-emerald-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-cyan-200,
+:root[data-theme-mode="light"] .text-cyan-300,
 :root[data-theme-mode="light"] .text-cyan-400,
+.light .text-cyan-200,
+.light .text-cyan-300,
 .light .text-cyan-400 {
   color: var(--color-cyan-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-purple-300,
 :root[data-theme-mode="light"] .text-purple-400,
+.light .text-purple-300,
 .light .text-purple-400 {
   color: var(--color-purple-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-amber-200,
+:root[data-theme-mode="light"] .text-amber-300,
 :root[data-theme-mode="light"] .text-amber-400,
+.light .text-amber-200,
+.light .text-amber-300,
 .light .text-amber-400 {
   color: var(--color-amber-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-rose-300,
 :root[data-theme-mode="light"] .text-rose-400,
+.light .text-rose-300,
 .light .text-rose-400 {
   color: var(--color-rose-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-blue-300,
 :root[data-theme-mode="light"] .text-blue-400,
+.light .text-blue-300,
 .light .text-blue-400 {
   color: var(--color-blue-contrast) !important;
 }
 
+:root[data-theme-mode="light"] .text-stone-200,
+:root[data-theme-mode="light"] .text-stone-300,
+:root[data-theme-mode="light"] .text-stone-400,
+.light .text-stone-200,
+.light .text-stone-300,
+.light .text-stone-400 {
+  color: var(--color-stone-contrast) !important;
+}
+
 :root[data-theme-mode="light"] .text-neutral-400,
 .light .text-neutral-400 {
-  color: #475569 !important; /* slate-600 */
+  color: #334155 !important; /* slate-700 */
 }
 
 /* =========================================================================

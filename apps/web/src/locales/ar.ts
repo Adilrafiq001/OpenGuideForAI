@@ -137,11 +137,11 @@ export const ar: Record<string, string> = {
   ide_terminal_ready: 'طرفية Pyodide التفاعلية • جاهزة',
   ide_xray_btn: 'عدسة فحص الأشعة السينية X-Ray',
 
-  // Abby Chatbot
-  abby_title: 'آبي (Abby)',
+  // Bluee Chatbot
+  abby_title: 'بلوي (Bluee)',
   abby_subtitle: 'مرشدك الذكي دون اتصال',
-  abby_greeting: 'مرحباً! أنا آبي، مرشدك دون اتصال في OpenGuide. اسألني عن مساراتنا التعليمية، أو بايثون في المتصفح، أو حسابات المتجهات، أو اختصارات لوحة المفاتيح!',
-  abby_placeholder: 'اسأل آبي عن المسارات، الأكواد، أو مفاهيم الذكاء الاصطناعي...',
+  abby_greeting: 'مرحباً! أنا بلوي (Bluee)، مرشدك دون اتصال في OpenGuide. اسألني عن مساراتنا التعليمية، أو بايثون في المتصفح، أو حسابات المتجهات، أو اختصارات لوحة المفاتيح!',
+  abby_placeholder: 'اسأل بلوي عن المسارات، الأكواد، أو مفاهيم الذكاء الاصطناعي...',
   abby_suggestion_1: 'ما هو المسار 0؟',
   abby_suggestion_2: 'كيف يعمل بايثون WASM في المتصفح؟',
   abby_suggestion_3: 'اشرح تشابه جيب التمام',

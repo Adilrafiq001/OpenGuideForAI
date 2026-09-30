@@ -133,11 +133,11 @@ export const ru: Record<string, string> = {
   ide_terminal_ready: 'Интерактивный Терминал Pyodide • Готов',
   ide_xray_btn: 'Рентген-Линза X-Ray',
 
-  // Abby Chatbot
-  abby_title: 'Эбби (Abby)',
+  // Bluee Chatbot
+  abby_title: 'Блуи (Bluee)',
   abby_subtitle: 'Офлайн AI-Гид',
-  abby_greeting: 'Привет! Я Эбби, твой офлайн-помощник в OpenGuide. Спроси меня о треках, Python в браузере, векторной математике или горячих клавишах!',
-  abby_placeholder: 'Спросите Эбби о треках, коде или концепциях ИИ...',
+  abby_greeting: 'Привет! Я Блуи, твой офлайн-помощник в OpenGuide. Спроси меня о треках, Python в браузере, векторной математике или горячих клавишах!',
+  abby_placeholder: 'Спросите Блуи о треках, коде или концепциях ИИ...',
   abby_suggestion_1: 'Что такое Трек 0?',
   abby_suggestion_2: 'Как работает Python в WASM?',
   abby_suggestion_3: 'Объясни косинусное сходство',

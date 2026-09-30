@@ -30,9 +30,9 @@ export const GitHubStarButton: React.FC<GitHubStarButtonProps> = ({
       transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       className={twMerge(
         'group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-amber-400/50 transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400',
-        variant === 'compact' ? 'px-2.5 py-1.5' : 
+        variant === 'compact' ? 'h-9 px-3' : 
         variant === 'drawer' ? 'w-full justify-center py-2.5 px-4' : 
-        'px-3.5 py-1.5 sm:py-2',
+        'h-9 px-3.5',
         className
       )}
     >

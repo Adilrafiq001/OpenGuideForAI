@@ -399,25 +399,25 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
                         <Tooltip content="Variable: A named label in memory that stores a piece of data." align="start">
                           <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
-                            <div className="text-[10px] text-purple-400 font-bold">variable_name</div>
+                            <div className="text-[10px] text-purple-800 dark:text-purple-300 font-bold">variable_name</div>
                             <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Named Memory Box</div>
                           </div>
                         </Tooltip>
                         <Tooltip content="Assignment: Stores the right-side value into the left-side name. (NOT math equality!)" align="center">
                           <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
-                            <div className="text-[10px] text-amber-400 font-bold">= (Assignment)</div>
+                            <div className="text-[10px] text-amber-800 dark:text-amber-300 font-bold">= (Assignment)</div>
                             <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Store into Name</div>
                           </div>
                         </Tooltip>
                         <Tooltip content='String: Raw text data wrapped in matching quotation marks ("..." or \x27...\x27).' align="end">
                           <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
-                            <div className="text-[10px] text-emerald-400 font-bold">&quot;text&quot; (String)</div>
+                            <div className="text-[10px] text-emerald-800 dark:text-emerald-300 font-bold">&quot;text&quot; (String)</div>
                             <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Literal Text</div>
                           </div>
                         </Tooltip>
                         <Tooltip content="print(): Python's built-in loudspeaker that sends text to your screen." align="start">
                           <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
-                            <div className="text-[10px] text-blue-400 font-bold">print(...)</div>
+                            <div className="text-[10px] text-blue-800 dark:text-blue-300 font-bold">print(...)</div>
                             <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Console Output</div>
                           </div>
                         </Tooltip>
@@ -429,7 +429,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                         </Tooltip>
                         <Tooltip content="assert condition: Automatic verification that proves your code produced the exact expected result." align="end">
                           <div className="p-2 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors cursor-help">
-                            <div className="text-[10px] text-rose-400 font-bold">assert ...</div>
+                            <div className="text-[10px] text-rose-800 dark:text-rose-300 font-bold">assert ...</div>
                             <div className="text-[10px] text-[var(--color-text-secondary)] mt-0.5 truncate">Unit Test Guard</div>
                           </div>
                         </Tooltip>
@@ -454,7 +454,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                           Pyodide Test
                         </span>
                       </div>
-                      <div className="text-emerald-700 dark:text-emerald-300 bg-[var(--color-secondary)] p-2.5 rounded-lg border border-emerald-500/20 whitespace-pre-wrap text-[11px] leading-relaxed">
+                      <div className="text-emerald-800 dark:text-emerald-300 bg-[var(--color-secondary)] p-2.5 rounded-lg border border-emerald-500/20 whitespace-pre-wrap text-[11px] leading-relaxed">
                         {currentLesson.expectedOutput}
                       </div>
                     </div>
@@ -475,7 +475,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                           </span>
                         </button>
                         {showHint && (
-                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/5 text-xs text-amber-800 dark:text-amber-200 leading-relaxed font-mono space-y-2">
+                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-2">
                             <div className="font-bold flex items-center gap-1.5 text-[11px]">
                               <Sparkle size={12} className="text-amber-500" />
                               <span>Implementation Guidance:</span>
@@ -599,10 +599,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   data-testid="ide-toggle-abby-btn"
                   onClick={() => window.dispatchEvent(new CustomEvent('openguide:toggle-abby'))}
                   className="px-2 py-0.5 rounded text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
-                  title="Ask Abby AI Assistant"
+                  title="Ask Bluee AI Assistant"
                 >
                   <Sparkle size={13} className="text-cyan-400 fill-cyan-400" />
-                  <span>Abby AI</span>
+                  <span>Bluee AI</span>
                 </button>
 
                 <Tooltip

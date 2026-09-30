@@ -15,7 +15,7 @@ export const CHANGELOG_DATA: ChangelogRelease[] = [
     highlights: [
       'Track 4 Expansion: 9 advanced labs on QKV Attention Mechanics, RoPE, KV Caching, LoRA, and Reasoning Models.',
       'Mobile IDE Ergonomics: 3-tab segmented controller (Study, Code, Output) with automatic switch to Output on code execution.',
-      'Abby Offline Co-Pilot: 50+ first-principles knowledge entries with exact keyword weighting and zero-latency local answering.',
+      'Bluee Offline Co-Pilot: 50+ first-principles knowledge entries with exact keyword weighting and zero-latency local answering.',
       'Curated Goldmines: YouTube app fallback and seamless mobile master-detail course drawer.',
       'Client-Side Synthesized Audio & Haptics: Web Audio synthesizer with tactile clicks, chimes, and mobile vibration feedback.',
       'WCAG AAA Theme Calibration: Eliminated low-contrast slop; verified >7:1 contrast across all 20 light and dark themes.',

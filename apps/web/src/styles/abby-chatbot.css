@@ -565,12 +565,12 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
 }
 
 .card .chat .chat-bot textarea:focus {
-  border-color: #9147ff;
-  background-color: #ffffff;
+  border-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 
 .card .chat .chat-bot textarea:focus::placeholder {
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .card .chat .options {
@@ -593,9 +593,9 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text-secondary);
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 4px;
@@ -604,9 +604,9 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
 
 .card .chat .options .btns-add button:hover {
   transform: translateY(-2px);
-  color: #9147ff;
-  border-color: #c084fc;
-  background-color: rgba(145, 71, 255, 0.08);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 
 .card .chat .options .btn-submit {

@@ -133,11 +133,11 @@ export const ja: Record<string, string> = {
   ide_terminal_ready: '対話型 Pyodide ターミナル • 準備完了',
   ide_xray_btn: 'X-Ray デバッグレンズ',
 
-  // Abby Chatbot
-  abby_title: 'アビー (Abby)',
+  // Bluee Chatbot
+  abby_title: 'ブルーイ (Bluee)',
   abby_subtitle: '完全オフラインAIガイド',
-  abby_greeting: 'こんにちは！OpenGuideのオフラインガイド、アビーです。カリキュラム、ブラウザWASM、ベクトル計算、キーボードショートカットなど、何でも聞いてください！',
-  abby_placeholder: 'アビーにコース、コード、AIの概念を質問...',
+  abby_greeting: 'こんにちは！OpenGuideのオフラインガイド、ブルーイです。カリキュラム、ブラウザWASM、ベクトル計算、キーボードショートカットなど、何でも聞いてください！',
+  abby_placeholder: 'ブルーイにコース、コード、AIの概念を質問...',
   abby_suggestion_1: 'Track 0 とは何ですか？',
   abby_suggestion_2: 'WASM Python はどのように動きますか？',
   abby_suggestion_3: 'コサイン類似度について教えて',
