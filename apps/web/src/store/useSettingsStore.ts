@@ -2,18 +2,23 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type Theme = 
-  // 10 Curated Light Themes
+  // 12 Curated Light Themes
   | 'pure-paper' | 'e-ink-papyrus' | 'claude-light' | 'linear-light' | 'notion-cream'
   | 'github-light' | 'swiss-modernist' | 'solarized-light' | 'nordic-fjord' | 'matcha-ceremonial'
-  // 10 Curated Dark Themes
+  | 'sakura-blossom' | 'champagne-luminary'
+  // 12 Curated Dark Themes
   | 'obsidian' | 'claude-dark' | 'linear-dark' | 'cursor-dark' | 'cyberpunk-neon'
-  | 'github-dark' | 'monokai-pro' | 'nord-dark' | 'dracula' | 'circadian-amber';
+  | 'github-dark' | 'monokai-pro' | 'nord-dark' | 'dracula' | 'circadian-amber'
+  | 'aurora-borealis' | 'celestial-nebula';
 
+export type CodeFont = 'fira-code' | 'jetbrains-mono' | 'source-code-pro' | 'ibm-plex-mono' | 'system-mono';
 
 export interface SettingsState {
   theme: Theme;
   displaySize: 'compact' | 'default' | 'large';
   fontSize: number;
+  editorFont: CodeFont;
+  modalOpacity: number;
   tabSize: number;
   vimMode: boolean;
   wordWrap: boolean;
@@ -31,6 +36,8 @@ export interface SettingsState {
   setTheme: (theme: Theme) => void;
   setDisplaySize: (size: 'compact' | 'default' | 'large') => void;
   setFontSize: (size: number) => void;
+  setEditorFont: (font: CodeFont) => void;
+  setModalOpacity: (opacity: number) => void;
   setTabSize: (size: number) => void;
   setVimMode: (enabled: boolean) => void;
   setWordWrap: (enabled: boolean) => void;
@@ -54,6 +61,8 @@ export const useSettingsStore = create<SettingsState>()(
       theme: 'obsidian',
       displaySize: 'default',
       fontSize: 14,
+      editorFont: 'jetbrains-mono',
+      modalOpacity: 0.85,
       tabSize: 2,
       vimMode: false,
       wordWrap: true,
@@ -71,6 +80,8 @@ export const useSettingsStore = create<SettingsState>()(
       setTheme: (theme) => set({ theme }),
       setDisplaySize: (displaySize) => set({ displaySize }),
       setFontSize: (fontSize) => set({ fontSize }),
+      setEditorFont: (editorFont) => set({ editorFont }),
+      setModalOpacity: (modalOpacity) => set({ modalOpacity }),
       setTabSize: (tabSize) => set({ tabSize }),
       setVimMode: (vimMode) => set({ vimMode }),
       setWordWrap: (wordWrap) => set({ wordWrap }),
@@ -89,6 +100,8 @@ export const useSettingsStore = create<SettingsState>()(
         theme: 'obsidian',
         displaySize: 'default',
         fontSize: 14,
+        editorFont: 'jetbrains-mono',
+        modalOpacity: 0.85,
         tabSize: 2,
         vimMode: false,
         wordWrap: true,

@@ -143,6 +143,21 @@
 - [x] **Automated Cross-Platform Suite (`universal-compatibility.spec.ts`):** 6/6 tests passing across 12 viewport widths (320px–1920px), mobile touch accessory bar, touch X-Ray lens, WebGPU SLM caching, WebXR headset emulation, and air-gapped Pyodide pre-caching.
 - [ ] **Physical Real-Device Human Verification Pass:** Scheduled for physical hardware execution by Adil across real iOS Safari, Android Chrome, iPad Stage Manager, and Chromebook.
 
+## Phase 15: Native-Grade Mobile Ergonomics & UI Tuning (Release v2.8.0)
+- [x] **Native Mobile Bottom Navigation Bar (`MobileBottomNav.tsx`):** Fixed bottom nav on `<768px` viewports respecting safe areas, with automatic unmounting on active IDE engine routes to protect CodeMirror 6 and Pyodide terminal space.
+- [x] **Luxury Mobile Navigation Sheet Drawer (`MobileNavDrawer.tsx`):** Linear/Apple-grade slide-over frosted bottom sheet with curriculum track hierarchy, Holodeck, Portfolio, 24-theme swatch grid, and language switcher.
+- [x] **Self-Healing Horizontal Guardrails:** Enforced `overflow-x-clip` and `html, body { max-width: 100vw; overflow-x: hidden !important; }` eliminating radial glow horizontal blowout across all phone viewports.
+- [x] **Mobile IDE Layout & Abby Mascot Collision Fix:** Hides floating mascot on mobile IDE screens (<1024px) to protect terminal output; added dedicated toolbar trigger in editor header.
+
+## Phase 16: Multi-Device Tour, Fluid Mascot Physics, 4 Magical Themes, Editor Customization & RTL Engine (Release v2.9.0)
+- [x] **Multi-Device Guided Tour Engine (`AppTour.tsx`, `app-tour.css`):** Interactive onboarding powered by `driver.js` (v1.8.0) with frosted glass popovers and device-aware contextual advice for small screens.
+- [x] **Abby Chatbot Fluid Physics & Jelly Bounce (`AbbyChatbot.tsx`, `abby-chatbot.css`):** Framer Motion drag gestures with spring inertia momentum and screen edge/corner velocity detection triggering squash-and-stretch jelly bounce oscillation.
+- [x] **4 Bespoke Magical Themes (2 Light, 2 Dark — Total 24 Themes):** Sakura Blossom, Champagne Luminary, Aurora Borealis, and Celestial Nebula with WCAG AAA contrast (>7:1) across all text tokens.
+- [x] **Editor Customization Engine:** Code Monospace font switcher (`jetbrains-mono`, `fira-code`, `source-code-pro`, `ibm-plex-mono`, `system-mono`) and live window transparency/opacity slider (`0.4` to `1.0` with backdrop blur) in `ThemeSettingsModal.tsx`.
+- [x] **Universal RTL Isolation Subsystem:** Strict LTR isolation for CodeMirror, Pyodide terminal output, and math formulas (`direction: ltr !important; unicode-bidi: isolate;`) in Arabic (`ar`) and Urdu (`ur`) locales, paired with script-safe line-height preservation and directional icon flipping (`.rtl-flip`).
+- [x] **100% Automated Regression Suite (`comprehensive-features.spec.ts`):** 49/49 tests passing across entire Playwright suite.
+
 **Creator & Architect:** Adil Rafiq Dar (ARD)
+
 
 

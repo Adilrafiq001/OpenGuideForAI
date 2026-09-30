@@ -164,4 +164,58 @@ body {
   color: #475569 !important; /* slate-600 */
 }
 
+/* =========================================================================
+   UNIVERSAL RIGHT-TO-LEFT (RTL) BIDIRECTIONAL ENGINE
+   Strict LTR Code Isolation, Stepper Inversion & Script-Safe Typography
+   ========================================================================= */
+
+/* 1. Critical LTR Isolation: Code editors, terminals, monospace, and math must ALWAYS remain strictly LTR */
+[dir="rtl"] .cm-editor,
+[dir="rtl"] .cm-scroller,
+[dir="rtl"] .cm-content,
+[dir="rtl"] .cm-gutters,
+[dir="rtl"] .cm-line,
+[dir="rtl"] [data-testid="terminal-container"],
+[dir="rtl"] [data-testid="terminal-output"],
+[dir="rtl"] .terminal-container,
+[dir="rtl"] pre,
+[dir="rtl"] code,
+[dir="rtl"] .font-mono,
+[dir="rtl"] .code-accessory-bar,
+[dir="rtl"] .latex-formula,
+[dir="rtl"] kbd {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate;
+}
+
+/* 2. Arabic & Urdu Typography & Script-Safe Line Heights */
+[dir="rtl"] body,
+[dir="rtl"] html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Arabic", "Noto Nastaliq Urdu", Tahoma, Arial, sans-serif;
+  line-height: 1.75;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] button {
+  letter-spacing: normal !important;
+}
+
+/* 3. Directional Icon & Stepper Mirroring in RTL */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* 4. Dock Centering Isolation in RTL */
+[dir="rtl"] [data-testid="command-dock-wrapper"] {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
 

@@ -205,7 +205,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               aria-label={t('ide_exit')}
               className="flex items-center justify-center gap-1.5 p-2 sm:px-2.5 sm:py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98] min-h-[40px] min-w-[40px] sm:min-h-[32px] sm:min-w-0"
             >
-              <ArrowLeft size={16} />
+              <ArrowLeft size={16} className="rtl-flip" />
               <span className="hidden sm:inline">{t('ide_exit')}</span>
             </button>
           </Tooltip>

@@ -463,3 +463,87 @@ html[data-theme="circadian-amber"], [data-theme="circadian-amber"] {
   --color-accent: #f59e0b;
   --color-accent-trans: rgba(245, 158, 11, 0.2);
 }
+
+/* 21. Kyoto Sakura Blossom (Imperial Camellia & Alabaster Silk) */
+html[data-theme="sakura-blossom"], [data-theme="sakura-blossom"] {
+  --bg-primary: #fffafb;
+  --bg-secondary: #fff0f3;
+  --bg-tertiary: #ffe4e8;
+  --border-color: rgba(225, 29, 72, 0.16);
+  --text-primary: #1f1318;
+  --text-secondary: #5c4750;
+  --accent: #be123c;
+  --accent-transparent: rgba(190, 18, 60, 0.15);
+
+  --color-primary: #fffafb;
+  --color-secondary: #fff0f3;
+  --color-tertiary: #ffe4e8;
+  --color-border: rgba(225, 29, 72, 0.16);
+  --color-text-primary: #1f1318;
+  --color-text-secondary: #5c4750;
+  --color-accent: #be123c;
+  --color-accent-trans: rgba(190, 18, 60, 0.15);
+}
+
+/* 22. Geneva Champagne Horology (Guilloché Dial & Blued Horology Steel) */
+html[data-theme="champagne-luminary"], [data-theme="champagne-luminary"] {
+  --bg-primary: #faf7f2;
+  --bg-secondary: #f1ebe1;
+  --bg-tertiary: #e7dfd1;
+  --border-color: rgba(180, 83, 9, 0.18);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #b45309;
+  --accent-transparent: rgba(180, 83, 9, 0.15);
+
+  --color-primary: #faf7f2;
+  --color-secondary: #f1ebe1;
+  --color-tertiary: #e7dfd1;
+  --color-border: rgba(180, 83, 9, 0.18);
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-accent: #b45309;
+  --color-accent-trans: rgba(180, 83, 9, 0.15);
+}
+
+/* 23. Abyssal Aurora Borealis (Bioluminescent Emerald & Arctic Abyss) */
+html[data-theme="aurora-borealis"], [data-theme="aurora-borealis"] {
+  --bg-primary: #040711;
+  --bg-secondary: #0a1124;
+  --bg-tertiary: #101c38;
+  --border-color: rgba(0, 245, 212, 0.22);
+  --text-primary: #f0fdfa;
+  --text-secondary: #94a3b8;
+  --accent: #00f5d4;
+  --accent-transparent: rgba(0, 245, 212, 0.2);
+
+  --color-primary: #040711;
+  --color-secondary: #0a1124;
+  --color-tertiary: #101c38;
+  --color-border: rgba(0, 245, 212, 0.22);
+  --color-text-primary: #f0fdfa;
+  --color-text-secondary: #94a3b8;
+  --color-accent: #00f5d4;
+  --color-accent-trans: rgba(0, 245, 212, 0.2);
+}
+
+/* 24. Celestial Starlight Nebula (Cosmic Stardust Gold & Deep Space Velvet) */
+html[data-theme="celestial-nebula"], [data-theme="celestial-nebula"] {
+  --bg-primary: #07040e;
+  --bg-secondary: #110b24;
+  --bg-tertiary: #1a1038;
+  --border-color: rgba(244, 114, 182, 0.22);
+  --text-primary: #fdf4ff;
+  --text-secondary: #c084fc;
+  --accent: #f59e0b;
+  --accent-transparent: rgba(245, 158, 11, 0.2);
+
+  --color-primary: #07040e;
+  --color-secondary: #110b24;
+  --color-tertiary: #1a1038;
+  --color-border: rgba(244, 114, 182, 0.22);
+  --color-text-primary: #fdf4ff;
+  --color-text-secondary: #c084fc;
+  --color-accent: #f59e0b;
+  --color-accent-trans: rgba(245, 158, 11, 0.2);
+}

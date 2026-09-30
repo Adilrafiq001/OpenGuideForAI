@@ -44,6 +44,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     setDisplaySize,
     fontSize, 
     setFontSize, 
+    editorFont,
+    setEditorFont,
+    modalOpacity,
+    setModalOpacity,
     wordWrap, 
     setWordWrap,
     tabSize,
@@ -117,7 +121,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/75 backdrop-blur-md"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            style={{ opacity: (modalOpacity ?? 0.85) * 0.75 }}
           />
 
           {/* Modal Container */}
@@ -126,7 +131,20 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] bg-[var(--color-secondary,#0d0d0f)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10"
+            className="theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10 transition-colors duration-200"
+            style={{
+              backgroundColor: (() => {
+                const hex = (activeThemeInfo.surface || '#0d0d0f').replace('#', '');
+                const fullHex = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex;
+                const num = parseInt(fullHex, 16);
+                const r = (num >> 16) & 255;
+                const g = (num >> 8) & 255;
+                const b = num & 255;
+                return `rgba(${r}, ${g}, ${b}, ${modalOpacity ?? 0.85})`;
+              })(),
+              backdropFilter: `blur(${Math.round(24 * (modalOpacity ?? 0.85) + 6)}px)`,
+              WebkitBackdropFilter: `blur(${Math.round(24 * (modalOpacity ?? 0.85) + 6)}px)`
+            }}
             data-testid="theme-settings-modal-dialog"
           >
             {/* Header */}
@@ -166,6 +184,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             <div className="px-4 sm:px-6 pt-2.5 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex items-center gap-2 overflow-x-auto no-scrollbar">
               <button
                 onClick={() => setActiveTab('themes')}
+                data-testid="tab-themes-btn"
                 className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 ${
                   activeTab === 'themes'
                     ? 'shadow-lg'
@@ -177,11 +196,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                 } : {}}
               >
                 <Palette size={16} />
-                Color Themes (20)
+                Color Themes ({THEMES_DATA.length})
               </button>
 
               <button
                 onClick={() => setActiveTab('preferences')}
+                data-testid="tab-preferences-btn"
                 className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 ${
                   activeTab === 'preferences'
                     ? 'shadow-lg'
@@ -491,6 +511,80 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             }`}
                           >
                             {size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Window Transparency & Glass Opacity Slider */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Window Transparency</span>
+                        <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[var(--color-secondary)] text-[var(--color-accent)] border border-[var(--color-border)]">
+                          {Math.round((modalOpacity ?? 0.85) * 100)}%
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Adjust glass opacity to see themes and code live through the modal.</p>
+                      <input 
+                        type="range" 
+                        min="0.4" 
+                        max="1.0" 
+                        step="0.05"
+                        value={modalOpacity ?? 0.85}
+                        onChange={(e) => setModalOpacity(parseFloat(e.target.value))}
+                        data-testid="modal-transparency-slider"
+                        className="w-full accent-[var(--color-accent)] cursor-pointer h-1.5 bg-[var(--color-tertiary)] border border-[var(--color-border)] rounded-lg appearance-none"
+                      />
+                      <div className="flex gap-1.5">
+                        {[
+                          { label: '50%', val: 0.5 },
+                          { label: '70%', val: 0.7 },
+                          { label: '85%', val: 0.85 },
+                          { label: '100%', val: 1.0 }
+                        ].map(opt => (
+                          <button
+                            key={opt.val}
+                            onClick={() => setModalOpacity(opt.val)}
+                            className={`flex-1 py-1 rounded-lg text-[10px] font-mono border transition-all ${
+                              Math.abs((modalOpacity ?? 0.85) - opt.val) < 0.04
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Code Editor Monospace Font Selector */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Code Monospace Font</span>
+                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold">
+                          {editorFont === 'jetbrains-mono' ? 'JetBrains' : editorFont === 'fira-code' ? 'Fira Code' : editorFont === 'source-code-pro' ? 'Source Code' : editorFont === 'ibm-plex-mono' ? 'IBM Plex' : 'System'}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Applies directly to Python CodeMirror editor.</p>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'jetbrains-mono', label: 'JetBrains Mono' },
+                          { id: 'fira-code', label: 'Fira Code' },
+                          { id: 'source-code-pro', label: 'Source Code' },
+                          { id: 'ibm-plex-mono', label: 'IBM Plex' },
+                          { id: 'system-mono', label: 'System Mono' }
+                        ].map(font => (
+                          <button
+                            key={font.id}
+                            onClick={() => setEditorFont(font.id as any)}
+                            data-testid={`editor-font-${font.id}-btn`}
+                            className={`py-1.5 px-2 rounded-xl text-[11px] font-mono border transition-all truncate text-left ${
+                              (editorFont || 'jetbrains-mono') === font.id
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
+                            }`}
+                          >
+                            {font.label}
                           </button>
                         ))}
                       </div>

@@ -26,6 +26,7 @@ import {
 } from '@codemirror/language';
 import { python } from '@codemirror/lang-python';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { useSettingsStore } from '../store/useSettingsStore';
 
 interface CodeEditorProps {
   value: string;
@@ -94,6 +95,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   // Track the latest value internally to avoid feedback loops
   const latestValueRef = useRef(value);
   latestValueRef.current = value;
+  const { editorFont } = useSettingsStore();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -104,7 +106,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         height: '100%',
         backgroundColor: 'transparent',
         color: 'var(--color-text-primary)',
-        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+        fontFamily: 'var(--font-code-mono, "JetBrains Mono", monospace)',
         fontSize: `${fontSize}px`
       },
       '.cm-scroller': {
@@ -207,7 +209,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       view.destroy();
       viewRef.current = null;
     };
-  }, [fontSize, wordWrap, readOnly]);
+  }, [fontSize, editorFont, wordWrap, readOnly]);
 
   // Synchronize document if value changes externally (e.g. reset or canonical solution insert)
   useEffect(() => {

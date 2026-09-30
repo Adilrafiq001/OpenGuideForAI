@@ -182,9 +182,41 @@ export const THEMES_DATA: ThemeInfo[] = [
     toolInspiration: 'Kyoto Tea Culture',
     physiologyBasis: 'Mid-wavelength green balance minimizes visual cortex hyper-excitation.'
   },
+  {
+    id: 'sakura-blossom',
+    name: 'Kyoto Sakura Blossom',
+    mode: 'light',
+    category: 'Light Themes',
+    bg: '#fffafb',
+    surface: '#fff0f3',
+    border: 'rgba(225, 29, 72, 0.16)',
+    accent: '#be123c',
+    accentName: 'Imperial Camellia',
+    textPrimary: '#1f1318',
+    textSecondary: '#5c4750',
+    description: 'Delicate alabaster paper with blush undertones, regal camellia rose accents, and deep sumi-e ink typography.',
+    toolInspiration: 'Kyoto Imperial Spring Garden',
+    physiologyBasis: 'Soft diffuse warmth with 16:1 text contrast eliminates glare fatigue during extended reading sessions.'
+  },
+  {
+    id: 'champagne-luminary',
+    name: 'Geneva Champagne Horology',
+    mode: 'light',
+    category: 'Light Themes',
+    bg: '#faf7f2',
+    surface: '#f1ebe1',
+    border: 'rgba(180, 83, 9, 0.18)',
+    accent: '#b45309',
+    accentName: 'Horological Amber Gold',
+    textPrimary: '#0f172a',
+    textSecondary: '#475569',
+    description: 'Swiss Haute Horlogerie grand complication guilloché dial with brushed satin surfaces and blued-steel typography.',
+    toolInspiration: 'Swiss Master Watchmakers',
+    physiologyBasis: 'Warm champagne luminance prevents pupil dilation strain while maintaining crisp 16:1 contrast.'
+  },
 
   // =========================================================================
-  // 10 CALIBRATED DARK THEMES
+  // 12 CALIBRATED DARK THEMES
   // OLED True Black, Developer Ergonomics & Scotopic Photobiology
   // =========================================================================
   {
@@ -346,5 +378,37 @@ export const THEMES_DATA: ThemeInfo[] = [
     description: 'Zero blue light (<500nm). Preserves natural nighttime melatonin synthesis.',
     toolInspiration: 'Vintage VT220 Terminal',
     physiologyBasis: 'Harvard Medical School circadian studies show <500nm suppression protects sleep cycles.'
+  },
+  {
+    id: 'aurora-borealis',
+    name: 'Abyssal Aurora Borealis',
+    mode: 'dark',
+    category: 'Dark Themes',
+    bg: '#040711',
+    surface: '#0a1124',
+    border: 'rgba(0, 245, 212, 0.22)',
+    accent: '#00f5d4',
+    accentName: 'Bioluminescent Emerald',
+    textPrimary: '#f0fdfa',
+    textSecondary: '#94a3b8',
+    description: 'Midnight Arctic ocean abyss illuminated by shifting northern lights and crystalline cyan bioluminescence.',
+    toolInspiration: 'Tromsø Arctic Observatory',
+    physiologyBasis: 'Cyan-emerald wavelengths stimulate focused alertness without photopic circadian disruption.'
+  },
+  {
+    id: 'celestial-nebula',
+    name: 'Celestial Starlight Nebula',
+    mode: 'dark',
+    category: 'Dark Themes',
+    bg: '#07040e',
+    surface: '#110b24',
+    border: 'rgba(244, 114, 182, 0.22)',
+    accent: '#f59e0b',
+    accentName: 'Pulsar Stellar Gold',
+    textPrimary: '#fdf4ff',
+    textSecondary: '#c084fc',
+    description: 'Deep space observatory field with luminous interstellar rose clouds, cosmic velvet, and stardust gold accents.',
+    toolInspiration: 'James Webb Deep Space Field',
+    physiologyBasis: 'Deep cosmic violet-black field lowers retinal energy absorption while stellar accents guide gaze tracking.'
   }
 ];

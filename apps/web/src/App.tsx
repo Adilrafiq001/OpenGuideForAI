@@ -27,7 +27,7 @@ const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ de
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
-  const { theme, displaySize } = useSettingsStore();
+  const { theme, displaySize, editorFont } = useSettingsStore();
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
@@ -48,7 +48,8 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
     const lightThemeIds = new Set([
       'pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream',
-      'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial'
+      'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial',
+      'sakura-blossom', 'champagne-luminary'
     ]);
     const mode = lightThemeIds.has(theme) ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme-mode', mode);
@@ -63,6 +64,20 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-display-size', displaySize || 'default');
   }, [displaySize]);
+
+  // Synchronize editorFont CSS variable and attribute
+  useEffect(() => {
+    const fontMap: Record<string, string> = {
+      'fira-code': '"Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+      'jetbrains-mono': '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+      'source-code-pro': '"Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+      'ibm-plex-mono': '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+      'system-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+    };
+    const activeFont = fontMap[editorFont] || fontMap['jetbrains-mono'];
+    document.documentElement.setAttribute('data-editor-font', editorFont || 'jetbrains-mono');
+    document.documentElement.style.setProperty('--font-code-mono', activeFont);
+  }, [editorFont]);
 
   const handleOpenThemes = () => {
     setInitialModalTab('themes');

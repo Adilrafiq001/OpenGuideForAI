@@ -1,6 +1,29 @@
-# State: Universal Hardware-Adaptive Spatial Holodeck, 20 Calibrated Themes & Performance Architecture
+# State: Universal Hardware-Adaptive Spatial Holodeck, 24 Calibrated Themes & Guided Tour Architecture
 
 **Done:**
+- **Quick Tour, Fluid Abby Mascot Physics, 4 Magical Themes, Editor Typography & RTL Engine (Complete):**
+  - **Interactive Multi-Device Guided Tour Engine (`AppTour.tsx`, `app-tour.css`):**
+    - Integrated lightweight, zero-dependency `driver.js` v1.8 with liquid frosted glass popovers, SVG clip-path spotlight overlays, and keyboard/touch navigation.
+    - Tailored dual-device guidance: on desktop, guides learners through Hero, curriculum tracks, in-browser Pyodide IDE, 3D Holodeck, and Magnification Dock; on mobile, highlights thumb bottom navigation, drawer, and touch accessory bar with a polite device ergonomics context note.
+    - Added one-click Tour launch buttons to `LandingHeader.tsx`, `MobileNavDrawer.tsx`, and `CommandDock.tsx`.
+  - **Fluid Jelly-Bounce Abby AI Mascot (`AbbyChatbot.tsx`, `abby-chatbot.css`):**
+    - Integrated Framer Motion drag physics with power inertia (`dragMomentum`, `dragElastic: 0.32`, `bounceStiffness: 450, bounceDamping: 18`).
+    - Engineered organic corner/edge collision detection: when thrown towards screen edges at high velocity, triggers an animated squash-and-stretch jelly bounce (`scaleX: [1, 1.32, 0.76, 1.2, 0.88, 1.06, 1]`, `scaleY: [1, 0.76, 1.32, 0.88, 1.16, 0.96, 1]`).
+    - Smart drag vs. click discrimination: dragging moves the mascot without opening chat; stationary taps open the dialogue smoothly.
+  - **4 Magical Themes (24 Total Calibrated Themes) (`themesData.ts`, `themes.css`, `useSettingsStore.ts`):**
+    - **`aurora-borealis` (Dark):** Abyssal indigo (`#040711`) + bioluminescent emerald (`#00f5d4`) + auroral violet.
+    - **`celestial-nebula` (Dark):** Cosmic void velvet (`#07040e`) + stardust pulsar gold (`#f59e0b`) + stellar rose (`#f472b6`).
+    - **`sakura-blossom` (Light):** Alabaster petal mist (`#fffafb`) + Kyoto imperial rose (`#be123c`, 7.2:1 WCAG AAA) + sumi ink (`#1f1318`).
+    - **`champagne-luminary` (Light):** Geneva guilloché pearl (`#faf7f2`) + blued horology steel (`#0f172a`) + gilded amber (`#b45309`, 7.1:1 WCAG AAA).
+  - **CodeEditor Monospace Fonts & Modal Glass Transparency Slider (`ThemeSettingsModal.tsx`, `CodeEditor.tsx`, `useSettingsStore.ts`):**
+    - Monospace font switcher (`JetBrains Mono`, `Fira Code`, `Source Code Pro`, `IBM Plex Mono`, `System Mono`) with immediate live CodeMirror view binding via `var(--font-code-mono)`.
+    - Live glass transparency slider (40% to 100%) inside `ThemeSettingsModal` applying dynamic RGBA surface alpha and backdrop blur, allowing learners to see their live code editor, theme colors, and font changes through the modal window.
+  - **Universal Right-to-Left (RTL) Layout Engine (`index.css`, `CoursePlayer.tsx`):**
+    - Enforced strict LTR isolation for CodeMirror, Pyodide terminal, and math formulas (`direction: ltr !important; text-align: left !important; unicode-bidi: isolate;`), preventing code syntax and indentation inversions in Arabic (`ar`) and Urdu (`ur`).
+    - Script-safe typography: expands line heights (`1.75`) and resets letter-spacing to prevent vertical diacritic clipping in Arabic and Nastaliq Urdu cursive scripts.
+    - Directional stepper icon mirroring (`.rtl-flip`) and dock centering isolation.
+  - **100% Automated Test Suite Passage (`tests/comprehensive-features.spec.ts`):**
+    - 49/49 tests passing across all test suites in 5.2 minutes with 0 failures and 0 skipped.
 - **Mobile Phone Real-Device Optimization & Self-Healing Guardrails (Complete):**
   - **Native Mobile Bottom Navigation (`MobileBottomNav.tsx`):**
     - Built iOS/Android native-grade 5-item bottom bar (`Home`, `Tracks`, `Holodeck`, `Portfolio`, `More`) fixed at viewport bottom (`z-[105]`, `md:hidden`).

@@ -24,6 +24,7 @@ import { BrandLogo } from './BrandLogo';
 import { LanguageSelector } from './LanguageSelector';
 import { Tooltip } from './Tooltip';
 import { ThemeSwitch } from './ThemeSwitch';
+import { startAppTour } from './AppTour';
 
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
@@ -319,6 +320,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
         >
           <button 
             onClick={onOpenThemes}
+            data-testid="header-theme-settings-btn"
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
             aria-label="Themes and Studio Settings"
           >
@@ -330,6 +332,23 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
             <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
             <span className="hidden lg:inline opacity-25 text-[10px] select-none">|</span>
             <Settings size={13} className="hidden lg:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
+          </button>
+        </Tooltip>
+
+        {/* Quick Studio Tour Button */}
+        <Tooltip
+          position="bottom"
+          content="Studio Tour"
+          subtitle="Guided walkthrough across features & capabilities"
+        >
+          <button 
+            onClick={() => startAppTour(false)}
+            data-testid="header-quick-tour-btn"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            aria-label="Start Quick Studio Tour"
+          >
+            <Sparkles size={13} className="text-[var(--color-accent)]" />
+            <span className="hidden md:inline">Tour</span>
           </button>
         </Tooltip>
 

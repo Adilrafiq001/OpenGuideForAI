@@ -15,9 +15,11 @@ import {
   Brain,
   Glasses,
   Target,
-  Award
+  Award,
+  Sparkles
 } from 'lucide-react';
 import { MagnificationDock, type DockItemData } from './MagnificationDock';
+import { startAppTour } from './AppTour';
 
 interface CommandDockProps {
   onOpenThemes?: () => void;
@@ -124,8 +126,13 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
     },
     {
       icon: <Palette size={20} className="text-[var(--color-text-secondary)]" />,
-      label: 'Color Themes (20)',
+      label: 'Color Themes (24)',
       onClick: () => onOpenThemes?.()
+    },
+    {
+      icon: <Sparkles size={20} className="text-[var(--color-accent)]" />,
+      label: 'Studio Guided Tour',
+      onClick: () => startAppTour(false)
     },
     {
       icon: <Settings size={20} className="text-[var(--color-text-secondary)]" />,

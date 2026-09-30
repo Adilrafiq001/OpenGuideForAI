@@ -16,11 +16,13 @@ import {
   Sliders,
   Check,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
+import { startAppTour } from './AppTour';
 
 interface MobileNavDrawerProps {
   isOpen: boolean;
@@ -379,19 +381,33 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                 </div>
               </div>
 
-              {/* SECTION 5: Preferences & Engine Control */}
-              <div className="pt-2 flex items-center justify-between border-t border-[var(--color-border)]">
-                <button
-                  onClick={() => {
-                    onClose();
-                    onOpenSettings();
-                  }}
-                  data-testid="drawer-preferences-btn"
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-medium hover:border-[var(--color-accent)] transition-all cursor-pointer"
-                >
-                  <Settings size={15} />
-                  <span>Settings & BYOK Keys</span>
-                </button>
+              {/* SECTION 5: Preferences, Tour & Engine Control */}
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--color-border)]">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenSettings();
+                    }}
+                    data-testid="drawer-preferences-btn"
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-medium hover:border-[var(--color-accent)] transition-all cursor-pointer"
+                  >
+                    <Settings size={15} />
+                    <span>Settings & BYOK</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onClose();
+                      setTimeout(() => startAppTour(true), 200);
+                    }}
+                    data-testid="drawer-quick-tour-btn"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-medium hover:border-[var(--color-accent)] transition-all cursor-pointer"
+                  >
+                    <Sparkles size={14} className="text-[var(--color-accent)]" />
+                    <span>Quick Tour</span>
+                  </button>
+                </div>
 
                 <div className="text-[10px] font-mono text-[var(--color-text-secondary)] text-right">
                   100% In-Browser WASM

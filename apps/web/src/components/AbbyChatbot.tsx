@@ -4,11 +4,8 @@ import { Settings, X, Copy, Check, Maximize2, Minimize2, Zap, Download } from 'l
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
-import { 
-  isLocalSlmCached, 
-  cacheLocalSlmWeights, 
-  generateLocalSlmResponse 
-} from '../services/localNeuralRunner';
+import { isLocalSlmCached, cacheLocalSlmWeights, generateLocalSlmResponse } from '../services/localNeuralRunner';
+import { motion, type PanInfo, useAnimationControls } from 'framer-motion';
 import '../styles/abby-chatbot.css';
 
 interface Message {
@@ -336,31 +333,85 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     setIsOpen(false);
   };
 
+  const jellyControls = useAnimationControls();
+  const isDraggingRef = useRef(false);
+
+  const handleDragStart = () => {
+    isDraggingRef.current = true;
+  };
+
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    const speed = Math.hypot(info.velocity.x, info.velocity.y);
+    // If pushed fast or near corners/edges, trigger organic jelly bounce wobble!
+    if (speed > 160) {
+      jellyControls.start({
+        scaleX: [1, 1.32, 0.76, 1.2, 0.88, 1.06, 1],
+        scaleY: [1, 0.76, 1.32, 0.88, 1.16, 0.96, 1],
+        rotate: [0, (info.velocity.x > 0 ? 1 : -1) * 9, 0],
+        transition: { duration: 0.65, ease: 'easeOut' }
+      });
+    }
+    setTimeout(() => {
+      isDraggingRef.current = false;
+    }, 120);
+  };
+
+  const handleMascotClick = (e: React.MouseEvent) => {
+    if (isDraggingRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    setIsOpen(true);
+  };
+
   return (
-    <div className={`abby-floating-anchor ${isOpen ? 'is-open' : ''} ${isEngine ? 'in-engine' : ''}`} id="abby-copilot">
+    <motion.div 
+      drag={!isOpen}
+      dragMomentum={true}
+      dragElastic={0.32}
+      dragTransition={{ bounceStiffness: 450, bounceDamping: 18, power: 0.25 }}
+      dragConstraints={{
+        left: typeof window !== 'undefined' ? -window.innerWidth + 90 : -350,
+        right: 0,
+        top: typeof window !== 'undefined' ? -window.innerHeight + 90 : -600,
+        bottom: 0
+      }}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      animate={jellyControls}
+      whileDrag={{ scale: 1.08, cursor: 'grabbing' }}
+      className={`abby-floating-anchor ${isOpen ? 'is-open' : ''} ${isEngine ? 'in-engine' : ''}`} 
+      id="abby-copilot"
+      data-testid="abby-floating-anchor"
+    >
       <div className={`container-ai-input ${isOpen ? 'is-open' : ''} size-${chatSize}`}>
         {/* 15 3D Mouse Hover Tilt Areas */}
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
-        <div className="area" onClick={() => setIsOpen(true)} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} />
 
         <label className={`container-wrap ${isOpen ? 'is-open' : ''}`}>
           <input 
             type="checkbox" 
             checked={isOpen} 
-            onChange={(e) => setIsOpen(e.target.checked)} 
+            onChange={(e) => {
+              if (!isDraggingRef.current) {
+                setIsOpen(e.target.checked);
+              }
+            }} 
             id="abby-toggle-checkbox"
             aria-label="Toggle Abby AI Copilot"
           />
@@ -566,6 +617,6 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
           </div>
         </label>
       </div>
-    </div>
+    </motion.div>
   );
 };

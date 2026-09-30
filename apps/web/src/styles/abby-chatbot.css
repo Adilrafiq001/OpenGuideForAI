@@ -10,6 +10,12 @@
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  touch-action: none;
+  cursor: grab;
+}
+
+.abby-floating-anchor:active {
+  cursor: grabbing;
 }
 
 @media (max-width: 767px) {
