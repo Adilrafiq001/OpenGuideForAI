@@ -92,9 +92,9 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
     if (contactForm.message.trim()) {
       const subject = encodeURIComponent(`[OpenGuide ${contactForm.category}] from ${contactForm.name || 'Engineer'}`);
       const body = encodeURIComponent(
-        `Hi Adil,\n\n${contactForm.message}\n\n---\nSender: ${contactForm.name || 'Anonymous'}\nEmail: ${contactForm.email || 'Not provided'}\nCategory: ${contactForm.category}\nPlatform: OpenGuide AI Studio`
+        `Hello OpenGuide Team,\n\n${contactForm.message}\n\n---\nSender: ${contactForm.name || 'Anonymous'}\nEmail: ${contactForm.email || 'Not provided'}\nCategory: ${contactForm.category}\nPlatform: OpenGuide AI Studio`
       );
-      window.open(`mailto:adilrafiq001@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      window.open(`mailto:openguideforai@gmail.com?subject=${subject}&body=${body}`, '_blank');
       try {
         const stored = JSON.parse(localStorage.getItem('openguide_contact_messages') || '[]');
         stored.push({ ...contactForm, timestamp: new Date().toISOString() });
@@ -733,7 +733,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     Inquiry Dispatched Directly
                   </h4>
                   <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed max-w-sm mx-auto">
-                    Your email client has been pre-filled addressed directly to founder & architect Adil Rafiq Dar (<span className="text-[var(--color-accent)] font-mono">adilrafiq001@gmail.com</span>), and your message has been recorded in your local browser ledger.
+                    Your email client has been pre-filled addressed directly to OpenGuide, and your message has been recorded in your local browser ledger.
                   </p>
                 </div>
               ) : (
@@ -741,9 +741,9 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] leading-relaxed text-[var(--color-text-secondary)] font-sans">
                     <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-semibold mb-1">
                       <Sparkles size={13} />
-                      <span>Direct Founder Dispatch &amp; Open Issues</span>
+                      <span>Direct Team Dispatch &amp; Open Issues</span>
                     </div>
-                    Under OpenGuide's strict zero-cloud-overhead policy ($0 Rule), inquiries dispatch directly to architect Adil Rafiq Dar (<span className="font-mono text-[var(--color-accent)]">adilrafiq001@gmail.com</span>) via your email client, or can be tracked publicly on GitHub Issues.
+                    Under OpenGuide's strict zero-cloud-overhead policy ($0 Rule), inquiries dispatch directly to OpenGuide via your email client, or can be tracked publicly on GitHub Issues.
                   </div>
 
                   <div>
@@ -754,7 +754,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                       type="text"
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                      placeholder="Adil / Engineer"
+                      placeholder="Alex / AI Engineer"
                       className="w-full bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-[var(--color-accent)] rounded-xl px-3 py-2 text-xs text-[var(--color-text-primary)] outline-none"
                     />
                   </div>
