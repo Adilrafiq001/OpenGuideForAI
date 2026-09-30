@@ -155,7 +155,7 @@ print(f"dw1/dL: {w1.grad:.4f}, dw2/dL: {w2.grad:.4f}")
       {
         id: 'lec-2',
         title: 'Lecture 2: The spelled-out intro to language modeling: building makemore (Bigram)',
-        youtubeId: 'PaCmpyUfSgU',
+        youtubeId: 'PaCmpygFfXo',
         duration: '1h 55m',
         keyTakeaway: 'Count-based Bigram vs. single-layer neural network with Cross Entropy loss and negative log likelihood.',
         timestamps: [
@@ -726,12 +726,12 @@ print("Token IDs:", ids)
     badge: '18 LESSONS',
     desc: '18 comprehensive lessons taking you from text generation foundations to production RAG.',
     type: 'youtube',
-    youtubeId: 'jIXdcNW_X_Y',
+    youtubeId: 'lFXQkBvEe0o',
     lectures: [
       {
         id: 'ms-genai-1',
         title: 'Overview: Large Language Models, Prompting & Production RAG',
-        youtubeId: 'jIXdcNW_X_Y',
+        youtubeId: 'lFXQkBvEe0o',
         duration: '42m',
         keyTakeaway: 'Vector embeddings enable semantic similarity search through geometric cosine distance rather than brittle keyword matching.',
         timestamps: [
@@ -815,12 +815,12 @@ print("Similarity Doc 2:", cosine_similarity(query, doc_2))
     badge: '8 LESSONS',
     desc: '8 hands-on architectural lessons building multi-agent systems and semantic kernels.',
     type: 'youtube',
-    youtubeId: 'b_B_kL4iK8U',
+    youtubeId: '3zgm60bXmQk',
     lectures: [
       {
         id: 'ms-agents-1',
         title: 'Masterclass: Autonomous AI Agents & Multi-Agent Collaboration',
-        youtubeId: 'b_B_kL4iK8U',
+        youtubeId: '3zgm60bXmQk',
         duration: '52m',
         keyTakeaway: 'An AI Agent coordinates an LLM reasoning engine, memory scratchpad, and typed external tools bounded by execution limits.',
         timestamps: [
@@ -910,12 +910,12 @@ print(code)
     badge: 'FREE INTENSIVE',
     desc: 'Foundational models, embeddings, multimodal vision, agents, and production MLOps.',
     type: 'youtube',
-    youtubeId: '4Wp9w_j6668',
+    youtubeId: 'WpIfAeCIFc0',
     lectures: [
       {
         id: 'gk-1',
         title: 'Masterclass: Multimodal Models, Structured Schemas & Production MLOps',
-        youtubeId: '4Wp9w_j6668',
+        youtubeId: 'WpIfAeCIFc0',
         duration: '1h 05m',
         keyTakeaway: 'Gemini flash models provide sub-second latency for structured data extraction and automated LLM-as-a-judge evaluations.',
         timestamps: [
@@ -1397,12 +1397,11 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     {/* Security Hardened YouTube Player */}
                     <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black/90 border border-[var(--color-border)] shadow-xl">
                       <iframe
-                        src={`https://www.youtube-nocookie.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0&modestbranding=1`}
+                        src={`https://www.youtube.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0`}
                         title={currentLecture.title}
                         className="absolute inset-0 w-full h-full border-0"
-                        sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox allow-forms"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                       />
                     </div>
