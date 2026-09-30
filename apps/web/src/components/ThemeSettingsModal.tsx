@@ -14,11 +14,14 @@ import {
   ArrowCounterClockwise,
   TextT,
   Cube,
-  Key
+  Key,
+  Article
 } from '@phosphor-icons/react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { THEMES_DATA, type ThemeInfo } from '../data/themesData';
 import { ThemeSwitch } from './ThemeSwitch';
+import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
+import { CHANGELOG_DATA, CURRENT_STUDIO_VERSION } from '../data/changelogData';
 
 interface ThemeSettingsModalProps {
   isOpen: boolean;
@@ -64,6 +67,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     setWasmHeapMb,
     soundFx,
     setSoundFx,
+    soundVolume,
+    setSoundVolume,
+    hapticsEnabled,
+    setHapticsEnabled,
     codeCompletion,
     setCodeCompletion,
     vimMode,
@@ -869,36 +876,89 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       </button>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Audio Feedback</span>
-                        <span className="text-[10px] text-[var(--color-text-secondary)]">Run chimes</span>
+                    {/* Audio & Haptic Synthesizer Panel */}
+                    <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Audio Feedback</span>
+                          <span className="text-[10px] text-[var(--color-text-secondary)]">Synthesizer clicks & run chimes ($0 compute)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {soundFx && (
+                            <button
+                              type="button"
+                              onClick={() => playTactileSound('success')}
+                              className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
+                              title="Test Sound Chime"
+                            >
+                              Test
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = !soundFx;
+                              setSoundFx(next);
+                              if (next) playTactileSound('click');
+                            }}
+                            className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center cursor-pointer ${
+                              soundFx ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
+                            }`}
+                            aria-label="Toggle Sound Effects"
+                          >
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${soundFx ? 'translate-x-4.5' : 'translate-x-0'}`} />
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => {
-                          setSoundFx(!soundFx);
-                          if (!soundFx) {
-                            try {
-                              const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-                              const osc = ctx.createOscillator();
-                              const gain = ctx.createGain();
-                              osc.type = 'sine';
-                              osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                              gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-                              osc.connect(gain);
-                              gain.connect(ctx.destination);
-                              osc.start();
-                              osc.stop(ctx.currentTime + 0.15);
-                            } catch (e) {}
-                          }
-                        }}
-                        className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center ${
-                          soundFx ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full bg-white transition-transform ${soundFx ? 'translate-x-4.5' : 'translate-x-0'}`} />
-                      </button>
+
+                      {soundFx && (
+                        <div className="flex items-center justify-between gap-3 pt-1 border-t border-[var(--color-border)]/50">
+                          <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">Volume ({Math.round(soundVolume * 100)}%)</span>
+                          <input 
+                            type="range"
+                            min="0.1"
+                            max="1.0"
+                            step="0.05"
+                            value={soundVolume}
+                            onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
+                            className="w-28 accent-[var(--color-accent)] cursor-pointer h-1.5"
+                            aria-label="Sound Volume"
+                          />
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between pt-1 border-t border-[var(--color-border)]/50">
+                        <div>
+                          <span className="text-xs font-semibold block text-[var(--color-text-primary)]">Touch Haptics</span>
+                          <span className="text-[10px] text-[var(--color-text-secondary)]">Device vibration on mobile interactions</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {hapticsEnabled && (
+                            <button
+                              type="button"
+                              onClick={() => triggerHaptic('success')}
+                              className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--color-secondary)] hover:bg-[var(--color-border)] text-[var(--color-text-secondary)] border border-[var(--color-border)] cursor-pointer"
+                              title="Test Vibration"
+                            >
+                              Test
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = !hapticsEnabled;
+                              setHapticsEnabled(next);
+                              if (next) triggerHaptic('light');
+                            }}
+                            className={`w-10 h-5.5 rounded-full p-0.5 transition-colors flex items-center cursor-pointer ${
+                              hapticsEnabled ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-tertiary)] border border-[var(--color-border)]'
+                            }`}
+                            aria-label="Toggle Mobile Haptics"
+                          >
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${hapticsEnabled ? 'translate-x-4.5' : 'translate-x-0'}`} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1065,6 +1125,44 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         Hardware shaders compile locally via Direct3D/Metal/Vulkan with 0ms network latency and $0 cost.
                       </p>
                     </div>
+                  </div>
+                </div>
+
+                {/* Section 4.5: Studio Release Notes & Changelog */}
+                <div className="space-y-3 pt-3 border-t border-[var(--color-border)]">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-mono uppercase tracking-wider text-[var(--color-accent)] font-bold flex items-center gap-1.5">
+                        <Article size={14} />
+                        <span>Studio Release Notes & Changelog</span>
+                      </h4>
+                      <p className="text-[11px] text-[var(--color-text-secondary)] mt-0.5">
+                        Continuous architectural improvements under the $0 Compute Rule.
+                      </p>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 font-bold">
+                      v{CURRENT_STUDIO_VERSION}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 max-h-56 overflow-y-auto pr-1 custom-scrollbar">
+                    {CHANGELOG_DATA.map((rel) => (
+                      <div key={rel.version} className="p-3 rounded-xl bg-[var(--color-primary)]/60 border border-[var(--color-border)] space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-xs text-[var(--color-text-primary)]">
+                            v{rel.version} — {rel.title}
+                          </span>
+                          <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">
+                            {rel.date}
+                          </span>
+                        </div>
+                        <ul className="space-y-1 text-[11px] text-[var(--color-text-secondary)] list-disc pl-4">
+                          {rel.highlights.map((h, i) => (
+                            <li key={i} className="leading-relaxed">{h}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </div>
 

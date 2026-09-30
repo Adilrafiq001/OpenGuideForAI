@@ -28,6 +28,9 @@ export interface SettingsState {
   autoRun: boolean;
   wasmHeapMb: number;
   soundFx: boolean;
+  soundVolume: number;
+  hapticsEnabled: boolean;
+  lastSeenVersion: string;
   codeCompletion: boolean;
   graphicsTier: 'auto' | '2d-lean' | '3d-hardware' | 'spatial-xr';
   byokApiKey: string;
@@ -47,6 +50,9 @@ export interface SettingsState {
   setAutoRun: (enabled: boolean) => void;
   setWasmHeapMb: (mb: number) => void;
   setSoundFx: (enabled: boolean) => void;
+  setSoundVolume: (volume: number) => void;
+  setHapticsEnabled: (enabled: boolean) => void;
+  setLastSeenVersion: (version: string) => void;
   setCodeCompletion: (enabled: boolean) => void;
   setGraphicsTier: (tier: 'auto' | '2d-lean' | '3d-hardware' | 'spatial-xr') => void;
   setByokApiKey: (key: string) => void;
@@ -72,6 +78,9 @@ export const useSettingsStore = create<SettingsState>()(
       autoRun: false,
       wasmHeapMb: 1024,
       soundFx: true,
+      soundVolume: 0.5,
+      hapticsEnabled: true,
+      lastSeenVersion: 'v3.0.0',
       codeCompletion: true,
       graphicsTier: 'auto',
       byokApiKey: '',
@@ -96,6 +105,9 @@ export const useSettingsStore = create<SettingsState>()(
       setAutoRun: (autoRun) => set({ autoRun }),
       setWasmHeapMb: (wasmHeapMb) => set({ wasmHeapMb }),
       setSoundFx: (soundFx) => set({ soundFx }),
+      setSoundVolume: (soundVolume) => set({ soundVolume }),
+      setHapticsEnabled: (hapticsEnabled) => set({ hapticsEnabled }),
+      setLastSeenVersion: (lastSeenVersion) => set({ lastSeenVersion }),
       setCodeCompletion: (codeCompletion) => set({ codeCompletion }),
       setGraphicsTier: (graphicsTier) => set({ graphicsTier }),
       setByokApiKey: (byokApiKey) => set({ byokApiKey }),
@@ -116,6 +128,9 @@ export const useSettingsStore = create<SettingsState>()(
         autoRun: false,
         wasmHeapMb: 1024,
         soundFx: true,
+        soundVolume: 0.5,
+        hapticsEnabled: true,
+        lastSeenVersion: 'v3.0.0',
         codeCompletion: true,
         graphicsTier: 'auto',
         byokApiKey: '',

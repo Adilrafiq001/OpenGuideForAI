@@ -25,6 +25,7 @@ import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/us
 import { THEMES_DATA } from '../data/themesData';
 import { startAppTour } from './AppTour';
 import { usePwaInstall } from '../hooks/usePwaInstall';
+import { GitHubStarButton } from './GitHubStarButton';
 
 interface MobileNavDrawerProps {
   isOpen: boolean;
@@ -189,6 +190,9 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
             {/* Scrollable Drawer Body */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar">
               
+              {/* GitHub Star Button */}
+              <GitHubStarButton variant="drawer" />
+
               {/* SECTION 1: Appearance & UI Tuning Hub */}
               <div className="p-3.5 rounded-2xl bg-[var(--color-primary)]/50 border border-[var(--color-border)] space-y-3">
                 <div className="flex items-center justify-between">

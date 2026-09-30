@@ -19,6 +19,7 @@ import {
   Palette
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { GitHubStarButton } from './GitHubStarButton';
 
 interface StudioFooterProps {
   onOpenThemes?: () => void;
@@ -162,6 +163,9 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               <Cpu size={13} className="text-cyan-400" />
               <span>Pyodide CPython v0.26 Web Worker</span>
             </div>
+
+            {/* GitHub Star Repository Link */}
+            <GitHubStarButton variant="pill" />
           </div>
         </div>
 

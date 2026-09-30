@@ -152,7 +152,7 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
 
     // Switch language to Urdu (RTL)
     await page.evaluate(() => {
-      const store = (window as any).__OPEN_GUIDE_STORE__;
+      const _store = (window as any).__OPEN_GUIDE_STORE__;
       document.documentElement.setAttribute('lang', 'ur');
       document.documentElement.setAttribute('dir', 'rtl');
       document.documentElement.classList.add('rtl-active');

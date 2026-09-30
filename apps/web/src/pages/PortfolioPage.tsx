@@ -18,7 +18,7 @@ import {
   ExternalLink,
   Download,
   Upload,
-  Sparkles
+  Network
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
@@ -98,11 +98,11 @@ export function PortfolioPage() {
     };
 
     return [
-      formatTrack(track0, 0, 'Kernel Architect', 'CPython WebAssembly & System Runtimes', Cpu, 'text-emerald-400', 'border-emerald-500/40'),
-      formatTrack(track1, 1, 'Geometrician', 'High-Dimensional Manifolds & Semantic Vectors', Layers, 'text-cyan-400', 'border-cyan-500/40'),
-      formatTrack(track2, 2, 'Agent Commander', 'Multi-Hop RAG & Autonomous ReAct Loops', Terminal, 'text-violet-400', 'border-violet-500/40'),
-      formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-400', 'border-amber-500/40'),
-      formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Sparkles, 'text-rose-400', 'border-rose-500/40')
+      formatTrack(track0, 0, 'Kernel Architect', 'CPython WebAssembly & System Runtimes', Cpu, 'text-emerald-700 dark:text-emerald-400', 'border-emerald-500/40'),
+      formatTrack(track1, 1, 'Geometrician', 'High-Dimensional Manifolds & Semantic Vectors', Layers, 'text-cyan-700 dark:text-cyan-400', 'border-cyan-500/40'),
+      formatTrack(track2, 2, 'Agent Commander', 'Multi-Hop RAG & Autonomous ReAct Loops', Terminal, 'text-violet-700 dark:text-violet-400', 'border-violet-500/40'),
+      formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-700 dark:text-amber-400', 'border-amber-500/40'),
+      formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Network, 'text-rose-700 dark:text-rose-400', 'border-rose-500/40')
     ];
   }, []);
 
@@ -403,7 +403,7 @@ export function PortfolioPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {allTracks.map((track) => {
               const TrackIcon = track.icon;
               const trackCompletedCount = track.lessons.filter(l => completedLessonIds.includes(l.id)).length;
@@ -431,8 +431,8 @@ export function PortfolioPage() {
 
                       <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
                         isUnlocked 
-                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
-                          : 'bg-white/5 text-neutral-400 border-white/10'
+                          ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-600/30 dark:border-emerald-500/40' 
+                          : 'bg-[var(--color-primary)] text-[var(--color-text-secondary)] border-[var(--color-border)]'
                       }`}>
                         {isUnlocked ? 'MASTERED' : `${trackCompletedCount}/${track.lessons.length} LABS`}
                       </span>

@@ -3,6 +3,18 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 24 Calibrated Themes & Guided Tour Architecture
 
 **Done:**
+- **Comprehensive UX, Mobile Ergonomics, Anti-AI Slop & Audio Architecture Audit (Complete):**
+  - **Zero-Layout-Shift Loaders Purge:** Removed static `#og-pre-loader` from `index.html` and keyframe animations; replaced route suspense loader with an ultra-thin 2.5px top progress line (`RouteTopProgressBar.tsx`), completely eliminating first-load flash and layout shift.
+  - **Synthesized Sound & Haptics Engine (`soundHaptics.ts`):** Created a zero-dependency Web Audio API synthesizer generating organic mechanical clicks, chimes, and mobile `navigator.vibrate` feedback. Added volume slider and haptics toggle in `ThemeSettingsModal.tsx`.
+  - **Animated Dual GitHub Star Button (`GitHubStarButton.tsx`):** Built animated Octocat + Star button linking to `https://github.com/openguideforai/OpenGuideForAI`, seamlessly integrated into Header, Mobile Drawer, Footer, and IDE.
+  - **Anti-AI Slop & Light Theme Contrast Calibration:** Purged neon candy gradients ("The Lila Ban"), enforced WCAG AAA (>7:1) contrast tokens across all 20 themes, and replaced generic `Sparkles` glyphs with precision domain engineering icons (`Atom`, `Network`, `Brain`, `Terminal`).
+  - **Curriculum & Portfolio Harmonization:** Added Track 4 (Frontier Intelligence - 9 labs) to Landing Page curriculum grid ("5 Core Tracks • 45 Interactive Labs") and updated Portfolio page grid to `xl:grid-cols-5`.
+  - **Abby Chatbot Knowledge & Mobile Viewport Overhaul:** Fixed mobile off-screen positioning bug with `jellyControls.start({ x: 0, y: 0 })` and CSS `transform: none !important;`. Expanded offline knowledge base to 50+ rich first-principles entries covering all tracks, math formulas, and token-weighted routing.
+  - **Curated Goldmines Mobile Optimization:** Expanded YouTube iframe sandbox (`allow-popups allow-forms`), added direct "Watch in YouTube App ↗" fallback button, and built mobile master-detail course drawer.
+  - **Mobile IDE 3-Tab Segmented Ergonomics:** Implemented `[ 📖 Study ] [ 💻 Code ] [ 📟 Output ]` tabs in `CoursePlayer.tsx` with automatic switch to `Output` upon code execution.
+  - **Spatial Holodeck Utility & Live Cosine Probes:** Added Track 4 Frontier cluster and 8 new semantic vector nodes (24 total) to `VectorSpace3D.tsx`, plus live Dual-Vector Cosine Probes with direct Python IDE launch links.
+  - **Changelog & Studio Update Announcement:** Added `changelogData.ts`, collapsible release notes accordion in Settings, and non-intrusive bottom announcement pill in `App.tsx`.
+  - **Public README Showcase:** Overhauled `README.md` into an award-winning public advertisement with zero secrets, badges, and complete architecture manifesto.
 - **Curriculum Expansion: Track 4 (Frontier Intelligence & System Foundations - 5 Tracks, 45 Labs Total) (Complete):**
   - **Frontier Intelligence & Invariant Foundations (`track4.ts`):**
     - Created Track 4 with 3 modules and 9 rigorous, practical in-browser WebAssembly labs:

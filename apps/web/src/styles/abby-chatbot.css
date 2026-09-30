@@ -774,6 +774,7 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
   .abby-floating-anchor.is-open,
   .abby-floating-anchor:has(.is-open) {
     inset: 0 !important;
+    transform: none !important;
     width: 100vw !important;
     height: 100dvh !important;
     display: flex !important;

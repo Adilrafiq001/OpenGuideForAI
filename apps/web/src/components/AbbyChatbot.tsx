@@ -121,8 +121,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     // Dynamic semantic synthesis for general questions
     if (qLower.includes('track') || qLower.includes('curriculum') || qLower.includes('learn') || qLower.includes('start')) {
       return {
-        content: "OpenGuide features **4 Comprehensive Hands-On Tracks** (36 Labs in total):\n\n• **Track 0: Absolute Zero:** In-browser CPython 3.12 WebAssembly, non-blocking Web Workers, vector primitives, and BPE tokenization.\n• **Track 1: Vector Spaces:** High-dimensional embedding spaces, cosine similarity vs Euclidean distance, and in-memory Top-K search.\n• **Track 2: RAG & Agents:** Sliding-window chunking, ReAct loop state machines, Model Context Protocol (MCP JSON-RPC 2.0), and autonomous research agents.\n• **Track 3: Evals & Guardrails:** Synthetic fuzzing, OWASP AI Top 10 defenses, canary token traps, and local client-side WebGPU neural inference.\n\nAll labs execute 100% locally in your browser with zero setup or paid subscriptions.",
-        takeaway: "Master AI engineering from foundational tensors to production agent swarms."
+        content: "OpenGuide features **5 Comprehensive Hands-On Tracks** (45 Labs in total):\n\n• **Track 0: Absolute Zero (9 Labs):** In-browser CPython 3.12 WebAssembly, non-blocking Web Workers, vector primitives, and BPE tokenization.\n• **Track 1: Vector Spaces (9 Labs):** High-dimensional embedding spaces, cosine similarity vs Euclidean distance, and in-memory Top-K search.\n• **Track 2: RAG & Agents (9 Labs):** Sliding-window chunking, ReAct loop state machines, Model Context Protocol (MCP JSON-RPC 2.0), and autonomous research agents.\n• **Track 3: Evals & Guardrails (9 Labs):** Synthetic fuzzing, OWASP AI Top 10 defenses, canary token traps, and local client-side WebGPU neural inference.\n• **Track 4: Frontier Intelligence (9 Labs):** QKV Scaled Dot-Product Attention, RoPE, KV Caching, LoRA/QLoRA adaptation, and Reasoning Models.\n\nAll labs execute 100% locally in your browser with zero setup or paid subscriptions.",
+        takeaway: "Master AI engineering from foundational tensors to frontier reasoning models."
       };
     }
 
@@ -148,7 +148,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     }
 
     return {
-      content: `I've analyzed your question regarding **"${userQuery}"**.\n\nOpenGuide is an in-browser AI engineering studio operating strictly under the **$0 Rule**. Here is where you can explore:\n\n• **Curriculum Tracks (0–3):** Jump directly into in-browser CPython WASM, vector math, RAG agent loops, or production evals.\n• **Interactive Laboratories:** Check out the Spatial Holodeck (\`/holodeck\`), Synapse Lounge minigames, or Cognitive Accelerator.\n• **Developer Tools:** Open the X-Ray Debug Lens (\`Alt+X\`), explore Free Courses Studio, or inspect the Four Tools setup guides.\n\nFeel free to ask me for exact code snippets, mathematical proofs, or navigation shortcuts!`,
+      content: `I've analyzed your question regarding **"${userQuery}"**.\n\nOpenGuide is an in-browser AI engineering studio operating strictly under the **$0 Rule** across **5 Core Tracks (45 Labs)**:\n\n• **Curriculum Tracks (0–4):** Jump directly into in-browser CPython WASM, vector math, RAG agent loops, production evals, or frontier attention mechanics.\n• **Interactive Laboratories:** Check out the Spatial Holodeck (\`/holodeck\`), Synapse Lounge minigames, or Cognitive Accelerator.\n• **Developer Tools:** Open the X-Ray Debug Lens (\`Alt+X\`), explore Free Courses Studio, or inspect the Four Tools setup guides.\n\nFeel free to ask me for exact code snippets, mathematical proofs, or navigation shortcuts!`,
       takeaway: "100% Client-Side WASM • Complete local data privacy"
     };
   };
@@ -335,6 +335,12 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
   const jellyControls = useAnimationControls();
   const isDraggingRef = useRef(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      jellyControls.start({ x: 0, y: 0, rotate: 0, scaleX: 1, scaleY: 1 });
+    }
+  }, [isOpen, jellyControls]);
 
   const handleDragStart = () => {
     isDraggingRef.current = true;

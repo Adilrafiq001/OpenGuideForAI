@@ -25,6 +25,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { Tooltip } from './Tooltip';
 import { ThemeSwitch } from './ThemeSwitch';
 import { startAppTour } from './AppTour';
+import { GitHubStarButton } from './GitHubStarButton';
 
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
@@ -335,6 +336,9 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
             <Settings size={13} className="hidden lg:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
           </button>
         </Tooltip>
+
+        {/* GitHub Star Button */}
+        <GitHubStarButton variant="compact" className="hidden lg:inline-flex" />
 
         {/* Quick Studio Tour Button */}
         <Tooltip

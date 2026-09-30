@@ -1,6 +1,6 @@
 import { useState, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ChevronRight, ArrowUpRight, Glasses } from 'lucide-react';
+import { Bot, Compass, ChevronRight, ArrowUpRight, Glasses } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
@@ -220,7 +220,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-[var(--color-border)] pb-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={16} style={{ color: currentThemeInfo.accent }} />
+              <Compass size={16} style={{ color: currentThemeInfo.accent }} />
               <span className="text-xs font-mono font-bold tracking-[0.25em] uppercase text-[var(--color-text-secondary)]">
                 {t('pathways_heading')}
               </span>
@@ -468,12 +468,12 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
             </p>
           </div>
           <span className="hidden md:block text-[var(--color-text-secondary)] text-xs font-mono uppercase tracking-widest">
-            4 Core Tracks
+            5 Core Tracks • 45 Interactive Labs
           </span>
         </div>
 
-        {/* 4 Core Tracks Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 5 Core Tracks Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {/* Track 0: Absolute Zero */}
           <article 
             onClick={() => navigate('/track/0/intro')}
@@ -607,16 +607,48 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
               </span>
             </div>
           </article>
+
+          {/* Track 4: Frontier Intelligence & Systems */}
+          <article 
+            onClick={() => navigate('/track/4/intro')}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-rose-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400">
+                  Track 04 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                Track 4: Frontier Intelligence
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                Scaled dot-product attention (Q, K, V), KV-cache dynamics, reasoning search trees, and Model Context Protocol (MCP).
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 9 Labs</span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
+              </span>
+            </div>
+          </article>
         </div>
 
         {/* Panoramic Spatial Holodeck Showcase Banner */}
         <article 
           onClick={() => navigate('/holodeck')}
-          className="mt-6 group relative bg-gradient-to-r from-violet-950/25 via-[var(--color-secondary)] to-cyan-950/20 border border-violet-500/30 hover:border-violet-500/70 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.005] cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+          className="mt-6 group relative bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 border border-[var(--color-border)] hover:border-violet-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.005] cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
         >
           <div className="space-y-3 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-400 font-bold flex items-center gap-1.5">
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-800 dark:text-violet-300 font-bold flex items-center gap-1.5">
                 <Glasses size={14} />
                 <span>Spatial Lab • 3D, WebXR & 2D Lean SVG</span>
               </span>
@@ -625,7 +657,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
               </span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--color-text-primary)] group-hover:text-violet-400 transition-colors">
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--color-text-primary)] group-hover:text-violet-700 dark:group-hover:text-violet-400 transition-colors">
               Universal Spatial Holodeck
             </h3>
 
@@ -635,10 +667,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
           </div>
 
           <div className="flex flex-col sm:items-end justify-between self-stretch shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-[var(--color-border)]">
-            <div className="w-12 h-12 rounded-2xl border border-violet-500/40 bg-violet-600/20 text-violet-300 group-hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-lg">
+            <div className="w-12 h-12 rounded-2xl border border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300 group-hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-md">
               <Glasses size={24} />
             </div>
-            <span className="text-xs font-mono font-bold text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 mt-4 sm:mt-0">
+            <span className="text-xs font-mono font-bold text-violet-700 dark:text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 mt-4 sm:mt-0">
               Launch Holodeck [3D] →
             </span>
           </div>
@@ -656,8 +688,8 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
       {/* SECTION 6: IN-HOUSE OFFLINE AI ASSISTANT (Explore the Offline AI Copilot: Abby) */}
       <section id="offline-ai-studio" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)] text-center relative overflow-hidden">
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-mono text-xs font-bold mb-4 shadow-sm">
-            <Sparkles size={14} />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-800 dark:text-cyan-300 font-mono text-xs font-bold mb-4 shadow-sm">
+            <Bot size={14} />
             <span>Explore the Offline AI Copilot: Abby</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-[var(--color-text-primary)] mb-4 tracking-tight">
@@ -674,10 +706,11 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
                 el.click();
               }
             }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm shadow-lg hover:shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
+            <Bot size={15} />
             <span>Ask Abby Now</span>
-            <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-mono">Offline</span>
+            <span className="text-xs bg-[var(--color-primary)]/20 px-2 py-0.5 rounded-full font-mono">Offline</span>
           </button>
         </div>
       </section>

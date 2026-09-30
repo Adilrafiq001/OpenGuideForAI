@@ -520,6 +520,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'video' | 'transcript' | 'code' | 'syllabus'>('video');
   const [playerStartTime, setPlayerStartTime] = useState<number>(0);
+  const [mobilePane, setMobilePane] = useState<'sidebar' | 'content'>('content');
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -640,20 +641,32 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
-              aria-label="Close dialog"
-            >
-              <X size={18} />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setMobilePane(prev => prev === 'sidebar' ? 'content' : 'sidebar')}
+                className="md:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
+              >
+                <BookOpen size={13} />
+                <span>{mobilePane === 'sidebar' ? 'View Player' : 'Courses'}</span>
+              </button>
+
+              <button
+                onClick={onClose}
+                className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
           {/* Main Layout: Left Sidebar for Course Navigation + Right Content Studio */}
           <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
             
             {/* Sidebar: Course List */}
-            <div className="w-full md:w-64 lg:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border)] bg-[var(--color-secondary)]/30 flex flex-col shrink-0 overflow-y-auto">
+            <div className={`w-full md:w-64 lg:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border)] bg-[var(--color-secondary)]/30 flex flex-col shrink-0 overflow-y-auto ${
+              mobilePane === 'sidebar' ? 'flex' : 'hidden md:flex'
+            }`}>
               <div className="p-3 text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold border-b border-[var(--color-border)]/50">
                 Curated Free Goldmines
               </div>
@@ -666,6 +679,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                       setSelectedLectureIdx(0);
                       setTranscriptSearch('');
                       setPlayerStartTime(0);
+                      setMobilePane('content');
                     }}
                     className={`w-full text-left p-2.5 rounded-xl text-xs transition-all flex flex-col gap-1 cursor-pointer ${
                       selectedCourseId === course.id
@@ -701,6 +715,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         onClick={() => {
                           setSelectedLectureIdx(idx);
                           setPlayerStartTime(0);
+                          setMobilePane('content');
                         }}
                         className={`w-full text-left p-2 rounded-lg text-[11px] transition-all flex items-center justify-between gap-1 cursor-pointer ${
                           selectedLectureIdx === idx
@@ -718,7 +733,9 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
             </div>
 
             {/* Right Pane: Media, Transcript, Syllabi & Code */}
-            <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[var(--color-primary)]">
+            <div className={`flex-1 flex flex-col min-w-0 min-h-0 bg-[var(--color-primary)] ${
+              mobilePane === 'content' ? 'flex' : 'hidden md:flex'
+            }`}>
               
               {/* Studio Tabs */}
               <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
@@ -801,7 +818,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         src={`https://www.youtube-nocookie.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0&modestbranding=1`}
                         title={currentLecture.title}
                         className="absolute inset-0 w-full h-full border-0"
-                        sandbox="allow-scripts allow-same-origin allow-presentation"
+                        sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox allow-forms"
                         referrerPolicy="strict-origin-when-cross-origin"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -819,9 +836,21 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                             Key Principle: {currentLecture.keyTakeaway}
                           </p>
                         </div>
-                        <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] shrink-0 self-start sm:self-center">
-                          {currentLecture.duration}
-                        </span>
+                        <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+                          <a
+                            href={`https://www.youtube.com/watch?v=${currentLecture.youtubeId}${playerStartTime > 0 ? `&t=${playerStartTime}s` : ''}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600/15 hover:bg-red-600/25 border border-red-500/30 text-red-600 dark:text-red-400 font-mono text-xs font-semibold transition-all cursor-pointer active:scale-95 shadow-sm"
+                            title="Open in YouTube App"
+                          >
+                            <ExternalLink size={12} />
+                            <span>Watch on YouTube App ↗</span>
+                          </a>
+                          <span className="text-xs font-mono px-2.5 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                            {currentLecture.duration}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Interactive Chapter Jump Pills */}

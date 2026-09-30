@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { 
   Compass, 
   RotateCcw,
-  Sparkles,
   Volume2,
   VolumeX,
   Layers
@@ -14,7 +14,7 @@ import { detectHardwareSync } from '../../utils/hardwareDetection';
 export interface SemanticVectorNode {
   id: string;
   label: string;
-  cluster: 'neural' | 'vector' | 'math' | 'agents';
+  cluster: 'neural' | 'vector' | 'math' | 'agents' | 'frontier';
   coords: [number, number, number]; // 3D coordinates (PCA projection)
   color: string;
   details: string;
@@ -33,17 +33,27 @@ export const SEMANTIC_VECTORS: SemanticVectorNode[] = [
   { id: 'cosine', label: 'Cosine Similarity', cluster: 'vector', coords: [-1.8, 1.0, 1.1], color: '#06b6d4', details: 'Dot-product angular distance formula' },
   { id: 'rag', label: 'RAG Pipeline', cluster: 'vector', coords: [-1.2, 2.5, -0.4], color: '#06b6d4', details: 'Retrieval-Augmented Generation context injection' },
 
-  // Cluster 3: Math & Optimization (Violet / Purple) - Centered & Normalized in Viewport
+  // Cluster 3: Math & Optimization (Violet / Purple)
   { id: 'gradient', label: 'Gradient Descent', cluster: 'math', coords: [0.5, -1.2, 1.8], color: '#8b5cf6', details: 'First-order iterative optimization algorithm' },
   { id: 'backprop', label: 'Backpropagation', cluster: 'math', coords: [0.8, -0.8, 2.3], color: '#8b5cf6', details: 'Chain-rule reverse gradient computation' },
   { id: 'loss', label: 'Cross-Entropy Loss', cluster: 'math', coords: [-0.2, -1.4, 1.4], color: '#8b5cf6', details: 'Prediction error quantification penalty' },
   { id: 'learning_rate', label: 'Learning Rate (η)', cluster: 'math', coords: [1.2, -1.6, 0.9], color: '#8b5cf6', details: 'Step size hyperparameter per iteration' },
+  { id: 'synthetic_fuzz', label: 'Synthetic Evals', cluster: 'math', coords: [-0.8, -1.2, 0.8], color: '#8b5cf6', details: 'Deterministic assertion & Likert benchmark suites' },
 
   // Cluster 4: Autonomous Agents & Memory (Amber / Orange)
   { id: 'agent', label: 'Autonomous Agent', cluster: 'agents', coords: [-0.5, 1.8, -2.4], color: '#f59e0b', details: 'Self-directed ReAct reasoning & execution loop' },
   { id: 'tools', label: 'Tool Schemas (MCP)', cluster: 'agents', coords: [-0.2, 2.4, -2.0], color: '#f59e0b', details: 'External APIs, Python interpreter & filesystem' },
   { id: 'react_loop', label: 'ReAct Loop', cluster: 'agents', coords: [-1.0, 1.2, -2.6], color: '#f59e0b', details: 'Reason -> Action -> Observation cycle' },
-  { id: 'context_window', label: 'Context Window', cluster: 'agents', coords: [0.6, 1.5, -1.8], color: '#f59e0b', details: 'Active token working memory capacity' }
+  { id: 'context_window', label: 'Context Window', cluster: 'agents', coords: [0.6, 1.5, -1.8], color: '#f59e0b', details: 'Active token working memory capacity' },
+  { id: 'owasp_evals', label: 'OWASP Guardrails', cluster: 'agents', coords: [1.0, 1.8, -2.2], color: '#f59e0b', details: 'Canary token traps and prompt injection sanitizers' },
+
+  // Cluster 5: Frontier Intelligence & Attention Mechanics (Rose / Red)
+  { id: 'rope', label: 'Rotary Embeddings (RoPE)', cluster: 'frontier', coords: [0.2, 2.8, 1.8], color: '#f43f5e', details: 'Relative position encoding via 2D rotation matrices' },
+  { id: 'kv_cache', label: 'KV Caching', cluster: 'frontier', coords: [-0.6, 2.2, 2.2], color: '#f43f5e', details: 'Autoregressive Key-Value memory state cache' },
+  { id: 'lora', label: 'LoRA (Low-Rank Adaptation)', cluster: 'frontier', coords: [1.2, 2.5, 2.0], color: '#f43f5e', details: 'Parameter-efficient fine-tuning via W = W0 + B*A' },
+  { id: 'quantization', label: 'INT4 Quantization', cluster: 'frontier', coords: [-1.4, 1.8, 2.4], color: '#f43f5e', details: 'Weight compression to 4-bit NormalFloat quantiles' },
+  { id: 'reasoning_grpo', label: 'Reasoning & GRPO', cluster: 'frontier', coords: [0.8, 3.2, 1.2], color: '#f43f5e', details: 'Reinforcement learning for extended test-time thinking chains' },
+  { id: 'mcp_frontier', label: 'MCP Protocol Server', cluster: 'frontier', coords: [-1.8, 2.8, -1.2], color: '#f43f5e', details: 'Production JSON-RPC 2.0 tool runtime standard' }
 ];
 
 interface VectorSpace3DProps {
@@ -53,6 +63,7 @@ interface VectorSpace3DProps {
 }
 
 export function VectorSpace3D({ onSelectNode, className = '', force2D = false }: VectorSpace3DProps) {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { graphicsTier } = useSettingsStore();
@@ -65,7 +76,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   const [hardwareInfo] = useState(() => detectHardwareSync());
   
   // Spatial XR Suite Controls (Meta/Oculus & VisionOS Grade)
-  const [clusterFilter, setClusterFilter] = useState<'all' | 'neural' | 'vector' | 'math' | 'agents'>('all');
+  const [clusterFilter, setClusterFilter] = useState<'all' | 'neural' | 'vector' | 'math' | 'agents' | 'frontier'>('all');
   const [simThreshold, setSimThreshold] = useState<number>(0.65);
   const [gimbalAngles, setGimbalAngles] = useState({ pitch: 0, yaw: 0 });
 
@@ -91,10 +102,11 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const freqs: Record<string, number> = {
-        neural: 523.25, // C5
-        vector: 659.25, // E5
-        math: 783.99,   // G5
-        agents: 1046.50 // C6
+        neural: 523.25,  // C5
+        vector: 659.25,  // E5
+        math: 783.99,    // G5
+        agents: 1046.50, // C6
+        frontier: 1318.51 // E6
       };
       osc.frequency.setValueAtTime(freqs[cluster] || 587.33, ctx.currentTime);
       osc.type = 'sine';
@@ -104,7 +116,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       gain.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + 0.28);
-    } catch (e) {}
+    } catch {}
   };
 
   // 3D Scene Initialization & Loop
@@ -523,7 +535,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
             {/* 3D Spatial Reticle & HUD Instructions */}
             <div className="absolute bottom-3 left-4 text-[10px] font-mono text-[var(--color-text-secondary)] pointer-events-none select-none flex items-center gap-2 bg-[var(--color-primary)]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[var(--color-border)] shadow-md">
-              <Sparkles size={12} className="text-[var(--color-accent)]" />
+              <Compass size={12} className="text-[var(--color-accent)]" />
               <span>Click node to select • Drag to orbit • 1,400 Manifold Particles • PCA R³ Projection</span>
             </div>
 
@@ -600,6 +612,9 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
             <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400">
               <span className="w-2 h-2 rounded-full bg-amber-400" /> Agents
             </span>
+            <span className="flex items-center gap-1 text-[10px] font-mono text-rose-400">
+              <span className="w-2 h-2 rounded-full bg-rose-400" /> Frontier
+            </span>
           </div>
         </div>
 
@@ -630,15 +645,32 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
           })}
         </div>
 
-        {/* Active Node Detail Card */}
-        <div className="p-3.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-between text-xs shadow-inner">
-          <div>
-            <span className="font-bold text-[var(--color-text-primary)] mr-2">{selectedNode.label}:</span>
-            <span className="text-[var(--color-text-secondary)]">{selectedNode.details}</span>
+        {/* Active Node Detail Card with Direct Curriculum IDE Launch */}
+        <div className="p-3.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-inner">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-[var(--color-text-primary)] text-sm">{selectedNode.label}</span>
+              <span className="font-mono text-[10px] text-[var(--color-accent)] px-2 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]">
+                [{selectedNode.coords.map(n => n.toFixed(1)).join(', ')}]
+              </span>
+            </div>
+            <p className="text-[var(--color-text-secondary)] text-xs mt-0.5">{selectedNode.details}</p>
           </div>
-          <span className="font-mono text-[10px] text-[var(--color-accent)] px-2 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]">
-            [{selectedNode.coords.map(n => n.toFixed(1)).join(', ')}]
-          </span>
+          <button
+            onClick={() => {
+              const trackMap: Record<string, string> = {
+                neural: '/track/0',
+                vector: '/track/1',
+                agents: '/track/2',
+                math: '/track/3',
+                frontier: '/track/4'
+              };
+              navigate(trackMap[selectedNode.cluster] || '/track/0');
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--color-accent)] text-black font-mono font-bold text-xs hover:opacity-90 transition-all cursor-pointer shrink-0 shadow-sm active:scale-95"
+          >
+            <span>Launch in Python IDE →</span>
+          </button>
         </div>
       </div>
 

@@ -32,6 +32,8 @@ import { NewtonsCradleLoader } from './NewtonsCradleLoader';
 import { CodeEditor } from './CodeEditor';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { useProgressStore } from '../store/useProgressStore';
+import { GitHubStarButton } from './GitHubStarButton';
+import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
 import type { Track } from '../data/track0';
 
 type CoursePlayerProps = {
@@ -48,7 +50,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [showSolution, setShowSolution] = useState(false);
   const [copiedSolution, setCopiedSolution] = useState(false);
   const [leftTab, setLeftTab] = useState<'briefing' | 'curriculum'>('briefing');
-  const [mobileTab, setMobileTab] = useState<'briefing' | 'editor'>('briefing');
+  const [mobileTab, setMobileTab] = useState<'briefing' | 'editor' | 'output'>('briefing');
   
   // Local-first persistent completed lesson store (IndexedDB + In-Memory Cache)
   const { completedLessonIds, completeLesson, initProgress } = useProgressStore();
@@ -123,6 +125,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const executeCode = async () => {
     clearLogs();
     setFeedback({ type: null, message: '' });
+    if (window.innerWidth < 1024) {
+      setMobileTab('output');
+    }
     
     try {
       // Decoupled test runner: if isolated testCode is provided, append it to execution payload
@@ -220,28 +225,6 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </span>
         </div>
 
-        {/* Mobile Viewport Tab Switcher (<lg screens) */}
-        <div className="flex lg:hidden items-center p-0.5 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono shrink-0">
-          <button
-            data-testid="mobile-tab-briefing"
-            onClick={() => setMobileTab('briefing')}
-            className={`px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-full transition-all cursor-pointer min-h-[36px] sm:min-h-[30px] ${
-              mobileTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
-            }`}
-          >
-            {t('ide_tab_briefing')}
-          </button>
-          <button
-            data-testid="mobile-tab-editor"
-            onClick={() => setMobileTab('editor')}
-            className={`px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-full transition-all cursor-pointer min-h-[36px] sm:min-h-[30px] ${
-              mobileTab === 'editor' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
-            }`}
-          >
-            {t('ide_tab_editor')}
-          </button>
-        </div>
-
         {/* Right Navigation & Tools */}
         <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
           <Tooltip
@@ -277,18 +260,65 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           
           <div className="w-px h-4 bg-[var(--color-border)] hidden sm:block" />
           
+          <GitHubStarButton variant="compact" className="hidden md:inline-flex" />
+
           <LanguageSelector />
           
           <SettingsDropdown />
         </div>
       </header>
 
+      {/* Mobile Ergonomic Segmented Switcher (Visible on < lg screens) */}
+      <div className="lg:hidden px-3 pt-2 pb-1 shrink-0 flex items-center justify-center">
+        <div className="flex items-center w-full max-w-md p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] font-mono text-xs shadow-sm">
+          <button
+            data-testid="mobile-tab-briefing"
+            onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('briefing'); }}
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+              mobileTab === 'briefing'
+                ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            <BookOpenText size={13} />
+            <span>Study</span>
+          </button>
+          <button
+            data-testid="mobile-tab-editor"
+            onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('editor'); }}
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+              mobileTab === 'editor'
+                ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            <Code size={13} />
+            <span>Code</span>
+          </button>
+          <button
+            data-testid="mobile-tab-output"
+            onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('output'); }}
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer relative ${
+              mobileTab === 'output'
+                ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            <Terminal size={13} />
+            <span>Output</span>
+            {logs.length > 0 && (
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 absolute top-1 right-2" />
+            )}
+          </button>
+        </div>
+      </div>
+
       {/* Main Split-Pane Workspace (Strictly fits remaining viewport height) */}
       <div className="flex-1 min-h-0 w-full p-2.5 sm:p-3.5 grid grid-cols-1 lg:grid-cols-12 gap-3 overflow-hidden">
         
         {/* Left Column: Instructions & Curriculum Tabs */}
         <div className={`col-span-1 lg:col-span-5 xl:col-span-4 h-full flex flex-col bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-sm min-h-0 ${
-          mobileTab === 'editor' ? 'hidden lg:flex' : 'flex'
+          mobileTab !== 'briefing' ? 'hidden lg:flex' : 'flex'
         }`}>
           {/* Left Column Tab Header */}
           <div className="h-11 px-3 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-primary)]/30 shrink-0">
@@ -553,7 +583,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         }`}>
           
           {/* Code Editor Panel */}
-          <div className="flex-1 min-h-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden shadow-sm">
+          <div className={`flex-1 min-h-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden shadow-sm ${
+            mobileTab === 'output' ? 'hidden lg:flex' : 'flex'
+          }`}>
             
             {/* Editor Top Bar */}
             <div className="h-10 border-b border-[var(--color-border)] flex items-center justify-between px-4 bg-[var(--color-primary)]/30 shrink-0">
@@ -673,7 +705,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </div>
 
           {/* Console Output Terminal Panel */}
-          <div data-testid="terminal-container" className="h-36 sm:h-44 shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm">
+          <div data-testid="terminal-container" className={`shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm ${
+            mobileTab === 'output' ? 'flex-1 h-full flex' : mobileTab === 'editor' ? 'h-36 sm:h-44 flex' : 'h-36 sm:h-44 hidden lg:flex'
+          }`}>
             <div className="rounded-xl bg-[var(--color-primary)] h-full p-3 flex flex-col overflow-hidden">
               
               <div className="flex items-center justify-between mb-2 border-b border-[var(--color-border)] pb-1.5 shrink-0 text-xs font-mono">

@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { CommandDock } from './components/CommandDock';
 import { AbbyChatbot } from './components/AbbyChatbot';
@@ -9,6 +9,7 @@ import { track1 } from './data/track1';
 import { track2 } from './data/track2';
 import { track3 } from './data/track3';
 import { track4 } from './data/track4';
+import { CURRENT_STUDIO_VERSION } from './data/changelogData';
 import './App.css';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -31,7 +32,7 @@ const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ de
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
-  const { theme, displaySize, editorFont, fontSize } = useSettingsStore();
+  const { theme, displaySize, editorFont, fontSize, lastSeenVersion, setLastSeenVersion } = useSettingsStore();
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
@@ -223,9 +224,62 @@ function App() {
 
         {/* Global PWA Install Prompt Banner & Guidance */}
         <PwaInstallPrompt />
+
+        {/* Studio Version Update Announcement Pill */}
+        <StudioAnnouncementPill 
+          lastSeenVersion={lastSeenVersion}
+          onOpenSettings={handleOpenSettings}
+          onDismiss={() => setLastSeenVersion(CURRENT_STUDIO_VERSION)}
+        />
       </div>
     </Router>
+  );
+}
 
+function StudioAnnouncementPill({
+  lastSeenVersion,
+  onOpenSettings,
+  onDismiss
+}: {
+  lastSeenVersion: string;
+  onOpenSettings: () => void;
+  onDismiss: () => void;
+}) {
+  const location = useLocation();
+  // Do not show floating announcement pill inside active coding IDE tracks
+  if (location.pathname.startsWith('/track')) return null;
+  if (lastSeenVersion === CURRENT_STUDIO_VERSION) return null;
+
+  return (
+    <div className="fixed bottom-20 md:bottom-6 left-4 md:left-6 z-[95] max-w-sm p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5 font-bold text-[var(--color-text-primary)]">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>OpenGuide v{CURRENT_STUDIO_VERSION} Live</span>
+        </div>
+        <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
+          Track 4, Mobile IDE Tabs, 50+ Abby answers
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5 shrink-0">
+        <button
+          onClick={() => {
+            onDismiss();
+            onOpenSettings();
+          }}
+          className="px-2.5 py-1 rounded-lg bg-[var(--color-accent)] text-black font-mono font-bold text-[11px] hover:opacity-90 transition-all cursor-pointer"
+        >
+          What's New
+        </button>
+        <button
+          onClick={onDismiss}
+          className="p-1 rounded-lg hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+          aria-label="Dismiss update notification"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
   );
 }
 
