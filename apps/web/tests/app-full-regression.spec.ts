@@ -953,7 +953,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     const iframe = coursesDialog.locator('iframe');
     await expect(iframe).toBeVisible();
     const iframeSrc = await iframe.getAttribute('src');
-    expect(iframeSrc).toContain('youtube-nocookie.com/embed/VMj-3S1tku0');
+    expect(iframeSrc).toContain('youtube.com/embed/VMj-3S1tku0');
 
     // Verify Chapter timestamps
     await expect(coursesDialog.locator('button:has-text("00:00")').first()).toBeVisible();
