@@ -55,7 +55,7 @@
 - **UI & Interaction Standards:** Emil Kowalski interaction craft (`emil-design-eng`, `animate`, `design-taste-frontend`, `impeccable`, `baseline-ui`). Animate compositor properties only (`transform`, `opacity`). Spring physics (`stiffness: 280, damping: 22`). WCAG AAA color contrast across 20 calibrated themes (10 Dark, 10 Light). Zero mentions of demeaning language ("dog"/"puppy"); use "The Intuition" and plain-language first principles.
 - **Language / i18n:** Multi-language persistent store (`en`, `es`, `zh`, `hi`, `fr`, `de`). Script-safe responsive line heights (avoid vertical text collisions in Devanagari, CJK, etc.).
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
-- **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+- **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>`.
 - **Dual-Remote Multi-Push Rule (Mandatory):** Both remote repositories must be updated simultaneously on every run/push:
   1. **Primary (Cloudflare Pages deploy target):** `https://github.com/openguideforai/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_OPEN`).
   2. **Secondary (Personal archive mirror):** `https://github.com/Adilrafiq001/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_ARD`).
