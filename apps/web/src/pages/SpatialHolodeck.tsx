@@ -32,7 +32,7 @@ export function SpatialHolodeck() {
     <div className="min-h-screen bg-[var(--color-primary,#09090b)] text-[var(--color-text-primary,#fafafa)] flex flex-col transition-colors selection:bg-[var(--color-accent,#10b981)] selection:text-black">
       
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 w-full border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-secondary)]/90 backdrop-blur-xl px-6 py-4 flex items-center justify-between shadow-sm">
+      <header className="sticky top-0 z-40 w-full border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-secondary)]/90 backdrop-blur-xl px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/')}
@@ -56,9 +56,9 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Graphics Tier Selector Quick Bar */}
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-[var(--color-text-secondary)] font-semibold hidden sm:inline">Compute Tier:</span>
-          <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm">
+        <div className="flex items-center gap-2 max-w-full overflow-x-auto no-scrollbar py-1">
+          <span className="text-[11px] font-mono text-[var(--color-text-secondary)] font-semibold hidden sm:inline shrink-0">Compute Tier:</span>
+          <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm shrink-0">
             <button
               onClick={() => setGraphicsTier('auto')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
@@ -132,7 +132,7 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-[var(--color-border)] gap-2">
+        <div className="flex border-b border-[var(--color-border)] gap-2 overflow-x-auto no-scrollbar max-w-full whitespace-nowrap pb-0.5">
           <button
             onClick={() => setActiveTab('vectors')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${

@@ -164,7 +164,7 @@ export function MagnificationDock({
   const mouseX = useMotionValue(Infinity);
 
   return (
-    <div className="flex max-w-[calc(100vw-1.5rem)] items-end justify-center pointer-events-auto h-[96px] pt-8 pb-3 overflow-visible">
+    <div className="flex max-w-[calc(100vw-1rem)] items-end justify-start sm:justify-center pointer-events-auto h-[96px] pt-8 pb-3 overflow-x-auto sm:overflow-visible no-scrollbar px-1">
       <motion.div
         onMouseMove={(e) => {
           mouseX.set(e.clientX);
@@ -172,7 +172,7 @@ export function MagnificationDock({
         onMouseLeave={() => {
           mouseX.set(Infinity);
         }}
-        className={`${className} flex items-end w-fit gap-2 sm:gap-2.5 rounded-[2.2rem] border border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-2xl p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-visible`}
+        className={`${className} flex items-end w-max gap-2 sm:gap-2.5 rounded-[2.2rem] border border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-2xl p-2 sm:p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-visible shrink-0`}
         style={{ minHeight: panelHeight }}
         role="toolbar"
         aria-label="Application dock"

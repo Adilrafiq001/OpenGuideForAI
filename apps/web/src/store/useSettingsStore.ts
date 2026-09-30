@@ -12,6 +12,7 @@ export type Theme =
 
 export interface SettingsState {
   theme: Theme;
+  displaySize: 'compact' | 'default' | 'large';
   fontSize: number;
   tabSize: number;
   vimMode: boolean;
@@ -28,6 +29,7 @@ export interface SettingsState {
   byokProvider: 'openai' | 'anthropic' | 'gemini' | 'openrouter';
   byokModel: string;
   setTheme: (theme: Theme) => void;
+  setDisplaySize: (size: 'compact' | 'default' | 'large') => void;
   setFontSize: (size: number) => void;
   setTabSize: (size: number) => void;
   setVimMode: (enabled: boolean) => void;
@@ -50,6 +52,7 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       theme: 'obsidian',
+      displaySize: 'default',
       fontSize: 14,
       tabSize: 2,
       vimMode: false,
@@ -66,6 +69,7 @@ export const useSettingsStore = create<SettingsState>()(
       byokProvider: 'openrouter',
       byokModel: 'google/gemini-2.5-flash',
       setTheme: (theme) => set({ theme }),
+      setDisplaySize: (displaySize) => set({ displaySize }),
       setFontSize: (fontSize) => set({ fontSize }),
       setTabSize: (tabSize) => set({ tabSize }),
       setVimMode: (vimMode) => set({ vimMode }),
@@ -82,6 +86,8 @@ export const useSettingsStore = create<SettingsState>()(
       setByokProvider: (byokProvider) => set({ byokProvider }),
       setByokModel: (byokModel) => set({ byokModel }),
       resetDefaults: () => set({
+        theme: 'obsidian',
+        displaySize: 'default',
         fontSize: 14,
         tabSize: 2,
         vimMode: false,

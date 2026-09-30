@@ -471,15 +471,15 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       </div>
 
       {/* Spatial Sub-Manifold Cluster Slicer Bar */}
-      <div className="px-5 py-2.5 bg-[var(--color-primary)]/70 border-b border-[var(--color-border)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-2">
-          <Layers size={14} className="text-[var(--color-accent)]" />
-          <span className="text-[var(--color-text-secondary)]">Isolate Sub-Manifold:</span>
+      <div className="px-3 sm:px-5 py-2.5 bg-[var(--color-primary)]/70 border-b border-[var(--color-border)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono max-w-full">
+        <div className="flex items-center gap-1.5 sm:gap-2 max-w-full overflow-x-auto no-scrollbar py-0.5">
+          <Layers size={14} className="text-[var(--color-accent)] shrink-0" />
+          <span className="text-[var(--color-text-secondary)] shrink-0">Isolate:</span>
           {(['all', 'neural', 'vector', 'math', 'agents'] as const).map(c => (
             <button
               key={c}
               onClick={() => setClusterFilter(c)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] capitalize transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] capitalize transition-all cursor-pointer shrink-0 ${
                 clusterFilter === c
                   ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]'

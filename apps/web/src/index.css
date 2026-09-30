@@ -17,6 +17,20 @@
   --color-accent-trans: var(--accent-transparent);
 }
 
+/* UI Scale / Display Size Engine */
+:root[data-display-size="compact"] {
+  --ui-scale: 0.92;
+  font-size: 14px;
+}
+:root[data-display-size="default"] {
+  --ui-scale: 1;
+  font-size: 16px;
+}
+:root[data-display-size="large"] {
+  --ui-scale: 1.08;
+  font-size: 17px;
+}
+
 html {
   scroll-behavior: smooth;
   overscroll-behavior-y: contain;
@@ -103,4 +117,51 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
 }
+
+/* Light Theme Contrast Calibration (WCAG AAA Compliance) */
+/* When in light mode, override low-contrast neon colors with high-contrast, accessible pigments */
+:root[data-theme-mode="light"], .light {
+  --color-emerald-contrast: #047857; /* emerald-700 */
+  --color-cyan-contrast: #0e7490;    /* cyan-700 */
+  --color-purple-contrast: #6b21a8;  /* purple-800 */
+  --color-amber-contrast: #b45309;   /* amber-700 */
+  --color-rose-contrast: #be123c;    /* rose-700 */
+  --color-blue-contrast: #1d4ed8;    /* blue-700 */
+}
+
+:root[data-theme-mode="light"] .text-emerald-400,
+.light .text-emerald-400 {
+  color: var(--color-emerald-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-cyan-400,
+.light .text-cyan-400 {
+  color: var(--color-cyan-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-purple-400,
+.light .text-purple-400 {
+  color: var(--color-purple-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-amber-400,
+.light .text-amber-400 {
+  color: var(--color-amber-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-rose-400,
+.light .text-rose-400 {
+  color: var(--color-rose-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-blue-400,
+.light .text-blue-400 {
+  color: var(--color-blue-contrast) !important;
+}
+
+:root[data-theme-mode="light"] .text-neutral-400,
+.light .text-neutral-400 {
+  color: #475569 !important; /* slate-600 */
+}
+
 

@@ -28,6 +28,7 @@ import { ThemeSwitch } from './ThemeSwitch';
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
   onOpenHelp?: () => void;
+  onOpenDrawer?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -40,7 +41,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, setTheme } = useSettingsStore();
   const { t } = useLanguageStore();
@@ -437,7 +438,8 @@ export function LandingHeader({ onOpenThemes }: LandingHeaderProps) {
 
         {/* Mobile Menu Toggle Button */}
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={onOpenDrawer || (() => setIsMobileMenuOpen(!isMobileMenuOpen))}
+          data-testid="landing-header-menu-btn"
           className="xl:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
           aria-label="Toggle navigation menu"
         >

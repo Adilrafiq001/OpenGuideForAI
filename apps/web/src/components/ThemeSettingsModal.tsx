@@ -40,6 +40,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   const { 
     theme, 
     setTheme, 
+    displaySize,
+    setDisplaySize,
     fontSize, 
     setFontSize, 
     wordWrap, 
@@ -108,7 +110,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -124,25 +126,26 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="relative w-full max-w-4xl max-h-[85vh] bg-[var(--color-secondary,#0d0d0f)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10"
+            className="theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] bg-[var(--color-secondary,#0d0d0f)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10"
+            data-testid="theme-settings-modal-dialog"
           >
             {/* Header */}
-            <div className="px-6 py-5 border-b border-[var(--color-border,rgba(255,255,255,0.1))] flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div className="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-[var(--color-border,rgba(255,255,255,0.1))] flex items-center justify-between">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-200"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-colors duration-200 shrink-0"
                   style={{ 
                     backgroundColor: `${activeThemeInfo.accent}20`,
                     color: activeThemeInfo.accent
                   }}
                 >
-                  <Palette weight="duotone" size={22} />
+                  <Palette weight="duotone" size={20} />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-primary,#fff)]">
+                  <h2 className="text-base sm:text-lg font-bold tracking-tight text-[var(--color-text-primary,#fff)]">
                     Workspace Personalization
                   </h2>
-                  <p className="text-xs text-[var(--color-text-secondary,#a1a1aa)]">
+                  <p className="text-[11px] sm:text-xs text-[var(--color-text-secondary,#a1a1aa)] line-clamp-1 sm:line-clamp-none">
                     Explore 20 calibrated themes (10 Dark & 10 Light) with real-time swatches & live preview
                   </p>
                 </div>
@@ -151,15 +154,16 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary)]/40 transition-colors"
-                aria-label="Close modal"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary)]/40 transition-colors cursor-pointer min-h-[44px] min-w-[44px] shrink-0"
+                aria-label="Close Theme Settings"
+                data-testid="close-theme-modal-btn"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="px-6 pt-3 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex items-center gap-2">
+            <div className="px-4 sm:px-6 pt-2.5 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex items-center gap-2 overflow-x-auto no-scrollbar">
               <button
                 onClick={() => setActiveTab('themes')}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 ${
@@ -251,6 +255,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         <button
                           type="button"
                           key={t.id}
+                          title={t.name}
+                          data-testid="theme-swatch-btn"
                           onMouseEnter={() => setHoveredTheme(t)}
                           onMouseLeave={() => setHoveredTheme(null)}
                           onClick={() => {
@@ -331,7 +337,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                 </div>
 
                 {/* Right: Live Interactive Theme Inspector / Preview */}
-                <div className="w-full md:w-80 bg-[var(--color-secondary)]/90 border-t md:border-t-0 md:border-l border-[var(--color-border)] p-6 flex flex-col justify-between overflow-y-auto">
+                <div className="hidden md:flex md:w-80 bg-[var(--color-secondary)]/90 border-t md:border-t-0 md:border-l border-[var(--color-border)] p-6 flex-col justify-between overflow-y-auto">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)]">
@@ -464,7 +470,32 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     <span>Typography & Code Canvas</span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Display Size / Scale */}
+                    <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Interface Scale</span>
+                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold capitalize">{displaySize}</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Optimizes touch targets and density across mobile & desktop.</p>
+                      <div className="flex gap-1.5">
+                        {(['compact', 'default', 'large'] as const).map(size => (
+                          <button
+                            key={size}
+                            onClick={() => setDisplaySize(size)}
+                            data-testid={`display-size-${size}-btn`}
+                            className={`flex-1 py-1.5 rounded-xl text-xs font-medium capitalize border transition-all cursor-pointer ${
+                              displaySize === size
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Font Size Control */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">
                       <div className="flex items-center justify-between">
@@ -501,7 +532,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     {/* Tab Size & Indentation */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Indentation (Tab Size)</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Indentation</span>
                         <span className="font-mono text-xs text-[var(--color-text-secondary)]">{tabSize} Spaces</span>
                       </div>
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Standard indentation width for Python code blocks.</p>
@@ -514,7 +545,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                               : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
-                          2 Spaces (Clean)
+                          2 Spaces
                         </button>
                         <button
                           onClick={() => setTabSize(4)}
@@ -524,7 +555,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                               : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
                           }`}
                         >
-                          4 Spaces (PEP 8)
+                          4 Spaces
                         </button>
                       </div>
                     </div>

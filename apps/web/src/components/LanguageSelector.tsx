@@ -38,11 +38,11 @@ export function LanguageSelector() {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-label="Select interface language"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group"
+        className="inline-flex items-center justify-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group min-h-[34px] min-w-[34px]"
       >
-        <Globe size={14} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300" />
-        <span className="font-semibold uppercase tracking-wider">{currentLang.code}</span>
-        <ChevronDown size={12} className={`opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <Globe size={15} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
+        <span className="hidden sm:inline font-semibold uppercase tracking-wider">{currentLang.code}</span>
+        <ChevronDown size={12} className={`hidden sm:inline opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>

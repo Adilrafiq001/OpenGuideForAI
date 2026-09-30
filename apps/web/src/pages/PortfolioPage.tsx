@@ -227,15 +227,16 @@ export function PortfolioPage() {
       `}</style>
 
       {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[var(--color-primary)]/80 backdrop-blur-md border-b border-[var(--color-border)] px-6 py-4 no-print">
+      <header className="sticky top-0 z-40 bg-[var(--color-primary)]/80 backdrop-blur-md border-b border-[var(--color-border)] px-4 sm:px-6 py-3 sm:py-4 no-print">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate('/')}
-              className="p-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all cursor-pointer flex items-center gap-2 text-xs font-mono"
+              className="p-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all cursor-pointer flex items-center gap-2 text-xs font-mono min-h-[40px] min-w-[40px]"
             >
               <ArrowLeft size={16} />
-              <span>Back to Overview</span>
+              <span className="hidden sm:inline">Back to Overview</span>
+              <span className="sm:hidden">Back</span>
             </button>
             <div className="h-4 w-px bg-[var(--color-border)] hidden sm:block" />
             <div className="flex items-center gap-2">
@@ -249,17 +250,18 @@ export function PortfolioPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
-              className="px-4 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer"
+              className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer min-h-[40px]"
             >
               <Printer size={16} className="text-[var(--color-accent)]" />
               <span className="hidden sm:inline">Export / Print Certificate</span>
+              <span className="sm:hidden">Print</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Content Container */}
-      <main className="max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12">
         
         {/* Hero Banner */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-8 border-b border-[var(--color-border)] no-print">
@@ -586,7 +588,7 @@ export function PortfolioPage() {
               </div>
 
               {/* THE CERTIFICATE CANVAS (Architectural & Printable) */}
-              <div className="certificate-container relative rounded-3xl bg-[var(--color-secondary)]/90 border-2 border-[var(--color-border)] p-8 sm:p-14 shadow-2xl overflow-hidden">
+              <div className="certificate-container relative rounded-2xl sm:rounded-3xl bg-[var(--color-secondary)]/90 border-2 border-[var(--color-border)] p-4 sm:p-8 md:p-14 shadow-2xl overflow-hidden">
                 {/* Watermark badge if in sample preview */}
                 {!isCertified && (
                   <div className="absolute top-6 right-6 z-20 pointer-events-none no-print border-2 border-dashed border-amber-500/60 bg-amber-500/15 text-amber-400 font-mono text-[10px] sm:text-xs px-3 py-1 rounded-lg uppercase tracking-widest font-bold">

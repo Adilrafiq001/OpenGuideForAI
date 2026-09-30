@@ -193,8 +193,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     <div className="h-[100dvh] w-full bg-[var(--color-primary)] text-[var(--color-text-primary)] font-sans overflow-hidden flex flex-col selection:bg-[var(--color-accent-trans)]">
       
       {/* Top Fixed Header Bar */}
-      <header className="h-13 px-4 sm:px-6 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-md flex items-center justify-between shrink-0 z-30">
-        <div className="flex items-center gap-3">
+      <header className="h-13 px-2 sm:px-6 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-md flex items-center justify-between shrink-0 z-30">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <Tooltip
             position="bottom"
             content="Exit to Overview"
@@ -202,10 +202,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           >
             <button
               onClick={() => navigate(`/track/${trackNum}/intro`)}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98]"
+              aria-label={t('ide_exit')}
+              className="flex items-center justify-center gap-1.5 p-2 sm:px-2.5 sm:py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98] min-h-[40px] min-w-[40px] sm:min-h-[32px] sm:min-w-0"
             >
-              <ArrowLeft size={13} />
-              <span>{t('ide_exit')}</span>
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">{t('ide_exit')}</span>
             </button>
           </Tooltip>
 
@@ -220,11 +221,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         </div>
 
         {/* Mobile Viewport Tab Switcher (<lg screens) */}
-        <div className="flex lg:hidden items-center p-0.5 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono">
+        <div className="flex lg:hidden items-center p-0.5 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono shrink-0">
           <button
             data-testid="mobile-tab-briefing"
             onClick={() => setMobileTab('briefing')}
-            className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+            className={`px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-full transition-all cursor-pointer min-h-[36px] sm:min-h-[30px] ${
               mobileTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
             }`}
           >
@@ -233,7 +234,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <button
             data-testid="mobile-tab-editor"
             onClick={() => setMobileTab('editor')}
-            className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+            className={`px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-full transition-all cursor-pointer min-h-[36px] sm:min-h-[30px] ${
               mobileTab === 'editor' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)]'
             }`}
           >
@@ -242,13 +243,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         </div>
 
         {/* Right Navigation & Tools */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
           <Tooltip
             position="bottom"
             content="Module Progress"
             subtitle={`Lesson ${currentLessonIdx + 1} of ${currentModule.lessons.length} in Module ${trackNum}.${currentModuleIdx + 1}`}
           >
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-[11px] font-mono text-[var(--color-text-secondary)]">
+            <div className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span className="text-[var(--color-accent)] font-bold">L{currentLessonIdx + 1}</span>
               <span>/</span>
               <span>{currentModule.lessons.length}</span>
@@ -266,15 +267,15 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               data-testid="xray-toggle-btn"
               onClick={() => setIsXRayOpen(true)}
               aria-label="Toggle X-Ray Debug Lens"
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-all cursor-pointer active:scale-[0.98] min-h-[34px]"
+              className="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-all cursor-pointer active:scale-[0.98] min-h-[40px] min-w-[40px] sm:min-h-[34px] sm:min-w-0"
             >
-              <Eye size={14} className="text-emerald-400 shrink-0" />
+              <Eye size={15} className="text-emerald-400 shrink-0" />
               <span className="font-bold hidden sm:inline">{t('ide_xray_btn')}</span>
               <span className="hidden xl:inline text-[10px] text-emerald-400/60 font-mono">[Alt+X]</span>
             </button>
           </Tooltip>
           
-          <div className="w-px h-4 bg-[var(--color-border)]" />
+          <div className="w-px h-4 bg-[var(--color-border)] hidden sm:block" />
           
           <LanguageSelector />
           
@@ -561,7 +562,17 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 <span className="font-bold text-[var(--color-text-primary)]">main.py</span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  data-testid="ide-toggle-abby-btn"
+                  onClick={() => window.dispatchEvent(new CustomEvent('openguide:toggle-abby'))}
+                  className="px-2 py-0.5 rounded text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                  title="Ask Abby AI Assistant"
+                >
+                  <Sparkle size={13} className="text-cyan-400 fill-cyan-400" />
+                  <span>Abby AI</span>
+                </button>
+
                 <Tooltip
                   position="bottom"
                   content={t('ide_reset_code')}
@@ -626,7 +637,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   >
                     <button
                       onClick={advanceNextLesson}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98]"
+                      className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98] min-h-[44px]"
                     >
                       <span>{t('ide_next_lesson')}</span>
                     </button>
@@ -641,9 +652,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   shortcut="Ctrl+↵"
                 >
                   <button
+                    data-testid="run-code-button"
                     onClick={executeCode}
                     disabled={state !== 'ready' && state !== 'running'}
-                    className={`flex items-center gap-2 rounded-full px-5 py-2 font-medium text-xs sm:text-sm transition-all active:scale-[0.98] cursor-pointer shadow-md ${
+                    className={`flex items-center gap-2 rounded-full px-5 py-2.5 font-medium text-xs sm:text-sm transition-all active:scale-[0.98] cursor-pointer shadow-md min-h-[44px] ${
                       state === 'ready' || state === 'running'
                         ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] hover:opacity-90' 
                         : 'bg-[var(--color-tertiary)] text-[var(--color-text-secondary)] cursor-not-allowed opacity-50'
@@ -661,7 +673,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </div>
 
           {/* Console Output Terminal Panel */}
-          <div className="h-36 sm:h-44 shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm">
+          <div data-testid="terminal-container" className="h-36 sm:h-44 shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm">
             <div className="rounded-xl bg-[var(--color-primary)] h-full p-3 flex flex-col overflow-hidden">
               
               <div className="flex items-center justify-between mb-2 border-b border-[var(--color-border)] pb-1.5 shrink-0 text-xs font-mono">
@@ -687,6 +699,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               
               <div 
                 id="terminal-output" 
+                data-testid="terminal-output"
                 className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
                 {state === 'running' ? (
                   <div className="py-2 flex items-center justify-center">

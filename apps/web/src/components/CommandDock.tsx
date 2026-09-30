@@ -30,7 +30,10 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
   const navigate = useNavigate();
   const location = useLocation();
   const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
-  const [isMinimized, setIsMinimized] = useState(() => isEngine);
+  const [isMinimized, setIsMinimized] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
+    return isEngine;
+  });
 
   // Auto-minimize when entering the active IDE workspace
   useEffect(() => {
@@ -144,15 +147,17 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
   if (isMinimized) {
     return (
       <div 
-        className="fixed left-6 z-[100]"
+        className="hidden md:block fixed left-3 sm:left-6 z-[100]"
         style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <button
           onClick={() => setIsMinimized(false)}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--color-secondary)]/90 backdrop-blur-md border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xl hover:border-[var(--color-accent)] transition-all cursor-pointer"
+          data-testid="show-command-dock-btn"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--color-secondary)]/95 backdrop-blur-md border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xl hover:border-[var(--color-accent)] transition-all cursor-pointer min-h-[44px]"
           title="Restore Command Dock"
+          aria-label="Show Command Dock"
         >
-          <Eye size={14} className="text-[var(--color-accent)]" />
+          <Eye size={16} className="text-[var(--color-accent)]" />
           <span>Show Dock</span>
         </button>
       </div>
@@ -161,7 +166,8 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
 
   return (
     <div 
-      className="fixed left-1/2 -translate-x-1/2 z-[100] pointer-events-auto overflow-visible"
+      data-testid="command-dock-wrapper"
+      className="hidden md:flex fixed left-1/2 -translate-x-1/2 z-[100] pointer-events-auto max-w-[calc(100vw-1rem)] overflow-visible"
       style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
     >
       <MagnificationDock

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Settings, X, Copy, Check, Maximize2, Minimize2, Zap, Download } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -24,6 +25,8 @@ interface AbbyChatbotProps {
 }
 
 export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
+  const location = useLocation();
+  const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
   const [isOpen, setIsOpen] = useState(false);
   const [chatSize, setChatSize] = useState<'standard' | 'expanded' | 'compact'>('standard');
   const [query, setQuery] = useState('');
@@ -74,6 +77,15 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       setTimeout(() => textareaRef.current?.focus(), 150);
     }
   }, [isOpen]);
+
+  // Global event listener to toggle Abby from custom triggers (e.g. IDE header button)
+  useEffect(() => {
+    const handleToggle = () => {
+      setIsOpen(prev => !prev);
+    };
+    window.addEventListener('openguide:toggle-abby', handleToggle);
+    return () => window.removeEventListener('openguide:toggle-abby', handleToggle);
+  }, []);
 
   const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
@@ -325,7 +337,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   };
 
   return (
-    <div className={`abby-floating-anchor ${isOpen ? 'is-open' : ''}`} id="abby-copilot">
+    <div className={`abby-floating-anchor ${isOpen ? 'is-open' : ''} ${isEngine ? 'in-engine' : ''}`} id="abby-copilot">
       <div className={`container-ai-input ${isOpen ? 'is-open' : ''} size-${chatSize}`}>
         {/* 15 3D Mouse Hover Tilt Areas */}
         <div className="area" onClick={() => setIsOpen(true)} />
@@ -382,7 +394,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
             </div>
 
             {/* Post-Click Chat Interface */}
-            <div className="container-ai-chat" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+            <div data-testid="abby-chat-window" className="container-ai-chat" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
               <div className="chat">
                 {/* Header with Title & Controls */}
                 <div className="abby-chat-header">

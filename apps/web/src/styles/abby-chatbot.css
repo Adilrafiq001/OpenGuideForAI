@@ -3,13 +3,26 @@
 
 .abby-floating-anchor {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1rem + env(safe-area-inset-right, 0px));
   z-index: 95;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .abby-floating-anchor {
+    bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+    right: calc(0.75rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (max-width: 1023px) {
+  .abby-floating-anchor.in-engine:not(.is-open) {
+    display: none !important;
+  }
 }
 
 .abby-floating-anchor:has(.is-open),
@@ -749,3 +762,49 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
     height: 18px;
   }
 }
+
+/* Mobile Responsive Bottom-Sheet Presentation (< 640px) */
+@media (max-width: 640px) {
+  .abby-floating-anchor.is-open,
+  .abby-floating-anchor:has(.is-open) {
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) 8px !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    pointer-events: auto !important;
+  }
+
+  .container-ai-input.is-open,
+  .container-ai-input.is-open.size-compact,
+  .container-ai-input.is-open.size-standard,
+  .container-ai-input.is-open.size-expanded {
+    width: 100% !important;
+    max-width: calc(100vw - 16px) !important;
+    height: 85dvh !important;
+    max-height: 85dvh !important;
+    margin: 0 auto !important;
+  }
+
+  .container-wrap input:checked + .card .content-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 1.5rem !important;
+  }
+
+  .abby-header-actions {
+    gap: 4px !important;
+  }
+
+  .abby-icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+

@@ -84,7 +84,7 @@ export function HeroPhysicsStage({
   };
 
   return (
-    <section className="relative pt-28 pb-16 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center text-center overflow-visible">
+    <section className="relative pt-28 pb-16 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center text-center overflow-x-clip">
       {/* Hardware-Accelerated Zero-Blur Radial Ambient Glows (Compositor-Safe) */}
       <div 
         className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] sm:w-[850px] sm:h-[450px] rounded-full opacity-15 pointer-events-none"
@@ -219,8 +219,8 @@ export function HeroPhysicsStage({
         </div>
 
         {/* Console Lens Switcher Bar */}
-        <div className="px-5 py-2.5 border-b border-[var(--color-border)] bg-black/[0.02] dark:bg-black/20 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
+        <div className="px-3 sm:px-5 py-2.5 border-b border-[var(--color-border)] bg-black/[0.02] dark:bg-black/20 flex flex-wrap items-center justify-between gap-2 max-w-full">
+          <div className="flex items-center gap-1.5 max-w-full overflow-x-auto no-scrollbar py-0.5">
             {[
               { id: 'wasm' as const, label: t('hero_console_tab_wasm'), icon: Terminal },
               { id: 'vector' as const, label: t('hero_console_tab_vector'), icon: Database },
@@ -234,7 +234,7 @@ export function HeroPhysicsStage({
                 <button
                   key={lens.id}
                   onClick={() => setActiveLens(lens.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-2 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
                     isActive
                       ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-semibold'
                       : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-black/5 dark:hover:bg-white/5'

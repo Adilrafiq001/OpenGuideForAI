@@ -56,7 +56,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
     <div className="min-h-[100dvh] bg-[var(--color-primary,#050505)] text-[var(--color-text-primary,#ebebeb)] selection:bg-[var(--color-accent,#10b981)] selection:text-black font-sans pb-32 transition-colors duration-300">
       
       {/* Top Navigation & Close / Back Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-12 py-3 sm:py-4 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]">
         <div className="flex items-center gap-4">
           <Tooltip
             position="bottom"
@@ -125,7 +125,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-6xl mx-auto pt-28 px-6 md:px-12">
+      <main className="max-w-6xl mx-auto pt-20 sm:pt-28 px-4 sm:px-6 md:px-12">
         
         {/* Banner Hero */}
         <div className="mb-12">
@@ -182,7 +182,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             </div>
 
             {/* Specs Strip */}
-            <div className="grid grid-cols-3 gap-3 mt-6 pt-5 border-t border-[var(--color-border)] font-mono text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-6 pt-5 border-t border-[var(--color-border)] font-mono text-xs">
               <div className="p-2.5 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)]">
                 <span className="text-[10px] text-[var(--color-text-secondary)] uppercase block">Engine</span>
                 <span className="font-bold text-[var(--color-text-primary)]">Pyodide 0.26</span>

@@ -12,6 +12,8 @@ import './App.css';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
+import { MobileBottomNav } from './components/MobileBottomNav';
+import { MobileNavDrawer } from './components/MobileNavDrawer';
 
 // Modals: Lazy-load offscreen modals so they are not included in the initial page bundle
 const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
@@ -25,10 +27,11 @@ const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ de
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
-  const { theme } = useSettingsStore();
+  const { theme, displaySize } = useSettingsStore();
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
 
   // Remove pre-bootstrap style tag and inline overrides once React hydrates
   useEffect(() => {
@@ -56,6 +59,11 @@ function App() {
     document.body.style.color = 'var(--text-primary)';
   }, [theme]);
 
+  // Synchronize data-display-size on root HTML document element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-display-size', displaySize || 'default');
+  }, [displaySize]);
+
   const handleOpenThemes = () => {
     setInitialModalTab('themes');
     setIsThemeModalOpen(true);
@@ -72,7 +80,7 @@ function App() {
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
           <Suspense fallback={<div className="min-h-screen bg-[var(--color-primary)]" />}>
             <Routes>
-              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} />} />
+              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} />} />
               <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
               <Route path="/track/0" element={<CoursePlayer track={track0} />} />
               <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
@@ -92,11 +100,24 @@ function App() {
           </Suspense>
         </ErrorBoundary>
 
-        {/* Global Floating Magnification Dock */}
+        {/* Global Floating Magnification Dock (Desktop md:flex only) */}
         <CommandDock 
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
           onOpenHelp={() => setIsHelpModalOpen(true)}
+        />
+
+        {/* Native-Grade Mobile Bottom Navigation Bar (<md screens only) */}
+        <MobileBottomNav 
+          onOpenDrawer={() => setIsNavDrawerOpen(true)}
+        />
+
+        {/* Luxury Mobile Navigation Sheet Drawer */}
+        <MobileNavDrawer 
+          isOpen={isNavDrawerOpen}
+          onClose={() => setIsNavDrawerOpen(false)}
+          onOpenThemes={handleOpenThemes}
+          onOpenSettings={handleOpenSettings}
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}

@@ -21,6 +21,7 @@ const FreeToolsModal = lazy(() => import('../components/FreeToolsModal').then(m 
 interface LandingPageProps {
   onOpenThemes?: () => void;
   onOpenHelp?: () => void;
+  onOpenDrawer?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -33,7 +34,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
+export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingPageProps) {
   const navigate = useNavigate();
   const { theme } = useSettingsStore();
   const { language, t } = useLanguageStore();
@@ -196,7 +197,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp }: LandingPageProps) {
       <ScrollProgressBar />
 
       {/* Top Glass Navigation Header (Isolated Leaf Component) */}
-      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} />
+      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
       <main id="main-content">
