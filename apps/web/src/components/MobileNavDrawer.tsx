@@ -109,6 +109,16 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       icon: ShieldCheck,
       path: '/track/3/intro',
       color: '#f59e0b'
+    },
+    {
+      id: 'track4',
+      num: '4',
+      title: 'Frontier Intelligence & Systems',
+      badge: 'Attention & MCP',
+      desc: 'Transformers, KV-cache dynamics, reasoning search & MCP tools',
+      icon: Sparkles,
+      path: '/track/4/intro',
+      color: '#f43f5e'
     }
   ];
 

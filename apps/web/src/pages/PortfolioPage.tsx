@@ -17,12 +17,14 @@ import {
   Key, 
   ExternalLink,
   Download,
-  Upload
+  Upload,
+  Sparkles
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
+import { track4 } from '../data/track4';
 import { useProgressStore } from '../store/useProgressStore';
 
 const STUDENT_NAME_KEY = 'openguide_student_name';
@@ -66,7 +68,7 @@ export function PortfolioPage() {
 
   const [verificationHash, setVerificationHash] = useState<string>('Computing verification signature...');
   const [copiedHash, setCopiedHash] = useState(false);
-  const [selectedTrackFilter, setSelectedTrackFilter] = useState<'all' | '0' | '1' | '2' | '3'>('all');
+  const [selectedTrackFilter, setSelectedTrackFilter] = useState<'all' | '0' | '1' | '2' | '3' | '4'>('all');
   const [showSamplePreview, setShowSamplePreview] = useState(false);
 
   // Build uniform track structure
@@ -99,11 +101,12 @@ export function PortfolioPage() {
       formatTrack(track0, 0, 'Kernel Architect', 'CPython WebAssembly & System Runtimes', Cpu, 'text-emerald-400', 'border-emerald-500/40'),
       formatTrack(track1, 1, 'Geometrician', 'High-Dimensional Manifolds & Semantic Vectors', Layers, 'text-cyan-400', 'border-cyan-500/40'),
       formatTrack(track2, 2, 'Agent Commander', 'Multi-Hop RAG & Autonomous ReAct Loops', Terminal, 'text-violet-400', 'border-violet-500/40'),
-      formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-400', 'border-amber-500/40')
+      formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-400', 'border-amber-500/40'),
+      formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Sparkles, 'text-rose-400', 'border-rose-500/40')
     ];
   }, []);
 
-  const totalCurriculumLabs = 36;
+  const totalCurriculumLabs = allTracks.reduce((acc, t) => acc + t.lessons.length, 0);
   const completedCount = completedLessonIds.length;
   const progressPercent = Math.min(100, Math.round((completedCount / totalCurriculumLabs) * 100));
   const isCertified = completedCount >= totalCurriculumLabs;
@@ -540,7 +543,7 @@ export function PortfolioPage() {
                       </span>
                     ) : (
                       <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold flex items-center gap-1">
-                        <Lock size={12} /> Sample Preview Mode ({completedCount}/36 Labs)
+                        <Lock size={12} /> Sample Preview Mode ({completedCount}/{totalCurriculumLabs} Labs)
                       </span>
                     )}
                   </div>
@@ -550,7 +553,7 @@ export function PortfolioPage() {
                   <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
                     {isCertified 
                       ? 'Congratulations, Engineer! Your name is applied locally onto the certificate below.'
-                      : 'Sample preview showing how your conferred document will appear upon completing all 36 labs.'}
+                      : `Sample preview showing how your conferred document will appear upon completing all ${totalCurriculumLabs} labs.`}
                   </p>
                 </div>
 
@@ -708,12 +711,12 @@ export function PortfolioPage() {
           )}
         </div>
 
-        {/* SECTION: Complete 36-Lab Transcript Audit */}
+        {/* SECTION: Complete Curriculum Transcript Audit */}
         <div className="space-y-6 no-print">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">
-                36-Lab Curriculum Transcript
+                {totalCurriculumLabs}-Lab Curriculum Transcript
               </h2>
               <span className="text-xs text-[var(--color-text-secondary)]">
                 Granular status of all exercises and boss project challenges
@@ -722,7 +725,7 @@ export function PortfolioPage() {
 
             {/* Filter buttons */}
             <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] overflow-x-auto max-w-full">
-              {(['all', '0', '1', '2', '3'] as const).map(f => (
+              {(['all', '0', '1', '2', '3', '4'] as const).map(f => (
                 <button
                   key={f}
                   onClick={() => setSelectedTrackFilter(f)}
@@ -732,7 +735,7 @@ export function PortfolioPage() {
                       : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                   }`}
                 >
-                  {f === 'all' ? 'All 36' : `Track ${f}`}
+                  {f === 'all' ? `All ${totalCurriculumLabs}` : `Track ${f}`}
                 </button>
               ))}
             </div>

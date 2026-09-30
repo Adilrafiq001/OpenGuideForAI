@@ -449,6 +449,17 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
                       </div>
                       <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
                     </button>
+
+                    <button
+                      onClick={() => { setIsTracksMenuOpen(false); navigate('/track/4/intro'); }}
+                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Sparkles size={14} className="text-rose-400" />
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)]">Track 4: Frontier</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">9 Labs</span>
+                    </button>
                   </div>
                 </motion.div>
               )}
@@ -546,6 +557,16 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
                   <span>Track 3: Production Evals & Security</span>
                 </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 3</span>
+              </button>
+              <button 
+                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/4/intro'); }}
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
+              >
+                <span className="flex items-center gap-2">
+                  <Sparkles size={16} style={{ color: currentThemeInfo.accent }} />
+                  <span>Track 4: Frontier Intelligence & Systems</span>
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 4</span>
               </button>
               <a 
                 href="#pathways" 

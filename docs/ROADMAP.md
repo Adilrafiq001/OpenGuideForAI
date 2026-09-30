@@ -68,6 +68,14 @@
 - [x] Integrated 8 Karpathy lectures, timestamp chapter seeking, live searchable transcript, and 1-click Markdown/Text export.
 - [x] In-App Runnable Python First-Principles code snippets and comprehensive syllabi.
 - [x] Four Tools. Zero Subscriptions. Idiot-Proof Setup Guides (`FreeToolsModal.tsx`) across Memory, Glue, Compute, and Hosting.
+
+## Phase 7: Frontier Intelligence & System Foundations (Active / Delivered)
+- [x] Track 4 Module 1: The Transformer Engine & Attention Mechanics (Scaled Dot-Product Attention from scratch, Multi-Head projection, KV-Cache memory scaling).
+- [x] Track 4 Module 2: Reasoning Models & Test-Time Compute (Tree-of-Thoughts search with self-critique pruning, FSM constrained decoding, Model Context Protocol JSON-RPC 2.0).
+- [x] Track 4 Module 3: Local Small Language Models & Optimization (Affine INT8/INT4 weight quantization, Direct Preference Optimization mathematical loss, Capstone Autonomous Reasoning Agent).
+- [x] 4 New Interactive First Principles Models (Attention Q/K/V, KV-Cache Scaling, Reasoning Tokens / Test-Time Search, MCP Protocol).
+- [x] Total curriculum expanded to 5 Tracks and 45 certified in-browser labs.
+- [x] Portfolio 5th Master Track Badge (*Frontier Architect*).
 - [x] Granular step-by-step setup guides for Chroma, Qdrant, pgvector, LangChain, LlamaIndex, Colab, Kaggle, Hugging Face, and Streamlit.
 - [x] Verification smoke tests with expected terminal outputs and 2026 Free Tier Quota notices with local alternatives.
 - [x] Header Responsive De-Cluttering eliminating horizontal collisions across all screen sizes (375px to 1440px).

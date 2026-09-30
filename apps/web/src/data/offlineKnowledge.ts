@@ -100,6 +100,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     codeSnippet: '# Canary Token Defense:\nSECRET_CANARY = "CANARY_X99"\ndef sanitize_output(output):\n    if SECRET_CANARY in output:\n        raise SecurityError("Prompt injection exfiltration detected!")',
     takeaway: 'Unmonitored AI is a liability. Defend systems with automated fuzzing, canaries, and strict evaluators.'
   },
+  {
+    id: 'track-4-frontier',
+    keywords: ['track 4', 'frontier', 'transformer', 'attention', 'qkv', 'kv-cache', 'reasoning', 'test-time', 'tot', 'mcp', 'quantization', 'dpo'],
+    title: 'Track 4: Frontier Intelligence & System Foundations',
+    category: 'curriculum',
+    summary: '9 labs mastering scaled dot-product attention, multi-head projections, KV-cache scaling, Tree-of-Thoughts reasoning, MCP tool dispatch, and DPO alignment.',
+    explanation: 'Track 4 unites eternal deep learning foundations with modern frontier architectures. Module 4.1 implements Scaled Dot-Product Attention (Q, K, V), multi-head decomposition, and KV-cache memory sizing. Module 4.2 implements test-time reasoning search trees (Tree-of-Thoughts), constrained FSM decoding, and the Model Context Protocol (MCP JSON-RPC 2.0). Module 4.3 delivers affine INT8/INT4 weight quantization, Direct Preference Optimization (DPO) mathematical loss, and the Capstone Autonomous Reasoning Agent.',
+    codeSnippet: '# Scaled Dot-Product Attention:\n# Attention(Q, K, V) = Softmax( (Q @ K.T) / sqrt(d_k) ) @ V\nscale = 1.0 / math.sqrt(d_k)\nscores = [[val * scale for val in row] for row in matrix_multiply(Q, K_T)]',
+    takeaway: 'Master the timeless linear algebra of attention and the cutting-edge of reasoning search and MCP.'
+  },
 
   // ---------------------------------------------------------------------------
   // 3. INTERACTIVE LABS & SPATIAL SUITE

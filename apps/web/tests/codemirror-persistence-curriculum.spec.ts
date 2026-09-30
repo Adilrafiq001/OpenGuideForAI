@@ -126,4 +126,21 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     await expect(page.locator('.abby-message-bubble.assistant').nth(1)).toContainText('Track 1');
   });
 
+  test('06. Track 4: Frontier Intelligence mounts with 9 labs and scaled dot-product attention', async ({ page }) => {
+    await page.goto('/track/4/engine', { waitUntil: 'domcontentloaded' });
+
+    // Wait for the CodeMirror editor to render
+    const cmEditor = page.locator('.cm-editor').first();
+    await expect(cmEditor).toBeVisible({ timeout: 15000 });
+
+    // Verify content has attention Q, K, V formula and TODO
+    const cmContent = page.locator('.cm-content').first();
+    await expect(cmContent).toBeVisible();
+    await expect(cmContent).toContainText('Scaled Dot-Product Attention');
+
+    // Verify Briefing header displays Track 4 lesson title
+    await expect(page.locator('text=Scaled Dot-Product Attention from Scratch (Q, K, V)').first()).toBeVisible();
+  });
+
 });
+

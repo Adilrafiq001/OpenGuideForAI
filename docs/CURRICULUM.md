@@ -86,6 +86,21 @@ Every module and curriculum milestone is anchored in three universal questions:
   - *Lesson 3.3.2:* Resilient Fallback State Machine & Exponential Backoff (429/503 retry routing and fallback cascading).
   - *Lesson 3.3.3:* Boss Project: Production Evaluation & Security Harness (`ProductionEvalSuite` complete certification report).
 
+### Track 4: Frontier Intelligence & System Foundations
+**Goal:** Master the eternal mathematical foundations of transformers, KV-cache dynamics, test-time reasoning search trees, Model Context Protocol (MCP), and local edge quantization without server bills.
+- **Module 4.1: The Transformer Engine & Attention Mechanics (Eternal Foundations)**
+  - *Lesson 4.1.1:* Scaled Dot-Product Attention from Scratch ($Q, K, V$ Matrices) ($\text{Attention}(Q, K, V) = \text{Softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$).
+  - *Lesson 4.1.2:* Multi-Head Projection & Subspace Decomposition (Parallel projections across $h$ representation heads).
+  - *Lesson 4.1.3:* KV-Cache Dynamics & Production Memory Sizing ($\text{Memory} = 2 \times L \times H \times D \times T \times \text{bytes}$, avoidance of $O(N^2)$ recomputation).
+- **Module 4.2: Reasoning Models & Test-Time Compute (The Modern Era)**
+  - *Lesson 4.2.1:* Tree-of-Thoughts & Self-Critique Search Trees (Test-time compute scaling, hypothesis branch generation, critique pruning).
+  - *Lesson 4.2.2:* Constrained Decoding & Finite State Machine (FSM) Grammars (Logit masking enforcing 100% syntactically valid JSON schemas).
+  - *Lesson 4.2.3:* Model Context Protocol (MCP) JSON-RPC 2.0 Dispatcher (Open standard tool discovery, parameter schema validation, error code `-32601`).
+- **Module 4.3: Local Small Language Models & Optimization ($0 Edge AI)**
+  - *Lesson 4.3.1:* Weight Quantization from Scratch (FP32 to INT8 / INT4 affine symmetric scaling).
+  - *Lesson 4.3.2:* Direct Preference Optimization (DPO) Loss from Scratch (Implicit reward modeling and closed-form mathematical alignment).
+  - *Lesson 4.3.3:* Boss Project: The Autonomous Frontier Reasoning Agent (`AutonomousReasoningEngine` full-stack synthesis).
+
 ---
 
 ## Beginner-to-Pro Pedagogical Assessment & Modular Evolution Plan

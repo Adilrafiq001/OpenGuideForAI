@@ -832,8 +832,8 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await simulateBtn.click();
     await page.waitForTimeout(400);
 
-    // Verify Mastered badges
-    await expect(page.locator('text=36 / 36').first()).toBeVisible();
+    // Verify Mastered badges (45 / 45 labs across 5 tracks)
+    await expect(page.locator('text=45 / 45').first()).toBeVisible();
     await expect(page.locator('text=MASTERED').first()).toBeVisible();
 
     // 2. Verify The Synapse Lounge on Landing Page (/)

@@ -422,5 +422,154 @@ export const FIRST_PRINCIPLES_MATRIX: FirstPrincipleQuestion[] = [
       de: 'Nutzen Sie 0.0 für Code und JSON-Strukturen; erhöhen Sie auf 0.7+ für kreatives Brainstorming.'
     },
     tags: ['Softmax', 'Inference', 'Hyperparameters']
+  },
+  {
+    id: 'how-attention-works',
+    category: 'how',
+    pillLabel: {
+      en: 'How Attention Works (Q, K, V)',
+      es: '¿Cómo Funciona la Atención (Q, K, V)?',
+      zh: 'Attention（注意力机制 Q, K, V）如何运行？',
+      hi: 'अटेंशन (Q, K, V) कैसे काम करता है?',
+      fr: 'Comment Fonctionne l’Attention (Q, K, V) ?',
+      de: 'Wie funktioniert Attention (Q, K, V)?'
+    },
+    title: {
+      en: 'How Attention Actually Works: The Mathematics of Q, K, and V',
+      es: 'Cómo funciona la atención: las matemáticas detrás de Query, Key y Value',
+      zh: '注意力机制核心数学原理：Query（查询）、Key（键）与 Value（值）',
+      hi: 'अटेंशन का वास्तविक गणित: Query, Key और Value की कार्यप्रणाली',
+      fr: 'Le fonctionnement mathématique de l’attention : Query, Key et Value',
+      de: 'Mathematik des Attention-Mechanismus: Query, Key und Value'
+    },
+    explanation: {
+      en: 'Attention is mathematically modeled as a content-addressable memory lookup: Attention(Q, K, V) = Softmax( (Q · K^T) / sqrt(d_k) ) · V. The Query vector represents what a token is asking for, Key vectors represent what other tokens contain, and Value vectors represent their information payload. The dot product measures alignment, scaled by 1/sqrt(d_k) to prevent vanishing gradients.',
+      es: 'La atención funciona como una memoria asociativa: Query busca, Key compara relevancia mediante producto punto, y Value aporta la información, escalado por 1/sqrt(d_k) para mantener estabilidad numérica.',
+      zh: '注意力机制在本质上是一个可寻址的关联内容查找器：Query（查询向量）提出需求，Key（键向量）声明自身内容，两者的点积计算出相关性权重，再经 1/sqrt(d_k) 缩放避免梯度消失，最后对 Value（值向量）进行加权求和。',
+      hi: 'अटेंशन एक कंटेंट-एड्रेसेबल मेमोरी की तरह है: Query मांग करता है, Key तुलना करता है, और Value वास्तविक जानकारी देता है। 1/sqrt(d_k) द्वारा स्केलिंग ग्रेडिएंट को स्थिर रखती है।',
+      fr: 'L’attention est une recherche en mémoire adressable : Query interroge, Key évalue la pertinence par produit scalaire, et Value fournit l’information pondérée par Softmax.',
+      de: 'Attention ist ein inhaltsadressierbarer Speicherabruf: Query fragt an, Key vergleicht Relevanz per Skalarprodukt, und Value liefert die gewichtete Repräsentation.'
+    },
+    takeaway: {
+      en: 'Attention is dynamic memory routing: Query asks, Key matches, Value provides.',
+      es: 'La atención es enrutamiento dinámico: Query pregunta, Key coincide, Value provee.',
+      zh: '注意力机制是动态记忆路由：Query 提出需求，Key 精确匹配，Value 提供内容。',
+      hi: 'अटेंशन गतिशील मेमोरी रूटिंग है: Query पूछता है, Key मेल खाता है, Value सामग्री देता है।',
+      fr: 'L’attention est un routage dynamique : Query demande, Key associe, Value fournit.',
+      de: 'Attention ist dynamisches Speicher-Routing: Query fragt, Key verknüpft, Value liefert.'
+    },
+    tags: ['Transformers', 'Attention', 'Linear Algebra']
+  },
+  {
+    id: 'how-kv-cache-works',
+    category: 'how',
+    pillLabel: {
+      en: 'Why KV-Cache is Essential',
+      es: '¿Por qué el KV-Cache es Esencial?',
+      zh: '为什么 KV-Cache（键值缓存）不可或缺？',
+      hi: 'KV-Cache क्यों आवश्यक है?',
+      fr: 'Pourquoi le KV-Cache est Indispensable ?',
+      de: 'Warum der KV-Cache unverzichtbar ist'
+    },
+    title: {
+      en: 'Why LLM Memory Explodes: The Invariant Mechanics of the KV-Cache',
+      es: 'Por qué explota la memoria en LLMs: la mecánica del KV-Cache',
+      zh: '为什么大模型推理显存会暴涨？KV-Cache 核心机制与内存计算',
+      hi: 'एलएलएम मेमोरी क्यों तेजी से बढ़ती है: KV-Cache का सिद्धांत',
+      fr: 'Pourquoi la mémoire s’emballe en inférence : le rôle clé du KV-Cache',
+      de: 'Warum der Speicherbedarf explodiert: Die Mechanik des KV-Cache'
+    },
+    explanation: {
+      en: 'During autoregressive token generation, past tokens do not change. Computing each new token would take O(N^2) if we recalculated past Keys and Values. The KV-Cache preserves past Keys and Values in VRAM. However, memory scales linearly with sequence length: Memory = 2 * layers * heads * d_head * tokens * bytes. At 128k context, KV-cache can exceed 40GB+ of VRAM.',
+      es: 'Al generar texto, recomputar cada token costaría O(N^2). El KV-Cache guarda los Keys y Values en VRAM para generar a O(1) por paso. En contextos de 128k tokens, puede consumir más de 40GB de memoria de video.',
+      zh: '自回归生成每一个新 Token 时，过去的 Token 已经固定。重新计算会导致 O(N^2) 的计算浪费。KV-Cache 将前面所有 Token 的 Key 和 Value 缓存在显存中，使每次新生成只需 O(1) 的增量运算。但其内存占用与上下文长度严格线性增长：128k 上下文可轻松耗尽 40GB+ 显存。',
+      hi: 'हर नए टोकन पर पुराने टोकन दोबारा प्रोसेस करना O(N^2) कम्प्यूट खर्च करता है। KV-Cache इन वैल्यूज को VRAM में सहेजता है। 128k कॉन्टेक्स्ट में यह 40GB+ VRAM ले सकता है।',
+      fr: 'Pour éviter de recalculer chaque token en O(N^2), le KV-Cache conserve les Keys et Values en VRAM. Cependant, à 128k tokens, il peut dépasser 40 Go de mémoire vidéo.',
+      de: 'Um O(N^2)-Berechnungen zu vermeiden, speichert der KV-Cache Keys und Values im VRAM. Bei 128k Tokens kann dies jedoch leicht über 40 GB Videospeicher belegen.'
+    },
+    takeaway: {
+      en: 'Inference is memory-bandwidth bound: KV-cache trades VRAM capacity for 10x token generation speed.',
+      es: 'La inferencia está limitada por el ancho de banda: el KV-Cache cambia VRAM por velocidad.',
+      zh: '大模型推理的瓶颈在于显存带宽：KV-Cache 用显存容量换取了 10 倍以上的极速生成。',
+      hi: 'अनुमान मेमोरी-बैंडविड्थ से बंधा है: KV-Cache VRAM के बदले 10x टोकन गति प्रदान करता है।',
+      fr: 'L’inférence dépend de la bande passante : le KV-Cache échange la VRAM contre une vitesse décuplée.',
+      de: 'Inferenz ist speicherbandbreitenlimitiert: Der KV-Cache tauscht VRAM gegen 10-fache Geschwindigkeit.'
+    },
+    tags: ['Inference', 'KV-Cache', 'Hardware Scaling']
+  },
+  {
+    id: 'what-is-test-time-compute',
+    category: 'what',
+    pillLabel: {
+      en: 'What is Test-Time Compute?',
+      es: '¿Qué es Test-Time Compute?',
+      zh: '什么是 Test-Time Compute（测试期计算）？',
+      hi: 'टेस्ट-टाइम कंप्यूट (Test-Time Compute) क्या है?',
+      fr: 'Qu’est-ce que le Test-Time Compute ?',
+      de: 'Was ist Test-Time Compute?'
+    },
+    title: {
+      en: 'Reasoning Tokens & Test-Time Compute: The Shift from Memorization to Search',
+      es: 'Tokens de razonamiento y Test-Time Compute: el paso de memorizar a razonar',
+      zh: '推理 Token 与测试期计算：从“静态记忆预测”到“动态搜索思考”的范式革命',
+      hi: 'रीजनिंग टोकन और टेस्ट-टाइम कंप्यूट: याद रखने से सोचने की ओर बदलाव',
+      fr: 'Tokens de raisonnement et calcul au test : de la mémorisation à la réflexion',
+      de: 'Reasoning-Tokens und Test-Time Compute: Vom Auswendiglernen zum logischen Suchen'
+    },
+    explanation: {
+      en: 'Classic LLMs only spend compute during pre-training; at inference, they output the first token that comes to mind. Reasoning models (o1, o3, Claude 3.7 Thinking) scale compute at test-time. They generate internal hidden thinking chains, explore candidate hypothesis trees, verify mathematical steps, and backtrack when an error is caught before showing the user the answer.',
+      es: 'Los modelos clásicos responden de inmediato con un solo paso. Los modelos de razonamiento (como o1 o Claude Thinking) dedican tiempo a "pensar" durante la inferencia, explorando ramas lógicas y corrigiendo errores antes de responder.',
+      zh: '经典大模型只在预训练阶段消耗主要算力，推理时直接吐出概率最高的下一个词。而现代推理模型（如 o1、o3、Claude 3.7 Thinking）在推理时（Test-Time）自主扩展计算：生成内部思维链、展开树状搜索、检验中间结论并自主回溯纠错。',
+      hi: 'पारंपरिक मॉडल तुरंत उत्तर देते हैं। रीजनिंग मॉडल (जैसे o1) उत्तर देने से पहले आंतरिक रूप से सोचते हैं, त्रुटियां जांचते हैं और तार्किक रास्ते खोजते हैं।',
+      fr: 'Les modèles classiques génèrent immédiatement. Les modèles de raisonnement allouent du calcul au moment du test pour explorer des hypothèses, vérifier et corriger.',
+      de: 'Klassische Modelle antworten sofort. Reasoning-Modelle investieren Rechenleistung zur Inferenzzeit, um Denkbäume zu prüfen und Fehler vorab zu korrigieren.'
+    },
+    takeaway: {
+      en: 'Spending more compute at inference time yields higher accuracy on complex reasoning tasks.',
+      es: 'Invertir más cómputo en la inferencia multiplica la precisión en razonamiento complejo.',
+      zh: '在推理时刻消耗更多思考算力，能在大逻辑推理、编程与数学证明上实现准确率质的跃迁。',
+      hi: 'अनुमान के समय अधिक सोचने से जटिल गणित और कोडिंग में सटीकता कई गुना बढ़ जाती है।',
+      fr: 'Consacrer plus de calcul à l’inférence maximise la précision sur les tâches complexes.',
+      de: 'Mehr Rechenzeit bei der Inferenz führt zu drastisch höherer Präzision bei komplexer Logik.'
+    },
+    tags: ['Reasoning', 'Search Trees', 'Modern Paradigms']
+  },
+  {
+    id: 'what-is-mcp',
+    category: 'what',
+    pillLabel: {
+      en: 'What is MCP Protocol?',
+      es: '¿Qué es el Protocolo MCP?',
+      zh: '什么是 Model Context Protocol (MCP)？',
+      hi: 'Model Context Protocol (MCP) क्या है?',
+      fr: 'Qu’est-ce que le Protocole MCP ?',
+      de: 'Was ist das Model Context Protocol (MCP)?'
+    },
+    title: {
+      en: 'Model Context Protocol (MCP): The Universal USB-C Standard for AI Agents',
+      es: 'Model Context Protocol (MCP): el puerto universal USB-C para agentes de IA',
+      zh: 'Model Context Protocol (MCP)：AI 智能体的通用“USB-C”连接器标准',
+      hi: 'Model Context Protocol (MCP): एआई एजेंट्स के लिए यूनिवर्सल मानक',
+      fr: 'Model Context Protocol (MCP) : le port USB-C universel pour agents IA',
+      de: 'Model Context Protocol (MCP): Der universelle USB-C-Standard für KI-Agenten'
+    },
+    explanation: {
+      en: 'Previously, connecting an AI model to tools (databases, GitHub, terminal) required custom, fragmented SDKs. Anthropic introduced Model Context Protocol (MCP) as an open standard over JSON-RPC 2.0. A standardized MCP client queries an MCP server with tools/list, requests tools/call, and streams structured results. Any agent can securely interface with any tool ecosystem worldwide.',
+      es: 'MCP estandariza cómo los agentes se conectan a herramientas mediante JSON-RPC 2.0. En lugar de escribir código a medida para cada base de datos o API, MCP actúa como un conector universal abierto.',
+      zh: '过去连接大模型与外部工具（数据库、Git、命令行）往往依赖各自碎片化的私有 SDK。Anthropic 推出的 Model Context Protocol (MCP) 成为开放的 JSON-RPC 2.0 国际通用标准。通过 tools/list 声明能力、tools/call 安全调用，任何智能体都能无缝插拔各类外部工具。',
+      hi: 'MCP एआई टूल्स को जोड़ने का खुला मानक है जो JSON-RPC 2.0 का उपयोग करता है। यह विभिन्न डेटाबेस और टूल के लिए अलग कोड लिखने की आवश्यकता को समाप्त करता है।',
+      fr: 'MCP normalise la communication entre les modèles et les outils via JSON-RPC 2.0, remplaçant les intégrations propriétaires par un standard universel ouvert.',
+      de: 'MCP vereinheitlicht die Werkzeuganbindung über JSON-RPC 2.0 und ersetzt fragmentierte Einzellösungen durch einen offenen Standard für alle KI-Agenten.'
+    },
+    takeaway: {
+      en: 'MCP is the open JSON-RPC 2.0 protocol decoupling AI reasoning from tool implementation.',
+      es: 'MCP es el estándar abierto que separa el razonamiento de la implementación de herramientas.',
+      zh: 'MCP 是开放解耦标准：模型专注于高维推理，工具服务器专注于底层安全执行。',
+      hi: 'MCP खुला मानक है जो एआई सोच को टूल के कार्यान्वयन से अलग और सुरक्षित करता है।',
+      fr: 'MCP est le standard ouvert qui sépare le raisonnement de l’exécution des outils.',
+      de: 'MCP ist das offene Protokoll, das logisches Schließen von der Tool-Implementierung entkoppelt.'
+    },
+    tags: ['MCP', 'Tool Calling', 'Agent Architecture']
   }
 ];
+

@@ -8,6 +8,7 @@ import { track0 } from './data/track0';
 import { track1 } from './data/track1';
 import { track2 } from './data/track2';
 import { track3 } from './data/track3';
+import { track4 } from './data/track4';
 import './App.css';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -161,6 +162,9 @@ function App() {
               <Route path="/track/3/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
               <Route path="/track/3" element={<CoursePlayer track={track3} />} />
               <Route path="/track/3/engine" element={<CoursePlayer track={track3} />} />
+              <Route path="/track/4/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+              <Route path="/track/4" element={<CoursePlayer track={track4} />} />
+              <Route path="/track/4/engine" element={<CoursePlayer track={track4} />} />
               <Route path="/holodeck" element={<SpatialHolodeck />} />
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="*" element={<NotFoundPage />} />

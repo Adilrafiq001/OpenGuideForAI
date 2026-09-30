@@ -3,6 +3,20 @@
 # State: Universal Hardware-Adaptive Spatial Holodeck, 24 Calibrated Themes & Guided Tour Architecture
 
 **Done:**
+- **Curriculum Expansion: Track 4 (Frontier Intelligence & System Foundations - 5 Tracks, 45 Labs Total) (Complete):**
+  - **Frontier Intelligence & Invariant Foundations (`track4.ts`):**
+    - Created Track 4 with 3 modules and 9 rigorous, practical in-browser WebAssembly labs:
+      - *Module 4.1: The Transformer Engine & Attention Mechanics* (Scaled Dot-Product Attention from scratch with numerical stability, Multi-Head projection splitting & recombination, KV-Cache memory footprint sizing & incremental append generator).
+      - *Module 4.2: Reasoning Models & Test-Time Compute* (Tree-of-Thoughts branch-and-bound search with self-critique pruning, Finite State Machine constrained decoding enforcing valid JSON, Model Context Protocol JSON-RPC 2.0 server dispatcher).
+      - *Module 4.3: Local Small Language Models & Optimization* (Affine symmetric 8-bit weight quantization, Direct Preference Optimization mathematical loss from scratch, Capstone Autonomous Reasoning Agent).
+  - **First Principles Matrix & Offline Knowledge Engine:**
+    - Added 4 comprehensive First Principles models in 6 languages (`firstPrinciplesData.ts`): Attention $Q,K,V$ memory routing, KV-Cache memory explosion mechanics, Reasoning Tokens / Test-Time compute scaling, and MCP JSON-RPC 2.0 standard.
+    - Updated offline knowledge base (`offlineKnowledge.ts`) with deep domain intelligence for Track 4.
+  - **Application-Wide Routing & Navigation Integration:**
+    - Wired `/track/4`, `/track/4/intro`, and `/track/4/engine` into `App.tsx`, `TrackBriefing.tsx`, `LandingHeader.tsx`, `MobileNavDrawer.tsx`, `AdaptivePathways.tsx`, and `PortfolioPage.tsx`.
+    - Made total curriculum lab count dynamic across all 5 tracks (45 practical labs total).
+  - **100% Automated Test Suite & Regression Coverage:**
+    - Added automated Playwright test `06. Track 4: Frontier Intelligence mounts with 9 labs and scaled dot-product attention` in `apps/web/tests/codemirror-persistence-curriculum.spec.ts`.
 - **Application Performance Optimization, WCAG 2.2 Accessibility & Android UI Journey Verification (Complete):**
   - **Application Performance Optimization (`application-performance-performance-optimization`):**
     - Configured Vite production chunk splitting with explicit vendor groups: `vendor-three` (`three`), `vendor-codemirror` (`@codemirror/*`), `vendor-motion` (`framer-motion`), `vendor-react` (`react`, `react-dom`, `react-router-dom`), `vendor-icons` (`lucide-react`), and `vendor-phosphor` (`@phosphor-icons/react`).

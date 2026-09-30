@@ -155,6 +155,16 @@ export function AdaptivePathways() {
       intuition: 'True $0 compute means running inference directly on the client device. Zero latency, 100% privacy, and infinite scalability without server bills.',
       goal: 'An offline-first AI application running local WebGPU inference inside the browser tab.',
       tools: ['WebGPU', 'WebLLM', 'IndexedDB Model Caching']
+    },
+    {
+      id: 'pro-4',
+      step: '04',
+      duration: 'Frontier Tier',
+      title: 'Frontier Intelligence: Attention, KV-Cache & Test-Time Reasoning',
+      summary: 'Master the eternal mathematical foundations of Scaled Dot-Product Attention, multi-head projection, KV-cache scaling, and test-time reasoning search trees.',
+      intuition: 'Instead of treating transformers as black boxes, you build attention matrices, calculate KV-cache memory limits, and implement Tree-of-Thoughts reasoning search from scratch.',
+      goal: 'A fully certified Autonomous Frontier Reasoning Engine running client-side with MCP tool dispatch.',
+      tools: ['Attention Math', 'KV-Cache Dynamics', 'Tree-of-Thoughts', 'MCP Protocol']
     }
   ];
 
