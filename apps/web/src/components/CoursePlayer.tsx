@@ -274,7 +274,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <button
             data-testid="mobile-tab-briefing"
             onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('briefing'); }}
-            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               mobileTab === 'briefing'
                 ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -286,7 +286,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <button
             data-testid="mobile-tab-editor"
             onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('editor'); }}
-            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               mobileTab === 'editor'
                 ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -298,7 +298,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           <button
             data-testid="mobile-tab-output"
             onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('output'); }}
-            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer relative ${
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               mobileTab === 'output'
                 ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -325,7 +325,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             <div className="flex items-center gap-1 p-0.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono">
               <button
                 onClick={() => setLeftTab('briefing')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   leftTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
@@ -334,7 +334,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               </button>
               <button
                 onClick={() => setLeftTab('curriculum')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   leftTab === 'curriculum' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >

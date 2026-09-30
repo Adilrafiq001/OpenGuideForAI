@@ -91,7 +91,7 @@ function DockItem({
         onFocus={() => isHovered.set(1)}
         onBlur={() => isHovered.set(0)}
         onClick={onClick}
-        className={`relative flex items-center justify-center rounded-full bg-[var(--color-primary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] border shadow-md cursor-pointer hover:border-[var(--color-accent)] hover:shadow-lg transition-all ${className}`}
+        className={`relative flex items-center justify-center rounded-full bg-[var(--color-primary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] border shadow-md cursor-pointer hover:border-[var(--color-accent)] hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${className}`}
         tabIndex={0}
         role="button"
         aria-haspopup="true"
