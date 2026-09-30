@@ -6,6 +6,17 @@
   justify-content: center;
   height: 52px;
   vertical-align: middle;
+  direction: ltr !important;
+  unicode-bidi: isolate;
+}
+
+.launch-track-hero-container *,
+.launch-track-hero-container .wrapper,
+.launch-track-hero-container .button,
+.launch-track-hero-container .text,
+.launch-track-hero-container .text span {
+  direction: ltr !important;
+  unicode-bidi: isolate;
 }
 
 .launch-track-hero-container .area {
@@ -395,6 +406,8 @@
   padding-right: 4px;
   font-family: var(--font-mono, 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace);
   font-weight: 700;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 255, 255, 0.45);
 }
 
 .launch-track-hero-container .text span {
@@ -489,6 +502,16 @@
 .launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 span::before,
 .launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 span::after {
   opacity: 0 !important;
+}
+
+.launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-1 {
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 /* ---- HOVER (checked only) ---- */
@@ -776,4 +799,29 @@
     transparent 75%
   ) !important;
 }
+
+/* =========================================================================
+   RTL TYPOGRAPHY & HIGH-CONTRAST LUMINESCENCE (Urdu & Arabic)
+   ========================================================================= */
+:is([dir="rtl"], .rtl-active, [lang="ur"], [lang="ar"]) .launch-track-hero-container .content {
+  direction: rtl !important;
+}
+
+:is([dir="rtl"], .rtl-active, [lang="ur"], [lang="ar"]) .launch-track-hero-container .text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95), 0 0 10px rgba(255, 200, 80, 0.9), 0 0 20px rgba(255, 160, 0, 0.55) !important;
+  direction: rtl !important;
+  letter-spacing: 0 !important;
+  font-size: 13px !important;
+  padding: 0 8px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+:is([dir="rtl"], .rtl-active, [lang="ur"], [lang="ar"]) .launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-2 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95), 0 0 12px rgba(255, 220, 100, 0.95), 0 0 24px rgba(255, 180, 20, 0.7) !important;
+  opacity: 1 !important;
+}
+
 

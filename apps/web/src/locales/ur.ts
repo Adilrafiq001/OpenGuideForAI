@@ -8,12 +8,16 @@ export const ur: Record<string, string> = {
   nav_cognitive_accelerator: 'علمی ایکسلریٹر',
   nav_synapse_lounge: 'سائنیپس لاؤنج',
   nav_science_vault: 'مستند سائنس والٹ',
-  nav_pillars: '11 بنیادی ستون',
   nav_launch_track0: 'ٹریک 0 شروع کریں',
+  nav_tour: 'ٹور',
+  nav_portfolio: 'پورٹ فولیو',
   nav_back_overview: 'جائزہ پر واپس',
   nav_close: 'بند کریں',
 
   // Hero Section
+  hero_never_coded_label: 'پہلے کبھی کوڈنگ نہیں کی؟',
+  hero_never_coded_subtitle: 'ٹریک 0 سے شروع کریں: بالکل شروعات (کسی سیٹ اپ کی ضرورت نہیں)',
+  hero_never_coded_badge: 'ٹریک 0: بالکل شروعات',
   hero_tag: '100% مفت اور اوپن سورس • صفر کلاؤڈ بل • براؤزر نیٹو واسم',
   hero_subtag: 'کوڈنگ کے پیشگی علم کی ضرورت نہیں',
   hero_title_prefix: 'صفر سے',

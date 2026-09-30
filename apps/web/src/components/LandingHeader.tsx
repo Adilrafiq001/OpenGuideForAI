@@ -174,7 +174,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
                     <div className="space-y-1">
                       <button 
                         onClick={() => { setIsExploreOpen(false); navigate('/holodeck'); }}
-                        className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group text-left cursor-pointer"
+                        className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
                       >
                         <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
                           <Glasses size={14} className="text-cyan-400" />
@@ -288,7 +288,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
         </nav>
       </div>
 
-      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         {/* Direct Day / Night Animated Switch */}
         <Tooltip
           position="bottom"
@@ -319,9 +319,10 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           shortcut="T"
         >
           <button 
+            id="header-theme-settings-btn"
             onClick={onOpenThemes}
             data-testid="header-theme-settings-btn"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+            className="flex items-center gap-2 px-3 py-1.5 min-h-[38px] sm:min-h-[44px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
             aria-label="Themes and Studio Settings"
           >
             <div 
@@ -344,11 +345,11 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           <button 
             onClick={() => startAppTour(false)}
             data-testid="header-quick-tour-btn"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] sm:min-h-[44px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
             aria-label="Start Quick Studio Tour"
           >
             <Sparkles size={13} className="text-[var(--color-accent)]" />
-            <span className="hidden md:inline">Tour</span>
+            <span className="hidden md:inline">{t('nav_tour')}</span>
           </button>
         </Tooltip>
 
@@ -387,7 +388,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
               aria-label="Select Learning Track"
             >
               <Layers size={13} style={{ color: currentThemeInfo.accent }} />
-              <span>Tracks</span>
+              <span>{t('nav_tracks')}</span>
               <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -407,7 +408,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
 
                     <button
                       onClick={() => { setIsTracksMenuOpen(false); navigate('/track/0/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
                     >
                       <div className="flex items-center gap-2">
                         <Zap size={14} className="text-amber-400" />
@@ -418,7 +419,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
 
                     <button
                       onClick={() => { setIsTracksMenuOpen(false); navigate('/track/1/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
                     >
                       <div className="flex items-center gap-2">
                         <Layers size={14} className="text-emerald-400" />
@@ -429,7 +430,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
 
                     <button
                       onClick={() => { setIsTracksMenuOpen(false); navigate('/track/2/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
                     >
                       <div className="flex items-center gap-2">
                         <Cpu size={14} className="text-blue-400" />
@@ -440,7 +441,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
 
                     <button
                       onClick={() => { setIsTracksMenuOpen(false); navigate('/track/3/intro'); }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer group"
+                      className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors ltr:text-left rtl:text-right cursor-pointer group"
                     >
                       <div className="flex items-center gap-2">
                         <ShieldCheck size={14} className="text-purple-400" />
@@ -459,7 +460,7 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
         <button
           onClick={onOpenDrawer || (() => setIsMobileMenuOpen(!isMobileMenuOpen))}
           data-testid="landing-header-menu-btn"
-          className="xl:hidden p-2 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
+          className="xl:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
           aria-label="Toggle navigation menu"
         >
           {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}

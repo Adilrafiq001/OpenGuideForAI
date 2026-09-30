@@ -56,6 +56,10 @@
 - **Language / i18n:** Multi-language persistent store (`en`, `es`, `zh`, `hi`, `fr`, `de`). Script-safe responsive line heights (avoid vertical text collisions in Devanagari, CJK, etc.).
 - **Browser Testing Tool:** Playwright MCP (`browser_navigate`, `browser_click`, `browser_take_screenshot`, `browser_evaluate`). Never `browser_subagent`.
 - **Git & Branches:** Active development on `main`. Conventional commits (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags in commit messages. Commit identity: `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`.
+- **Dual-Remote Multi-Push Rule (Mandatory):** Both remote repositories must be updated simultaneously on every run/push:
+  1. **Primary (Cloudflare Pages deploy target):** `https://github.com/openguideforai/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_OPEN`).
+  2. **Secondary (Personal archive mirror):** `https://github.com/Adilrafiq001/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_ARD`).
+  Multi-push on `origin` must push to both endpoints in a single operation.
 - **Clean As You Go & Project Hygiene (Mandatory Rule):** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (such as temporary screenshots in `.playwright-mcp/`, `test-results/`, and temporary log files) as we advance to subsequent tasks. Maintain a strictly clean, neat, and tidy project directory tree at all times.
 - **Zero-Tolerance GitHub CI & Pre-Flight Gate (Strict Mandatory Rule):** Before ANY commit, push, or claiming completion of ANY task, the agent MUST run and physically verify the 5-Point Local Pre-Flight Suite:
   1. **Dev Server Live Check:** Confirm the local dev server is running as a daemon and responds with HTTP `200 OK` (`(Invoke-WebRequest http://localhost:5173).StatusCode == 200`).
@@ -66,6 +70,7 @@
   Never commit, push, or report success if any of these 5 steps fails. A single failing test on GitHub Actions or locally is a P0 regression that blocks all other work.
 - **Physical Verification Integrity Rule (No Blind Claims):** Never claim an app is serving, tested, or ready without concrete physical execution evidence. Never assume a server is running after a test command exits. The daemon dev server must be kept running and verified.
 - **100% Automated Regression Coverage:** Every bug fix, UI layout change, or architectural feature must have permanent Playwright regression assertions added. Never delete, weaken, or bypass a test to pass CI.
-- **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`, `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`.
+- **Production Readiness Freeze (Active):** New feature development is strictly frozen per `docs/PRODUCTION-READINESS-AUDIT.md`. Mandatory reading order: `AGENTS.md` → `docs/PRODUCTION-READINESS-AUDIT.md` → `docs/PROJECT-STATE.md` → `GOAL.md` → `HUMAN-AUDIT-QA.md` → `UNIVERSAL-COMPATIBILITY.md`. No new features until Go verdict in `docs/PRODUCTION-READINESS-VERDICT.md`.
+- **Affected Documentation:** `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`, `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`, `docs/PRODUCTION-READINESS-AUDIT.md`, `docs/PRODUCTION-READINESS-VERDICT.md`.
 
 

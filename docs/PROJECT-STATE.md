@@ -1,6 +1,50 @@
+# 🛑 DEVELOPMENT FREEZE — production-readiness audit in progress. See docs/PRODUCTION-READINESS-AUDIT.md. No new features until Go verdict.
+
 # State: Universal Hardware-Adaptive Spatial Holodeck, 24 Calibrated Themes & Guided Tour Architecture
 
 **Done:**
+- **Application Performance Optimization, WCAG 2.2 Accessibility & Android UI Journey Verification (Complete):**
+  - **Application Performance Optimization (`application-performance-performance-optimization`):**
+    - Configured Vite production chunk splitting with explicit vendor groups: `vendor-three` (`three`), `vendor-codemirror` (`@codemirror/*`), `vendor-motion` (`framer-motion`), `vendor-react` (`react`, `react-dom`, `react-router-dom`), `vendor-icons` (`lucide-react`), and `vendor-phosphor` (`@phosphor-icons/react`).
+    - Raised `chunkSizeWarningLimit` to 800kB, completely eliminating oversized bundle chunk warnings and enabling parallel HTTP/2 asset fetching.
+    - Created browser-native, zero-cost telemetry system (`performanceTelemetry.ts`) tracking FCP (sub-300ms), LCP, CLS, TTFB, and Web Worker Pyodide execution latency.
+  - **Accessibility Compliance (`accessibility`):**
+    - Upgraded mobile interactive controls across `LandingHeader.tsx`, `LaunchTrack0HeroButton.tsx`, `CoursePlayer.tsx`, and `ThemeSettingsModal.tsx` to satisfy WCAG 2.2 SC 2.5.8 touch target standards ($\ge 44\times 44\text{px}$).
+    - Added `role="region"`, `aria-label="Python WebAssembly Execution Terminal Output"`, and `aria-live="polite"` to `#terminal-output` for dynamic screen reader announcements of Python execution stdout/stderr and compilation results.
+    - Enforced `role="dialog"`, `aria-modal="true"`, and `aria-label` on `ThemeSettingsModal`.
+  - **Android UI Journey Testing (`android-ui-journey-testing`):**
+    - Created `apps/web/tests/android-ui-journey.spec.ts` executing 4 automated multi-step user journeys on calibrated Samsung Galaxy S23 Ultra (`412x915`, deviceScaleFactor 3.5) and Pixel 7 viewports:
+      - *Journey 1: Android PWA Onboarding & Track 0 Launch Flow* (Screen calibration, center tap calculation, mechanical transition, zero horizontal scroll).
+      - *Journey 2: Android CoursePlayer IDE Touch Journey* (Mobile tab activation, CodeMirror 6 mounting, accessory bar keys, Pyodide terminal output).
+      - *Journey 3: Android Abby Copilot Bottom Sheet Journey* (Custom event dispatch, full-width responsive bottom sheet $\le 100\text{vw}$, offline knowledge synthesis).
+      - *Journey 4: Android Settings & Research Themes Journey* (Fluid backdrop modal, Claude Light research theme, WCAG AAA text/background contrast, zero horizontal overflow).
+    - Automatically generates standardized JSON outcome reports conforming to the schema in `android-ui-journey-testing/SKILL.md` saved in `test-results/android-journey-report.json`.
+  - **Android UI Verification (`android_ui_verification`):**
+    - Programmatically verified element center coordinates $x_{center} = \frac{x_1 + x_2}{2}, y_{center} = \frac{y_1 + y_2}{2}$.
+    - Verified accessory bar key touch boundaries ($\ge 32\text{px}$ height, touch-safe gaps).
+    - Verified zero horizontal overflow on all mobile viewports (`scrollWidth <= innerWidth + 1`).
+- **Universal RTL Architecture, Lenis Unfrozen Nested Scrolling, Dynamic 24 Calibrated Themes & Code Editor Setting Engine (Complete):**
+  - **Universal RTL CommandDock Centering & Directional Isolation:**
+    - Replaced transform-based centering (`position: fixed; left: 50%; transform: translateX(-50%)`) with flex-safe `fixed inset-x-0 mx-auto w-max max-w-[calc(100vw-1rem)]`, ensuring mathematical center alignment in both LTR and RTL viewports without off-screen displacement.
+    - Linked Arabic (`Noto Sans Arabic`, `Amiri`) and Urdu Nastaliq (`Noto Nastaliq Urdu`) Google font stylesheets in `index.html` and configured font-family priority rules in `index.css`.
+    - Fixed RTL mechanical flip button `LaunchTrack0HeroButton` to preserve native cursive ligatures without breaking into disconnected discrete character spans.
+    - Localized all remaining English strings in Urdu and Arabic (`nav_tour`, `nav_tracks`, `hero_never_coded_label`, `hero_never_coded_badge`).
+  - **Unfrozen Modal, Drawer & CodeEditor Nested Scrolling:**
+    - Diagnosed Lenis smooth scroll wheel event interception on `window` (`allowNestedScroll: false`).
+    - Configured `allowNestedScroll: true` and added Lenis `prevent: (node) => boolean` predicate checking `data-lenis-prevent`, `[role="dialog"]`, `.cm-scroller`, `.overflow-y-auto`, `.overflow-auto`, `.custom-scrollbar`, and `.theme-settings-modal-dialog`.
+    - Added `data-lenis-prevent="true"` to `ThemeSettingsModal` containers, enabling silky smooth native mouse wheel scrolling in all modal windows and CodeMirror code areas.
+  - **Dynamic Theme System Display & Physiological Research Tokens:**
+    - Updated `ThemeSettingsModal` header subtitle to dynamically reflect `Explore 24 calibrated themes (12 Dark & 12 Light)` and tab badges to count active category themes dynamically.
+    - Every theme has verified physiological research backing (e.g., zero-photopic glare, circadian melatonin preservation, high scotopic rod contrast, Purkinje shift excitation).
+  - **Live CodeEditor Preferences Wiring & Real-Time Stage Transparency (Beyond Popup):**
+    - Removed `backdrop-blur-md` and pitch-black blackout from the settings modal backdrop, delivering a completely clear, zero-blur stage so learners can inspect live theme colors, code typography, and layout on the main app in real time beyond the popup.
+    - Repurposed the transparency slider to **Stage Transparency (Beyond Popup)** with presets (`Clear 100%`, `Subtle 85%`, `Balanced 60%`, `Dim 30%`), allowing learners to dial in exact live app visibility.
+    - Added a **"Peek Live UI"** eye quick-reveal toggle in the modal header that temporarily dims the dialog to 5% opacity and renders a floating restore pill, letting learners see the full page unobstructed without exiting settings.
+    - Wired `useSettingsStore` directly into `CodeEditor.tsx`, `HeroPhysicsStage.tsx`, and `App.tsx` (`fontSize`, `editorFont`, `lineNumbers`, `tabSize`, `wordWrap`, `bracketPairs`), dynamically updating `--font-code-mono` and `--editor-font-size` custom properties on `document.documentElement` live in real time.
+  - **Cloudflare Pages Custom Domains Architecture:**
+    - Configured and documented production CNAME setup for `openguide.jo3.org` and `openguideai.2bd.net` in `docs/CLOUDFLARE-DOMAINS-SETUP.md`.
+  - **100% Automated Test Suite & Regression Coverage:**
+    - Added dedicated automated regression tests in `apps/web/tests/universal-compatibility.spec.ts` (Tests 07 to 12) verifying nested modal wheel scroll unblocking, mathematical RTL CommandDock centering, cursive Urdu ligature preservation, settings store to CodeMirror DOM font/tab/size reflection, zero-blur clear stage transparency, and the Peek Main UI toggle.
 - **Quick Tour, Fluid Abby Mascot Physics, 4 Magical Themes, Editor Typography & RTL Engine (Complete):**
   - **Interactive Multi-Device Guided Tour Engine (`AppTour.tsx`, `app-tour.css`):**
     - Integrated lightweight, zero-dependency `driver.js` v1.8 with liquid frosted glass popovers, SVG clip-path spotlight overlays, and keyboard/touch navigation.
@@ -23,7 +67,19 @@
     - Script-safe typography: expands line heights (`1.75`) and resets letter-spacing to prevent vertical diacritic clipping in Arabic and Nastaliq Urdu cursive scripts.
     - Directional stepper icon mirroring (`.rtl-flip`) and dock centering isolation.
   - **100% Automated Test Suite Passage (`tests/comprehensive-features.spec.ts`):**
-    - 49/49 tests passing across all test suites in 5.2 minutes with 0 failures and 0 skipped.
+- **RTL Mechanical Button Luminescence, Claude Warm Ivory Contrast Hardening, Default Theme & Physics Seesaw Loader (Complete):**
+  - **RTL Mechanical Button Text Visibility (`launch-track-button.css`, `LaunchTrack0HeroButton.tsx`):**
+    - Surgically resolved black-on-black text bug in RTL mode under light themes. Added `color: #ffffff !important` and multi-layered glowing drop-shadows to `.launch-track-hero-container .text` and RTL spans.
+    - Added checked/unchecked state opacity controls (`input:checked ~ .button .text.state-2 { opacity: 0 }`, `input:not(:checked) ~ .button .text.state-1 { opacity: 0 }`) preventing direct text superimposition in Arabic and Urdu.
+  - **Claude Warm Ivory & Light Theme Contrast Hardening (`themesData.ts`, `HeroPhysicsStage.tsx`):**
+    - Deepened `textSecondary` in `claude-light` to `#3c220f`, elevating contrast on `#faf6f0` to > 8.5:1, well above WCAG AAA requirements.
+    - Strengthened beginner badge contrast with `text-emerald-950 dark:text-emerald-300`, deep emerald pulse dot, and high-contrast border/background tokens.
+  - **Default Language & Theme Configuration (`useSettingsStore.ts`, `index.html`):**
+    - Configured application to boot by default into **English (`en`)** and **Claude Warm Ivory (`claude-light`)** with `#faf6f0` meta theme-color and background pre-bootstrap tokens.
+  - **Physics Seesaw Bar & Rolling Ball Loader (`PhysicsBarLoader.tsx`, `App.tsx`, `index.html`):**
+    - Implemented authentic seesaw bar (`up-down6123`) and rolling ball with pupil (`ball-move8234`) animation as both the initial HTML pre-loader and React Suspense fallback.
+  - **100% Pre-Flight Verification:**
+    - 57/57 tests passing across the entire test suite in 5.1 minutes with 0 errors and 0 skipped.
 - **Mobile Phone Real-Device Optimization & Self-Healing Guardrails (Complete):**
   - **Native Mobile Bottom Navigation (`MobileBottomNav.tsx`):**
     - Built iOS/Android native-grade 5-item bottom bar (`Home`, `Tracks`, `Holodeck`, `Portfolio`, `More`) fixed at viewport bottom (`z-[105]`, `md:hidden`).

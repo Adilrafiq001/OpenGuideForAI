@@ -175,4 +175,70 @@ test.describe('OpenGuide Comprehensive Features, Themes, Tour, Abby Physics & RT
     });
   });
 
+  test('07. PWA Installation: Manifest, PNG Icons & Install Prompt Banner', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify manifest & icon links in DOM
+    const pwaMeta = await page.evaluate(() => {
+      const manifest = document.querySelector('link[rel="manifest"]')?.getAttribute('href');
+      const appleIcon = document.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href');
+      const icon192 = document.querySelector('link[sizes="192x192"]')?.getAttribute('href');
+      const icon512 = document.querySelector('link[sizes="512x512"]')?.getAttribute('href');
+      const banner = document.querySelector('[data-testid="pwa-install-banner"]');
+      const actionBtn = document.querySelector('[data-testid="pwa-install-action-btn"]');
+      return {
+        manifest,
+        appleIcon,
+        icon192,
+        icon512,
+        hasBanner: !!banner,
+        hasActionBtn: !!actionBtn
+      };
+    });
+
+    expect(pwaMeta.manifest).toBe('/manifest.webmanifest');
+    expect(pwaMeta.appleIcon).toBe('/apple-touch-icon.png');
+    expect(pwaMeta.icon192).toBe('/icon-192.png');
+    expect(pwaMeta.icon512).toBe('/icon-512.png');
+    expect(pwaMeta.hasBanner).toBe(true);
+    expect(pwaMeta.hasActionBtn).toBe(true);
+
+    // Clicking install opens dialog or triggers install
+    await page.locator('[data-testid="pwa-install-action-btn"]').click({ force: true });
+  });
+
+  test('08. Lenis Momentum Smooth Scroll & Mechanical Button RTL Text Integrity', async ({ page }) => {
+    await page.goto('/');
+
+    // 1. Verify Lenis smooth scroll engine is attached to html
+    const isLenis = await page.evaluate(() => {
+      return document.documentElement.classList.contains('lenis');
+    });
+    expect(isLenis).toBe(true);
+
+    // 2. Enable RTL (Urdu)
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.setAttribute('lang', 'ur');
+    });
+
+    // 3. Verify Mechanical Button letters are NOT reversed into "0k carTh cnual"
+    const buttonState = await page.evaluate(() => {
+      const container = document.querySelector('.launch-track-hero-container');
+      const textEl = container?.querySelector('.text');
+      const letters = Array.from(textEl?.querySelectorAll('span') || []).map(s => s.textContent).join('');
+      const dir = container ? window.getComputedStyle(container).direction : '';
+      return { letters, dir };
+    });
+
+    expect(buttonState.dir).toBe('ltr');
+    expect(buttonState.letters).toBe('LaunchTrack0');
+
+    // Reset back
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.setAttribute('lang', 'en');
+    });
+  });
+
 });

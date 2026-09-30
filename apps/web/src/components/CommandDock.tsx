@@ -174,7 +174,8 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
   return (
     <div 
       data-testid="command-dock-wrapper"
-      className="hidden md:flex fixed left-1/2 -translate-x-1/2 z-[100] pointer-events-auto max-w-[calc(100vw-1rem)] overflow-visible"
+      dir="ltr"
+      className="hidden md:flex fixed inset-x-0 mx-auto w-max max-w-[calc(100vw-1rem)] z-[100] pointer-events-auto overflow-visible"
       style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
     >
       <MagnificationDock

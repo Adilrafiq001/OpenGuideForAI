@@ -4,27 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#090d16" />
+    <meta name="theme-color" content="#faf6f0" />
     <meta name="description" content="Zero-cost, browser-native AI engineering curriculum with client-side Python Pyodide execution." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>OpenGuide — AI Engineering Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Amiri:ital,wght@0,400;0,700&family=Noto+Sans+Arabic:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
       (function() {
         try {
-          var theme = 'obsidian';
-          var raw = localStorage.getItem('openguide-settings');
-          if (raw) {
-            var parsed = JSON.parse(raw);
-            if (parsed && parsed.state && parsed.state.theme) {
-              theme = parsed.state.theme;
-            }
-          } else {
-            var legacy = localStorage.getItem('openguide_theme');
-            if (legacy) theme = legacy;
+          // App must always open in Claude Warm Ivory (light theme) and English
+          var theme = 'claude-light';
+          var sessionTheme = sessionStorage.getItem('openguide_session_theme');
+          if (sessionTheme) {
+            theme = sessionTheme;
           }
+
           var lightThemes = ['pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream', 'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial'];
           document.documentElement.setAttribute('data-theme', theme);
           document.documentElement.setAttribute('data-theme-mode', lightThemes.indexOf(theme) !== -1 ? 'light' : 'dark');
@@ -51,7 +53,7 @@
             'dracula': '#191a21',
             'circadian-amber': '#0a0908'
           };
-          var bg = themeBgs[theme] || '#050505';
+          var bg = themeBgs[theme] || '#faf6f0';
 
           var themeTextColors = {
             'pure-paper': '#111111',
@@ -75,21 +77,25 @@
             'dracula': '#f8f8f2',
             'circadian-amber': '#fef3c7'
           };
-          var textColor = themeTextColors[theme] || '#f8fafc';
+          var textColor = themeTextColors[theme] || '#1e140d';
 
           document.documentElement.style.backgroundColor = bg;
           document.documentElement.style.color = textColor;
 
           var styleEl = document.createElement('style');
           styleEl.id = 'theme-pre-bootstrap';
-          styleEl.innerHTML = 'html, body, #root { background-color: ' + bg + '; color: ' + textColor + '; min-height: 100vh; } @keyframes ogPulse { 0%, 100% { opacity: 0.2; transform: scale(0.98); } 50% { opacity: 0.45; transform: scale(1.02); } }';
+          styleEl.innerHTML = 'html, body, #root { background-color: ' + bg + '; color: ' + textColor + '; min-height: 100vh; }';
           document.head.appendChild(styleEl);
 
-          var savedLang = localStorage.getItem('openguide_lang') || 'en';
+          // Always open in English on fresh visit / startup
+          var savedLang = sessionStorage.getItem('openguide_session_lang') || localStorage.getItem('openguide_lang') || 'en';
           document.documentElement.setAttribute('lang', savedLang);
           if (savedLang === 'ur' || savedLang === 'ar') {
             document.documentElement.setAttribute('dir', 'rtl');
             document.documentElement.classList.add('rtl-active');
+          } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+            document.documentElement.classList.remove('rtl-active');
           }
         } catch (e) {}
       })();
@@ -102,8 +108,74 @@
   </head>
   <body class="overflow-x-hidden antialiased">
     <div id="root">
-      <div id="og-pre-loader" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; font-family: system-ui, -apple-system, sans-serif;">
-        <div style="width: 48px; height: 48px; border-radius: 14px; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; letter-spacing: -0.5px; font-family: monospace; animation: ogPulse 1.4s ease-in-out infinite;">OG</div>
+      <div id="og-pre-loader" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 32px; font-family: system-ui, -apple-system, sans-serif; background-color: inherit; color: inherit;">
+        <div class="og-loader-wrapper">
+          <div class="bar">
+            <div class="ball"></div>
+          </div>
+        </div>
+        <span style="font-family: monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75;">OpenGuide</span>
+        <style>
+          .og-loader-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+          }
+          .og-loader-wrapper .bar {
+            width: 10px;
+            height: 100px;
+            background: #1e140d;
+            border-radius: 10px;
+            transform: rotate(0deg);
+            animation: og-bar-move 2.5s infinite ease-in-out;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+          .og-loader-wrapper .ball {
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            bottom: -10px;
+            left: -7.5px;
+            border-radius: 50%;
+            background: #e74c3c;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+            animation: og-ball-bounce 2.5s infinite ease-in-out;
+          }
+          @keyframes og-bar-move {
+            0% {
+              transform: rotate(0deg);
+            }
+            50% {
+              transform: rotate(90deg);
+            }
+            100% {
+              transform: rotate(0deg);
+            }
+          }
+          @keyframes og-ball-bounce {
+            0% {
+              left: -7.5px;
+              bottom: -10px;
+            }
+            25% {
+              bottom: 85px;
+            }
+            50% {
+              left: -7.5px;
+              bottom: -10px;
+            }
+            75% {
+              bottom: 85px;
+            }
+            100% {
+              left: -7.5px;
+              bottom: -10px;
+            }
+          }
+        </style>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>

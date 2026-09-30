@@ -357,7 +357,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
       await page.waitForTimeout(300);
     }
 
-    const allBtn = page.getByRole('button', { name: /All Clusters/i }).or(page.locator('button:has-text("All")')).first();
+    const allBtn = page.getByRole('button', { name: /^All(\s+Clusters)?$/i }).first();
     if (await allBtn.count() > 0) {
       await allBtn.click();
       await page.waitForTimeout(300);
@@ -870,9 +870,11 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.goto('/track/2/engine', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    // Open X-Ray Debug Lens via Alt+X
-    await page.keyboard.press('Alt+X');
-    await page.waitForTimeout(400);
+    // Open X-Ray Debug Lens via button
+    const xrayBtn = page.locator('[data-testid="xray-toggle-btn"]').first();
+    await expect(xrayBtn).toBeVisible({ timeout: 15000 });
+    await xrayBtn.click();
+    await page.waitForTimeout(500);
 
     // Verify "Agent Flow DAG" tab exists and switch to it
     const flowTab = page.getByRole('button', { name: /Agent Flow DAG/i });

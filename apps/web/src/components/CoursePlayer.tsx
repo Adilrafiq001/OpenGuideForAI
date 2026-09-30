@@ -700,6 +700,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               <div 
                 id="terminal-output" 
                 data-testid="terminal-output"
+                role="region"
+                aria-label="Python WebAssembly Execution Terminal Output"
+                aria-live="polite"
                 className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
                 {state === 'running' ? (
                   <div className="py-2 flex items-center justify-center">

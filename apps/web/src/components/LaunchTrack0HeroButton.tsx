@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useLanguageStore, isRTLLanguage } from '../store/useLanguageStore';
 import '../styles/launch-track-button.css';
 
 interface LaunchTrack0HeroButtonProps {
@@ -7,6 +8,9 @@ interface LaunchTrack0HeroButtonProps {
 }
 
 export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ onLaunch }) => {
+  const { language, t } = useLanguageStore();
+  const isRTL = isRTLLanguage(language);
+
   // checked = true → resting closed state; checked = false → opening animation
   const [isChecked, setIsChecked] = useState(true);
   // Incrementing key forces full DOM remount, clearing all CSS animation state
@@ -119,6 +123,8 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
           <div className="light-3" />
         </div>
         <div
+          id="launch-track-0-hero-btn"
+          data-testid="launch-track-0-hero-btn"
           className="area-wrapper"
           onClick={handleTrigger}
           onKeyDown={(e) => {
@@ -128,7 +134,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
           }}
           tabIndex={0}
           role="button"
-          aria-label="Launch Track 0"
+          aria-label={t('nav_launch_track0') || 'Launch Track 0'}
         >
           <div className="wrapper">
             <input
@@ -205,36 +211,65 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                     <path stroke="currentColor" d="M32.5 26.1085C32.5 26.1085 32 5.90019 38.5 2.10852C45 -1.68315 49 5.10852 47.5 9.60852C46 14.1085 39.5 17.1085 21 18.1085C13.667 18.5049 6.49118 18.0371 0.5 17.328" />
                     <path stroke="currentColor" d="M32.5 26C32.5 26 32 46.2083 38.5 50C45 53.7917 49 47 47.5 42.5C46 38 39.5 35 21 34C13.667 33.6036 6.49118 34.0714 0.5 34.7805" />
                   </svg>
-                  <span className="content">
-                    <span className="text state-1">
-                      {state1Chars.map((item) => (
-                        <span
-                          key={item.idx}
-                          data-label={item.char}
-                          style={{
-                            ['--i' as any]: item.idx,
-                            marginRight: item.margin ? '5px' : undefined
-                          }}
-                        >
-                          {item.char}
-                        </span>
-                      ))}
+                  {isRTL ? (
+                    <span className="content flex items-center justify-center" dir="rtl">
+                      <span 
+                        className="text state-1 font-bold text-sm tracking-normal"
+                        style={{ 
+                          fontFamily: language === 'ur' ? "'Noto Nastaliq Urdu', 'Amiri', serif" : "'Noto Sans Arabic', 'Amiri', sans-serif",
+                          color: '#ffffff',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.95), 0 0 10px rgba(255,200,80,0.9), 0 0 20px rgba(255,160,0,0.55)',
+                          direction: 'rtl',
+                          letterSpacing: '0'
+                        }}
+                      >
+                        {t('nav_launch_track0') || 'ٹریک 0 شروع کریں'}
+                      </span>
+                      <span 
+                        className="text state-2 font-bold text-sm tracking-normal"
+                        style={{ 
+                          fontFamily: language === 'ur' ? "'Noto Nastaliq Urdu', 'Amiri', serif" : "'Noto Sans Arabic', 'Amiri', sans-serif",
+                          color: '#ffffff',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.95), 0 0 12px rgba(255,220,100,0.95), 0 0 24px rgba(255,180,20,0.7)',
+                          direction: 'rtl',
+                          letterSpacing: '0'
+                        }}
+                      >
+                        {t('nav_launch_track0') || 'ٹریک 0 شروع کریں'}
+                      </span>
                     </span>
-                    <span className="text state-2">
-                      {state2Chars.map((item) => (
-                        <span
-                          key={item.idx}
-                          data-label={item.char}
-                          style={{
-                            ['--i' as any]: item.idx,
-                            marginRight: item.margin ? '5px' : undefined
-                          }}
-                        >
-                          {item.char}
-                        </span>
-                      ))}
+                  ) : (
+                    <span className="content">
+                      <span className="text state-1">
+                        {state1Chars.map((item) => (
+                          <span
+                            key={item.idx}
+                            data-label={item.char}
+                            style={{
+                              ['--i' as any]: item.idx,
+                              marginRight: item.margin ? '5px' : undefined
+                            }}
+                          >
+                            {item.char}
+                          </span>
+                        ))}
+                      </span>
+                      <span className="text state-2">
+                        {state2Chars.map((item) => (
+                          <span
+                            key={item.idx}
+                            data-label={item.char}
+                            style={{
+                              ['--i' as any]: item.idx,
+                              marginRight: item.margin ? '5px' : undefined
+                            }}
+                          >
+                            {item.char}
+                          </span>
+                        ))}
+                      </span>
                     </span>
-                  </span>
+                  )}
                 </div>
               </div>
             </div>

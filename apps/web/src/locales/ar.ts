@@ -8,12 +8,16 @@ export const ar: Record<string, string> = {
   nav_cognitive_accelerator: 'المسرع المعرفي',
   nav_synapse_lounge: 'استراحة المشابك العصبية',
   nav_science_vault: 'خزينة العلوم الموثقة',
-  nav_pillars: '11 ركيزة هندسية',
   nav_launch_track0: 'بدء المسار 0',
+  nav_tour: 'جولة',
+  nav_portfolio: 'محفظة الأعمال',
   nav_back_overview: 'العودة إلى النظرة العامة',
   nav_close: 'إغلاق',
 
   // Hero Section
+  hero_never_coded_label: 'لم تبرمج من قبل؟',
+  hero_never_coded_subtitle: 'ابدأ من المسار 0: نقطة الصفر (بدون أي إعداد مسبق)',
+  hero_never_coded_badge: 'المسار 0: نقطة الصفر',
   hero_tag: 'مجاني ومفتوح المصدر 100% • بدون فواتير سحابية • WebAssembly في المتصفح',
   hero_subtag: 'لا يشترط وجود خبرة سابقة في البرمجة',
   hero_title_prefix: 'من الصفر إلى',

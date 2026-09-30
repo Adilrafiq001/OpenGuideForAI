@@ -157,6 +157,17 @@
 - [x] **Universal RTL Isolation Subsystem:** Strict LTR isolation for CodeMirror, Pyodide terminal output, and math formulas (`direction: ltr !important; unicode-bidi: isolate;`) in Arabic (`ar`) and Urdu (`ur`) locales, paired with script-safe line-height preservation and directional icon flipping (`.rtl-flip`).
 - [x] **100% Automated Regression Suite (`comprehensive-features.spec.ts`):** 49/49 tests passing across entire Playwright suite.
 
+## Phase 17: Universal RTL Hardening, Lenis Nested Scroll Unfreeze, 24 Unique Physiological Themes Display & Cloudflare Custom Domains (Release v3.0.0)
+- [x] **Universal RTL CommandDock Centering & Directional Isolation:** Replaced fragile `translateX(-50%)` transform centering with standard `fixed inset-x-0 mx-auto w-max max-w-[calc(100vw-1rem)]`, ensuring mathematical center alignment in both LTR and RTL viewports without off-screen displacement.
+- [x] **Native Urdu & Arabic Cursive Ligature Preservation:** Linked Google Fonts for `Noto Sans Arabic`, `Amiri`, and `Noto Nastaliq Urdu`. Refactored `LaunchTrack0HeroButton` to preserve native cursive word calligraphy in RTL without breaking strings into discrete character spans.
+- [x] **Zero English Leaks in RTL Locales:** Localized navigation and hero badges (`nav_tour`, `nav_tracks`, `hero_never_coded_label`, `hero_never_coded_badge`) in Urdu (`ur`) and Arabic (`ar`).
+- [x] **Unfrozen Modal, Drawer & CodeEditor Nested Scrolling:** Configured Lenis `allowNestedScroll: true` with a robust `prevent` predicate for dialogs and scrollable containers, restoring native wheel and touch scrolling inside modals and CodeMirror.
+- [x] **Dynamic 24 Themes Count & Physiological Research Badging:** Updated `ThemeSettingsModal` header subtitle to dynamically reflect `Explore 24 calibrated themes (12 Dark & 12 Light)` and tab badges to count active category themes dynamically.
+- [x] **Direct CodeEditor Preferences Wiring & Real-Time Stage Transparency (Beyond Popup):** Connected CodeMirror 6, `HeroPhysicsStage.tsx`, and `App.tsx` directly to `useSettingsStore` compartments (`fontSize`, `editorFont`, `lineNumbers`, `tabSize`, `wordWrap`, `bracketPairs`), dynamically updating `--font-code-mono` and `--editor-font-size` on `document.documentElement` live in real time. Eliminated `backdrop-blur-md` and pitch-black blackout from the settings modal backdrop, delivering a completely clear stage so learners can inspect live theme colors, code typography, and layout on the main app in real time beyond the popup.
+- [x] **"Peek Live UI" Header Quick-Reveal Action:** Added an accessible eye toggle button in the modal header that temporarily dims the dialog to 5% opacity and displays a floating restore pill, allowing full-screen live inspection without closing settings.
+- [x] **Production Cloudflare Pages Custom Domains Architecture:** Configured CNAME and custom domain deployment specifications for `openguide.jo3.org` and `openguideai.2bd.net` in `docs/CLOUDFLARE-DOMAINS-SETUP.md`.
+- [x] **100% Automated Test Suite Passage:** 57/57 tests passing across all suites (`app-full-regression`, `comprehensive-features`, `mobile-experience`, `universal-compatibility`, `example`, `codemirror-persistence-curriculum`) with permanent regression coverage.
+
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 
 

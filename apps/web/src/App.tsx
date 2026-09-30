@@ -14,6 +14,9 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileNavDrawer } from './components/MobileNavDrawer';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
+import { PhysicsBarLoader } from './components/PhysicsBarLoader';
+import Lenis from 'lenis';
 
 // Modals: Lazy-load offscreen modals so they are not included in the initial page bundle
 const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
@@ -27,7 +30,7 @@ const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ de
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function App() {
-  const { theme, displaySize, editorFont } = useSettingsStore();
+  const { theme, displaySize, editorFont, fontSize } = useSettingsStore();
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
@@ -79,6 +82,56 @@ function App() {
     document.documentElement.style.setProperty('--font-code-mono', activeFont);
   }, [editorFont]);
 
+  // Synchronize editor font size CSS variable
+  useEffect(() => {
+    document.documentElement.style.setProperty('--editor-font-size', `${fontSize || 14}px`);
+  }, [fontSize]);
+
+  // Luxury Inertial Momentum Smooth Scrolling across all devices
+  useEffect(() => {
+    // Respect user's reduced-motion preference
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const lenis = new Lenis({
+      duration: 1.0,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.2,
+      infinite: false,
+      allowNestedScroll: true,
+      prevent: (node) => {
+        if (!node) return false;
+        return (
+          node.hasAttribute?.('data-lenis-prevent') ||
+          Boolean(node.closest?.('[data-lenis-prevent]')) ||
+          Boolean(node.closest?.('[role="dialog"]')) ||
+          Boolean(node.closest?.('.cm-scroller')) ||
+          Boolean(node.closest?.('.overflow-y-auto')) ||
+          Boolean(node.closest?.('.overflow-auto')) ||
+          Boolean(node.closest?.('.custom-scrollbar')) ||
+          Boolean(node.closest?.('.theme-settings-modal-dialog'))
+        );
+      }
+    });
+
+    let animId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      animId = requestAnimationFrame(raf);
+    }
+    animId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      lenis.destroy();
+    };
+  }, []);
+
   const handleOpenThemes = () => {
     setInitialModalTab('themes');
     setIsThemeModalOpen(true);
@@ -93,7 +146,7 @@ function App() {
     <Router>
       <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
-          <Suspense fallback={<div className="min-h-screen bg-[var(--color-primary)]" />}>
+          <Suspense fallback={<PhysicsBarLoader />}>
             <Routes>
               <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} />} />
               <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
@@ -163,6 +216,9 @@ function App() {
 
         {/* Real-Time Offline PWA Connection Status */}
         <OfflineStatusIndicator />
+
+        {/* Global PWA Install Prompt Banner & Guidance */}
+        <PwaInstallPrompt />
       </div>
     </Router>
 

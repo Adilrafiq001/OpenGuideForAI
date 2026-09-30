@@ -117,20 +117,20 @@ export function HeroPhysicsStage({
         transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
         className="max-w-4xl mx-auto mb-6"
       >
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.04] text-[var(--color-text-primary)] select-none">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.08] text-[var(--color-text-primary)] select-none">
           <span 
-            className="font-mono font-bold mr-1 inline-block"
+            className="font-mono font-bold ltr:mr-2 rtl:ml-2 inline-block select-none"
             style={{ color: currentThemeInfo.accent }}
           >
             /
           </span>
-          <span>{t('hero_title_prefix')} </span>
-          <span 
-            className="inline-block"
+          <bdi className="inline">{t('hero_title_prefix')} </bdi>
+          <bdi 
+            className="inline"
             style={{ color: currentThemeInfo.accent }}
           >
             {t('hero_title_suffix')}
-          </span>
+          </bdi>
         </h1>
       </motion.div>
 
@@ -156,7 +156,7 @@ export function HeroPhysicsStage({
         <a
           href="#pathways"
           onClick={onExplorePathways}
-          className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] font-semibold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+          className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-stone-100/90 dark:bg-[var(--color-secondary)] hover:bg-stone-200/90 border border-stone-300/80 dark:border-[var(--color-border)] text-stone-900 dark:text-[var(--color-text-primary)] font-semibold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
         >
           <span>{t('hero_explore_pathways')}</span>
           <ChevronRight size={16} />
@@ -172,19 +172,19 @@ export function HeroPhysicsStage({
       >
         <button
           onClick={onLaunchTrack0}
-          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-600/50 dark:border-emerald-500/30 bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100/90 text-emerald-950 dark:text-emerald-300 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
         >
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="font-bold text-emerald-800 dark:text-emerald-300">
-            Never Coded Before?
+          <span className="flex h-2 w-2 rounded-full bg-emerald-700 dark:bg-emerald-400 animate-pulse" />
+          <span className="font-bold text-emerald-950 dark:text-emerald-300">
+            {t('hero_never_coded_label') || 'Never Coded Before?'}
           </span>
-          <span className="text-[var(--color-text-secondary)] hidden sm:inline">
-            Start at Track 0: Absolute Zero (0 Setup Required)
+          <span className="text-stone-900 dark:text-stone-200 font-medium hidden sm:inline">
+            {t('hero_never_coded_subtitle') || 'Start at Track 0: Absolute Zero (0 Setup Required)'}
           </span>
-          <span className="text-[var(--color-text-secondary)] sm:hidden">
-            Track 0: Absolute Zero
+          <span className="text-stone-900 dark:text-stone-200 font-medium sm:hidden">
+            {t('hero_never_coded_badge') || 'Track 0: Absolute Zero'}
           </span>
-          <span className="text-emerald-700 dark:text-emerald-300 font-bold transition-transform group-hover:translate-x-0.5">
+          <span className="text-emerald-950 dark:text-emerald-300 font-bold transition-transform group-hover:translate-x-0.5 inline-block rtl:rotate-180">
             &rarr;
           </span>
         </button>
@@ -211,8 +211,8 @@ export function HeroPhysicsStage({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-[11px] font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 dark:bg-emerald-500/10 border border-emerald-600/40 dark:border-emerald-500/25 text-emerald-900 dark:text-emerald-300 font-mono text-[11px] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
               <span>{t('hero_console_runtime_badge')}</span>
             </div>
           </div>
@@ -241,7 +241,7 @@ export function HeroPhysicsStage({
                   }`}
                 >
                   <Icon size={13} style={{ color: isActive ? currentThemeInfo.accent : undefined }} />
-                  <span>{lens.label}</span>
+                  <bdi>{lens.label}</bdi>
                 </button>
               );
             })}
@@ -258,7 +258,13 @@ export function HeroPhysicsStage({
         </div>
 
         {/* Lens Interactive Display Canvas */}
-        <div className="p-6 font-mono text-xs overflow-x-auto momentum-scroll-x custom-scrollbar min-h-[170px] flex flex-col justify-between bg-[var(--color-primary)]/40">
+        <div 
+          className="p-6 font-mono overflow-x-auto momentum-scroll-x custom-scrollbar min-h-[170px] flex flex-col justify-between bg-[var(--color-primary)]/40 transition-all duration-150"
+          style={{
+            fontFamily: 'var(--font-code-mono)',
+            fontSize: 'var(--editor-font-size, 12px)'
+          }}
+        >
           <AnimatePresence mode="wait">
             {activeLens === 'wasm' && (
               <motion.div
@@ -270,19 +276,19 @@ export function HeroPhysicsStage({
                 className="space-y-2.5"
               >
                 <div className="flex items-center gap-2 text-[var(--color-text-secondary)] text-[11px]">
-                  <Code2 size={13} className="text-emerald-400" />
+                  <Code2 size={13} className="text-emerald-700 dark:text-emerald-400" />
                   <span>Interactive Pyodide CPython WebAssembly Sandbox</span>
                 </div>
                 <div className="text-[var(--color-text-secondary)] leading-relaxed space-y-1">
-                  <p><span className="text-purple-400">import</span> numpy <span className="text-purple-400">as</span> np</p>
-                  <p><span className="text-blue-400">query_vector</span> = np.array([0.421, 0.882, -0.194])</p>
-                  <p><span className="text-blue-400">document_vector</span> = np.array([0.435, 0.867, -0.180])</p>
+                  <p><span className="text-purple-700 dark:text-purple-400">import</span> numpy <span className="text-purple-700 dark:text-purple-400">as</span> np</p>
+                  <p><span className="text-blue-700 dark:text-blue-400">query_vector</span> = np.array([0.421, 0.882, -0.194])</p>
+                  <p><span className="text-blue-700 dark:text-blue-400">document_vector</span> = np.array([0.435, 0.867, -0.180])</p>
                   <p className="text-[var(--color-text-primary)] font-semibold">
-                    <span className="text-purple-400">similarity</span> = np.dot(query_vector, document_vector) / (np.linalg.norm(query_vector) * np.linalg.norm(document_vector))
+                    <span className="text-purple-700 dark:text-purple-400">similarity</span> = np.dot(query_vector, document_vector) / (np.linalg.norm(query_vector) * np.linalg.norm(document_vector))
                   </p>
                 </div>
                 <div className="pt-2 border-t border-[var(--color-border)] flex items-center justify-between text-[11px]">
-                  <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <span className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
                     <CheckCircle2 size={13} />
                     {simOutput || 'Output: cosine_similarity = 0.9984 • Memory: 1.2MB WASM Heap'}
                   </span>

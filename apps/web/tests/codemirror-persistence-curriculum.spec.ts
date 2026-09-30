@@ -37,7 +37,7 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
   });
 
   test('03. Scaffolded challenge execution, solution reveal and pass advancement', async ({ page }) => {
-    await page.goto('/track/0', { waitUntil: 'domcontentloaded' });
+    await page.goto('/track/0/engine', { waitUntil: 'domcontentloaded' });
 
     // Wait for Pyodide worker ready state
     const terminalHeader = page.locator('text=CPython Output Stream').first();

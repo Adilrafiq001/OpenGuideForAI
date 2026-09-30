@@ -8,6 +8,28 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  resolve: {
+    dedupe: ['react', 'react-dom']
+  },
+  server: {
+    port: 5173,
+    strictPort: true
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react/jsx-runtime',
+      'react-router-dom',
+      '@phosphor-icons/react',
+      'zustand',
+      'clsx',
+      'tailwind-merge',
+      'framer-motion',
+      'lucide-react'
+    ]
+  },
   build: {
     rollupOptions: {
       output: {
@@ -24,8 +46,15 @@ export default defineConfig({
           if (id.includes('node_modules/framer-motion')) {
             return 'vendor-motion';
           }
+          if (id.includes('node_modules/three')) {
+            return 'vendor-three';
+          }
+          if (id.includes('node_modules/@codemirror') || id.includes('node_modules/codemirror')) {
+            return 'vendor-codemirror';
+          }
         }
       }
-    }
+    },
+    chunkSizeWarningLimit: 800
   }
 })

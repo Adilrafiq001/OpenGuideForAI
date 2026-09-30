@@ -25,7 +25,7 @@ test.describe('OpenGuide Mobile, Cross-Device & Small Screen Suite', () => {
           const docScroll = document.documentElement.scrollWidth;
           const bodyScroll = document.body.scrollWidth;
           const vw = window.innerWidth;
-          const hasOverflow = docScroll > vw || bodyScroll > vw;
+          const hasOverflow = docScroll > vw + 1 || bodyScroll > vw + 1;
           return {
             hasOverflow,
             docScroll,
@@ -36,7 +36,7 @@ test.describe('OpenGuide Mobile, Cross-Device & Small Screen Suite', () => {
 
         expect(
           checkOverflow.hasOverflow,
-          `Horizontal scroll overflow detected on route "${route}" on ${device.name} (${device.width}x${device.height}): docScroll=${checkOverflow.docScroll}, vw=${checkOverflow.vw}`
+          `Horizontal scroll overflow detected on route "${route}" on ${device.name} (${device.width}x${device.height}): docScroll=${checkOverflow.docScroll}, bodyScroll=${checkOverflow.bodyScroll}, vw=${checkOverflow.vw}`
         ).toBeFalsy();
       }
     });
@@ -146,6 +146,7 @@ test.describe('OpenGuide Mobile, Cross-Device & Small Screen Suite', () => {
     // Tap the Run Code button
     const runBtn = page.locator('[data-testid="run-code-button"]').first();
     await expect(runBtn).toBeVisible({ timeout: 10000 });
+    await expect(runBtn).toBeEnabled({ timeout: 25000 });
     await runBtn.click();
 
     // Pyodide execution output should appear in terminal

@@ -58,7 +58,7 @@ export interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      theme: 'obsidian',
+      theme: (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('openguide_session_theme') as Theme : null) || 'claude-light',
       displaySize: 'default',
       fontSize: 14,
       editorFont: 'jetbrains-mono',
@@ -77,7 +77,12 @@ export const useSettingsStore = create<SettingsState>()(
       byokApiKey: '',
       byokProvider: 'openrouter',
       byokModel: 'google/gemini-2.5-flash',
-      setTheme: (theme) => set({ theme }),
+      setTheme: (theme) => {
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.setItem('openguide_session_theme', theme);
+        }
+        set({ theme });
+      },
       setDisplaySize: (displaySize) => set({ displaySize }),
       setFontSize: (fontSize) => set({ fontSize }),
       setEditorFont: (editorFont) => set({ editorFont }),
@@ -97,7 +102,7 @@ export const useSettingsStore = create<SettingsState>()(
       setByokProvider: (byokProvider) => set({ byokProvider }),
       setByokModel: (byokModel) => set({ byokModel }),
       resetDefaults: () => set({
-        theme: 'obsidian',
+        theme: 'claude-light',
         displaySize: 'default',
         fontSize: 14,
         editorFont: 'jetbrains-mono',
@@ -120,6 +125,12 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'openguide-settings',
+      partialize: (state) => {
+        // App must always open in Claude Warm Ivory (light theme)
+        // Preferences (editor font, font size, vim mode, BYOK) persist, but theme defaults to Claude Warm Ivory
+        const { theme: _theme, ...rest } = state;
+        return rest;
+      }
     }
   )
 );

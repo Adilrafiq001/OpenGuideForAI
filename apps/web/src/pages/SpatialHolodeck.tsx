@@ -29,7 +29,7 @@ export function SpatialHolodeck() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--color-primary,#09090b)] text-[var(--color-text-primary,#fafafa)] flex flex-col transition-colors selection:bg-[var(--color-accent,#10b981)] selection:text-black">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--color-primary,#09090b)] text-[var(--color-text-primary,#fafafa)] flex flex-col transition-colors selection:bg-[var(--color-accent,#10b981)] selection:text-black">
       
       {/* Top Navbar */}
       <header className="sticky top-0 z-40 w-full border-b border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-secondary)]/90 backdrop-blur-xl px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">

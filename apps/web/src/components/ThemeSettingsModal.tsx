@@ -84,18 +84,23 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   const [hoveredTheme, setHoveredTheme] = useState<ThemeInfo | null>(null);
   const [resetConfirmed, setResetConfirmed] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
+  const [isPeeking, setIsPeeking] = useState(false);
 
   const displayedTheme = hoveredTheme || activeThemeInfo;
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        if (isPeeking) {
+          setIsPeeking(false);
+        } else {
+          onClose();
+        }
       }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isPeeking]);
 
   useEffect(() => {
     if (isOpen && initialTab) {
@@ -115,37 +120,55 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-6 overflow-hidden">
-          {/* Backdrop */}
+          {/* Clear Stage Backdrop (Beyond Popup) — Zero Blurring for Real-Time Main UI Visibility */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            style={{ opacity: (modalOpacity ?? 0.85) * 0.75 }}
+            data-testid="modal-stage-backdrop"
+            className="absolute inset-0 transition-colors duration-200"
+            style={{ 
+              backgroundColor: isPeeking 
+                ? 'transparent' 
+                : `rgba(0, 0, 0, ${Math.max(0, (1 - (modalOpacity ?? 0.85)) * 0.7)})`
+            }}
           />
+
+          {/* Peeking Floating Bar to Return to Settings */}
+          {isPeeking && (
+            <button
+              onClick={() => setIsPeeking(false)}
+              data-testid="return-from-peek-btn"
+              className="fixed top-6 left-1/2 -translate-x-1/2 z-[250] px-5 py-2.5 rounded-full bg-[var(--color-accent)] text-[var(--color-bg-primary)] font-bold text-xs shadow-2xl flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+            >
+              <EyeSlash size={16} weight="bold" />
+              <span>Viewing Live App • Click to Restore Settings</span>
+            </button>
+          )}
 
           {/* Modal Container */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            animate={{ 
+              opacity: isPeeking ? 0.05 : 1, 
+              scale: isPeeking ? 0.98 : 1, 
+              y: 0 
+            }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10 transition-colors duration-200"
+            data-lenis-prevent="true"
+            className={`theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10 transition-all duration-200 ${
+              isPeeking ? 'pointer-events-none' : ''
+            }`}
             style={{
-              backgroundColor: (() => {
-                const hex = (activeThemeInfo.surface || '#0d0d0f').replace('#', '');
-                const fullHex = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex;
-                const num = parseInt(fullHex, 16);
-                const r = (num >> 16) & 255;
-                const g = (num >> 8) & 255;
-                const b = num & 255;
-                return `rgba(${r}, ${g}, ${b}, ${modalOpacity ?? 0.85})`;
-              })(),
-              backdropFilter: `blur(${Math.round(24 * (modalOpacity ?? 0.85) + 6)}px)`,
-              WebkitBackdropFilter: `blur(${Math.round(24 * (modalOpacity ?? 0.85) + 6)}px)`
+              backgroundColor: activeThemeInfo.surface || 'var(--color-surface, #0d0d0f)',
+              color: 'var(--color-text-primary, #ffffff)'
             }}
             data-testid="theme-settings-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Workspace Personalization Settings"
           >
             {/* Header */}
             <div className="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-[var(--color-border,rgba(255,255,255,0.1))] flex items-center justify-between">
@@ -164,20 +187,39 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     Workspace Personalization
                   </h2>
                   <p className="text-[11px] sm:text-xs text-[var(--color-text-secondary,#a1a1aa)] line-clamp-1 sm:line-clamp-none">
-                    Explore 20 calibrated themes (10 Dark & 10 Light) with real-time swatches & live preview
+                    Explore {THEMES_DATA.length} calibrated themes ({THEMES_DATA.filter(t => t.mode === 'dark').length} Dark & {THEMES_DATA.filter(t => t.mode === 'light').length} Light) with real-time swatches & live preview
                   </p>
                 </div>
               </div>
 
-              {/* Close Button */}
-              <button
-                onClick={onClose}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary)]/40 transition-colors cursor-pointer min-h-[44px] min-w-[44px] shrink-0"
-                aria-label="Close Theme Settings"
-                data-testid="close-theme-modal-btn"
-              >
-                <X size={20} />
-              </button>
+              {/* Header Right Actions */}
+              <div className="flex items-center gap-2">
+                {/* Peek Live UI Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsPeeking(!isPeeking)}
+                  className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    isPeeking
+                      ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] border-[var(--color-accent)] shadow-lg'
+                      : 'border-[var(--color-border)] bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)]/80 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                  title="Peek live app behind settings"
+                  data-testid="peek-stage-btn"
+                >
+                  <Eye size={15} weight={isPeeking ? "fill" : "regular"} />
+                  <span className="hidden sm:inline">{isPeeking ? 'Restore Settings' : 'Peek Main UI'}</span>
+                </button>
+
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary)]/40 transition-colors cursor-pointer min-h-[44px] min-w-[44px] shrink-0"
+                  aria-label="Close Theme Settings"
+                  data-testid="close-theme-modal-btn"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Navigation Tabs */}
@@ -249,7 +291,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             {activeMode === 'dark' ? 'Dark Themes' : 'Light Themes'}
                           </span>
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] font-semibold">
-                            10
+                            {filteredThemes.length}
                           </span>
                         </div>
                         <span className="text-[11px] text-[var(--color-text-secondary)]">
@@ -267,7 +309,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
 
                   {/* Themes Grid / List */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-2" data-lenis-prevent="true">
                     {filteredThemes.map((t) => {
                       const isSelected = theme === t.id;
 
@@ -481,7 +523,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               </div>
             ) : (
               /* Editor & Environment Preferences Tab */
-              <div className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[60vh] custom-scrollbar text-[var(--color-text-primary,#ffffff)]">
+              <div className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[60vh] custom-scrollbar text-[var(--color-text-primary,#ffffff)]" data-lenis-prevent="true">
                 
                 {/* Section 1: Typography & Editor Canvas */}
                 <div className="space-y-4">
@@ -516,18 +558,18 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       </div>
                     </div>
 
-                    {/* Window Transparency & Glass Opacity Slider */}
+                    {/* Stage Transparency (Beyond Popup) Slider */}
                     <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Window Transparency</span>
+                        <span className="text-xs font-semibold text-[var(--color-text-primary)]">Stage Transparency (Beyond Popup)</span>
                         <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[var(--color-secondary)] text-[var(--color-accent)] border border-[var(--color-border)]">
                           {Math.round((modalOpacity ?? 0.85) * 100)}%
                         </span>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary)]">Adjust glass opacity to see themes and code live through the modal.</p>
+                      <p className="text-[11px] text-[var(--color-text-secondary)]">Controls visibility of the live app behind this settings popup. 100% gives full live visibility without dimming.</p>
                       <input 
                         type="range" 
-                        min="0.4" 
+                        min="0.2" 
                         max="1.0" 
                         step="0.05"
                         value={modalOpacity ?? 0.85}
@@ -537,10 +579,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       />
                       <div className="flex gap-1.5">
                         {[
-                          { label: '50%', val: 0.5 },
-                          { label: '70%', val: 0.7 },
-                          { label: '85%', val: 0.85 },
-                          { label: '100%', val: 1.0 }
+                          { label: 'Clear 100%', val: 1.0 },
+                          { label: 'Subtle 85%', val: 0.85 },
+                          { label: 'Balanced 60%', val: 0.6 },
+                          { label: 'Dim 30%', val: 0.3 }
                         ].map(opt => (
                           <button
                             key={opt.val}
@@ -611,6 +653,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           <button
                             key={size}
                             onClick={() => setFontSize(size)}
+                            data-testid={`font-size-${size}-btn`}
                             className={`flex-1 py-1 rounded-lg text-[10px] font-mono border transition-all ${
                               fontSize === size 
                                 ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'

@@ -10,10 +10,15 @@ export const en: Record<string, string> = {
   nav_science_vault: 'Verified Science Vault',
   nav_pillars: '11 Architectural Pillars',
   nav_launch_track0: 'Launch Track 0',
+  nav_tour: 'Tour',
+  nav_portfolio: 'Portfolio',
   nav_back_overview: 'Back to Overview',
   nav_close: 'Close',
 
   // Hero Section
+  hero_never_coded_label: 'Never Coded Before?',
+  hero_never_coded_subtitle: 'Start at Track 0: Absolute Zero (0 Setup Required)',
+  hero_never_coded_badge: 'Track 0: Absolute Zero',
   hero_tag: '100% Free & Open Source • Zero Cloud Bills • In-Browser WASM',
   hero_subtag: 'Zero Coding Knowledge Required',
   hero_title_prefix: 'Zero To',

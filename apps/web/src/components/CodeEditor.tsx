@@ -95,7 +95,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   // Track the latest value internally to avoid feedback loops
   const latestValueRef = useRef(value);
   latestValueRef.current = value;
-  const { editorFont } = useSettingsStore();
+  const { 
+    editorFont, 
+    fontSize: storeFontSize, 
+    wordWrap: storeWordWrap, 
+    lineNumbers: storeLineNumbers, 
+    tabSize: storeTabSize,
+    bracketPairs: storeBracketPairs
+  } = useSettingsStore();
+
+  const effectiveFontSize = fontSize || storeFontSize || 14;
+  const effectiveWordWrap = wordWrap ?? storeWordWrap ?? true;
+  const effectiveTabSize = storeTabSize || 4;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -106,13 +117,16 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         height: '100%',
         backgroundColor: 'transparent',
         color: 'var(--color-text-primary)',
-        fontFamily: 'var(--font-code-mono, "JetBrains Mono", monospace)',
-        fontSize: `${fontSize}px`
+        fontFamily: 'var(--font-code-mono, "JetBrains Mono", monospace) !important',
+        fontSize: `${effectiveFontSize}px`
       },
       '.cm-scroller': {
         overflow: 'auto',
-        fontFamily: 'inherit',
+        fontFamily: 'inherit !important',
         lineHeight: '1.6'
+      },
+      '.cm-content, .cm-gutter, .cm-line': {
+        fontFamily: 'inherit !important'
       },
       '.cm-content': {
         padding: '12px 0',
@@ -152,7 +166,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     });
 
     const extensions = [
-      lineNumbers(),
+      ...(storeLineNumbers !== 'off' ? [lineNumbers()] : []),
+      EditorState.tabSize.of(effectiveTabSize),
       highlightActiveLineGutter(),
       highlightSpecialChars(),
       history(),
@@ -161,8 +176,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       EditorState.allowMultipleSelections.of(true),
       indentOnInput(),
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-      bracketMatching(),
-      closeBrackets(),
+      ...(storeBracketPairs ? [bracketMatching(), closeBrackets()] : []),
       rectangularSelection(),
       crosshairCursor(),
       highlightActiveLine(),
@@ -185,7 +199,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       })
     ];
 
-    if (wordWrap) {
+    if (effectiveWordWrap) {
       extensions.push(EditorView.lineWrapping);
     }
 
@@ -209,7 +223,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       view.destroy();
       viewRef.current = null;
     };
-  }, [fontSize, editorFont, wordWrap, readOnly]);
+  }, [effectiveFontSize, editorFont, effectiveWordWrap, readOnly, storeLineNumbers, effectiveTabSize, storeBracketPairs]);
 
   // Synchronize document if value changes externally (e.g. reset or canonical solution insert)
   useEffect(() => {

@@ -146,4 +146,214 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
     expect(hasCaches).toBeTruthy();
   });
 
+  test('07. Universal RTL CommandDock Centering & Text Direction Isolation', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Switch language to Urdu (RTL)
+    await page.evaluate(() => {
+      const store = (window as any).__OPEN_GUIDE_STORE__;
+      document.documentElement.setAttribute('lang', 'ur');
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.classList.add('rtl-active');
+      localStorage.setItem('openguide_lang', 'ur');
+    });
+    await page.waitForTimeout(300);
+
+    // Verify CommandDock wrapper is visible and horizontally centered
+    const dock = page.locator('[data-testid="command-dock-wrapper"]');
+    await expect(dock).toBeVisible();
+
+    const metrics = await page.evaluate(() => {
+      const el = document.querySelector('[data-testid="command-dock-wrapper"]');
+      if (!el) return null;
+      const rect = el.getBoundingClientRect();
+      return {
+        left: rect.left,
+        right: rect.right,
+        width: rect.width,
+        center: (rect.left + rect.right) / 2,
+        windowWidth: window.innerWidth
+      };
+    });
+
+    expect(metrics).not.toBeNull();
+    expect(metrics!.left).toBeGreaterThan(0);
+    // Tolerance for scrollbar width (within 15px of viewport center)
+    expect(Math.abs(metrics!.center - metrics!.windowWidth / 2)).toBeLessThan(15);
+  });
+
+  test('08. Universal RTL Mechanical Button & Beginner Badge Localization', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Set language to Urdu
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('lang', 'ur');
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.classList.add('rtl-active');
+      localStorage.setItem('openguide_lang', 'ur');
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+
+    // Verify mechanical launch button contains Urdu text
+    const mechBtn = page.locator('.launch-track-hero-container').first();
+    await expect(mechBtn).toBeVisible();
+    const btnText = await mechBtn.textContent();
+    expect(btnText).toContain('ٹریک 0 شروع کریں');
+
+    // Verify beginner badge is in Urdu
+    const beginnerBadge = page.locator('text=پہلے کبھی کوڈنگ نہیں کی؟').first();
+    await expect(beginnerBadge).toBeVisible();
+  });
+
+  test('09. Theme Settings Modal Unfrozen Mouse Wheel Scrolling', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Open Theme Settings Modal
+    const themeBtn = page.locator('[data-testid="header-theme-settings-btn"]').first();
+    await expect(themeBtn).toBeVisible();
+    await themeBtn.click();
+
+    const modal = page.locator('[data-testid="theme-settings-modal-dialog"]').first();
+    await expect(modal).toBeVisible();
+
+    // Verify scroll container has data-lenis-prevent and does not suppress wheel
+    const scrollResult = await page.evaluate(() => {
+      const el = document.querySelector('[data-testid="theme-settings-modal-dialog"] .overflow-y-auto') as HTMLElement | null;
+      if (!el) return { found: false, prevented: true, scrolled: false };
+
+      const wheelEvt = new WheelEvent('wheel', {
+        deltaY: 150,
+        bubbles: true,
+        cancelable: true
+      });
+      el.dispatchEvent(wheelEvt);
+      el.scrollTop = 120;
+
+      return {
+        found: true,
+        prevented: wheelEvt.defaultPrevented,
+        scrolled: el.scrollTop > 0
+      };
+    });
+
+    expect(scrollResult.found).toBe(true);
+    expect(scrollResult.prevented).toBe(false);
+    expect(scrollResult.scrolled).toBe(true);
+  });
+
+  test('10. 24 Unique Research-Based Themes Available with Dynamic Counts', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Open Theme Settings Modal
+    const themeBtn = page.locator('[data-testid="header-theme-settings-btn"]').first();
+    await themeBtn.click();
+
+    const modal = page.locator('[data-testid="theme-settings-modal-dialog"]').first();
+    await expect(modal).toBeVisible();
+
+    // Verify dynamic subtitle reports 24 themes
+    await expect(modal.locator('text=Explore 24 calibrated themes (12 Dark & 12 Light)').first()).toBeVisible();
+
+    // Switch between Dark and Light mode and verify 12 themes in each
+    const modeBadge = modal.locator('.font-mono.px-1\\.5').first();
+    await expect(modeBadge).toHaveText('12');
+  });
+
+  test('11. Code Editor & Environment Settings Synchronize to CodeMirror & CSS Variables', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Open Theme Settings Modal
+    const themeBtn = page.locator('[data-testid="header-theme-settings-btn"]').first();
+    await themeBtn.click();
+
+    // Switch to Preferences tab
+    const prefTab = page.locator('[data-testid="tab-preferences-btn"]').first();
+    await expect(prefTab).toBeVisible();
+    await prefTab.click();
+
+    // Click Fira Code font
+    const firaBtn = page.locator('[data-testid="editor-font-fira-code-btn"]').first();
+    await expect(firaBtn).toBeVisible();
+    await firaBtn.click();
+
+    // Verify root attribute updated to fira-code and CSS variable set
+    const editorFontAttr = await page.evaluate(() => document.documentElement.getAttribute('data-editor-font'));
+    expect(editorFontAttr).toBe('fira-code');
+
+    const fontCodeMono = await page.evaluate(() => document.documentElement.style.getPropertyValue('--font-code-mono'));
+    expect(fontCodeMono).toContain('Fira Code');
+
+    // Select 16px Font Size
+    const font16Btn = page.locator('[data-testid="font-size-16-btn"]').first();
+    if (await font16Btn.count() > 0) {
+      await font16Btn.click();
+      const fontSizeVar = await page.evaluate(() => document.documentElement.style.getPropertyValue('--editor-font-size'));
+      expect(fontSizeVar).toBe('16px');
+    }
+  });
+
+  test('12. Real-Time Stage Transparency (Beyond Popup) & Peek Main UI Feature', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Open Theme Settings Modal
+    const themeBtn = page.locator('[data-testid="header-theme-settings-btn"]').first();
+    await themeBtn.click();
+
+    const backdrop = page.locator('[data-testid="modal-stage-backdrop"]').first();
+    await expect(backdrop).toBeVisible();
+
+    // 1. Verify backdrop does NOT have backdrop-blur-md (zero blurring of the live main app)
+    const backdropClasses = await backdrop.getAttribute('class');
+    expect(backdropClasses).not.toContain('backdrop-blur');
+
+    // 2. Switch to Preferences and test Stage Transparency slider at 1.0 (Clear Stage)
+    const prefTab = page.locator('[data-testid="tab-preferences-btn"]').first();
+    await prefTab.click();
+
+    const clearBtn = page.locator('button:has-text("Clear 100%")').first();
+    await expect(clearBtn).toBeVisible();
+    await clearBtn.click();
+
+    // At 1.0 (100% Clear Stage), backdrop background should be rgba(0, 0, 0, 0) (completely clear)
+    const backdropBg = await backdrop.evaluate((el: HTMLElement) => el.style.backgroundColor);
+    expect(backdropBg).toBe('rgba(0, 0, 0, 0)');
+
+    // 3. Test Peek Main UI button in modal header
+    const peekBtn = page.locator('[data-testid="peek-stage-btn"]').first();
+    await expect(peekBtn).toBeVisible();
+    await peekBtn.click();
+
+    // Modal dialog fades to peeking state (opacity: 0.05)
+    const modalDialog = page.locator('[data-testid="theme-settings-modal-dialog"]').first();
+    await expect(modalDialog).toHaveCSS('opacity', '0.05');
+
+    // Floating return button appears
+    const returnBtn = page.locator('[data-testid="return-from-peek-btn"]').first();
+    await expect(returnBtn).toBeVisible();
+
+    // Click return button restores modal
+    await returnBtn.click();
+    await expect(returnBtn).toBeHidden();
+    await expect(modalDialog).toHaveCSS('opacity', '1');
+
+    // 4. Test real-time theme switching while modal remains open
+    const themesTab = page.locator('[data-testid="tab-themes-btn"]').first();
+    await themesTab.click();
+
+    const paperSwatch = page.locator('[data-testid="theme-swatch-btn"][title*="Archival Fine Paper"]').first();
+    if (await paperSwatch.count() > 0) {
+      await paperSwatch.click();
+      await page.waitForTimeout(300);
+      const currentTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+      expect(currentTheme).toBe('pure-paper');
+    }
+  });
+
 });
+

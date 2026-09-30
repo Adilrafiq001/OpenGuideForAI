@@ -65,7 +65,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#c2410c',
     accentName: 'Terracotta Flame',
     textPrimary: '#1e140d',
-    textSecondary: '#63391b',
+    textSecondary: '#3c220f',
     description: 'Anthropic Claude-inspired warm ivory parchment with comforting roasted terracotta accents.',
     toolInspiration: 'Anthropic Claude AI',
     physiologyBasis: 'Warm earth tones reduce autonomic fight-or-flight triggers during intense focus.'

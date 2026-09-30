@@ -17,12 +17,14 @@ import {
   Check,
   Zap,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Download
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
 import { startAppTour } from './AppTour';
+import { usePwaInstall } from '../hooks/usePwaInstall';
 
 interface MobileNavDrawerProps {
   isOpen: boolean;
@@ -40,6 +42,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
   const navigate = useNavigate();
   const { theme, setTheme, displaySize, setDisplaySize } = useSettingsStore();
   const { language, setLanguage } = useLanguageStore();
+  const { isInstalled, promptInstall } = usePwaInstall();
 
   const currentThemeInfo = useMemo(() => {
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
@@ -407,6 +410,19 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                     <Sparkles size={14} className="text-[var(--color-accent)]" />
                     <span>Quick Tour</span>
                   </button>
+
+                  {!isInstalled && (
+                    <button
+                      onClick={() => {
+                        promptInstall();
+                      }}
+                      data-testid="drawer-install-pwa-btn"
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-accent)] text-black text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-95"
+                    >
+                      <Download size={14} />
+                      <span>Install App</span>
+                    </button>
+                  )}
                 </div>
 
                 <div className="text-[10px] font-mono text-[var(--color-text-secondary)] text-right">
