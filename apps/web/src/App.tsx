@@ -18,11 +18,14 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileNavDrawer } from './components/MobileNavDrawer';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import { PhysicsBarLoader } from './components/PhysicsBarLoader';
+import { startAppTour } from './components/AppTour';
 import Lenis from 'lenis';
 
 // Modals: Lazy-load offscreen modals so they are not included in the initial page bundle
 const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
 const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
+const FirstTimeSetupModal = lazy(() => import('./components/FirstTimeSetupModal').then(m => ({ default: m.FirstTimeSetupModal })));
+const StudioInteractiveDemoModal = lazy(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -37,6 +40,11 @@ function App() {
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
+  const [isFirstTimeSetupOpen, setIsFirstTimeSetupOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !localStorage.getItem('og_onboarding_completed');
+  });
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   // Remove pre-bootstrap style tag and inline overrides once React hydrates
   useEffect(() => {
@@ -144,13 +152,21 @@ function App() {
     setIsThemeModalOpen(true);
   };
 
+  const handleOpenDemo = () => {
+    setIsDemoModalOpen(true);
+  };
+
+  const handleOpenOnboarding = () => {
+    setIsFirstTimeSetupOpen(true);
+  };
+
   return (
     <Router>
       <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
           <Suspense fallback={<PhysicsBarLoader />}>
             <Routes>
-              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} />} />
+              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} onOpenDemo={handleOpenDemo} />} />
               <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
               <Route path="/track/0" element={<CoursePlayer track={track0} />} />
               <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
@@ -178,6 +194,7 @@ function App() {
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
           onOpenHelp={() => setIsHelpModalOpen(true)}
+          onOpenDemo={handleOpenDemo}
         />
 
         {/* Native-Grade Mobile Bottom Navigation Bar (<md screens only) */}
@@ -210,6 +227,34 @@ function App() {
             <HelpModal 
               isOpen={isHelpModalOpen}
               onClose={() => setIsHelpModalOpen(false)}
+              onOpenTour={() => startAppTour(typeof window !== 'undefined' && window.innerWidth < 768)}
+              onOpenDemo={handleOpenDemo}
+              onOpenOnboarding={handleOpenOnboarding}
+            />
+          </Suspense>
+        )}
+
+        {/* First Time Visitor Setup & Onboarding Wizard */}
+        {isFirstTimeSetupOpen && (
+          <Suspense fallback={null}>
+            <FirstTimeSetupModal 
+              isOpen={isFirstTimeSetupOpen}
+              onClose={() => setIsFirstTimeSetupOpen(false)}
+              onStartTour={() => startAppTour(typeof window !== 'undefined' && window.innerWidth < 768)}
+              onLaunchTrack0={() => {
+                window.location.assign('/track/0/intro');
+              }}
+            />
+          </Suspense>
+        )}
+
+        {/* Studio Interactive Architecture & Engine Demo Modal */}
+        {isDemoModalOpen && (
+          <Suspense fallback={null}>
+            <StudioInteractiveDemoModal 
+              isOpen={isDemoModalOpen}
+              onClose={() => setIsDemoModalOpen(false)}
+              onOpenThemes={handleOpenThemes}
             />
           </Suspense>
         )}

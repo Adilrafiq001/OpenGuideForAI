@@ -13,6 +13,20 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     actionTimeout: 10000,
     navigationTimeout: 30000,
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: 'http://localhost:5173',
+          localStorage: [
+            {
+              name: 'og_onboarding_completed',
+              value: 'true',
+            },
+          ],
+        },
+      ],
+    },
   },
   projects: [
     {

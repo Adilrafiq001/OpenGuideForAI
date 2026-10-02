@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://openguideforai.dpdns.org">
+<a href="https://openguide.pages.dev">
   <img src="apps/web/public/favicon.svg" width="76" height="76" alt="OpenGuide AI Studio Monogram" />
 </a>
 
@@ -12,7 +12,7 @@
 > **100% Free. In-Browser Python WebAssembly. Zero Setup. Zero Telemetry. Sovereign Forever.**
 
 <p align="center">
-  <a href="https://openguideforai.dpdns.org">
+  <a href="https://openguide.pages.dev">
     <img src="docs/assets/hero-banner.svg" alt="OpenGuide Interactive CPython 3.12 WASM Engine Terminal" width="100%" />
   </a>
 </p>
@@ -21,12 +21,12 @@
 [![CPython 3.12 WASM](https://img.shields.io/badge/CPython%203.12-Pyodide%20WASM-3b82f6.svg?style=for-the-badge)](https://pyodide.org/)
 [![Cloud Bill: $0 Forever](https://img.shields.io/badge/Cloud%20Bill-%240%20Forever-10b981.svg?style=for-the-badge)](#the-0-rule-hard-constraint)
 [![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-8b5cf6.svg?style=for-the-badge)](#curriculum)
-[![Zero Setup: No Install](https://img.shields.io/badge/Zero%20Setup-Instant%20Browser%20Launch-06b6d4.svg?style=for-the-badge)](https://openguideforai.dpdns.org)
+[![Zero Setup: No Install](https://img.shields.io/badge/Zero%20Setup-Instant%20Browser%20Launch-06b6d4.svg?style=for-the-badge)](https://openguide.pages.dev)
 [![Native Desktop App](https://img.shields.io/badge/Desktop%20App-Windows%20%E2%80%A2%20Mac%20%E2%80%A2%20Linux-f59e0b.svg?style=for-the-badge)](#desktop-app)
 
 ---
 
-### [🚀 Launch Live Studio (Free)](https://openguideforai.dpdns.org) • [💻 Desktop App Guide](#desktop-app) • [📚 45 Interactive Labs](#curriculum) • [💡 Power Tips](#-upfront-tips--power-tricks) • [💖 Support the Creator](#-a-message-from-the-creator--sponsorship)
+### [🚀 Launch Live Studio (Free)](https://openguide.pages.dev) • [💻 Desktop App Guide](#desktop-app) • [📚 45 Interactive Labs](#curriculum) • [💡 Power Tips](#power-tips) • [💖 Support the Creator](#sponsorship)
 
 </div>
 
@@ -107,18 +107,18 @@ graph TD
 OpenGuide is engineered as an **Installable Progressive Web App (PWA)** with native OS window integration. You never have to install Python, Node.js, or Docker on your host operating system to build neural architectures:
 
 ### 🪟 Windows (10 / 11)
-1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Google Chrome, Microsoft Edge, or Brave.
+1. Open **[https://openguide.pages.dev](https://openguide.pages.dev)** in Google Chrome, Microsoft Edge, or Brave.
 2. In the right side of the address bar, click the **Install OpenGuide** computer icon (or click the three dots `⋮` $\rightarrow$ **Install OpenGuide**).
 3. Click **Install**.
 4. **Automatic Desktop Shortcut:** Windows automatically generates an **OpenGuide shortcut directly on your Desktop**, adds it to your **Start Menu**, and lets you pin it to your **Taskbar**.
 5. When launched, OpenGuide opens in a clean, standalone OS window with native titlebar controls and no browser tabs or URL bars.
 
 ### 🍎 macOS (Sonoma / Ventura / Monterey)
-1. **Chrome / Brave / Edge:** Visit **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)**, click the **Install** button in the omnibox, and confirm. OpenGuide is added to `/Applications`, your **Dock**, and indexed in **Spotlight Search** (`Cmd + Space`).
+1. **Chrome / Brave / Edge:** Visit **[https://openguide.pages.dev](https://openguide.pages.dev)**, click the **Install** button in the omnibox, and confirm. OpenGuide is added to `/Applications`, your **Dock**, and indexed in **Spotlight Search** (`Cmd + Space`).
 2. **Safari (macOS Sonoma+):** Click **File** in the top menu bar $\rightarrow$ **Add to Dock**. OpenGuide operates as a standalone Mac application with full `Cmd + Tab` app switcher support.
 
 ### 🐧 Linux (Ubuntu, Debian, Fedora, Arch)
-1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Chromium, Chrome, or Brave.
+1. Open **[https://openguide.pages.dev](https://openguide.pages.dev)** in Chromium, Chrome, or Brave.
 2. Click **Install OpenGuide** from the address bar or app menu.
 3. Your desktop environment (GNOME, KDE Plasma, XFCE) automatically creates an OpenGuide `.desktop` launcher under `~/.local/share/applications/` and places an icon on your desktop with full system tray and application drawer integration.
 
@@ -131,6 +131,7 @@ Thanks to our Service Worker cache (`sw.js`), all curriculum content, the Pyodid
 
 ---
 
+<a id="power-tips"></a>
 ## 💡 Upfront Tips & Power Tricks
 
 Master OpenGuide like a staff engineer from day one:
@@ -185,6 +186,7 @@ Yes! OpenGuide generates a <strong>Deterministic SHA-256 Document Integrity Sign
 
 ---
 
+<a id="sponsorship"></a>
 ## 💖 A Message from the Creator & Sponsorship
 
 OpenGuide was envisioned, architected, and built by **Adil Rafiq Dar (ARD)**.
@@ -219,36 +221,107 @@ If OpenGuide has helped you understand AI, saved you money, or empowered your en
 
 Want to run OpenGuide locally or contribute to the open-source studio?
 
-### Prerequisites
-* **Node.js**: v18.0.0 or higher
-* **Yarn** (v4.x) or **npm**
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/openguideforai/OpenGuideForAI)
 
-### 1. Clone & Install
+### Prerequisites & Supported Environments
+* **Node.js**: `v18.18.0` or higher (`node -v`). LTS Recommended (`v20.x` or `v22.x`).
+* **Package Manager**: Yarn Berry `v4.x` (managed via Node.js Corepack) or `npm` / `pnpm`.
+* **Hardware & Browser Requirements**: Chrome 113+, Microsoft Edge 113+, Safari 16.4+, or Firefox 115+ (with WebAssembly & WebGL hardware acceleration enabled).
+
+### 🖥️ Platform-Specific Setup Guide
+
+<details open>
+<summary><strong>🪟 Windows (10 / 11) Setup & PowerShell Execution Policy</strong></summary>
+
+1. **PowerShell Script Policy:** If Windows blocks script execution (`PSSecurityException`), run:
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   ```
+2. **Enable Corepack:** Activate Yarn Berry v4 without installing global packages:
+   ```powershell
+   corepack enable
+   ```
+3. **Line Endings (LF Preservation):** Prevent Git from mutating Unix LF line endings in WebAssembly workers:
+   ```powershell
+   git config --global core.autocrlf false
+   ```
+4. **Clone & Install:**
+   ```powershell
+   git clone https://github.com/openguideforai/OpenGuideForAI.git
+   cd OpenGuideForAI
+   yarn install
+   ```
+</details>
+
+<details>
+<summary><strong>🍎 macOS (Apple Silicon M1/M2/M3/M4 & Intel)</strong></summary>
+
+1. **Node Environment (via nvm or fnm):**
+   ```bash
+   nvm use || fnm use
+   ```
+2. **Enable Corepack & Install:**
+   ```bash
+   corepack enable
+   git clone https://github.com/openguideforai/OpenGuideForAI.git
+   cd OpenGuideForAI
+   yarn install
+   ```
+</details>
+
+<details>
+<summary><strong>🐧 Linux (Ubuntu, Debian, Fedora, Arch, WSL2)</strong></summary>
+
+1. Ensure standard build toolchain is installed:
+   ```bash
+   # Debian / Ubuntu / WSL2:
+   sudo apt update && sudo apt install -y git curl
+   ```
+2. Enable Corepack and clone:
+   ```bash
+   corepack enable
+   git clone https://github.com/openguideforai/OpenGuideForAI.git
+   cd OpenGuideForAI
+   yarn install
+   ```
+</details>
+
+<details>
+<summary><strong>☁️ Zero-Install Cloud Development (GitHub Codespaces)</strong></summary>
+
+Launch a full, zero-setup developer environment directly in your browser with 1 click:
+* Click **[Open in GitHub Codespaces](https://codespaces.new/openguideforai/OpenGuideForAI)**.
+* Visual Studio Code for Web boots in < 60 seconds with all Node dependencies and ports pre-configured.
+</details>
+
+---
+
+### 1. Launch Dev Studio
+
 ```bash
-# Clone the repository
-git clone https://github.com/openguideforai/OpenGuideForAI.git
-cd OpenGuideForAI
-
-# Install workspace dependencies
-yarn install
-```
-
-### 2. Launch Dev Studio
-```bash
-# Start local Vite development server
+# Start local Vite development server on http://localhost:5173
 yarn dev
 ```
+
 Open [http://localhost:5173](http://localhost:5173) in your browser. The Pyodide WebAssembly runtime will initialize locally in < 800ms.
 
-### 3. The 5-Point Quality Assurance Gate
-Before any code is committed, it must pass our strict 5-point verification suite:
+#### 📱 Multi-Device & Mobile LAN Testing (Smartphones & Tablets)
+To test OpenGuide on a physical Android phone, iPhone, or iPad connected to your local Wi-Fi:
+```bash
+# Expose dev server to your local network (0.0.0.0):
+yarn dev --host
+```
+Vite will output a local network address (e.g., `http://192.168.x.x:5173`). Open that URL in your mobile browser to test touch gestures, the touchscreen accessory bar, haptics, and responsive layouts live on real hardware!
+
+### 2. The 5-Point Quality Assurance Gate
+Before any code is committed or pushed to production, it must pass our strict 5-point verification suite:
 ```bash
 # 1. Dev server responds HTTP 200 OK
-# 2. Zero console errors
-# 3. Lint verification
+# 2. Zero console errors via Playwright inspection
+# 3. Lint verification (0 errors, 0 warnings)
 yarn lint
 
-# 4. 100% Playwright E2E regression pass
+# 4. 100% Playwright E2E regression pass (all test suites)
 npx playwright test
 
 # 5. Production static build compilation

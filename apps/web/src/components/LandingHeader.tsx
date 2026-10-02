@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   Layers,
   Cpu,
-  BookOpen
+  BookOpen,
+  Play
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -32,6 +33,7 @@ interface LandingHeaderProps {
   onOpenThemes?: () => void;
   onOpenHelp?: () => void;
   onOpenDrawer?: () => void;
+  onOpenDemo?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -44,7 +46,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, setTheme } = useSettingsStore();
   const { t } = useLanguageStore();
@@ -350,11 +352,28 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
           <button 
             onClick={() => startAppTour(false)}
             data-testid="header-quick-tour-btn"
-            className="hidden sm:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            className="hidden xl:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
             aria-label="Start Quick Studio Tour"
           >
             <Sparkles size={13} className="text-[var(--color-accent)]" />
-            <span className="hidden md:inline">{t('nav_tour')}</span>
+            <span>{t('nav_tour')}</span>
+          </button>
+        </Tooltip>
+
+        {/* Whole App Interactive Flow Demo Button */}
+        <Tooltip
+          position="bottom"
+          content="Studio Flow Demo"
+          subtitle="Interactive walkthrough of all engines and workflows"
+        >
+          <button 
+            onClick={() => onOpenDemo?.()}
+            data-testid="header-interactive-demo-btn"
+            className="hidden xl:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            aria-label="Open Studio Interactive Flow Demo"
+          >
+            <Play size={12} className="text-[var(--color-accent)]" />
+            <span>Demo</span>
           </button>
         </Tooltip>
 
@@ -594,6 +613,31 @@ export function LandingHeader({ onOpenThemes, onOpenDrawer }: LandingHeaderProps
               >
                 {t('nav_pillars')}
               </a>
+
+              <div className="pt-2 mt-1 border-t border-[var(--color-border)] flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    startAppTour(true);
+                  }}
+                  data-testid="mobile-drawer-tour-btn"
+                  className="flex-1 py-2 px-3 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1.5 text-[var(--color-text-primary)] cursor-pointer"
+                >
+                  <Sparkles size={14} className="text-[var(--color-accent)]" />
+                  <span>{t('nav_tour')}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenDemo?.();
+                  }}
+                  data-testid="mobile-drawer-demo-btn"
+                  className="flex-1 py-2 px-3 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1.5 text-[var(--color-text-primary)] cursor-pointer"
+                >
+                  <Play size={13} className="text-[var(--color-accent)]" />
+                  <span>Demo</span>
+                </button>
+              </div>
             </nav>
           </motion.div>
         )}

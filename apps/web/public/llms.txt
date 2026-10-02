@@ -1,0 +1,23 @@
+# OpenGuide AI Studio
+> The Sovereign In-Browser AI Engineering Studio ($0 Forever)
+
+OpenGuide is a 100% free, local-first interactive AI engineering curriculum and sovereign Python WebAssembly development environment. Architected by Adil Rafiq Dar (ARD).
+
+## Core Architecture & Engine
+- **In-Browser CPython Runtime:** Pyodide v0.26 WebAssembly executing inside dedicated Web Workers with a 15-second watchdog timer. Zero backend servers.
+- **3D Spatial Vector Manifold:** High-performance Three.js spatial holodeck visualizing high-dimensional embeddings, PCA projections, cosine similarity metrics, and semantic clustering with zero memory leaks.
+- **Frontier Transformer Mechanics:** Interactive multi-head attention visualizer, token residual stream tracer, autograd reverse-mode autodiff micrograd engine.
+- **Local-First Cryptographic Persistence:** IndexedDB storage with optional AES-GCM 256-bit passphrase encrypted private GitHub Gist sync ($0 Rule) and W3C Verifiable Credentials (.jsonld) export.
+- **20 Calibrated Design Themes:** 10 Dark and 10 Light themes meeting WCAG AAA color contrast ratios across OLED, Nordic, Cyberpunk, and Pure Paper palettes.
+
+## Curriculum Tracks
+1. **Track 0: Absolute Zero (Foundations):** Python syntax, memory models, tensor manipulation, and algorithmic thinking for machine learning.
+2. **Track 1: Vector Space & Embeddings:** Mathematical geometry of embeddings, cosine distance, vector search, dimensionality reduction.
+3. **Track 2: RAG & Autonomous Agents:** Retrieval-Augmented Generation, chunking, re-ranking, Model Context Protocol (MCP) JSON-RPC tooling.
+4. **Track 3: Production Evals & Security:** LLM evaluation suites, prompt injection defense, adversarial testing, hallucination mitigation.
+5. **Track 4: Frontier Attention & Systems:** Transformer self-attention, rotary position embeddings (RoPE), KV caching, speculative decoding.
+
+## Official Links
+- Web Application: https://openguide.pages.dev/
+- GitHub Repository: https://github.com/openguideforai/OpenGuideForAI
+- License: MIT

@@ -22,6 +22,7 @@ interface LandingPageProps {
   onOpenThemes?: () => void;
   onOpenHelp?: () => void;
   onOpenDrawer?: () => void;
+  onOpenDemo?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -34,7 +35,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingPageProps) {
+export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo }: LandingPageProps) {
   const navigate = useNavigate();
   const { theme } = useSettingsStore();
   const { language, t } = useLanguageStore();
@@ -197,7 +198,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer }: LandingP
       <ScrollProgressBar />
 
       {/* Top Glass Navigation Header (Isolated Leaf Component) */}
-      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} />
+      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} onOpenDemo={onOpenDemo} />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
       <main id="main-content">

@@ -216,12 +216,12 @@ export function PortfolioPage() {
     const cred = JSON.stringify({
       "@context": [
         "https://www.w3.org/ns/credentials/v2",
-        "https://openguideforai.dpdns.org/contexts/v1"
+        "https://openguide.pages.dev/contexts/v1"
       ],
       id: `urn:uuid:${crypto.randomUUID()}`,
       type: ["VerifiableCredential", "AIEngineeringCompetencyCertificate"],
       issuer: {
-        id: "https://openguideforai.dpdns.org",
+        id: "https://openguide.pages.dev",
         name: "OpenGuide AI Studio",
         architect: "Adil Rafiq Dar (ARD)"
       },
@@ -252,7 +252,7 @@ export function PortfolioPage() {
 
   const handleCopyBadgeMarkdown = () => {
     const badgeUrl = `https://img.shields.io/badge/OpenGuide_Certified-AI_Engineer-10b981?style=for-the-badge&logo=openai&logoColor=white`;
-    const md = `[![OpenGuide Certified AI Engineer](${badgeUrl})](https://openguideforai.dpdns.org/portfolio?verify=${verificationHash})`;
+    const md = `[![OpenGuide Certified AI Engineer](${badgeUrl})](https://openguide.pages.dev/portfolio?verify=${verificationHash})`;
     navigator.clipboard.writeText(md);
     setCopiedBadge(true);
     setTimeout(() => setCopiedBadge(false), 2500);

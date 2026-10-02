@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Palette, 
@@ -42,6 +43,7 @@ function getContrastColor(hexColor: string): string {
 }
 
 export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: ThemeSettingsModalProps) {
+  const navigate = useNavigate();
   const { 
     theme, 
     setTheme, 
@@ -1030,13 +1032,16 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       <Cube size={16} weight="bold" />
                       <span>Graphics & Spatial Acceleration (3D / WebXR / 2D Lean)</span>
                     </div>
-                    <a
-                      href="/holodeck"
-                      onClick={() => onClose()}
-                      className="text-[11px] font-mono text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        navigate('/holodeck');
+                      }}
+                      className="text-[11px] font-mono text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
                     >
                       Open Holodeck Lab &rarr;
-                    </a>
+                    </button>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-[var(--color-primary,rgba(0,0,0,0.3))] border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-3">

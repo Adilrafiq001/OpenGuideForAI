@@ -3,6 +3,25 @@
 # State: Universal 10/10 Sovereign AI Studio Architecture (Encrypted Gist Sync, W3C Credentials, Scaled Attention Dissection & Upstream AI Freshness CI)
 
 **Done:**
+- **First-Time Visitor Onboarding, 10-Stop Master Studio Tour, Interactive Subsystem Demo, Comprehensive SEO Suite & Multi-Platform Quickstart (Complete):**
+  - **First-Time Visitor Onboarding Modal (`FirstTimeSetupModal.tsx`):** Built an Apple-grade, intuitive, and skippable first-time visitor setup experience presented strictly once on initial entry (`localStorage.getItem('og_onboarding_completed')`). Offers interactive configuration across all 24 calibrated themes, 12 languages with native RTL typography, 1-click PWA home screen install, background Pyodide WASM pre-warming, and journey branching (Master Studio Tour vs Track 0: Absolute Zero vs Free Exploration). Also wired for on-demand relaunch from Help Modal and Command Dock.
+  - **Master Studio Tour Overhaul (`AppTour.tsx`):** Overhauled Driver.js studio tour into a rich 10-step master tour on desktop and 8-step tour on mobile. Highlights: Welcome Philosophy, Adaptive Learning Pathways, Free $0 Stack, Science Vault, System Pillars, In-Browser IDE Sandbox, Cognitive Accelerator, Synapse Lounge, Magnification Command Dock, and Bluee Copilot.
+  - **Whole App Interactive Flow Demo Modal (`StudioInteractiveDemoModal.tsx`):** Created a comprehensive interactive demo modal showcasing all 6 core studio engines (Pyodide WASM Runtime, Attention Matrix Dissection, Spatial Holodeck 3D, Cognitive Psychology, W3C Credentials / AES-256 Gist Sync, and Synapse Visual Lab) with live jump-in action triggers.
+  - **Comprehensive SEO & Modern AI Search Architecture:**
+    - Canonicalized domain to `https://openguide.pages.dev/` across `index.html`, `sitemap.xml`, `robots.txt`, `PortfolioPage.tsx`, and `AbbyChatbot.tsx`.
+    - Optimized `<title>` to 52 characters: `OpenGuide — Free In-Browser AI Engineering Studio`.
+    - Created RFC-style `public/llms.txt` enabling high-fidelity knowledge extraction for frontier AI search engines.
+    - Updated `public/robots.txt` with dedicated directives for `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, and `CCBot`.
+    - Conducted automated browser SEO audit using `All-In-One-Free-SEO-Tool` via Playwright MCP, resolving all flags and documenting findings in `docs/SEO-AUDIT-REPORT.md`.
+  - **Cross-Platform Local Quickstart & False Links Purge (`README.md`):**
+    - Enhanced local quickstart instructions with Windows PowerShell ExecutionPolicy bypass, Yarn Berry v4.9.1 Corepack enablement, Git LF line endings, macOS/Linux nvm/fnm guide, GitHub Codespaces 1-click launch badge, and mobile/tablet local network testing (`yarn dev --host`).
+    - Purged outdated `dpdns.org` links and replaced raw internal `<a>` links with SPA navigation.
+  - **100% Automated Test Suite Passage & 5-Point Gate Verification:**
+    - Created `apps/web/tests/onboarding-tour-demo-seo.spec.ts` covering onboarding modal, master tour, interactive flow demo, and SEO meta tags.
+    - Full Playwright test suite: **70/70 passing (100% passage, 0 failing, 0 skipped)** across all 9 spec files.
+    - Verified 0 console errors via Playwright MCP `browser_console_messages(level: "error")`.
+    - Verified `yarn lint` with 0 errors.
+    - Verified `yarn --cwd apps/web build` with 0 errors (6,950 modules transformed in 24.5s).
 - **Universal 10/10 Production Architecture & Full Audit Closure (Complete):**
   - **Decentralized Zero-Knowledge Encrypted Gist Sync:** Integrated Web Crypto AES-GCM 256-bit encryption in `useProgressStore.ts` and `PortfolioPage.tsx` enabling learners to backup and restore progress across devices using private GitHub Gists without any third-party backend servers ($0 Rule).
   - **W3C Verifiable Credential & Dynamic GitHub README Badge:** Export portfolio certificate as standardized W3C Verifiable Credential (`.jsonld`) and generated 1-click dynamic GitHub Profile markdown badge.

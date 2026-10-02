@@ -7,5 +7,21 @@ Allow: /holodeck
 Allow: /synapse
 Allow: /portfolio
 
-# Sitemaps
-Sitemap: https://openguideforai.dpdns.org/sitemap.xml
+# AI Crawlers & LLM Indexation Policy (Educational Open Access)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Canonical Sitemaps
+Sitemap: https://openguide.pages.dev/sitemap.xml

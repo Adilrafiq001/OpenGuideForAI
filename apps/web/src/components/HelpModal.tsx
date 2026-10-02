@@ -1,12 +1,21 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Command, Cpu, Terminal, ShieldCheck, Key } from 'lucide-react';
+import { X, Command, Cpu, Terminal, ShieldCheck, Key, Sparkles, Play, RotateCcw } from 'lucide-react';
 
 interface HelpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenTour?: () => void;
+  onOpenDemo?: () => void;
+  onOpenOnboarding?: () => void;
 }
 
-export function HelpModal({ isOpen, onClose }: HelpModalProps) {
+export function HelpModal({ 
+  isOpen, 
+  onClose,
+  onOpenTour,
+  onOpenDemo,
+  onOpenOnboarding
+}: HelpModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -85,6 +94,62 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                     <Terminal size={16} className="text-cyan-500 mt-0.5 shrink-0" />
                     <p><strong className="text-[var(--color-text-primary,#fff)] font-semibold">BYOK (Bring-Your-Own-Key):</strong> Future tracks connect to provider APIs client-side with keys stored strictly in your local IndexedDB.</p>
                   </div>
+                </div>
+              </div>
+
+              {/* Guided Exploration & Setup Section */}
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-accent,#10b981)] mb-3 flex items-center gap-1.5">
+                  <Sparkles size={14} /> Guided Exploration & Wizards
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenTour?.();
+                    }}
+                    className="p-3 rounded-2xl bg-[var(--color-surface,rgba(255,255,255,0.03))] border border-[var(--color-border,rgba(255,255,255,0.08))] hover:border-[var(--color-accent,#10b981)] hover:bg-[var(--color-surface,rgba(255,255,255,0.06))] transition-all text-left cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles size={14} className="text-violet-400 group-hover:scale-110 transition-transform" />
+                      <span className="font-bold text-xs text-[var(--color-text-primary,#fff)]">Studio Tour</span>
+                    </div>
+                    <p className="text-[11px] text-[var(--color-text-secondary,#a1a1aa)] leading-snug">
+                      10-step guided tour of all studio subsystems
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenDemo?.();
+                    }}
+                    className="p-3 rounded-2xl bg-[var(--color-surface,rgba(255,255,255,0.03))] border border-[var(--color-border,rgba(255,255,255,0.08))] hover:border-[var(--color-accent,#10b981)] hover:bg-[var(--color-surface,rgba(255,255,255,0.06))] transition-all text-left cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Play size={14} className="text-cyan-400 group-hover:scale-110 transition-transform" />
+                      <span className="font-bold text-xs text-[var(--color-text-primary,#fff)]">Flow Demo</span>
+                    </div>
+                    <p className="text-[11px] text-[var(--color-text-secondary,#a1a1aa)] leading-snug">
+                      Visual deep dive into how each engine operates
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenOnboarding?.();
+                    }}
+                    className="p-3 rounded-2xl bg-[var(--color-surface,rgba(255,255,255,0.03))] border border-[var(--color-border,rgba(255,255,255,0.08))] hover:border-[var(--color-accent,#10b981)] hover:bg-[var(--color-surface,rgba(255,255,255,0.06))] transition-all text-left cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <RotateCcw size={14} className="text-amber-400 group-hover:scale-110 transition-transform" />
+                      <span className="font-bold text-xs text-[var(--color-text-primary,#fff)]">Setup Wizard</span>
+                    </div>
+                    <p className="text-[11px] text-[var(--color-text-secondary,#a1a1aa)] leading-snug">
+                      Re-run initial PWA, language & theme setup
+                    </p>
+                  </button>
                 </div>
               </div>
             </div>

@@ -16,7 +16,8 @@ import {
   Glasses,
   Target,
   Award,
-  Sparkles
+  Sparkles,
+  Play
 } from 'lucide-react';
 import { MagnificationDock, type DockItemData } from './MagnificationDock';
 import { startAppTour } from './AppTour';
@@ -26,9 +27,10 @@ interface CommandDockProps {
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
   onOpenCopilot?: () => void;
+  onOpenDemo?: () => void;
 }
 
-export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: CommandDockProps) {
+export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDemo }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
@@ -133,6 +135,11 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp }: Comman
       icon: <Sparkles size={20} className="text-[var(--color-accent)]" />,
       label: 'Studio Guided Tour',
       onClick: () => startAppTour(false)
+    },
+    {
+      icon: <Play size={19} className="text-[var(--color-accent)]" />,
+      label: 'Studio Flow Demo',
+      onClick: () => onOpenDemo?.()
     },
     {
       icon: <Settings size={20} className="text-[var(--color-text-secondary)]" />,

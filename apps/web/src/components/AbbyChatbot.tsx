@@ -167,7 +167,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${byokApiKey}`,
-          ...(byokProvider === 'openrouter' ? { 'HTTP-Referer': 'https://openguideforai.dpdns.org', 'X-Title': 'OpenGuide' } : {})
+          ...(byokProvider === 'openrouter' ? { 'HTTP-Referer': 'https://openguide.pages.dev', 'X-Title': 'OpenGuide' } : {})
         },
         body: JSON.stringify({
           model,
