@@ -8,7 +8,7 @@
   - **Master Studio Tour Overhaul (`AppTour.tsx`):** Overhauled Driver.js studio tour into a rich 10-step master tour on desktop and 8-step tour on mobile. Highlights: Welcome Philosophy, Adaptive Learning Pathways, Free $0 Stack, Science Vault, System Pillars, In-Browser IDE Sandbox, Cognitive Accelerator, Synapse Lounge, Magnification Command Dock, and Bluee Copilot.
   - **Whole App Interactive Flow Demo Modal (`StudioInteractiveDemoModal.tsx`):** Created a comprehensive interactive demo modal showcasing all 6 core studio engines (Pyodide WASM Runtime, Attention Matrix Dissection, Spatial Holodeck 3D, Cognitive Psychology, W3C Credentials / AES-256 Gist Sync, and Synapse Visual Lab) with live jump-in action triggers.
   - **Comprehensive SEO & Modern AI Search Architecture:**
-    - Canonicalized domain to `https://openguide.pages.dev/` across `index.html`, `sitemap.xml`, `robots.txt`, `PortfolioPage.tsx`, and `AbbyChatbot.tsx`.
+    - Canonicalized domain to `https://openguideforai.dpdns.org/` across `index.html`, `sitemap.xml`, `robots.txt`, `PortfolioPage.tsx`, and `AbbyChatbot.tsx`.
     - Optimized `<title>` to 52 characters: `OpenGuide — Free In-Browser AI Engineering Studio`.
     - Created RFC-style `public/llms.txt` enabling high-fidelity knowledge extraction for frontier AI search engines.
     - Updated `public/robots.txt` with dedicated directives for `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, and `CCBot`.

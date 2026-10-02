@@ -626,6 +626,10 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     <p>
                       To execute Python code client-side at $0 infrastructure cost, OpenGuide downloads compiled CPython WebAssembly binaries on demand from <code className="text-[var(--color-accent)]">cdn.jsdelivr.net</code> (Pyodide official distribution). In air-gapped or offline environments, an integrated local Standby Engine provides local execution without network calls. Additionally, in the Free Courses Studio, optional educational video lectures are embedded using privacy-enhanced mode (<code className="text-[var(--color-accent)]">youtube-nocookie.com</code>), which prevents tracking cookies until playback is initiated.
                     </p>
+                    <h4 className="text-sm font-bold text-[var(--color-text-primary)] font-mono">5. Statutory Compliance (DPDP Act 2023 & GDPR)</h4>
+                    <p>
+                      In compliance with the Indian Digital Personal Data Protection Act, 2023 (DPDP Act) and the EU General Data Protection Regulation (GDPR), OpenGuide enforces absolute data minimization, transparent local storage, and zero centralized processing. All privacy rights (access, erasure, correction) are directly exercised locally on your device. For full details, see our comprehensive <a href="https://github.com/openguideforai/OpenGuideForAI/blob/main/docs/PRIVACY.md" target="_blank" rel="noopener noreferrer" className="text-[var(--color-accent)] underline">Privacy Policy Charter</a>.
+                    </p>
                   </div>
                 )}
 

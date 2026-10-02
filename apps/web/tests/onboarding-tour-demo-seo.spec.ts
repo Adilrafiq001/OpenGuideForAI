@@ -129,15 +129,15 @@ test.describe('Onboarding, Tour, Interactive Demo & SEO Suite', () => {
 
     // Verify Canonical Link
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-    expect(canonical).toBe('https://openguide.pages.dev/');
+    expect(canonical).toBe('https://openguideforai.dpdns.org/');
 
     // Verify OpenGraph URL
     const ogUrl = await page.locator('meta[property="og:url"]').getAttribute('content');
-    expect(ogUrl).toBe('https://openguide.pages.dev/');
+    expect(ogUrl).toBe('https://openguideforai.dpdns.org/');
 
     // Verify JSON-LD Structured Data
     const jsonLdContent = await page.locator('script[type="application/ld+json"]').textContent();
-    expect(jsonLdContent).toContain('https://openguide.pages.dev/');
-    expect(jsonLdContent).not.toContain('dpdns.org');
+    expect(jsonLdContent).toContain('https://openguideforai.dpdns.org/');
+    expect(jsonLdContent).not.toContain('openguide.pages.dev');
   });
 });

@@ -102,40 +102,79 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
   const generateOfflineResponse = (userQuery: string): { content: string; codeSnippet?: string; takeaway?: string } => {
     const qLower = userQuery.toLowerCase().trim();
+    const clean = qLower.replace(/[^\w\s]/g, '').trim();
+
+    // 1. Conversational Greetings & Social Interaction
+    if (/^(hi|hello|hey|greetings|good\s*(morning|afternoon|evening)|yo|sup|howdy)$/i.test(clean) || clean === 'hi' || clean === 'hello' || clean === 'hey') {
+      return {
+        content: "Hello! I'm **Bluee**, your AI engineering mentor at OpenGuide.\n\nI can help you build rock-solid intuition for everything from **CPython WebAssembly & vector embeddings** to **RAG pipelines, self-attention mechanics**, and **production evals**.\n\nAre you looking to explore a specific concept, debug a Python lab, or find your way around the curriculum?",
+        takeaway: "Ask a concept question, request code, or explore any track lab."
+      };
+    }
+
+    // 2. Identity & Capabilities
+    if (/who are you|what are you|what can you do|how can you help|help me/i.test(clean)) {
+      return {
+        content: "I'm **Bluee**, OpenGuide's client-side engineering mentor.\n\nHere is how I can support your learning:\n\n• **First-Principles Explanations:** Intuitive, mathematical, and mechanical breakdowns of core AI algorithms.\n• **Executable Code:** Clean Python and TypeScript snippets designed to run directly in our in-browser Pyodide environment.\n• **Lab Guidance:** Navigating through our 5 Tracks (45 interactive browser labs).\n• **Frontier Models:** When you configure your own API key (BYOK) in Settings, I can also query frontier models (OpenAI, Gemini, OpenRouter) seamlessly.\n\nWhat would you like to build or understand today?",
+        takeaway: "100% Client-Side • Local First • Sovereign Compute"
+      };
+    }
+
+    // 3. Multi-turn Follow-up handling (e.g. "show me code", "give an example")
+    if (/^(show me code|give me code|code snippet|give an example|example code|show code)$/i.test(clean)) {
+      const recentAssistant = [...messages].reverse().find(m => m.role === 'assistant' && m.codeSnippet);
+      if (recentAssistant && recentAssistant.codeSnippet) {
+        return {
+          content: `Here is the executable Python snippet for the concept we were discussing:\n\n\`\`\`python\n${recentAssistant.codeSnippet}\n\`\`\`\n\nYou can copy this directly into your active lab editor and run it with \`Cmd/Ctrl + Enter\`!`,
+          codeSnippet: recentAssistant.codeSnippet,
+          takeaway: "Press Run Code in any lab to execute via Pyodide WASM."
+        };
+      }
+    }
+
+    // 4. Topic Knowledge Search
     const results = searchOfflineKnowledge(userQuery);
 
     if (results.length > 0) {
       const top = results[0];
-      let responseText = `**${top.title}**\n\n${top.summary}\n\n${top.explanation}`;
+      let content = `### ${top.title}\n\n${top.summary}\n\n**The Mechanics:**\n${top.explanation}`;
       if (results.length > 1) {
-        const related = results.slice(1, 3).map(r => `• **${r.title}**: ${r.summary}`).join('\n\n');
-        responseText += `\n\n---\n**Related Knowledge:**\n${related}`;
+        const relatedTitles = results.slice(1, 3).map(r => `**${r.title}**`).join(' and ');
+        content += `\n\n💡 *Connected concepts:* ${relatedTitles}. Let me know if you would like to explore either one!`;
       }
       return {
-        content: responseText,
+        content,
         codeSnippet: top.codeSnippet,
         takeaway: top.takeaway
       };
     }
 
-    // Dynamic semantic synthesis for general questions
-    if (qLower.includes('track') || qLower.includes('curriculum') || qLower.includes('learn') || qLower.includes('start')) {
+    // 5. Dynamic Semantic Synthesis for Core OpenGuide Features
+    if (qLower.includes('track') || qLower.includes('curriculum') || qLower.includes('learn') || qLower.includes('syllabus')) {
       return {
         content: "OpenGuide features **5 Comprehensive Hands-On Tracks** (45 Labs in total):\n\n• **Track 0: Absolute Zero (9 Labs):** In-browser CPython 3.12 WebAssembly, non-blocking Web Workers, vector primitives, and BPE tokenization.\n• **Track 1: Vector Spaces (9 Labs):** High-dimensional embedding spaces, cosine similarity vs Euclidean distance, and in-memory Top-K search.\n• **Track 2: RAG & Agents (9 Labs):** Sliding-window chunking, ReAct loop state machines, Model Context Protocol (MCP JSON-RPC 2.0), and autonomous research agents.\n• **Track 3: Evals & Guardrails (9 Labs):** Synthetic fuzzing, OWASP AI Top 10 defenses, canary token traps, and local client-side WebGPU neural inference.\n• **Track 4: Frontier Intelligence (9 Labs):** QKV Scaled Dot-Product Attention, RoPE, KV Caching, LoRA/QLoRA adaptation, and Reasoning Models.\n\nAll labs execute 100% locally in your browser with zero setup or paid subscriptions.",
         takeaway: "Master AI engineering from foundational tensors to frontier reasoning models."
       };
     }
 
+    if (qLower.includes('pyodide') || qLower.includes('python') || qLower.includes('wasm') || qLower.includes('run code') || qLower.includes('execute')) {
+      return {
+        content: "OpenGuide runs real **CPython 3.12** inside your browser using **Pyodide WebAssembly**:\n\n• **Dedicated Web Worker:** Scripts run off the main UI thread so your browser stays smooth at 60 FPS.\n• **Watchdog Timer:** A 15-second watchdog terminates runaway loops to safeguard your system memory.\n• **NumPy & Math:** Real client-side numerical tensors without server calls.\n\nPress **Ctrl+Enter** (or **Cmd+Enter**) in any lab editor to run your code instantly.",
+        codeSnippet: "import numpy as np\n\nu = np.array([1.0, 0.0, 1.0])\nv = np.array([0.0, 1.0, 1.0])\ncos_sim = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))\nprint(f\"Cosine Similarity: {cos_sim:.4f}\")",
+        takeaway: "100% Client-Side Python WebAssembly"
+      };
+    }
+
     if (qLower.includes('holodeck') || qLower.includes('3d') || qLower.includes('vr') || qLower.includes('xr') || qLower.includes('spatial')) {
       return {
-        content: "The **Spatial Holodeck** (`/holodeck`) is OpenGuide's spatial computing laboratory. It features 3 universal compute tiers:\n\n1. **Tier 1 (2D Lean SVG):** Lightweight coordinate projection for older devices and battery savings (0% GPU load).\n2. **Tier 2 (Hardware-Accelerated 3D):** Three.js WebGL orbit space with Cosmic Starfield, interactive Raycaster node hit testing, and spatial audio chimes.\n3. **Tier 3 (WebXR Spatial Gateway):** 6-DOF immersive VR (Meta Quest) & AR passthrough (Vision Pro and mobile webcam camera).\n\nExplore 24 semantic AI concepts mapped in geometric hyper-space with live cosine distances.",
+        content: "The **Spatial Holodeck** (`/holodeck`) is OpenGuide's spatial computing laboratory with 3 compute tiers:\n\n1. **Tier 1 (2D Lean SVG):** Lightweight coordinate projection for older devices and battery savings (0% GPU load).\n2. **Tier 2 (Hardware-Accelerated 3D):** Three.js WebGL orbit space with Cosmic Starfield, interactive Raycaster node hit testing, and spatial audio chimes.\n3. **Tier 3 (WebXR Spatial Gateway):** 6-DOF immersive VR (Meta Quest) & AR passthrough (Vision Pro and mobile webcam).\n\nExplore 24 semantic AI concepts mapped in geometric hyper-space with live cosine distances.",
         takeaway: "Spatial intuition bridges mathematical formulas with tangible 3D geometry."
       };
     }
 
     if (qLower.includes('synapse') || qLower.includes('minigame') || qLower.includes('game') || qLower.includes('arcade')) {
       return {
-        content: "The **Synapse Lounge** is our neuro-plasticity diffuse-mode arcade featuring 3 tactile minigames:\n\n1. **Vector Alignment Radar:** Align the probe vector with semantic target embeddings in a unit circle.\n2. **Neural Gate Deductor:** Tune weights (w1, w2) and bias to solve logical AND, OR, and NAND gates.\n3. **Transformer Attention Radar:** Manipulate Query/Key dot products, dimension scaling (√d_k), and temperature (τ) to route attention weights!",
+        content: "The **Synapse Lounge** (`/synapse`) is our neuro-plasticity diffuse-mode arcade featuring 3 tactile minigames:\n\n1. **Vector Alignment Radar:** Align the probe vector with semantic target embeddings in a unit circle.\n2. **Neural Gate Deductor:** Tune weights (w1, w2) and bias to solve logical AND, OR, and NAND gates.\n3. **Transformer Attention Radar:** Manipulate Query/Key dot products, dimension scaling (√d_k), and temperature (τ) to route attention weights!",
         takeaway: "Tactile play strengthens deep conceptual memory."
       };
     }
@@ -147,9 +186,10 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       };
     }
 
+    // 6. Articulate, High-Taste Fallback
     return {
-      content: `I've analyzed your question regarding **"${userQuery}"**.\n\nOpenGuide is an in-browser AI engineering studio operating strictly under the **$0 Rule** across **5 Core Tracks (45 Labs)**:\n\n• **Curriculum Tracks (0–4):** Jump directly into in-browser CPython WASM, vector math, RAG agent loops, production evals, or frontier attention mechanics.\n• **Interactive Laboratories:** Check out the Spatial Holodeck (\`/holodeck\`), Synapse Lounge minigames, or Cognitive Accelerator.\n• **Developer Tools:** Open the X-Ray Debug Lens (\`Alt+X\`), explore Free Courses Studio, or inspect the Four Tools setup guides.\n\nFeel free to ask me for exact code snippets, mathematical proofs, or navigation shortcuts!`,
-      takeaway: "100% Client-Side WASM • Complete local data privacy"
+      content: `That's a thoughtful question regarding **"${userQuery}"**.\n\nIn AI engineering, we approach problems from first principles:\n\n1. **Geometric Representation:** How discrete tokens and data are mapped into continuous vector space.\n2. **Information Routing:** How attention heads and weights propagate context across residual streams.\n3. **Verification & Systems:** How models and pipelines are evaluated for hallucination, latency, and determinism.\n\nCould you clarify if you'd like an intuitive mental model, a working Python code implementation, or help with a specific track lab?`,
+      takeaway: "Ask for code, mathematical intuition, or lab navigation."
     };
   };
 
@@ -167,14 +207,14 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${byokApiKey}`,
-          ...(byokProvider === 'openrouter' ? { 'HTTP-Referer': 'https://openguide.pages.dev', 'X-Title': 'OpenGuide' } : {})
+          ...(byokProvider === 'openrouter' ? { 'HTTP-Referer': 'https://openguideforai.dpdns.org', 'X-Title': 'OpenGuide' } : {})
         },
         body: JSON.stringify({
           model,
           messages: [
             {
               role: 'system',
-              content: 'You are Bluee, an encouraging, rigorous AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples.'
+              content: 'You are Bluee, an articulate, world-class AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples without fluff or robotic preambles.'
             },
             ...messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
             { role: 'user', content: userQuery }

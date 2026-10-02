@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 interface MarkdownRendererProps {
   content: string;
@@ -30,7 +31,11 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       breaks: true
     }) as string;
 
-    return rawHtml;
+    // Hardened XSS Protection: Cleanse parsed HTML through DOMPurify
+    return DOMPurify.sanitize(rawHtml, {
+      USE_PROFILES: { html: true },
+      ADD_ATTR: ['target', 'rel']
+    });
   }, [content]);
 
   return (

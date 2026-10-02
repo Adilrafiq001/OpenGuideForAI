@@ -189,13 +189,29 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
     try {
       const raw = get().exportProgressJSON();
       const enc = new TextEncoder();
-      const keyMaterial = await crypto.subtle.importKey(
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      
+      // NIST SP 800-132: 100,000 PBKDF2-HMAC-SHA256 iterations with cryptographically random salt
+      const baseKey = await crypto.subtle.importKey(
         'raw',
-        enc.encode(encryptionKey.padEnd(32, '0').slice(0, 32)),
-        { name: 'AES-GCM' },
+        enc.encode(encryptionKey),
+        { name: 'PBKDF2' },
         false,
-        ['encrypt']
+        ['deriveKey']
       );
+      const keyMaterial = await crypto.subtle.deriveKey(
+        {
+          name: 'PBKDF2',
+          salt,
+          iterations: 100000,
+          hash: 'SHA-256'
+        },
+        baseKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+
       const iv = crypto.getRandomValues(new Uint8Array(12));
       const cipherBuffer = await crypto.subtle.encrypt(
         { name: 'AES-GCM', iv },
@@ -203,7 +219,10 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
         enc.encode(raw)
       );
       const payload = {
-        format: 'OpenGuide-Encrypted-Ledger-v1',
+        format: 'OpenGuide-Encrypted-Ledger-v2',
+        kdf: 'PBKDF2-HMAC-SHA256',
+        iterations: 100000,
+        salt: Array.from(salt),
         iv: Array.from(iv),
         data: Array.from(new Uint8Array(cipherBuffer)),
         updatedAt: new Date().toISOString()
@@ -246,13 +265,40 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
       if (!rawFile) throw new Error('Ledger file not found in Gist');
       const parsed = JSON.parse(rawFile);
       const enc = new TextEncoder();
-      const keyMaterial = await crypto.subtle.importKey(
-        'raw',
-        enc.encode(encryptionKey.padEnd(32, '0').slice(0, 32)),
-        { name: 'AES-GCM' },
-        false,
-        ['decrypt']
-      );
+      
+      let keyMaterial: CryptoKey;
+      if (parsed.salt && Array.isArray(parsed.salt)) {
+        // v2: Standard PBKDF2 Key Derivation
+        const baseKey = await crypto.subtle.importKey(
+          'raw',
+          enc.encode(encryptionKey),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveKey']
+        );
+        keyMaterial = await crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: new Uint8Array(parsed.salt),
+            iterations: parsed.iterations || 100000,
+            hash: 'SHA-256'
+          },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+      } else {
+        // Legacy v1 fallback: Padded key compatibility
+        keyMaterial = await crypto.subtle.importKey(
+          'raw',
+          enc.encode(encryptionKey.padEnd(32, '0').slice(0, 32)),
+          { name: 'AES-GCM' },
+          false,
+          ['decrypt']
+        );
+      }
+
       const decrypted = await crypto.subtle.decrypt(
         { name: 'AES-GCM', iv: new Uint8Array(parsed.iv) },
         keyMaterial,

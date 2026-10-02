@@ -56,6 +56,7 @@ export interface SettingsState {
   setCodeCompletion: (enabled: boolean) => void;
   setGraphicsTier: (tier: 'auto' | '2d-lean' | '3d-hardware' | 'spatial-xr') => void;
   setByokApiKey: (key: string) => void;
+  clearByokApiKey: () => void;
   setByokProvider: (provider: 'openai' | 'anthropic' | 'gemini' | 'openrouter') => void;
   setByokModel: (model: string) => void;
   resetDefaults: () => void;
@@ -110,7 +111,8 @@ export const useSettingsStore = create<SettingsState>()(
       setLastSeenVersion: (lastSeenVersion) => set({ lastSeenVersion }),
       setCodeCompletion: (codeCompletion) => set({ codeCompletion }),
       setGraphicsTier: (graphicsTier) => set({ graphicsTier }),
-      setByokApiKey: (byokApiKey) => set({ byokApiKey }),
+      setByokApiKey: (byokApiKey) => set({ byokApiKey: byokApiKey.trim() }),
+      clearByokApiKey: () => set({ byokApiKey: '' }),
       setByokProvider: (byokProvider) => set({ byokProvider }),
       setByokModel: (byokModel) => set({ byokModel }),
       resetDefaults: () => set({

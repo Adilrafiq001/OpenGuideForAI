@@ -18,6 +18,6 @@ OpenGuide is a 100% free, local-first interactive AI engineering curriculum and 
 5. **Track 4: Frontier Attention & Systems:** Transformer self-attention, rotary position embeddings (RoPE), KV caching, speculative decoding.
 
 ## Official Links
-- Web Application: https://openguide.pages.dev/
+- Web Application: https://openguideforai.dpdns.org/
 - GitHub Repository: https://github.com/openguideforai/OpenGuideForAI
 - License: MIT

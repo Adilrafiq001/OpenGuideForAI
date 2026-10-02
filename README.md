@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://openguide.pages.dev">
+<a href="https://openguideforai.dpdns.org">
   <img src="apps/web/public/favicon.svg" width="76" height="76" alt="OpenGuide AI Studio Monogram" />
 </a>
 
@@ -12,7 +12,7 @@
 > **100% Free. In-Browser Python WebAssembly. Zero Setup. Zero Telemetry. Sovereign Forever.**
 
 <p align="center">
-  <a href="https://openguide.pages.dev">
+  <a href="https://openguideforai.dpdns.org">
     <img src="docs/assets/hero-banner.svg" alt="OpenGuide Interactive CPython 3.12 WASM Engine Terminal" width="100%" />
   </a>
 </p>
@@ -21,12 +21,12 @@
 [![CPython 3.12 WASM](https://img.shields.io/badge/CPython%203.12-Pyodide%20WASM-3b82f6.svg?style=for-the-badge)](https://pyodide.org/)
 [![Cloud Bill: $0 Forever](https://img.shields.io/badge/Cloud%20Bill-%240%20Forever-10b981.svg?style=for-the-badge)](#the-0-rule-hard-constraint)
 [![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-8b5cf6.svg?style=for-the-badge)](#curriculum)
-[![Zero Setup: No Install](https://img.shields.io/badge/Zero%20Setup-Instant%20Browser%20Launch-06b6d4.svg?style=for-the-badge)](https://openguide.pages.dev)
+[![Zero Setup: No Install](https://img.shields.io/badge/Zero%20Setup-Instant%20Browser%20Launch-06b6d4.svg?style=for-the-badge)](https://openguideforai.dpdns.org)
 [![Native Desktop App](https://img.shields.io/badge/Desktop%20App-Windows%20%E2%80%A2%20Mac%20%E2%80%A2%20Linux-f59e0b.svg?style=for-the-badge)](#desktop-app)
 
 ---
 
-### [🚀 Launch Live Studio (Free)](https://openguide.pages.dev) • [💻 Desktop App Guide](#desktop-app) • [📚 45 Interactive Labs](#curriculum) • [💡 Power Tips](#power-tips) • [💖 Support the Creator](#sponsorship)
+### [🚀 Launch Live Studio (Free)](https://openguideforai.dpdns.org) • [💻 Desktop App Guide](#desktop-app) • [📚 45 Interactive Labs](#curriculum) • [💡 Power Tips](#power-tips) • [💖 Support the Creator](#sponsorship)
 
 </div>
 
@@ -107,18 +107,18 @@ graph TD
 OpenGuide is engineered as an **Installable Progressive Web App (PWA)** with native OS window integration. You never have to install Python, Node.js, or Docker on your host operating system to build neural architectures:
 
 ### 🪟 Windows (10 / 11)
-1. Open **[https://openguide.pages.dev](https://openguide.pages.dev)** in Google Chrome, Microsoft Edge, or Brave.
+1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Google Chrome, Microsoft Edge, or Brave.
 2. In the right side of the address bar, click the **Install OpenGuide** computer icon (or click the three dots `⋮` $\rightarrow$ **Install OpenGuide**).
 3. Click **Install**.
 4. **Automatic Desktop Shortcut:** Windows automatically generates an **OpenGuide shortcut directly on your Desktop**, adds it to your **Start Menu**, and lets you pin it to your **Taskbar**.
 5. When launched, OpenGuide opens in a clean, standalone OS window with native titlebar controls and no browser tabs or URL bars.
 
 ### 🍎 macOS (Sonoma / Ventura / Monterey)
-1. **Chrome / Brave / Edge:** Visit **[https://openguide.pages.dev](https://openguide.pages.dev)**, click the **Install** button in the omnibox, and confirm. OpenGuide is added to `/Applications`, your **Dock**, and indexed in **Spotlight Search** (`Cmd + Space`).
+1. **Chrome / Brave / Edge:** Visit **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)**, click the **Install** button in the omnibox, and confirm. OpenGuide is added to `/Applications`, your **Dock**, and indexed in **Spotlight Search** (`Cmd + Space`).
 2. **Safari (macOS Sonoma+):** Click **File** in the top menu bar $\rightarrow$ **Add to Dock**. OpenGuide operates as a standalone Mac application with full `Cmd + Tab` app switcher support.
 
 ### 🐧 Linux (Ubuntu, Debian, Fedora, Arch)
-1. Open **[https://openguide.pages.dev](https://openguide.pages.dev)** in Chromium, Chrome, or Brave.
+1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Chromium, Chrome, or Brave.
 2. Click **Install OpenGuide** from the address bar or app menu.
 3. Your desktop environment (GNOME, KDE Plasma, XFCE) automatically creates an OpenGuide `.desktop` launcher under `~/.local/share/applications/` and places an icon on your desktop with full system tray and application drawer integration.
 

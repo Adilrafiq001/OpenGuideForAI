@@ -24,4 +24,4 @@ User-agent: CCBot
 Allow: /
 
 # Canonical Sitemaps
-Sitemap: https://openguide.pages.dev/sitemap.xml
+Sitemap: https://openguideforai.dpdns.org/sitemap.xml

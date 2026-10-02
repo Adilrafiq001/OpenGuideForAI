@@ -42,8 +42,9 @@
 - **Responsive Header Layout Architecture:** Unified header architecture with adaptive collapsing (`Tracks ▾` dropdown on desktop `lg:`, `Launch Track 0` primary CTA, responsive `BrandLogo`, and zero horizontal collisions from 375px to 1440px).
 - **Agency-Grade Studio Footer Architecture (`StudioFooter`):** Comprehensive footer subsystem with 4-column dynamic sitemap, WASM kernel status telemetry, local-first newsletter dispatch, interactive Legal modal (5 policy tabs), Contact & Inquiries modal with direct founder dispatch, and release changelog.
 - **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
-- **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 45-lab completion validation, sample preview mode, and zero-leak client-side name stamping for PDF/print export.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (62 comprehensive tests passing).
+- **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 45-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
+- **007 Defense-in-Depth Security:** PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 16-byte random salt) + AES-256-GCM encrypted GitHub Gist backup, DOMPurify HTML/Markdown sanitization, Cloudflare Pages CSP/HSTS/COOP/COEP headers, and static tokenization in offline Pyodide worker fallback without `eval` or `Function`.
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (70 comprehensive tests passing with 100% pass rate).
 
 ## Application Directory Structure
 - `/apps/web`: Production web application root.

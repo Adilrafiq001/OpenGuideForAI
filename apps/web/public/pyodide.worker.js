@@ -21,18 +21,26 @@ function runFallbackPython(code) {
       if (!line || line.startsWith('#')) continue;
 
       if (line.startsWith('print(') && line.endsWith(')')) {
-        let inside = line.substring(6, line.length - 1);
-        // evaluate inside or mock print
+        let inside = line.substring(6, line.length - 1).trim();
         try {
-          // Check for variable in scope
           if (scope[inside] !== undefined) {
             mockPrint(scope[inside]);
           } else if ((inside.startsWith('"') && inside.endsWith('"')) || (inside.startsWith("'") && inside.endsWith("'"))) {
             mockPrint(inside.substring(1, inside.length - 1));
+          } else if (inside === 'True') {
+            mockPrint(true);
+          } else if (inside === 'False') {
+            mockPrint(false);
+          } else if (inside === 'None') {
+            mockPrint(null);
+          } else if (!isNaN(Number(inside))) {
+            mockPrint(Number(inside));
           } else {
-            // Evaluated in JS context safely
-            let evalVal = Function(...Object.keys(scope), `return ${inside};`)(...Object.values(scope));
-            mockPrint(evalVal);
+            try {
+              mockPrint(JSON.parse(inside));
+            } catch {
+              mockPrint(inside);
+            }
           }
         } catch {
           mockPrint(inside);
