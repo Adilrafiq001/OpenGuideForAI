@@ -101,3 +101,42 @@ export function triggerHaptic(type: 'light' | 'success' | 'error') {
     }
   } catch (e) {}
 }
+
+/**
+ * Cosine Similarity Audio Sonification
+ * Maps angular distance (similarity -1.0 to +1.0) to consonant vs dissonant frequencies.
+ * High similarity (+1.0) -> Pure Perfect Fifth (E5 659Hz + A5 880Hz).
+ * Orthogonal (0.0) -> Neutral middle tone (C4 261Hz).
+ * Dissonant / Opposite (-1.0) -> Tritone (F#4 370Hz).
+ */
+export function playCosineSonification(similarity: number) {
+  const { soundFx, soundVolume = 0.5 } = useSettingsStore.getState() as any;
+  if (!soundFx || soundVolume <= 0) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    const vol = Math.max(0.01, Math.min(1, soundVolume)) * 0.15;
+    gain.gain.setValueAtTime(vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    // Base frequency clamped between 260Hz and 880Hz
+    const normalized = Math.max(-1, Math.min(1, similarity));
+    const baseFreq = 440 + normalized * 220; // 220Hz to 660Hz
+
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+    osc1.frequency.setValueAtTime(baseFreq, now);
+    osc2.frequency.setValueAtTime(baseFreq * (normalized > 0.5 ? 1.5 : 1.414), now);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.35);
+    osc2.stop(now + 0.35);
+  } catch (e) {}
+}

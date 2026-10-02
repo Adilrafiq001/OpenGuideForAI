@@ -13,7 +13,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    strictPort: true
+    strictPort: true,
+    hmr: {
+      clientPort: 5173
+    }
   },
   optimizeDeps: {
     include: [
@@ -27,7 +30,12 @@ export default defineConfig({
       'clsx',
       'tailwind-merge',
       'framer-motion',
-      'lucide-react'
+      'lucide-react',
+      'dexie',
+      'marked',
+      'lenis',
+      'three',
+      'driver.js'
     ]
   },
   build: {

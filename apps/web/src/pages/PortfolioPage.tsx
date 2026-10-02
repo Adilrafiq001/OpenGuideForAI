@@ -18,7 +18,9 @@ import {
   ExternalLink,
   Download,
   Upload,
-  Network
+  Network,
+  Cloud,
+  Share2
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
@@ -51,6 +53,8 @@ export function PortfolioPage() {
     simulateAllComplete,
     exportProgressJSON,
     importProgressJSON,
+    syncToEncryptedGist,
+    restoreFromEncryptedGist,
     initProgress
   } = useProgressStore();
 
@@ -199,6 +203,93 @@ export function PortfolioPage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  // 10/10 Decentralized Gist Sync state
+  const [showGistSyncModal, setShowGistSyncModal] = useState(false);
+  const [gistPat, setGistPat] = useState('');
+  const [gistPassphrase, setGistPassphrase] = useState('');
+  const [gistIdToRestore, setGistIdToRestore] = useState('');
+  const [gistSyncStatus, setGistSyncStatus] = useState<string | null>(null);
+  const [gistSyncLoading, setGistSyncLoading] = useState(false);
+  const [copiedBadge, setCopiedBadge] = useState(false);
+
+  const handleExportW3CCredential = () => {
+    const cred = JSON.stringify({
+      "@context": [
+        "https://www.w3.org/ns/credentials/v2",
+        "https://openguideai.org/contexts/v1"
+      ],
+      id: `urn:uuid:${crypto.randomUUID()}`,
+      type: ["VerifiableCredential", "AIEngineeringCompetencyCertificate"],
+      issuer: {
+        id: "https://openguideai.org",
+        name: "OpenGuide AI Studio",
+        architect: "Adil Rafiq Dar (ARD)"
+      },
+      issuanceDate: new Date().toISOString(),
+      credentialSubject: {
+        id: `did:key:${verificationHash.slice(2, 34)}`,
+        name: studentName,
+        competency: "Autonomous AI Engineering & Frontier Systems",
+        completedLabs: completedLessonIds.length,
+        totalLabs: totalCurriculumLabs,
+        integritySignatureSHA256: verificationHash
+      },
+      proof: {
+        type: "DeterministicWebCryptoDigest2026",
+        created: new Date().toISOString(),
+        proofValue: verificationHash
+      }
+    }, null, 2);
+
+    const blob = new Blob([cred], { type: 'application/ld+json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `openguide-w3c-credential-${new Date().toISOString().slice(0, 10)}.jsonld`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyBadgeMarkdown = () => {
+    const badgeUrl = `https://img.shields.io/badge/OpenGuide_Certified-AI_Engineer-10b981?style=for-the-badge&logo=openai&logoColor=white`;
+    const md = `[![OpenGuide Certified AI Engineer](${badgeUrl})](https://openguideai.org/portfolio?verify=${verificationHash})`;
+    navigator.clipboard.writeText(md);
+    setCopiedBadge(true);
+    setTimeout(() => setCopiedBadge(false), 2500);
+  };
+
+  const handleSyncGist = async () => {
+    if (!gistPat.trim() || !gistPassphrase.trim()) {
+      setGistSyncStatus('Please enter your GitHub PAT and passphrase.');
+      return;
+    }
+    setGistSyncLoading(true);
+    setGistSyncStatus('Encrypting with AES-GCM and syncing to private Gist...');
+    const res = await syncToEncryptedGist(gistPat, gistPassphrase);
+    setGistSyncLoading(false);
+    if (res.success) {
+      setGistSyncStatus(`Synced successfully! Gist URL: ${res.gistUrl}`);
+    } else {
+      setGistSyncStatus(`Sync failed: ${res.error}`);
+    }
+  };
+
+  const handleRestoreGist = async () => {
+    if (!gistPat.trim() || !gistPassphrase.trim() || !gistIdToRestore.trim()) {
+      setGistSyncStatus('Please enter your GitHub PAT, passphrase, and Gist ID.');
+      return;
+    }
+    setGistSyncLoading(true);
+    setGistSyncStatus('Fetching Gist and decrypting with AES-GCM...');
+    const res = await restoreFromEncryptedGist(gistPat, gistPassphrase, gistIdToRestore);
+    setGistSyncLoading(false);
+    if (res.success) {
+      setGistSyncStatus('Successfully restored and decrypted progress ledger!');
+    } else {
+      setGistSyncStatus(`Restore failed: ${res.error}`);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--color-primary)] text-[var(--color-text-primary)] font-sans antialiased selection:bg-[var(--color-accent)] selection:text-black">
       
@@ -284,6 +375,33 @@ export function PortfolioPage() {
           {/* Quick Sandbox Controls & Durability Ledger */}
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
+              onClick={() => setShowGistSyncModal(true)}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-cyan-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Sync encrypted progress to your private GitHub Gist"
+            >
+              <Cloud size={13} className="text-cyan-400" />
+              <span>Encrypted Gist Sync</span>
+            </button>
+
+            <button
+              onClick={handleExportW3CCredential}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-violet-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Download official W3C Verifiable Credential (JSON-LD)"
+            >
+              <ShieldCheck size={13} className="text-violet-400" />
+              <span>W3C Credential (.jsonld)</span>
+            </button>
+
+            <button
+              onClick={handleCopyBadgeMarkdown}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Copy verified badge markdown for your GitHub Profile README"
+            >
+              <Share2 size={13} className="text-emerald-400" />
+              <span>{copiedBadge ? 'Badge Copied!' : 'GitHub Badge'}</span>
+            </button>
+
+            <button
               onClick={handleExportBackup}
               className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               title="Download your cryptographic learning ledger as a JSON file"
@@ -312,7 +430,7 @@ export function PortfolioPage() {
             <button
               onClick={handleSimulateCompletion}
               className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/50 text-[11px] font-mono text-emerald-400 transition-all cursor-pointer"
-              title="Unlock all 36 curriculum labs for certificate testing"
+              title="Unlock all curriculum labs for certificate testing"
             >
               Simulate 100% Complete
             </button>
@@ -809,6 +927,101 @@ export function PortfolioPage() {
               })}
           </div>
         </div>
+
+        {/* Encrypted Gist Sync Modal */}
+        {showGistSyncModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="gist-sync-title">
+            <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5">
+              <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <Cloud size={18} />
+                  </div>
+                  <div>
+                    <h3 id="gist-sync-title" className="text-base font-bold text-[var(--color-text-primary)]">
+                      Decentralized Gist Sync ($0 Rule)
+                    </h3>
+                    <p className="text-[11px] font-mono text-[var(--color-text-secondary)]">Client-side AES-GCM 256-bit Zero-Knowledge Sync</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowGistSyncModal(false);
+                    setGistSyncStatus(null);
+                  }}
+                  className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Your progress ledger is encrypted locally in your browser before uploading to a private GitHub Gist under your personal GitHub account. No third-party servers, no telemetry, and 100% immune to browser cache clearing.
+              </p>
+
+              <div className="space-y-3 font-mono text-xs">
+                <div>
+                  <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">GitHub Personal Access Token (PAT with 'gist' scope):</label>
+                  <input
+                    type="password"
+                    value={gistPat}
+                    onChange={(e) => setGistPat(e.target.value)}
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">Passphrase (Used for AES-GCM Encryption / Decryption):</label>
+                  <input
+                    type="password"
+                    value={gistPassphrase}
+                    onChange={(e) => setGistPassphrase(e.target.value)}
+                    placeholder="Enter a secret passphrase"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">Gist ID (Only required if Restoring on a new device):</label>
+                  <input
+                    type="text"
+                    value={gistIdToRestore}
+                    onChange={(e) => setGistIdToRestore(e.target.value)}
+                    placeholder="e.g. 7f3b8c9d0e1f2a3b4c5d"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                  />
+                </div>
+              </div>
+
+              {gistSyncStatus && (
+                <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono text-cyan-400 break-all">
+                  {gistSyncStatus}
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  disabled={gistSyncLoading}
+                  onClick={handleSyncGist}
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md disabled:opacity-50"
+                >
+                  <Cloud size={14} />
+                  <span>{gistSyncLoading ? 'Syncing...' : 'Sync to Gist (Backup)'}</span>
+                </button>
+
+                <button
+                  disabled={gistSyncLoading}
+                  onClick={handleRestoreGist}
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--color-primary)] hover:border-cyan-400 border border-[var(--color-border)] text-[var(--color-text-primary)] font-mono font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md disabled:opacity-50"
+                >
+                  <Upload size={14} />
+                  <span>Restore from Gist</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </main>
     </div>

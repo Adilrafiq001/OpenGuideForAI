@@ -1,0 +1,39 @@
+name: Curriculum & Upstream AI Protocol Freshness Check
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-upstream:
+    name: Verify Upstream AI Standards & Pyodide Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Verify Pyodide Release Tag
+        run: |
+          LATEST_PYODIDE=$(curl -s https://api.github.com/repos/pyodide/pyodide/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "Latest Pyodide release tag: $LATEST_PYODIDE"
+          if [[ -z "$LATEST_PYODIDE" ]]; then
+            echo "Failed to fetch Pyodide release"
+            exit 1
+          fi
+
+      - name: Verify Anthropic MCP Specification Endpoint
+        run: |
+          MCP_HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/schema.json || echo "000")
+          echo "MCP schema HTTP status: $MCP_HTTP_STATUS"
+
+      - name: Setup Node and Monorepo
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify Build
+        run: |
+          corepack enable
+          yarn install
+          yarn build

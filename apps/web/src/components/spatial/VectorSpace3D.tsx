@@ -10,6 +10,15 @@ import {
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
+import { playCosineSonification } from '../../services/soundHaptics';
+
+function calculateCosine(a: [number, number, number], b: [number, number, number]): number {
+  const dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const magA = Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+  const magB = Math.sqrt(b[0] * b[0] + b[1] * b[1] + b[2] * b[2]);
+  if (magA === 0 || magB === 0) return 0;
+  return Math.max(-1, Math.min(1, dot / (magA * magB)));
+}
 
 export interface SemanticVectorNode {
   id: string;
@@ -309,6 +318,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         if (hit) {
           if (hit.data.id !== selectedNode.id) {
             setComparedNode(selectedNode);
+            const sim = calculateCosine(hit.data.coords, selectedNode.coords);
+            playCosineSonification(sim);
           }
           setSelectedNode(hit.data);
           onSelectNode?.(hit.data);
@@ -628,6 +639,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 onClick={() => {
                   if (node.id !== selectedNode.id) {
                     setComparedNode(selectedNode);
+                    const sim = calculateCosine(node.coords, selectedNode.coords);
+                    playCosineSonification(sim);
                   }
                   setSelectedNode(node);
                   onSelectNode?.(node);

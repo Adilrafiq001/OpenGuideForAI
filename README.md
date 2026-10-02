@@ -1,168 +1,234 @@
 <div align="center">
 
 # OpenGuide. ⚡
-### AI STUDIO • SOVEREIGN IN-BROWSER AI ENGINEERING PLATFORM
+### THE SOVEREIGN IN-BROWSER AI ENGINEERING STUDIO
+**From a cracked phone to a screen-reader user: Learn artificial intelligence from absolute first principles with zero dollar cloud bills, zero telemetry, and zero gatekeeping.**
 
-**The world's premier $0, local-first, zero-setup AI engineering studio.**  
-*From foundational Python tensors to frontier attention mechanics, multi-agent swarms, and production evals.*
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
-[![Python WASM](https://img.shields.io/badge/CPython-3.12%20WASM%20(Pyodide)-blue.svg)](https://pyodide.org/)
-[![Compute Rule](https://img.shields.io/badge/Hosting%20Cost-%240%20Forever-success.svg)](docs/PROJECT-STATE.md)
-[![Curriculum](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-violet.svg)](#the-curriculum)
-[![WCAG](https://img.shields.io/badge/Accessibility-WCAG%20AAA%20(>7:1)-amber.svg)](#visual-sovereignty--themes)
-[![GitHub Stars](https://img.shields.io/github/stars/openguideforai/OpenGuideForAI?style=social)](https://github.com/openguideforai/OpenGuideForAI)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge)](LICENSE)
+[![CPython 3.12 WASM](https://img.shields.io/badge/CPython%203.12-Pyodide%20WASM-3b82f6.svg?style=for-the-badge)](https://pyodide.org/)
+[![Hosting Cost](https://img.shields.io/badge/Cloud%20Bill-%240%20Forever-emerald.svg?style=for-the-badge)](#the-0-rule-hard-constraint)
+[![Curriculum](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-8b5cf6.svg?style=for-the-badge)](#-the-master-curriculum-at-a-glance)
+[![Accessibility](https://img.shields.io/badge/WCAG%202.2-AAA%20Calibrated-f59e0b.svg?style=for-the-badge)](#-universal-accessibility--ergonomics)
+[![Sponsor OpenGuide](https://img.shields.io/badge/Sponsor%20OpenGuide-Heart%20Patron-f43f5e.svg?style=for-the-badge)](#-a-message-from-the-creator--sponsorship)
 
 ---
 
-[Explore Live Studio](https://openguideforai.dpdns.org) • [Architectural Manifesto](#the-0-rule--architecture) • [Curriculum Tracks](#the-curriculum) • [Quickstart](#quickstart-local-development)
+### [🚀 Launch Live Studio](https://openguideai.org) • [📖 Read the Manifesto](#-why-openguide-exists) • [💡 Tips & Tricks](#-upfront-tips--power-tricks) • [💖 Support & Sponsor](#-a-message-from-the-creator--sponsorship)
 
 </div>
 
 ---
 
-## 🌟 Why OpenGuide?
+## 🌟 Why OpenGuide Exists
 
-Most AI tutorials teach high-level black-box APIs that break tomorrow. **OpenGuide teaches the eternal physics of artificial intelligence from first principles.**
+Most AI education today is broken. It forces you through either:
+1. **Superficial "Wrapper" Tutorials:** Teaching high-level black-box APIs that go obsolete in 6 months.
+2. **Intimidating Math Walls:** Dense, gatekept academic papers with no interactive execution.
+3. **Expensive Corporate Cloud Sandboxes:** Requiring credit cards, cloud accounts, Docker setups, or $30/month subscriptions.
 
-Instead of expensive cloud sandboxes, Docker containers, or paid monthly subscriptions, **OpenGuide executes genuine CPython 3.12 and WebGPU neural networks directly inside your client browser**.
+**OpenGuide dismantles all three.**
 
-> "Every feature of OpenGuide is explainable by OpenGuide. You don't just learn how to build AI systems; you use X-Ray mode (`Alt+X`) to see exactly how OpenGuide itself was engineered using the exact same first principles."
+We believe artificial intelligence is a fundamental literacy of human civilization. Whether you are coding on an **ultra-budget $100 Android smartphone**, an old Chromebook, or a high-end workstation; whether you navigate using **assistive screen readers** or a physical mouse: **OpenGuide gives you an elite, sovereign laboratory in your browser for free.**
 
----
-
-## 💎 Core Architectural Pillars
-
-### 1. The $0 Rule (Hard Constraint)
-* **Zero Cloud Compute Costs:** 100% of Python code, tensor projections, BPE tokenization, and vector math executes locally on your CPU/GPU via WebAssembly (Pyodide v0.26) and WebGPU.
-* **Zero Telemetry & Absolute Privacy:** Your code, notes, progress, and keys never touch an intermediate server. Your browser is your private laboratory.
-* **BYOK (Bring Your Own Key):** When experimenting with frontier frontier models (OpenAI, Google Gemini, Anthropic), requests route directly via client-side HTTPS.
-
-### 2. Multi-Head In-Browser Web Workers & 15-Second Watchdog
-Python computations run on dedicated background threads via Web Workers. If you write an accidental infinite loop (`while True:`), a client-side watchdog timer automatically terminates and respawns the worker, keeping the studio silky smooth at **120 FPS**.
-
-### 3. Local-First Sovereignty (IndexedDB)
-Every keystroke, challenge completion, custom test script, and vector embedding index persists instantly in browser IndexedDB via Dexie. Work offline on a plane, subway, or in remote environments with zero data loss.
+> *"Every feature of OpenGuide is explainable by OpenGuide. You don't just study AI math; you watch tensors flow, dissect live attention heads, hear cosine distances through harmonic audio, and inspect the WebAssembly engine live using X-Ray mode (`Alt + X`)."*
 
 ---
 
-## 📚 The Curriculum: 5 Tracks • 45 Interactive Labs
+## 🗺️ The Architecture Infogram: How It Works Without Servers
 
-```mermaid
-graph LR
-    T0["Track 0: Absolute Zero<br/>(CPython WASM, Vectors, BPE)"] --> T1["Track 1: Vector Spaces<br/>(Manifolds, Cosine, Top-K)"]
-    T1 --> T2["Track 2: RAG & Agents<br/>(ReAct Loops, MCP JSON-RPC)"]
-    T2 --> T3["Track 3: Evals & Guardrails<br/>(OWASP AI Top 10, WebGPU)"]
-    T3 --> T4["Track 4: Frontier Intelligence<br/>(QKV Attention, RoPE, LoRA)"]
+OpenGuide runs under the **$0 Rule**. There is **no backend server**. There is **no database tracking you**. 100% of the computation executes inside your local web browser:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   YOUR LOCAL CLIENT BROWSER SANDBOX                    │
+│                                                                        │
+│  ┌─────────────────────────┐         ┌──────────────────────────────┐  │
+│  │   UI & INTERACTION      │         │   BACKGROUND WEB WORKER      │  │
+│  │   • React 18 + Vite     │         │   • CPython 3.12 (Pyodide)   │  │
+│  │   • 24 Calibrated Themes│ ◄─────► │   • NumPy Vector Math        │  │
+│  │   • Lenis Smooth Scroll │         │   • 15s Runaway Watchdog     │  │
+│  │   • CodeMirror 6 Editor │         │   • Zero-Crash Standby Fallback││
+│  └────────────┬────────────┘         └──────────────┬───────────────┘  │
+│               │                                     │                  │
+│  ┌────────────▼────────────┐         ┌──────────────▼───────────────┐  │
+│  │   SPATIAL & NEURAL      │         │   SOVEREIGN PERSISTENCE      │  │
+│  │   • Three.js WebGL / XR │         │   • IndexedDB via Dexie      │  │
+│  │   • Harmonic Audio Synth│         │   • AES-GCM Encrypted Backup │  │
+│  │   • In-Browser WebGPU   │         │   • W3C Verifiable Signature │  │
+│  └─────────────────────────┘         └──────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🟢 Track 0: Absolute Zero (9 Labs)
-* **Module 0.1: In-Browser CPython WASM:** Standard streams, non-blocking Web Worker event loops, and Pyodide virtual file systems.
-* **Module 0.2: Vectors & Serialization:** Multi-dimensional lists, dictionary serialization, and tool-calling JSON schemas.
-* **Module 0.3: Tokenization & Sampling:** Byte-Pair Encoding (BPE) from scratch, system prompt delimiters, and temperature logit distributions.
+---
 
-### 🔵 Track 1: Vector Spaces & High-Dimensional Geometry (9 Labs)
-* **Module 1.1: Vector Geometry:** Dense embeddings, sparse vs dense representations, and dot-product projections.
-* **Module 1.2: Distance Metrics:** Cosine Similarity, Euclidean (L2) distance, and unit normalization algorithms.
-* **Module 1.3: Boss Project:** An in-memory, high-speed Semantic Search Engine (`SemanticSearchEngine`) indexing documents and scoring queries with cosine math.
+## 📚 The Master Curriculum at a Glance
 
-### 🟣 Track 2: RAG & Production Agent Architecture (9 Labs)
-* **Module 2.1: Semantic Chunking:** Sliding-window text chunking with stride overlap, context augmentation, and Reciprocal Rank Fusion (RRF).
-* **Module 2.2: ReAct Loop State Machines:** Deterministic Thought $\rightarrow$ Action $\rightarrow$ Observation cycles and Model Context Protocol (MCP JSON-RPC 2.0).
-* **Module 2.3: Boss Project:** Autonomous Research Agent with dynamic tool dispatch, memory state machines, and planner-worker-critic handoffs.
+Five rigorous, production-grade tracks consisting of **45 interactive, runnable labs**:
 
-### 🟡 Track 3: Production Evals & Guardrails (9 Labs)
-* **Module 3.1: Benchmarking & Evals:** Synthetic fuzzing, deterministic test harnesses, and LLM-as-a-Judge Likert scoring rubrics.
-* **Module 3.2: OWASP AI Top 10 Defenses:** Prompt injection delimiters, high-entropy canary token traps, and automated PII sanitization.
-* **Module 3.3: Boss Project & WebGPU:** Production evaluation test suite paired with in-browser WebGPU quantized neural inference (SmolLM-135M).
+```mermaid
+graph TD
+    T0["🟢 Track 0: Absolute Zero<br/>(CPython WASM, Variables, Loops, BPE Tokenization)"]
+    T1["🔵 Track 1: Vector Spaces<br/>(High-D Manifolds, Cosine Alignment, Top-K Semantic Search)"]
+    T2["🟣 Track 2: RAG & Autonomous Agents<br/>(ReAct Loops, Chunking, Anthropic MCP JSON-RPC)"]
+    T3["🟡 Track 3: Evals & Guardrails<br/>(OWASP AI Top 10, Canary Traps, WebGPU Quantization)"]
+    T4["🔴 Track 4: Frontier Intelligence<br/>(Scaled Dot-Product Attention, RoPE, KV-Cache, DPO)"]
 
-### 🔴 Track 4: Frontier Intelligence & Attention Mechanics (9 Labs)
-* **Module 4.1: Attention Mechanics & Transformers:** Scaled Dot-Product Attention:
-  $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
-  Multi-Head Attention (MHA), Rotary Position Embeddings (RoPE), and KV Caching.
-* **Module 4.2: Model Adaptation & Efficiency:** LoRA low-rank updates ($\Delta W = B \cdot A$), QLoRA, and FP16/INT8/INT4/NF4 quantization.
-* **Module 4.3: Reasoning Models & Frontier Protocols:** Chain of Thought, Test-Time Compute scaling, GRPO reinforcement learning, and production MCP servers.
+    T0 --> T1 --> T2 --> T3 --> T4
+```
+
+| Track | Labs | Core Mental Model | Capstone Boss Project |
+|:---|:---:|:---|:---|
+| **Track 0: Absolute Zero** | 9 | Python syntax through warm real-world kitchen & map analogies | Byte-Pair Encoding (BPE) tokenizer from scratch |
+| **Track 1: Vector Spaces** | 9 | Spatial geometry, dot products, and high-dimensional semantic density | In-memory `SemanticSearchEngine` indexing documents |
+| **Track 2: RAG & Agents** | 9 | Thought $\rightarrow$ Action $\rightarrow$ Observation state machines & MCP tool schemas | Full Autonomous Research Agent with multi-hop reasoning |
+| **Track 3: Evals & Guardrails** | 9 | Adversarial red-teaming, prompt injection defense, and metric rubrics | Synthetic eval harness paired with in-browser WebGPU inference |
+| **Track 4: Frontier Systems** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, KV-cache memory math, RoPE, and LoRA | Transformer Attention Head Dissection & DPO Loss Engine |
 
 ---
 
-## 🛠️ The Interactive Laboratory Suite
+## 💡 Upfront Tips & Power Tricks
 
-| Tool | Description | Shortcut |
-| :--- | :--- | :---: |
-| **Course Player IDE** | Segmented 3-tab mobile workspace (`[Study] [Code] [Output]`) with instant execution auto-switching | `Ctrl + Enter` |
-| **Spatial Holodeck** | 3D Three.js semantic embedding space with live Dual-Vector Cosine Probes & 6-DOF WebXR | `/holodeck` |
-| **Synapse Lounge** | Neuro-plasticity arcade: Vector Alignment Radar, Neural Logic Gates, Attention Sliders | `/synapse` |
-| **Bluee AI Copilot** | 100% offline first-principles mentor with 50+ domain answers, zero cloud latency | Floating Mascot |
-| **X-Ray Debug Lens** | Live telemetry inspecting Pyodide AST, Web Worker memory heap, and IndexedDB state | `Alt + X` |
-| **Curated Goldmines** | Curated elite video lectures (Karpathy, 3Blue1Brown) with interactive timestamp seekers | Header Button |
+Master OpenGuide like a staff engineer from day one:
 
----
-
-## 🎨 Visual Sovereignty & Accessibility
-
-* **20 Calibrated Themes:** 10 Dark and 10 Light themes meeting strict **WCAG AAA (>7:1)** color contrast ratios. Zero washed-out neon text slop.
-* **Tactile Web Audio & Haptics:** Pure Web Audio API synthesized mechanical clicks, chimes, and mobile vibration feedback (`navigator.vibrate`) with user volume controls.
-* **Universal i18n & Native RTL:** 12 world languages (English, Urdu, Arabic, Spanish, Mandarin, Hindi, French, German, Japanese, Portuguese, Russian, Italian) with script-safe responsive line heights for Nastaliq and Arabic.
+* **⚡ Lightning Execution:** Press `Ctrl + Enter` (or `Cmd + Enter` on macOS) anywhere in the editor to run Python code instantly.
+* **🔬 The X-Ray Debug Lens:** Press `Alt + X` (or tap the floating lens icon on mobile) to inspect live Pyodide Abstract Syntax Trees (AST), active Web Worker memory heap, and local IndexedDB tables.
+* **📱 Mobile 3-Tab Workspace:** On smartphones, switch effortlessly between `[ 📖 Study ]`, `[ 💻 Code ]`, and `[ 📟 Output ]`. Running code automatically switches you to the Output terminal!
+* **🎹 Touchscreen Accessory Bar:** Typing Python syntax on mobile software keyboards is usually painful. OpenGuide provides a 20-button fast-input bar (`def`, `:`, `Tab`, `return`, `()`, `[]`, `==`) right above your keyboard.
+* **👁️ Peek Live UI Mode:** Open Theme Settings and click the **"Peek Live UI"** eye icon to dim the modal to 5% opacity, letting you preview your typography and theme against the real studio in real time.
+* **🎧 Harmonic Vector Sonification:** Turn on sound effects in settings. When you select nodes in the 3D Vector Space, OpenGuide synthesizes harmonic chords: high semantic similarity plays a consonant perfect fifth; orthogonal vectors sound a neutral tone.
+* **🛡️ Zero-Loss Encrypted Gist Sync:** Never lose your streaks. Open your **Portfolio**, click **Encrypted Gist Sync**, and enter your personal GitHub PAT with a secret passphrase. OpenGuide encrypts your progress with **AES-GCM 256-bit cryptography** before saving it to a private Gist under your personal GitHub account.
+* **🏅 GitHub Profile README Badge:** Completed your labs? Click **GitHub Badge** in your Portfolio to copy a live, markdown badge linking directly to your verified deterministic SHA-256 certificate!
 
 ---
 
-## 🚀 Quickstart (Local Development)
+## 🎨 Universal Accessibility & Ergonomics
+
+OpenGuide is designed under strict **WCAG 2.2 AAA standards**:
+* **24 Calibrated Scientific Themes:** 12 Dark and 12 Light themes engineered for circadian rhythm preservation, zero photopic glare, and high scotopic rod contrast (>13.8:1 up to 20.6:1 contrast ratios).
+* **Screen Reader Certified:** Live ARIA status regions (`aria-live="polite"`), modal focus containment, semantic landmarks (`<main>`, `<nav>`), and skip-to-content links ensure blind and low-vision engineers can code seamlessly.
+* **Universal RTL (Right-to-Left):** Fully mirrored interfaces in **Urdu** and **Arabic** with native cursive Nastaliq font ligatures and directional containment.
+* **Air-Gapped PWA Capability:** Install OpenGuide as a Progressive Web App on Windows, macOS, Android, or iOS. After the initial load, the studio runs 100% disconnected from the internet.
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><strong>1. Is OpenGuide truly 100% free? Are there any hidden fees or paywalls?</strong></summary>
+Yes. OpenGuide is 100% free and open-source under the MIT license. There are no subscriptions, no credit card prompts, no trial periods, and no locked "pro" tracks. It operates under the <strong>$0 Rule</strong>, meaning all computing happens directly in your browser.
+</details>
+
+<details>
+<summary><strong>2. Do I need an expensive NVIDIA GPU or Mac Studio to learn?</strong></summary>
+No! That is the core breakthrough of OpenGuide. Pyodide compiles CPython to WebAssembly, running on any standard CPU. Even a budget $100 smartphone or a library computer can execute every lab effortlessly. For frontier neural networks, we utilize client-side WebGPU or your own BYOK keys.
+</details>
+
+<details>
+<summary><strong>3. Are my code, notes, and API keys safe?</strong></summary>
+Completely. OpenGuide has zero telemetry, zero analytics tracking, and zero backend databases. If you enter an API key for optional frontier models, it stays in your browser's private memory and goes directly to provider endpoints (OpenAI, Anthropic, Gemini). It never touches our servers.
+</details>
+
+<details>
+<summary><strong>4. How is OpenGuide different from Karpathy's "Zero to Hero" or Hugging Face?</strong></summary>
+We revere Andrej Karpathy and Hugging Face—in fact, OpenGuide features all 8 full Karpathy lectures with runnable autograd playgrounds in our Curated Goldmines! Where OpenGuide differs is providing an interactive, structured, zero-setup studio with immediate automated test validation, 3D visual manifolds, MCP tool protocols, and gamified mastery paths.
+</details>
+
+<details>
+<summary><strong>5. Can I use the certificate on my resume and LinkedIn?</strong></summary>
+Yes! OpenGuide generates a <strong>Deterministic SHA-256 Document Integrity Signature</strong> and exports standard <strong>W3C Verifiable Credentials (JSON-LD)</strong>. You can print high-resolution vector certificates, export verifiable JSON ledgers, and embed live verified badges into your GitHub profile README.
+</details>
+
+---
+
+## 💖 A Message from the Creator & Sponsorship
+
+OpenGuide was envisioned, architected, and built by **Adil Rafiq Dar (ARD)**.
+
+```
+                  A NOTE ON SOVEREIGNTY & SUSTAINABILITY
+"I built OpenGuide because I was tired of seeing brilliant minds locked out of artificial
+intelligence by paywalled bootcamps, high-cost cloud subscriptions, and elitist gatekeeping.
+
+Every line of this studio was crafted through countless sleepless nights, rigorous mathematical
+testing, and an uncompromising dedication to visual craft. OpenGuide is my gift to the world.
+
+To keep this studio 100% free, forever independent, and continuously updated with the latest
+frontier AI protocols without ever adding ads or investor paywalls, I rely on the generosity
+of learners and sponsors who believe in democratized education."
+```
+
+If OpenGuide has helped you understand AI, saved you money, or empowered your engineering career, please consider becoming a patron:
+
+<div align="center">
+
+[![Sponsor via PayPal](https://img.shields.io/badge/Sponsor%20via-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![Support on Ko-fi](https://img.shields.io/badge/Support%20on-Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on-GitHub%20Sponsors-EA4AAA?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/Adilrafiq001)
+
+*Every sponsorship directly sustains open-source domain hosting, automated CI verification suites, and future curriculum tracks.*
+
+</div>
+
+---
+
+## 🚀 Quickstart: Local Development
+
+Want to run OpenGuide locally or contribute to the open-source studio?
 
 ### Prerequisites
 * **Node.js**: v18.0.0 or higher
-* **Yarn** or **npm**
+* **Yarn** (v4.x) or **npm**
 
-### Clone & Run
+### 1. Clone & Install
 ```bash
 # Clone the repository
 git clone https://github.com/openguideforai/OpenGuideForAI.git
 cd OpenGuideForAI
 
-# Install dependencies
+# Install workspace dependencies
 yarn install
-
-# Launch the local development studio
-yarn dev
 ```
 
-Visit `http://localhost:5173` in your browser. All Pyodide WASM runtimes will initialize locally in < 800ms.
-
-### Production Verification Suite (5-Point Gate)
+### 2. Launch Dev Studio
 ```bash
-# 1. Run full unit and component tests
-yarn test
+# Start local Vite development server
+yarn dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser. The Pyodide WebAssembly runtime will initialize locally in < 800ms.
 
-# 2. Run Playwright E2E browser regression tests
-npx playwright test
-
-# 3. Verify code style & linting
+### 3. The 5-Point Quality Assurance Gate
+Before any code is committed, it must pass our strict 5-point verification suite:
+```bash
+# 1. Dev server responds HTTP 200 OK
+# 2. Zero console errors
+# 3. Lint verification
 yarn lint
 
-# 4. Compile production static bundle
-yarn build
+# 4. 100% Playwright E2E regression pass
+npx playwright test
+
+# 5. Production static build compilation
+yarn --cwd apps/web build
 ```
 
 ---
 
-## 🔒 Security & Privacy Manifesto
+## 🔒 Security, Privacy & Integrity
 
-* **Zero Tracking:** No Google Analytics, no Facebook Pixels, no telemetry beacons.
-* **Zero Backend Database:** All student work resides in your browser's private IndexedDB sandbox.
-* **Zero API Key Leaks:** API keys entered for frontier models remain in your browser's local memory and are never transmitted to any OpenGuide server.
+* **Zero Tracking:** 0 cookies, 0 telemetry beacons, 0 analytics pings.
+* **Local Cryptography:** Cryptographic hashes calculated client-side via W3C Web Cryptography API (`window.crypto.subtle`).
+* **Environment Safeguards:** Example configuration provided in [`.env.example`](file:///.env.example). Real deployment tokens are strictly untracked.
 
 ---
 
 ## 👥 Creator & Architect
 
-OpenGuide was envisioned, designed, and architected by **Adil Rafiq Dar (ARD)**.
-
-* **Creator:** Adil Rafiq Dar (ARD)
+* **Architect & Lead Engineer:** Adil Rafiq Dar (ARD)
 * **Organization:** OpenGuide AI Studio
-* **Repository:** [https://github.com/openguideforai/OpenGuideForAI](https://github.com/openguideforai/OpenGuideForAI)
-* **License:** MIT License — Open Source Forever.
-
----
+* **Primary Target:** [https://github.com/openguideforai/OpenGuideForAI](https://github.com/openguideforai/OpenGuideForAI)
+* **Archive Mirror:** [https://github.com/Adilrafiq001/OpenGuideForAI](https://github.com/Adilrafiq001/OpenGuideForAI)
+* **License:** [MIT License](LICENSE) — Sovereign, Free, and Open to Humanity Forever.
 
 <div align="center">
-  <sub>Crafted with sovereign engineering rigor under the $0 Compute Rule. If this repository empowers your AI journey, consider giving us a ⭐ star on GitHub!</sub>
+  <sub>Architected with ❤️ by Adil Rafiq Dar (ARD). If you love this project, star the repo on GitHub! ⭐</sub>
 </div>

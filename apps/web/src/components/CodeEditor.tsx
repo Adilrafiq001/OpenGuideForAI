@@ -267,6 +267,17 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         className="flex-1 w-full overflow-hidden custom-scrollbar"
         data-testid="codemirror-editor"
       />
+
+      {/* Screen Reader ARIA Live Region for Diagnostics */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        data-testid="codemirror-a11y-live-region"
+      >
+        Python CodeMirror Editor active. Press Control Enter to execute Python in WebAssembly worker.
+      </div>
     </div>
   );
 };

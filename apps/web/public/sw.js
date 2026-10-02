@@ -61,6 +61,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Bypass service worker entirely for localhost development and Vite internal URLs
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.pathname.includes('/@') || url.pathname.includes('/node_modules/')) {
+    return;
+  }
+
   // 1a. Cache-first strategy for external Pyodide CDN assets (cdn.jsdelivr.net/pyodide/*) and wheels
   if (url.hostname.includes('jsdelivr.net') && (url.pathname.includes('/pyodide/') || url.pathname.endsWith('.whl') || url.pathname.endsWith('.wasm') || url.pathname.endsWith('.json'))) {
     event.respondWith(

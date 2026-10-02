@@ -133,7 +133,7 @@ test.describe('OpenGuide Android UI Journey & Verification Suite', () => {
     };
 
     await page.setViewportSize({ width: s23Ultra.width, height: s23Ultra.height });
-    await page.goto('/track/0', { waitUntil: 'domcontentloaded' });
+    await page.goto('/track/0/engine', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
     // Step 1: Switch to mobile editor tab
@@ -183,7 +183,27 @@ test.describe('OpenGuide Android UI Journey & Verification Suite', () => {
       });
     }
 
-    // Step 4: Verify Pyodide Execution Terminal Accessible Attributes (WCAG 2.2)
+    // Step 4: Run Code and Verify Execution Trigger
+    const runBtn = page.locator('[data-testid="run-code-button"], #ide-run-button, button:has-text("Run Code")').first();
+    if (await runBtn.count() > 0) {
+      await expect(runBtn).toBeVisible({ timeout: 10000 });
+      await expect(runBtn).toBeEnabled({ timeout: 25000 });
+      await runBtn.click();
+      await page.waitForTimeout(1000);
+      report.results.push({
+        action: 'Tap Run Code button',
+        status: 'PASSED',
+        commands: ['click run-code-btn'],
+        comment: 'Run code action triggered execution in Pyodide WebAssembly worker.',
+      });
+    }
+
+    // Step 5: Switch to mobile Output tab and Verify Pyodide Execution Terminal Accessible Attributes (WCAG 2.2)
+    const outputTabBtn = page.locator('[data-testid="mobile-tab-output"]').first();
+    if (await outputTabBtn.count() > 0) {
+      await outputTabBtn.click();
+      await page.waitForTimeout(400);
+    }
     const terminalOutput = page.locator('#terminal-output, [data-testid="terminal-output"]').first();
     await expect(terminalOutput).toBeVisible({ timeout: 10000 });
 
@@ -202,19 +222,6 @@ test.describe('OpenGuide Android UI Journey & Verification Suite', () => {
       commands: [`role="${terminalAttrs.role}"`, `aria-live="${terminalAttrs.ariaLive}"`],
       comment: 'Terminal output has role="region" and aria-live="polite" for dynamic screen reader announcements.',
     });
-
-    // Step 5: Run Code and Verify Output
-    const runBtn = page.locator('#ide-run-button, button:has-text("Run"), button:has-text("Run Code")').first();
-    if (await runBtn.count() > 0) {
-      await runBtn.click();
-      await page.waitForTimeout(1000);
-      report.results.push({
-        action: 'Tap Run Code button',
-        status: 'PASSED',
-        commands: ['click run-code-btn'],
-        comment: 'Run code action triggered execution in Pyodide WebAssembly worker.',
-      });
-    }
 
     allJourneyReports.push(report);
   });

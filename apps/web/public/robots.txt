@@ -1,0 +1,12 @@
+# OpenGuide AI Studio - robots.txt
+# High-Efficiency Search Engine Crawling & Indexation
+User-agent: *
+Allow: /
+Allow: /track/
+Allow: /holodeck
+Allow: /synapse
+Allow: /portfolio
+
+# Sitemaps
+Sitemap: https://openguideai.org/sitemap.xml
+Sitemap: https://openguideforai.dpdns.org/sitemap.xml
