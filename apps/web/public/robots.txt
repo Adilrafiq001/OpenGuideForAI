@@ -8,5 +8,4 @@ Allow: /synapse
 Allow: /portfolio
 
 # Sitemaps
-Sitemap: https://openguideai.org/sitemap.xml
 Sitemap: https://openguideforai.dpdns.org/sitemap.xml

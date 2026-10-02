@@ -1,19 +1,32 @@
 <div align="center">
 
-# OpenGuide. ⚡
-### THE SOVEREIGN IN-BROWSER AI ENGINEERING STUDIO
-**From a cracked phone to a screen-reader user: Learn artificial intelligence from absolute first principles with zero dollar cloud bills, zero telemetry, and zero gatekeeping.**
+<a href="https://openguideforai.dpdns.org">
+  <img src="apps/web/public/favicon.svg" width="76" height="76" alt="OpenGuide AI Studio Monogram" />
+</a>
+
+# OpenGuide.
+### SOVEREIGN IN-BROWSER AI ENGINEERING STUDIO
+
+> **Education empowers humanity, and human knowledge must remain free. Intelligence should never be gatekept behind a $300 cloud invoice, an elitist paywall, or closed corporate silos.**  
+> **From a cracked $40 smartphone under a dim bulb to a multi-monitor engineering rig with an assistive screen reader: OpenGuide places a sovereign, production-grade AI engineering laboratory directly inside your browser.**  
+> **100% Free. In-Browser Python WebAssembly. Zero Setup. Zero Telemetry. Sovereign Forever.**
+
+<p align="center">
+  <a href="https://openguideforai.dpdns.org">
+    <img src="docs/assets/hero-banner.svg" alt="OpenGuide Interactive CPython 3.12 WASM Engine Terminal" width="100%" />
+  </a>
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge)](LICENSE)
 [![CPython 3.12 WASM](https://img.shields.io/badge/CPython%203.12-Pyodide%20WASM-3b82f6.svg?style=for-the-badge)](https://pyodide.org/)
-[![Hosting Cost](https://img.shields.io/badge/Cloud%20Bill-%240%20Forever-emerald.svg?style=for-the-badge)](#the-0-rule-hard-constraint)
-[![Curriculum](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-8b5cf6.svg?style=for-the-badge)](#-the-master-curriculum-at-a-glance)
-[![Accessibility](https://img.shields.io/badge/WCAG%202.2-AAA%20Calibrated-f59e0b.svg?style=for-the-badge)](#-universal-accessibility--ergonomics)
-[![Sponsor OpenGuide](https://img.shields.io/badge/Sponsor%20OpenGuide-Heart%20Patron-f43f5e.svg?style=for-the-badge)](#-a-message-from-the-creator--sponsorship)
+[![Cloud Bill: $0 Forever](https://img.shields.io/badge/Cloud%20Bill-%240%20Forever-10b981.svg?style=for-the-badge)](#the-0-rule-hard-constraint)
+[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-8b5cf6.svg?style=for-the-badge)](#curriculum)
+[![Zero Setup: No Install](https://img.shields.io/badge/Zero%20Setup-Instant%20Browser%20Launch-06b6d4.svg?style=for-the-badge)](https://openguideforai.dpdns.org)
+[![Native Desktop App](https://img.shields.io/badge/Desktop%20App-Windows%20%E2%80%A2%20Mac%20%E2%80%A2%20Linux-f59e0b.svg?style=for-the-badge)](#desktop-app)
 
 ---
 
-### [🚀 Launch Live Studio](https://openguideai.org) • [📖 Read the Manifesto](#-why-openguide-exists) • [💡 Tips & Tricks](#-upfront-tips--power-tricks) • [💖 Support & Sponsor](#-a-message-from-the-creator--sponsorship)
+### [🚀 Launch Live Studio (Free)](https://openguideforai.dpdns.org) • [💻 Desktop App Guide](#desktop-app) • [📚 45 Interactive Labs](#curriculum) • [💡 Power Tips](#-upfront-tips--power-tricks) • [💖 Support the Creator](#-a-message-from-the-creator--sponsorship)
 
 </div>
 
@@ -34,6 +47,7 @@ We believe artificial intelligence is a fundamental literacy of human civilizati
 
 ---
 
+<a id="the-0-rule-hard-constraint"></a>
 ## 🗺️ The Architecture Infogram: How It Works Without Servers
 
 OpenGuide runs under the **$0 Rule**. There is **no backend server**. There is **no database tracking you**. 100% of the computation executes inside your local web browser:
@@ -61,6 +75,7 @@ OpenGuide runs under the **$0 Rule**. There is **no backend server**. There is *
 
 ---
 
+<a id="curriculum"></a>
 ## 📚 The Master Curriculum at a Glance
 
 Five rigorous, production-grade tracks consisting of **45 interactive, runnable labs**:
@@ -83,6 +98,36 @@ graph TD
 | **Track 2: RAG & Agents** | 9 | Thought $\rightarrow$ Action $\rightarrow$ Observation state machines & MCP tool schemas | Full Autonomous Research Agent with multi-hop reasoning |
 | **Track 3: Evals & Guardrails** | 9 | Adversarial red-teaming, prompt injection defense, and metric rubrics | Synthetic eval harness paired with in-browser WebGPU inference |
 | **Track 4: Frontier Systems** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, KV-cache memory math, RoPE, and LoRA | Transformer Attention Head Dissection & DPO Loss Engine |
+
+---
+
+<a id="desktop-app"></a>
+## 💻 Install as a Native Desktop App (Windows, macOS, Linux, Mobile)
+
+OpenGuide is engineered as an **Installable Progressive Web App (PWA)** with native OS window integration. You never have to install Python, Node.js, or Docker on your host operating system to build neural architectures:
+
+### 🪟 Windows (10 / 11)
+1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Google Chrome, Microsoft Edge, or Brave.
+2. In the right side of the address bar, click the **Install OpenGuide** computer icon (or click the three dots `⋮` $\rightarrow$ **Install OpenGuide**).
+3. Click **Install**.
+4. **Automatic Desktop Shortcut:** Windows automatically generates an **OpenGuide shortcut directly on your Desktop**, adds it to your **Start Menu**, and lets you pin it to your **Taskbar**.
+5. When launched, OpenGuide opens in a clean, standalone OS window with native titlebar controls and no browser tabs or URL bars.
+
+### 🍎 macOS (Sonoma / Ventura / Monterey)
+1. **Chrome / Brave / Edge:** Visit **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)**, click the **Install** button in the omnibox, and confirm. OpenGuide is added to `/Applications`, your **Dock**, and indexed in **Spotlight Search** (`Cmd + Space`).
+2. **Safari (macOS Sonoma+):** Click **File** in the top menu bar $\rightarrow$ **Add to Dock**. OpenGuide operates as a standalone Mac application with full `Cmd + Tab` app switcher support.
+
+### 🐧 Linux (Ubuntu, Debian, Fedora, Arch)
+1. Open **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** in Chromium, Chrome, or Brave.
+2. Click **Install OpenGuide** from the address bar or app menu.
+3. Your desktop environment (GNOME, KDE Plasma, XFCE) automatically creates an OpenGuide `.desktop` launcher under `~/.local/share/applications/` and places an icon on your desktop with full system tray and application drawer integration.
+
+### 📱 Android & iOS / iPadOS
+* **Android (Chrome / Brave / Samsung Internet):** Tap the **Add to Home screen** or **Install app** banner. An app tile is placed on your home screen with a custom splash screen and standalone display.
+* **iOS / iPadOS (Safari):** Tap the **Share** button (square with arrow) $\rightarrow$ tap **Add to Home Screen** $\rightarrow$ tap **Add**. Launches full-screen with native iOS touch gestures.
+
+### ✈️ 100% Air-Gapped Offline Execution
+Thanks to our Service Worker cache (`sw.js`), all curriculum content, the Pyodide WebAssembly engine, and visualizer modules are stored locally on your device. You can disconnect from Wi-Fi entirely, board a plane, or work in remote locations: OpenGuide boots and executes Python labs seamlessly offline.
 
 ---
 
@@ -163,7 +208,6 @@ If OpenGuide has helped you understand AI, saved you money, or empowered your en
 
 [![Sponsor via PayPal](https://img.shields.io/badge/Sponsor%20via-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
 [![Support on Ko-fi](https://img.shields.io/badge/Support%20on-Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
-[![GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on-GitHub%20Sponsors-EA4AAA?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/Adilrafiq001)
 
 *Every sponsorship directly sustains open-source domain hosting, automated CI verification suites, and future curriculum tracks.*
 

@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 290" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="50%" stop-color="#070c16" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#10b981" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.3" />
+    </linearGradient>
+    <linearGradient id="glowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0" />
+      <stop offset="50%" stop-color="#10b981" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.65" />
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes pulseLine { 0%, 100% { transform: scaleX(0.85); opacity: 0.5; } 50% { transform: scaleX(1); opacity: 1; } }
+    @keyframes lineFade { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: translateY(0); } }
+    .cursor { animation: blink 1s infinite; }
+    .pulse-line { transform-origin: center; animation: pulseLine 4s ease-in-out infinite; }
+    .code-text { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Monaco, Consolas, monospace; font-size: 13px; }
+  </style>
+
+  <!-- Container Box -->
+  <g filter="url(#shadow)">
+    <rect x="15" y="15" width="810" height="260" rx="14" fill="url(#bgGrad)" />
+    <rect x="15" y="15" width="810" height="260" rx="14" stroke="url(#borderGrad)" stroke-width="1.5" />
+  </g>
+
+  <!-- Window Header / Title Bar -->
+  <rect x="16" y="16" width="808" height="38" rx="13" fill="#0f172a" fill-opacity="0.75" />
+  <line x1="16" y1="54" x2="824" y2="54" stroke="#1e293b" stroke-width="1" />
+
+  <!-- Window Controls -->
+  <circle cx="38" cy="35" r="5.5" fill="#ef4444" />
+  <circle cx="56" cy="35" r="5.5" fill="#f59e0b" />
+  <circle cx="74" cy="35" r="5.5" fill="#10b981" />
+
+  <!-- Window Title -->
+  <text x="420" y="39" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#94a3b8" letter-spacing="0.5">
+    OpenGuide CPython 3.12 WASM Engine • Local Sandbox
+  </text>
+
+  <!-- Status Chip -->
+  <rect x="715" y="27" width="95" height="18" rx="9" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-opacity="0.4" stroke-width="1" />
+  <circle cx="725" cy="36" r="3" fill="#10b981" />
+  <text x="733" y="39.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" fill="#34d399">RUNNING 0ms</text>
+
+  <!-- Code Execution Terminal -->
+  <g class="code-text">
+    <!-- Line 1: Imports -->
+    <text x="40" y="85" fill="#64748b">&gt;&gt;&gt;</text>
+    <text x="72" y="85" fill="#c084fc">import</text>
+    <text x="122" y="85" fill="#f8fafc">numpy</text>
+    <text x="168" y="85" fill="#c084fc">as</text>
+    <text x="189" y="85" fill="#f8fafc">np</text>
+    <text x="204" y="85" fill="#64748b">,</text>
+    <text x="219" y="85" fill="#f8fafc">openguide</text>
+    <text x="296" y="85" fill="#c084fc">as</text>
+    <text x="317" y="85" fill="#f8fafc">og</text>
+    <text x="345" y="85" fill="#64748b"># Pyodide WebAssembly runtime</text>
+
+    <!-- Line 2: Transformer Initialization -->
+    <text x="40" y="115" fill="#64748b">&gt;&gt;&gt;</text>
+    <text x="72" y="115" fill="#f8fafc">model</text>
+    <text x="116" y="115" fill="#38bdf8">=</text>
+    <text x="130" y="115" fill="#f8fafc">og</text>
+    <text x="144" y="115" fill="#64748b">.</text>
+    <text x="151" y="115" fill="#60a5fa">ScaledDotProductAttention</text>
+    <text x="330" y="115" fill="#94a3b8">(d_k=64,</text>
+    <text x="390" y="115" fill="#94a3b8">heads=12)</text>
+
+    <!-- Line 3: Vector Encoding & Inference -->
+    <text x="40" y="145" fill="#64748b">&gt;&gt;&gt;</text>
+    <text x="72" y="145" fill="#f8fafc">tokens</text>
+    <text x="123" y="145" fill="#38bdf8">=</text>
+    <text x="137" y="145" fill="#f8fafc">og</text>
+    <text x="151" y="145" fill="#64748b">.</text>
+    <text x="158" y="145" fill="#60a5fa">bpe_encode</text>
+    <text x="233" y="145" fill="#94a3b8">(</text>
+    <text x="240" y="145" fill="#34d399">"Democratize Intelligence for Humanity"</text>
+    <text x="525" y="145" fill="#94a3b8">)</text>
+
+    <!-- Line 4: Forward Attention Pass -->
+    <text x="40" y="175" fill="#64748b">&gt;&gt;&gt;</text>
+    <text x="72" y="175" fill="#f8fafc">context</text>
+    <text x="127" y="175" fill="#64748b">,</text>
+    <text x="140" y="175" fill="#f8fafc">weights</text>
+    <text x="195" y="175" fill="#38bdf8">=</text>
+    <text x="210" y="175" fill="#f8fafc">model</text>
+    <text x="249" y="175" fill="#64748b">.</text>
+    <text x="256" y="175" fill="#60a5fa">forward</text>
+    <text x="309" y="175" fill="#94a3b8">(tokens)</text>
+    <text x="380" y="175" fill="#64748b"># Executed 100% client-side</text>
+
+    <!-- Line 5: Output Result & Verification -->
+    <text x="40" y="210" fill="#34d399">✓</text>
+    <text x="60" y="210" font-weight="700" fill="#34d399">[VERIFIED]:</text>
+    <text x="152" y="210" fill="#f8fafc">Attention tensor shape</text>
+    <text x="315" y="210" fill="#fbbf24">(1, 12, 5, 64)</text>
+    <text x="415" y="210" fill="#64748b">|</text>
+    <text x="430" y="210" fill="#94a3b8">Cloud Bill: $0.00</text>
+    <text x="560" y="210" fill="#64748b">|</text>
+    <text x="575" y="210" fill="#94a3b8">Telemetry: 0 bytes</text>
+
+    <!-- Line 6: Prompt with Blinking Cursor -->
+    <text x="40" y="240" fill="#64748b">&gt;&gt;&gt;</text>
+    <text x="72" y="240" fill="#94a3b8">Ready for next lab. Press Ctrl+Enter...</text>
+    <rect class="cursor" x="350" y="228" width="8" height="15" fill="#10b981" rx="1.5" />
+  </g>
+
+  <!-- Dynamic Bottom Ambient Pulse -->
+  <line class="pulse-line" x1="120" y1="274" x2="720" y2="274" stroke="url(#glowLine)" stroke-width="2" />
+</svg>

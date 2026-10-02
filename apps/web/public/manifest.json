@@ -35,5 +35,28 @@
       "purpose": "any"
     }
   ],
-  "categories": ["education", "developer", "productivity"]
+  "categories": ["education", "developer", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Interactive Studio",
+      "short_name": "Studio",
+      "description": "Jump straight into the in-browser CPython IDE",
+      "url": "/studio",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Master Curriculum",
+      "short_name": "Curriculum",
+      "description": "Explore the 5 tracks and 45 engineering labs",
+      "url": "/#curriculum",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Engineering Portfolio",
+      "short_name": "Portfolio",
+      "description": "View cryptographic progress and verifiable credentials",
+      "url": "/portfolio",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
