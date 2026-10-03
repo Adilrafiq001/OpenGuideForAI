@@ -230,7 +230,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     const view = viewRef.current;
     if (view && value !== view.state.doc.toString()) {
       view.dispatch({
-        changes: { from: 0, to: view.state.doc.length, insert: value }
+        changes: { from: 0, to: view.state.doc.length, insert: value },
+        selection: { anchor: 0 }
       });
     }
   }, [value]);
@@ -253,7 +254,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
               type="button"
               onClick={() => insertText(k.insert)}
               title={k.title}
-              className="px-2.5 py-1 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-black border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[34px] min-w-[32px] flex items-center justify-center shrink-0"
+              className="px-2.5 py-1 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-[var(--color-text-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[34px] min-w-[32px] flex items-center justify-center shrink-0"
             >
               {k.label}
             </button>

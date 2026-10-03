@@ -19,7 +19,8 @@ import {
   ChevronRight,
   Palette,
   ExternalLink,
-  Scale
+  Scale,
+  Heart
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
@@ -65,18 +66,22 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   // Changelog Modal state
   const [changelogModalOpen, setChangelogModalOpen] = useState(false);
 
+  // Sponsor Modal state
+  const [sponsorModalOpen, setSponsorModalOpen] = useState(false);
+
   useEffect(() => {
-    if (!legalModalOpen && !contactModalOpen && !changelogModalOpen) return;
+    if (!legalModalOpen && !contactModalOpen && !changelogModalOpen && !sponsorModalOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setLegalModalOpen(false);
         setContactModalOpen(false);
         setChangelogModalOpen(false);
+        setSponsorModalOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [legalModalOpen, contactModalOpen, changelogModalOpen]);
+  }, [legalModalOpen, contactModalOpen, changelogModalOpen, sponsorModalOpen]);
 
   // Commit hash copy state
   const [copiedHash, setCopiedHash] = useState(false);
@@ -514,6 +519,17 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
 
         {/* Direct Action Links & Support */}
         <div className="flex items-center gap-4 text-xs font-sans">
+          <button
+            onClick={() => setSponsorModalOpen(true)}
+            className="hover:text-rose-400 text-rose-500/90 transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+            title="Sponsor & Support OpenGuide AI Studio"
+          >
+            <Heart size={13} className="text-rose-400 fill-rose-400/20" />
+            <span>Sponsor</span>
+          </button>
+
+          <span className="text-[var(--color-border)]">•</span>
+
           <button
             onClick={() => setContactModalOpen(true)}
             className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1 cursor-pointer font-medium"
@@ -976,6 +992,110 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold text-xs cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Close Changelog
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================================= */}
+      {/* 4. SPONSOR & COMMUNITY SUPPORT MODAL                                       */}
+      {/* ========================================================================= */}
+      <AnimatePresence>
+        {sponsorModalOpen && (
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSponsorModalOpen(false);
+            }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              className="w-full max-w-lg bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden outline-none"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="sponsor-modal-title"
+              tabIndex={-1}
+              onKeyDown={(e) => handleModalKeyDown(e, () => setSponsorModalOpen(false))}
+            >
+              <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                    <Heart size={16} className="fill-rose-400/20" />
+                  </div>
+                  <div>
+                    <h3 id="sponsor-modal-title" className="text-base font-bold text-[var(--color-text-primary)]">
+                      Sponsor OpenGuide
+                    </h3>
+                    <p className="text-[11px] font-mono text-[var(--color-text-secondary)]">Sustaining 100% Free Sovereign AI Education ($0 Forever)</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSponsorModalOpen(false)}
+                  className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  aria-label="Close sponsor dialog"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4 text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                <p>
+                  OpenGuide was created by <strong className="text-[var(--color-text-primary)]">Adil Rafiq Dar (ARD)</strong> to democratize artificial intelligence with zero subscriptions, zero paid APIs, and zero gatekeeping.
+                </p>
+                <p>
+                  Every contribution directly funds automated CI testing suites, domain hosting, and developing future hands-on interactive tracks.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                  <a
+                    href="https://github.com/sponsors/openguideforai"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-pink-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
+                  >
+                    <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-pink-400 transition-colors">
+                      GitHub Sponsors
+                    </span>
+                    <span className="text-[10px] font-mono text-pink-400">@openguideforai ↗</span>
+                  </a>
+
+                  <a
+                    href="https://ko-fi.com/buymegoodcoffee"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-amber-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
+                  >
+                    <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-amber-400 transition-colors">
+                      Ko-fi
+                    </span>
+                    <span className="text-[10px] font-mono text-amber-400">buymegoodcoffee ↗</span>
+                  </a>
+
+                  <a
+                    href="https://paypal.me/buymegoodcoffee"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-blue-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
+                  >
+                    <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-blue-400 transition-colors">
+                      PayPal
+                    </span>
+                    <span className="text-[10px] font-mono text-blue-400">paypal.me ↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-primary)]/40 flex justify-end shrink-0">
+                <button
+                  onClick={() => setSponsorModalOpen(false)}
+                  className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold text-xs cursor-pointer hover:opacity-90 transition-opacity"
+                >
+                  Close
                 </button>
               </div>
             </motion.div>

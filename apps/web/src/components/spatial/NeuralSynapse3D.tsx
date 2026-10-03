@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
+import { getAudioContext } from '../../services/soundHaptics';
 
 interface SynapseNode {
   id: string;
@@ -96,7 +97,8 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
   const playSynapseChime = (layer: number) => {
     if (!soundEnabled) return;
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const freqs = [392.00, 523.25, 659.25, 880.00]; // G4, C5, E5, A5

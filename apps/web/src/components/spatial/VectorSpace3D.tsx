@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
-import { playCosineSonification } from '../../services/soundHaptics';
+import { playCosineSonification, getAudioContext } from '../../services/soundHaptics';
 
 function calculateCosine(a: [number, number, number], b: [number, number, number]): number {
   const dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -107,7 +107,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   const playNodeChime = (cluster: string) => {
     if (!soundEnabled) return;
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const freqs: Record<string, number> = {

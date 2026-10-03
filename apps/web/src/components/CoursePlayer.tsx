@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Play, 
@@ -62,6 +62,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     initProgress();
   }, [initProgress]);
 
+  const [searchParams] = useSearchParams();
+  const paramMod = searchParams.get('module');
+  const paramLes = searchParams.get('lesson');
+
   const { theme, fontSize, wordWrap } = useSettingsStore();
 
   const trackNum = track.id.replace('track-', '') || '0';
@@ -79,6 +83,37 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Synchronize track.id and search parameters (module & lesson deep-linking)
+  useEffect(() => {
+    let modIdx = 0;
+    let lesIdx = 0;
+    if (paramMod !== null) {
+      const parsed = parseInt(paramMod, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules.length) {
+        modIdx = parsed;
+      }
+    }
+    if (paramLes !== null && track.modules[modIdx]) {
+      const parsed = parseInt(paramLes, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules[modIdx].lessons.length) {
+        lesIdx = parsed;
+      }
+    }
+    setCurrentModuleIdx(modIdx);
+    setCurrentLessonIdx(lesIdx);
+    const target = track.modules[modIdx]?.lessons[lesIdx] || track.modules[0]?.lessons[0];
+    if (target) {
+      setCode(target.initialCode);
+      clearLogs();
+      setFeedback({ type: null, message: '' });
+      setSyntaxDiagnostic(null);
+      setShowHint(false);
+      setShowSolution(false);
+      setCopiedSolution(false);
+      setIsChallengePassed(completedLessonIds.includes(target.id));
+    }
+  }, [track.id, paramMod, paramLes]);
 
   // Reset code when lesson changes
   const handleLessonChange = (modIdx: number, lesIdx: number) => {

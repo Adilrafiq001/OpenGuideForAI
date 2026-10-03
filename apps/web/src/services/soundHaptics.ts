@@ -2,7 +2,7 @@ import { useSettingsStore } from '../store/useSettingsStore';
 
 let sharedAudioCtx: AudioContext | null = null;
 
-function getAudioContext(): AudioContext | null {
+export function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!sharedAudioCtx) {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;

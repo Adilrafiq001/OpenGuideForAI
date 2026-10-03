@@ -103,7 +103,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
             subtitle: `Track ${id} • Module ${mIdx + 1}.${lIdx + 1} (${mod.title})`,
             category: 'Lab',
             icon: BookOpen,
-            action: () => { onClose(); navigate(`/track/${id}/engine`); }
+            action: () => { onClose(); navigate(`/track/${id}/engine?module=${mIdx}&lesson=${lIdx}`); }
           });
         });
       });

@@ -3,6 +3,7 @@
 # State: Universal 10/10 Sovereign AI Studio Architecture (Encrypted Gist Sync, W3C Credentials, Scaled Attention Dissection & Upstream AI Freshness CI)
 
 **Done:**
+- **ASD-STE100 Technical System Explainer (`explainer.md`):** Complete technical breakdown in Simplified Technical English (~80% conformance) covering the client-side architecture, Web Worker execution sandbox, 5-track curriculum, and privacy guarantees.
 - **Universal 10/10 Perfection Architecture & 6-Pillar Systemic Polish (Complete):**
   - **1. Studio Command Palette (`Cmd+K` / `Ctrl+K`) (`CommandPaletteModal.tsx`):** Engineered a native Apple/Linear-grade command palette accessible from anywhere in the application via keyboard shortcut (`Cmd+K` / `Ctrl+K`), header search pill, Command Dock affordance, and mobile drawer. Features fuzzy keyword search, instantaneous route navigation, modal triggers, theme switcher jumps, comprehensive curriculum lab selector across all tracks, and direct quick actions with keyboard navigation (`↑`/`↓` and `Enter`).
   - **2. Granular Pyodide WebAssembly Download Telemetry (`usePyodide.ts`, `pyodide.worker.js`, `CoursePlayer.tsx`):** Implemented multi-stage real-time runtime initialization telemetry dispatching granular worker lifecycle events (`idle` → `connecting` → `downloading_wasm` → `compiling_engine` → `ready`) with visual progress indicators, percentage estimates, and human-readable diagnostic messages.

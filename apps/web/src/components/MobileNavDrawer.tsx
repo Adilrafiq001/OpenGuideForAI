@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -45,6 +45,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
   onOpenCommandPalette
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, setTheme, displaySize, setDisplaySize } = useSettingsStore();
   const { language, setLanguage } = useLanguageStore();
   const { isInstalled, promptInstall } = usePwaInstall();
@@ -351,14 +352,26 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                 <div className="flex items-center gap-2 pt-1">
                   <a
                     href="#pathways"
-                    onClick={onClose}
+                    onClick={(e) => {
+                      onClose();
+                      if (location.pathname !== '/') {
+                        e.preventDefault();
+                        navigate('/#pathways');
+                      }
+                    }}
                     className="flex-1 text-center py-2 px-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors"
                   >
                     Pathways Overview
                   </a>
                   <a
                     href="#curriculum"
-                    onClick={onClose}
+                    onClick={(e) => {
+                      onClose();
+                      if (location.pathname !== '/') {
+                        e.preventDefault();
+                        navigate('/#curriculum');
+                      }
+                    }}
                     className="flex-1 text-center py-2 px-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors"
                   >
                     Full Syllabus

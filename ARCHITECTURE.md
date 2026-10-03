@@ -59,3 +59,8 @@
   - `src/worker/`: Dedicated Pyodide CPython WebAssembly Web Worker runner (`pyodide.worker.ts`).
   - `src/locales/`: Universal 12-language translation catalogs.
   - `src/styles/`: Craft CSS sheets, 20 theme tokens, and GPU-composited animations.
+
+## Related Documentation
+- [ASD-STE100 System Explainer](explainer.md): High-level system breakdown written in Simplified Technical English (~80% conformance).
+- [Curriculum Specifications](docs/CURRICULUM.md): Detailed syllabus and lab outcomes across all 45 hands-on modules.
+- [Project State](docs/PROJECT-STATE.md): Operational architecture and audit ledger.

@@ -52,6 +52,8 @@ export function LanguageSelector() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 6 }}
             transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+            role="listbox"
+            aria-label={t('select_language')}
             className="absolute right-0 mt-2 w-52 max-h-80 overflow-y-auto rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl backdrop-blur-xl z-[150] space-y-1 custom-scrollbar momentum-scroll-y"
           >
             <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-[var(--color-text-secondary)] border-b border-[var(--color-border)] mb-1">
@@ -63,6 +65,8 @@ export function LanguageSelector() {
                 <button
                   key={lang.code}
                   type="button"
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={() => {
                     setLanguage(lang.code);
                     setIsOpen(false);

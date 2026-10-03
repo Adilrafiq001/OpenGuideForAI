@@ -47,7 +47,10 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
       try {
         const cached = localStorage.getItem(STORAGE_KEY);
         if (cached) {
-          initialIds = JSON.parse(cached);
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed)) {
+            initialIds = parsed.filter(id => typeof id === 'string');
+          }
         }
       } catch {
         // localStorage optional
@@ -83,7 +86,8 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
       try {
         const cached = localStorage.getItem(STORAGE_KEY);
         if (cached) {
-          set({ completedLessonIds: JSON.parse(cached), isLoaded: true });
+          const parsed = JSON.parse(cached);
+          set({ completedLessonIds: Array.isArray(parsed) ? parsed : [], isLoaded: true });
         } else {
           set({ isLoaded: true });
         }

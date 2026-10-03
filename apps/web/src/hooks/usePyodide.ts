@@ -141,6 +141,10 @@ export function usePyodide() {
         watchdogTimerRef.current = null;
       }
       setState('error');
+      if (activeExecution.current) {
+        activeExecution.current.reject(new Error('Web Worker encountered an unhandled error.'));
+        activeExecution.current = null;
+      }
     };
 
     // Kick off initialization

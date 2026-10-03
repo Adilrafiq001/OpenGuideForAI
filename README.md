@@ -26,7 +26,7 @@
 
 ---
 
-### [Launch Studio](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Architecture](#sovereign-client-side-architecture) &nbsp;•&nbsp; [Curriculum](#curriculum-overview) &nbsp;•&nbsp; [Desktop App](#desktop--progressive-web-application-installation) &nbsp;•&nbsp; [Power Shortcuts](#ergonomics--power-shortcuts) &nbsp;•&nbsp; [Quickstart](#local-development-quickstart)
+### [Launch Studio](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Architecture](#sovereign-client-side-architecture) &nbsp;•&nbsp; [Curriculum](#curriculum-overview) &nbsp;•&nbsp; [Explainer (STE)](explainer.md) &nbsp;•&nbsp; [Desktop App](#desktop--progressive-web-application-installation) &nbsp;•&nbsp; [Power Shortcuts](#ergonomics--power-shortcuts) &nbsp;•&nbsp; [Quickstart](#local-development-quickstart)
 
 </div>
 
@@ -335,6 +335,15 @@ npx playwright test
 # 5. Production static build compilation
 yarn --cwd apps/web build
 ```
+
+---
+
+## Technical Documentation
+
+* **[ASD-STE100 System Explainer](explainer.md):** Complete technical breakdown in Simplified Technical English (~80% conformance) covering the client-side architecture, Web Worker execution sandbox, 5-track curriculum, and privacy guarantees.
+* **[System Architecture](ARCHITECTURE.md):** Deep dive into reactive stores, Pyodide WebAssembly runner, and WebGPU pipelines.
+* **[Curriculum Specifications](docs/CURRICULUM.md):** Detailed syllabus and lab outcomes across all 45 hands-on modules.
+* **[Project State & Audit](docs/PROJECT-STATE.md):** Operational status, compliance metrics, and test coverage ledger.
 
 ---
 

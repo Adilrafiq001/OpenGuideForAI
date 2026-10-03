@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Network } from 'lucide-react';
 
 interface AutogradDAGModalProps {
@@ -9,6 +9,15 @@ interface AutogradDAGModalProps {
 export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onClose }) => {
   const [a, setA] = useState<number>(2.0);
   const [b, setB] = useState<number>(-3.0);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -33,8 +42,16 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
   const grad_b = 2.0 * a;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="dag-modal-title">
-      <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm cursor-pointer" 
+      role="dialog" 
+      aria-modal="true" 
+      aria-labelledby="dag-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4 cursor-default" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-3">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/30 flex items-center justify-center text-[var(--color-accent)]">
@@ -47,7 +64,11 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
               <p className="text-[10px] font-mono text-[var(--color-text-secondary)]">Reactive Forward & Backward Pass Propagation</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer">
+          <button 
+            onClick={onClose} 
+            aria-label="Close autograd graph dialog"
+            className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer"
+          >
             <X size={18} />
           </button>
         </div>

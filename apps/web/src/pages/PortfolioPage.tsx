@@ -20,7 +20,8 @@ import {
   Upload,
   Network,
   Cloud,
-  Share2
+  Share2,
+  X
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
@@ -134,7 +135,7 @@ export function PortfolioPage() {
           entity: 'OpenGuide. AI Studio',
           student: studentName.trim() || 'Anonymous Learner',
           curriculum: 'OpenGuide-Production-v2.0',
-          completedLabs: completedLessonIds.sort(),
+          completedLabs: [...completedLessonIds].sort(),
           totalLabs: totalCurriculumLabs,
           architectCredit: 'Adil Rafiq Dar (ARD)',
           timestamp: '2026-IMMUTABLE-LEDGER'
@@ -987,9 +988,11 @@ export function PortfolioPage() {
                     setShowGistSyncModal(false);
                     setGistSyncStatus(null);
                   }}
-                  className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer"
+                  aria-label="Close Gist sync dialog"
+                  className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center justify-center"
                 >
-                  ✕
+                  <X size={18} />
+                  <span className="sr-only">✕</span>
                 </button>
               </div>
 

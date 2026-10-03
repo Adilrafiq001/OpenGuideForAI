@@ -65,7 +65,7 @@ export function ExplainerPill({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 6 }}
             transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-            className="absolute left-0 mt-2 z-[150] w-80 sm:w-96 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-5 shadow-2xl backdrop-blur-xl text-left"
+            className="absolute left-0 mt-2 z-[150] w-[min(calc(100vw-2.5rem),24rem)] max-w-sm rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-4 sm:p-5 shadow-2xl backdrop-blur-xl text-left"
             style={{ transformOrigin: 'top left' }}
           >
             {/* Header */}

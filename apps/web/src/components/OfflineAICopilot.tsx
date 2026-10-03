@@ -36,6 +36,15 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -85,7 +94,8 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="text-xs px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-200"
+              aria-label="Clear search query"
+              className="text-xs px-2 py-1 rounded bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border)] cursor-pointer"
             >
               Clear
             </button>
