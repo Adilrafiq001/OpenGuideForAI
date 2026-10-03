@@ -23,7 +23,7 @@ export const GitHubStarButton: React.FC<GitHubStarButtonProps> = ({
       href="https://github.com/openguideforai/OpenGuideForAI"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Star OpenGuide on GitHub"
+      aria-label={variant === 'compact' ? 'Star on GitHub' : 'Star on GitHub — OpenGuide repository'}
       onClick={handleClick}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}

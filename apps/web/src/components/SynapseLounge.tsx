@@ -476,9 +476,9 @@ export function SynapseLounge() {
                       <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-wider block font-semibold">
                         Interactive Embedding Probe
                       </span>
-                      <h4 className="text-sm font-bold text-[var(--color-text-primary)]">
+                      <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
                         Tune Probe Vector Angle θ
-                      </h4>
+                      </h3>
                     </div>
 
                     <div className="text-right">
@@ -839,9 +839,9 @@ export function SynapseLounge() {
                       Scenario {attentionIdx + 1} of {attentionScenarios.length}
                     </span>
                   </div>
-                  <h4 className="text-base font-bold text-[var(--color-text-primary)]">
+                  <h3 className="text-base font-bold text-[var(--color-text-primary)]">
                     {currentAttention.description}
-                  </h4>
+                  </h3>
                 </div>
 
                 <div className="flex items-center gap-2">

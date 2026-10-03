@@ -270,7 +270,7 @@ export function FirstTimeSetupModal({
                         }`}
                       >
                         <div className="text-xs font-semibold">{lang.nativeName}</div>
-                        <div className="text-[10px] font-mono opacity-60 uppercase">{lang.code}</div>
+                        <div className="text-[10px] font-mono opacity-85 font-medium uppercase">{lang.code}</div>
                       </button>
                     ))}
                   </div>

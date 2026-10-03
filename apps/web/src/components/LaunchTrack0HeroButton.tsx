@@ -136,7 +136,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
           role="button"
           aria-label={t('nav_launch_track0') || 'Launch Track 0'}
         >
-          <div className="wrapper">
+          <div className="wrapper" aria-hidden="true">
             <input
               type="checkbox"
               checked={isChecked}

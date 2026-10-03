@@ -25,6 +25,7 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
+  --color-accent-text: #000000;
   --color-accent-trans: var(--accent-transparent);
 }
 
@@ -100,6 +101,7 @@ html[data-theme="claude-light"], [data-theme="claude-light"] {
   --color-text-primary: #1e140d;
   --color-text-secondary: #63391b;
   --color-accent: #c2410c;
+  --color-accent-text: #ffffff;
   --color-accent-trans: rgba(194, 65, 12, 0.18);
 }
 

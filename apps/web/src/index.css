@@ -195,6 +195,14 @@ body {
   color: #334155 !important; /* slate-700 */
 }
 
+/* Button & Badge Accent High-Contrast Text Safeguard (WCAG AAA) */
+.bg-\[var\(--color-accent\)\]:where(button, [role="button"], a),
+.bg-\[var\(--color-accent\,\#10b981\)\]:where(button, [role="button"], a),
+button.bg-\[var\(--color-accent\)\],
+button.bg-\[var\(--color-accent\,\#10b981\)\] {
+  color: var(--color-accent-text, #000000) !important;
+}
+
 /* =========================================================================
    LENIS INERTIAL MOMENTUM SMOOTH SCROLLING ENGINE
    Luxury kinetic friction & velocity preservation across desktop & mobile

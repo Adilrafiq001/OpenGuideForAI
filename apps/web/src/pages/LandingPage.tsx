@@ -283,9 +283,9 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                   <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">100% FREE</span>
                 </div>
 
-                <p className="text-xs text-[var(--color-text-secondary)] mb-3 font-medium">
+                <h3 className="text-xs text-[var(--color-text-secondary)] mb-3 font-medium">
                   {category.tag}
-                </p>
+                </h3>
 
                 {/* Plain-Language Explainer Pill */}
                 <div className="mb-5">
