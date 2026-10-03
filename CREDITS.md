@@ -5,7 +5,7 @@
 
 ---
 
-## 🏛️ Creator & Architect
+## Creator & Architect
 
 ### **Adil Rafiq Dar (ARD)**
 * **Role:** Creator, Lead Architect, and Systems Designer
@@ -14,7 +14,7 @@
 
 ---
 
-## 🌟 Foundational Open-Source Ecosystems & Giants
+## Open-Source Foundations & Core Dependencies
 
 OpenGuide stands on the shoulders of remarkable open-source engineering achievements. We extend our deepest gratitude to the creators, maintainers, and contributors of the following technologies:
 
@@ -75,7 +75,7 @@ OpenGuide stands on the shoulders of remarkable open-source engineering achievem
 
 ---
 
-## 📜 Educational & Research Influences
+## Pedagogical & Research Influences
 
 OpenGuide's pedagogical design draws direct inspiration from foundational thinkers in computer science and artificial intelligence:
 * **Andrej Karpathy:** For championing radical, first-principles AI education ("Zero to Hero", Micrograd, nanoGPT) that empowers engineers to build neural networks from scratch.
@@ -84,6 +84,6 @@ OpenGuide's pedagogical design draws direct inspiration from foundational thinke
 
 ---
 
-## 🤝 Attribution Notice & Open License
+## Attribution & Licensing Notice
 
 OpenGuide is released under the **MIT License**. You are free to inspect, learn from, fork, and build upon this architecture. We request that all forks and derived educational works maintain prominent attribution to **Adil Rafiq Dar (ARD)** and OpenGuide as specified in [AGENTS.md](AGENTS.md).
