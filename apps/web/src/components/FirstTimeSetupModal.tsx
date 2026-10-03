@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Sparkles, 
   Download, 
   Check, 
   ArrowRight, 
@@ -458,7 +457,7 @@ export function FirstTimeSetupModal({
                   onClick={handleComplete}
                   className="px-6 py-2.5 rounded-xl bg-[var(--color-accent,#10b981)] text-black font-bold text-xs flex items-center gap-1.5 hover:opacity-90 active:scale-95 transition-all shadow-md cursor-pointer"
                 >
-                  <Sparkles size={14} />
+                  <Compass size={14} />
                   <span>Start Exploring OpenGuide</span>
                 </button>
               )}

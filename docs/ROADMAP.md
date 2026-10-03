@@ -8,7 +8,7 @@
 - [x] First-Principles Knowledge Matrix (Why • How • What) with interactive exploration modal.
 - [x] Multi-Language Store across 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic RTL bidirectional layout and script-safe line heights.
 - [x] Material-wide dynamic translation spanning all curriculum tracks, hero copy, 11 pillars, free tools, and Abby guide.
-- [x] Universal Header Synchronization (`LanguageSelector` and `[ ● Theme 🎨 | ⚙️ ]`) across all page headers.
+- [x] Universal Header Synchronization (`LanguageSelector` and `[ ● Theme | Settings ]`) across all page headers.
 - [x] Advanced Editor & Environment Preferences Dashboard (Monaco, WASM heap, sound FX).
 - [x] "The Synapse Lounge" Neuro-plasticity lab and cognitive arcade minigames.
 - [x] Universal Hardware-Adaptive Spatial Holodeck:
@@ -184,7 +184,7 @@
 - [x] **Curriculum & Portfolio Harmonization:** Added Track 4 (Frontier Intelligence - 9 labs) to Landing Page curriculum grid ("5 Core Tracks • 45 Interactive Labs") and updated Portfolio page grid to `xl:grid-cols-5`.
 - [x] **Abby Chatbot Knowledge & Mobile Viewport Overhaul:** Fixed mobile off-screen positioning bug with `jellyControls.start({ x: 0, y: 0 })` and CSS `transform: none !important;`. Expanded offline knowledge base to 50+ rich first-principles entries covering all tracks, math formulas, and token-weighted routing.
 - [x] **Curated Goldmines Mobile Optimization:** Expanded YouTube iframe sandbox (`allow-popups allow-forms`), added direct "Watch in YouTube App ↗" fallback button, and built mobile master-detail course drawer.
-- [x] **Mobile IDE 3-Tab Segmented Ergonomics:** Implemented `[ 📖 Study ] [ 💻 Code ] [ 📟 Output ]` tabs in `CoursePlayer.tsx` with automatic switch to `Output` upon code execution.
+- [x] **Mobile IDE 3-Tab Segmented Ergonomics:** Implemented `[ Study ] [ Code ] [ Output ]` tabs in `CoursePlayer.tsx` with automatic switch to `Output` upon code execution.
 - [x] **Spatial Holodeck Utility & Live Cosine Probes:** Added Track 4 Frontier cluster and 8 new semantic vector nodes (24 total) to `VectorSpace3D.tsx`, plus live Dual-Vector Cosine Probes with direct Python IDE launch links.
 - [x] **Changelog & Studio Update Announcement:** Added `changelogData.ts`, collapsible release notes accordion in Settings, and non-intrusive bottom announcement pill in `App.tsx`.
 - [x] **Public README Showcase:** Overhauled `README.md` into an award-winning public advertisement with zero secrets, badges, and complete architecture manifesto.
@@ -200,7 +200,7 @@
 - [x] **The Synapse Lounge Re-Framing:** Reframed arcade into an "Interactive Visual Lab: See AI Math in Action" with plain-English intuition cards explaining why Vector Manifolds, Single-Neuron Decisions, and Transformer Attention routing matter before writing code.
 - [x] **100% Automated Test Suite Passage:** 62/62 tests passing across all suites (`codemirror-persistence-curriculum`, `universal-compatibility`, `comprehensive-features`, `mobile-experience`, `app-full-regression`).
 
-## Phase 20: Universal 10/10 Perfection Architecture & 6-Pillar Systemic Polish (Release v3.3.0)
+## Phase 20: Universal 10/10 Perfection Architecture & 6-Pillar Systemic Polish (Release v1.1.0)
 - [x] **Studio Command Palette (`Cmd+K` / `Ctrl+K`):** Global omnibox modal with fuzzy search across all curriculum labs, direct modal triggers, theme switcher jumps, and keyboard navigation.
 - [x] **Granular Pyodide WebAssembly Telemetry:** Multi-phase Web Worker bootstrapping states (`idle` → `connecting` → `downloading_wasm` → `compiling_engine` → `ready`) with percentage estimates, human-readable status, and automatic fallback.
 - [x] **Beginner-Friendly Python Syntax Doctor (`pythonDiagnostic.ts`):** Client-side zero-cost static diagnostic parser for Pyodide tracebacks converting cryptic compiler errors (`SyntaxError`, `IndentationError`, `NameError`, etc.) into conversational plain-English advice and concrete code fixes.

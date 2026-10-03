@@ -14,7 +14,7 @@ import {
   Award,
   ArrowRight,
   BookOpen,
-  Sparkles,
+  Workflow,
   Zap,
   Target
 } from 'lucide-react';
@@ -172,7 +172,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
         title: 'Studio Architecture & Flow Demo',
         subtitle: 'Interactive Walkthrough of all 6 Core Engines',
         category: 'Tool',
-        icon: Sparkles,
+        icon: Workflow,
         action: () => { onClose(); onOpenDemo(); }
       });
     }

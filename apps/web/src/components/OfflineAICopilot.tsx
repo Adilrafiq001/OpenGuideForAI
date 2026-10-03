@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Sparkles, X, Search, ShieldCheck, Cpu, Copy, Check } from 'lucide-react';
+import { Lightbulb, X, Search, ShieldCheck, Cpu, Copy, Check } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import '../styles/offline-copilot.css';
 
@@ -145,7 +145,7 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
                 )}
 
                 <div className="copilot-takeaway">
-                  <Sparkles className="w-3.5 h-3.5 flex-shrink-0" />
+                  <Lightbulb className="w-3.5 h-3.5 flex-shrink-0 text-amber-400" />
                   <span>{entry.takeaway}</span>
                 </div>
               </div>

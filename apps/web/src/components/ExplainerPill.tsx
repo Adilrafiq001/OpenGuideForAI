@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, ArrowRight } from 'lucide-react';
+import { X, Lightbulb, ArrowRight } from 'lucide-react';
 
 export interface ExplainerPillProps {
   label: string;
@@ -72,7 +72,7 @@ export function ExplainerPill({
             <div className="flex items-start justify-between gap-3 mb-3 border-b border-[var(--color-border)] pb-2.5">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-lg bg-[var(--color-accent-trans,rgba(16,185,129,0.15))] text-[var(--color-accent)] flex items-center justify-center shrink-0">
-                  <Sparkles size={14} />
+                  <Lightbulb size={14} />
                 </div>
                 <h4 className="font-bold text-sm text-[var(--color-text-primary)] tracking-tight">
                   {title}

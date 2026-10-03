@@ -16,7 +16,6 @@ import {
   Glasses,
   Target,
   Award,
-  Sparkles,
   Play,
   Search
 } from 'lucide-react';
@@ -157,7 +156,7 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
       onClick: () => onOpenThemes?.()
     },
     {
-      icon: <Sparkles size={20} className="text-[var(--color-accent)]" />,
+      icon: <Compass size={20} className="text-[var(--color-accent)]" />,
       label: 'Studio Guided Tour',
       onClick: () => startAppTour(false)
     },

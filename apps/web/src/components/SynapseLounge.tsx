@@ -7,7 +7,6 @@ import {
   Check, 
   Flame,
   Compass,
-  Sparkles,
   Layers,
   Sliders
 } from 'lucide-react';
@@ -402,7 +401,7 @@ export function SynapseLounge() {
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div>
               <div className="p-3 mb-4 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
-                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <Compass size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Words aren't magic to computers—they're coordinates on a high-dimensional map. When words share meaning, their arrows point in the same direction. Use the slider below to align the probe vector and see cosine similarity calculate live!
                 </span>
@@ -516,7 +515,7 @@ export function SynapseLounge() {
                   {isAngleAligned ? (
                     <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center justify-between">
                       <span className="flex items-center gap-1.5 font-bold">
-                        <Sparkles size={14} /> Hyper-Plane Aligned! Semantic projection matched.
+                        <Target size={14} /> Hyper-Plane Aligned! Semantic projection matched.
                       </span>
                       <span className="text-[10px] bg-emerald-500/20 px-2 py-0.5 rounded-full font-bold">
                         +150 XP
@@ -609,7 +608,7 @@ export function SynapseLounge() {
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div>
               <div className="p-3 mb-4 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
-                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <Cpu size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Deep networks like GPT are made from millions of tiny decision switches called perceptrons. Each one computes <code className="text-emerald-400 font-mono">(Input₁ × W₁) + (Input₂ × W₂) + Bias</code>. Tune the weights and bias until your neuron accurately solves the truth table!
                 </span>
@@ -822,7 +821,7 @@ export function SynapseLounge() {
           <div className="space-y-8 flex-1 flex flex-col justify-between">
             <div className="space-y-6">
               <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] flex items-start gap-2.5">
-                <Sparkles size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                <Brain size={15} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-[var(--color-text-primary)]">Why It Matters:</strong> Transformers don't read words one by one—they compute attention between every word pair simultaneously. The Softmax function turns dot products into percentages. Lower temperature (τ) makes attention sharp and decisive; higher temperature spreads it out.
                 </span>

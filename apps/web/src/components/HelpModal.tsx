@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Command, Cpu, Terminal, ShieldCheck, Key, Sparkles, Play, RotateCcw } from 'lucide-react';
+import { X, Command, Cpu, Terminal, ShieldCheck, Key, Compass, Play, RotateCcw } from 'lucide-react';
 
 interface HelpModalProps {
   isOpen: boolean;
@@ -100,7 +100,7 @@ export function HelpModal({
               {/* Guided Exploration & Setup Section */}
               <div>
                 <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--color-accent,#10b981)] mb-3 flex items-center gap-1.5">
-                  <Sparkles size={14} /> Guided Exploration & Wizards
+                  <Compass size={14} /> Guided Exploration & Wizards
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <button
@@ -111,7 +111,7 @@ export function HelpModal({
                     className="p-3 rounded-2xl bg-[var(--color-surface,rgba(255,255,255,0.03))] border border-[var(--color-border,rgba(255,255,255,0.08))] hover:border-[var(--color-accent,#10b981)] hover:bg-[var(--color-surface,rgba(255,255,255,0.06))] transition-all text-left cursor-pointer group"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <Sparkles size={14} className="text-violet-400 group-hover:scale-110 transition-transform" />
+                      <Compass size={14} className="text-violet-400 group-hover:scale-110 transition-transform" />
                       <span className="font-bold text-xs text-[var(--color-text-primary,#fff)]">Studio Tour</span>
                     </div>
                     <p className="text-[11px] text-[var(--color-text-secondary,#a1a1aa)] leading-snug">

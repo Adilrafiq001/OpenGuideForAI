@@ -7,7 +7,7 @@ import {
   Glasses, 
   Cpu, 
   ShieldCheck, 
-  Sparkles
+  Atom
 } from 'lucide-react';
 import { VectorSpace3D } from '../components/spatial/VectorSpace3D';
 import { NeuralSynapse3D } from '../components/spatial/NeuralSynapse3D';
@@ -194,7 +194,7 @@ export function SpatialHolodeck() {
         {/* First-Principles Spatial Intuition Section */}
         <div className="pt-6 border-t border-[var(--color-border)] space-y-4">
           <h2 className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] flex items-center gap-2">
-            <Sparkles size={14} className="text-[var(--color-accent)]" />
+            <Atom size={14} className="text-[var(--color-accent)]" />
             First-Principles: Spatial Geometry & Universal Compatibility
           </h2>
 

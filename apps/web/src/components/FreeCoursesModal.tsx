@@ -11,7 +11,6 @@ import {
   Clock, 
   CheckCircle, 
   Copy, 
-  Sparkles,
   Layers,
   Code2,
   FileText
@@ -1531,7 +1530,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     </pre>
 
                     <div className="p-4 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-start gap-3">
-                      <Sparkles size={16} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                      <Terminal size={16} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                       <div className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                         <strong className="text-[var(--color-text-primary)]">Run inside OpenGuide:</strong> This code executes 100% locally in your browser via our Pyodide WebAssembly runtime with zero remote server connections. Launch any Track in our Studio to test and modify it interactively.
                       </div>
@@ -1594,7 +1593,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                                 ))}
                               </div>
                               <div className="text-[11px] text-emerald-400/90 font-mono pt-1">
-                                🎯 Lab Goal: {mod.labGoal}
+                                Lab Objective: {mod.labGoal}
                               </div>
                             </div>
                           ))}

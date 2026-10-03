@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, 
-  Sparkles, 
+  Atom, 
   HelpCircle, 
   Cpu, 
   Database, 
@@ -475,7 +475,7 @@ export function HeroPhysicsStage({
       {/* 6. Plain-Language First-Principles Cluster */}
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center mb-8">
         <div className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] opacity-85 mb-3 flex items-center justify-center gap-2 select-none">
-          <Sparkles size={14} style={{ color: currentThemeInfo.accent }} />
+          <Atom size={14} style={{ color: currentThemeInfo.accent }} />
           <span>{t('firstPrinciplesLabel')}</span>
         </div>
 

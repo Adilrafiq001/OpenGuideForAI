@@ -4,7 +4,7 @@ import {
   X, 
   Terminal, 
   Palette, 
-  Sparkle,
+  Compass,
   ArrowRight
 } from '@phosphor-icons/react';
 import { Settings } from 'lucide-react';
@@ -139,7 +139,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
               color: currentThemeInfo.accent
             }}
           >
-            <Sparkle weight="fill" size={13} />
+            <Compass weight="bold" size={13} />
             <span>{t('briefing_directive')}</span>
           </div>
 

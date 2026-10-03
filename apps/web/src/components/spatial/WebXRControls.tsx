@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { 
   Glasses, 
-  Sparkles, 
+  Eye,
+  Layers,
+  Activity,
   Laptop, 
   CheckCircle2, 
   AlertCircle,
@@ -169,7 +171,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               Webcam or Phone Camera
             </div>
           </div>
-          <Sparkles size={16} className="text-cyan-400 group-hover:scale-110 transition-transform" />
+          <Eye size={16} className="text-cyan-400 group-hover:scale-110 transition-transform" />
         </button>
 
         {/* Immersive 6-DOF VR */}
@@ -201,7 +203,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               Meta Quest 3/Pro Exclusive
             </div>
           </div>
-          <Sparkles size={16} className="text-emerald-400 group-hover:scale-110 transition-transform" />
+          <Layers size={16} className="text-emerald-400 group-hover:scale-110 transition-transform" />
         </button>
 
         {/* Headset Simulator Mode (Preview Quest / Vision Pro without physical hardware) */}
@@ -230,7 +232,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
               Quest 3 &amp; Vision Pro Preview
             </div>
           </div>
-          <Sparkles size={16} className="text-amber-400 group-hover:scale-110 transition-transform" />
+          <Activity size={16} className="text-amber-400 group-hover:scale-110 transition-transform" />
         </button>
       </div>
 

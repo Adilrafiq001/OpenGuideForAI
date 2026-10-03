@@ -5,7 +5,8 @@ import {
   Palette, 
   ChevronRight, 
   Zap, 
-  Sparkles, 
+  Compass,
+  Terminal,
   Award,
   Brain,
   Glasses,
@@ -240,7 +241,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
                       >
                         <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Sparkles size={14} className="text-cyan-400" />
+                          <Layers size={14} className="text-cyan-400" />
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
@@ -359,7 +360,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             className="hidden xl:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
             aria-label="Start Quick Studio Tour"
           >
-            <Sparkles size={13} className="text-[var(--color-accent)]" />
+            <Compass size={13} className="text-[var(--color-accent)]" />
             <span>{t('nav_tour')}</span>
           </button>
         </Tooltip>
@@ -423,7 +424,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 </div>
                 <div className="p-1 space-y-1">
                   {[
-                    { id: '0', title: 'Track 0: Absolute Zero', path: '/track/0/intro', icon: Sparkles, badge: 'Beginner' },
+                    { id: '0', title: 'Track 0: Absolute Zero', path: '/track/0/intro', icon: Terminal, badge: 'Beginner' },
                     { id: '1', title: 'Track 1: Vectors', path: '/track/1/intro', icon: Layers, badge: 'Core Math' },
                     { id: '2', title: 'Track 2: Agents', path: '/track/2/intro', icon: Cpu, badge: 'Applied AI' },
                     { id: '3', title: 'Track 3: Evals', path: '/track/3/intro', icon: ShieldCheck, badge: 'Production' },
@@ -569,7 +570,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
               >
                 <span className="flex items-center gap-2">
-                  <Sparkles size={16} style={{ color: currentThemeInfo.accent }} />
+                  <Brain size={16} style={{ color: currentThemeInfo.accent }} />
                   <span>Track 4: Frontier Intelligence & Systems</span>
                 </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 4</span>
@@ -646,7 +647,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                   data-testid="mobile-drawer-tour-btn"
                   className="flex-1 py-2 px-3 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1.5 text-[var(--color-text-primary)] cursor-pointer"
                 >
-                  <Sparkles size={14} className="text-[var(--color-accent)]" />
+                  <Compass size={14} className="text-[var(--color-accent)]" />
                   <span>{t('nav_tour')}</span>
                 </button>
                 <button

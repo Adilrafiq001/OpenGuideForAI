@@ -1,4 +1,4 @@
-# 🚀 PRODUCTION CERTIFIED: UNCONDITIONAL GO (10/10) — Development Freeze Lifted. All Operational, Human, and AI Engineering Gates 100% Verified.
+# PRODUCTION CERTIFIED: UNCONDITIONAL GO (10/10) — Development Freeze Lifted. All Operational, Human, and AI Engineering Gates 100% Verified.
 
 # State: Universal 10/10 Sovereign AI Studio Architecture (Encrypted Gist Sync, W3C Credentials, Scaled Attention Dissection & Upstream AI Freshness CI)
 
@@ -56,7 +56,7 @@
   - **Curriculum & Portfolio Harmonization:** Added Track 4 (Frontier Intelligence - 9 labs) to Landing Page curriculum grid ("5 Core Tracks • 45 Interactive Labs") and updated Portfolio page grid to `xl:grid-cols-5`.
   - **Abby Chatbot Knowledge & Mobile Viewport Overhaul:** Fixed mobile off-screen positioning bug with `jellyControls.start({ x: 0, y: 0 })` and CSS `transform: none !important;`. Expanded offline knowledge base to 50+ rich first-principles entries covering all tracks, math formulas, and token-weighted routing.
   - **Curated Goldmines Mobile Optimization:** Expanded YouTube iframe sandbox (`allow-popups allow-forms`), added direct "Watch in YouTube App ↗" fallback button, and built mobile master-detail course drawer.
-  - **Mobile IDE 3-Tab Segmented Ergonomics:** Implemented `[ 📖 Study ] [ 💻 Code ] [ 📟 Output ]` tabs in `CoursePlayer.tsx` with automatic switch to `Output` upon code execution.
+  - **Mobile IDE 3-Tab Segmented Ergonomics:** Implemented `[ Study ] [ Code ] [ Output ]` tabs in `CoursePlayer.tsx` with automatic switch to `Output` upon code execution.
   - **Spatial Holodeck Utility & Live Cosine Probes:** Added Track 4 Frontier cluster and 8 new semantic vector nodes (24 total) to `VectorSpace3D.tsx`, plus live Dual-Vector Cosine Probes with direct Python IDE launch links.
   - **Changelog & Studio Update Announcement:** Added `changelogData.ts`, collapsible release notes accordion in Settings, and non-intrusive bottom announcement pill in `App.tsx`.
   - **Public README Showcase:** Overhauled `README.md` into an award-winning public advertisement with zero secrets, badges, and complete architecture manifesto.
@@ -391,7 +391,7 @@
   - **Comprehensive 12-Language Support:** Expanded from 6 to 12 world languages: English (`en`), Urdu (`ur` - اردو), Arabic (`ar` - العربية), Spanish (`es`), Mandarin (`zh`), Hindi (`hi`), French (`fr`), German (`de`), Japanese (`ja`), Portuguese (`pt`), Russian (`ru`), and Italian (`it`).
   - **Automatic RTL Layout & Script-Safe Line Heights:** Automatic `dir="rtl"` activation for Urdu and Arabic on the document root with script-safe line-height preservation (`leading-normal` to `leading-relaxed`) preventing vertical text collisions in Nastaliq, Arabic, and Devanagari scripts.
   - **Material-Wide Translation:** Replaced localized heading-only translations with full-material translations spanning navigation links, hero headline, 2.5D Studio console simulation tabs, first-principles explainer pills, all 4 curriculum tracks, 11 architectural pillars, free tool ecosystem, knowledge vault, Abby offline AI guide, and footer.
-  - **Universal Header Synchronization & Settings Affordance:** Standardized header controls across all three core pages (`LandingPage`, `TrackBriefing`, and `CoursePlayer`) with responsive `<LanguageSelector />` and unified Theme/Settings pill displaying `[ ● ThemeName 🎨 | ⚙️ ]` with a subtle divider and 45° hover rotation on the gear icon.
+  - **Universal Header Synchronization & Settings Affordance:** Standardized header controls across all three core pages (`LandingPage`, `TrackBriefing`, and `CoursePlayer`) with responsive `<LanguageSelector />` and unified Theme/Settings pill displaying `[ ● ThemeName | Settings ]` with a subtle divider and 45° hover rotation on the gear icon.
   - **Abby Chatbot Aesthetics & Zero-Overlap Scroll Physics:** Refined Abby chatbot greeting, scaled floating anchor with 3D eye tracking, and implemented zero-overlap CSS transitions gracefully fading out the floating scroll-to-top pill when Abby chat window expands.
   - **Comprehensive 15-Suite Playwright E2E Automation Regression Suite (`app-full-regression.spec.ts` & `example.spec.ts`):** 15/15 tests passing with 0 failures, covering 12-language switching, RTL layout activation, cross-theme contrast, mobile drawer navigation, spatial holodeck, Pyodide terminal execution, universal header synchronization, and scroll mechanics. Verified clean production build (`npm run build` exits 0 in 5.43s).
 - **Comprehensive UI/UX Refinement, Blazing Fast Performance & CI Alignment (Complete):**
@@ -572,7 +572,7 @@
   - Validated full Curriculum Lab Depth across Tracks 1, 2, and 3 (36 total interactive labs) with in-browser WASM verification and expected output assertions.
   - Verified production build (`npm run build`) passing cleanly with 0 errors in 3.09s, valid `_headers` edge caching rules, and PWA service worker pre-caching.
 
-**Current Release:** v2.5.0 Production-Ready (Build Verified)
+**Current Release:** v1.1.0 Production-Ready (Build Verified)
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 
 

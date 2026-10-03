@@ -8,7 +8,7 @@ import {
   Sun, 
   Moon, 
   Sliders, 
-  Sparkle, 
+  Play, 
   Eye,
   EyeSlash,
   Cpu,
@@ -463,7 +463,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           color: getContrastColor(displayedTheme.accent)
                         }}
                       >
-                        <Sparkle size={13} weight="fill" />
+                        <Play size={13} weight="fill" />
                         Execute In-Browser
                       </button>
                     </div>
@@ -472,7 +472,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     {displayedTheme.physiologyBasis && (
                       <div className="mt-4 p-3 rounded-xl border border-emerald-500/20 bg-emerald-950/20 space-y-1.5">
                         <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold">
-                          <Sparkle size={12} weight="fill" />
+                          <Eye size={12} weight="bold" />
                           <span>Physiological & Visual Science</span>
                         </div>
                         <p className="text-[11px] text-neutral-300 leading-relaxed font-sans">

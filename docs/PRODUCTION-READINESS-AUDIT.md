@@ -7,7 +7,7 @@
 **New feature development stops now.** The only work permitted until this audit reaches a Go verdict is: running this audit, and fixing what it finds. If you're mid-feature, finish it to a safe stopping point, commit, and stop.
 
 Immediately:
-1. Add to the top of `docs/PROJECT-STATE.md`: `🛑 DEVELOPMENT FREEZE — production-readiness audit in progress. See docs/PRODUCTION-READINESS-AUDIT.md. No new features until Go verdict.`
+1. Add to the top of `docs/PROJECT-STATE.md`: `DEVELOPMENT FREEZE — production-readiness audit in progress. See docs/PRODUCTION-READINESS-AUDIT.md. No new features until Go verdict.`
 2. Add this file to `AGENTS.md`'s read-order list (§0), so no future session misses the freeze.
 
 ## 1. Mission

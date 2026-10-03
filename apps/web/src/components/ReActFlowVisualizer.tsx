@@ -4,7 +4,7 @@ import {
   GitFork, 
   ArrowRight, 
   CheckCircle, 
-  Sparkle, 
+  Brain, 
   Eye, 
   Wrench,
   Pulse
@@ -273,7 +273,7 @@ export function ReActFlowVisualizer({ logs = [], activeLessonTitle = 'Interactiv
           border: isSelected ? 'border-amber-400 bg-amber-500/20' : 'border-amber-500/40 bg-amber-950/20 hover:border-amber-400/80',
           text: 'text-amber-300',
           badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-          icon: Sparkle
+          icon: Brain
         };
       case 'action':
         return {

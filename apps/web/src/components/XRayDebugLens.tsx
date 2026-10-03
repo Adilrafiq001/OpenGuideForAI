@@ -8,7 +8,7 @@ import {
   CheckCircle, 
   WarningCircle, 
   BracketsCurly,
-  Sparkle,
+  Lightbulb,
   GitFork
 } from '@phosphor-icons/react';
 import type { PyodideTelemetry, PyodideState } from '../hooks/usePyodide';
@@ -185,7 +185,7 @@ export function XRayDebugLens({
                 {/* Architectural Blueprint Note */}
                 <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 text-neutral-300 space-y-2">
                   <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
-                    <Sparkle size={15} />
+                    <Lightbulb size={15} />
                     <span>How This Works (First Principles)</span>
                   </div>
                   <p className="leading-relaxed text-xs">

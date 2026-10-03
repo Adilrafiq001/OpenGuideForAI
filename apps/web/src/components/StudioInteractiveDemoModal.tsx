@@ -8,7 +8,7 @@ import {
   Brain, 
   Bot, 
   Award, 
-  Sparkles, 
+  Workflow, 
   X, 
   ArrowRight, 
   CheckCircle2, 
@@ -318,7 +318,7 @@ export function StudioInteractiveDemoModal({
           <div className="p-5 sm:p-6 pb-4 border-b border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between gap-4 shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[var(--color-accent,#10b981)]/15 text-[var(--color-accent,#10b981)] flex items-center justify-center">
-                <Sparkles size={20} />
+                <Workflow size={20} />
               </div>
               <div>
                 <h2 id="studio-demo-modal-title" className="text-base sm:text-lg font-black tracking-tight">

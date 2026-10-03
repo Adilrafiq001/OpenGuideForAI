@@ -140,7 +140,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       let content = `### ${top.title}\n\n${top.summary}\n\n**The Mechanics:**\n${top.explanation}`;
       if (results.length > 1) {
         const relatedTitles = results.slice(1, 3).map(r => `**${r.title}**`).join(' and ');
-        content += `\n\n💡 *Connected concepts:* ${relatedTitles}. Let me know if you would like to explore either one!`;
+        content += `\n\n*Connected concepts:* ${relatedTitles}. Let me know if you would like to explore either one!`;
       }
       return {
         content,

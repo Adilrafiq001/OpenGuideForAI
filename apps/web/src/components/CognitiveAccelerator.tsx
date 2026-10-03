@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Brain, 
-  Sparkles, 
   RotateCcw, 
   CheckCircle2, 
   AlertTriangle, 
@@ -175,7 +174,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
             </div>
 
             <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3 text-xs">
-              <Sparkles size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+              <Target size={16} className="text-emerald-500 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-emerald-950 dark:text-emerald-400">Targeted Diagnostic Exam Question:</strong>
                 <p className="text-[var(--color-text-secondary)] mt-1">{selectedPareto.examQuestion}</p>

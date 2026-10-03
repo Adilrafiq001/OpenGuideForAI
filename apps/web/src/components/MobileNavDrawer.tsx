@@ -17,7 +17,8 @@ import {
   Check,
   Zap,
   ArrowRight,
-  Sparkles,
+  Compass,
+  Brain,
   Download,
   Search
 } from 'lucide-react';
@@ -120,7 +121,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       title: 'Frontier Intelligence & Systems',
       badge: 'Attention & MCP',
       desc: 'Transformers, KV-cache dynamics, reasoning search & MCP tools',
-      icon: Sparkles,
+      icon: Brain,
       path: '/track/4/intro',
       color: '#f43f5e'
     }
@@ -440,7 +441,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                     data-testid="drawer-quick-tour-btn"
                     className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-medium hover:border-[var(--color-accent)] transition-all cursor-pointer"
                   >
-                    <Sparkles size={14} className="text-[var(--color-accent)]" />
+                    <Compass size={14} className="text-[var(--color-accent)]" />
                     <span>Quick Tour</span>
                   </button>
 

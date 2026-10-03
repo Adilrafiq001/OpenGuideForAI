@@ -5,11 +5,11 @@ import {
   Play, 
   Terminal, 
   Code, 
+  Cpu, 
   CheckCircle, 
   WarningCircle, 
   BookOpenText, 
   ArrowLeft,
-  Sparkle,
   Eye,
   Check,
   ArrowCounterClockwise,
@@ -391,7 +391,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   {/* The Intuition: First Principles Block */}
                   <div className="p-3.5 rounded-xl bg-[var(--color-primary)]/70 border border-[var(--color-border)] space-y-1.5">
                     <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">
-                      <Sparkle size={13} />
+                      <Lightbulb size={13} />
                       <span>The Intuition (First Principles)</span>
                     </div>
                     <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -490,7 +490,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                         {showHint && (
                           <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-2">
                             <div className="font-bold flex items-center gap-1.5 text-[11px]">
-                              <Sparkle size={12} className="text-amber-500" />
+                              <Lightbulb size={12} className="text-amber-500" />
                               <span>Implementation Guidance:</span>
                             </div>
                             <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
@@ -614,7 +614,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   className="px-2 py-0.5 rounded text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
                   title="Ask Bluee AI Assistant"
                 >
-                  <Sparkle size={13} className="text-cyan-400 fill-cyan-400" />
+                  <Cpu size={13} className="text-cyan-400" />
                   <span>Bluee AI</span>
                 </button>
 
@@ -791,7 +791,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                       <div className="mb-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs font-sans space-y-1.5 animate-in fade-in duration-200" data-testid="syntax-doctor-card">
                         <div className="flex items-center justify-between font-bold text-rose-600 dark:text-rose-300 font-mono text-[11px]">
                           <span className="flex items-center gap-1.5">
-                            <span>💡 Syntax Doctor:</span>
+                            <span className="flex items-center gap-1">
+                              <Lightbulb size={13} className="text-amber-500" />
+                              <span>Syntax Doctor:</span>
+                            </span>
                             <span>{syntaxDiagnostic.type}</span>
                             {syntaxDiagnostic.line && <span>(Line {syntaxDiagnostic.line})</span>}
                           </span>

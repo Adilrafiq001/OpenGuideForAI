@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -11,7 +11,8 @@ import {
   Check,
   BookOpen,
   Layers,
-  Sparkles,
+  FlaskConical,
+  Milestone,
   X,
   Cpu,
   Lock,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
+import { CURRENT_STUDIO_VERSION, CHANGELOG_DATA } from '../data/changelogData';
 
 interface StudioFooterProps {
   onOpenThemes?: () => void;
@@ -63,11 +65,24 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   // Changelog Modal state
   const [changelogModalOpen, setChangelogModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (!legalModalOpen && !contactModalOpen && !changelogModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLegalModalOpen(false);
+        setContactModalOpen(false);
+        setChangelogModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [legalModalOpen, contactModalOpen, changelogModalOpen]);
+
   // Commit hash copy state
   const [copiedHash, setCopiedHash] = useState(false);
-  const buildHash = '36503a8';
-  const buildVersion = 'v2.5.0';
-  const buildDate = '2026.09.29-PROD';
+  const buildHash = 'dc8909b';
+  const buildVersion = `v${CURRENT_STUDIO_VERSION}`;
+  const buildDate = '2026.10.03-PROD';
 
   const handleCopyHash = () => {
     navigator.clipboard.writeText(buildHash);
@@ -308,7 +323,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
         {/* Column 2: Laboratories & Interactive Tools */}
         <div className="space-y-4">
           <h4 className="font-mono uppercase tracking-widest text-[var(--color-text-secondary)] font-bold text-[11px] flex items-center gap-1.5">
-            <Sparkles size={13} className="text-cyan-400" />
+            <FlaskConical size={13} className="text-cyan-400" />
             <span>Interactive Labs</span>
           </h4>
           <ul className="space-y-2.5 text-[var(--color-text-secondary)]">
@@ -433,6 +448,17 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 Open Source Licenses
               </button>
             </li>
+            <li>
+              <button 
+                onClick={() => setChangelogModalOpen(true)}
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left cursor-pointer flex items-center gap-1.5"
+              >
+                <span>Release Changelog</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                  {buildVersion}
+                </span>
+              </button>
+            </li>
           </ul>
         </div>
 
@@ -466,7 +492,13 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
 
         {/* Build Telemetry & Copy Hash */}
         <div className="flex items-center gap-3 bg-[var(--color-secondary)] border border-[var(--color-border)] px-3 py-1.5 rounded-full">
-          <span>{buildVersion}</span>
+          <button
+            onClick={() => setChangelogModalOpen(true)}
+            className="hover:text-[var(--color-accent)] transition-colors cursor-pointer font-bold font-mono"
+            title="Open Platform Changelog & Release Milestones"
+          >
+            {buildVersion}
+          </button>
           <span className="text-[var(--color-border)]">•</span>
           <span>{buildDate}</span>
           <span className="text-[var(--color-border)]">•</span>
@@ -519,7 +551,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       <AnimatePresence>
         {legalModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setLegalModalOpen(false);
+            }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+          >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -757,7 +794,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <form onSubmit={handleContactSubmit} className="space-y-4 text-xs font-mono">
                   <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] leading-relaxed text-[var(--color-text-secondary)] font-sans">
                     <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-semibold mb-1">
-                      <Sparkles size={13} />
+                      <ShieldCheck size={13} />
                       <span>Direct Team Dispatch &amp; Open Issues</span>
                     </div>
                     Under OpenGuide's strict zero-cloud-overhead policy ($0 Rule), inquiries dispatch directly to OpenGuide via your email client, or can be tracked publicly on GitHub Issues.
@@ -859,7 +896,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       <AnimatePresence>
         {changelogModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setChangelogModalOpen(false);
+            }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+          >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -874,7 +916,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
             >
               <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={18} className="text-amber-400" />
+                  <Milestone size={18} className="text-amber-400" />
                   <h3 id="changelog-modal-title" className="text-base font-bold text-[var(--color-text-primary)]">
                     Platform Changelog & Release Milestones
                   </h3>
@@ -888,95 +930,44 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </div>
 
               <div className="p-6 overflow-y-auto space-y-6 text-xs font-mono">
-                {/* Phase 7-10 / v2.5.0 */}
-                <div className="space-y-2 border-l-2 border-[var(--color-accent)] pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 7–10: Production PWA, Attention Radar, 24 Themes & Bluee Copilot
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
-                      v2.5.0 • Active
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    Offline PWA service worker with pre-caching, Cloudflare Pages immutable headers, 12 Special research-calibrated physiological themes (melatonin-preserving Circadian Amber, Scotopic Mariana, E-Ink Papyrus, Biophilic Forest), resizable Bluee Copilot with deep domain intelligence and fluid Apple exit physics, Hero interactive mechanical button, and Synapse Lounge Transformer Attention Radar with dynamic Softmax temperature routing.
-                  </p>
-                </div>
-
-                {/* Phase 6 */}
-                <div className="space-y-2 border-l-2 border-cyan-500 pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 6: In-App Free Courses Studio & Granular Setup Guides
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                      v2.4.0
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    Zero-redirect in-app YouTube studio with 8 Karpathy lectures, chapter timestamp pills, live searchable transcript, runnable Python scalar autograd engine, 9 idiot-proof free stack setup guides (Chroma, Qdrant, LangChain, Colab), header de-cluttering, and certificate milestone gating.
-                  </p>
-                </div>
-
-                {/* Phase 5 */}
-                <div className="space-y-2 border-l-2 border-violet-500 pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 5: Student Certification Ledger & ReAct Flow DAG
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/15 text-violet-400 border border-violet-500/30">
-                      v2.3.0
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    Student portfolio dashboard, W3C WebCrypto SHA-256 cryptographic verification signatures, printable guilloche certificates, and X-Ray Lens ReAct Agent execution graph visualization.
-                  </p>
-                </div>
-
-                {/* Phase 4 */}
-                <div className="space-y-2 border-l-2 border-cyan-500 pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 4: Track 3 Production Evals & WebGPU Neural Engine
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                      v2.2.0
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    OWASP AI Top 10 security guardrails, LLM-as-a-Judge evaluation rubrics, and in-browser WebGPU local SLM inference tensor pipeline.
-                  </p>
-                </div>
-
-                {/* Phase 3 */}
-                <div className="space-y-2 border-l-2 border-amber-500 pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phase 3: Track 2 Autonomous Agents & Model Context Protocol
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                      v2.1.0
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    RAG sliding-window ingestion, ReAct loop mechanics, and JSON-RPC 2.0 FastMCP tool orchestration.
-                  </p>
-                </div>
-
-                {/* Phase 2 & Earlier */}
-                <div className="space-y-2 border-l-2 border-[var(--color-border)] pl-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                      Phases 0-2: Foundation, Spatial Holodeck & Track 1 Embeddings
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]">
-                      v1.0.0
-                    </span>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed font-sans">
-                    Initial launch with 20 WCAG AAA calibrated themes, 12 world languages with RTL support, Three.js 3D WebGL / WebXR Holodeck, and in-browser Pyodide WASM runtime.
-                  </p>
-                </div>
+                {CHANGELOG_DATA.map((rel, index) => {
+                  const isActive = rel.version === CURRENT_STUDIO_VERSION;
+                  return (
+                    <div
+                      key={rel.version}
+                      className={`space-y-2 border-l-2 pl-4 ${
+                        isActive
+                          ? 'border-[var(--color-accent)]'
+                          : index % 2 === 0
+                            ? 'border-cyan-500'
+                            : 'border-violet-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
+                          {rel.title}
+                        </span>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded font-mono ${
+                            isActive
+                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold'
+                              : 'bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]'
+                          }`}
+                        >
+                          v{rel.version}{isActive ? ' • Active' : ''}
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-sans text-[var(--color-text-secondary)] mb-1">
+                        Released: {rel.date}
+                      </p>
+                      <ul className="text-[var(--color-text-secondary)] leading-relaxed font-sans space-y-1 list-disc list-inside">
+                        {rel.highlights.map((h, i) => (
+                          <li key={i}>{h}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-primary)]/40 flex justify-end shrink-0">
