@@ -17,7 +17,8 @@ import {
   Lock,
   ChevronRight,
   Palette,
-  ExternalLink
+  ExternalLink,
+  Scale
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
@@ -159,14 +160,26 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
             OpenGuide is engineered from the ground up to dismantle the black box of artificial intelligence. Built for absolute beginners and rigorous engineers alike who want to master real-world AI systems with <span className="text-emerald-500 font-semibold">$0 cloud infrastructure bills</span>, native in-browser WebAssembly runtimes, and zero corporate gatekeeping.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             {/* Live Infrastructure Status Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-xs font-mono font-medium shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-xs font-mono font-medium shadow-sm">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span>100% Client-Side WASM Kernel • $0 Cloud Cost</span>
+              <span>100% Client-Side WASM • $0 Cost</span>
+            </div>
+
+            {/* Zero Telemetry Privacy Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-mono">
+              <ShieldCheck size={13} className="text-blue-400" />
+              <span>Zero Telemetry • 100% Private</span>
+            </div>
+
+            {/* Open Source License Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs font-mono">
+              <Scale size={13} className="text-amber-400" />
+              <span>MIT / Apache 2.0 Free Software</span>
             </div>
 
             {/* Architecture Badge */}
@@ -506,7 +519,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       <AnimatePresence>
         {legalModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -700,7 +713,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       <AnimatePresence>
         {contactModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -846,7 +859,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       <AnimatePresence>
         {changelogModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}

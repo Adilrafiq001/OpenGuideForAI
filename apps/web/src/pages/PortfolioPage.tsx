@@ -28,6 +28,7 @@ import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
 import { track4 } from '../data/track4';
 import { useProgressStore } from '../store/useProgressStore';
+import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
 
 const STUDENT_NAME_KEY = 'openguide_student_name';
 
@@ -211,6 +212,18 @@ export function PortfolioPage() {
   const [gistSyncStatus, setGistSyncStatus] = useState<string | null>(null);
   const [gistSyncLoading, setGistSyncLoading] = useState(false);
   const [copiedBadge, setCopiedBadge] = useState(false);
+
+  useEffect(() => {
+    if (!showGistSyncModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowGistSyncModal(false);
+        setGistSyncStatus(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showGistSyncModal]);
 
   const handleExportW3CCredential = () => {
     const cred = JSON.stringify({
@@ -399,6 +412,20 @@ export function PortfolioPage() {
             >
               <Share2 size={13} className="text-emerald-400" />
               <span>{copiedBadge ? 'Badge Copied!' : 'GitHub Badge'}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                const sampleLesson = track0.modules[0].lessons[0];
+                const nb = generateJupyterNotebook(sampleLesson.title, sampleLesson.subtitle || sampleLesson.content, sampleLesson.solutionCode || sampleLesson.initialCode, sampleLesson.testCode);
+                downloadFile(nb, 'openguide_sovereign_ai_curriculum.ipynb', 'application/x-ipynb+json');
+              }}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-amber-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Download sovereign curriculum starter as a Jupyter Notebook (.ipynb)"
+              data-testid="portfolio-export-ipynb-btn"
+            >
+              <Download size={13} className="text-amber-400" />
+              <span>Jupyter (.ipynb)</span>
             </button>
 
             <button
@@ -930,7 +957,18 @@ export function PortfolioPage() {
 
         {/* Encrypted Gist Sync Modal */}
         {showGistSyncModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="gist-sync-title">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setShowGistSyncModal(false);
+                setGistSyncStatus(null);
+              }
+            }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gist-sync-title"
+          >
             <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5">
               <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
                 <div className="flex items-center gap-2.5">

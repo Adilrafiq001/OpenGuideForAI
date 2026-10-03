@@ -149,9 +149,17 @@ Without altering the existing navigation, route structure, or module hierarchy, 
   - A clean scorecard: `[PASS] Test 1: Shape Match (1536,) | [PASS] Test 2: Unit Normalization | [PASS] Test 3: Null Resilience`.
 - **Tier 4 — Production Capstone Modules:**
   - **Track 0 Capstone:** In-Browser Byte-Pair Tokenizer & Structured Message Router.
-  - **Track 1 Capstone:** BYOK Multi-Turn Streaming Assistant with Context-Preserving Sliding Window.
+  - **Track 1 Capstone:** In-Memory Semantic Search Engine with Cosine Similarity.
   - **Track 2 Capstone:** Autonomous Hybrid RAG & ReAct Agent with Tool Sandboxing & Error Recovery.
   - **Track 3 Capstone:** Production Evaluation CI Harness with OWASP Adversarial Red-Teaming & Cost Guardrails.
+  - **Track 4 Capstone:** Autonomous Reasoning Agent & DPO Mathematical Loss Engine.
+
+---
+
+## Learner Empowerment Architecture
+- **Beginner-Friendly Python Syntax Doctor (`pythonDiagnostic.ts`):** Client-side zero-cost static diagnostic parser for Pyodide tracebacks converting cryptic compiler errors (`SyntaxError`, `IndentationError`, `NameError`, etc.) into conversational plain-English advice and concrete code fixes.
+- **Portable Proof-of-Work Jupyter (.ipynb) Engine (`notebookExport.ts`):** Zero-dependency JSON serializer generating standard Jupyter Notebook files conforming strictly to nbformat 4.5, packaging Markdown theory and executable Python solution cells for local execution in VS Code or JupyterLab.
+- **Studio Command Palette (`Cmd+K` / `Ctrl+K`):** Global omnibox modal with fuzzy search across all curriculum labs, direct modal triggers, theme switcher jumps, and keyboard navigation.
 
 ---
 
@@ -163,4 +171,5 @@ Without altering the existing navigation, route structure, or module hierarchy, 
 ---
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
+
 

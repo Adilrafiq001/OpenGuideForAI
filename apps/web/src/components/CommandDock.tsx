@@ -17,7 +17,8 @@ import {
   Target,
   Award,
   Sparkles,
-  Play
+  Play,
+  Search
 } from 'lucide-react';
 import { MagnificationDock, type DockItemData } from './MagnificationDock';
 import { startAppTour } from './AppTour';
@@ -28,9 +29,10 @@ interface CommandDockProps {
   onOpenHelp?: () => void;
   onOpenCopilot?: () => void;
   onOpenDemo?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
-export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDemo }: CommandDockProps) {
+export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDemo, onOpenCommandPalette }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
@@ -38,6 +40,24 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
     if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
     return isEngine;
   });
+
+  // Responsive item sizing to guarantee zero collisions on laptops/tablets
+  const [baseItemSize, setBaseItemSize] = useState(() => {
+    if (typeof window === 'undefined') return 44;
+    if (window.innerWidth < 1100) return 38;
+    if (window.innerWidth < 1440) return 42;
+    return 46;
+  });
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth < 1100) setBaseItemSize(38);
+      else if (window.innerWidth < 1440) setBaseItemSize(42);
+      else setBaseItemSize(46);
+    };
+    window.addEventListener('resize', updateSize, { passive: true });
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   // Auto-minimize when entering the active IDE workspace
   useEffect(() => {
@@ -47,6 +67,11 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
   }, [location.pathname, isEngine]);
 
   const dockItems: DockItemData[] = [
+    {
+      icon: <Search size={20} className="text-[var(--color-accent)]" />,
+      label: 'Command Search (⌘K)',
+      onClick: () => onOpenCommandPalette?.()
+    },
     {
       icon: <Home size={20} className={location.pathname === '/' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
       label: 'Home Overview',
@@ -187,10 +212,10 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
     >
       <MagnificationDock
         items={dockItems}
-        panelHeight={64}
-        baseItemSize={48}
-        magnification={70}
-        distance={180}
+        panelHeight={baseItemSize + 16}
+        baseItemSize={baseItemSize}
+        magnification={Math.round(baseItemSize * 1.45)}
+        distance={Math.round(baseItemSize * 3.5)}
       />
     </div>
   );

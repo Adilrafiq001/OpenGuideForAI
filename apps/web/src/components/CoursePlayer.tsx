@@ -18,7 +18,8 @@ import {
   Copy,
   Lock,
   LockOpen,
-  ArrowSquareIn
+  ArrowSquareIn,
+  DownloadSimple
 } from '@phosphor-icons/react';
 import { usePyodide } from '../hooks/usePyodide';
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -34,6 +35,8 @@ import { MarkdownRenderer } from './MarkdownRenderer';
 import { useProgressStore } from '../store/useProgressStore';
 import { GitHubStarButton } from './GitHubStarButton';
 import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
+import { diagnosePythonError, type PythonDiagnostic } from '../utils/pythonDiagnostic';
+import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
 import type { Track } from '../data/track0';
 
 type CoursePlayerProps = {
@@ -68,8 +71,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [code, setCode] = useState(currentLesson.initialCode);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [isChallengePassed, setIsChallengePassed] = useState(false);
+  const [syntaxDiagnostic, setSyntaxDiagnostic] = useState<PythonDiagnostic | null>(null);
 
-  const { state, logs, telemetry, runCode, clearLogs } = usePyodide();
+  const { state, initStage, logs, telemetry, runCode, clearLogs } = usePyodide();
 
   // Apply theme to document
   useEffect(() => {
@@ -84,6 +88,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setCode(targetLesson.initialCode);
     clearLogs();
     setFeedback({ type: null, message: '' });
+    setSyntaxDiagnostic(null);
     setShowHint(false);
     setShowSolution(false);
     setCopiedSolution(false);
@@ -94,6 +99,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setCode(currentLesson.initialCode);
     clearLogs();
     setFeedback({ type: null, message: '' });
+    setSyntaxDiagnostic(null);
     setShowSolution(false);
   };
 
@@ -105,6 +111,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       type: 'success', 
       message: '✓ Canonical solution loaded into editor. Click "Run Code" to execute.' 
     });
+    setSyntaxDiagnostic(null);
   };
 
   const handleCopySolution = () => {
@@ -125,6 +132,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const executeCode = async () => {
     clearLogs();
     setFeedback({ type: null, message: '' });
+    setSyntaxDiagnostic(null);
     if (window.innerWidth < 1024) {
       setMobileTab('output');
     }
@@ -172,6 +180,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         ? `Assertion Failed: ${errMsg.split('AssertionError:')[1].trim()}`
         : errMsg;
       setFeedback({ type: 'error', message: cleanMsg || 'Execution failed' });
+      setSyntaxDiagnostic(diagnosePythonError(errMsg, code));
     }
   };
 
@@ -625,6 +634,24 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
                 <Tooltip
                   position="bottom"
+                  content="Export Jupyter Notebook (.ipynb)"
+                  subtitle="Download runnable notebook with theory and code"
+                >
+                  <button
+                    onClick={() => {
+                      const nb = generateJupyterNotebook(currentLesson.title, currentLesson.subtitle || currentLesson.content, code, currentLesson.testCode);
+                      downloadFile(nb, `${currentLesson.id || 'lab'}.ipynb`, 'application/x-ipynb+json');
+                    }}
+                    data-testid="export-ipynb-btn"
+                    className="px-2 py-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <DownloadSimple size={12} />
+                    <span className="hidden sm:inline">.ipynb</span>
+                  </button>
+                </Tooltip>
+
+                <Tooltip
+                  position="bottom"
                   content="Local CPython 3.12"
                   subtitle="Client-side WebAssembly Web Worker • $0 compute"
                 >
@@ -742,7 +769,15 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 aria-label="Python WebAssembly Execution Terminal Output"
                 aria-live="polite"
                 className="flex-1 min-h-0 overflow-y-auto font-mono text-xs leading-relaxed flex flex-col gap-1 custom-scrollbar">
-                {state === 'running' ? (
+                {state === 'initializing' ? (
+                  <div className="py-2.5 px-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-[var(--color-text-primary)]">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                      <span className="font-semibold text-amber-600 dark:text-amber-300 font-mono text-[11px]">{initStage}</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">CPython WASM</span>
+                  </div>
+                ) : state === 'running' ? (
                   <div className="py-2 flex items-center justify-center">
                     <NewtonsCradleLoader size={34} label="Executing in CPython WASM Web Worker..." />
                   </div>
@@ -751,7 +786,26 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     Ready for execution. Click "Run Code" above.
                   </div>
                 ) : (
-                  logs.map((log, i) => (
+                  <>
+                    {syntaxDiagnostic && (
+                      <div className="mb-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs font-sans space-y-1.5 animate-in fade-in duration-200" data-testid="syntax-doctor-card">
+                        <div className="flex items-center justify-between font-bold text-rose-600 dark:text-rose-300 font-mono text-[11px]">
+                          <span className="flex items-center gap-1.5">
+                            <span>💡 Syntax Doctor:</span>
+                            <span>{syntaxDiagnostic.type}</span>
+                            {syntaxDiagnostic.line && <span>(Line {syntaxDiagnostic.line})</span>}
+                          </span>
+                        </div>
+                        <p className="text-[var(--color-text-primary)] text-xs leading-relaxed">
+                          {syntaxDiagnostic.friendlyExplanation}
+                        </p>
+                        <p className="text-[var(--color-text-secondary)] text-[11px] font-mono leading-relaxed bg-[var(--color-primary)]/80 p-2 rounded-lg border border-[var(--color-border)]">
+                          <span className="text-[var(--color-accent)] font-bold">Recommended Fix: </span>
+                          {syntaxDiagnostic.actionableTip}
+                        </p>
+                      </div>
+                    )}
+                    {logs.map((log, i) => (
                     <div 
                       key={i}
                       className={`flex gap-2 ${
@@ -762,7 +816,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                       <span className="text-[var(--color-text-secondary)] opacity-60 select-none">&gt;</span>
                       <span className="whitespace-pre-wrap">{log.text}</span>
                     </div>
-                  ))
+                  ))}
+                </>
                 )}
               </div>
             </div>

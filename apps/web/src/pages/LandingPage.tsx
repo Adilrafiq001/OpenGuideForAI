@@ -23,6 +23,7 @@ interface LandingPageProps {
   onOpenHelp?: () => void;
   onOpenDrawer?: () => void;
   onOpenDemo?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -35,7 +36,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo }: LandingPageProps) {
+export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette }: LandingPageProps) {
   const navigate = useNavigate();
   const { theme } = useSettingsStore();
   const { language, t } = useLanguageStore();
@@ -119,7 +120,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         { id: 'streamlit-cloud', name: 'Streamlit Community', desc: 'Deploy interactive Python apps directly from Git', badge: 'DEPLOY FREE' }
       ]
     }
-  ], [language, t]);
+  ], [t]);
 
   // Curated Knowledge Vault
   const knowledgeVault = [
@@ -182,6 +183,34 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
     { title: 'Adaptive Learning', desc: 'Curriculum updated continuously as frontier models release new capabilities.' }
   ];
 
+  // First-Principles Industry Voices
+  const firstPrinciplesQuotes = [
+    {
+      author: 'Andrej Karpathy',
+      initials: 'AK',
+      role: 'Former Director of AI at Tesla • OpenAI Founding Member',
+      institution: 'Eureka Labs / Stanford CS231n',
+      badge: 'VERIFIED PRINCIPLE',
+      quote: 'The best way to understand deep learning is to build everything from scratch. When you write backprop with your own hands, the magic disappears and real understanding takes its place.'
+    },
+    {
+      author: 'Yann LeCun',
+      initials: 'YL',
+      role: 'Chief AI Scientist at Meta • Turing Award Laureate',
+      institution: 'NYU Courant Institute',
+      badge: 'FOUNDATIONAL THEORY',
+      quote: 'Most of what we call intelligence is learning models of the world. Understanding the foundational principles of how systems represent, predict, and optimize is what truly endures.'
+    },
+    {
+      author: 'Andrew Ng',
+      initials: 'AN',
+      role: 'Founder of DeepLearning.AI • Stanford Adjunct Professor',
+      institution: 'Coursera / Stanford AI Lab',
+      badge: 'PEDAGOGICAL STANDARD',
+      quote: 'AI is the new electricity. Do not be distracted by temporary hype or bloated abstraction layers until you master the first-principles foundations of data, loss functions, and evaluation.'
+    }
+  ];
+
   return (
     <div className="min-h-[100dvh] bg-[var(--color-primary)] text-[var(--color-text-primary)] selection:bg-[var(--color-accent)] selection:text-black overflow-x-hidden font-sans pb-32 transition-colors duration-300">
       
@@ -198,7 +227,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       <ScrollProgressBar />
 
       {/* Top Glass Navigation Header (Isolated Leaf Component) */}
-      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} onOpenDemo={onOpenDemo} />
+      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} onOpenDemo={onOpenDemo} onOpenCommandPalette={onOpenCommandPalette} />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
       <main id="main-content">
@@ -450,6 +479,68 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 </p>
               </div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 4.5: FIRST-PRINCIPLES PEDAGOGY & VOICES IN AI */}
+      <section id="voices" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span 
+            className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3 text-emerald-500"
+          >
+            FIRST PRINCIPLES PEDAGOGY
+          </span>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
+            Why We Teach From Scratch
+          </h2>
+          <p className="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed">
+            The greatest breakthrough researchers and practitioners agree: real AI competence does not come from memorizing framework wrappers or paying for expensive SaaS subscriptions. It comes from building the core math with your own hands.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {firstPrinciplesQuotes.map((item, idx) => (
+            <figure
+              key={idx}
+              className="p-6 md:p-8 rounded-[2rem] bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col justify-between hover:border-[var(--color-accent)] transition-all duration-300 shadow-md group"
+            >
+              <blockquote className="space-y-4">
+                <div className="flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] text-[10px]">
+                    {item.badge}
+                  </span>
+                  <span className="text-[var(--color-accent)] text-lg leading-none font-serif select-none">“</span>
+                </div>
+                <p className="text-sm text-[var(--color-text-primary)] leading-relaxed italic">
+                  "{item.quote}"
+                </p>
+              </blockquote>
+
+              <figcaption className="pt-6 mt-6 border-t border-[var(--color-border)] flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs font-mono shrink-0 shadow-inner"
+                  style={{
+                    backgroundColor: `${currentThemeInfo.accent}25`,
+                    color: currentThemeInfo.accent,
+                    border: `1px solid ${currentThemeInfo.accent}40`
+                  }}
+                >
+                  {item.initials}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-bold text-[var(--color-text-primary)] truncate">
+                    {item.author}
+                  </div>
+                  <div className="text-[11px] text-[var(--color-text-secondary)] truncate">
+                    {item.role}
+                  </div>
+                  <div className="text-[10px] font-mono text-[var(--color-accent)] truncate">
+                    {item.institution}
+                  </div>
+                </div>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </section>

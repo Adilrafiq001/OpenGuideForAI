@@ -12,8 +12,8 @@ export function PwaInstallPrompt() {
   const [showInstalledToast, setShowInstalledToast] = useState(false);
 
   useEffect(() => {
-    // Check if dismissed in this session
-    const dismissed = sessionStorage.getItem('openguide_pwa_dismissed');
+    // Check if dismissed in storage
+    const dismissed = localStorage.getItem('openguide_pwa_dismissed') || sessionStorage.getItem('openguide_pwa_dismissed');
     if (dismissed) {
       setIsDismissed(true);
     }
@@ -21,6 +21,7 @@ export function PwaInstallPrompt() {
 
   const handleDismiss = () => {
     setIsDismissed(true);
+    localStorage.setItem('openguide_pwa_dismissed', 'true');
     sessionStorage.setItem('openguide_pwa_dismissed', 'true');
   };
 
@@ -42,6 +43,7 @@ export function PwaInstallPrompt() {
     }
   };
 
+  if (location.pathname.startsWith('/track')) return null;
   if (location.pathname.includes('/engine')) return null;
   if (isInstalled && !showInstalledToast) return null;
   if (isDismissed && !showIosModal) return null;
@@ -63,53 +65,51 @@ export function PwaInstallPrompt() {
         )}
       </AnimatePresence>
 
-      {/* Persistent Bottom Floating Banner (Mobile & Desktop) */}
+      {/* Streamlined Top Announcement Banner (Zero Collisions Across All Devices) */}
       <AnimatePresence>
         {!isDismissed && !isInstalled && (
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="fixed bottom-20 md:bottom-6 left-4 right-4 md:right-auto md:left-8 md:w-96 z-[95] pointer-events-auto"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed top-[52px] sm:top-[56px] left-0 right-0 z-[90] pointer-events-auto bg-[var(--color-secondary)]/95 border-b border-[var(--color-border)] backdrop-blur-xl shadow-sm"
             data-testid="pwa-install-banner"
           >
-            <div className="bg-[var(--color-secondary)]/95 backdrop-blur-xl border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 rounded-2xl p-3.5 shadow-[0_12px_36px_rgba(0,0,0,0.45)] flex items-center justify-between gap-3 transition-colors">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-center shrink-0 shadow-inner">
-                  <div className="w-6 h-6 rounded-lg bg-[var(--color-accent)]/20 text-[var(--color-accent)] flex items-center justify-center font-black text-xs font-mono">
-                    OG
-                  </div>
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-6 h-6 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-center shrink-0 shadow-inner">
+                  <span className="font-mono font-bold text-[10px] text-[var(--color-accent)]">OG</span>
                 </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold text-[var(--color-text-primary)] truncate flex items-center gap-1.5">
-                    <span>Install OpenGuide</span>
-                    <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30">
-                      PWA
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
-                    Fast 1-tap launch & day-0 offline AI studio
-                  </p>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xs font-bold text-[var(--color-text-primary)] truncate">
+                    Install OpenGuide
+                  </span>
+                  <span className="hidden sm:inline-flex px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30">
+                    PWA
+                  </span>
+                  <span className="text-[11px] text-[var(--color-text-secondary)] hidden md:inline truncate">
+                    • Fast 1-tap launch & day-0 offline AI studio
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={handleInstallClick}
                   data-testid="pwa-install-action-btn"
-                  className="px-3 py-1.5 rounded-xl font-bold text-xs bg-[var(--color-accent)] text-black hover:opacity-90 active:scale-95 transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1 rounded-full font-bold text-xs bg-[var(--color-accent)] text-black hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Download size={13} />
+                  <Download size={12} />
                   <span>Install</span>
                 </button>
                 <button
                   onClick={handleDismiss}
                   data-testid="pwa-dismiss-btn"
                   aria-label="Dismiss Install Prompt"
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)] transition-colors cursor-pointer"
+                  className="w-6 h-6 rounded-lg flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)] transition-colors cursor-pointer"
                 >
-                  <X size={14} />
+                  <X size={13} />
                 </button>
               </div>
             </div>

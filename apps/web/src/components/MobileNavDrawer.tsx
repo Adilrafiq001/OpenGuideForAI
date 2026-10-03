@@ -18,7 +18,8 @@ import {
   Zap,
   ArrowRight,
   Sparkles,
-  Download
+  Download,
+  Search
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/useLanguageStore';
@@ -32,13 +33,15 @@ interface MobileNavDrawerProps {
   onClose: () => void;
   onOpenThemes: () => void;
   onOpenSettings: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
 export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
   isOpen,
   onClose,
   onOpenThemes,
-  onOpenSettings
+  onOpenSettings,
+  onOpenCommandPalette
 }) => {
   const navigate = useNavigate();
   const { theme, setTheme, displaySize, setDisplaySize } = useSettingsStore();
@@ -190,6 +193,22 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
             {/* Scrollable Drawer Body */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar">
               
+              {/* Studio Command Search Button */}
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenCommandPalette?.();
+                }}
+                data-testid="mobile-drawer-search-btn"
+                className="w-full p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 flex items-center justify-between text-xs text-[var(--color-text-secondary)] shadow-sm cursor-pointer transition-all active:scale-[0.99]"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Search size={15} className="text-[var(--color-accent)]" />
+                  <span className="font-semibold text-[var(--color-text-primary)]">Search Studio...</span>
+                </div>
+                <kbd className="px-2 py-0.5 rounded text-[10px] font-mono bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">⌘K</kbd>
+              </button>
+
               {/* GitHub Star Button */}
               <GitHubStarButton variant="drawer" />
 

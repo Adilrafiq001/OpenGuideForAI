@@ -5,7 +5,7 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '2.2.0';
+export const CURRENT_STUDIO_VERSION = '3.3.0';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
   {

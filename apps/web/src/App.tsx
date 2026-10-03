@@ -26,6 +26,7 @@ const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').
 const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
 const FirstTimeSetupModal = lazy(() => import('./components/FirstTimeSetupModal').then(m => ({ default: m.FirstTimeSetupModal })));
 const StudioInteractiveDemoModal = lazy(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
+const CommandPaletteModal = lazy(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -45,6 +46,26 @@ function App() {
     return !localStorage.getItem('og_onboarding_completed');
   });
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  // Global Keyboard Listener for Cmd+K / Ctrl+K Studio Command Palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing inside input, textarea, or contentEditable
+      const target = e.target as HTMLElement | null;
+      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('.cm-editor'));
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      } else if (e.key === '/' && !isInput) {
+        e.preventDefault();
+        setIsCommandPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Remove pre-bootstrap style tag and inline overrides once React hydrates
   useEffect(() => {
@@ -160,13 +181,17 @@ function App() {
     setIsFirstTimeSetupOpen(true);
   };
 
+  const handleOpenCommandPalette = () => {
+    setIsCommandPaletteOpen(true);
+  };
+
   return (
     <Router>
       <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
           <Suspense fallback={<PhysicsBarLoader />}>
             <Routes>
-              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} onOpenDemo={handleOpenDemo} />} />
+              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} onOpenDemo={handleOpenDemo} onOpenCommandPalette={handleOpenCommandPalette} />} />
               <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
               <Route path="/track/0" element={<CoursePlayer track={track0} />} />
               <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
@@ -195,6 +220,7 @@ function App() {
           onOpenSettings={handleOpenSettings}
           onOpenHelp={() => setIsHelpModalOpen(true)}
           onOpenDemo={handleOpenDemo}
+          onOpenCommandPalette={handleOpenCommandPalette}
         />
 
         {/* Native-Grade Mobile Bottom Navigation Bar (<md screens only) */}
@@ -208,6 +234,7 @@ function App() {
           onClose={() => setIsNavDrawerOpen(false)}
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
+          onOpenCommandPalette={handleOpenCommandPalette}
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}
@@ -259,6 +286,18 @@ function App() {
           </Suspense>
         )}
 
+        {/* Studio Command Palette Search Modal (Cmd+K / Ctrl+K) */}
+        {isCommandPaletteOpen && (
+          <Suspense fallback={null}>
+            <CommandPaletteModal 
+              isOpen={isCommandPaletteOpen}
+              onClose={() => setIsCommandPaletteOpen(false)}
+              onOpenThemes={handleOpenThemes}
+              onOpenDemo={handleOpenDemo}
+            />
+          </Suspense>
+        )}
+
         {/* Standalone In-House AI Chatbot: Abby (100% Offline + BYOK Frontier Option) */}
         <AbbyChatbot 
           onOpenSettings={handleOpenSettings}
@@ -296,7 +335,7 @@ function StudioAnnouncementPill({
   if (lastSeenVersion === CURRENT_STUDIO_VERSION) return null;
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 left-4 md:left-6 z-[95] max-w-sm p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
+    <div className="fixed top-20 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-auto">
       <div className="min-w-0">
         <div className="flex items-center gap-1.5 font-bold text-[var(--color-text-primary)]">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

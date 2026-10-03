@@ -17,7 +17,8 @@ import {
   Layers,
   Cpu,
   BookOpen,
-  Play
+  Play,
+  Search
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -34,6 +35,7 @@ interface LandingHeaderProps {
   onOpenHelp?: () => void;
   onOpenDrawer?: () => void;
   onOpenDemo?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
 function getContrastColor(hexColor: string): string {
@@ -46,7 +48,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, setTheme } = useSettingsStore();
   const { t } = useLanguageStore();
@@ -85,14 +87,14 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
         ? 'bg-[var(--color-primary)]/95 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/20' 
         : 'bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]/60 shadow-sm'
     }`}>
-      <div className="flex items-center gap-3 xl:gap-5 min-w-0 shrink">
+      <div className="flex items-center gap-3 xl:gap-5 min-w-0 shrink-0">
         {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
         <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl shrink-0">
           <BrandLogo size="md" />
         </a>
         
-        {/* Desktop Streamlined Navigation with Hover Reveals (visible on xl+ to prevent overlap) */}
-        <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+        {/* Desktop Streamlined Navigation with Hover Reveals */}
+        <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap overflow-hidden">
           <Tooltip
             position="bottom"
             content="10 Structured Pathways"
@@ -131,23 +133,25 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           </div>
 
           {/* Credentials / Portfolio link */}
-          <Tooltip
-            position="bottom"
-            content="Credentials & Portfolio [SHA-256]"
-            subtitle="Verifiable 36-lab accomplishments & cryptographic certificate"
-          >
-            <button 
-              onClick={() => navigate('/portfolio')}
-              className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
+          <div className="hidden 2xl:flex">
+            <Tooltip
+              position="bottom"
+              content="Credentials & Portfolio [SHA-256]"
+              subtitle="Verifiable 36-lab accomplishments & cryptographic certificate"
             >
-              <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
-              <span>Portfolio</span>
-            </button>
-          </Tooltip>
+              <button 
+                onClick={() => navigate('/portfolio')}
+                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
+              >
+                <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
+                <span>Portfolio</span>
+              </button>
+            </Tooltip>
+          </div>
 
           {/* Hover Reveal Dropdown: Explore Labs & Ecosystem */}
           <div 
-            className="relative"
+            className="relative hidden 2xl:block"
             onMouseEnter={() => setIsExploreOpen(true)}
             onMouseLeave={() => setIsExploreOpen(false)}
           >
@@ -293,13 +297,13 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
       </div>
 
       <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-        {/* Direct Day / Night Animated Switch */}
+        {/* Direct Day / Night Animated Switch (visible on ultra-wide 1800px+) */}
         <Tooltip
           position="bottom"
           content={currentThemeInfo.mode === 'dark' ? 'Switch to Light Themes' : 'Switch to Dark Themes'}
           subtitle={currentThemeInfo.mode === 'dark' ? 'Paper ergonomics & daylight workspaces' : 'Curated dark IDE palettes'}
         >
-          <div className="flex items-center">
+          <div className="hidden min-[1800px]:flex items-center">
             <ThemeSwitch 
               isDark={currentThemeInfo.mode === 'dark'}
               onToggle={() => {
@@ -333,17 +337,17 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
               style={{ backgroundColor: currentThemeInfo.accent }}
             />
-            <span className="hidden lg:inline font-mono text-[11px]">{currentThemeInfo.name}</span>
+            <span className="hidden 2xl:inline font-mono text-[11px] truncate max-w-[90px]">{currentThemeInfo.name}</span>
             <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
-            <span className="hidden lg:inline opacity-25 text-[10px] select-none">|</span>
-            <Settings size={13} className="hidden lg:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
+            <span className="hidden 2xl:inline opacity-25 text-[10px] select-none">|</span>
+            <Settings size={13} className="hidden 2xl:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
           </button>
         </Tooltip>
 
-        {/* GitHub Star Button */}
-        <GitHubStarButton variant="compact" className="hidden lg:inline-flex" />
+        {/* GitHub Star Button (visible on min-[1600px]+ to keep standard desktop clean) */}
+        <GitHubStarButton variant="compact" className="hidden min-[1600px]:inline-flex" />
 
-        {/* Quick Studio Tour Button */}
+        {/* Quick Studio Tour Button (visible on xl+) */}
         <Tooltip
           position="bottom"
           content="Studio Tour"
@@ -360,7 +364,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           </button>
         </Tooltip>
 
-        {/* Whole App Interactive Flow Demo Button */}
+        {/* Whole App Interactive Flow Demo Button (visible on xl+) */}
         <Tooltip
           position="bottom"
           content="Studio Flow Demo"
@@ -374,6 +378,25 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           >
             <Play size={12} className="text-[var(--color-accent)]" />
             <span>Demo</span>
+          </button>
+        </Tooltip>
+
+        {/* Studio Command Palette Search Button */}
+        <Tooltip
+          position="bottom"
+          content="Search Studio"
+          subtitle="Jump to 45 labs, 24 themes, languages, tools"
+          shortcut="⌘K"
+        >
+          <button 
+            onClick={() => onOpenCommandPalette?.()}
+            data-testid="header-command-palette-btn"
+            className="hidden lg:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+            aria-label="Open Studio Search Palette"
+          >
+            <Search size={13} className="text-[var(--color-accent)]" />
+            <span className="hidden sm:inline">Search</span>
+            <kbd className="hidden sm:inline px-1.5 py-0.5 rounded text-[9px] font-mono bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">⌘K</kbd>
           </button>
         </Tooltip>
 

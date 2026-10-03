@@ -136,7 +136,10 @@ Thanks to our Service Worker cache (`sw.js`), all curriculum content, the Pyodid
 
 Master OpenGuide with native shortcuts and diagnostic lenses:
 
+* **Studio Command Palette (`Cmd + K` / `Ctrl + K`):** Quick-launch anywhere in the studio to fuzzy-search across all curriculum labs, trigger modal lenses, switch themes, navigate pathways, or open developer tools via keyboard navigation (`↑`/`↓` and `Enter`).
 * **Instant Execution:** Press `Ctrl + Enter` (or `Cmd + Enter` on macOS) anywhere in the editor to run Python code instantly.
+* **Beginner-Friendly Python Syntax Doctor:** Intelligent static diagnostic analysis immediately translates cryptic Python compiler tracebacks (`SyntaxError`, `IndentationError`, `NameError`) into warm plain-English advice and concrete code remedies.
+* **Portable Proof-of-Work Jupyter Export (`.ipynb`):** Download verified lab solutions and whole track portfolios directly as standard Jupyter Notebooks (nbformat 4.5) for local execution in VS Code or JupyterLab.
 * **X-Ray Debug Lens (`Alt + X`):** Press `Alt + X` (or tap the floating lens icon on mobile) to inspect live Pyodide Abstract Syntax Trees (AST), active Web Worker memory heap, and local IndexedDB tables.
 * **Mobile Segmented Workspace:** On smartphones, switch effortlessly between `[ Study ]`, `[ Code ]`, and `[ Output ]`. Running code automatically switches to the Output terminal.
 * **Touchscreen Accessory Bar:** Fast-input syntax bar (`def`, `:`, `Tab`, `return`, `()`, `[]`, `==`) anchored directly above mobile keyboards.

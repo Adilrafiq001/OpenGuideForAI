@@ -80,9 +80,14 @@ let activeStdout = [];
 
 async function initPyodide() {
   try {
+    postMessage({ type: 'INIT_PROGRESS', text: 'Connecting to CPython WebAssembly runtime...' });
     importScripts('https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js');
+    postMessage({ type: 'INIT_PROGRESS', text: 'Loading WebAssembly compiler and standard library...' });
     pyodide = await loadPyodide({
       indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/',
+      statusCallback: (statusText) => {
+        postMessage({ type: 'INIT_PROGRESS', text: statusText });
+      }
     });
 
     // Redirect stdout/stderr to the main thread

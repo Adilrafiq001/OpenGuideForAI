@@ -14,6 +14,7 @@ export interface PyodideTelemetry {
 
 export function usePyodide() {
   const [state, setState] = useState<PyodideState>('idle');
+  const [initStage, setInitStage] = useState<string>('Pre-warming WebAssembly kernel...');
   const workerRef = useRef<Worker | null>(null);
   
   // Track output for the X-Ray lens or terminal
@@ -51,8 +52,13 @@ export function usePyodide() {
       const timestamp = new Date().toLocaleTimeString();
       
       switch (msg.type) {
+        case 'INIT_PROGRESS':
+          setInitStage(msg.text || 'Loading WebAssembly runtime...');
+          break;
+
         case 'READY':
           setState('ready');
+          setInitStage('CPython WebAssembly Ready');
           setTelemetry(prev => ({
             ...prev,
             version: msg.version || prev.version,
@@ -193,5 +199,5 @@ export function usePyodide() {
 
   const clearLogs = useCallback(() => setLogs([]), []);
 
-  return { state, logs, telemetry, runCode, clearLogs };
+  return { state, initStage, logs, telemetry, runCode, clearLogs };
 }
