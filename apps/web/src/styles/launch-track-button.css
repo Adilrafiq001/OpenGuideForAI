@@ -506,12 +506,18 @@
 
 .launch-track-hero-container .area-wrapper input:checked ~ .button .text.state-2 {
   opacity: 0 !important;
+  display: none !important;
   pointer-events: none;
 }
 
 .launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-1 {
   opacity: 0 !important;
+  display: none !important;
   pointer-events: none;
+}
+
+.launch-track-hero-container .area-wrapper input:not(:checked) ~ .button .text.state-2 {
+  display: flex !important;
 }
 
 /* ---- HOVER (checked only) ---- */
