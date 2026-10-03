@@ -1,0 +1,34 @@
+name: Feature Request / Curriculum Proposal
+description: Suggest an idea or propose a new curriculum module / shader experiment
+labels: ["enhancement", "discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new visual intuition lesson, WebGPU experiment, or UI capability? Propose it below!
+  - type: input
+    id: title
+    attributes:
+      label: Feature / Module Title
+      placeholder: e.g. Interactive Visual Transformer Attention Visualizer
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: Is your feature request related to a problem or a gap in current AI learning materials?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / Visual Intuition
+      description: Describe the solution you'd like to see, including how it adheres to our $0 Rule (in-browser client compute).
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative implementations or existing tools you've considered.

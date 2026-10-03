@@ -1,0 +1,55 @@
+name: Bug Report
+description: Create a report to help us fix a defect or unexpected behavior
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue in OpenGuide! Please ensure you have tested the behavior against the latest version at https://openguideforai.dpdns.org.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A concise summary of what happened.
+      placeholder: e.g. Pyodide worker times out when loading numpy module on Safari
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction Steps
+      description: How can we reproduce this behavior?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs Actual Behavior
+      description: What did you expect to happen versus what actually occurred?
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Browser & Operating System
+      description: Which browser and OS did you observe this in?
+      options:
+        - Chrome / Chromium (Desktop)
+        - Firefox (Desktop)
+        - Safari (macOS / iOS)
+        - Edge (Windows)
+        - Mobile Chrome / Android
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Logs / Telemetry
+      description: Copy relevant console errors or Web Worker output if available.
+      render: shell
