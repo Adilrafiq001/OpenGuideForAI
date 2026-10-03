@@ -138,16 +138,15 @@ test.describe('OpenGuide Android UI Journey & Verification Suite', () => {
 
     // Step 1: Switch to mobile editor tab
     const editorTabBtn = page.locator('[data-testid="mobile-tab-editor"]').first();
-    if (await editorTabBtn.count() > 0) {
-      await editorTabBtn.click();
-      await page.waitForTimeout(400);
-      report.results.push({
-        action: 'Switch to mobile Code tab',
-        status: 'PASSED',
-        commands: ['click data-testid="mobile-tab-editor"'],
-        comment: 'Activated mobile IDE editor pane.',
-      });
-    }
+    await editorTabBtn.waitFor({ state: 'visible', timeout: 15000 });
+    await editorTabBtn.click();
+    await page.waitForTimeout(400);
+    report.results.push({
+      action: 'Switch to mobile Code tab',
+      status: 'PASSED',
+      commands: ['click data-testid="mobile-tab-editor"'],
+      comment: 'Activated mobile IDE editor pane.',
+    });
 
     // Step 2: Verify CodeMirror 6 Editor Mounts on Mobile
     const cmEditor = page.locator('.cm-editor').first();
