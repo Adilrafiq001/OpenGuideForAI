@@ -86,4 +86,4 @@ OpenGuide's pedagogical design draws direct inspiration from foundational thinke
 
 ## Attribution & Licensing Notice
 
-OpenGuide is released under the **MIT License**. You are free to inspect, learn from, fork, and build upon this architecture. We request that all forks and derived educational works maintain prominent attribution to **Adil Rafiq Dar (ARD)** and OpenGuide as specified in [AGENTS.md](AGENTS.md).
+OpenGuide is released under a sovereign dual license: the **GNU Affero General Public License v3.0 (AGPL-3.0)** for application software code and **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)** for curriculum and educational content. You are free to inspect, learn from, fork, and build upon this architecture. All forks, network services, and derived educational works must maintain prominent attribution to **Adil Rafiq Dar (ARD)** and OpenGuide as specified in [AGENTS.md](AGENTS.md) and [LICENSE](LICENSE), with strictly zero commercial paywalls.

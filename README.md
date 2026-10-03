@@ -17,7 +17,7 @@
   </a>
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-0f172a.svg?style=flat)](LICENSE)
+[![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/License-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Runtime-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/Architecture-Local--First%20$0-0f172a.svg?style=flat)](#sovereign-client-side-architecture)
 [![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-0f172a.svg?style=flat)](#curriculum-overview)
@@ -349,7 +349,7 @@ yarn --cwd apps/web build
 * **Organization:** OpenGuide AI Studio
 * **Primary Target:** [https://github.com/openguideforai/OpenGuideForAI](https://github.com/openguideforai/OpenGuideForAI)
 * **Archive Mirror:** [https://github.com/Adilrafiq001/OpenGuideForAI](https://github.com/Adilrafiq001/OpenGuideForAI)
-* **License:** [MIT License](LICENSE) — Sovereign, Free, and Open to Humanity.
+* **License:** [Dual License (AGPL-3.0 & CC BY-NC-SA 4.0)](LICENSE) — Sovereign, Free, Copyleft & Non-Commercial with Adil Rafiq Dar (ARD) Attribution.
 
 <div align="center">
   <sub>Architected and built by Adil Rafiq Dar (ARD). All rights reserved.</sub>

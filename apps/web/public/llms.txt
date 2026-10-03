@@ -20,4 +20,4 @@ OpenGuide is a 100% free, local-first interactive AI engineering curriculum and 
 ## Official Links
 - Web Application: https://openguideforai.dpdns.org/
 - GitHub Repository: https://github.com/openguideforai/OpenGuideForAI
-- License: MIT
+- License: AGPL-3.0 (Software) & CC BY-NC-SA 4.0 (Curriculum) — Copyright (c) Adil Rafiq Dar (ARD)

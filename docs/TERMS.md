@@ -3,7 +3,7 @@
 > **Effective Date:** October 2, 2026  
 > **Last Updated:** October 2, 2026  
 > **Application:** OpenGuide AI Studio (`https://openguideforai.dpdns.org`)  
-> **Governing Frameworks:** Information Technology Act, 2000 (India), IT (Intermediary Guidelines and Digital Media Ethics Code) Rules 2021 (India), MIT License.
+> **Governing Frameworks:** Information Technology Act, 2000 (India), IT (Intermediary Guidelines and Digital Media Ethics Code) Rules 2021 (India), GNU Affero General Public License v3.0 (AGPL-3.0), Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0).
 
 ---
 
@@ -48,9 +48,10 @@ OpenGuide enables optional client-side connections to commercial frontier model 
 
 ## 5. Intellectual Property & Open-Source Licensing
 
-1. **Core Open-Source Code:** The source code of OpenGuide is licensed under the permissive **MIT License**. You are free to inspect, fork, modify, and distribute the codebase in accordance with the MIT license terms.
-2. **Attribution & Provenance:** Any fork, distribution, or derivative educational platform utilizing OpenGuide's architectural concepts, curriculum structure, or visualizers must maintain prominent, indelible attribution to **Adil Rafiq Dar (ARD)** and OpenGuide as required in [AGENTS.md](../AGENTS.md) and [CREDITS.md](../CREDITS.md).
-3. **Trademarks:** The names "OpenGuide", "OpenGuide.", the "OG" monogram, and the subtitle "AI STUDIO" are proprietary marks of Adil Rafiq Dar. Unauthorized commercial impersonation or misleading misrepresentation is strictly prohibited.
+1. **Core Open-Source Code:** The source code of OpenGuide is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. You are free to inspect, fork, modify, and distribute the codebase in accordance with the AGPL-3.0 terms. If you modify or host OpenGuide as a network or web service, you must provide access to your corresponding source code under the same AGPL-3.0 license.
+2. **Curriculum & Educational Content:** All curriculum texts, lessons, and learning materials are licensed under **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**. Commercial resale, paywalling, or monetized bundling is strictly prohibited.
+3. **Attribution & Provenance:** Any fork, distribution, or derivative educational platform utilizing OpenGuide's architectural concepts, curriculum structure, or visualizers must maintain prominent, indelible attribution to **Adil Rafiq Dar (ARD)** and OpenGuide as required in [AGENTS.md](../AGENTS.md), [CREDITS.md](../CREDITS.md), and [LICENSE](../LICENSE).
+4. **Trademarks:** The names "OpenGuide", "OpenGuide.", the "OG" monogram, and the subtitle "AI STUDIO" are proprietary marks of Adil Rafiq Dar. Unauthorized commercial impersonation or misleading misrepresentation is strictly prohibited.
 
 ---
 
