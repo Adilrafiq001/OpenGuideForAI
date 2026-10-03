@@ -58,9 +58,10 @@ export function SpatialHolodeck() {
         {/* Graphics Tier Selector Quick Bar */}
         <div className="flex items-center gap-2 max-w-full overflow-x-auto no-scrollbar py-1">
           <span className="text-[11px] font-mono text-[var(--color-text-secondary)] font-semibold hidden sm:inline shrink-0">Compute Tier:</span>
-          <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm shrink-0">
+          <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm shrink-0" role="group" aria-label="Graphics Compute Tier Selector">
             <button
               onClick={() => setGraphicsTier('auto')}
+              aria-pressed={graphicsTier === 'auto'}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 graphicsTier === 'auto' ? 'bg-[var(--color-accent,#10b981)] text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
@@ -70,6 +71,7 @@ export function SpatialHolodeck() {
             </button>
             <button
               onClick={() => setGraphicsTier('2d-lean')}
+              aria-pressed={graphicsTier === '2d-lean'}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 graphicsTier === '2d-lean' ? 'bg-amber-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
@@ -79,6 +81,7 @@ export function SpatialHolodeck() {
             </button>
             <button
               onClick={() => setGraphicsTier('3d-hardware')}
+              aria-pressed={graphicsTier === '3d-hardware'}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 graphicsTier === '3d-hardware' ? 'bg-cyan-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
@@ -88,6 +91,7 @@ export function SpatialHolodeck() {
             </button>
             <button
               onClick={() => setGraphicsTier('spatial-xr')}
+              aria-pressed={graphicsTier === 'spatial-xr'}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 graphicsTier === 'spatial-xr' ? 'bg-purple-400 text-black font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
@@ -132,8 +136,12 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-[var(--color-border)] gap-2 overflow-x-auto no-scrollbar max-w-full whitespace-nowrap pb-0.5">
+        <div className="flex border-b border-[var(--color-border)] gap-2 overflow-x-auto no-scrollbar max-w-full whitespace-nowrap pb-0.5" role="tablist" aria-label="Holodeck Visualizer Views">
           <button
+            id="tab-vectors"
+            role="tab"
+            aria-selected={activeTab === 'vectors'}
+            aria-controls="tabpanel-vectors"
             onClick={() => setActiveTab('vectors')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'vectors'
@@ -146,6 +154,10 @@ export function SpatialHolodeck() {
           </button>
 
           <button
+            id="tab-synapses"
+            role="tab"
+            aria-selected={activeTab === 'synapses'}
+            aria-controls="tabpanel-synapses"
             onClick={() => setActiveTab('synapses')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'synapses'
@@ -158,6 +170,10 @@ export function SpatialHolodeck() {
           </button>
 
           <button
+            id="tab-webxr"
+            role="tab"
+            aria-selected={activeTab === 'webxr'}
+            aria-controls="tabpanel-webxr"
             onClick={() => setActiveTab('webxr')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'webxr'
@@ -173,19 +189,19 @@ export function SpatialHolodeck() {
         {/* Active View */}
         <div className="space-y-6">
           {activeTab === 'vectors' && (
-            <div className="space-y-4">
+            <div id="tabpanel-vectors" role="tabpanel" aria-labelledby="tab-vectors" className="space-y-4">
               <VectorSpace3D force2D={graphicsTier === '2d-lean'} />
             </div>
           )}
 
           {activeTab === 'synapses' && (
-            <div className="space-y-4">
+            <div id="tabpanel-synapses" role="tabpanel" aria-labelledby="tab-synapses" className="space-y-4">
               <NeuralSynapse3D force2D={graphicsTier === '2d-lean'} />
             </div>
           )}
 
           {activeTab === 'webxr' && (
-            <div className="space-y-4">
+            <div id="tabpanel-webxr" role="tabpanel" aria-labelledby="tab-webxr" className="space-y-4">
               <WebXRControls />
             </div>
           )}

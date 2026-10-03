@@ -231,10 +231,18 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev + 1) % Math.max(1, filteredItems.length));
+      setSelectedIndex(prev => {
+        const next = (prev + 1) % Math.max(1, filteredItems.length);
+        document.getElementById(`palette-item-btn-${next}`)?.scrollIntoView({ block: 'nearest' });
+        return next;
+      });
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev - 1 + filteredItems.length) % Math.max(1, filteredItems.length));
+      setSelectedIndex(prev => {
+        const next = (prev - 1 + filteredItems.length) % Math.max(1, filteredItems.length);
+        document.getElementById(`palette-item-btn-${next}`)?.scrollIntoView({ block: 'nearest' });
+        return next;
+      });
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (filteredItems[selectedIndex]) {
@@ -245,39 +253,42 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
-      <div 
-        className="fixed inset-0 z-[250] flex items-start justify-center pt-12 sm:pt-20 md:pt-24 px-3 sm:px-4 bg-black/60 backdrop-blur-md transition-all"
-        onClick={onClose}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Studio Command Search Palette"
-        data-testid="command-palette-modal"
-      >
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.96, y: -12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: -12 }}
-          transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-          className="w-full max-w-xl rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-[0_24px_64px_rgba(0,0,0,0.5)] overflow-hidden pointer-events-auto flex flex-col max-h-[82dvh]"
-          onClick={e => e.stopPropagation()}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-[250] flex items-start justify-center pt-12 sm:pt-20 md:pt-24 px-3 sm:px-4 bg-black/60 backdrop-blur-md transition-all"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Studio Command Search Palette"
+          data-testid="command-palette-modal"
         >
-          {/* Search Header */}
-          <div className="flex items-center px-4 py-3.5 border-b border-[var(--color-border)] gap-3 bg-[var(--color-primary)]/50 shrink-0">
-            <Search size={18} className="text-[var(--color-accent)] shrink-0" />
-            <input 
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
-              onKeyDown={handleKeyDown}
-              placeholder="Search 45 labs, 24 themes, 12 languages, tools..."
-              className="w-full bg-transparent text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/60 focus:outline-none font-medium"
-              data-testid="command-palette-input"
-            />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.96, y: -12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -12 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+            className="w-full max-w-xl rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-[0_24px_64px_rgba(0,0,0,0.5)] overflow-hidden pointer-events-auto flex flex-col max-h-[82dvh]"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Search Header */}
+            <div className="flex items-center px-4 py-3.5 border-b border-[var(--color-border)] gap-3 bg-[var(--color-primary)]/50 shrink-0">
+              <Search size={18} className="text-[var(--color-accent)] shrink-0" />
+              <input 
+                ref={inputRef}
+                type="text"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="true"
+                aria-controls="command-palette-results"
+                value={query}
+                onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
+                onKeyDown={handleKeyDown}
+                placeholder="Search 45 labs, 24 themes, 12 languages, tools..."
+                className="w-full bg-transparent text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/60 focus:outline-none font-medium"
+                data-testid="command-palette-input"
+              />
             <button 
               onClick={onClose}
               className="px-2 py-0.5 rounded text-[10px] font-mono bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
@@ -288,7 +299,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
           </div>
 
           {/* Results List */}
-          <div className="overflow-y-auto p-2 space-y-1 overscroll-contain flex-1 custom-scrollbar" data-lenis-prevent="true">
+          <div id="command-palette-results" role="listbox" className="overflow-y-auto p-2 space-y-1 overscroll-contain flex-1 custom-scrollbar" data-lenis-prevent="true">
             {filteredItems.length === 0 ? (
               <div className="py-10 text-center text-xs text-[var(--color-text-secondary)] font-mono">
                 No matching labs, themes, or commands found for "{query}".
@@ -300,6 +311,9 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
                 return (
                   <button
                     key={item.id}
+                    id={`palette-item-btn-${idx}`}
+                    role="option"
+                    aria-selected={isSelected}
                     onClick={item.action}
                     onMouseEnter={() => setSelectedIndex(idx)}
                     className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-3 cursor-pointer ${
@@ -344,6 +358,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

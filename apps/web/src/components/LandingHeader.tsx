@@ -51,7 +51,7 @@ function getContrastColor(hexColor: string): string {
 
 export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette }: LandingHeaderProps) {
   const navigate = useNavigate();
-  const { theme, setTheme } = useSettingsStore();
+  const { theme, toggleThemeMode } = useSettingsStore();
   const { t } = useLanguageStore();
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -307,11 +307,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           <div className="hidden min-[1800px]:flex items-center">
             <ThemeSwitch 
               isDark={currentThemeInfo.mode === 'dark'}
-              onToggle={() => {
-                const nextMode = currentThemeInfo.mode === 'dark' ? 'light' : 'dark';
-                const target = THEMES_DATA.find(t => t.mode === nextMode);
-                if (target) setTheme(target.id);
-              }}
+              onToggle={toggleThemeMode}
               className="scale-90 origin-center"
             />
           </div>
@@ -501,11 +497,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 <div className="flex items-center gap-2">
                   <ThemeSwitch 
                     isDark={currentThemeInfo.mode === 'dark'}
-                    onToggle={() => {
-                      const nextMode = currentThemeInfo.mode === 'dark' ? 'light' : 'dark';
-                      const target = THEMES_DATA.find(t => t.mode === nextMode);
-                      if (target) setTheme(target.id);
-                    }}
+                    onToggle={toggleThemeMode}
                     className="scale-85 origin-left"
                   />
                   <span className="text-xs font-semibold text-[var(--color-text-primary)]">

@@ -50,10 +50,24 @@ function runFallbackPython(code) {
         varName = varName.trim();
         let valStr = rest.join(' = ').trim();
         try {
-          if (valStr.startsWith('"') && valStr.endsWith('"')) {
+          if ((valStr.startsWith('"') && valStr.endsWith('"')) || (valStr.startsWith("'") && valStr.endsWith("'"))) {
             scope[varName] = valStr.substring(1, valStr.length - 1);
-          } else if (valStr.startsWith("'") && valStr.endsWith("'")) {
-            scope[varName] = valStr.substring(1, valStr.length - 1);
+          } else if (valStr === 'True') {
+            scope[varName] = true;
+          } else if (valStr === 'False') {
+            scope[varName] = false;
+          } else if (valStr === 'None') {
+            scope[varName] = null;
+          } else if (scope[valStr] !== undefined) {
+            scope[varName] = scope[valStr];
+          } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/.test(valStr)) {
+            scope[varName] = Number(valStr);
+          } else if (/^[-+*/%0-9 .()]+$/.test(valStr)) {
+            try {
+              scope[varName] = Function(`'use strict'; return (${valStr});`)();
+            } catch {
+              scope[varName] = valStr;
+            }
           } else {
             scope[varName] = JSON.parse(valStr);
           }
@@ -81,10 +95,10 @@ let activeStdout = [];
 async function initPyodide() {
   try {
     postMessage({ type: 'INIT_PROGRESS', text: 'Connecting to CPython WebAssembly runtime...' });
-    importScripts('https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js');
+    importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js');
     postMessage({ type: 'INIT_PROGRESS', text: 'Loading WebAssembly compiler and standard library...' });
     pyodide = await loadPyodide({
-      indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/',
+      indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/',
       statusCallback: (statusText) => {
         postMessage({ type: 'INIT_PROGRESS', text: statusText });
       }
@@ -107,7 +121,7 @@ async function initPyodide() {
 
     postMessage({ 
       type: 'READY',
-      version: pyodide.version || '0.25.0',
+      version: pyodide.version || '0.26.2',
       runtime: 'WASM CPython'
     });
   } catch (error) {
@@ -198,6 +212,7 @@ json.dumps(__vars)
       postMessage({ 
         type: 'RESULT', 
         error: error.message, 
+        stdout: activeStdout.join('\n'),
         id: msg.id,
         durationMs
       });

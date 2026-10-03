@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import '../styles/not-found.css';
 
 export const NotFoundPage: React.FC = () => {
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = '404: Signal Lost | OpenGuide';
+    return () => {
+      document.title = originalTitle;
+    };
+  }, []);
+
   return (
     <div className="not-found-page">
       <div className="not-found-card" role="region" aria-label="Page Not Found">

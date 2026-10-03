@@ -174,7 +174,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
     if (qLower.includes('synapse') || qLower.includes('minigame') || qLower.includes('game') || qLower.includes('arcade')) {
       return {
-        content: "The **Synapse Lounge** (`/synapse`) is our neuro-plasticity diffuse-mode arcade featuring 3 tactile minigames:\n\n1. **Vector Alignment Radar:** Align the probe vector with semantic target embeddings in a unit circle.\n2. **Neural Gate Deductor:** Tune weights (w1, w2) and bias to solve logical AND, OR, and NAND gates.\n3. **Transformer Attention Radar:** Manipulate Query/Key dot products, dimension scaling (√d_k), and temperature (τ) to route attention weights!",
+        content: "The **Synapse Lounge** (`/#synapse`) is our neuro-plasticity diffuse-mode arcade featuring 3 tactile minigames:\n\n1. **Vector Alignment Radar:** Align the probe vector with semantic target embeddings in a unit circle.\n2. **Neural Gate Deductor:** Tune weights (w1, w2) and bias to solve logical AND, OR, and NAND gates.\n3. **Transformer Attention Radar:** Manipulate Query/Key dot products, dimension scaling (√d_k), and temperature (τ) to route attention weights!",
         takeaway: "Tactile play strengthens deep conceptual memory."
       };
     }
@@ -379,6 +379,13 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   useEffect(() => {
     if (isOpen) {
       jellyControls.start({ x: 0, y: 0, rotate: 0, scaleX: 1, scaleY: 1 });
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
     }
   }, [isOpen, jellyControls]);
 

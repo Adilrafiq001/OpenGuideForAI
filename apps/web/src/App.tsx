@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { X } from 'lucide-react';
 import { LandingPage } from './pages/LandingPage';
 import { CommandDock } from './components/CommandDock';
 import { AbbyChatbot } from './components/AbbyChatbot';
@@ -35,7 +36,8 @@ const SpatialHolodeck = lazy(() => import('./pages/SpatialHolodeck').then(m => (
 const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
   const { theme, displaySize, editorFont, fontSize, lastSeenVersion, setLastSeenVersion } = useSettingsStore();
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [initialModalTab, setInitialModalTab] = useState<'themes' | 'preferences'>('themes');
@@ -186,8 +188,7 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
+    <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
           <Suspense fallback={<PhysicsBarLoader />}>
             <Routes>
@@ -269,7 +270,7 @@ function App() {
               onClose={() => setIsFirstTimeSetupOpen(false)}
               onStartTour={() => startAppTour(typeof window !== 'undefined' && window.innerWidth < 768)}
               onLaunchTrack0={() => {
-                window.location.assign('/track/0/intro');
+                navigate('/track/0/intro');
               }}
             />
           </Suspense>
@@ -316,7 +317,6 @@ function App() {
           onDismiss={() => setLastSeenVersion(CURRENT_STUDIO_VERSION)}
         />
       </div>
-    </Router>
   );
 }
 
@@ -360,10 +360,18 @@ function StudioAnnouncementPill({
           className="p-1 rounded-lg hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
           aria-label="Dismiss update notification"
         >
-          ✕
+          <X size={14} />
         </button>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

@@ -31,6 +31,7 @@ import { useSettingsStore } from '../store/useSettingsStore';
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
+  onRun?: () => void;
   fontSize?: number;
   wordWrap?: boolean;
   readOnly?: boolean;
@@ -65,6 +66,7 @@ const ACCESSORY_KEYS = [
 export const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
+  onRun,
   fontSize = 13,
   wordWrap = false,
   readOnly = false,
@@ -75,6 +77,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
+  const onRunRef = useRef(onRun);
+  onRunRef.current = onRun;
 
   const insertText = (textToInsert: string) => {
     const view = viewRef.current;
@@ -183,6 +187,13 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       python(),
       openGuideTheme,
       keymap.of([
+        {
+          key: 'Mod-Enter',
+          run: () => {
+            onRunRef.current?.();
+            return true;
+          }
+        },
         indentWithTab,
         ...closeBracketsKeymap,
         ...defaultKeymap,

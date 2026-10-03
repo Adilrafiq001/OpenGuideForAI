@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Download, 
@@ -9,7 +9,7 @@ import {
   Cpu, 
   Compass, 
   Code2, 
-  X,
+  X, 
   Smartphone
 } from 'lucide-react';
 import { useSettingsStore, type Theme } from '../store/useSettingsStore';
@@ -37,6 +37,7 @@ export function FirstTimeSetupModal({
   const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
   const [isWarmingWasm, setIsWarmingWasm] = useState(false);
   const [wasmPreWarmed, setWasmPreWarmed] = useState(false);
+  const preWarmWorkerRef = useRef<Worker | null>(null);
 
   const handleComplete = () => {
     playTactileSound('click');
@@ -46,6 +47,26 @@ export function FirstTimeSetupModal({
     }
     onClose();
   };
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
+  // Clean up any active pre-warming worker on unmount
+  useEffect(() => {
+    return () => {
+      if (preWarmWorkerRef.current) {
+        preWarmWorkerRef.current.terminate();
+        preWarmWorkerRef.current = null;
+      }
+    };
+  }, []);
 
   // Close on Escape key
   useEffect(() => {
@@ -78,6 +99,7 @@ export function FirstTimeSetupModal({
     playTactileSound('click');
     try {
       const worker = new Worker('/pyodide.worker.js');
+      preWarmWorkerRef.current = worker;
       worker.postMessage({ type: 'INIT' });
       worker.onmessage = (e) => {
         if (e.data?.type === 'READY') {
@@ -85,14 +107,17 @@ export function FirstTimeSetupModal({
           setWasmPreWarmed(true);
           playTactileSound('success');
           worker.terminate();
+          preWarmWorkerRef.current = null;
         }
       };
       worker.onerror = () => {
         setIsWarmingWasm(false);
         worker.terminate();
+        preWarmWorkerRef.current = null;
       };
     } catch {
       setIsWarmingWasm(false);
+      preWarmWorkerRef.current = null;
     }
   };
 

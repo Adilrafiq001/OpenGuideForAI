@@ -69,11 +69,15 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
 .container-ai-input.is-open.size-compact {
   width: 350px;
   height: 460px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
 }
 
 .container-ai-input.is-open.size-standard {
   width: 440px;
   height: 560px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
 }
 
 .container-ai-input.is-open.size-expanded {

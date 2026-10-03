@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Command, Cpu, Terminal, ShieldCheck, Key, Compass, Play, RotateCcw } from 'lucide-react';
 
@@ -16,6 +17,29 @@ export function HelpModal({
   onOpenDemo,
   onOpenOnboarding
 }: HelpModalProps) {
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -33,7 +57,11 @@ export function HelpModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="relative w-full max-w-2xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-2xl p-6 sm:p-8 z-10 text-[var(--color-text-primary,#fff)]"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="help-modal-title"
+            tabIndex={-1}
+            className="relative w-full max-w-2xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-2xl p-6 sm:p-8 z-10 text-[var(--color-text-primary,#fff)] outline-none"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-5 border-b border-[var(--color-border,rgba(255,255,255,0.12))] mb-6">
@@ -42,7 +70,7 @@ export function HelpModal({
                   <Command size={20} />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[var(--color-text-primary,#fff)]">OpenGuide Architecture & Shortcuts</h2>
+                  <h2 id="help-modal-title" className="text-lg font-bold text-[var(--color-text-primary,#fff)]">OpenGuide Architecture & Shortcuts</h2>
                   <p className="text-xs text-[var(--color-text-secondary,#a1a1aa)]">Zero Cloud Compute • 100% In-Browser Pyodide Execution</p>
                 </div>
               </div>

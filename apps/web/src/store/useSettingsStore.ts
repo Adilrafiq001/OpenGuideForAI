@@ -15,6 +15,8 @@ export type CodeFont = 'fira-code' | 'jetbrains-mono' | 'source-code-pro' | 'ibm
 
 export interface SettingsState {
   theme: Theme;
+  lastDarkTheme: Theme;
+  lastLightTheme: Theme;
   displaySize: 'compact' | 'default' | 'large';
   fontSize: number;
   editorFont: CodeFont;
@@ -37,6 +39,7 @@ export interface SettingsState {
   byokProvider: 'openai' | 'anthropic' | 'gemini' | 'openrouter';
   byokModel: string;
   setTheme: (theme: Theme) => void;
+  toggleThemeMode: () => void;
   setDisplaySize: (size: 'compact' | 'default' | 'large') => void;
   setFontSize: (size: number) => void;
   setEditorFont: (font: CodeFont) => void;
@@ -66,6 +69,8 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       theme: (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('openguide_session_theme') as Theme : null) || 'claude-light',
+      lastDarkTheme: 'obsidian',
+      lastLightTheme: 'claude-light',
       displaySize: 'default',
       fontSize: 14,
       editorFont: 'jetbrains-mono',
@@ -91,7 +96,27 @@ export const useSettingsStore = create<SettingsState>()(
         if (typeof sessionStorage !== 'undefined') {
           sessionStorage.setItem('openguide_session_theme', theme);
         }
-        set({ theme });
+        const lightThemeIds = new Set([
+          'pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream',
+          'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial',
+          'sakura-blossom', 'champagne-luminary'
+        ]);
+        if (lightThemeIds.has(theme)) {
+          set({ theme, lastLightTheme: theme });
+        } else {
+          set({ theme, lastDarkTheme: theme });
+        }
+      },
+      toggleThemeMode: () => {
+        const state = useSettingsStore.getState();
+        const lightThemeIds = new Set([
+          'pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream',
+          'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial',
+          'sakura-blossom', 'champagne-luminary'
+        ]);
+        const isCurrentLight = lightThemeIds.has(state.theme);
+        const nextTheme = isCurrentLight ? (state.lastDarkTheme || 'obsidian') : (state.lastLightTheme || 'claude-light');
+        state.setTheme(nextTheme);
       },
       setDisplaySize: (displaySize) => set({ displaySize }),
       setFontSize: (fontSize) => set({ fontSize }),

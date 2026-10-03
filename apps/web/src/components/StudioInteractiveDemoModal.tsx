@@ -56,6 +56,16 @@ export function StudioInteractiveDemoModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
   const flows: DemoFlowItem[] = [
     {
       id: 'ide-flow',
@@ -286,16 +296,15 @@ export function StudioInteractiveDemoModal({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
-      <div 
-        className="fixed inset-0 z-[260] flex items-center justify-center p-3 sm:p-6 overflow-hidden"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="studio-demo-modal-title"
-      >
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-[260] flex items-center justify-center p-3 sm:p-6 overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="studio-demo-modal-title"
+        >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -467,6 +476,7 @@ export function StudioInteractiveDemoModal({
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

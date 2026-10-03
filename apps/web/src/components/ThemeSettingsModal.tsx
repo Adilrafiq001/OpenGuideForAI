@@ -87,6 +87,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     setByokProvider,
     byokModel,
     setByokModel,
+    toggleThemeMode,
     resetDefaults
   } = useSettingsStore();
   const [activeTab, setActiveTab] = useState<'themes' | 'preferences'>(initialTab);
@@ -296,10 +297,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         onToggle={() => {
                           const nextMode = activeMode === 'dark' ? 'light' : 'dark';
                           setActiveMode(nextMode);
-                          const targetTheme = THEMES_DATA.find(t => t.mode === nextMode);
-                          if (targetTheme) {
-                            setTheme(targetTheme.id);
-                          }
+                          toggleThemeMode();
                         }} 
                       />
                       <div className="flex flex-col">

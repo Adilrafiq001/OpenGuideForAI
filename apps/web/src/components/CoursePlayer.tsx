@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -73,7 +73,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const currentLesson = currentModule.lessons[currentLessonIdx] || currentModule.lessons[0];
 
   const [code, setCode] = useState(currentLesson.initialCode);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
+  const [canUndoReset, setCanUndoReset] = useState(false);
+  const previousCodeRef = useRef<string>('');
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | 'info' | null; message: string }>({ type: null, message: '' });
   const [isChallengePassed, setIsChallengePassed] = useState(false);
   const [syntaxDiagnostic, setSyntaxDiagnostic] = useState<PythonDiagnostic | null>(null);
 
@@ -128,14 +130,33 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setShowSolution(false);
     setCopiedSolution(false);
     setIsChallengePassed(completedLessonIds.includes(targetLesson.id));
+    setCanUndoReset(false);
   };
 
   const handleResetCode = () => {
+    if (code !== currentLesson.initialCode) {
+      previousCodeRef.current = code;
+      setCanUndoReset(true);
+      setFeedback({ 
+        type: 'info', 
+        message: 'Editor code reset to initial boilerplate.' 
+      });
+    }
     setCode(currentLesson.initialCode);
     clearLogs();
-    setFeedback({ type: null, message: '' });
     setSyntaxDiagnostic(null);
     setShowSolution(false);
+  };
+
+  const handleUndoReset = () => {
+    if (previousCodeRef.current) {
+      setCode(previousCodeRef.current);
+      setCanUndoReset(false);
+      setFeedback({ 
+        type: 'success', 
+        message: '✓ Restored your previous code.' 
+      });
+    }
   };
 
   const handleInsertSolution = () => {
@@ -219,10 +240,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     }
   };
 
-  // Keyboard shortcut & Touch event listener for X-Ray Lens
+  // Keyboard shortcuts (Normalized Ctrl+Enter / Cmd+Enter for Run Code, Alt+X for X-Ray Lens)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && e.key.toLowerCase() === 'x') {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        executeCode();
+      } else if (e.altKey && e.key.toLowerCase() === 'x') {
         setIsXRayOpen(prev => !prev);
       }
     };
@@ -235,7 +259,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('openguide:toggle-xray', handleToggleEvent);
     };
-  }, []);
+  }, [code, currentLesson, state]);
 
   const hasNextLesson = currentLessonIdx < currentModule.lessons.length - 1 || currentModuleIdx < track.modules.length - 1;
   const isCurrentCompleted = completedLessonIds.includes(currentLesson.id);
@@ -667,6 +691,17 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   </button>
                 </Tooltip>
 
+                {canUndoReset && (
+                  <button
+                    onClick={handleUndoReset}
+                    className="px-2 py-0.5 rounded text-amber-500 hover:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer animate-pulse"
+                    title="Undo code reset"
+                  >
+                    <ArrowCounterClockwise size={12} className="rotate-180" />
+                    <span>Undo</span>
+                  </button>
+                )}
+
                 <Tooltip
                   position="bottom"
                   content="Export Jupyter Notebook (.ipynb)"
@@ -706,6 +741,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               <CodeEditor
                 value={code}
                 onChange={setCode}
+                onRun={executeCode}
                 fontSize={fontSize}
                 wordWrap={wordWrap}
               />
@@ -717,6 +753,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 {feedback.type && (
                   <div className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full truncate ${
                     feedback.type === 'success' ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 
+                    feedback.type === 'info' ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20' :
                     'text-rose-400 bg-rose-500/10 border border-rose-500/20'
                   }`}>
                     {feedback.type === 'success' ? <CheckCircle size={14} className="shrink-0" /> : <WarningCircle size={14} className="shrink-0" />}

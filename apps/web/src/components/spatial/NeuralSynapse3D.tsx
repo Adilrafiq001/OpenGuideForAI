@@ -353,14 +353,21 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       if (!containerRef.current) return;
       const newW = containerRef.current.clientWidth;
       const newH = containerRef.current.clientHeight;
-      camera.aspect = newW / newH;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newW, newH);
+      if (newW && newH) {
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      }
     };
     window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    resizeObserver.observe(container);
 
     return () => {
       cancelAnimationFrame(animId);
+      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('mousemove', handleCanvasMouseMove);
       canvas.removeEventListener('click', handleCanvasClick);
@@ -442,7 +449,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       <div ref={containerRef} className="relative w-full h-[480px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]">
         {use3D ? (
           <>
-            <canvas ref={canvasRef} className="w-full h-full block" />
+            <canvas ref={canvasRef} className="w-full h-full block" style={{ touchAction: 'none' }} />
             
             {/* Real-time Hovered / Active Neuron Badge */}
             {hoveredNode && (

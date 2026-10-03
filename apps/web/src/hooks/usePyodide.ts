@@ -25,7 +25,7 @@ export function usePyodide() {
     lastDurationMs: 0,
     memoryMb: 0,
     runtime: 'CPython WASM',
-    version: '0.25.0',
+    version: '0.26.2',
     variables: {},
     lastPayload: null,
     history: []
@@ -164,7 +164,10 @@ export function usePyodide() {
   }, [initWorker]);
 
   const runCode = useCallback((code: string): Promise<{ result: any; stdout: string; durationMs: number }> => {
-    if (state !== 'ready' && state !== 'running') {
+    if (state !== 'ready') {
+      if (state === 'running') {
+        return Promise.reject(new Error('Pyodide engine is currently busy executing code.'));
+      }
       return Promise.reject(new Error('Pyodide engine is not ready.'));
     }
 
