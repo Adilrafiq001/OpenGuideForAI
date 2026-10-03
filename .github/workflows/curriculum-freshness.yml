@@ -28,7 +28,7 @@ jobs:
           echo "MCP schema HTTP status: $MCP_HTTP_STATUS"
 
       - name: Setup Node and Monorepo
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
 
