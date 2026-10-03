@@ -152,6 +152,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       if (passed) {
         setIsChallengePassed(true);
         completeLesson(currentLesson.id, track.id);
+        playTactileSound('success');
+        triggerHaptic('success');
         setFeedback({ 
           type: 'success', 
           message: '✓ Challenge Passed! Output matches expected first-principles criteria.' 
@@ -163,6 +165,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         });
       }
     } catch (e: any) {
+      playTactileSound('error');
+      triggerHaptic('error');
       const errMsg = e.message || 'Execution failed';
       const cleanMsg = errMsg.includes('AssertionError:') 
         ? `Assertion Failed: ${errMsg.split('AssertionError:')[1].trim()}`

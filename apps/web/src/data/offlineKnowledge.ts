@@ -415,6 +415,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     summary: 'Accelerate your workflow with ergonomic keyboard hotkeys.',
     explanation: '• Ctrl + Enter (Cmd + Enter): Execute Python code in Pyodide WASM\n• Alt + X: Toggle floating X-Ray Debug Lens\n• Ctrl + L: Clear terminal output\n• Alt + → / Alt + ←: Navigate to next or previous curriculum lab\n• Escape: Close open modals, drawers, or tools',
     takeaway: 'Keep your hands on the keyboard for uninterrupted developer flow state.'
+  },
+  {
+    id: 'numpy-vector-ops',
+    keywords: ['numpy', 'vector', 'matrix', 'dot product', 'linalg', 'norm', 'cosine', 'multiply', 'array', 'shape', 'reshape', 'linear algebra'],
+    title: 'NumPy Vector & Linear Algebra Reference',
+    category: 'math',
+    summary: 'Essential NumPy primitives for vector spaces, cosine similarity, and matrix projections in Pyodide WASM.',
+    explanation: 'Pyodide includes full C-optimized NumPy compiled to WebAssembly. Key vector operations used across Tracks 1 to 4:\n• np.dot(a, b): Inner dot product $\\sum a_i b_i$\n• np.linalg.norm(a): L2 Euclidean length $\\sqrt{\\sum a_i^2}$\n• Cosine Similarity: np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))\n• L2 Normalization: a / np.linalg.norm(a) turning dot product into cosine similarity directly\n• np.matmul(A, B) or A @ B: Matrix multiplication for attention projection $Q K^T$\n• np.argmax(scores) / np.argsort(scores)[::-1]: Top-K retrieval ranking.',
+    codeSnippet: 'import numpy as np\n\n# Create 3D semantic vectors\nu = np.array([0.2, 0.8, 0.5])\nv = np.array([0.1, 0.9, 0.4])\n\n# Compute cosine similarity\ncosine_sim = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))\nprint(f"Cosine Similarity: {cosine_sim:.4f}")',
+    takeaway: 'Vector normalization eliminates magnitude bias, enabling lightning-fast inner-product semantic search.'
   }
 ];
 
