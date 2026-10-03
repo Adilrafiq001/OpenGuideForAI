@@ -37,7 +37,7 @@ export function LanguageSelector() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
-        aria-label={`${currentLang.code.toUpperCase()} — Select interface language`}
+        aria-label="Select interface language"
         className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group"
       >
         <Globe size={14} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
