@@ -241,20 +241,23 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                   ) : (
                     <span className="content">
                       <span className="text state-1">
-                        {state1Chars.map((item) => (
-                          <span
-                            key={item.idx}
-                            data-label={item.char}
-                            style={{
-                              ['--i' as any]: item.idx,
-                              marginRight: item.margin ? '5px' : undefined
-                            }}
-                          >
-                            {item.char}
-                          </span>
-                        ))}
+                        <span className="sr-only">Launch Track 0</span>
+                        <span aria-hidden="true" className="contents">
+                          {state1Chars.map((item) => (
+                            <span
+                              key={item.idx}
+                              data-label={item.char}
+                              style={{
+                                ['--i' as any]: item.idx,
+                                marginRight: item.margin ? '5px' : undefined
+                              }}
+                            >
+                              {item.char}
+                            </span>
+                          ))}
+                        </span>
                       </span>
-                      <span className="text state-2">
+                      <span className="text state-2" aria-hidden="true">
                         {state2Chars.map((item) => (
                           <span
                             key={item.idx}

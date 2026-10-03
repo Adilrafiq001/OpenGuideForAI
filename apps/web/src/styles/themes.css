@@ -88,21 +88,21 @@ html[data-theme="claude-light"], [data-theme="claude-light"] {
   --bg-primary: #faf6f0;
   --bg-secondary: #f0e8dc;
   --bg-tertiary: #e3d7c5;
-  --border-color: rgba(194, 65, 12, 0.22);
+  --border-color: rgba(154, 52, 18, 0.22);
   --text-primary: #1e140d;
   --text-secondary: #63391b;
-  --accent: #c2410c;
-  --accent-transparent: rgba(194, 65, 12, 0.18);
+  --accent: #9a3412;
+  --accent-transparent: rgba(154, 52, 18, 0.18);
 
   --color-primary: #faf6f0;
   --color-secondary: #f0e8dc;
   --color-tertiary: #e3d7c5;
-  --color-border: rgba(194, 65, 12, 0.22);
+  --color-border: rgba(154, 52, 18, 0.22);
   --color-text-primary: #1e140d;
   --color-text-secondary: #63391b;
-  --color-accent: #c2410c;
+  --color-accent: #9a3412;
   --color-accent-text: #ffffff;
-  --color-accent-trans: rgba(194, 65, 12, 0.18);
+  --color-accent-trans: rgba(154, 52, 18, 0.18);
 }
 
 /* 4. Linear Precision Gray (Linear Quartz & Precision Indigo) */
