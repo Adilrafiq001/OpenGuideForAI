@@ -20,6 +20,7 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ isDark, onToggle, clas
         checked={isDark} 
         onChange={onToggle}
         aria-checked={isDark}
+        aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} Themes`}
         role="switch"
       />
       <div className="theme-switch__container">

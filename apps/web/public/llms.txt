@@ -11,13 +11,19 @@ OpenGuide is a 100% free, local-first interactive AI engineering curriculum and 
 - **20 Calibrated Design Themes:** 10 Dark and 10 Light themes meeting WCAG AAA color contrast ratios across OLED, Nordic, Cyberpunk, and Pure Paper palettes.
 
 ## Curriculum Tracks
-1. **Track 0: Absolute Zero (Foundations):** Python syntax, memory models, tensor manipulation, and algorithmic thinking for machine learning.
-2. **Track 1: Vector Space & Embeddings:** Mathematical geometry of embeddings, cosine distance, vector search, dimensionality reduction.
-3. **Track 2: RAG & Autonomous Agents:** Retrieval-Augmented Generation, chunking, re-ranking, Model Context Protocol (MCP) JSON-RPC tooling.
-4. **Track 3: Production Evals & Security:** LLM evaluation suites, prompt injection defense, adversarial testing, hallucination mitigation.
-5. **Track 4: Frontier Attention & Systems:** Transformer self-attention, rotary position embeddings (RoPE), KV caching, speculative decoding.
+- [Track 0: Absolute Zero (Foundations)](https://openguideforai.dpdns.org/track/0): Python syntax, memory models, tensor manipulation, and algorithmic thinking for machine learning.
+- [Track 1: Vector Space & Embeddings](https://openguideforai.dpdns.org/track/1): Mathematical geometry of embeddings, cosine distance, vector search, dimensionality reduction.
+- [Track 2: RAG & Autonomous Agents](https://openguideforai.dpdns.org/track/2): Retrieval-Augmented Generation, chunking, re-ranking, Model Context Protocol (MCP) JSON-RPC tooling.
+- [Track 3: Production Evals & Security](https://openguideforai.dpdns.org/track/3): LLM evaluation suites, prompt injection defense, adversarial testing, hallucination mitigation.
+- [Track 4: Frontier Attention & Systems](https://openguideforai.dpdns.org/track/4): Transformer self-attention, rotary position embeddings (RoPE), KV caching, speculative decoding.
 
-## Official Links
-- Web Application: https://openguideforai.dpdns.org/
-- GitHub Repository: https://github.com/openguideforai/OpenGuideForAI
-- License: AGPL-3.0 (Software) & CC BY-NC-SA 4.0 (Curriculum) — Copyright (c) Adil Rafiq Dar (ARD)
+## Interactive Labs & Tools
+- [Spatial Holodeck](https://openguideforai.dpdns.org/holodeck): 3D vector manifold cluster slicer and spatial neural topology visualizer.
+- [Synapse Lounge](https://openguideforai.dpdns.org/synapse): Interactive vector dot-product, neuron activation, and attention temperature playground.
+- [Learner Portfolio](https://openguideforai.dpdns.org/portfolio): W3C verifiable credentials, achievement ledger, and cryptographic identity.
+- [Sitemap](https://openguideforai.dpdns.org/sitemap.xml): Complete machine-readable route manifest.
+
+## Official Resources & Source
+- [OpenGuide Web Application](https://openguideforai.dpdns.org/): Live production studio.
+- [GitHub Repository](https://github.com/openguideforai/OpenGuideForAI): Full open source codebase, test suite, and community governance.
+- [Software License](https://github.com/openguideforai/OpenGuideForAI/blob/main/LICENSE): GNU Affero General Public License v3.0 (AGPL-3.0) and CC BY-NC-SA 4.0.

@@ -44,6 +44,7 @@ type DockItemProps = {
   distance: number;
   baseItemSize: number;
   magnification: number;
+  ariaLabel?: string;
 };
 
 function DockItem({
@@ -54,7 +55,8 @@ function DockItem({
   spring,
   distance,
   magnification,
-  baseItemSize
+  baseItemSize,
+  ariaLabel
 }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isHovered = useMotionValue(0);
@@ -94,6 +96,7 @@ function DockItem({
         className={`relative flex items-center justify-center rounded-full bg-[var(--color-primary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] border shadow-md cursor-pointer hover:border-[var(--color-accent)] hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${className}`}
         tabIndex={0}
         role="button"
+        aria-label={ariaLabel}
         aria-haspopup="true"
       >
         {Children.map(children, child =>
@@ -187,6 +190,7 @@ export function MagnificationDock({
             distance={distance}
             magnification={magnification}
             baseItemSize={baseItemSize}
+            ariaLabel={typeof item.label === 'string' ? item.label : undefined}
           >
             <DockIcon>{item.icon}</DockIcon>
             <DockLabel>{item.label}</DockLabel>

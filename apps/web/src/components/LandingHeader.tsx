@@ -327,7 +327,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             onClick={onOpenThemes}
             data-testid="header-theme-settings-btn"
             className="flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
-            aria-label="Themes and Studio Settings"
+            aria-label={`${currentThemeInfo.name} — Themes and Studio Settings`}
           >
             <div 
               className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
@@ -382,7 +382,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           <button
             onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
             className="flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-            aria-label="Select Learning Track"
+            aria-label="Tracks — Select Learning Track"
           >
             <BookOpen size={14} className="text-[var(--color-accent)]" />
             <span>Tracks ▾</span>

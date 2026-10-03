@@ -498,6 +498,7 @@ export function SynapseLounge() {
                       min="0"
                       max="360"
                       value={probeAngle}
+                      aria-label="Probe Vector Angle"
                       onChange={(e) => {
                         setProbeAngle(Number(e.target.value));
                       }}
@@ -659,6 +660,7 @@ export function SynapseLounge() {
                         max="2"
                         step="0.5"
                         value={neuronWeights.w1}
+                        aria-label="Neuron Weight 1 (W1)"
                         onChange={(e) => {
                           setNeuronWeights(nw => ({ ...nw, w1: Number(e.target.value) }));
                         }}
@@ -698,6 +700,7 @@ export function SynapseLounge() {
                         max="2"
                         step="0.5"
                         value={neuronWeights.w2}
+                        aria-label="Neuron Weight 2 (W2)"
                         onChange={(e) => {
                           setNeuronWeights(nw => ({ ...nw, w2: Number(e.target.value) }));
                         }}
@@ -737,6 +740,7 @@ export function SynapseLounge() {
                         max="2"
                         step="0.5"
                         value={neuronWeights.bias}
+                        aria-label="Activation Bias (B)"
                         onChange={(e) => {
                           setNeuronWeights(nw => ({ ...nw, bias: Number(e.target.value) }));
                         }}
@@ -913,6 +917,7 @@ export function SynapseLounge() {
                       max="2.5"
                       step="0.05"
                       value={temperature}
+                      aria-label="Softmax Temperature (τ)"
                       onChange={(e) => {
                         setTemperature(Number(e.target.value));
                       }}
