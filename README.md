@@ -5,10 +5,10 @@
 </a>
 
 # OpenGuide.
-### OWN THE INTELLIGENCE.
+### Understand the mind behind the machine.
 
-> **Build artificial intelligence from first principles. Directly inside your web browser.**  
-> **100% Free • In-Browser Python WebAssembly • Zero Cloud Bills • Zero Tracking**
+> **A sovereign, browser-native studio engineered to demystify artificial intelligence—turning complex black boxes into intuitive, hands-on understanding through pure code execution.**  
+> **Crafted for every curious human on Earth—from a cracked phone glowing under a single late-night lightbulb to an engineering workstation with a screen reader. 100% Free • Zero Cloud Invoices • Sovereign in Your Browser.**
 
 <p align="center">
   <a href="https://openguideforai.dpdns.org">
@@ -41,31 +41,31 @@
 
 ---
 
-### [Launch Studio Online](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Quickstart](#get-started-in-60-seconds) &nbsp;•&nbsp; [Curriculum](#curriculum-tracks) &nbsp;•&nbsp; [Technical Explainer](explainer.md) &nbsp;•&nbsp; [Desktop App](#install-as-desktop--mobile-app) &nbsp;•&nbsp; [Shortcuts](#power-shortcuts)
+### [Launch Studio Online](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [The Experience](#what-you-experience) &nbsp;•&nbsp; [Curriculum](#curriculum-tracks) &nbsp;•&nbsp; [Technical Explainer](explainer.md) &nbsp;•&nbsp; [Quickstart](#get-started-in-60-seconds) &nbsp;•&nbsp; [Shortcuts](#power-shortcuts)
 
 </div>
 
 ---
 
-## What is OpenGuide?
+## What You Experience
 
-OpenGuide is a sovereign artificial intelligence engineering laboratory that runs entirely inside your web browser. It teaches machine learning from mathematical foundations with zero software installation and zero cloud costs.
+OpenGuide is not a cloud service or a toy tutorial. It is a browser-native laboratory where you deconstruct, examine, and understand artificial intelligence through real code execution.
 
-| Core Feature | Technical Capability | Benefit to Learner |
+| Pillar | What Happens Inside | Why It Matters |
 |---|---|---|
-| **In-Browser CPython 3.12** | Runs real Python through WebAssembly (Pyodide v0.26) in a background Web Worker. | Zero setup. No Python, Anaconda, or Docker installation required. |
-| **First-Principles Curriculum** | Construct tokenizers, vector math, self-attention, and autonomous agents from scratch. | Understand the true mechanics instead of memorizing library wrappers. |
-| **3D Spatial Manifolds** | Three.js WebGL visualizer projects high-dimensional embeddings into 3D space. | Observe vector clustering and cosine similarity geometrically in real time. |
-| **Zero Cloud Bills ($0 Rule)** | 100% client-side computing. Data persists locally in browser IndexedDB. | Complete data privacy. Zero subscription fees. Zero unexpected cloud invoices. |
-| **Offline PWA Engine** | Progressive Web App caches runtime and modules via Service Worker (`sw.js`). | Code and run exercises anywhere without active internet access. |
+| 🎓 **Pure Education** | Learn the true mathematics: write Byte-Pair tokenizers, vector dot products, and self-attention heads from scratch. | You gain permanent conceptual understanding instead of memorizing temporary library wrappers. |
+| ⚡ **Instant Execution** | Real CPython 3.12 executes in your browser via WebAssembly (Pyodide v0.26) inside a dedicated Web Worker. | Zero setup. No Python, Anaconda, or Docker environment required on your machine. |
+| 🪐 **3D Spatial Manifolds** | An interactive Three.js WebGL visualizer maps high-dimensional vector spaces into physical coordinates with harmonic audio feedback. | You see and hear how language models cluster words and calculate semantic distance. |
+| 🛡️ **Sovereign & Private** | 100% client-side computing. Data persists locally in browser IndexedDB. Zero telemetry. | Complete data privacy. Zero subscription fees. Zero unexpected cloud invoices. |
+| 📱 **Offline PWA** | Progressive Web App caches the curriculum and WebAssembly engine on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
 
-> 📖 **Deep Technical Specification:** For full architectural diagrams, Web Worker message schemas, and watchdog memory limits, see the [ASD-STE100 Technical Explainer](explainer.md).
+> 📖 **Deep Engineering Specification:** For the complete system architecture, execution pipeline, 15-second watchdog supervisor, and progressive disclosure design, read the [ASD-STE100 Technical Explainer](explainer.md).
 
 ---
 
 ## Curriculum Tracks
 
-Five rigorous learning tracks consisting of **45 interactive, runnable laboratories**:
+Five sequential learning tracks comprising **45 interactive, runnable laboratories**:
 
 ```mermaid
 graph LR
@@ -78,33 +78,33 @@ graph LR
     T0 --> T1 --> T2 --> T3 --> T4
 ```
 
-| Track | Labs | Core Principle Taught | Capstone Project |
+| Track | Labs | Core Principle | Capstone Boss Project |
 |:---|:---:|:---|:---|
-| **Track 0: Absolute Zero** | 9 | Python syntax via intuitive kitchen and map metaphors | Byte-Pair Encoding (BPE) tokenizer from scratch |
-| **Track 1: Vector Spaces** | 9 | Spatial geometry, dot products, and semantic distance | In-memory `SemanticSearchEngine` indexing documents |
+| **Track 0: Absolute Zero** | 9 | Python syntax taught through intuitive real-world metaphors | Build a Byte-Pair Encoding (BPE) tokenizer from scratch |
+| **Track 1: Vector Spaces** | 9 | High-dimensional geometry, dot products, and semantic density | In-memory `SemanticSearchEngine` indexing documents |
 | **Track 2: RAG & Agents** | 9 | Thought $\rightarrow$ Action $\rightarrow$ Observation state machines | Autonomous Research Agent with multi-hop reasoning |
 | **Track 3: Evals & Guardrails** | 9 | Adversarial testing, prompt injection, and safety rules | Synthetic evaluation harness with WebGPU inference |
 | **Track 4: Frontier Systems** | 9 | Scaled dot-product attention, KV-cache math, and RoPE | Transformer Attention Dissection & DPO Loss Engine |
 
 ---
 
-## Who OpenGuide Serves
+## Who We Engineered This For
 
-| Profile | Real-World Need | How OpenGuide Delivers |
+| Learner Profile | Real-World Context | What OpenGuide Delivers |
 |---|---|---|
-| **The Resource-Constrained Learner** | Operates on entry-level hardware or metered data connections. | 100% in-browser WebAssembly. Complete offline PWA capability with zero cost. |
-| **The Systems Engineer** | Experienced programmer transitioning into AI. Rejects black boxes. | Raw mathematical implementations (NumPy, self-attention, MCP) without library wrappers. |
-| **The Career Candidate** | Needs verifiable proof of competency for employers or academic review. | Exports standard Jupyter Notebooks (`.ipynb`) and W3C Verifiable Credentials (SHA-256). |
-| **The Privacy-First Practitioner** | Subject to strict data governance. Cannot send code to external clouds. | Zero telemetry. Zero remote servers. All code and notes stay inside local browser memory. |
+| **The Resource-Constrained Learner** | Operates on entry-level hardware or metered data connections. | 100% in-browser WebAssembly. Full offline PWA capability with zero cost. |
+| **The Systems Engineer** | Seasoned programmer transitioning into AI. Rejects black-box abstractions. | Transparent mathematical code (NumPy, self-attention, MCP) without commercial wrappers. |
+| **The Student & Career Candidate** | Needs verifiable proof of competency for academic or professional review. | Exports standard Jupyter Notebooks (`.ipynb`) and signed W3C Verifiable Credentials. |
+| **The Privacy-Conscious Practitioner** | Subject to strict data security rules. Prohibited from cloud code transmission. | Zero telemetry. Zero remote servers. All code remains strictly inside local browser memory. |
 
 ---
 
 ## Get Started in 60 Seconds
 
-### Option A: Launch Directly in Browser (No Installation)
-Visit **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** and click **Launch Track 0**. The CPython WebAssembly runtime initializes in under a second.
+### Launch in Browser (No Installation)
+Visit **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** and click **Launch Track 0**. The CPython WebAssembly runtime initializes locally in under a second.
 
-### Option B: Run Locally via Git
+### Run Locally via Git
 ```bash
 # 1. Enable Corepack and clone the repository
 corepack enable
@@ -118,7 +118,7 @@ yarn dev
 Open `http://localhost:5173` in your browser.
 
 #### Mobile LAN Testing
-To test on a physical smartphone or tablet connected to your local Wi-Fi:
+To test on a physical smartphone or tablet connected to your local network:
 ```bash
 yarn dev --host
 ```
@@ -127,13 +127,13 @@ yarn dev --host
 
 ## Install as Desktop & Mobile App
 
-OpenGuide is an **Installable Progressive Web App (PWA)** that operates like a native application:
+OpenGuide functions as an **Installable Progressive Web App (PWA)** with native window controls:
 
-* **Windows:** In Chrome or Edge, click the **Install** computer icon in the address bar. An application shortcut is added to your Desktop and Start Menu.
+* **Windows:** In Chrome or Edge, click the **Install** computer icon in the address bar. A native shortcut is added to your Desktop and Start Menu.
 * **macOS:** In Safari, click **File** $\rightarrow$ **Add to Dock**. In Chrome/Edge, click **Install** in the omnibox.
-* **Linux:** Click **Install** in Chromium or Chrome. An OpenGuide `.desktop` entry is created automatically in your application launcher.
+* **Linux:** Click **Install** in Chromium or Chrome. An OpenGuide `.desktop` entry is created automatically in your application drawer.
 * **iOS / Android:** Tap **Share** $\rightarrow$ **Add to Home Screen** (iOS) or **Install app** (Android) for full-screen touch execution.
-* **Air-Gapped Offline Mode:** The Service Worker stores all lessons, visualizers, and the CPython WebAssembly engine locally. You can study on trains, flights, or remote locations with zero connectivity.
+* **Air-Gapped Offline Mode:** The Service Worker stores all lessons, visualizers, and the CPython WebAssembly engine locally. You can study on flights, trains, or off-grid locations with zero connectivity.
 
 ---
 
@@ -144,7 +144,7 @@ OpenGuide is an **Installable Progressive Web App (PWA)** that operates like a n
 | **`Cmd + K` / `Ctrl + K`** | Command Palette | Fuzzy search across all 45 labs, 24 themes, 12 languages, and studio tools. |
 | **`Ctrl + Enter`** | Code Runner | Instantly compiles and executes active Python code in the Web Worker. |
 | **`Alt + X`** | X-Ray Debug Lens | Inspects real-time WebAssembly memory heap, AST nodes, and IndexedDB tables. |
-| **Touch Ribbon** | Mobile Editor | Provides single-tap access to syntax keys (`Tab`, `:`, `( )`, `[ ]`, `def`, `assert`). |
+| **Touch Ribbon** | Mobile Editor | Single-tap access to syntax keys (`Tab`, `:`, `( )`, `[ ]`, `def`, `assert`). |
 | **`.ipynb` Export** | Notebook Creator | Downloads verified lab solutions as standard Jupyter Notebooks (nbformat 4.5). |
 | **Harmonic Audio** | 3D Holodeck | Synthesizes harmonic chord frequencies proportional to vector cosine similarity. |
 
