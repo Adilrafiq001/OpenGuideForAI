@@ -5,11 +5,10 @@
 </a>
 
 # OpenGuide.
-### SOUVERÄNES KI-ENGINEERING-STUDIO DIREKT IM BROWSER
+### Verstehe den Geist hinter der Maschine.
 
-> **Bildung stärkt die Menschheit, und menschliches Wissen muss frei bleiben. Intelligenz darf niemals hinter einer 300-Dollar-Cloud-Rechnung, elitären Paywalls oder geschlossenen Konzernstrukturen eingesperrt werden.**  
-> **Vom zersprungenen 40-Dollar-Smartphone unter schwachem Licht bis zur modernen Multi-Monitor-Workstation mit Screenreader: OpenGuide bringt ein souveränes, praxiserprobtes KI-Engineering-Labor direkt in Ihren Browser.**  
-> **100% Kostenlos • Python WebAssembly im Browser • Null Einrichtung • Null Telemetrie • Für immer unabhängig.**
+> **Ein souveränes, browsernatives Studio zur Entmystifizierung künstlicher Intelligenz – es verwandelt komplexe Blackboxes durch direkte Codeausführung in intuitives, greifbares Verständnis.**  
+> **Geschaffen für jeden neugierigen Menschen auf der Erde – vom rissigen Smartphone-Bildschirm unter einer einsamen Glühbirne bis zur barrierefreien Ingenieur-Workstation mit Screenreader. 100% Kostenlos • Keine Cloud-Rechnungen • Souverän in Deinem Browser.**
 
 <p align="center">
   <a href="https://openguideforai.dpdns.org">

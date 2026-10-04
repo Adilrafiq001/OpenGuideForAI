@@ -5,11 +5,10 @@
 </a>
 
 # OpenGuide.
-### STUDIO SOVRANO DI INGEGNERIA AI DIRETTAMENTE NEL BROWSER
+### Comprendi la mente dietro la macchina.
 
-> **L'istruzione emancipa l'umanità, e la conoscenza umana deve rimanere libera. L'intelligenza non deve mai essere rinchiusa dietro una fattura cloud da 300 $, un pedaggio elitario o silos aziendali proprietari.**  
-> **Da uno smartphone scheggiato da 40 $ sotto una luce soffusa a una workstation multi-monitor con screen reader assistivo: OpenGuide porta un laboratorio sovrano di ingegneria AI di livello industriale direttamente nel tuo browser.**  
-> **100% Gratuito • Python WebAssembly nel Browser • Zero Configurazione • Zero Telemetria • Sovrano per Sempre.**
+> **Uno studio sovrano e nativo nel browser progettato per demistificare l'intelligenza artificiale — trasformando complesse scatole nere in una comprensione intuitiva e pratica attraverso l'esecuzione diretta del codice.**  
+> **Creato per ogni mente curiosa sulla Terra: da uno schermo rotto che brilla sotto una lampadina notturna, a una workstation di ingegneria con screen reader. 100% Gratuito • Zero Bollette Cloud • Sovrano nel Tuo Browser.**
 
 <p align="center">
   <a href="https://openguideforai.dpdns.org">

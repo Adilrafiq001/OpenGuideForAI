@@ -5,11 +5,10 @@
 </a>
 
 # OpenGuide.
-### ESTUDIO SOBERANO DE INGENIERÍA EN IA EN EL NAVEGADOR
+### Comprende la mente detrás de la máquina.
 
-> **La educación empodera a la humanidad, y el conocimiento humano debe seguir siendo libre. La inteligencia nunca debe estar restringida tras una factura en la nube de $300, un muro de pago elitista o silos corporativos cerrados.**  
-> **Desde un teléfono inteligente de $40 con pantalla rota bajo una bombilla tenue, hasta una estación de ingeniería multipantalla con lector de pantalla asistivo: OpenGuide sitúa un laboratorio soberano de ingeniería en IA de nivel de producción directamente dentro de tu navegador.**  
-> **100% Gratuito. Python WebAssembly en el Navegador. Cero Configuración. Cero Telemetría. Soberano para Siempre.**
+> **Un estudio soberano y nativo del navegador diseñado para desmitificar la inteligencia artificial: transformando complejas cajas negras en comprensión intuitiva y práctica mediante la ejecución directa de código.**  
+> **Diseñado para cada ser curioso de la Tierra: desde un teléfono con la pantalla rota iluminado bajo una solitaria bombilla nocturna, hasta una estación de ingeniería con lector de pantalla. 100% Gratuito • Cero Facturas en la Nube • Soberano en tu Navegador.**
 
 <p align="center">
   <a href="https://openguideforai.dpdns.org">
