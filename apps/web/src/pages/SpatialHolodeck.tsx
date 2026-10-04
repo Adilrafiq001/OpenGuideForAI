@@ -115,10 +115,10 @@ export function SpatialHolodeck() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 pb-44 space-y-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 pb-64 md:pb-72 space-y-5">
         
         {/* Hardware Telemetry Bar */}
-        <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+        <div className="py-2.5 px-4 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)]">
               <Cpu size={16} />

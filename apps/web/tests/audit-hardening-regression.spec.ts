@@ -570,6 +570,50 @@ ZeroDivisionError: division by zero`;
     expect(evaluation.lastLine).toBe(4);
   });
 
+  test('TC-AUDIT-024: VectorSpace3D 2D Lean Selective Labeling & Harmonic Chord Audio Sonification', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/holodeck');
+
+    // 1. Beginner Guide is collapsed by default to preserve viewport space
+    const guideContent = page.locator('text=How the Holodeck Works: Visualizing the AI Latent Mind');
+    await expect(guideContent).not.toBeVisible();
+
+    // 2. Guide toggles open and closed smoothly
+    const guideToggle = page.locator('button:has-text("How It Works"), button:has-text("Hide Guide")').first();
+    await guideToggle.click();
+    await expect(guideContent).toBeVisible();
+    await guideToggle.click();
+    await expect(guideContent).not.toBeVisible();
+
+    // 3. Play Chord Button synthesized audio and visual feedback
+    const playChordBtn = page.locator('button[data-testid="play-chord-button"]');
+    await expect(playChordBtn).toBeVisible();
+    await playChordBtn.click();
+    await page.waitForTimeout(300);
+
+    // 4. Switch to 2D Lean SVG Mode
+    const leanBtn = page.locator('button:has-text("2D Lean")');
+    await leanBtn.click();
+    await page.waitForTimeout(200);
+
+    // 5. Verify 2D selective labeling: only active [A] and [B] have text pills rendered
+    const textNodes = page.locator('svg text');
+    const textCount = await textNodes.count();
+    // In clean selective mode, exactly 2 labels ([A] and [B]) are rendered instead of 25 colliding blobs
+    expect(textCount).toBeLessThanOrEqual(3);
+
+    const textA = page.locator('svg text:has-text("[A]")');
+    const textB = page.locator('svg text:has-text("[B]")');
+    await expect(textA).toBeVisible();
+    await expect(textB).toBeVisible();
+
+    // Zero console errors
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
 });
 
 

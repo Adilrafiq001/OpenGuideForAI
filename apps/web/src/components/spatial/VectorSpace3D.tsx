@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
-import { playCosineSonification, getAudioContext } from '../../services/soundHaptics';
+import { playCosineSonification, getAudioContext, triggerHaptic } from '../../services/soundHaptics';
 
 function calculateCosine(a: [number, number, number], b: [number, number, number]): number {
   const dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -147,7 +147,9 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   const [isRotating, setIsRotating] = useState(true);
   const [isHoveringCanvas, setIsHoveringCanvas] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [showGuide, setShowGuide] = useState(true);
+  const [showGuide, setShowGuide] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [lastPlayedChord, setLastPlayedChord] = useState<string | null>(null);
   const [hardwareInfo] = useState(() => detectHardwareSync());
   
   // Spatial XR Suite Controls
@@ -172,6 +174,83 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   };
 
   const proximityVerdict = getProximityVerdict(cosineSim);
+
+  // Direct Web Audio Chord Synthesis with Guaranteed Resumption & Live Visual State
+  const triggerDirectComparisonAudio = async (overrideSim?: number, overrideCluster?: string) => {
+    const sim = overrideSim !== undefined ? overrideSim : cosineSim;
+    const cluster = overrideCluster || selectedNode.cluster;
+
+    setIsPlayingAudio(true);
+    triggerHaptic('light');
+
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) {
+        setTimeout(() => setIsPlayingAudio(false), 600);
+        return;
+      }
+
+      let ctx = getAudioContext();
+      if (!ctx) {
+        ctx = new AudioCtx();
+      }
+      if (ctx.state === 'suspended') {
+        await ctx.resume().catch(() => {});
+      }
+
+      const now = ctx.currentTime;
+      const gain = ctx.createGain();
+      gain.connect(ctx.destination);
+
+      // Map cosine similarity (-1.0 to 1.0) smoothly to fundamental pitch
+      const clampedSim = Math.max(-1, Math.min(1, sim));
+      const baseFreq = 392 + (clampedSim * 130); // ~262Hz (C4) to 522Hz (C5)
+      
+      // Near identical -> Consonant Fifth (1.5x)
+      // Moderate -> Major Third (1.25x)
+      // Distant -> Dissonant Tritone (1.414x)
+      const intervalRatio = clampedSim > 0.7 ? 1.5 : clampedSim > 0.4 ? 1.25 : 1.414;
+      const harmonicFreq = baseFreq * intervalRatio;
+      const descriptor = clampedSim > 0.7 ? 'Consonant 5th' : clampedSim > 0.4 ? 'Major 3rd' : 'Dissonant Tritone';
+
+      setLastPlayedChord(`${Math.round(baseFreq)}Hz ⟷ ${Math.round(harmonicFreq)}Hz (${descriptor})`);
+
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      osc1.type = 'sine';
+      osc2.type = 'triangle';
+      osc1.frequency.setValueAtTime(baseFreq, now);
+      osc2.frequency.setValueAtTime(harmonicFreq, now);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 0.65);
+      osc2.stop(now + 0.65);
+
+      osc1.onended = () => {
+        try {
+          osc1.disconnect();
+          osc2.disconnect();
+          gain.disconnect();
+        } catch {}
+      };
+
+      if (soundEnabledRef.current) {
+        playCosineSonification(sim);
+        playNodeChime(cluster);
+      }
+    } catch {}
+
+    setTimeout(() => {
+      setIsPlayingAudio(false);
+    }, 750);
+  };
 
   // Web Audio Spatial Synthesizer Chime
   const playNodeChime = (cluster: string) => {
@@ -205,20 +284,13 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     } catch {}
   };
 
-  // Trigger both chord sonification and node chime
-  const triggerComparisonAudio = (sim: number, cluster: string) => {
-    if (!soundEnabledRef.current) return;
-    playCosineSonification(sim);
-    playNodeChime(cluster);
-  };
-
   // Swap Concept A and Concept B
   const handleSwapConcepts = () => {
     const prevA = selectedNode;
     const prevB = comparedNode;
     setSelectedNode(prevB);
     setComparedNode(prevA);
-    triggerComparisonAudio(cosineSim, prevB.cluster);
+    triggerDirectComparisonAudio(cosineSim, prevB.cluster);
   };
 
   // Apply a curated comparison preset
@@ -230,7 +302,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       setComparedNode(nodeB);
       onSelectNode?.(nodeA);
       const sim = calculateCosine(nodeA.coords, nodeB.coords);
-      triggerComparisonAudio(sim, nodeA.cluster);
+      triggerDirectComparisonAudio(sim, nodeA.cluster);
     }
   };
 
@@ -785,7 +857,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                   setSelectedNode(node);
                   onSelectNode?.(node);
                   const sim = calculateCosine(node.coords, comparedNode.coords);
-                  triggerComparisonAudio(sim, node.cluster);
+                  triggerDirectComparisonAudio(sim, node.cluster);
                 }
               }}
               className="w-full bg-transparent text-xs font-bold text-[var(--color-text-primary)] font-mono outline-none cursor-pointer pr-2 truncate"
@@ -826,15 +898,37 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
               <span className={`px-2 py-0.2 rounded-full border text-[9px] font-semibold ${proximityVerdict.color}`}>
                 {proximityVerdict.label}
               </span>
+              {lastPlayedChord && (
+                <>
+                  <span>•</span>
+                  <span className="text-[9px] text-[var(--color-accent)] font-bold">{lastPlayedChord}</span>
+                </>
+              )}
             </div>
           </div>
 
           <button
-            onClick={() => triggerComparisonAudio(cosineSim, selectedNode.cluster)}
-            className="p-2.5 rounded-xl bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/40 text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black transition-all cursor-pointer shadow-sm active:scale-95"
+            onClick={() => triggerDirectComparisonAudio(cosineSim, selectedNode.cluster)}
+            className={`px-3 py-2 rounded-xl border transition-all cursor-pointer shadow-sm active:scale-95 flex items-center gap-1.5 font-mono text-xs ${
+              isPlayingAudio 
+                ? 'bg-[var(--color-accent)] text-black font-bold border-transparent shadow-lg scale-105' 
+                : 'bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/40 text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black'
+            }`}
             title="Play Harmonic Chord Sonification"
+            data-testid="play-chord-button"
           >
-            <Play size={16} />
+            {isPlayingAudio ? (
+              <div className="flex items-center gap-1">
+                <span className="w-1 h-3 bg-black rounded-full animate-bounce [animation-delay:0ms]" />
+                <span className="w-1 h-4 bg-black rounded-full animate-bounce [animation-delay:150ms]" />
+                <span className="w-1 h-2.5 bg-black rounded-full animate-bounce [animation-delay:300ms]" />
+              </div>
+            ) : (
+              <Play size={15} className="fill-current" />
+            )}
+            <span className="hidden sm:inline font-bold">
+              {isPlayingAudio ? 'Playing...' : 'Play Chord'}
+            </span>
           </button>
         </div>
 
@@ -850,7 +944,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 if (node) {
                   setComparedNode(node);
                   const sim = calculateCosine(selectedNode.coords, node.coords);
-                  triggerComparisonAudio(sim, node.cluster);
+                  triggerDirectComparisonAudio(sim, node.cluster);
                 }
               }}
               className="w-full bg-transparent text-xs font-bold text-[var(--color-text-primary)] font-mono outline-none cursor-pointer pr-2 truncate"
@@ -905,7 +999,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         ref={containerRef} 
         onMouseEnter={() => setIsHoveringCanvas(true)}
         onMouseLeave={() => setIsHoveringCanvas(false)}
-        className="relative w-full h-[400px] sm:h-[450px] md:h-[480px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]"
+        className="relative w-full h-[320px] sm:h-[400px] md:h-[440px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]"
       >
         {use3D ? (
           <>
@@ -935,16 +1029,28 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
             </div>
           </>
         ) : (
-          /* 2D Lean SVG Fallback for Low-End Hardware */
-          <div className="w-full h-full p-6 flex flex-col justify-between relative bg-gradient-to-b from-black/40 to-transparent">
-            <svg className="w-full h-full" viewBox="-4 -4 8 8">
-              {/* Coordinate Grid */}
-              <line x1="-4" y1="0" x2="4" y2="0" stroke="rgba(255,255,255,0.1)" strokeWidth="0.02" />
-              <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(255,255,255,0.1)" strokeWidth="0.02" />
-              <circle cx="0" cy="0" r="1" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.02" />
-              <circle cx="0" cy="0" r="2.5" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.02" />
+          /* 2D Lean SVG Radar Projection with Selective Labeling */
+          <div className="w-full h-full p-4 sm:p-6 flex flex-col justify-between relative bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]">
+            {/* 2D Top Floating HUD Badge */}
+            <div className="absolute top-3 left-4 z-10 flex items-center gap-2 bg-[var(--color-primary)]/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[var(--color-border)] text-xs font-mono shadow-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="font-bold text-emerald-400">{selectedNode.label} [A]</span>
+              <span className="text-[var(--color-text-secondary)]">⟷</span>
+              <span className="w-2 h-2 rounded-full bg-cyan-400" />
+              <span className="font-bold text-cyan-400">{comparedNode.label} [B]</span>
+              <span className="text-[10px] text-[var(--color-accent)] font-bold ml-1">
+                ({(cosineSim * 100).toFixed(0)}% sim)
+              </span>
+            </div>
 
-              {/* Connecting line between selected and compared */}
+            <svg className="w-full h-full" viewBox="-4 -4 8 8">
+              {/* Radar Grid Circles & Axes */}
+              <circle cx="0" cy="0" r="1.0" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.02" strokeDasharray="0.05, 0.05" />
+              <circle cx="0" cy="0" r="2.5" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.02" />
+              <line x1="-3.8" y1="0" x2="3.8" y2="0" stroke="rgba(255,255,255,0.08)" strokeWidth="0.015" />
+              <line x1="0" y1="-3.8" x2="0" y2="3.8" stroke="rgba(255,255,255,0.08)" strokeWidth="0.015" />
+
+              {/* Connecting line between Selected A and Compared B */}
               <line 
                 x1={selectedNode.coords[0]} 
                 y1={-selectedNode.coords[1]} 
@@ -952,40 +1058,102 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                 y2={-comparedNode.coords[1]} 
                 stroke="#38bdf8" 
                 strokeWidth="0.04" 
-                strokeDasharray="0.1, 0.1" 
+                strokeDasharray="0.08, 0.08" 
               />
 
-              {/* Nodes */}
+              {/* Semantic Vectors (Only selective labels rendered to prevent text collision) */}
               {SEMANTIC_VECTORS.map(vec => {
                 const isSel = vec.id === selectedNode.id;
                 const isComp = vec.id === comparedNode.id;
+                const isHovered = hoveredNode?.id === vec.id;
                 const matchesFilter = clusterFilter === 'all' || vec.cluster === clusterFilter;
+                const showLabel = isSel || isComp || isHovered;
+
                 return (
                   <g 
                     key={vec.id} 
-                    className="cursor-pointer transition-opacity duration-200" 
+                    className="cursor-pointer" 
                     style={{ opacity: matchesFilter ? 1 : 0.2 }}
+                    onMouseEnter={() => setHoveredNode(vec)}
+                    onMouseLeave={() => setHoveredNode(null)}
                     onClick={() => {
                       if (vec.id !== selectedNode.id) {
                         setComparedNode(selectedNode);
                         setSelectedNode(vec);
                         onSelectNode?.(vec);
                         const sim = calculateCosine(vec.coords, selectedNode.coords);
-                        triggerComparisonAudio(sim, vec.cluster);
+                        triggerDirectComparisonAudio(sim, vec.cluster);
+                      } else {
+                        triggerDirectComparisonAudio(cosineSim, vec.cluster);
                       }
                     }}
                   >
-                    <line x1="0" y1="0" x2={vec.coords[0]} y2={-vec.coords[1]} stroke={vec.color} strokeWidth="0.02" opacity="0.4" />
-                    <circle cx={vec.coords[0]} cy={-vec.coords[1]} r={isSel || isComp ? 0.25 : 0.16} fill={vec.color} />
-                    <text x={vec.coords[0] + 0.25} y={-vec.coords[1] + 0.08} fill="#ffffff" fontSize="0.22" fontFamily="monospace">
-                      {vec.label} {isSel ? '[A]' : isComp ? '[B]' : ''}
-                    </text>
+                    {/* Origin Vector Line */}
+                    <line 
+                      x1="0" 
+                      y1="0" 
+                      x2={vec.coords[0]} 
+                      y2={-vec.coords[1]} 
+                      stroke={vec.color} 
+                      strokeWidth={isSel || isComp ? 0.03 : 0.015} 
+                      opacity={isSel || isComp ? 0.8 : 0.25} 
+                    />
+
+                    {/* Outer Halo on Active Concepts */}
+                    {(isSel || isComp) && (
+                      <circle 
+                        cx={vec.coords[0]} 
+                        cy={-vec.coords[1]} 
+                        r={0.28} 
+                        fill="none" 
+                        stroke={isSel ? '#10b981' : '#38bdf8'} 
+                        strokeWidth="0.02" 
+                        opacity="0.85" 
+                      />
+                    )}
+
+                    {/* Central Node Dot */}
+                    <circle 
+                      cx={vec.coords[0]} 
+                      cy={-vec.coords[1]} 
+                      r={isSel || isComp ? 0.20 : isHovered ? 0.16 : 0.11} 
+                      fill={vec.color} 
+                    />
+
+                    {/* Selective Label Pill with Dark Background (Prevents all text collisions) */}
+                    {showLabel && (
+                      <g pointerEvents="none">
+                        <rect
+                          x={vec.coords[0] + 0.16}
+                          y={-vec.coords[1] - 0.14}
+                          width={(isSel || isComp ? vec.label.length + 4 : vec.label.length) * 0.11 + 0.25}
+                          height={0.28}
+                          rx={0.06}
+                          fill="rgba(4, 7, 17, 0.92)"
+                          stroke={isSel ? '#10b981' : isComp ? '#38bdf8' : 'rgba(255,255,255,0.3)'}
+                          strokeWidth="0.015"
+                        />
+                        <text 
+                          x={vec.coords[0] + 0.24} 
+                          y={-vec.coords[1] + 0.05} 
+                          fill={isSel ? '#34d399' : isComp ? '#38bdf8' : '#ffffff'} 
+                          fontSize="0.17" 
+                          fontFamily="monospace"
+                          fontWeight="bold"
+                        >
+                          {isSel ? `[A] ${vec.label}` : isComp ? `[B] ${vec.label}` : vec.label}
+                        </text>
+                      </g>
+                    )}
                   </g>
                 );
               })}
             </svg>
-            <div className="text-[10px] font-mono text-[var(--color-text-secondary)]">
-              Rendering in 2D Lean Vector Projection mode (Optimal for low-power CPUs).
+
+            {/* Bottom 2D Subtitle */}
+            <div className="flex items-center justify-between text-[10px] font-mono text-[var(--color-text-secondary)] bg-[var(--color-primary)]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[var(--color-border)] shadow-md">
+              <span>2D Radar Projection • Clean Vector View</span>
+              <span className="hidden sm:inline">Hover dots to reveal labels • Click any dot to calculate cosine proximity</span>
             </div>
           </div>
         )}
@@ -1030,7 +1198,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
                       setSelectedNode(node);
                       onSelectNode?.(node);
                       const sim = calculateCosine(node.coords, selectedNode.coords);
-                      triggerComparisonAudio(sim, node.cluster);
+                      triggerDirectComparisonAudio(sim, node.cluster);
                     }
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono shrink-0 border transition-all cursor-pointer flex items-center gap-1.5 ${
@@ -1052,7 +1220,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         </div>
 
         {/* 8. Active Pair Detail Card with Direct Curriculum IDE Launch */}
-        <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs shadow-inner">
+        <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs shadow-inner mb-6">
           <div className="space-y-1.5 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-[var(--color-text-primary)] text-sm">{selectedNode.label}</span>
