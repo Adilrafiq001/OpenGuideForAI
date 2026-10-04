@@ -1,0 +1,194 @@
+<div align="center">
+
+<a href="https://openguideforai.dpdns.org">
+  <img src="../../apps/web/public/favicon.svg" width="76" height="76" alt="Monograma de OpenGuide AI Studio" />
+</a>
+
+# OpenGuide.
+### ESTUDIO SOBERANO DE INGENIERÍA EN IA EN EL NAVEGADOR
+
+> **La educación empodera a la humanidad, y el conocimiento humano debe seguir siendo libre. La inteligencia nunca debe estar restringida tras una factura en la nube de $300, un muro de pago elitista o silos corporativos cerrados.**  
+> **Desde un teléfono inteligente de $40 con pantalla rota bajo una bombilla tenue, hasta una estación de ingeniería multipantalla con lector de pantalla asistivo: OpenGuide sitúa un laboratorio soberano de ingeniería en IA de nivel de producción directamente dentro de tu navegador.**  
+> **100% Gratuito. Python WebAssembly en el Navegador. Cero Configuración. Cero Telemetría. Soberano para Siempre.**
+
+<p align="center">
+  <a href="https://openguideforai.dpdns.org">
+    <img src="../assets/hero-banner.svg" alt="Terminal interactiva del motor CPython 3.12 WASM de OpenGuide" width="100%" />
+  </a>
+</p>
+
+[![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/Licencia-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
+[![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Entorno-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
+[![Architecture: Local--First $0](https://img.shields.io/badge/Arquitectura-Local--First%20$0-0f172a.svg?style=flat)](#arquitectura-soberana-del-lado-del-cliente)
+[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curr%C3%ADculo-5%20Rutas%20%E2%80%A2%2045%20Labs-0f172a.svg?style=flat)](#resumen-del-curr%C3%ADculo)
+[![Design: WCAG AAA](https://img.shields.io/badge/Dise%C3%B1o-WCAG%20AAA-0f172a.svg?style=flat)](#accesibilidad-universal-y-est%C3%A1ndares)
+[![PWA: Offline Ready](https://img.shields.io/badge/PWA-Listo%20sin%20Conexi%C3%B3n-0f172a.svg?style=flat)](#instalaci%C3%B3n-como-aplicaci%C3%B3n-de-escritorio-y-pwa)
+
+<p align="center">
+  <b>Traducciones:</b>&nbsp;
+  <a href="../../README.md">English</a> &nbsp;•&nbsp;
+  <a href="README_es.md"><b>Español</b></a> &nbsp;•&nbsp;
+  <a href="README_zh.md">简体中文</a> &nbsp;•&nbsp;
+  <a href="README_ur.md">اردو</a> &nbsp;•&nbsp;
+  <a href="README_ar.md">العربية</a> &nbsp;•&nbsp;
+  <a href="README_hi.md">हिन्दी</a> &nbsp;•&nbsp;
+  <a href="README_fr.md">Français</a> &nbsp;•&nbsp;
+  <a href="README_de.md">Deutsch</a> &nbsp;•&nbsp;
+  <a href="README_ja.md">日本語</a> &nbsp;•&nbsp;
+  <a href="README_pt.md">Português</a> &nbsp;•&nbsp;
+  <a href="README_ru.md">Русский</a> &nbsp;•&nbsp;
+  <a href="README_it.md">Italiano</a>
+</p>
+
+---
+
+### [Iniciar Estudio](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Arquitectura](#arquitectura-soberana-del-lado-del-cliente) &nbsp;•&nbsp; [Currículo](#resumen-del-curr%C3%ADculo) &nbsp;•&nbsp; [Explicación (STE)](../../explainer.md) &nbsp;•&nbsp; [App de Escritorio](#instalaci%C3%B3n-como-aplicaci%C3%B3n-de-escritorio-y-pwa) &nbsp;•&nbsp; [Atajos Rápidos](#ergonom%C3%ADa-y-atajos-de-teclado) &nbsp;•&nbsp; [Inicio Rápido](#gu%C3%ADa-de-desarrollo-local)
+
+</div>
+
+---
+
+## Filosofía y Propósito
+
+La mayor parte de la educación en IA actual tiene serias deficiencias. Te obliga a elegir entre:
+1. **Tutoriales superficiales sobre librerías:** Enseñan APIs de caja negra que quedan obsoletas en 6 meses.
+2. **Muros de matemáticas intimidantes:** Artículos académicos densos y cerrados, sin ejecución interactiva.
+3. **Costosos entornos en la nube corporativos:** Requieren tarjetas de crédito, cuentas en la nube, configuraciones Docker o suscripciones de $30/mes.
+
+**OpenGuide desmantela los tres.**
+
+Creemos que la inteligencia artificial es una alfabetización fundamental de la civilización humana. Ya sea que programes en un **teléfono inteligente Android de $100**, un viejo Chromebook o una estación de trabajo de alta gama; ya sea que navegues con **lectores de pantalla asistivos** o un ratón físico: **OpenGuide te ofrece un laboratorio soberano de élite en tu navegador de forma gratuita.**
+
+> *"Cada característica de OpenGuide es explicable por OpenGuide. No solo estudias matemáticas de IA; observas el flujo de tensores, diseccionas cabezales de atención en vivo, escuchas distancias coseno mediante audio armónico e inspeccionas el motor WebAssembly en vivo con el modo Rayos X (`Alt + X`)."*
+
+---
+
+<a id="arquitectura-soberana-del-lado-del-cliente"></a>
+## Arquitectura Soberana del Lado del Cliente
+
+OpenGuide opera bajo la **Regla de los $0**. **No hay servidor backend**. **No hay base de datos rastreándote**. El 100% del cómputo se ejecuta dentro de tu navegador web local:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│               TU ENTORNO LOCAL AISLADO EN EL NAVEGADOR                 │
+│                                                                        │
+│  ┌─────────────────────────┐         ┌──────────────────────────────┐  │
+│  │   INTERFAZ Y NAVEGACIÓN │         │    WEB WORKER EN SEGUNDO PLANO│ │
+│  │   • React 18 + Vite     │         │   • CPython 3.12 (Pyodide)   │  │
+│  │   • 24 Temas Calibrados │ ◄─────► │   • Matemáticas Vectoriales  │  │
+│  │   • Scroll Suave Lenis  │         │   • Watchdog de 15s          │  │
+│  │   • Editor CodeMirror 6 │         │   • Simulador Standby JS Puro│  │
+│  └────────────┬────────────┘         └──────────────┬───────────────┘  │
+│               │                                     │                  │
+│  ┌────────────▼────────────┐         ┌──────────────▼───────────────┐  │
+│  │   ESPACIAL Y NEURONAL   │         │    PERSISTENCIA SOBERANA     │  │
+│  │   • Three.js WebGL / XR │         │   • IndexedDB vía Dexie      │  │
+│  │   • Sintetizador Armónico│        │   • Copia Cifrada AES-GCM    │  │
+│  │   • WebGPU en Navegador │         │   • Firma Verificable W3C    │  │
+│  └─────────────────────────┘         └──────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="resumen-del-curr%C3%ADculo"></a>
+## Resumen del Currículo
+
+Cinco rutas rigurosas de nivel de producción que constan de **45 laboratorios interactivos y ejecutables**:
+
+```mermaid
+graph TD
+    T0["Ruta 0: Cero Absoluto<br/>(CPython WASM, Variables, Bucles, Tokenización BPE)"]
+    T1["Ruta 1: Espacios Vectoriales<br/>(Variedades en Alta Dimensión, Alineación Coseno, Búsqueda Semántica)"]
+    T2["Ruta 2: RAG y Agentes Autónomos<br/>(Bucles ReAct, Fragmentación, Esquemas Anthropic MCP)"]
+    T3["Ruta 3: Evaluaciones y Barandillas<br/>(OWASP AI Top 10, Trampas Canario, Cuantización WebGPU)"]
+    T4["Ruta 4: Inteligencia de Frontera<br/>(Atención Producto Punto Escalado, RoPE, KV-Cache, DPO)"]
+
+    T0 --> T1 --> T2 --> T3 --> T4
+```
+
+| Ruta | Labs | Modelo Mental Central | Proyecto Final Destacado |
+|:---|:---:|:---|:---|
+| **Ruta 0: Cero Absoluto** | 9 | Sintaxis de Python mediante analogías claras de cocina y mapas | Tokenizador Byte-Pair Encoding (BPE) desde cero |
+| **Ruta 1: Espacios Vectoriales** | 9 | Geometría espacial, productos punto y densidad semántica | `SemanticSearchEngine` en memoria que indexa documentos |
+| **Ruta 2: RAG y Agentes** | 9 | Máquinas de estados Pensamiento $\rightarrow$ Acción $\rightarrow$ Observación y esquemas MCP | Agente de Investigación Autónomo con razonamiento multietapa |
+| **Ruta 3: Evaluaciones y Guardas** | 9 | Red-teaming adversario, defensa contra inyección de prompts y métricas | Arnés de evaluación sintético con inferencia WebGPU en navegador |
+| **Ruta 4: Sistemas de Frontera** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, memoria de KV-cache, RoPE y LoRA | Disección de Cabezal de Atención Transformer y Motor de Pérdida DPO |
+
+---
+
+<a id="instalaci%C3%B3n-como-aplicaci%C3%B3n-de-escritorio-y-pwa"></a>
+## Instalación como Aplicación de Escritorio y PWA
+
+OpenGuide está diseñado como una **Aplicación Web Progresiva Instalable (PWA)** con integración nativa con la ventana del sistema operativo:
+
+* **Windows (10 / 11):** Visita [https://openguideforai.dpdns.org](https://openguideforai.dpdns.org) en Chrome, Edge o Brave. Haz clic en el icono de **Instalar OpenGuide** en la barra de direcciones. Crea automáticamente un acceso directo en tu Escritorio y Menú Inicio.
+* **macOS:** En Chrome/Brave/Edge, haz clic en **Instalar** en la barra de navegación; en Safari, haz clic en **Archivo** $\rightarrow$ **Añadir al Dock**.
+* **Linux:** Instalable desde Chromium o Chrome; crea automáticamente un archivo `.desktop` en el lanzador de aplicaciones.
+* **Móviles (Android e iOS):** En Android, pulsa **Instalar aplicación**; en iOS Safari, pulsa **Compartir** $\rightarrow$ **Añadir a pantalla de inicio**.
+* **Ejecución Desconectada (Air-Gapped):** Gracias a la caché del Service Worker (`sw.js`), todos los contenidos, el motor WebAssembly Pyodide y los módulos visuales se almacenan en tu dispositivo. Puedes desconectarte por completo y seguir ejecutando Python sin conexión.
+
+---
+
+<a id="ergonom%C3%ADa-y-atajos-de-teclado"></a>
+## Ergonomía y Atajos de Teclado
+
+* **Paleta de Comandos (`Cmd + K` / `Ctrl + K`):** Búsqueda difusa instantánea de laboratorios, herramientas y temas.
+* **Ejecución Inmediata:** Pulsa `Ctrl + Enter` (o `Cmd + Enter` en Mac) para ejecutar código Python al instante.
+* **Doctor de Sintaxis Amigable:** Traduce errores crípticos de compilador en consejos prácticos en lenguaje claro.
+* **Exportación a Jupyter Notebook (`.ipynb`):** Descarga tus soluciones verificadas como notebooks estándar de Jupyter.
+* **Lente de Depuración Rayos X (`Alt + X`):** Inspecciona el árbol sintáctico (AST), la memoria del Web Worker y las tablas de IndexedDB en tiempo real.
+* **Sincronización en Gist Cifrada:** Exporta tu progreso con cifrado **AES-GCM de 256 bits** a tus Gists privados de GitHub.
+
+---
+
+<a id="accesibilidad-universal-y-est%C3%A1ndares"></a>
+## Accesibilidad Universal y Estándares
+
+* **24 Temas Científicos Calibrados:** 12 oscuros y 12 claros diseñados para preservar el ritmo circadiano, con contraste superior a WCAG 2.2 AAA (>7:1 hasta 20:1).
+* **Compatible con Lectores de Pantalla:** Regiones activas ARIA (`aria-live="polite"`), navegación accesible por teclado y enlaces de salto directo.
+* **Compatibilidad RTL Completa:** Interfaces completamente reflejadas en **urdu** y **árabe**, protegiendo la dirección LTR en bloques de código.
+
+---
+
+<a id="autor%C3%ADa-y-patrocinio"></a>
+## Autoría y Patrocinio
+
+OpenGuide fue concebido, diseñado y construido por **Adil Rafiq Dar (ARD)**.
+
+```
+                    UNA NOTA SOBRE SOBERANÍA Y SOSTENIBILIDAD
+"Construí OpenGuide porque estaba cansado de ver mentes brillantes excluidas de la inteligencia
+artificial debido a bootcamps de pago, costosas suscripciones en la nube y barreras elitistas.
+
+Cada línea de este estudio fue forjada con incontables noches de trabajo, pruebas matemáticas
+rigurosas y una dedicación inflexible al detalle visual. OpenGuide es mi regalo para el mundo.
+
+Para mantener este estudio 100% gratuito, siempre independiente y continuamente actualizado
+con los últimos protocolos de IA de frontera sin incluir anuncios ni inversores privados,
+confío en la generosidad de estudiantes y patrocinadores que creen en la educación democratizada."
+```
+
+Si OpenGuide te ha ayudado a comprender la IA, te ha ahorrado dinero o ha impulsado tu carrera profesional, considera apoyar su desarrollo independiente:
+
+<div align="center">
+
+[![Patrocinar vía PayPal](https://img.shields.io/badge/Patrocinar%20v%C3%ADa-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+&nbsp;&nbsp;
+[![Apoyar en Ko-fi](https://img.shields.io/badge/Apoyar%20en-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+
+</div>
+
+---
+
+<a id="gu%C3%ADa-de-desarrollo-local"></a>
+## Guía de Desarrollo Local
+
+```bash
+git clone https://github.com/openguideforai/OpenGuideForAI.git
+cd OpenGuideForAI
+corepack enable
+yarn install
+yarn --cwd apps/web dev
+```
+Abre `http://localhost:5173` en tu navegador.

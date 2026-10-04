@@ -24,6 +24,22 @@
 [![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#universal-accessibility--standards)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-Offline%20Ready-0f172a.svg?style=flat)](#desktop--progressive-web-application-installation)
 
+<p align="center">
+  <b>Translations:</b>&nbsp;
+  <a href="README.md"><b>English</b></a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_es.md">Español</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_zh.md">简体中文</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_ur.md">اردو</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_ar.md">العربية</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_hi.md">हिन्दी</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_fr.md">Français</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_de.md">Deutsch</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_ja.md">日本語</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_pt.md">Português</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_ru.md">Русский</a> &nbsp;•&nbsp;
+  <a href="docs/translations/README_it.md">Italiano</a>
+</p>
+
 ---
 
 ### [Launch Studio](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Architecture](#sovereign-client-side-architecture) &nbsp;•&nbsp; [Curriculum](#curriculum-overview) &nbsp;•&nbsp; [Explainer (STE)](explainer.md) &nbsp;•&nbsp; [Desktop App](#desktop--progressive-web-application-installation) &nbsp;•&nbsp; [Power Shortcuts](#ergonomics--power-shortcuts) &nbsp;•&nbsp; [Quickstart](#local-development-quickstart)
