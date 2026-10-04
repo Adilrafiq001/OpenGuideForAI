@@ -6,7 +6,9 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
 
   test('TC-AUDIT-001: 24-Theme Parity in index.html Pre-Bootstrap Script', async ({ page }) => {
     // Read index.html from disk to verify static contract
-    const indexHtmlPath = path.resolve(process.cwd(), 'index.html');
+    const indexHtmlPath = fs.existsSync(path.resolve(process.cwd(), 'apps/web/index.html'))
+      ? path.resolve(process.cwd(), 'apps/web/index.html')
+      : path.resolve(process.cwd(), 'index.html');
     const indexHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
 
     const expectedLightThemes = [
@@ -93,7 +95,9 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
   });
 
   test('TC-AUDIT-004: SSR SEO Fallback Tracks Match Current Curriculum', async () => {
-    const indexHtmlPath = path.resolve(process.cwd(), 'index.html');
+    const indexHtmlPath = fs.existsSync(path.resolve(process.cwd(), 'apps/web/index.html'))
+      ? path.resolve(process.cwd(), 'apps/web/index.html')
+      : path.resolve(process.cwd(), 'index.html');
     const indexHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
 
     expect(indexHtml).toContain('Track 0: Absolute Zero AI Engineering');
@@ -222,4 +226,101 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     }
   });
 
+  test('TC-AUDIT-011: VectorSpace3D Filter Cluster Parity & Frontier Cluster Presence', async ({ page }) => {
+    await page.goto('/holodeck');
+    // Ensure Vector Space tab is active
+    const vectorTab = page.locator('#tab-vectors');
+    await expect(vectorTab).toBeVisible();
+    await expect(vectorTab).toHaveAttribute('aria-selected', 'true');
+
+    // Verify 'frontier' filter button exists
+    const frontierBtn = page.locator('button:has-text("frontier"), button:has-text("Frontier")').first();
+    await expect(frontierBtn).toBeVisible();
+
+    // Click frontier filter and check that active styling applies without error
+    await frontierBtn.click({ force: true });
+    await expect(frontierBtn).toHaveClass(/font-bold/);
+  });
+
+  test('TC-AUDIT-012: LandingPage Core Tracks & Holodeck Keyboard Accessibility', async ({ page }) => {
+    await page.goto('/');
+
+    const track0 = page.locator('article[aria-label="Track 0: Absolute Zero briefing"]');
+    await expect(track0).toHaveAttribute('tabindex', '0');
+    await expect(track0).toHaveAttribute('role', 'link');
+
+    const track1 = page.locator('article[aria-label="Track 1: Embeddings briefing"]');
+    await expect(track1).toHaveAttribute('tabindex', '0');
+    await expect(track1).toHaveAttribute('role', 'link');
+
+    const holodeckCard = page.locator('article[aria-label="Universal Spatial Holodeck"]');
+    await expect(holodeckCard).toHaveAttribute('tabindex', '0');
+    await expect(holodeckCard).toHaveAttribute('role', 'link');
+
+    // Focus and press Enter on Holodeck card to verify keyboard navigation
+    await holodeckCard.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForURL('**/holodeck');
+    expect(page.url()).toContain('/holodeck');
+  });
+
+  test('TC-AUDIT-013: Web Audio Safety & Clean Sound Triggering', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/');
+    await page.evaluate(async () => {
+      const { playTactileSound, playCosineSonification } = await import('/src/services/soundHaptics.ts');
+      playTactileSound('click');
+      playTactileSound('success');
+      playTactileSound('chime');
+      playCosineSonification(0.85);
+    });
+
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-014: StudioFooter Modal Accessibility & Route-Agnostic Anchor Navigation', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify footer anchor links point to root anchors so they work cross-route
+    const loungeLink = page.locator('#studio-footer a[href="/#synapse-lounge"]');
+    await expect(loungeLink).toBeVisible();
+
+    const acceleratorLink = page.locator('#studio-footer a[href="/#cognitive-accelerator"]');
+    await expect(acceleratorLink).toBeVisible();
+
+    const vaultLink = page.locator('#studio-footer a[href="/#vault"]');
+    await expect(vaultLink).toBeVisible();
+
+    // Open legal modal from footer and check close button aria-label
+    const legalBtn = page.locator('#studio-footer button:has-text("Terms of Service")').first();
+    await legalBtn.click();
+    const legalCloseBtn = page.locator('button[aria-label="Close legal modal"]');
+    await expect(legalCloseBtn).toBeVisible();
+    await legalCloseBtn.click();
+    await expect(legalCloseBtn).not.toBeVisible();
+  });
+
+  test('TC-AUDIT-015: Hardened Clipboard Action Resilience Without Unhandled Rejections', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/');
+
+    // Simulate clicking copy commit hash in footer
+    const copyHashBtn = page.locator('#studio-footer button[title="Copy commit hash to clipboard"]');
+    if (await copyHashBtn.isVisible()) {
+      await copyHashBtn.click();
+    }
+
+    // Verify 0 uncaught errors or unhandled rejections
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
 });
+

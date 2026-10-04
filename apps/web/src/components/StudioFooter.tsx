@@ -89,10 +89,14 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   const buildVersion = `v${CURRENT_STUDIO_VERSION}`;
   const buildDate = '2026.10.03-PROD';
 
-  const handleCopyHash = () => {
-    navigator.clipboard.writeText(buildHash);
-    setCopiedHash(true);
-    setTimeout(() => setCopiedHash(false), 2000);
+  const handleCopyHash = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(buildHash);
+        setCopiedHash(true);
+        setTimeout(() => setCopiedHash(false), 2000);
+      }
+    } catch {}
   };
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
@@ -342,12 +346,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </button>
             </li>
             <li>
-              <a href="#synapse-lounge" className="hover:text-[var(--color-text-primary)] transition-colors block">
+              <a href="/#synapse-lounge" className="hover:text-[var(--color-text-primary)] transition-colors block">
                 The Synapse Lounge
               </a>
             </li>
             <li>
-              <a href="#cognitive-accelerator" className="hover:text-[var(--color-text-primary)] transition-colors block">
+              <a href="/#cognitive-accelerator" className="hover:text-[var(--color-text-primary)] transition-colors block">
                 Cognitive Accelerator Suite
               </a>
             </li>
@@ -397,7 +401,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </button>
             </li>
             <li>
-              <a href="#vault" className="hover:text-[var(--color-text-primary)] transition-colors block">
+              <a href="/#vault" className="hover:text-[var(--color-text-primary)] transition-colors block">
                 Verified Cognitive Science Vault
               </a>
             </li>
@@ -596,6 +600,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <button
                   onClick={() => setLegalModalOpen(false)}
                   className="p-1.5 rounded-full hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  aria-label="Close legal modal"
                 >
                   <X size={18} />
                 </button>
@@ -789,6 +794,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <button
                   onClick={() => setContactModalOpen(false)}
                   className="p-1.5 rounded-full hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  aria-label="Close contact modal"
                 >
                   <X size={18} />
                 </button>
@@ -940,6 +946,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <button
                   onClick={() => setChangelogModalOpen(false)}
                   className="p-1.5 rounded-full hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  aria-label="Close changelog modal"
                 >
                   <X size={18} />
                 </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -119,9 +119,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
   // Reset code when lesson changes
   const handleLessonChange = (modIdx: number, lesIdx: number) => {
+    const targetLesson = track.modules[modIdx]?.lessons[lesIdx];
+    if (!targetLesson) return;
     setCurrentModuleIdx(modIdx);
     setCurrentLessonIdx(lesIdx);
-    const targetLesson = track.modules[modIdx].lessons[lesIdx];
     setCode(targetLesson.initialCode);
     clearLogs();
     setFeedback({ type: null, message: '' });
@@ -170,11 +171,15 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setSyntaxDiagnostic(null);
   };
 
-  const handleCopySolution = () => {
+  const handleCopySolution = async () => {
     const solution = currentLesson.solutionCode || currentLesson.initialCode;
-    navigator.clipboard.writeText(solution);
-    setCopiedSolution(true);
-    setTimeout(() => setCopiedSolution(false), 2000);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(solution);
+        setCopiedSolution(true);
+        setTimeout(() => setCopiedSolution(false), 2000);
+      }
+    } catch {}
   };
 
   const advanceNextLesson = () => {
@@ -240,12 +245,17 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     }
   };
 
+  const executeCodeRef = useRef(executeCode);
+  useLayoutEffect(() => {
+    executeCodeRef.current = executeCode;
+  });
+
   // Keyboard shortcuts (Normalized Ctrl+Enter / Cmd+Enter for Run Code, Alt+X for X-Ray Lens)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        executeCode();
+        executeCodeRef.current();
       } else if (e.altKey && e.key.toLowerCase() === 'x') {
         setIsXRayOpen(prev => !prev);
       }
@@ -259,7 +269,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('openguide:toggle-xray', handleToggleEvent);
     };
-  }, [code, currentLesson, state]);
+  }, []);
 
   const hasNextLesson = currentLessonIdx < currentModule.lessons.length - 1 || currentModuleIdx < track.modules.length - 1;
   const isCurrentCompleted = completedLessonIds.includes(currentLesson.id);

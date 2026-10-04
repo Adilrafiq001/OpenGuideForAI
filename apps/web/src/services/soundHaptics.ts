@@ -7,7 +7,11 @@ export function getAudioContext(): AudioContext | null {
   if (!sharedAudioCtx) {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
     if (AudioCtx) {
-      sharedAudioCtx = new AudioCtx();
+      try {
+        sharedAudioCtx = new AudioCtx();
+      } catch {
+        sharedAudioCtx = null;
+      }
     }
   }
   if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
@@ -41,6 +45,12 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       gain.gain.setValueAtTime(vol * 0.6, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
       osc.connect(gain);
+      osc.onended = () => {
+        try {
+          osc.disconnect();
+          gain.disconnect();
+        } catch {}
+      };
       osc.start(now);
       osc.stop(now + 0.03);
     } else if (type === 'success') {
@@ -56,6 +66,13 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
       osc1.connect(gain);
       osc2.connect(gain);
+      osc1.onended = () => {
+        try {
+          osc1.disconnect();
+          osc2.disconnect();
+          gain.disconnect();
+        } catch {}
+      };
       osc1.start(now);
       osc2.start(now + 0.08);
       osc1.stop(now + 0.28);
@@ -68,6 +85,12 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       gain.gain.setValueAtTime(vol * 0.7, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
       osc.connect(gain);
+      osc.onended = () => {
+        try {
+          osc.disconnect();
+          gain.disconnect();
+        } catch {}
+      };
       osc.start(now);
       osc.stop(now + 0.2);
     } else if (type === 'chime') {
@@ -78,6 +101,12 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       gain.gain.setValueAtTime(vol * 0.8, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
       osc.connect(gain);
+      osc.onended = () => {
+        try {
+          osc.disconnect();
+          gain.disconnect();
+        } catch {}
+      };
       osc.start(now);
       osc.stop(now + 0.25);
     }
@@ -134,6 +163,13 @@ export function playCosineSonification(similarity: number) {
     osc2.frequency.setValueAtTime(baseFreq * (normalized > 0.5 ? 1.5 : 1.414), now);
     osc1.connect(gain);
     osc2.connect(gain);
+    osc1.onended = () => {
+      try {
+        osc1.disconnect();
+        osc2.disconnect();
+        gain.disconnect();
+      } catch {}
+    };
     osc1.start(now);
     osc2.start(now);
     osc1.stop(now + 0.35);

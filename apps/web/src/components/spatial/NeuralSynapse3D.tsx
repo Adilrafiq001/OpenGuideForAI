@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { 
   Network, 
@@ -48,7 +48,20 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
   const [hoveredNode, setHoveredNode] = useState<SynapseNode | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL;
+  const isPlayingRef = useRef(isPlaying);
+  const pulseSpeedRef = useRef(pulseSpeed);
+  const selectedNodeRef = useRef(selectedNode);
+  const nodeMeshesRef = useRef<{ mesh: THREE.Mesh; halo: THREE.Mesh; data: SynapseNode }[]>([]);
+  const edgeLinesRef = useRef<{ line: THREE.Line; edge: SynapseEdge }[]>([]);
+
+  useLayoutEffect(() => {
+    isPlayingRef.current = isPlaying;
+    pulseSpeedRef.current = pulseSpeed;
+    selectedNodeRef.current = selectedNode;
+  });
+
+  const [webGLFailed, setWebGLFailed] = useState(false);
+  const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL && !webGLFailed;
 
   // Build Graph Nodes & Edges
   const { nodes, edges } = (() => {
@@ -108,6 +121,12 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.22);
       osc.connect(gain);
       gain.connect(ctx.destination);
+      osc.onended = () => {
+        try {
+          osc.disconnect();
+          gain.disconnect();
+        } catch (_) {}
+      };
       osc.start();
       osc.stop(ctx.currentTime + 0.22);
     } catch (e) {}
@@ -126,12 +145,23 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(0, 0, 11.5);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: !hardwareInfo.isLowEnd,
-      powerPreference: 'high-performance'
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !hardwareInfo.isLowEnd,
+        powerPreference: 'high-performance'
+      });
+      if (!renderer.getContext() || renderer.getContext().isContextLost()) {
+        renderer.dispose();
+        setTimeout(() => setWebGLFailed(true), 0);
+        return;
+      }
+    } catch {
+      setTimeout(() => setWebGLFailed(true), 0);
+      return;
+    }
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -213,6 +243,9 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       edgeLines.push({ line, edge });
     });
 
+    nodeMeshesRef.current = nodeMeshes;
+    edgeLinesRef.current = edgeLines;
+
     // Action Potential Signal Pulses (Traveling Particles)
     const PULSE_COUNT = 36;
     const pulseGeo = new THREE.SphereGeometry(0.07, 10, 10);
@@ -257,7 +290,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
         canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
         setHoveredNode(null);
         nodeMeshes.forEach(n => {
-          if (n.data.id !== selectedNode?.id) {
+          if (n.data.id !== selectedNodeRef.current?.id) {
             n.mesh.scale.set(1, 1, 1);
           }
         });
@@ -326,9 +359,9 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      if (isPlaying) {
+      if (isPlayingRef.current) {
         pulses.forEach(pulse => {
-          pulse.progress += pulse.speed * pulseSpeed;
+          pulse.progress += pulse.speed * pulseSpeedRef.current;
           if (pulse.progress > 1) {
             pulse.progress = 0;
             pulse.edge = edges[Math.floor(Math.random() * edges.length)];
@@ -377,6 +410,19 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       canvas.removeEventListener('touchstart', handlePointerDown);
       window.removeEventListener('touchmove', handlePointerMove);
       window.removeEventListener('touchend', handlePointerUp);
+      scene.traverse((obj) => {
+        if ((obj as THREE.Mesh).isMesh || (obj as THREE.Line).isLine || (obj as THREE.Points).isPoints) {
+          const item = obj as THREE.Mesh;
+          if (item.geometry) item.geometry.dispose();
+          if (item.material) {
+            if (Array.isArray(item.material)) {
+              item.material.forEach((m) => m.dispose());
+            } else {
+              item.material.dispose();
+            }
+          }
+        }
+      });
       renderer.dispose();
       dustGeo.dispose();
       dustMat.dispose();
@@ -385,7 +431,37 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       pulseGeo.dispose();
       pulseMat.dispose();
     };
-  }, [use3D, isPlaying, pulseSpeed, selectedNode, hardwareInfo.isLowEnd, soundEnabled]);
+  }, [use3D, hardwareInfo.isLowEnd, webGLFailed]);
+
+  // Reactive node selection & synapse weight highlighting without scene rebuild
+  useEffect(() => {
+    if (!use3D) return;
+    nodeMeshesRef.current.forEach(n => {
+      const isSelected = selectedNode?.id === n.data.id;
+      const mat = n.mesh.material as THREE.MeshStandardMaterial;
+      if (mat) {
+        mat.emissiveIntensity = isSelected ? 0.9 : 0.45;
+      }
+      const haloMat = n.halo.material as THREE.MeshBasicMaterial;
+      if (haloMat) {
+        haloMat.opacity = isSelected ? 0.6 : 0;
+      }
+      n.mesh.scale.set(isSelected ? 1.25 : 1, isSelected ? 1.25 : 1, isSelected ? 1.25 : 1);
+    });
+
+    edgeLinesRef.current.forEach(({ line, edge }) => {
+      const isConnected = selectedNode 
+        ? edge.from === selectedNode.id || edge.to === selectedNode.id 
+        : true;
+      const baseOpacity = isConnected 
+        ? (Math.abs(edge.weight) > 0.4 ? 0.45 : 0.25)
+        : 0.06;
+      const mat = line.material as THREE.LineBasicMaterial;
+      if (mat) {
+        mat.opacity = baseOpacity;
+      }
+    });
+  }, [use3D, selectedNode]);
 
   return (
     <div className={`relative w-full rounded-3xl overflow-hidden bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col shadow-2xl text-[var(--color-text-primary)] transition-colors ${className}`}>

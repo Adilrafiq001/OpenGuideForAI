@@ -159,7 +159,12 @@ export function usePyodide() {
         clearTimeout(watchdogTimerRef.current);
         watchdogTimerRef.current = null;
       }
+      if (activeExecution.current) {
+        activeExecution.current.reject(new Error('Execution cancelled: component unmounted mid-flight.'));
+        activeExecution.current = null;
+      }
       workerRef.current?.terminate();
+      workerRef.current = null;
     };
   }, [initWorker]);
 

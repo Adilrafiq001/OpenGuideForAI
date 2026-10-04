@@ -1178,10 +1178,14 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(activeCodeSnippet);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  const handleCopyCode = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(activeCodeSnippet);
+        setCopiedCode(true);
+        setTimeout(() => setCopiedCode(false), 2000);
+      }
+    } catch {}
   };
 
   return (

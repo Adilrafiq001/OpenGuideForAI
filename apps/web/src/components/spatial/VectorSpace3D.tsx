@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { 
@@ -88,9 +88,10 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
   const [clusterFilter, setClusterFilter] = useState<'all' | 'neural' | 'vector' | 'math' | 'agents' | 'frontier'>('all');
   const [simThreshold, setSimThreshold] = useState<number>(0.65);
   const [gimbalAngles, setGimbalAngles] = useState({ pitch: 0, yaw: 0 });
+  const [webGLFailed, setWebGLFailed] = useState(false);
 
   // Determine if we should render 3D WebGL or 2D Lean
-  const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL;
+  const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL && !webGLFailed;
 
   // Calculate real cosine similarity between selected and compared nodes in 3D
   const cosineSim = (() => {
@@ -129,7 +130,26 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     } catch {}
   };
 
-  // 3D Scene Initialization & Loop
+  // Refs for state that changes without needing WebGL reconstruction
+  const selectedNodeRef = useRef(selectedNode);
+  const comparedNodeRef = useRef(comparedNode);
+  const isRotatingRef = useRef(isRotating);
+  const soundEnabledRef = useRef(soundEnabled);
+  const onSelectNodeRef = useRef(onSelectNode);
+  const playNodeChimeRef = useRef(playNodeChime);
+  const nodeMeshesRef = useRef<{ mesh: THREE.Mesh; halo: THREE.Mesh; line: THREE.Line; data: SemanticVectorNode }[]>([]);
+  const pairLineRef = useRef<THREE.Line | null>(null);
+
+  useLayoutEffect(() => {
+    selectedNodeRef.current = selectedNode;
+    comparedNodeRef.current = comparedNode;
+    isRotatingRef.current = isRotating;
+    soundEnabledRef.current = soundEnabled;
+    onSelectNodeRef.current = onSelectNode;
+    playNodeChimeRef.current = playNodeChime;
+  });
+
+  // 3D Scene Initialization & Loop (Created ONCE on mount / hardware switch)
   useEffect(() => {
     if (!use3D || !canvasRef.current || !containerRef.current) return;
 
@@ -147,12 +167,23 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     camera.position.set(0, 0.6, 9.0);
     camera.lookAt(0, 0.1, 0);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: !hardwareInfo.isLowEnd,
-      powerPreference: 'high-performance'
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !hardwareInfo.isLowEnd,
+        powerPreference: 'high-performance'
+      });
+      if (!renderer.getContext() || renderer.getContext().isContextLost()) {
+        renderer.dispose();
+        setTimeout(() => setWebGLFailed(true), 0);
+        return;
+      }
+    } catch {
+      setTimeout(() => setWebGLFailed(true), 0);
+      return;
+    }
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -213,24 +244,23 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     galaxyGroup.add(gridHelper);
 
     // 4. Create Physical Dielectric 3D Nodes
-    const nodeMeshes: { mesh: THREE.Mesh; halo: THREE.Mesh; data: SemanticVectorNode }[] = [];
+    const nodeMeshes: { mesh: THREE.Mesh; halo: THREE.Mesh; line: THREE.Line; data: SemanticVectorNode }[] = [];
     const sphereGeo = new THREE.SphereGeometry(0.24, 28, 28);
     const haloGeo = new THREE.SphereGeometry(0.38, 16, 16);
 
     SEMANTIC_VECTORS.forEach(vec => {
-      const isSelected = vec.id === selectedNode.id;
-      const isCompared = vec.id === comparedNode.id;
-      const matchesFilter = clusterFilter === 'all' || vec.cluster === clusterFilter;
+      const isSelected = vec.id === selectedNodeRef.current.id;
+      const isCompared = vec.id === comparedNodeRef.current.id;
 
       // High-grade physical shader material with depth sheen
       const mat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(vec.color),
         emissive: new THREE.Color(vec.color),
-        emissiveIntensity: isSelected ? 1.0 : isCompared ? 0.7 : matchesFilter ? 0.35 : 0.08,
+        emissiveIntensity: isSelected ? 1.0 : isCompared ? 0.7 : 0.35,
         roughness: 0.2,
         metalness: 0.35,
         transparent: true,
-        opacity: matchesFilter ? 1.0 : 0.2
+        opacity: 1.0
       });
 
       const mesh = new THREE.Mesh(sphereGeo, mat);
@@ -248,13 +278,11 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       halo.position.set(...vec.coords);
       galaxyGroup.add(halo);
 
-      nodeMeshes.push({ mesh, halo, data: vec });
-
       // Connecting line from center origin to vector node
       const lineMat = new THREE.LineBasicMaterial({
         color: new THREE.Color(vec.color),
         transparent: true,
-        opacity: isSelected ? 0.7 : matchesFilter ? 0.25 : 0.05
+        opacity: isSelected ? 0.7 : 0.25
       });
       const lineGeo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, 0, 0),
@@ -262,7 +290,10 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       ]);
       const line = new THREE.Line(lineGeo, lineMat);
       galaxyGroup.add(line);
+
+      nodeMeshes.push({ mesh, halo, line, data: vec });
     });
+    nodeMeshesRef.current = nodeMeshes;
 
     // 5. Connecting Geodesic Vector Line between Selected and Compared nodes
     const pairLineMat = new THREE.LineDashedMaterial({
@@ -273,12 +304,13 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       opacity: 0.95
     });
     const pairLineGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(...selectedNode.coords),
-      new THREE.Vector3(...comparedNode.coords)
+      new THREE.Vector3(...selectedNodeRef.current.coords),
+      new THREE.Vector3(...comparedNodeRef.current.coords)
     ]);
     const pairLine = new THREE.Line(pairLineGeo, pairLineMat);
     pairLine.computeLineDistances();
     galaxyGroup.add(pairLine);
+    pairLineRef.current = pairLine;
 
     // 6. Direct Three.js Raycaster for Interactive Hit-Testing
     const raycaster = new THREE.Raycaster();
@@ -293,11 +325,11 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     const handleCanvasMouseMove = (e: MouseEvent) => {
       getNormalizedMouse(e);
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(nodeMeshes.map(n => n.mesh));
+      const intersects = raycaster.intersectObjects(nodeMeshesRef.current.map(n => n.mesh));
 
       if (intersects.length > 0) {
         canvas.style.cursor = 'pointer';
-        const hit = nodeMeshes.find(n => n.mesh === intersects[0].object);
+        const hit = nodeMeshesRef.current.find(n => n.mesh === intersects[0].object);
         if (hit) {
           setHoveredNode(hit.data);
           hit.mesh.scale.set(1.3, 1.3, 1.3);
@@ -305,26 +337,26 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       } else {
         canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
         setHoveredNode(null);
-        nodeMeshes.forEach(n => n.mesh.scale.set(1, 1, 1));
+        nodeMeshesRef.current.forEach(n => n.mesh.scale.set(1, 1, 1));
       }
     };
 
     const handleCanvasClick = (e: MouseEvent) => {
       getNormalizedMouse(e);
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(nodeMeshes.map(n => n.mesh));
+      const intersects = raycaster.intersectObjects(nodeMeshesRef.current.map(n => n.mesh));
 
       if (intersects.length > 0) {
-        const hit = nodeMeshes.find(n => n.mesh === intersects[0].object);
+        const hit = nodeMeshesRef.current.find(n => n.mesh === intersects[0].object);
         if (hit) {
-          if (hit.data.id !== selectedNode.id) {
-            setComparedNode(selectedNode);
-            const sim = calculateCosine(hit.data.coords, selectedNode.coords);
+          if (hit.data.id !== selectedNodeRef.current.id) {
+            setComparedNode(selectedNodeRef.current);
+            const sim = calculateCosine(hit.data.coords, selectedNodeRef.current.coords);
             playCosineSonification(sim);
           }
           setSelectedNode(hit.data);
-          onSelectNode?.(hit.data);
-          playNodeChime(hit.data.cluster);
+          onSelectNodeRef.current?.(hit.data);
+          playNodeChimeRef.current(hit.data.cluster);
         }
       }
     };
@@ -380,14 +412,14 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      if (isRotating && !isDragging) {
+      if (isRotatingRef.current && !isDragging) {
         galaxyGroup.rotation.y += 0.0022;
         starField.rotation.y -= 0.0004;
       }
 
       // Rotate selected node halo
-      nodeMeshes.forEach(n => {
-        if (n.data.id === selectedNode.id) {
+      nodeMeshesRef.current.forEach(n => {
+        if (n.data.id === selectedNodeRef.current.id) {
           n.halo.rotation.y += 0.025;
           n.halo.rotation.x += 0.015;
         }
@@ -427,17 +459,62 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       canvas.removeEventListener('touchstart', handlePointerDown);
       window.removeEventListener('touchmove', handlePointerMove);
       window.removeEventListener('touchend', handlePointerUp);
+
+      // Deep recursive disposal of all geometries and materials to prevent WebGL GPU leaks
+      scene.traverse((obj: any) => {
+        if (obj.geometry) {
+          obj.geometry.dispose();
+        }
+        if (obj.material) {
+          if (Array.isArray(obj.material)) {
+            obj.material.forEach((m: any) => m.dispose());
+          } else {
+            obj.material.dispose();
+          }
+        }
+      });
+
       renderer.dispose();
-      starGeo.dispose();
-      starMat.dispose();
-      ringGeo1.dispose();
-      ringMat1.dispose();
-      ringGeo2.dispose();
-      ringMat2.dispose();
-      sphereGeo.dispose();
-      haloGeo.dispose();
+
+      nodeMeshesRef.current = [];
+      pairLineRef.current = null;
     };
-  }, [use3D, isRotating, selectedNode, comparedNode, hardwareInfo.isLowEnd, soundEnabled, clusterFilter, simThreshold]);
+  }, [use3D, hardwareInfo.isLowEnd, webGLFailed]);
+
+  // Reactive in-place property updates (zero scene destruction on selection/filter changes)
+  useEffect(() => {
+    if (!use3D) return;
+
+    nodeMeshesRef.current.forEach(n => {
+      const isSelected = n.data.id === selectedNode.id;
+      const isCompared = n.data.id === comparedNode.id;
+      const matchesFilter = clusterFilter === 'all' || n.data.cluster === clusterFilter;
+
+      const mat = n.mesh.material as THREE.MeshStandardMaterial;
+      if (mat) {
+        mat.emissiveIntensity = isSelected ? 1.0 : isCompared ? 0.7 : matchesFilter ? 0.35 : 0.08;
+        mat.opacity = matchesFilter ? 1.0 : 0.2;
+      }
+
+      const haloMat = n.halo.material as THREE.MeshBasicMaterial;
+      if (haloMat) {
+        haloMat.opacity = isSelected ? 0.75 : isCompared ? 0.4 : 0;
+      }
+
+      const lineMat = n.line.material as THREE.LineBasicMaterial;
+      if (lineMat) {
+        lineMat.opacity = isSelected ? 0.7 : matchesFilter ? 0.25 : 0.05;
+      }
+    });
+
+    if (pairLineRef.current) {
+      pairLineRef.current.geometry.setFromPoints([
+        new THREE.Vector3(...selectedNode.coords),
+        new THREE.Vector3(...comparedNode.coords)
+      ]);
+      pairLineRef.current.computeLineDistances();
+    }
+  }, [use3D, selectedNode, comparedNode, clusterFilter]);
 
   return (
     <div className={`relative w-full rounded-3xl overflow-hidden bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col shadow-2xl text-[var(--color-text-primary)] transition-colors ${className}`}>
@@ -506,7 +583,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
         <div className="flex items-center gap-1.5 sm:gap-2 max-w-full overflow-x-auto no-scrollbar py-0.5">
           <Layers size={14} className="text-[var(--color-accent)] shrink-0" />
           <span className="text-[var(--color-text-secondary)] shrink-0">Isolate:</span>
-          {(['all', 'neural', 'vector', 'math', 'agents'] as const).map(c => (
+          {(['all', 'neural', 'vector', 'math', 'agents', 'frontier'] as const).map(c => (
             <button
               key={c}
               onClick={() => setClusterFilter(c)}
@@ -589,15 +666,21 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
               {SEMANTIC_VECTORS.map(vec => {
                 const isSel = vec.id === selectedNode.id;
                 const isComp = vec.id === comparedNode.id;
+                const matchesFilter = clusterFilter === 'all' || vec.cluster === clusterFilter;
                 return (
-                  <g key={vec.id} className="cursor-pointer" onClick={() => {
-                    if (vec.id !== selectedNode.id) {
-                      setComparedNode(selectedNode);
-                    }
-                    setSelectedNode(vec);
-                    onSelectNode?.(vec);
-                    playNodeChime(vec.cluster);
-                  }}>
+                  <g 
+                    key={vec.id} 
+                    className="cursor-pointer transition-opacity duration-200" 
+                    style={{ opacity: matchesFilter ? 1 : 0.2 }}
+                    onClick={() => {
+                      if (vec.id !== selectedNode.id) {
+                        setComparedNode(selectedNode);
+                      }
+                      setSelectedNode(vec);
+                      onSelectNode?.(vec);
+                      playNodeChime(vec.cluster);
+                    }}
+                  >
                     <line x1="0" y1="0" x2={vec.coords[0]} y2={-vec.coords[1]} stroke={vec.color} strokeWidth="0.02" opacity="0.4" />
                     <circle cx={vec.coords[0]} cy={-vec.coords[1]} r={isSel || isComp ? 0.25 : 0.16} fill={vec.color} />
                     <text x={vec.coords[0] + 0.25} y={-vec.coords[1] + 0.08} fill="#ffffff" fontSize="0.22" fontFamily="monospace">

@@ -43,7 +43,9 @@ export function FirstTimeSetupModal({
     playTactileSound('click');
     triggerHaptic('light');
     if (typeof window !== 'undefined') {
-      localStorage.setItem('og_onboarding_completed', 'true');
+      try {
+        localStorage.setItem('og_onboarding_completed', 'true');
+      } catch {}
     }
     onClose();
   };

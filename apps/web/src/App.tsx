@@ -46,7 +46,11 @@ function AppContent() {
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
   const [isFirstTimeSetupOpen, setIsFirstTimeSetupOpen] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return !localStorage.getItem('og_onboarding_completed');
+    try {
+      return !localStorage.getItem('og_onboarding_completed');
+    } catch {
+      return false;
+    }
   });
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);

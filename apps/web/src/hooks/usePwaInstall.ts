@@ -8,25 +8,24 @@ interface BeforeInstallPromptEvent extends Event {
 export function usePwaInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [isIos, setIsIos] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia?.('(display-mode: standalone)').matches ||
+      (window.navigator as any)?.standalone === true ||
+      (typeof document !== 'undefined' && document.referrer.includes('android-app://'))
+    );
+  });
+  const [isIos] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+  });
 
   useEffect(() => {
-    // Check if already in standalone PWA mode
-    const isStandalone = 
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true ||
-      document.referrer.includes('android-app://');
-
-    if (isStandalone) {
-      setIsInstalled(true);
+    if (isInstalled) {
       return;
     }
-
-    // Detect iOS
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
-    setIsIos(isIosDevice);
 
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();

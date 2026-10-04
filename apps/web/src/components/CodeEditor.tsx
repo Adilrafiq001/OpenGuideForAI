@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { EditorState } from '@codemirror/state';
 import { 
   EditorView, 
@@ -76,9 +76,14 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
   const onRunRef = useRef(onRun);
-  onRunRef.current = onRun;
+  const latestValueRef = useRef(value);
+
+  useLayoutEffect(() => {
+    onChangeRef.current = onChange;
+    onRunRef.current = onRun;
+    latestValueRef.current = value;
+  });
 
   const insertText = (textToInsert: string) => {
     const view = viewRef.current;
@@ -95,10 +100,6 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     });
     view.focus();
   };
-
-  // Track the latest value internally to avoid feedback loops
-  const latestValueRef = useRef(value);
-  latestValueRef.current = value;
   const { 
     editorFont, 
     fontSize: storeFontSize, 
@@ -240,9 +241,11 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   useEffect(() => {
     const view = viewRef.current;
     if (view && value !== view.state.doc.toString()) {
+      const currentPos = view.state.selection.main.head;
+      const targetPos = Math.min(currentPos, value.length);
       view.dispatch({
         changes: { from: 0, to: view.state.doc.length, insert: value },
-        selection: { anchor: 0 }
+        selection: { anchor: targetPos }
       });
     }
   }, [value]);

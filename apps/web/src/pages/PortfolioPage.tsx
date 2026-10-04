@@ -161,10 +161,12 @@ export function PortfolioPage() {
     return () => {
       isMounted = false;
     };
-  }, [studentName, completedLessonIds]);
+  }, [studentName, completedLessonIds, totalCurriculumLabs]);
 
   const handleCopyHash = () => {
-    navigator.clipboard.writeText(verificationHash);
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(verificationHash).catch(() => {});
+    }
     setCopiedHash(true);
     setTimeout(() => setCopiedHash(false), 2000);
   };
@@ -264,12 +266,16 @@ export function PortfolioPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleCopyBadgeMarkdown = () => {
+  const handleCopyBadgeMarkdown = async () => {
     const badgeUrl = `https://img.shields.io/badge/OpenGuide_Certified-AI_Engineer-10b981?style=for-the-badge&logo=openai&logoColor=white`;
     const md = `[![OpenGuide Certified AI Engineer](${badgeUrl})](https://openguideforai.dpdns.org/portfolio?verify=${verificationHash})`;
-    navigator.clipboard.writeText(md);
-    setCopiedBadge(true);
-    setTimeout(() => setCopiedBadge(false), 2500);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(md);
+        setCopiedBadge(true);
+        setTimeout(() => setCopiedBadge(false), 2500);
+      }
+    } catch {}
   };
 
   const handleSyncGist = async () => {

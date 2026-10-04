@@ -568,8 +568,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {/* Track 0: Absolute Zero */}
           <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 0: Absolute Zero briefing"
             onClick={() => navigate('/track/0/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/0/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -606,8 +615,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
           {/* Track 1: Embeddings & Vector Space */}
           <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 1: Embeddings briefing"
             onClick={() => navigate('/track/1/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-cyan-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/1/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-cyan-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
           >
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -638,8 +656,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
           {/* Track 2: Autonomous Agents & RAG */}
           <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 2: Agents & RAG briefing"
             onClick={() => navigate('/track/2/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-violet-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/2/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-violet-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
           >
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -670,8 +697,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
           {/* Track 3: Production Evals & Guardrails */}
           <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 3: Production Evals briefing"
             onClick={() => navigate('/track/3/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-amber-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/3/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-amber-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
           >
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -702,8 +738,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
           {/* Track 4: Frontier Intelligence & Systems */}
           <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 4: Frontier Intelligence briefing"
             onClick={() => navigate('/track/4/intro')}
-            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-rose-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/4/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-rose-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-rose-500/50"
           >
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -735,8 +780,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         {/* Panoramic Spatial Holodeck Showcase Banner */}
         <article 
+          tabIndex={0}
+          role="link"
+          aria-label="Universal Spatial Holodeck"
           onClick={() => navigate('/holodeck')}
-          className="mt-6 group relative bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 border border-[var(--color-border)] hover:border-violet-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.005] cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              navigate('/holodeck');
+            }
+          }}
+          className="mt-6 group relative bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 border border-[var(--color-border)] hover:border-violet-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-2xl hover:scale-[1.005] cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
         >
           <div className="space-y-3 max-w-3xl">
             <div className="flex items-center gap-2">

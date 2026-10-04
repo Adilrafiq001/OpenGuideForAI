@@ -30,10 +30,14 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
     return results.filter(item => item.category === activeCategory);
   }, [query, activeCategory]);
 
-  const handleCopyCode = (id: string, code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+  const handleCopyCode = async (id: string, code: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(code);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+      }
+    } catch {}
   };
 
   useEffect(() => {

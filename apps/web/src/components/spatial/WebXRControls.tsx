@@ -56,7 +56,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        videoRef.current.play().catch(() => {});
       }
       setIsCameraActive(true);
       setStatusMsg('Live AR Camera Passthrough activated. 3D spatial models are now augmented over your real physical environment.');

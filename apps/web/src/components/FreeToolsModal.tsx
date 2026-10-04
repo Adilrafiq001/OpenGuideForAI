@@ -539,10 +539,14 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
     return FREE_TOOLS_GUIDES.find(t => t.id === selectedToolId) || currentTools[0] || FREE_TOOLS_GUIDES[0];
   }, [selectedToolId, currentTools]);
 
-  const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(id);
-    setTimeout(() => setCopiedIndex(null), 2000);
+  const handleCopy = async (text: string, id: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        setCopiedIndex(id);
+        setTimeout(() => setCopiedIndex(null), 2000);
+      }
+    } catch {}
   };
 
   return (
