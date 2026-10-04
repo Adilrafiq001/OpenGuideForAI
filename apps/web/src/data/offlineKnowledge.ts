@@ -425,6 +425,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     explanation: 'Pyodide includes full C-optimized NumPy compiled to WebAssembly. Key vector operations used across Tracks 1 to 4:\n• np.dot(a, b): Inner dot product $\\sum a_i b_i$\n• np.linalg.norm(a): L2 Euclidean length $\\sqrt{\\sum a_i^2}$\n• Cosine Similarity: np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))\n• L2 Normalization: a / np.linalg.norm(a) turning dot product into cosine similarity directly\n• np.matmul(A, B) or A @ B: Matrix multiplication for attention projection $Q K^T$\n• np.argmax(scores) / np.argsort(scores)[::-1]: Top-K retrieval ranking.',
     codeSnippet: 'import numpy as np\n\n# Create 3D semantic vectors\nu = np.array([0.2, 0.8, 0.5])\nv = np.array([0.1, 0.9, 0.4])\n\n# Compute cosine similarity\ncosine_sim = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))\nprint(f"Cosine Similarity: {cosine_sim:.4f}")',
     takeaway: 'Vector normalization eliminates magnitude bias, enabling lightning-fast inner-product semantic search.'
+  },
+  {
+    id: 'tensor-broadcasting-matrix-ops',
+    keywords: ['broadcasting', 'tensor', 'matmul', 'softmax', 'einsum', 'matrix multiplication', 'batch', 'dimension', 'axis'],
+    title: 'Tensor Broadcasting & Transformer Dimension Mechanics',
+    category: 'math',
+    summary: 'Core rules for tensor dimension alignment, row-wise softmax stability, and multi-head attention projections.',
+    explanation: 'When implementing self-attention from scratch without PyTorch:\n1. Broadcasting Rules: Two dimensions are compatible when they are equal, or one of them is 1. Operations expand the singleton dimension to match.\n2. Stable Softmax: To prevent numerical overflow with exponentiated logits, subtract max along axis=-1 before exp: np.exp(x - np.max(x, axis=-1, keepdims=True)).\n3. Scaled Attention Score: S = (Q @ K.T) / np.sqrt(d_k). Scaling prevents gradients from vanishing in extreme softmax regions.\n4. Causal Masking: Add an upper-triangular negative infinity mask (-1e9) to logits before softmax to prevent attending to future tokens.',
+    codeSnippet: 'import numpy as np\n\ndef stable_softmax(logits):\n    exp_x = np.exp(logits - np.max(logits, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\n# Q: (seq, d_k), K: (seq, d_k)\nQ = np.random.randn(4, 16)\nK = np.random.randn(4, 16)\nscores = (Q @ K.T) / np.sqrt(16)\nweights = stable_softmax(scores)\nprint("Attention Matrix Shape:", weights.shape)',
+    takeaway: 'Numerically stable softmax and sqrt(d_k) scaling are non-negotiable requirements for training and evaluating attention models.'
   }
 ];
 

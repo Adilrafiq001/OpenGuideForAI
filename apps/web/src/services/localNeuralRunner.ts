@@ -332,6 +332,15 @@ export const AVAILABLE_SLM_MODELS: LocalSlmModelMetadata[] = [
     description: 'Ultra-lightweight local language model running entirely in browser RAM for quick intuition and offline mentoring.'
   },
   {
+    id: 'smollm2-360m-q4',
+    name: 'SmolLM2-360M (INT4 Quantized)',
+    architecture: 'SmolLM2 Transformer',
+    sizeMb: 145,
+    quantization: 'q4f16_1 (WebGPU ONNX)',
+    recommendedHardware: 'Laptop / Tablet (2GB+ WebGPU VRAM)',
+    description: 'Balanced edge model delivering improved Python logic reasoning and mathematical derivation with low RAM footprint.'
+  },
+  {
     id: 'qwen2.5-0.5b-q4',
     name: 'Qwen2.5-0.5B (INT4 Quantized)',
     architecture: 'Qwen Transformer',
@@ -339,8 +348,38 @@ export const AVAILABLE_SLM_MODELS: LocalSlmModelMetadata[] = [
     quantization: 'q4_k_m (WebGPU WGSL)',
     recommendedHardware: 'Discrete GPU or Apple Silicon (M1/M2/M3)',
     description: 'Higher reasoning fidelity model capable of complete Python code synthesis and deep architectural explanations.'
+  },
+  {
+    id: 'qwen2.5-1.5b-q4',
+    name: 'Qwen2.5-1.5B (INT4 Quantized)',
+    architecture: 'Qwen Transformer',
+    sizeMb: 450,
+    quantization: 'q4_k_m (WebGPU WGSL)',
+    recommendedHardware: 'High-End Desktop / Workstation (4GB+ WebGPU VRAM)',
+    description: 'Full-capability sovereign desktop SLM supporting complex multi-turn coding and comprehensive first-principles math.'
   }
 ];
+
+/**
+ * Adaptive VRAM sensing: inspects detected WebGPU hardware limits and returns
+ * the optimal recommended local SLM model to prevent browser OOM or tab crashes.
+ */
+export function getRecommendedSlmModel(telemetry: WebGpuTelemetry): LocalSlmModelMetadata {
+  if (!telemetry.supported || telemetry.isFallbackCpu) {
+    return AVAILABLE_SLM_MODELS[0]; // smollm-135m-q4 for CPU fallback
+  }
+
+  // maxBufferSizeMb gives direct telemetry on GPU addressable buffer ceiling
+  if (telemetry.maxBufferSizeMb >= 2048) {
+    return AVAILABLE_SLM_MODELS.find(m => m.id === 'qwen2.5-1.5b-q4') || AVAILABLE_SLM_MODELS[2];
+  } else if (telemetry.maxBufferSizeMb >= 1024) {
+    return AVAILABLE_SLM_MODELS.find(m => m.id === 'qwen2.5-0.5b-q4') || AVAILABLE_SLM_MODELS[1];
+  } else if (telemetry.maxBufferSizeMb >= 512) {
+    return AVAILABLE_SLM_MODELS.find(m => m.id === 'smollm2-360m-q4') || AVAILABLE_SLM_MODELS[0];
+  }
+
+  return AVAILABLE_SLM_MODELS[0];
+}
 
 /**
  * Checks if a specific local SLM model's weights are cached in CacheStorage / IndexedDB.

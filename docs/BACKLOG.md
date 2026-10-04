@@ -32,11 +32,14 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
 
 ---
 
-## 2. Future Architectural Enhancements ($0 Rule Compliant)
+## 2. Architectural Enhancements ($0 Rule Compliant) [COMPLETED]
 
-- [ ] **WebGPU Quantized Model Expansion:**
-  - Add optional larger quantized models (`smollm2-360m-q4`, `qwen2.5-1.5b-q4`) with adaptive VRAM sensing for high-memory desktop clients.
-- [ ] **Mobile Haptic Feedback:**
-  - Add optional subtle vibration pulses (`navigator.vibrate([15, 30, 15])`) on successful lab verification and boss challenge unlocks on supported Android devices.
-- [ ] **Extended Offline Datasets:**
-  - Pre-package compact offline documentation for NumPy vector operations in Pyodide IndexedDB cache.
+- [x] **WebGPU Quantized Model Expansion:**
+  - Expanded `AVAILABLE_SLM_MODELS` with `smollm2-360m-q4` (145MB) and `qwen2.5-1.5b-q4` (450MB) alongside `smollm-135m-q4` and `qwen2.5-0.5b-q4`.
+  - Implemented `getRecommendedSlmModel(telemetry)` with adaptive VRAM sensing inspecting `maxBufferSizeMb` to prevent OOM errors.
+- [x] **Mobile Haptic Feedback:**
+  - Added native multi-tier haptic vibration profiles (`'light'`, `'success'`, `'error'`, and `'boss'` with `[15, 30, 15, 30, 25]` cadence).
+  - Integrated celebratory haptics on standard lab and Boss Project completions in `CoursePlayer.tsx`.
+- [x] **Extended Offline Datasets:**
+  - Pre-packaged comprehensive offline NumPy linear algebra, vector spaces, and tensor broadcasting documentation in `offlineKnowledge.ts`.
+

@@ -120,7 +120,7 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
 /**
  * Native Mobile Touch Vibration (Haptics)
  */
-export function triggerHaptic(type: 'light' | 'success' | 'error') {
+export function triggerHaptic(type: 'light' | 'success' | 'error' | 'boss') {
   const { hapticsEnabled = true } = useSettingsStore.getState() as any;
   if (!hapticsEnabled || typeof navigator === 'undefined' || !navigator.vibrate) return;
 
@@ -129,6 +129,8 @@ export function triggerHaptic(type: 'light' | 'success' | 'error') {
       navigator.vibrate(8);
     } else if (type === 'success') {
       navigator.vibrate([12, 40, 18]);
+    } else if (type === 'boss') {
+      navigator.vibrate([15, 30, 15, 30, 25]);
     } else if (type === 'error') {
       navigator.vibrate([30, 40, 30]);
     }

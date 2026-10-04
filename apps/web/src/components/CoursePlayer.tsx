@@ -238,11 +238,14 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       if (passed) {
         setIsChallengePassed(true);
         completeLesson(currentLesson.id, track.id);
+        const isBoss = currentLesson.title.toLowerCase().includes('boss');
         playTactileSound('success');
-        triggerHaptic('success');
+        triggerHaptic(isBoss ? 'boss' : 'success');
         setFeedback({ 
           type: 'success', 
-          message: '✓ Challenge Passed! Output matches expected first-principles criteria.' 
+          message: isBoss 
+            ? '🏆 Boss Project Completed! Full First-Principles synthesis verified.' 
+            : '✓ Challenge Passed! Output matches expected first-principles criteria.' 
         });
       } else {
         setFeedback({ 
