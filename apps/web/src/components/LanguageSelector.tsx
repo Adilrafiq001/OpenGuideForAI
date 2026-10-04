@@ -97,5 +97,3 @@ export function LanguageSelector() {
     </div>
   );
 }
-
-export default LanguageSelector;

@@ -164,8 +164,8 @@ export function usePyodide() {
   }, [initWorker]);
 
   const runCode = useCallback((code: string): Promise<{ result: any; stdout: string; durationMs: number }> => {
-    if (state !== 'ready') {
-      if (state === 'running') {
+    if (state !== 'ready' || activeExecution.current !== null) {
+      if (state === 'running' || activeExecution.current !== null) {
         return Promise.reject(new Error('Pyodide engine is currently busy executing code.'));
       }
       return Promise.reject(new Error('Pyodide engine is not ready.'));

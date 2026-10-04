@@ -5,6 +5,7 @@ import { LandingPage } from './pages/LandingPage';
 import { CommandDock } from './components/CommandDock';
 import { AbbyChatbot } from './components/AbbyChatbot';
 import { useSettingsStore } from './store/useSettingsStore';
+import { useProgressStore } from './store/useProgressStore';
 import { track0 } from './data/track0';
 import { track1 } from './data/track1';
 import { track2 } from './data/track2';
@@ -49,6 +50,11 @@ function AppContent() {
   });
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  // Eagerly hydrate learner progress from Dexie IndexedDB on application boot
+  useEffect(() => {
+    useProgressStore.getState().initProgress();
+  }, []);
 
   // Global Keyboard Listener for Cmd+K / Ctrl+K Studio Command Palette
   useEffect(() => {

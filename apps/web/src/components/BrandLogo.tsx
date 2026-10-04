@@ -34,5 +34,3 @@ export function BrandLogo({ className = '', showBadge = true, size = 'md' }: Bra
     </div>
   );
 }
-
-export default BrandLogo;

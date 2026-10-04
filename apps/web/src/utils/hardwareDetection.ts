@@ -32,6 +32,10 @@ export function detectHardwareSync(): { hasWebGL: boolean; isLowEnd: boolean; re
     const memory = (navigator as any).deviceMemory || 4;
     const isLowEnd = isSoftware || cores <= 2 || memory <= 2;
 
+    try {
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+    } catch {}
+
     return {
       hasWebGL: true,
       isLowEnd,

@@ -97,7 +97,7 @@
             theme = sessionTheme;
           }
 
-          var lightThemes = ['pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream', 'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial'];
+          var lightThemes = ['pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream', 'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial', 'sakura-blossom', 'champagne-luminary'];
           document.documentElement.setAttribute('data-theme', theme);
           document.documentElement.setAttribute('data-theme-mode', lightThemes.indexOf(theme) !== -1 ? 'light' : 'dark');
 
@@ -121,7 +121,11 @@
             'monokai-pro': '#1a191e',
             'nord-dark': '#1e222a',
             'dracula': '#191a21',
-            'circadian-amber': '#0a0908'
+            'circadian-amber': '#0a0908',
+            'sakura-blossom': '#fffafb',
+            'champagne-luminary': '#faf7f2',
+            'aurora-borealis': '#040711',
+            'celestial-nebula': '#07040e'
           };
           var bg = themeBgs[theme] || '#faf6f0';
 
@@ -145,7 +149,11 @@
             'monokai-pro': '#fcfcfa',
             'nord-dark': '#eceff4',
             'dracula': '#f8f8f2',
-            'circadian-amber': '#fef3c7'
+            'circadian-amber': '#fef3c7',
+            'sakura-blossom': '#1f1318',
+            'champagne-luminary': '#0f172a',
+            'aurora-borealis': '#f0fdfa',
+            'celestial-nebula': '#fdf4ff'
           };
           var textColor = themeTextColors[theme] || '#1e140d';
 
@@ -184,9 +192,9 @@
         <nav aria-label="Sovereign AI Curriculum Directory">
           <a href="/track/0">Track 0: Absolute Zero AI Engineering</a>
           <a href="/track/1">Track 1: Embeddings, Vector Spaces and Semantic Search</a>
-          <a href="/track/2">Track 2: Neural Networks and Autograd Micrograd from Scratch</a>
-          <a href="/track/3">Track 3: Transformer Mechanics, Attention and KV Cache</a>
-          <a href="/track/4">Track 4: Frontier Systems, ReAct Agents and Model Context Protocol</a>
+          <a href="/track/2">Track 2: RAG, Retrieval &amp; Autonomous Agents</a>
+          <a href="/track/3">Track 3: Production Evals, Guardrails &amp; Security</a>
+          <a href="/track/4">Track 4: Frontier Attention, Systems &amp; Reasoning</a>
           <a href="/holodeck">Spatial Holodeck: 3D Vector Manifolds</a>
           <a href="/portfolio">Portfolio and Verifiable Credentials</a>
         </nav>

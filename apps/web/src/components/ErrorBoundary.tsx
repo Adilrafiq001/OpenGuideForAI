@@ -36,6 +36,11 @@ export class ErrorBoundary extends Component<Props, State> {
   private handleClearData = () => {
     try {
       localStorage.removeItem('openguide_completed_lessons');
+      localStorage.removeItem('openguide-settings');
+      sessionStorage.clear();
+      if (typeof indexedDB !== 'undefined') {
+        indexedDB.deleteDatabase('OpenGuideDatabase');
+      }
     } catch {
       // Storage optional
     }

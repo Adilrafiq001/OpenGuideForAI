@@ -64,10 +64,20 @@ function applyDocumentLanguage(lang: SupportedLanguage) {
   }
 }
 
-const savedSessionLang = (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('openguide_session_lang') : null) as SupportedLanguage;
-const savedLocalLang = (typeof localStorage !== 'undefined' ? localStorage.getItem('openguide_lang') : null) as SupportedLanguage;
+let savedSessionLang: SupportedLanguage | null = null;
+let savedLocalLang: SupportedLanguage | null = null;
+try {
+  if (typeof sessionStorage !== 'undefined') {
+    savedSessionLang = sessionStorage.getItem('openguide_session_lang') as SupportedLanguage;
+  }
+} catch {}
+try {
+  if (typeof localStorage !== 'undefined') {
+    savedLocalLang = localStorage.getItem('openguide_lang') as SupportedLanguage;
+  }
+} catch {}
 const savedLang = savedSessionLang || savedLocalLang;
-const initialLanguage: SupportedLanguage = LANGUAGES.some(l => l.code === savedLang) ? savedLang : 'en';
+const initialLanguage: SupportedLanguage = LANGUAGES.some(l => l.code === savedLang) ? (savedLang as SupportedLanguage) : 'en';
 
 // Apply on startup
 applyDocumentLanguage(initialLanguage);
@@ -75,12 +85,16 @@ applyDocumentLanguage(initialLanguage);
 export const useLanguageStore = create<LanguageStoreState>((set, get) => ({
   language: initialLanguage,
   setLanguage: (lang: SupportedLanguage) => {
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem('openguide_session_lang', lang);
-    }
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('openguide_lang', lang);
-    }
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('openguide_session_lang', lang);
+      }
+    } catch {}
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('openguide_lang', lang);
+      }
+    } catch {}
     applyDocumentLanguage(lang);
     set({ language: lang });
   },

@@ -149,6 +149,11 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
     ]
   });
 
+  // Restore dock if minimized before starting tour
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('openguide:restore-dock'));
+  }
+
   // Short delay to allow smooth scroll to top before starting tour
   setTimeout(() => {
     driverObj.drive();

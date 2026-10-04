@@ -57,6 +57,15 @@ class PerformanceTelemetry {
       });
       lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
+      const stopLcp = () => {
+        try {
+          lcpObserver.disconnect();
+        } catch {}
+      };
+      ['keydown', 'click', 'visibilitychange'].forEach(type => {
+        window.addEventListener(type, stopLcp, { once: true, passive: true });
+      });
+
       // Observe Cumulative Layout Shift (CLS)
       const clsObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries() as any[]) {

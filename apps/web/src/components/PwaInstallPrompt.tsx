@@ -10,19 +10,22 @@ export function PwaInstallPrompt() {
   const [isDismissed, setIsDismissed] = useState(false);
   const [showIosModal, setShowIosModal] = useState(false);
   const [showInstalledToast, setShowInstalledToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('OpenGuide App Installed Successfully! Launch from your Home Screen anytime.');
 
   useEffect(() => {
-    // Check if dismissed in storage
-    const dismissed = localStorage.getItem('openguide_pwa_dismissed') || sessionStorage.getItem('openguide_pwa_dismissed');
-    if (dismissed) {
-      setIsDismissed(true);
-    }
+    try {
+      const dismissed = localStorage.getItem('openguide_pwa_dismissed') || sessionStorage.getItem('openguide_pwa_dismissed');
+      if (dismissed) {
+        setIsDismissed(true);
+      }
+    } catch {}
   }, []);
 
   const handleDismiss = () => {
     setIsDismissed(true);
-    localStorage.setItem('openguide_pwa_dismissed', 'true');
-    sessionStorage.setItem('openguide_pwa_dismissed', 'true');
+    try {
+      localStorage.setItem('openguide_pwa_dismissed', 'true');
+    } catch {}
   };
 
   const handleInstallClick = async () => {
@@ -34,12 +37,14 @@ export function PwaInstallPrompt() {
     if (isInstallable) {
       const res = await promptInstall();
       if (res?.outcome === 'accepted') {
+        setToastMessage('OpenGuide App Installed Successfully! Launch from your Home Screen anytime.');
         setShowInstalledToast(true);
         setTimeout(() => setShowInstalledToast(false), 4000);
       }
     } else {
-      // Fallback instructions if browser hasn't fired beforeinstallprompt yet
-      setShowIosModal(true);
+      setToastMessage('To install OpenGuide, click the Install App icon in your browser address bar.');
+      setShowInstalledToast(true);
+      setTimeout(() => setShowInstalledToast(false), 4500);
     }
   };
 
@@ -57,10 +62,10 @@ export function PwaInstallPrompt() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-[300] bg-emerald-950/90 border border-emerald-500/40 text-emerald-200 px-4 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-2.5 text-xs font-semibold"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-[300] bg-emerald-950/90 border border-emerald-500/40 text-emerald-200 px-4 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-2.5 text-xs font-semibold max-w-sm text-center"
           >
-            <CheckCircle size={16} className="text-emerald-400" />
-            <span>OpenGuide App Installed Successfully! Launch from your Home Screen anytime.</span>
+            <CheckCircle size={16} className="text-emerald-400 shrink-0" />
+            <span>{toastMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>

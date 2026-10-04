@@ -87,6 +87,7 @@ export const ScrollToTopButton: React.FC = () => {
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] backdrop-blur-xl shadow-lg hover:shadow-xl text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer hover:border-[var(--color-accent)]/50 active:scale-95"
         title="Smooth scroll to top"
+        aria-label="Scroll to top of page"
       >
         <ArrowUp size={13} className="text-[var(--color-accent)] group-hover:-translate-y-0.5 transition-transform" />
         <span ref={percentRef} className="font-semibold">0%</span>

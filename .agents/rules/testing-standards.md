@@ -180,5 +180,29 @@ Whenever testing interactive CTAs, forms, or page transitions:
 5. **Computed Style Pollution Check:** Inspect computed styles of the originating element to confirm no deferred styles from the target route leaked into it.
 6. **Re-trigger Verification:** Click the CTA a second time to ensure it re-animates cleanly without race conditions or stuck state.
 
+---
+
+## 13. Mandatory Edge-Case, Mid-Flight Unmounting, Hardware Lifecycle & Drift Testing (Universal)
+
+To guarantee zero regression of latent defects, test automation suites and physical verification MUST enforce:
+
+### A. Mid-Flight Unmounting & Resource Cleanup
+- **Timers & Asynchronous Callbacks:** Every component mounting a `setTimeout`, `setInterval`, `requestAnimationFrame`, or worker message listener MUST clear the reference on unmount.
+- **Event Listeners:** `addEventListener` listeners MUST be strictly mirrored by `removeEventListener` in cleanup. Event listeners MUST NOT rely on callback return values for cleanup.
+- **State Updates After Unmount:** Triggering network state changes (e.g. online/offline) or route transitions while timers are pending must produce ZERO `setState` on unmounted component warnings.
+
+### B. Hardware & Native API Lifecycle Enforcement
+- **WebGPU Buffers & Devices:** Any function calling `adapter.requestDevice()` or `device.createBuffer()` MUST destroy all buffers (`buffer.destroy()`) and the device (`device.destroy()`) inside a `finally` block to prevent GPU process OOM and device limits.
+- **WebGL Contexts:** Temporary feature detection or hardware probing canvases MUST explicitly release contexts via `gl.getExtension('WEBGL_lose_context')?.loseContext()`.
+- **Web Audio Contexts:** `AudioContext` references must be checked for suspension state before scheduling audio parameters, and must never hold unbounded global mutable listeners.
+
+### C. Drift & Prototype Trap Prevention
+- **Production Truth Rule:** Stubs, simulations, or synthetic placeholders (e.g. mock token loops or dummy zero-filled cache blobs) MUST NEVER intercept or replace real production user flows.
+- **Knowledge Engine Fallback:** The sovereign offline knowledge base must remain canonical and active unless a genuine, verified user-configured model is loaded.
+
+### D. Single-Source-of-Truth Sync Verification
+- **Catalog Parity:** Any list duplicated across layers (e.g., `index.html` inline pre-bootstrap FOUC script vs `useSettingsStore.ts` vs `themesData.ts`) must have automated test assertions proving 100% item-for-item parity.
+- **Metadata Parity:** SSR fallbacks, SEO meta tags, and exported schema files (e.g., Jupyter notebook `kernelspec` schemas) must be validated against real application data structures.
+
 
 

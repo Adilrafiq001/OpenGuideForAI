@@ -26,7 +26,6 @@ interface CommandDockProps {
   onOpenThemes?: () => void;
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
-  onOpenCopilot?: () => void;
   onOpenDemo?: () => void;
   onOpenCommandPalette?: () => void;
 }
@@ -39,6 +38,12 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
     if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
     return isEngine;
   });
+
+  useEffect(() => {
+    const handleRestoreDock = () => setIsMinimized(false);
+    window.addEventListener('openguide:restore-dock', handleRestoreDock);
+    return () => window.removeEventListener('openguide:restore-dock', handleRestoreDock);
+  }, []);
 
   // Responsive item sizing to guarantee zero collisions on laptops/tablets
   const [baseItemSize, setBaseItemSize] = useState(() => {

@@ -68,7 +68,13 @@ export interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      theme: (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('openguide_session_theme') as Theme : null) || 'claude-light',
+      theme: (() => {
+        try {
+          return (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('openguide_session_theme') as Theme : null) || 'claude-light';
+        } catch {
+          return 'claude-light';
+        }
+      })(),
       lastDarkTheme: 'obsidian',
       lastLightTheme: 'claude-light',
       displaySize: 'default',
@@ -86,16 +92,18 @@ export const useSettingsStore = create<SettingsState>()(
       soundFx: true,
       soundVolume: 0.5,
       hapticsEnabled: true,
-      lastSeenVersion: '1.1.0',
+      lastSeenVersion: '0.0.0',
       codeCompletion: true,
       graphicsTier: 'auto',
       byokApiKey: '',
       byokProvider: 'openrouter',
       byokModel: 'google/gemini-2.5-flash',
       setTheme: (theme) => {
-        if (typeof sessionStorage !== 'undefined') {
-          sessionStorage.setItem('openguide_session_theme', theme);
-        }
+        try {
+          if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem('openguide_session_theme', theme);
+          }
+        } catch {}
         const lightThemeIds = new Set([
           'pure-paper', 'e-ink-papyrus', 'claude-light', 'linear-light', 'notion-cream',
           'github-light', 'swiss-modernist', 'solarized-light', 'nordic-fjord', 'matcha-ceremonial',
@@ -140,8 +148,10 @@ export const useSettingsStore = create<SettingsState>()(
       clearByokApiKey: () => set({ byokApiKey: '' }),
       setByokProvider: (byokProvider) => set({ byokProvider }),
       setByokModel: (byokModel) => set({ byokModel }),
-      resetDefaults: () => set({
+      resetDefaults: () => set(state => ({
         theme: 'claude-light',
+        lastDarkTheme: 'obsidian',
+        lastLightTheme: 'claude-light',
         displaySize: 'default',
         fontSize: 14,
         editorFont: 'jetbrains-mono',
@@ -157,13 +167,12 @@ export const useSettingsStore = create<SettingsState>()(
         soundFx: true,
         soundVolume: 0.5,
         hapticsEnabled: true,
-        lastSeenVersion: '1.1.0',
         codeCompletion: true,
         graphicsTier: 'auto',
-        byokApiKey: '',
         byokProvider: 'openrouter',
-        byokModel: 'google/gemini-2.5-flash'
-      })
+        byokModel: 'google/gemini-2.5-flash',
+        byokApiKey: state.byokApiKey
+      }))
     }),
     {
       name: 'openguide-settings',

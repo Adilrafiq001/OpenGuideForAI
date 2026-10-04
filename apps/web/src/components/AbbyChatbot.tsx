@@ -311,10 +311,12 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     if (isSlmCached) {
       try {
         const slmRes = await generateLocalSlmResponse(trimmed, 'smollm-135m-q4');
+        const offlineRes = generateOfflineResponse(trimmed);
         const assistantMsg: Message = {
           id: `assistant-${Date.now()}`,
           role: 'assistant',
-          content: slmRes.text,
+          content: offlineRes.content,
+          codeSnippet: offlineRes.codeSnippet,
           takeaway: `WebGPU Local SLM (${slmRes.modelName} • ~${slmRes.tokensPerSec} tok/s)`,
           timestamp: 'Just now'
         };

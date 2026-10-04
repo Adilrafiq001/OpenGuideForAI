@@ -11,7 +11,6 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ isDark, onToggle, clas
   return (
     <label 
       className={`theme-switch ${className}`}
-      aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} Themes`}
       title={`Switch to ${isDark ? 'Light' : 'Dark'} Themes`}
     >
       <input 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useId } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
@@ -62,10 +62,10 @@ export function Tooltip({
     }, delay);
   };
 
-  const hideTooltip = () => {
+  const hideTooltip = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setIsVisible(false);
-  };
+  }, []);
 
   // Close on Escape or click outside
   useEffect(() => {
@@ -87,7 +87,7 @@ export function Tooltip({
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [isVisible]);
+  }, [isVisible, hideTooltip]);
 
   // Position classes & motion offsets with full align awareness
   const getPositionConfig = (pos: TooltipPosition, al: TooltipAlign) => {
@@ -211,5 +211,3 @@ export function Tooltip({
     </div>
   );
 }
-
-export default Tooltip;
