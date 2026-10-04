@@ -50,14 +50,19 @@ export function SpatialHolodeck() {
 
           <div className="h-4 w-[1px] bg-[var(--color-border)]" />
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent,#10b981)] animate-pulse" />
-            <h1 className="text-sm font-bold tracking-tight text-[var(--color-text-primary)] flex items-center gap-2">
-              Spatial Holodeck
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--color-accent,#10b981)]/20 text-[var(--color-accent,#10b981)] border border-[var(--color-accent,#10b981)]/30 font-semibold">
-                3D • VR • 2D Lean
-              </span>
-            </h1>
+            <div>
+              <h1 className="text-sm font-bold tracking-tight text-[var(--color-text-primary)] flex items-center gap-2">
+                Spatial Holodeck
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--color-accent,#10b981)]/20 text-[var(--color-accent,#10b981)] border border-[var(--color-accent,#10b981)]/30 font-semibold">
+                  3D Semantic Cosmos
+                </span>
+              </h1>
+              <p className="text-[10px] font-mono text-[var(--color-text-secondary)] hidden sm:block">
+                Semantic Embedding Hyper-Space // See, measure, and hear how AI models represent meaning in geometric space
+              </p>
+            </div>
           </div>
         </div>
 
@@ -110,7 +115,7 @@ export function SpatialHolodeck() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-6 pb-36 space-y-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 pb-44 space-y-6">
         
         {/* Hardware Telemetry Bar */}
         <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
