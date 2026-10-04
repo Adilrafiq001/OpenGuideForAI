@@ -22,6 +22,32 @@ class OpenGuideDatabase extends Dexie {
 export const db = new OpenGuideDatabase();
 
 const STORAGE_KEY = 'openguide_completed_lessons';
+const SYNC_CHANNEL_NAME = 'openguide_progress_broadcast';
+
+let progressBroadcast: BroadcastChannel | null = null;
+try {
+  if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+    progressBroadcast = new BroadcastChannel(SYNC_CHANNEL_NAME);
+  }
+} catch {}
+
+function getInitialCachedProgress(): { ids: string[]; loaded: boolean } {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const ids = parsed.filter(id => typeof id === 'string');
+          return { ids, loaded: true };
+        }
+      }
+    }
+  } catch {}
+  return { ids: [], loaded: false };
+}
+
+const initialCached = getInitialCachedProgress();
 
 interface ProgressStoreState {
   completedLessonIds: string[];
@@ -37,8 +63,8 @@ interface ProgressStoreState {
 }
 
 export const useProgressStore = create<ProgressStoreState>((set, get) => ({
-  completedLessonIds: [],
-  isLoaded: false,
+  completedLessonIds: initialCached.ids,
+  isLoaded: initialCached.loaded,
 
   initProgress: async () => {
     try {
@@ -105,6 +131,9 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
     
     // Performance optimization: Instantaneous in-memory cache update
     set({ completedLessonIds: updated });
+    try {
+      progressBroadcast?.postMessage({ type: 'LESSON_COMPLETED', lessonId, updatedList: updated });
+    } catch {}
 
     // Sync to localStorage cache
     try {
@@ -126,6 +155,9 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
   resetProgress: async () => {
     set({ completedLessonIds: [] });
     try {
+      progressBroadcast?.postMessage({ type: 'PROGRESS_RESET' });
+    } catch {}
+    try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
     try {
@@ -137,6 +169,9 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
 
   simulateAllComplete: async (allLessonIds: string[]) => {
     set({ completedLessonIds: allLessonIds });
+    try {
+      progressBroadcast?.postMessage({ type: 'SIMULATE_ALL', allLessonIds });
+    } catch {}
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(allLessonIds));
     } catch {}
@@ -168,6 +203,9 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
       }
       const newIds = data.completedLessons.filter((id: any) => typeof id === 'string');
       set({ completedLessonIds: newIds });
+      try {
+        progressBroadcast?.postMessage({ type: 'PROGRESS_IMPORTED', completedLessonIds: newIds });
+      } catch {}
       
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newIds));
@@ -317,3 +355,29 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
     }
   }
 }));
+
+// Cross-Tab Broadcast Synchronization
+if (progressBroadcast) {
+  progressBroadcast.onmessage = (event) => {
+    try {
+      const data = event.data;
+      if (!data || typeof data !== 'object') return;
+      if (data.type === 'LESSON_COMPLETED' && Array.isArray(data.updatedList)) {
+        useProgressStore.setState({ completedLessonIds: data.updatedList });
+      } else if (data.type === 'PROGRESS_RESET') {
+        useProgressStore.setState({ completedLessonIds: [] });
+      } else if (data.type === 'SIMULATE_ALL' && Array.isArray(data.allLessonIds)) {
+        useProgressStore.setState({ completedLessonIds: data.allLessonIds });
+      } else if (data.type === 'PROGRESS_IMPORTED' && Array.isArray(data.completedLessonIds)) {
+        useProgressStore.setState({ completedLessonIds: data.completedLessonIds });
+      }
+    } catch {}
+  };
+}
+
+// Eager client runtime initProgress on boot
+if (typeof window !== 'undefined') {
+  useProgressStore.getState().initProgress();
+}
+
+

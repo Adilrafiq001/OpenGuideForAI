@@ -197,22 +197,20 @@ export function PortfolioPage() {
 
   const handleExportBackup = () => {
     const json = exportProgressJSON();
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadFile(json, `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
   };
 
   const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const text = await file.text();
-    const success = await importProgressJSON(text);
-    if (!success) {
-      alert('Unable to import: Invalid JSON ledger format.');
+    try {
+      const text = await file.text();
+      const success = await importProgressJSON(text);
+      if (!success) {
+        console.warn('Unable to import: Invalid JSON ledger format.');
+      }
+    } catch (err) {
+      console.warn('Failed to read backup file:', err);
     }
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -280,13 +278,7 @@ export function PortfolioPage() {
       }
     }, null, 2);
 
-    const blob = new Blob([cred], { type: 'application/ld+json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `openguide-w3c-credential-${new Date().toISOString().slice(0, 10)}.jsonld`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadFile(cred, `openguide-w3c-credential-${new Date().toISOString().slice(0, 10)}.jsonld`, 'application/ld+json');
   };
 
   const handleCopyBadgeMarkdown = async () => {

@@ -69,6 +69,10 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       osc1.onended = () => {
         try {
           osc1.disconnect();
+        } catch {}
+      };
+      osc2.onended = () => {
+        try {
           osc2.disconnect();
           gain.disconnect();
         } catch {}
@@ -152,7 +156,8 @@ export function playCosineSonification(similarity: number) {
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
     // Base frequency clamped between 260Hz and 880Hz
-    const normalized = Math.max(-1, Math.min(1, similarity));
+    const safeSimilarity = Number.isFinite(similarity) ? similarity : 0;
+    const normalized = Math.max(-1, Math.min(1, safeSimilarity));
     const baseFreq = 440 + normalized * 220; // 220Hz to 660Hz
 
     const osc1 = ctx.createOscillator();
@@ -166,6 +171,10 @@ export function playCosineSonification(similarity: number) {
     osc1.onended = () => {
       try {
         osc1.disconnect();
+      } catch {}
+    };
+    osc2.onended = () => {
+      try {
         osc2.disconnect();
         gain.disconnect();
       } catch {}

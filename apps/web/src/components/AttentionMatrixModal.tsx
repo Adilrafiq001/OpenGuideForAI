@@ -106,10 +106,12 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
         </div>
 
         {/* Head Selectors */}
-        <div className="flex flex-wrap gap-2">
+        <div role="tablist" aria-label="Attention Heads" className="flex flex-wrap gap-2">
           {['Head 0 (Local Syntax)', 'Head 1 (Subject-Verb)', 'Head 2 (Object Tracking)', 'Head 3 (Global Context)'].map((label, idx) => (
             <button
               key={idx}
+              role="tab"
+              aria-selected={activeHead === idx}
               onClick={() => setActiveHead(idx)}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer ${
                 activeHead === idx

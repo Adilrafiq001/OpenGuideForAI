@@ -54,13 +54,29 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   }, [theme]);
 
-  // Lock body scroll while drawer is open
+  // Lock body scroll and trap focus while drawer is open
   useEffect(() => {
     if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
+        if (e.key === 'Escape') {
+          onClose();
+        } else if (e.key === 'Tab') {
+          const sheet = document.getElementById('mobile-nav-drawer-sheet');
+          if (!sheet) return;
+          const focusables = sheet.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (focusables.length === 0) return;
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       };
       window.addEventListener('keydown', handleKeyDown);
       return () => {
@@ -150,6 +166,10 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
 
           {/* Luxury Sheet Container */}
           <motion.div
+            id="mobile-nav-drawer-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}

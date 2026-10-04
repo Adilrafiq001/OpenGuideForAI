@@ -352,13 +352,15 @@ export function StudioInteractiveDemoModal({
           {/* Main Layout: Flow Selector Sidebar + Interactive Detail Pane */}
           <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden">
             {/* Sidebar Navigation */}
-            <div className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#000)]/30 overflow-x-auto md:overflow-y-auto p-3 flex md:flex-col gap-1.5 shrink-0">
+            <div role="tablist" aria-label="Demo Flows" className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#000)]/30 overflow-x-auto md:overflow-y-auto p-3 flex md:flex-col gap-1.5 shrink-0">
               {flows.map((flow) => {
                 const Icon = flow.icon;
                 const isActive = flow.id === activeFlowId;
                 return (
                   <button
                     key={flow.id}
+                    role="tab"
+                    aria-selected={isActive}
                     onClick={() => {
                       setActiveFlowId(flow.id);
                       playTactileSound('click');
@@ -391,7 +393,7 @@ export function StudioInteractiveDemoModal({
             </div>
 
             {/* Active Detail Showcase Area */}
-            <div className="flex-1 p-5 sm:p-7 overflow-y-auto space-y-6">
+            <div role="tabpanel" aria-label={activeFlow.title} className="flex-1 p-5 sm:p-7 overflow-y-auto space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase ${activeFlow.badgeColor}`}>

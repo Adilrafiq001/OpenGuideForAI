@@ -570,19 +570,23 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div 
-          className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tools-modal-title"
-      >
+          className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md cursor-pointer"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="tools-modal-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
+        >
         <motion.div
           ref={modalRef}
           tabIndex={-1}
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-          className="relative w-full max-w-6xl h-[92vh] max-h-[850px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
+          className="relative w-full max-w-6xl h-[92vh] max-h-[850px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)] cursor-default"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/50 shrink-0">
@@ -615,12 +619,14 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
           </div>
 
           {/* Category Navigation Bar */}
-          <div className="flex items-center gap-2 px-5 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 overflow-x-auto shrink-0">
+          <div role="tablist" aria-label="Tool Categories" className="flex items-center gap-2 px-5 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 overflow-x-auto shrink-0">
             {(['MEMORY', 'GLUE', 'COMPUTE', 'HOSTING'] as const).map(cat => {
               const isActive = selectedCategory === cat;
               return (
                 <button
                   key={cat}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => {
                     setSelectedCategory(cat);
                     const first = FREE_TOOLS_GUIDES.find(t => t.category === cat);

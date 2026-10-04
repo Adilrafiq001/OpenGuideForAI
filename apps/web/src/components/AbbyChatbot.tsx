@@ -255,7 +255,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         takeaway: `Generated live via ${byokProvider.toUpperCase()} (${model})`
       };
     } else if (byokProvider === 'gemini') {
-      const model = byokModel || 'gemini-1.5-flash';
+      const rawModel = byokModel || 'gemini-1.5-flash';
+      const model = rawModel.includes('/') ? rawModel.split('/')[1] : rawModel;
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${byokApiKey}`;
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -274,6 +275,37 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       return {
         content,
         takeaway: `Generated live via Google Gemini (${model})`
+      };
+    } else if (byokProvider === 'anthropic') {
+      const rawModel = byokModel || 'claude-3-5-haiku-20241022';
+      const model = rawModel.includes('/') ? rawModel.split('/')[1] : rawModel;
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': byokApiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 800,
+          system: 'You are Bluee, an articulate, world-class AI engineering mentor for OpenGuide. Provide concise, first-principles explanations and clean Python/TypeScript code examples without fluff.',
+          messages: [
+            ...messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
+            { role: 'user', content: userQuery }
+          ]
+        })
+      });
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error?.message || `Anthropic API returned status ${res.status}`);
+      }
+      const data = await res.json();
+      const content = data.content?.[0]?.text || 'No response returned from model.';
+      return {
+        content,
+        takeaway: `Generated live via Anthropic (${model})`
       };
     } else {
       throw new Error(`Direct browser calls to ${byokProvider} are not directly supported. Falling back to local engine.`);

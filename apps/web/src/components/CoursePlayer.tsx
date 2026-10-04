@@ -62,7 +62,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     initProgress();
   }, [initProgress]);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const paramMod = searchParams.get('module');
   const paramLes = searchParams.get('lesson');
 
@@ -75,6 +75,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [code, setCode] = useState(currentLesson.initialCode);
   const [canUndoReset, setCanUndoReset] = useState(false);
   const previousCodeRef = useRef<string>('');
+  const isInitialMountRef = useRef(true);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | 'info' | null; message: string }>({ type: null, message: '' });
   const [isChallengePassed, setIsChallengePassed] = useState(false);
   const [syntaxDiagnostic, setSyntaxDiagnostic] = useState<PythonDiagnostic | null>(null);
@@ -102,6 +103,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         lesIdx = parsed;
       }
     }
+    if (!isInitialMountRef.current && modIdx === currentModuleIdx && lesIdx === currentLessonIdx) {
+      return;
+    }
+    isInitialMountRef.current = false;
     setCurrentModuleIdx(modIdx);
     setCurrentLessonIdx(lesIdx);
     const target = track.modules[modIdx]?.lessons[lesIdx] || track.modules[0]?.lessons[0];
@@ -115,12 +120,15 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       setCopiedSolution(false);
       setIsChallengePassed(completedLessonIds.includes(target.id));
     }
-  }, [track.id, paramMod, paramLes]);
+  }, [track.id, paramMod, paramLes, currentModuleIdx, currentLessonIdx]);
 
   // Reset code when lesson changes
   const handleLessonChange = (modIdx: number, lesIdx: number) => {
     const targetLesson = track.modules[modIdx]?.lessons[lesIdx];
     if (!targetLesson) return;
+    try {
+      setSearchParams({ module: modIdx.toString(), lesson: lesIdx.toString() }, { replace: true });
+    } catch {}
     setCurrentModuleIdx(modIdx);
     setCurrentLessonIdx(lesIdx);
     setCode(targetLesson.initialCode);

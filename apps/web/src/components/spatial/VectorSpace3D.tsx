@@ -322,14 +322,16 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    const getNormalizedMouse = (e: MouseEvent) => {
+    const getNormalizedMouse = (e: MouseEvent): boolean => {
       const rect = canvas.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return false;
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      return true;
     };
 
     const handleCanvasMouseMove = (e: MouseEvent) => {
-      getNormalizedMouse(e);
+      if (!getNormalizedMouse(e)) return;
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(nodeMeshesRef.current.map(n => n.mesh));
 
@@ -348,7 +350,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     };
 
     const handleCanvasClick = (e: MouseEvent) => {
-      getNormalizedMouse(e);
+      if (!getNormalizedMouse(e)) return;
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(nodeMeshesRef.current.map(n => n.mesh));
 
@@ -373,6 +375,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     let prevMouseY = 0;
 
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      if ('touches' in e && (!e.touches || !e.touches[0])) return;
       isDragging = true;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
@@ -382,6 +385,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
     const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       if (!isDragging) return;
+      if ('touches' in e && (!e.touches || !e.touches[0])) return;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       const deltaX = clientX - prevMouseX;

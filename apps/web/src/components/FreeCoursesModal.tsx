@@ -1208,19 +1208,23 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div 
-          className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="course-modal-title"
-      >
+          className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md cursor-pointer"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="course-modal-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
+        >
         <motion.div
           ref={modalRef}
           tabIndex={-1}
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-          className="relative w-full max-w-6xl h-[92vh] max-h-[850px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
+          className="relative w-full max-w-6xl h-[92vh] max-h-[850px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)] cursor-default"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/50 shrink-0">
@@ -1338,10 +1342,12 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
             }`}>
               
               {/* Studio Tabs */}
-              <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
+              <div role="tablist" aria-label="Course Sections" className="flex items-center justify-between px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
                 <div className="flex items-center gap-1 sm:gap-2">
                   {hasVideo && (
                     <button
+                      role="tab"
+                      aria-selected={activeTab === 'video'}
                       onClick={() => setActiveTab('video')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
                         activeTab === 'video'
@@ -1356,6 +1362,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
 
                   {hasVideo && (
                     <button
+                      role="tab"
+                      aria-selected={activeTab === 'transcript'}
                       onClick={() => setActiveTab('transcript')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
                         activeTab === 'transcript'
@@ -1369,6 +1377,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                   )}
 
                   <button
+                    role="tab"
+                    aria-selected={activeTab === 'code'}
                     onClick={() => setActiveTab('code')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
                       activeTab === 'code'
@@ -1381,6 +1391,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                   </button>
 
                   <button
+                    role="tab"
+                    aria-selected={activeTab === 'syllabus'}
                     onClick={() => setActiveTab('syllabus')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
                       activeTab === 'syllabus'

@@ -128,10 +128,12 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
             {/* Category Tabs & Search Bar */}
             <div className="px-6 py-3.5 bg-[var(--color-secondary)]/80 border-b border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Category Pills */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] w-full sm:w-auto shadow-inner">
+              <div role="tablist" aria-label="Question Categories" className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] w-full sm:w-auto shadow-inner">
                 {(['why', 'how', 'what'] as const).map(cat => (
                   <button
                     key={cat}
+                    role="tab"
+                    aria-selected={activeCategory === cat}
                     onClick={() => {
                       setActiveCategory(cat);
                       const firstInCat = FIRST_PRINCIPLES_MATRIX.find(q => q.category === cat);

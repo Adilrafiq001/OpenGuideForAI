@@ -55,9 +55,12 @@ export function HeroPhysicsStage({
   const [webGpuKernelOutput, setWebGpuKernelOutput] = useState<WebGpuKernelResult | null>(null);
   const [webGpuTelemetry, setWebGpuTelemetry] = useState<WebGpuTelemetry | null>(null);
   const simTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
+    isMountedRef.current = true;
     return () => {
+      isMountedRef.current = false;
       if (simTimerRef.current) {
         clearTimeout(simTimerRef.current);
       }
@@ -66,7 +69,9 @@ export function HeroPhysicsStage({
 
   useEffect(() => {
     if (activeLens === 'webgpu') {
-      detectWebGpuSupport().then(setWebGpuTelemetry);
+      detectWebGpuSupport().then(res => {
+        if (isMountedRef.current) setWebGpuTelemetry(res);
+      });
     }
   }, [activeLens]);
 
@@ -77,16 +82,19 @@ export function HeroPhysicsStage({
     if (activeLens === 'webgpu') {
       try {
         const result = await executeWebGpuKernel();
+        if (!isMountedRef.current) return;
         setWebGpuKernelOutput(result);
         setIsSimRunning(false);
         setSimOutput(`${result.backend} • Dot: ${result.dotProduct} in ${result.durationMs}ms (${result.adapterName})`);
       } catch {
+        if (!isMountedRef.current) return;
         setIsSimRunning(false);
         setSimOutput('WASM CPU Fallback • Dot: 0.9984 in 1.8ms (Software Kernel)');
       }
     } else {
       if (simTimerRef.current) clearTimeout(simTimerRef.current);
       simTimerRef.current = setTimeout(() => {
+        if (!isMountedRef.current) return;
         setIsSimRunning(false);
         setSimOutput(t('hero_console_sim_done'));
       }, 450);

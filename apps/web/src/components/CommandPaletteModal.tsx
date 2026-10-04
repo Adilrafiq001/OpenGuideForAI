@@ -70,6 +70,10 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
     }
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
+
   const items = useMemo(() => {
     const list: Array<{
       id: string;

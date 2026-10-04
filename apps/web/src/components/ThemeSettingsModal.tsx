@@ -250,7 +250,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               <button
                 onClick={() => setActiveTab('themes')}
                 data-testid="tab-themes-btn"
-                className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === 'themes'
                     ? 'shadow-lg'
                     : 'text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]/30'
@@ -267,7 +267,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               <button
                 onClick={() => setActiveTab('preferences')}
                 data-testid="tab-preferences-btn"
-                className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === 'preferences'
                     ? 'shadow-lg'
                     : 'text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]/30'
@@ -345,6 +345,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             setTheme(t.id);
                             setActiveMode(t.mode);
                           }}
+                          aria-pressed={isSelected}
                           className={`group w-full p-3 rounded-2xl cursor-pointer transition-all duration-200 border flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                             isSelected
                               ? 'border-[var(--color-accent)] bg-[var(--color-accent-trans,rgba(16,185,129,0.12))] shadow-md'
