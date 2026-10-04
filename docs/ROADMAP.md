@@ -207,7 +207,13 @@
 - [x] **Portable Proof-of-Work Jupyter (.ipynb) Engine (`notebookExport.ts`):** Zero-dependency JSON serializer generating standard Jupyter Notebook files conforming strictly to nbformat 4.5, packaging Markdown theory and executable Python solution cells.
 - [x] **Ambient Notification & Priority Orchestration:** Decoupled z-index and coordinate hierarchy (`z-[200]` for modal backdrops, `z-[95]` for non-interfering top-right desktop toasts) eliminating pointer collisions with the bottom-left announcement pill and bottom-right Bluee chatbot.
 - [x] **Zero-Cost Open-Source Social Proof & Trust Architecture:** Verified community quotes from foundational AI leaders (Karpathy, LeCun, Ng) in `#voices` section and verified MIT/Apache, Zero-Telemetry, $0 WASM badges in footer.
-- [x] **Universal Cross-Device Responsive Layout Certification:** Zero horizontal scroll overflow (`scrollWidth <= innerWidth + 1`) and zero UI collisions across 320px–1920px viewports.
+## Phase 21: Latent Bug Hardening, Audio Lifecycle & Modal Architecture (Release v1.2.0)
+- [x] **Web Audio Resource Lifecycle & Node Disposal:** Attached `osc.onended = () => { osc.disconnect(); gain.disconnect(); }` across `VectorSpace3D.tsx` and `SynapseLounge.tsx`, preventing audio graph nodes from accumulating in Web Audio thread memory across gaming and 3D exploration sessions.
+- [x] **Stale Closure Audio Muting Fix:** Added `soundEnabledRef` synchronized via `useLayoutEffect` in `NeuralSynapse3D.tsx` and `VectorSpace3D.tsx`, guaranteeing that UI mute toggles immediately silence canvas raycaster clicks.
+- [x] **Mid-Flight Simulation Unmount Protection:** Guarded `HeroPhysicsStage.tsx` simulation timers via `simTimerRef` with unmount clearance, preventing state updates on unmounted components during fast page navigation.
+- [x] **FirstPrinciplesModal Accessibility & Keyboard Navigation:** Added `Escape` keydown handler, `overflow: hidden` body scroll lock with cleanup, `role="dialog"`, `aria-modal="true"`, and `aria-label="First Principles Knowledge Matrix"`.
+- [x] **Modal Scroll Bleed Elimination:** Added body scroll locks across `AutogradDAGModal.tsx` and `AttentionMatrixModal.tsx` with restoration cleanup.
+- [x] **Automated Regression Suite Hardening:** Extended `audit-hardening-regression.spec.ts` with `TC-AUDIT-014` through `TC-AUDIT-019`. Full test suite: **91/91 passing (100% pass, 0 failing, 0 skipped)**.
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 
