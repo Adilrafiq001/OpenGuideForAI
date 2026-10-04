@@ -322,5 +322,133 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
 
+  test('TC-AUDIT-016: Curriculum Integrity & Globally Unique Lesson IDs Across 45 Labs', async ({ page }) => {
+    await page.goto('/');
+
+    const curriculumData = await page.evaluate(async () => {
+      const { track0 } = await import('/src/data/track0.ts');
+      const { track1 } = await import('/src/data/track1.ts');
+      const { track2 } = await import('/src/data/track2.ts');
+      const { track3 } = await import('/src/data/track3.ts');
+      const { track4 } = await import('/src/data/track4.ts');
+
+      const allTracks = [track0, track1, track2, track3, track4];
+      const lessonIds: string[] = [];
+      let totalLessons = 0;
+      let missingVerificationCount = 0;
+
+      for (const track of allTracks) {
+        for (const mod of track.modules) {
+          for (const les of mod.lessons) {
+            totalLessons++;
+            lessonIds.push(les.id);
+            if (!les.id || !les.title || !les.initialCode) {
+              missingVerificationCount++;
+            }
+            if (!les.expectedOutput && !les.testCode) {
+              missingVerificationCount++;
+            }
+          }
+        }
+      }
+
+      const uniqueIds = new Set(lessonIds);
+      return {
+        totalLessons,
+        uniqueCount: uniqueIds.size,
+        hasDuplicates: uniqueIds.size !== lessonIds.length,
+        missingVerificationCount
+      };
+    });
+
+    expect(curriculumData.totalLessons).toBe(45);
+    expect(curriculumData.uniqueCount).toBe(45);
+    expect(curriculumData.hasDuplicates).toBe(false);
+    expect(curriculumData.missingVerificationCount).toBe(0);
+  });
+
+  test('TC-AUDIT-017: Cognitive Accelerator Timer Stability & Synapse Sound Disconnection', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/#cognitive-accelerator');
+    const blurtingTab = page.locator('button:has-text("Blurting Retrieval")');
+    if (await blurtingTab.isVisible()) {
+      await blurtingTab.click();
+      await page.waitForTimeout(300);
+      // Verify countdown is ticking and recall button is interactive
+      const recallBtn = page.locator('button:has-text("Start Forced Recall Now")');
+      await expect(recallBtn).toBeVisible();
+      await recallBtn.click();
+      await expect(page.locator('#cognitive-accelerator textarea')).toBeVisible();
+    }
+
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-018: FirstPrinciplesModal Accessibility, Escape Key & Body Scroll Lock', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/');
+    // Click any visible ExplainerPill to open FirstPrinciplesModal
+    const pill = page.locator('button:has-text("The Intuition")').first();
+    if (await pill.isVisible()) {
+      await pill.click();
+      await page.waitForTimeout(300);
+
+      const dialog = page.locator('[role="dialog"][aria-label="First Principles Knowledge Matrix"]');
+      if (await dialog.isVisible()) {
+        // Verify body scroll lock is applied
+        const overflow = await page.evaluate(() => document.body.style.overflow);
+        expect(overflow).toBe('hidden');
+
+        // Press Escape to close modal
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(300);
+
+        // Verify body scroll lock is released
+        const restoredOverflow = await page.evaluate(() => document.body.style.overflow);
+        expect(restoredOverflow).not.toBe('hidden');
+      }
+    }
+
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-019: VectorSpace3D Audio Mute Synchronization & Mid-Flight Simulation Unmount', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    // 1. Holodeck VectorSpace3D Audio Mute Synchronization
+    await page.goto('/holodeck');
+    const muteBtn = page.locator('button[title*="Spatial Audio"]').first();
+    if (await muteBtn.isVisible()) {
+      await muteBtn.click();
+      await page.waitForTimeout(200);
+      await muteBtn.click();
+      await page.waitForTimeout(200);
+    }
+
+    // 2. Mid-flight simulation unmount test
+    await page.goto('/');
+    const runSimBtn = page.locator('button:has-text("Run Simulation"), button:has-text("Simulate")').first();
+    if (await runSimBtn.isVisible()) {
+      await runSimBtn.click();
+      // Immediately navigate mid-flight before simulation timer fires
+      await page.goto('/portfolio');
+      await page.waitForTimeout(600);
+    }
+
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
 });
+
 

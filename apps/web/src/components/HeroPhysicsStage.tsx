@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, 
@@ -54,6 +54,15 @@ export function HeroPhysicsStage({
   const [simOutput, setSimOutput] = useState<string | null>(null);
   const [webGpuKernelOutput, setWebGpuKernelOutput] = useState<WebGpuKernelResult | null>(null);
   const [webGpuTelemetry, setWebGpuTelemetry] = useState<WebGpuTelemetry | null>(null);
+  const simTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (simTimerRef.current) {
+        clearTimeout(simTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (activeLens === 'webgpu') {
@@ -76,7 +85,8 @@ export function HeroPhysicsStage({
         setSimOutput('WASM CPU Fallback • Dot: 0.9984 in 1.8ms (Software Kernel)');
       }
     } else {
-      setTimeout(() => {
+      if (simTimerRef.current) clearTimeout(simTimerRef.current);
+      simTimerRef.current = setTimeout(() => {
         setIsSimRunning(false);
         setSimOutput(t('hero_console_sim_done'));
       }, 450);

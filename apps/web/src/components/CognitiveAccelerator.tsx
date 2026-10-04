@@ -42,12 +42,19 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
   const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
-    let timer: any;
-    if (activeTab === 'blurting' && blurtPhase === 'study' && countdown > 0) {
-      timer = setInterval(() => setCountdown(c => c - 1), 1000);
-    }
+    if (activeTab !== 'blurting' || blurtPhase !== 'study') return;
+    const timer = setInterval(() => {
+      setCountdown(c => {
+        if (c <= 1) {
+          clearInterval(timer);
+          setBlurtPhase('recall');
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
     return () => clearInterval(timer);
-  }, [activeTab, blurtPhase, countdown]);
+  }, [activeTab, blurtPhase]);
 
   // Feynman State
   const [selectedFeynman, setSelectedFeynman] = useState<FeynmanChallenge>(FEYNMAN_CHALLENGES[0]);

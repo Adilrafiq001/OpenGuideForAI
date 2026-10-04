@@ -106,7 +106,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
   // Web Audio Spatial Synthesizer Chime
   const playNodeChime = (cluster: string) => {
-    if (!soundEnabled) return;
+    if (!soundEnabledRef.current) return;
     try {
       const ctx = getAudioContext();
       if (!ctx) return;
@@ -125,6 +125,12 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
       osc.connect(gain);
       gain.connect(ctx.destination);
+      osc.onended = () => {
+        try {
+          osc.disconnect();
+          gain.disconnect();
+        } catch (_) {}
+      };
       osc.start();
       osc.stop(ctx.currentTime + 0.28);
     } catch {}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -24,6 +24,27 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
   const [selectedQuestionId, setSelectedQuestionId] = useState<string>(
     FIRST_PRINCIPLES_MATRIX[0]?.id || ''
   );
+
+  useEffect(() => {
+    if (isOpen && initialCategory) {
+      setActiveCategory(initialCategory);
+    }
+  }, [isOpen, initialCategory]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
 
   const categoryLabels: Record<QuestionCategory, { label: string; count: number; desc: string }> = {
     why: { 
@@ -74,6 +95,9 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="First Principles Knowledge Matrix"
             className="relative w-full max-w-5xl max-h-[88vh] bg-[var(--color-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border)] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col z-10"
           >
             {/* Header */}

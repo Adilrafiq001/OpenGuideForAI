@@ -51,6 +51,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
   const isPlayingRef = useRef(isPlaying);
   const pulseSpeedRef = useRef(pulseSpeed);
   const selectedNodeRef = useRef(selectedNode);
+  const soundEnabledRef = useRef(soundEnabled);
   const nodeMeshesRef = useRef<{ mesh: THREE.Mesh; halo: THREE.Mesh; data: SynapseNode }[]>([]);
   const edgeLinesRef = useRef<{ line: THREE.Line; edge: SynapseEdge }[]>([]);
 
@@ -58,6 +59,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     isPlayingRef.current = isPlaying;
     pulseSpeedRef.current = pulseSpeed;
     selectedNodeRef.current = selectedNode;
+    soundEnabledRef.current = soundEnabled;
   });
 
   const [webGLFailed, setWebGLFailed] = useState(false);
@@ -108,7 +110,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
 
   // Web Audio Chime on Neuron Activation
   const playSynapseChime = (layer: number) => {
-    if (!soundEnabled) return;
+    if (!soundEnabledRef.current) return;
     try {
       const ctx = getAudioContext();
       if (!ctx) return;

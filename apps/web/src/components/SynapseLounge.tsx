@@ -34,6 +34,12 @@ function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boole
     if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
+    osc.onended = () => {
+      try {
+        osc.disconnect();
+        gain.disconnect();
+      } catch (_) {}
+    };
     
     if (type === 'success') {
       osc.type = 'triangle';
