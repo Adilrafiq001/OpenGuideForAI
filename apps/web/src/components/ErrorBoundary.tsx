@@ -26,18 +26,37 @@ export class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an unhandled exception:', error, errorInfo);
     this.setState({ errorInfo });
+
+    // Auto-recover from chunk loading errors caused by mid-flight deployments
+    const errMsg = error?.message || '';
+    const isChunkError = errMsg.includes('Failed to fetch dynamically imported module') ||
+                         errMsg.includes('Loading chunk') ||
+                         error?.name === 'ChunkLoadError';
+    if (isChunkError && !sessionStorage.getItem('og_chunk_error_reloaded')) {
+      sessionStorage.setItem('og_chunk_error_reloaded', 'true');
+      window.location.reload();
+    }
   }
 
   private handleReset = () => {
     this.setState({ hasError: false, error: null, errorInfo: null });
+    sessionStorage.removeItem('og_chunk_error_reloaded');
     window.location.reload();
   };
 
-  private handleClearData = () => {
+  private handleClearData = async () => {
     try {
       localStorage.removeItem('openguide_completed_lessons');
       localStorage.removeItem('openguide-settings');
       sessionStorage.clear();
+      if (typeof caches !== 'undefined') {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      }
       if (typeof indexedDB !== 'undefined') {
         indexedDB.deleteDatabase('OpenGuideDatabase');
       }

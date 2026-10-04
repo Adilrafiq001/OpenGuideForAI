@@ -609,8 +609,16 @@
   - Validated full Curriculum Lab Depth across Tracks 1, 2, and 3 (36 total interactive labs) with in-browser WASM verification and expected output assertions.
   - Verified production build (`npm run build`) passing cleanly with 0 errors in 3.09s, valid `_headers` edge caching rules, and PWA service worker pre-caching.
 
-**Current Release:** v1.1.0 Production-Ready (Build Verified)
+- **Phase 14: PWA Auto-Update Lifecycle & Dynamic Chunk Self-Healing (Release v2.7.0 Complete):**
+  - **Network-First Document Navigation (`sw.js`):** Replaced stale-while-revalidate for HTML documents (`mode === 'navigate'`) with a Network-First strategy and offline cache fallback. When online, users immediately receive the newest `index.html` referencing fresh Vite chunk hashes, preventing stale shell retention across deployments.
+  - **Service Worker Lifecycle & Cache Versioning (`sw.js`, `main.tsx`):** Bumped cache namespace to `openguide-shell-v2.7.0`, registered with `{ updateViaCache: 'none' }` to bypass browser HTTP caching of `sw.js`, added periodic hourly update polling, window visibility listeners, immediate `SKIP_WAITING` dispatch, and automatic single `controllerchange` reload.
+  - **Dynamic Import Chunk Recovery (`App.tsx`):** Wrapped all lazy route and modal imports (`TrackBriefing`, `CoursePlayer`, `SpatialHolodeck`, `PortfolioPage`, `NotFoundPage`, etc.) with `lazyWithRetry()`, gracefully intercepting 404 chunk errors caused by mid-flight deployments and reloading from CDN without crashing into error boundaries.
+  - **Resilient Error Boundary & Cache Purge (`ErrorBoundary.tsx`):** Added automatic reload on caught `ChunkLoadError` or dynamically imported module fetch failures, and upgraded "Reset Sandbox / Clear Data" to deeply unregister service workers and purge all `CacheStorage` keys.
+  - **Full Pre-Flight Verification:** Passed 5-Point Gate (Dev live HTTP 200, Playwright MCP 0 console errors on `/` and `/holodeck`, `yarn lint` 0 errors, `npx playwright test` 97/97 passed [100%], and `yarn --cwd apps/web build` 0 errors in 6.52s).
+
+**Current Release:** v2.7.0 Production-Ready (PWA Auto-Update & Self-Healing Verified)
 **Creator & Architect:** Adil Rafiq Dar (ARD)
+
 
 
 

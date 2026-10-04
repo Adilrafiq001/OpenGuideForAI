@@ -1,6 +1,6 @@
 // OpenGuide AI Studio - Offline-First Service Worker
 // Governed by the $0 Rule: 100% Client-Side Execution & Caching
-const CACHE_NAME = 'openguide-shell-v2.6.0';
+const CACHE_NAME = 'openguide-shell-v2.7.0';
 const PYODIDE_CACHE_NAME = 'openguide-pyodide-v0.26';
 const STATIC_ASSETS = [
   '/',
@@ -30,8 +30,11 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Listener for explicit pre-caching of Pyodide WASM core for day-0 air-gap support
+// Listener for explicit pre-caching of Pyodide WASM core and client SKIP_WAITING
 self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
   if (event.data && event.data.type === 'PRECACHE_PYODIDE_CORE') {
     const PYODIDE_CORE_URLS = [
       'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js',
@@ -103,22 +106,20 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. Stale-while-revalidate strategy for navigation requests (HTML pages)
+  // 2. Network-First strategy for navigation requests (HTML document shell)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/').then((cached) => {
-        const fetchPromise = fetch(event.request)
-          .then((response) => {
-            if (response && response.status === 200) {
-              const clone = response.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put('/', clone));
-            }
-            return response;
-          })
-          .catch(() => cached);
-
-        return cached || fetchPromise;
-      })
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put('/', clone));
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match('/') || caches.match(event.request);
+        })
     );
     return;
   }

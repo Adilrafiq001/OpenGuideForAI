@@ -23,19 +23,40 @@ import { PhysicsBarLoader } from './components/PhysicsBarLoader';
 import { startAppTour } from './components/AppTour';
 import Lenis from 'lenis';
 
+// Auto-recover from stale chunk 404s after new deployments
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  componentImport: () => Promise<{ default: T }>
+) {
+  return lazy(async () => {
+    const pageHasBeenForceRefreshed = sessionStorage.getItem('og_chunk_retry');
+    try {
+      const component = await componentImport();
+      sessionStorage.removeItem('og_chunk_retry');
+      return component;
+    } catch (error) {
+      if (!pageHasBeenForceRefreshed) {
+        sessionStorage.setItem('og_chunk_retry', 'true');
+        window.location.reload();
+        return { default: (() => null) as unknown as T };
+      }
+      throw error;
+    }
+  });
+}
+
 // Modals: Lazy-load offscreen modals so they are not included in the initial page bundle
-const ThemeSettingsModal = lazy(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
-const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
-const FirstTimeSetupModal = lazy(() => import('./components/FirstTimeSetupModal').then(m => ({ default: m.FirstTimeSetupModal })));
-const StudioInteractiveDemoModal = lazy(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
-const CommandPaletteModal = lazy(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
+const ThemeSettingsModal = lazyWithRetry(() => import('./components/ThemeSettingsModal').then(m => ({ default: m.ThemeSettingsModal })));
+const HelpModal = lazyWithRetry(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
+const FirstTimeSetupModal = lazyWithRetry(() => import('./components/FirstTimeSetupModal').then(m => ({ default: m.FirstTimeSetupModal })));
+const StudioInteractiveDemoModal = lazyWithRetry(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
+const CommandPaletteModal = lazyWithRetry(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
-const TrackBriefing = lazy(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
-const CoursePlayer = lazy(() => import('./components/CoursePlayer').then(m => ({ default: m.CoursePlayer })));
-const SpatialHolodeck = lazy(() => import('./pages/SpatialHolodeck').then(m => ({ default: m.SpatialHolodeck })));
-const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const TrackBriefing = lazyWithRetry(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
+const CoursePlayer = lazyWithRetry(() => import('./components/CoursePlayer').then(m => ({ default: m.CoursePlayer })));
+const SpatialHolodeck = lazyWithRetry(() => import('./pages/SpatialHolodeck').then(m => ({ default: m.SpatialHolodeck })));
+const PortfolioPage = lazyWithRetry(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
+const NotFoundPage = lazyWithRetry(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 function AppContent() {
   const navigate = useNavigate();
