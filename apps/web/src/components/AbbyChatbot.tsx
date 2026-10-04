@@ -62,6 +62,19 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const focusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const responseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
+      if (dragTimerRef.current) clearTimeout(dragTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -71,7 +84,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => textareaRef.current?.focus(), 150);
+      if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+      focusTimerRef.current = setTimeout(() => textareaRef.current?.focus(), 150);
     }
   }, [isOpen]);
 
@@ -89,7 +103,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
         setCopiedId(id);
-        setTimeout(() => setCopiedId(null), 2000);
+        if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+        copyTimerRef.current = setTimeout(() => setCopiedId(null), 2000);
       }
     } catch {}
   };
@@ -333,7 +348,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     }
 
     // Default: Answer via embedded offline knowledge base
-    setTimeout(() => {
+    if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
+    responseTimerRef.current = setTimeout(() => {
       const response = generateOfflineResponse(trimmed);
       const assistantMsg: Message = {
         id: `assistant-${Date.now()}`,
@@ -410,7 +426,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
         transition: { duration: 0.65, ease: 'easeOut' }
       });
     }
-    setTimeout(() => {
+    if (dragTimerRef.current) clearTimeout(dragTimerRef.current);
+    dragTimerRef.current = setTimeout(() => {
       isDraggingRef.current = false;
     }, 120);
   };

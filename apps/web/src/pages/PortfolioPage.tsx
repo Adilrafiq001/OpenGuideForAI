@@ -28,6 +28,7 @@ import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
 import { track4 } from '../data/track4';
+import { safeRandomUUID } from '../utils/uuid';
 import { useProgressStore } from '../store/useProgressStore';
 import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
 
@@ -163,12 +164,21 @@ export function PortfolioPage() {
     };
   }, [studentName, completedLessonIds, totalCurriculumLabs]);
 
+  const copiedHashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedHashTimerRef.current) clearTimeout(copiedHashTimerRef.current);
+    };
+  }, []);
+
   const handleCopyHash = () => {
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(verificationHash).catch(() => {});
     }
     setCopiedHash(true);
-    setTimeout(() => setCopiedHash(false), 2000);
+    if (copiedHashTimerRef.current) clearTimeout(copiedHashTimerRef.current);
+    copiedHashTimerRef.current = setTimeout(() => setCopiedHash(false), 2000);
   };
 
   const handlePrint = () => {
@@ -193,7 +203,7 @@ export function PortfolioPage() {
     a.href = url;
     a.download = `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,9 +225,19 @@ export function PortfolioPage() {
   const [gistSyncStatus, setGistSyncStatus] = useState<string | null>(null);
   const [gistSyncLoading, setGistSyncLoading] = useState(false);
   const [copiedBadge, setCopiedBadge] = useState(false);
+  const copiedBadgeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedBadgeTimerRef.current) clearTimeout(copiedBadgeTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!showGistSyncModal) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setShowGistSyncModal(false);
@@ -225,7 +245,10 @@ export function PortfolioPage() {
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [showGistSyncModal]);
 
   const handleExportW3CCredential = () => {
@@ -234,7 +257,7 @@ export function PortfolioPage() {
         "https://www.w3.org/ns/credentials/v2",
         "https://openguideforai.dpdns.org/contexts/v1"
       ],
-      id: `urn:uuid:${crypto.randomUUID()}`,
+      id: `urn:uuid:${safeRandomUUID()}`,
       type: ["VerifiableCredential", "AIEngineeringCompetencyCertificate"],
       issuer: {
         id: "https://openguideforai.dpdns.org",
@@ -263,7 +286,7 @@ export function PortfolioPage() {
     a.href = url;
     a.download = `openguide-w3c-credential-${new Date().toISOString().slice(0, 10)}.jsonld`;
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleCopyBadgeMarkdown = async () => {
@@ -273,7 +296,8 @@ export function PortfolioPage() {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(md);
         setCopiedBadge(true);
-        setTimeout(() => setCopiedBadge(false), 2500);
+        if (copiedBadgeTimerRef.current) clearTimeout(copiedBadgeTimerRef.current);
+        copiedBadgeTimerRef.current = setTimeout(() => setCopiedBadge(false), 2500);
       }
     } catch {}
   };

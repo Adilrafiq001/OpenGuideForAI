@@ -47,6 +47,9 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
       const timer = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
@@ -60,6 +63,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
       window.addEventListener('keydown', handleGlobalKeyDown);
 
       return () => {
+        document.body.style.overflow = originalOverflow;
         clearTimeout(timer);
         window.removeEventListener('keydown', handleGlobalKeyDown);
       };

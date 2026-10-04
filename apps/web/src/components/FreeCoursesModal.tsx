@@ -1096,15 +1096,30 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     }
   }, [initialCourseId, isOpen]);
 
-  // Handle Escape key for WCAG accessibility
+  const copiedCodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
+    return () => {
+      if (copiedCodeTimerRef.current) clearTimeout(copiedCodeTimerRef.current);
+    };
+  }, []);
+
+  // Handle Escape key & body scroll lock for WCAG accessibility
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   // Focus trap inside modal
@@ -1175,7 +1190,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleCopyCode = async () => {
@@ -1183,7 +1198,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(activeCodeSnippet);
         setCopiedCode(true);
-        setTimeout(() => setCopiedCode(false), 2000);
+        if (copiedCodeTimerRef.current) clearTimeout(copiedCodeTimerRef.current);
+        copiedCodeTimerRef.current = setTimeout(() => setCopiedCode(false), 2000);
       }
     } catch {}
   };

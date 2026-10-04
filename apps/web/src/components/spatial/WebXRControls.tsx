@@ -18,15 +18,27 @@ export function WebXRControls({ className = '' }: { className?: string }) {
   const [statusMsg, setStatusMsg] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    detectHardwareFull().then(res => setTelemetry(res));
+    let isMounted = true;
+    detectHardwareFull().then(res => {
+      if (isMounted) setTelemetry(res);
+    });
 
     return () => {
+      isMounted = false;
       // Clean up camera stream if component unmounts
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(t => t.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        if (videoRef.current.srcObject) {
+          const stream = videoRef.current.srcObject as MediaStream;
+          stream.getTracks().forEach(t => t.stop());
+        }
+        videoRef.current.srcObject = null;
       }
     };
   }, []);
@@ -34,9 +46,15 @@ export function WebXRControls({ className = '' }: { className?: string }) {
   // Universal AR Camera Passthrough (Webcam on PC/Mac & Rear Camera on Mobile)
   const toggleCameraPassthrough = async () => {
     if (isCameraActive) {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(t => t.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        if (videoRef.current.srcObject) {
+          const stream = videoRef.current.srcObject as MediaStream;
+          stream.getTracks().forEach(t => t.stop());
+        }
         videoRef.current.srcObject = null;
       }
       setIsCameraActive(false);
@@ -53,6 +71,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
       });
+      streamRef.current = stream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;

@@ -33,6 +33,12 @@ export function Tooltip({
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipId = useId();
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const showTooltip = () => {
     if (disabled) return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);

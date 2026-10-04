@@ -25,7 +25,13 @@ export function SpatialHolodeck() {
   const [telemetry, setTelemetry] = useState<HardwareTelemetry | null>(null);
 
   useEffect(() => {
-    detectHardwareFull().then(res => setTelemetry(res));
+    let isMounted = true;
+    detectHardwareFull().then(res => {
+      if (isMounted) setTelemetry(res);
+    });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

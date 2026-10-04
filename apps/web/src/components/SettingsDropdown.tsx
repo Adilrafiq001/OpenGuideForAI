@@ -45,10 +45,19 @@ export function SettingsDropdown() {
     };
   }, [isOpen]);
 
+  const resetViewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetViewTimerRef.current) clearTimeout(resetViewTimerRef.current);
+    };
+  }, []);
+
   // Reset view when dropdown closes
   useEffect(() => {
     if (!isOpen) {
-      setTimeout(() => setActiveView('main'), 200);
+      if (resetViewTimerRef.current) clearTimeout(resetViewTimerRef.current);
+      resetViewTimerRef.current = setTimeout(() => setActiveView('main'), 200);
     }
   }, [isOpen]);
 

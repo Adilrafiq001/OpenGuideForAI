@@ -86,7 +86,9 @@ function runFallbackPython(code) {
       variables: scope
     };
   } catch (err) {
-    throw new Error(err.message);
+    const errorObj = new Error(err.message);
+    errorObj.partialOutput = stdoutLogs.join('\n');
+    throw errorObj;
   }
 }
 
@@ -158,7 +160,14 @@ self.onmessage = async (event) => {
           variables: fallbackRes.variables
         });
       } catch (err) {
-        postMessage({ type: 'RESULT', error: err.message, id: msg.id });
+        const durationMs = Math.round(performance.now() - startTime);
+        postMessage({ 
+          type: 'RESULT', 
+          error: err.message, 
+          stdout: err.partialOutput || '', 
+          id: msg.id, 
+          durationMs 
+        });
       }
       return;
     }

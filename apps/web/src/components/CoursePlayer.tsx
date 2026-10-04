@@ -171,13 +171,22 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setSyntaxDiagnostic(null);
   };
 
+  const copySolutionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copySolutionTimerRef.current) clearTimeout(copySolutionTimerRef.current);
+    };
+  }, []);
+
   const handleCopySolution = async () => {
     const solution = currentLesson.solutionCode || currentLesson.initialCode;
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(solution);
         setCopiedSolution(true);
-        setTimeout(() => setCopiedSolution(false), 2000);
+        if (copySolutionTimerRef.current) clearTimeout(copySolutionTimerRef.current);
+        copySolutionTimerRef.current = setTimeout(() => setCopiedSolution(false), 2000);
       }
     } catch {}
   };

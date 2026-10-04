@@ -33,18 +33,25 @@ export function XRayDebugLens({
 }: XRayDebugLensProps) {
   const [activeTab, setActiveTab] = useState<'telemetry' | 'ipc' | 'variables' | 'history' | 'react'>('telemetry');
 
-  // Keyboard shortcut listener (Escape or Alt+X to close)
+  // Keyboard shortcut listener (Escape or Alt+X to close) & Body scroll lock
   useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
       if (e.altKey && e.key.toLowerCase() === 'x') {
-        if (isOpen) onClose();
+        onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

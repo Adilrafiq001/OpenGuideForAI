@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Lightbulb, X, Search, ShieldCheck, Cpu, Copy, Check } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import '../styles/offline-copilot.css';
@@ -13,15 +13,31 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // Close on Escape
+  const copiedTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
+    return () => {
+      if (copiedTimeoutRef.current) clearTimeout(copiedTimeoutRef.current);
+    };
+  }, []);
+
+  // Close on Escape & Lock body scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   const searchResults = useMemo(() => {
@@ -35,19 +51,11 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(code);
         setCopiedId(id);
-        setTimeout(() => setCopiedId(null), 2000);
+        if (copiedTimeoutRef.current) clearTimeout(copiedTimeoutRef.current);
+        copiedTimeoutRef.current = setTimeout(() => setCopiedId(null), 2000);
       }
     } catch {}
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 

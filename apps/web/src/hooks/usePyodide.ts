@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { safeRandomUUID } from '../utils/uuid';
 
 export type PyodideState = 'idle' | 'initializing' | 'ready' | 'running' | 'error';
 
@@ -177,7 +178,7 @@ export function usePyodide() {
     }
 
     return new Promise((resolve, reject) => {
-      const id = crypto.randomUUID();
+      const id = safeRandomUUID();
       const timestamp = new Date().toLocaleTimeString();
       activeExecution.current = { id, code, resolve, reject };
       

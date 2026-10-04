@@ -5,13 +5,21 @@ export interface PythonDiagnostic {
   actionableTip: string;
 }
 
+function extractInnermostLineNumber(err: string): number | undefined {
+  const allMatches = [...err.matchAll(/line (\d+)/gi)];
+  if (allMatches.length > 0) {
+    const lastMatch = allMatches[allMatches.length - 1];
+    return parseInt(lastMatch[1], 10);
+  }
+  return undefined;
+}
+
 export function diagnosePythonError(errorMessage: string, _code?: string): PythonDiagnostic | null {
   if (!errorMessage) return null;
 
   // IndentationError: unexpected indent / unindent does not match
   if (errorMessage.includes('IndentationError')) {
-    const lineMatch = errorMessage.match(/line (\d+)/i);
-    const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+    const line = extractInnermostLineNumber(errorMessage);
     return {
       type: 'Indentation Error',
       line,
@@ -22,8 +30,7 @@ export function diagnosePythonError(errorMessage: string, _code?: string): Pytho
 
   // SyntaxError: invalid syntax / unclosed string
   if (errorMessage.includes('SyntaxError')) {
-    const lineMatch = errorMessage.match(/line (\d+)/i);
-    const line = lineMatch ? parseInt(lineMatch[1], 10) : undefined;
+    const line = extractInnermostLineNumber(errorMessage);
     const isUnclosedString = errorMessage.includes('unterminated string') || errorMessage.includes('EOL while scanning');
     return {
       type: 'Syntax Error',

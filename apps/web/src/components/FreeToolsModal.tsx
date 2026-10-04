@@ -513,15 +513,31 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
     }
   }, [initialCategory, initialToolId, isOpen]);
 
-  // Handle Escape key
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
+    return () => {
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+    };
+  }, []);
+
+  // Handle Escape key & body scroll lock
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   // Focus trap
@@ -544,7 +560,8 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
         setCopiedIndex(id);
-        setTimeout(() => setCopiedIndex(null), 2000);
+        if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+        copiedTimerRef.current = setTimeout(() => setCopiedIndex(null), 2000);
       }
     } catch {}
   };

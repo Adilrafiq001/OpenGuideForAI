@@ -74,6 +74,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
               data-testid={`mobile-nav-${item.id}`}
               onClick={item.onClick}
               aria-label={item.label}
+              aria-current={item.active ? 'page' : undefined}
               className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl min-w-[56px] min-h-[48px] active:scale-95 transition-all duration-150 cursor-pointer ${
                 item.active 
                   ? 'text-[var(--color-accent)] font-semibold' 

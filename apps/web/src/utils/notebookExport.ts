@@ -10,6 +10,10 @@ export function generateJupyterNotebook(
   studentCode: string,
   testCode?: string
 ): string {
+  const cleanTheory = (markdownTheory || '').replace(/\r\n/g, '\n');
+  const cleanCode = (studentCode || '').replace(/\r\n/g, '\n');
+  const cleanTestCode = testCode ? testCode.replace(/\r\n/g, '\n') : undefined;
+
   const notebook = {
     cells: [
       {
@@ -18,7 +22,7 @@ export function generateJupyterNotebook(
         source: [
           `# ${title}\n`,
           `*Exported from OpenGuide AI Studio (https://openguideforai.dpdns.org/)*\n\n`,
-          ...markdownTheory.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
+          ...cleanTheory.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
         ]
       },
       {
@@ -26,7 +30,7 @@ export function generateJupyterNotebook(
         execution_count: null,
         metadata: {},
         outputs: [],
-        source: studentCode.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
+        source: cleanCode.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
       }
     ],
     metadata: {
@@ -51,7 +55,7 @@ export function generateJupyterNotebook(
     nbformat_minor: 5
   };
 
-  if (testCode) {
+  if (cleanTestCode) {
     notebook.cells.push({
       cell_type: 'code',
       execution_count: null,
@@ -61,7 +65,7 @@ export function generateJupyterNotebook(
         "# ============================================================\n",
         "# Automated First Principles Test Verification\n",
         "# ============================================================\n",
-        ...testCode.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
+        ...cleanTestCode.split('\n').map((line, idx, arr) => idx < arr.length - 1 ? `${line}\n` : line)
       ]
     });
   }
@@ -74,6 +78,9 @@ export function generatePythonScript(
   studentCode: string,
   testCode?: string
 ): string {
+  const cleanCode = (studentCode || '').replace(/\r\n/g, '\n');
+  const cleanTestCode = testCode ? testCode.replace(/\r\n/g, '\n') : '';
+
   const header = [
     `# ============================================================`,
     `# ${title}`,
@@ -82,11 +89,11 @@ export function generatePythonScript(
     `# ============================================================\n\n`
   ].join('\n');
 
-  const testHarness = testCode
-    ? `\n\n# ============================================================\n# Automated Test Verification\n# ============================================================\n${testCode}`
+  const testHarness = cleanTestCode
+    ? `\n\n# ============================================================\n# Automated Test Verification\n# ============================================================\n${cleanTestCode}`
     : '';
 
-  return `${header}${studentCode}${testHarness}\n`;
+  return `${header}${cleanCode}${testHarness}\n`;
 }
 
 export function downloadFile(content: string, filename: string, mimeType: string) {
@@ -98,5 +105,5 @@ export function downloadFile(content: string, filename: string, mimeType: string
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
