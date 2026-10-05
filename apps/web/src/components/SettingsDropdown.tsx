@@ -4,7 +4,7 @@ import { Gear, Palette, TextAa, CaretRight, CaretLeft, Check } from '@phosphor-i
 import { useSettingsStore, type Theme } from '../store/useSettingsStore';
 import { THEMES_DATA } from '../data/themesData';
 
-export const THEME_GROUPS = [
+const THEME_GROUPS = [
   {
     category: 'Dark Themes',
     themes: THEMES_DATA.filter(t => t.category === 'Dark Themes')

@@ -114,7 +114,7 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
       osc.start(now);
       osc.stop(now + 0.25);
     }
-  } catch (e) {}
+  } catch {}
 }
 
 /**
@@ -134,7 +134,7 @@ export function triggerHaptic(type: 'light' | 'success' | 'error' | 'boss') {
     } else if (type === 'error') {
       navigator.vibrate([30, 40, 30]);
     }
-  } catch (e) {}
+  } catch {}
 }
 
 /**
@@ -185,5 +185,5 @@ export function playCosineSonification(similarity: number) {
     osc2.start(now);
     osc1.stop(now + 0.35);
     osc2.stop(now + 0.35);
-  } catch (e) {}
+  } catch {}
 }

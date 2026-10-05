@@ -60,6 +60,18 @@ export default defineConfig({
           if (id.includes('node_modules/@codemirror') || id.includes('node_modules/codemirror')) {
             return 'vendor-codemirror';
           }
+          if (id.includes('node_modules/dexie')) {
+            return 'vendor-dexie';
+          }
+          if (id.includes('node_modules/marked') || id.includes('node_modules/dompurify')) {
+            return 'vendor-markdown';
+          }
+          if (id.includes('node_modules/lenis')) {
+            return 'vendor-lenis';
+          }
+          if (id.includes('src/data/track') || id.includes('src/data/offlineKnowledge') || id.includes('src/data/firstPrinciplesData') || id.includes('src/data/cognitiveLearningData')) {
+            return 'curriculum-data';
+          }
         }
       }
     },

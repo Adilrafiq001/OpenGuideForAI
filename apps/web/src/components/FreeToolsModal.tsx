@@ -39,7 +39,7 @@ export interface ToolSetupGuide {
   localAlternative: string;
 }
 
-export const FREE_TOOLS_GUIDES: ToolSetupGuide[] = [
+const FREE_TOOLS_GUIDES: ToolSetupGuide[] = [
   // --- MEMORY ---
   {
     id: 'chroma',
@@ -498,10 +498,9 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
   const [selectedToolId, setSelectedToolId] = useState<string>(initialToolId || 'chroma');
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  // Sync initial props
-  useEffect(() => {
+  const [prevProps, setPrevProps] = useState({ initialCategory, initialToolId, isOpen });
+  if (prevProps.initialCategory !== initialCategory || prevProps.initialToolId !== initialToolId || prevProps.isOpen !== isOpen) {
+    setPrevProps({ initialCategory, initialToolId, isOpen });
     if (initialCategory) {
       setSelectedCategory(initialCategory);
     }
@@ -511,7 +510,9 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
       const firstInCat = FREE_TOOLS_GUIDES.find(t => t.category === initialCategory);
       if (firstInCat) setSelectedToolId(firstInCat.id);
     }
-  }, [initialCategory, initialToolId, isOpen]);
+  }
+
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

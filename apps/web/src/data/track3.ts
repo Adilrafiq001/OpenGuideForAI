@@ -206,7 +206,7 @@ print(f"Average Score: {avg_score:.2f} / 5.0")
 import re
 
 def parse_judge_score(judge_output):
-    match = re.search(r"Score:\s*([1-5])/5", judge_output)
+    match = re.search(r"Score:\\s*([1-5])/5", judge_output)
     return int(match.group(1)) if match else 1
 
 judge_reviews = [

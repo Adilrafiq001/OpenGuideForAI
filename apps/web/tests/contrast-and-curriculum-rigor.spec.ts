@@ -166,4 +166,24 @@ test.describe('OpenGuide 9.8 Production Rigor & Quality Gate', () => {
     const uniqueDirectives = new Set(directives);
     expect(uniqueDirectives.size).toBe(5);
   });
+
+  test('06. Stale Chunk Auto-Recovery Listener & Dynamic Chunk Preload Resilience', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    let logReceived = false;
+    page.on('console', (msg) => {
+      if (msg.text().includes('New deployment chunk mismatch detected')) {
+        logReceived = true;
+      }
+    });
+
+    await page.evaluate(() => {
+      const errorEvent = new Event('vite:preloadError');
+      window.dispatchEvent(errorEvent);
+    });
+
+    await page.waitForTimeout(500);
+    expect(logReceived).toBe(true);
+  });
 });

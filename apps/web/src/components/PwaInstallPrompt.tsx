@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, PlusSquare, Smartphone, CheckCircle } from 'lucide-react';
@@ -7,19 +7,17 @@ import { usePwaInstall } from '../hooks/usePwaInstall';
 export function PwaInstallPrompt() {
   const location = useLocation();
   const { isInstallable, isInstalled, isIos, promptInstall } = usePwaInstall();
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem('openguide_pwa_dismissed') || sessionStorage.getItem('openguide_pwa_dismissed'));
+    } catch {
+      return false;
+    }
+  });
   const [showIosModal, setShowIosModal] = useState(false);
   const [showInstalledToast, setShowInstalledToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('OpenGuide App Installed Successfully! Launch from your Home Screen anytime.');
 
-  useEffect(() => {
-    try {
-      const dismissed = localStorage.getItem('openguide_pwa_dismissed') || sessionStorage.getItem('openguide_pwa_dismissed');
-      if (dismissed) {
-        setIsDismissed(true);
-      }
-    } catch {}
-  }, []);
 
   const handleDismiss = () => {
     setIsDismissed(true);

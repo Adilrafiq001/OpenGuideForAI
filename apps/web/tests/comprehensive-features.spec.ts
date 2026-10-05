@@ -7,7 +7,6 @@ test.describe('OpenGuide Comprehensive Features, Themes, Tour, Abby Physics & RT
 
     // Verify all 24 themes are present in THEMES_DATA
     const themeCount = await page.evaluate(() => {
-      const themes = (window as any).__SETTINGS_STORE__?.getState?.()?.theme;
       return document.documentElement.getAttribute('data-theme');
     });
     expect(themeCount).toBeTruthy();

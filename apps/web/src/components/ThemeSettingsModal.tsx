@@ -125,17 +125,16 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     }
   }, [isOpen, isPeeking]);
 
-  useEffect(() => {
-    if (isOpen && initialTab) {
-      setActiveTab(initialTab);
-    }
-  }, [isOpen, initialTab]);
-
-  useEffect(() => {
+  const [prevModalState, setPrevModalState] = useState({ isOpen, initialTab, themeMode: activeThemeInfo.mode });
+  if (prevModalState.isOpen !== isOpen || prevModalState.initialTab !== initialTab || prevModalState.themeMode !== activeThemeInfo.mode) {
+    setPrevModalState({ isOpen, initialTab, themeMode: activeThemeInfo.mode });
     if (isOpen) {
+      if (initialTab) {
+        setActiveTab(initialTab);
+      }
       setActiveMode(activeThemeInfo.mode || 'dark');
     }
-  }, [isOpen, activeThemeInfo.mode]);
+  }
 
   const filteredThemes = THEMES_DATA.filter(t => t.mode === activeMode);
 

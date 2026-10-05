@@ -18,7 +18,9 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
   const isOpeningRef = useRef(false);
   const timerRef = useRef<number | null>(null);
   const onLaunchRef = useRef(onLaunch);
-  onLaunchRef.current = onLaunch;
+  useEffect(() => {
+    onLaunchRef.current = onLaunch;
+  }, [onLaunch]);
   const location = useLocation();
 
   // Full reset: clears timer, resets state, and forces DOM remount
@@ -33,9 +35,11 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
   }, []);
 
   // Guarantee clean resting state upon route transition or return
-  useEffect(() => {
-    resetToIdle();
-  }, [location.pathname, location.key, resetToIdle]);
+  const [prevLocationKey, setPrevLocationKey] = useState(location.key);
+  if (location.key !== prevLocationKey) {
+    setPrevLocationKey(location.key);
+    setIsChecked(true);
+  }
 
   useEffect(() => {
     // Listen for BFCache restores and SPA popstate events

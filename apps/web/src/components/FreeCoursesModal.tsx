@@ -46,7 +46,7 @@ export interface CourseData {
   repoUrl?: string;
 }
 
-export const FREE_COURSES: CourseData[] = [
+const FREE_COURSES: CourseData[] = [
   {
     id: 'karpathy',
     title: 'Neural Networks: Zero to Hero',
@@ -1086,15 +1086,18 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Sync initialCourseId when prop changes
-  useEffect(() => {
+  const [prevCourseProp, setPrevCourseProp] = useState(initialCourseId);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (initialCourseId !== prevCourseProp || (isOpen && !prevIsOpen)) {
+    setPrevCourseProp(initialCourseId);
+    setPrevIsOpen(isOpen);
     if (initialCourseId) {
       setSelectedCourseId(initialCourseId);
       setSelectedLectureIdx(0);
       setTranscriptSearch('');
       setPlayerStartTime(0);
     }
-  }, [initialCourseId, isOpen]);
+  }
 
   const copiedCodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

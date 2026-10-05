@@ -78,6 +78,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const onChangeRef = useRef(onChange);
   const onRunRef = useRef(onRun);
   const latestValueRef = useRef(value);
+  const initialValueRef = useRef(value);
 
   useLayoutEffect(() => {
     onChangeRef.current = onChange;
@@ -220,7 +221,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
 
     const state = EditorState.create({
-      doc: value,
+      doc: initialValueRef.current,
       extensions
     });
 

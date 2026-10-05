@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Download, 
@@ -39,7 +39,7 @@ export function FirstTimeSetupModal({
   const [wasmPreWarmed, setWasmPreWarmed] = useState(false);
   const preWarmWorkerRef = useRef<Worker | null>(null);
 
-  const handleComplete = () => {
+  const handleComplete = useCallback(() => {
     playTactileSound('click');
     triggerHaptic('light');
     if (typeof window !== 'undefined') {
@@ -48,7 +48,7 @@ export function FirstTimeSetupModal({
       } catch {}
     }
     onClose();
-  };
+  }, [onClose]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -79,7 +79,7 @@ export function FirstTimeSetupModal({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleComplete]);
 
   const handleTourClick = () => {
     handleComplete();

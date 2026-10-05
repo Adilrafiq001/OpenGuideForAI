@@ -117,7 +117,7 @@ async function initPyodide() {
 
     try {
       await pyodide.loadPackage(['micropip']);
-    } catch (e) {
+    } catch {
       // micropip optional
     }
 

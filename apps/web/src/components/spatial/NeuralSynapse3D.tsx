@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { 
   Network, 
@@ -65,8 +65,8 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
   const [webGLFailed, setWebGLFailed] = useState(false);
   const use3D = !force2D && graphicsTier !== '2d-lean' && hardwareInfo.hasWebGL && !webGLFailed;
 
-  // Build Graph Nodes & Edges
-  const { nodes, edges } = (() => {
+  // Build Graph Nodes & Edges (Memoized)
+  const { nodes, edges } = useMemo(() => {
     const nList: SynapseNode[] = [];
     const eList: SynapseEdge[] = [];
 
@@ -106,7 +106,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     }
 
     return { nodes: nList, edges: eList };
-  })();
+  }, []);
 
   // Web Audio Chime on Neuron Activation
   const playSynapseChime = (layer: number) => {
@@ -127,11 +127,11 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
         try {
           osc.disconnect();
           gain.disconnect();
-        } catch (_) {}
+        } catch {}
       };
       osc.start();
       osc.stop(ctx.currentTime + 0.22);
-    } catch (e) {}
+    } catch {}
   };
 
   // 3D Scene Initialization
@@ -195,7 +195,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     const haloGeo = new THREE.SphereGeometry(0.38, 16, 16);
 
     nodes.forEach(node => {
-      const isSelected = selectedNode?.id === node.id;
+      const isSelected = selectedNodeRef.current?.id === node.id;
       const mat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(node.color),
         emissive: new THREE.Color(node.color),
@@ -223,8 +223,8 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     // Edges (Synaptic weights)
     const edgeLines: { line: THREE.Line; edge: SynapseEdge }[] = [];
     edges.forEach(edge => {
-      const isConnected = selectedNode 
-        ? edge.from === selectedNode.id || edge.to === selectedNode.id 
+      const isConnected = selectedNodeRef.current 
+        ? edge.from === selectedNodeRef.current.id || edge.to === selectedNodeRef.current.id 
         : true;
 
       const baseOpacity = isConnected 
@@ -433,7 +433,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       pulseGeo.dispose();
       pulseMat.dispose();
     };
-  }, [use3D, hardwareInfo.isLowEnd, webGLFailed]);
+  }, [use3D, hardwareInfo.isLowEnd, webGLFailed, nodes, edges]);
 
   // Reactive node selection & synapse weight highlighting without scene rebuild
   useEffect(() => {

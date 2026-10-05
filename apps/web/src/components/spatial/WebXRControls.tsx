@@ -26,19 +26,21 @@ export function WebXRControls({ className = '' }: { className?: string }) {
       if (isMounted) setTelemetry(res);
     });
 
+    const videoEl = videoRef.current;
     return () => {
       isMounted = false;
       // Clean up camera stream if component unmounts
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop());
+      const activeStream = streamRef.current;
+      if (activeStream) {
+        activeStream.getTracks().forEach(t => t.stop());
         streamRef.current = null;
       }
-      if (videoRef.current) {
-        if (videoRef.current.srcObject) {
-          const stream = videoRef.current.srcObject as MediaStream;
+      if (videoEl) {
+        if (videoEl.srcObject) {
+          const stream = videoEl.srcObject as MediaStream;
           stream.getTracks().forEach(t => t.stop());
         }
-        videoRef.current.srcObject = null;
+        videoEl.srcObject = null;
       }
     };
   }, []);

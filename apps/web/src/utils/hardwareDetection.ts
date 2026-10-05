@@ -41,7 +41,7 @@ export function detectHardwareSync(): { hasWebGL: boolean; isLowEnd: boolean; re
       isLowEnd,
       rendererName: renderer
     };
-  } catch (e) {
+  } catch {
     return { hasWebGL: false, isLowEnd: true, rendererName: 'Unknown' };
   }
 }
@@ -55,13 +55,13 @@ export async function detectHardwareFull(): Promise<HardwareTelemetry> {
   if (hasWebXR && navigator.xr) {
     try {
       hasImmersiveVR = await navigator.xr.isSessionSupported('immersive-vr');
-    } catch (e) {
+    } catch {
       hasImmersiveVR = false;
     }
 
     try {
       hasImmersiveAR = await navigator.xr.isSessionSupported('immersive-ar');
-    } catch (e) {
+    } catch {
       hasImmersiveAR = false;
     }
   }

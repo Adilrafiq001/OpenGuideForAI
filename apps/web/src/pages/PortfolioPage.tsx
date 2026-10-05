@@ -152,7 +152,7 @@ export function PortfolioPage() {
         if (isMounted) {
           setVerificationHash(`0x${hashHex}`);
         }
-      } catch (err) {
+      } catch {
         if (isMounted) {
           // Fallback simulation hash
           setVerificationHash(`0x9f8b4c7e2a1d0f5e8b3c6a9d2f1e4b7c0a3d6f9e2b5c8a1d4f7e0b3c6a9d2f1e`);
@@ -163,7 +163,7 @@ export function PortfolioPage() {
     return () => {
       isMounted = false;
     };
-  }, [studentName, completedLessonIds, totalCurriculumLabs]);
+  }, [studentName, uniqueCompletedIds, totalCurriculumLabs]);
 
   const copiedHashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

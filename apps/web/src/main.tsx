@@ -3,6 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
+// Auto-recover from stale chunk 404s after new deployments
+window.addEventListener('vite:preloadError', () => {
+  console.warn('[OpenGuide] New deployment chunk mismatch detected. Reloading for fresh assets...');
+  window.location.reload();
+});
+
 // Register offline-first service worker for PWA caching & installation in production
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {

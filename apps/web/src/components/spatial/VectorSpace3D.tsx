@@ -36,7 +36,7 @@ export interface SemanticVectorNode {
   details: string;
 }
 
-export const SEMANTIC_VECTORS: SemanticVectorNode[] = [
+const SEMANTIC_VECTORS: SemanticVectorNode[] = [
   // Cluster 1: Neural Architecture (Emerald / Green)
   { id: 'transformer', label: 'Transformer', cluster: 'neural', coords: [2.5, 1.8, 1.2], color: '#10b981', details: 'Multi-head self-attention backbone' },
   { id: 'attention', label: 'Self-Attention', cluster: 'neural', coords: [2.8, 2.2, 0.9], color: '#10b981', details: 'Dynamic token-to-token contextual weighting' },

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   Brain, 
   Target, 
@@ -38,7 +38,7 @@ function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boole
       try {
         osc.disconnect();
         gain.disconnect();
-      } catch (_) {}
+      } catch {}
     };
     
     if (type === 'success') {
@@ -82,7 +82,7 @@ function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boole
       osc.start();
       osc.stop(ctx.currentTime + 0.15);
     }
-  } catch (e) {}
+  } catch {}
 }
 
 export function SynapseLounge() {
@@ -139,7 +139,6 @@ export function SynapseLounge() {
   const [attentionIdx, setAttentionIdx] = useState(0);
   const [temperature, setTemperature] = useState(1.0);
   const [useScaleFactor, setUseScaleFactor] = useState(true);
-  const [hasAwardedAttention, setHasAwardedAttention] = useState(false);
 
   const currentAttention = attentionScenarios[attentionIdx];
   const dk = 64; // standard transformer d_k
@@ -163,16 +162,20 @@ export function SynapseLounge() {
   const targetWeight = targetTokenIdx >= 0 ? attentionWeights[targetTokenIdx] : 0;
   const isAttentionOptimized = targetWeight >= 0.40;
 
+  const hasAwardedAttentionRef = useRef(false);
   useEffect(() => {
-    if (isAttentionOptimized && !hasAwardedAttention) {
-      setHasAwardedAttention(true);
+    if (isAttentionOptimized && !hasAwardedAttentionRef.current) {
+      hasAwardedAttentionRef.current = true;
       playSound('success', soundFx);
-      setScore(s => s + 300);
-      setStreak(st => st + 1);
-    } else if (!isAttentionOptimized && hasAwardedAttention) {
-      setHasAwardedAttention(false);
+      const t = setTimeout(() => {
+        setScore(s => s + 300);
+        setStreak(st => st + 1);
+      }, 0);
+      return () => clearTimeout(t);
+    } else if (!isAttentionOptimized && hasAwardedAttentionRef.current) {
+      hasAwardedAttentionRef.current = false;
     }
-  }, [isAttentionOptimized, hasAwardedAttention, soundFx]);
+  }, [isAttentionOptimized, soundFx]);
 
 
   // --- GAME 1: VECTOR SPACE ALIGNMENT (Interactive Angle + Semantic Cards) ---
@@ -182,18 +185,20 @@ export function SynapseLounge() {
   const angularDistance = angleDelta > 180 ? 360 - angleDelta : angleDelta;
   const cosineSim = Math.cos((angularDistance * Math.PI) / 180);
   const isAngleAligned = cosineSim >= 0.92;
-  const [hasAwardedAngle, setHasAwardedAngle] = useState(false);
-
+  const hasAwardedAngleRef = useRef(false);
   useEffect(() => {
-    if (isAngleAligned && !hasAwardedAngle) {
-      setHasAwardedAngle(true);
+    if (isAngleAligned && !hasAwardedAngleRef.current) {
+      hasAwardedAngleRef.current = true;
       playSound('combo', soundFx);
-      setScore(s => s + 150);
-      setStreak(st => st + 1);
-    } else if (!isAngleAligned && hasAwardedAngle) {
-      setHasAwardedAngle(false);
+      const t = setTimeout(() => {
+        setScore(s => s + 150);
+        setStreak(st => st + 1);
+      }, 0);
+      return () => clearTimeout(t);
+    } else if (!isAngleAligned && hasAwardedAngleRef.current) {
+      hasAwardedAngleRef.current = false;
     }
-  }, [isAngleAligned, hasAwardedAngle, soundFx]);
+  }, [isAngleAligned, soundFx]);
 
   const vectorRounds = [
     {
@@ -270,7 +275,6 @@ export function SynapseLounge() {
   // --- GAME 2: NEURAL GATE DEDUCTOR (Perceptron Logic) ---
   const [neuronWeights, setNeuronWeights] = useState({ w1: 1.0, w2: 1.0, bias: -1.5 });
   const [targetGate, setTargetGate] = useState<'AND' | 'OR' | 'NAND'>('AND');
-  const [gateSolved, setGateSolved] = useState(false);
 
   // Perceptron function: f(x1, x2) = 1 if (x1*w1 + x2*w2 + bias) > 0 else 0
   const evaluatePerceptron = (x1: number, x2: number) => {
@@ -294,16 +298,20 @@ export function SynapseLounge() {
 
   const allPassed = truthTable.every(row => evaluatePerceptron(row.x1, row.x2) === row.expected);
 
+  const gateSolvedRef = useRef(false);
   useEffect(() => {
-    if (allPassed && !gateSolved) {
-      setGateSolved(true);
+    if (allPassed && !gateSolvedRef.current) {
+      gateSolvedRef.current = true;
       playSound('combo', soundFx);
-      setScore(s => s + 250);
-      setStreak(st => st + 1);
-    } else if (!allPassed && gateSolved) {
-      setGateSolved(false);
+      const t = setTimeout(() => {
+        setScore(s => s + 250);
+        setStreak(st => st + 1);
+      }, 0);
+      return () => clearTimeout(t);
+    } else if (!allPassed && gateSolvedRef.current) {
+      gateSolvedRef.current = false;
     }
-  }, [allPassed, gateSolved, soundFx]);
+  }, [allPassed, soundFx]);
 
   // Unit circle geometry coordinates for probe vector
   const circleRadius = 55;
@@ -630,7 +638,7 @@ export function SynapseLounge() {
                       key={gate}
                       onClick={() => {
                         setTargetGate(gate);
-                        setGateSolved(false);
+                        gateSolvedRef.current = false;
                       }}
                       className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                         targetGate === gate 
@@ -856,7 +864,7 @@ export function SynapseLounge() {
                       onClick={() => {
                         playSound('click', soundFx);
                         setAttentionIdx(idx);
-                        setHasAwardedAttention(false);
+                        hasAwardedAttentionRef.current = false;
                       }}
                       className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-all cursor-pointer ${
                         attentionIdx === idx

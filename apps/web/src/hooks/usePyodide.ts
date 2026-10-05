@@ -14,7 +14,7 @@ export interface PyodideTelemetry {
 }
 
 export function usePyodide() {
-  const [state, setState] = useState<PyodideState>('idle');
+  const [state, setState] = useState<PyodideState>('initializing');
   const [initStage, setInitStage] = useState<string>('Pre-warming WebAssembly kernel...');
   const workerRef = useRef<Worker | null>(null);
   
@@ -44,7 +44,6 @@ export function usePyodide() {
   const watchdogTimerRef = useRef<number | null>(null);
 
   const initWorker = useCallback(() => {
-    setState('initializing');
     const worker = new Worker('/pyodide.worker.js');
     workerRef.current = worker;
 

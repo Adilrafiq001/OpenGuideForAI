@@ -75,7 +75,6 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const [code, setCode] = useState(currentLesson.initialCode);
   const [canUndoReset, setCanUndoReset] = useState(false);
   const previousCodeRef = useRef<string>('');
-  const isInitialMountRef = useRef(true);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | 'info' | null; message: string }>({ type: null, message: '' });
   const [isChallengePassed, setIsChallengePassed] = useState(false);
   const [syntaxDiagnostic, setSyntaxDiagnostic] = useState<PythonDiagnostic | null>(null);
@@ -88,7 +87,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   }, [theme]);
 
   // Synchronize track.id and search parameters (module & lesson deep-linking)
-  useEffect(() => {
+  const activeLessonKey = `${track.id}-${paramMod ?? '0'}-${paramLes ?? '0'}`;
+  const [prevLessonKey, setPrevLessonKey] = useState(activeLessonKey);
+
+  if (activeLessonKey !== prevLessonKey) {
+    setPrevLessonKey(activeLessonKey);
     let modIdx = 0;
     let lesIdx = 0;
     if (paramMod !== null) {
@@ -103,16 +106,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         lesIdx = parsed;
       }
     }
-    if (!isInitialMountRef.current && modIdx === currentModuleIdx && lesIdx === currentLessonIdx) {
-      return;
-    }
-    isInitialMountRef.current = false;
     setCurrentModuleIdx(modIdx);
     setCurrentLessonIdx(lesIdx);
     const target = track.modules[modIdx]?.lessons[lesIdx] || track.modules[0]?.lessons[0];
     if (target) {
       setCode(target.initialCode);
-      clearLogs();
       setFeedback({ type: null, message: '' });
       setSyntaxDiagnostic(null);
       setShowHint(false);
@@ -120,7 +118,11 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       setCopiedSolution(false);
       setIsChallengePassed(completedLessonIds.includes(target.id));
     }
-  }, [track.id, paramMod, paramLes, currentModuleIdx, currentLessonIdx]);
+  }
+
+  useEffect(() => {
+    clearLogs();
+  }, [activeLessonKey, clearLogs]);
 
   // Reset code when lesson changes
   const handleLessonChange = (modIdx: number, lesIdx: number) => {

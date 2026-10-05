@@ -43,10 +43,17 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
   const { setTheme } = useSettingsStore();
   const { setLanguage } = useLanguageStore();
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 
@@ -69,10 +76,6 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
       };
     }
   }, [isOpen, onClose]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
 
   const items = useMemo(() => {
     const list: Array<{

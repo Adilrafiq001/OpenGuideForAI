@@ -480,6 +480,9 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
       };
 
       const fallbackUUID = generateFallback();
+      try {
+        crypto.randomUUID = originalRandomUUID;
+      } catch {}
       return {
         isValid: uuidRegex.test(fallbackUUID),
         length: fallbackUUID.length
