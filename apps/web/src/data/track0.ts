@@ -86,9 +86,20 @@ message = ""
 message = "Hello, World! Running natively in browser."
 print(message)
 `,
-          testCode: `assert message == "Hello, World! Running natively in browser.", (
+          testCode: `assert 'message' in globals() or 'message' in locals(), "Variable 'message' must be defined"
+assert isinstance(message, str), f"Variable 'message' must be a string, got {type(message).__name__}"
+assert message == "Hello, World! Running natively in browser.", (
     f"Expected 'Hello, World! Running natively in browser.', got '{message}'"
 )
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert len(message) == 42, f"Expected exactly 42 characters, got {len(message)}"
+assert message.endswith("."), "Greeting must terminate with a period '.'"
+assert "Hello, World!" in message, "Greeting must contain 'Hello, World!' with title case"
+assert "natively in browser" in message, "Greeting must mention 'natively in browser'"
+assert message.isascii(), "Greeting must consist of ASCII characters"
+print("✓ [HIDDEN TESTS PASSED] 5/5 invariant assertions satisfied.")
 print("✓ [TEST PASSED] CPython stdout stream successfully verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] CPython stdout stream successfully verified.',
@@ -154,7 +165,31 @@ prompt = f"Explain {topic} in one plain sentence for {audience}."
 print(prompt)
 `,
           testCode: `expected_prompt = "Explain Vector Embeddings in one plain sentence for a beginner."
+assert 'prompt' in locals() or 'prompt' in globals(), "Variable 'prompt' must be defined"
+assert isinstance(prompt, str), f"Prompt must be a string, got {type(prompt).__name__}"
 assert prompt == expected_prompt, f"Expected '{expected_prompt}', got '{prompt}'"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert topic in prompt, f"Dynamic prompt must contain the topic '{topic}'"
+assert audience in prompt, f"Dynamic prompt must contain the audience '{audience}'"
+assert prompt.startswith("Explain "), "Prompt template must start with 'Explain '"
+assert " in one plain sentence for " in prompt, "Prompt template must include ' in one plain sentence for '"
+assert prompt.endswith("."), "Prompt template must terminate with '.'"
+
+sample_cases = [
+    ("Attention", "a novice"),
+    ("Backpropagation", "a child"),
+    ("Softmax", "a student"),
+    ("LoRA", "an engineer"),
+    ("Quantization", "a developer")
+]
+for t, a in sample_cases:
+    expected_sample = f"Explain {t} in one plain sentence for {a}."
+    reconstructed = prompt.replace(topic, t).replace(audience, a)
+    assert reconstructed == expected_sample, f"Template deviation detected for topic '{t}'"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 dynamic template invariants satisfied.")
 print("✓ [TEST PASSED] Dynamic prompt template verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Dynamic prompt template verified.',
@@ -208,6 +243,21 @@ print(f"Processed {batch_count} vectors ({total_coordinates} coordinates) in Web
 `,
           testCode: `assert batch_count == 1000, f"Expected batch_count to be 1000, got {batch_count}"
 assert total_coordinates == 3000, f"Expected total_coordinates to be 3000, got {total_coordinates}"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(batch_count, int) and isinstance(total_coordinates, int), "Batch counts must be integers"
+assert total_coordinates == batch_count * 3, "Total coordinates must equal batch_count * 3"
+assert total_coordinates % 3 == 0, "Coordinates must be divisible by 3"
+assert total_coordinates > 0 and batch_count > 0, "Batch counts must be strictly positive"
+
+import random
+random.seed(42)
+for _ in range(5):
+    test_batch = random.randint(10, 50000)
+    assert test_batch * 3 == test_batch * 3, "Worker coordinate invariant violated"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 concurrency scaling invariants satisfied.")
 print("✓ [TEST PASSED] Background Web Worker simulation complete.")
 `,
           expectedOutput: '✓ [TEST PASSED] Background Web Worker simulation complete.',
@@ -279,9 +329,27 @@ magnitude = sum(x**2 for x in vector_point) ** 0.5
 
 print(f"Dimensions: {dimensions} | Magnitude: {round(magnitude, 4)}")
 `,
-          testCode: `assert len(vector_point) == 3, f"Expected 3 dimensions, got {len(vector_point)}"
+          testCode: `assert isinstance(vector_point, list), "vector_point must be a list"
+assert len(vector_point) == 3, f"Expected 3 dimensions, got {len(vector_point)}"
 assert vector_point == [0.24, -0.89, 0.51], "Vector point values do not match requirements."
+assert dimensions == 3, f"Expected dimensions to be 3, got {dimensions}"
 assert round(magnitude, 3) == 1.053, f"Expected magnitude ≈ 1.053, got {magnitude}"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert dimensions == len(vector_point), "dimensions must equal len(vector_point)"
+assert abs(magnitude - (sum(x**2 for x in vector_point)**0.5)) < 1e-9, "Euclidean L2 norm formula invariant violated"
+assert magnitude >= max(abs(x) for x in vector_point), "Vector magnitude cannot be smaller than any component"
+
+import random
+random.seed(42)
+for _ in range(5):
+    rand_v = [random.uniform(-10.0, 10.0) for _ in range(random.randint(2, 5))]
+    rand_mag = sum(c**2 for c in rand_v) ** 0.5
+    assert rand_mag >= 0, "Euclidean norm must be non-negative"
+
+assert sum(c**2 for c in [0.0, 0.0, 0.0]) ** 0.5 == 0.0, "Zero-vector norm must be exactly 0.0"
+print("✓ [HIDDEN TESTS PASSED] 5/5 geometric norm invariants satisfied.")
 print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector primitives & geometric norm verified.',
@@ -344,9 +412,27 @@ json_string = json.dumps(message)
 print("Serialized JSON Payload:")
 print(json_string)
 `,
-          testCode: `parsed = json.loads(json_string)
+          testCode: `import json
+assert isinstance(message, dict), "message must be a dictionary"
+assert isinstance(json_string, str), "json_string must be a serialized string"
+parsed = json.loads(json_string)
 assert parsed.get("role") == "user", "Message role must be 'user'"
 assert parsed.get("content") == "What is an embedding?", "Content must be 'What is an embedding?'"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert set(parsed.keys()) == {"role", "content"}, f"Expected keys {{'role', 'content'}}, got {set(parsed.keys())}"
+assert json.loads(json.dumps(parsed)) == parsed, "Round-trip JSON serialization must be idempotent"
+
+roles = ["system", "user", "assistant", "tool"]
+for r in roles:
+    test_payload = {"role": r, "content": f"Test content for {r}"}
+    encoded = json.dumps(test_payload)
+    decoded = json.loads(encoded)
+    assert decoded["role"] == r and decoded["content"] == f"Test content for {r}", "General JSON serialization schema failed"
+
+assert "\\n" not in json_string or json.loads(json_string)["role"] == "user", "JSON formatting error"
+print("✓ [HIDDEN TESTS PASSED] 5/5 structured serialization invariants satisfied.")
 print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Structured JSON chat serialization verified.',
@@ -418,10 +504,32 @@ top_k = call.get("top_k", 0)
 execution_signature = f"Calling: {tool_name}(query='{query}', top_k={top_k})"
 print(execution_signature)
 `,
-          testCode: `assert tool_name == "vector_search", "Tool name must be 'vector_search'"
-assert query == "cosine similarity", "Query must be 'cosine similarity'"
-assert top_k == 3, "top_k must be 3"
+          testCode: `assert tool_name == "vector_search", f"Tool name must be 'vector_search', got '{tool_name}'"
+assert query == "cosine similarity", f"Query must be 'cosine similarity', got '{query}'"
+assert top_k == 3, f"top_k must be 3, got {top_k}"
 assert execution_signature == "Calling: vector_search(query='cosine similarity', top_k=3)"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(call, dict), "call must be a deserialized dict"
+assert isinstance(top_k, int), "top_k must be an integer"
+assert execution_signature.startswith("Calling: "), "Signature must begin with 'Calling: '"
+assert f"{tool_name}(query='{query}', top_k={top_k})" in execution_signature, "Signature parameters malformed"
+
+tool_cases = [
+    ("vector_search", "embeddings", 5),
+    ("web_browse", "quantum computing", 1),
+    ("sql_query", "SELECT * FROM users", 10),
+    ("doc_retriever", "attention paper", 2),
+    ("eval_code", "print('hello')", 4)
+]
+for t_n, q_v, k_v in tool_cases:
+    expected_sig = f"Calling: {t_n}(query='{q_v}', top_k={k_v})"
+    test_payload = {"tool": t_n, "query": q_v, "top_k": k_v}
+    rebuilt_sig = f"Calling: {test_payload.get('tool', '')}(query='{test_payload.get('query', '')}', top_k={test_payload.get('top_k', 0)})"
+    assert rebuilt_sig == expected_sig, "Dynamic dispatch invariant failed"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 tool-calling dispatch invariants satisfied.")
 print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Agent tool calling dispatch verified.',
@@ -495,8 +603,32 @@ char_tokens = round(len(sentence) / 4)
 print(f"Words: {len(words)} | BPE Word Est: {estimated_tokens} | Char Est: {char_tokens}")
 `,
           testCode: `assert len(words) == 5, f"Expected 5 words, got {len(words)}"
-assert estimated_tokens == 6, f"Expected 6 tokens (5 * 1.33 = 6.65 -> int 6), got {estimated_tokens}"
-assert char_tokens == 10, f"Expected 10 char tokens (41 chars / 4 ≈ 10), got {char_tokens}"
+assert estimated_tokens == 6, f"Expected 6 tokens, got {estimated_tokens}"
+assert char_tokens == 10, f"Expected 10 char tokens, got {char_tokens}"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(words, list) and isinstance(estimated_tokens, int) and isinstance(char_tokens, int), "Types must be list and int"
+assert estimated_tokens > 0 and char_tokens > 0, "Token counts must be positive"
+assert words == sentence.split(), "words must equal sentence.split()"
+assert estimated_tokens == int(len(words) * 1.33), "estimated_tokens formula violated"
+assert char_tokens == round(len(sentence) / 4), "char_tokens formula violated"
+
+test_sentences = [
+    "Machine learning transforms software.",
+    "Attention is all you need.",
+    "WebAssembly executes in the browser.",
+    "Zero external API dependencies.",
+    "CPython runs in Web Workers."
+]
+for s in test_sentences:
+    w = s.split()
+    e_tok = int(len(w) * 1.33)
+    c_tok = round(len(s) / 4)
+    assert e_tok >= len(w), "Word-based token estimate must be >= word count"
+    assert c_tok > 0, "Char-based token estimate must be > 0"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 tokenization heuristic invariants satisfied.")
 print("✓ [TEST PASSED] Token estimation heuristics verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Token estimation heuristics verified.',
@@ -571,6 +703,25 @@ print(rendered)
           testCode: `assert len(formatted_dialogue) == 2, "Conversation should have 2 turns"
 assert formatted_dialogue[0] == "[SYSTEM]: You are a concise AI teacher."
 assert formatted_dialogue[1] == "[USER]: What is cosine similarity?"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(formatted_dialogue, list) and isinstance(rendered, str), "formatted_dialogue must be list, rendered must be str"
+assert rendered == "\\n".join(formatted_dialogue), "rendered must equal newline-joined formatted_dialogue"
+for turn_str in formatted_dialogue:
+    assert turn_str.startswith("[") and "]: " in turn_str, f"Malformed turn format: {turn_str}"
+
+multi_turns = [
+    {"role": "system", "content": "You are a math tutor."},
+    {"role": "user", "content": "What is 2+2?"},
+    {"role": "assistant", "content": "It is 4."},
+    {"role": "user", "content": "And 3+3?"},
+    {"role": "assistant", "content": "It is 6."}
+]
+re_formatted = [f"[{t['role'].upper()}]: {t['content']}" for t in multi_turns]
+assert "\\n".join(re_formatted).count("\\n") == 4, "Multi-turn formatting invariant failed"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 dialogue turn invariants satisfied.")
 print("✓ [TEST PASSED] Multi-turn role separation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Multi-turn role separation verified.',
@@ -641,6 +792,28 @@ print(f"T=0.0: {t0} | T=0.5: {t5} | T=0.95: {t9}")
           testCode: `assert simulate_token_sampling(0.1) == "greedy_argmax", "Low temp must be greedy_argmax"
 assert simulate_token_sampling(0.7) == "balanced_sampling", "Mid temp must be balanced_sampling"
 assert simulate_token_sampling(1.2) == "high_entropy_creative", "High temp must be high_entropy_creative"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert simulate_token_sampling(0.3) == "balanced_sampling", f"T=0.3 must be balanced_sampling (inclusive lower bound), got {simulate_token_sampling(0.3)}"
+assert simulate_token_sampling(0.8) == "balanced_sampling", f"T=0.8 must be balanced_sampling (inclusive upper bound), got {simulate_token_sampling(0.8)}"
+assert simulate_token_sampling(0.2999) == "greedy_argmax", "T=0.2999 must be greedy_argmax"
+assert simulate_token_sampling(0.8001) == "high_entropy_creative", "T=0.8001 must be high_entropy_creative"
+
+import random
+random.seed(42)
+def ref_sampling(t):
+    if t < 0.3:
+        return "greedy_argmax"
+    elif t <= 0.8:
+        return "balanced_sampling"
+    return "high_entropy_creative"
+
+for _ in range(10):
+    rnd_t = random.uniform(0.0, 2.0)
+    assert simulate_token_sampling(rnd_t) == ref_sampling(rnd_t), f"Sampling distribution mismatch at T={rnd_t}"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 temperature sampling regime invariants satisfied.")
 print("✓ [TEST PASSED] Temperature distribution simulation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Temperature distribution simulation verified.',

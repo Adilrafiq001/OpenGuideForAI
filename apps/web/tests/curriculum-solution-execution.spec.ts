@@ -169,5 +169,89 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
     expect(preSolvedLabs, `Starter code should FAIL tests so students have an authentic challenge! Found ${preSolvedLabs.length} pre-solved labs.`).toEqual([]);
   });
 
+  test('04. Mutation Testing & Autograder Resilience Audit (Track 0)', async () => {
+    const track0Mutants: Record<string, string[]> = {
+      'lesson-0-1-1': [
+        'message = "Hello, World!"',
+        'message = "Hello, World! Running natively in browser"',
+        'message = 42'
+      ],
+      'lesson-0-1-2': [
+        'topic = "Vector Embeddings"\naudience = "a beginner"\nprompt = "Explain {topic} in one plain sentence for {audience}."',
+        'topic = "Vector Embeddings"\naudience = "a beginner"\nprompt = f"Explain {topic} for {audience}."',
+        'topic = "Vector Embeddings"\naudience = "a beginner"\nprompt = "hardcoded wrong"'
+      ],
+      'lesson-0-1-3': [
+        'batch_count = 1000\ntotal_coordinates = batch_count * 2',
+        'batch_count = 500\ntotal_coordinates = 1500',
+        'batch_count = 1000\ntotal_coordinates = 3001'
+      ],
+      'lesson-0-2-1': [
+        'vector_point = [0.24, -0.89, 0.51]\ndimensions = 3\nmagnitude = sum(vector_point)',
+        'vector_point = [0.24, -0.89, 0.51]\ndimensions = 3\nmagnitude = sum(x**2 for x in vector_point)',
+        'vector_point = [0.24, 0.89, 0.51]\ndimensions = 3\nmagnitude = 1.053'
+      ],
+      'lesson-0-2-2': [
+        'import json\nmessage = {"role": "assistant", "content": "What is an embedding?"}\njson_string = json.dumps(message)',
+        'import json\nmessage = {"role": "user"}\njson_string = json.dumps(message)',
+        'message = {"role": "user", "content": "What is an embedding?"}\njson_string = str(message)'
+      ],
+      'lesson-0-2-3': [
+        'import json\nraw_tool_call = \'{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}\'\ncall = json.loads(raw_tool_call)\ntool_name = "search"\nquery = "cosine similarity"\ntop_k = 3\nexecution_signature = f"Calling: {tool_name}(query=\'{query}\', top_k={top_k})"',
+        'import json\nraw_tool_call = \'{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}\'\ncall = json.loads(raw_tool_call)\ntool_name = call.get("tool")\nquery = call.get("query")\ntop_k = 5\nexecution_signature = f"Calling: {tool_name}(query=\'{query}\', top_k={top_k})"',
+        'import json\nraw_tool_call = \'{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}\'\ncall = json.loads(raw_tool_call)\ntool_name = call.get("tool")\nquery = call.get("query")\ntop_k = call.get("top_k")\nexecution_signature = f"{tool_name}(query={query}, top_k={top_k})"'
+      ],
+      'lesson-0-3-1': [
+        'sentence = "OpenGuide makes AI engineering intuitive"\nwords = sentence.split()\nestimated_tokens = len(words)\nchar_tokens = len(sentence)',
+        'sentence = "OpenGuide makes AI engineering intuitive"\nwords = sentence.split()\nestimated_tokens = int(len(words) * 1.33)\nchar_tokens = len(sentence) // 2',
+        'sentence = "OpenGuide makes AI engineering intuitive"\nwords = list(sentence)\nestimated_tokens = int(len(words) * 1.33)\nchar_tokens = round(len(sentence) / 4)'
+      ],
+      'lesson-0-3-2': [
+        'conversation = [{"role": "system", "content": "You are a concise AI teacher."}, {"role": "user", "content": "What is cosine similarity?"}]\nformatted_dialogue = [f"[{m[\'role\']}]: {m[\'content\']}" for m in conversation]\nrendered = "\\n".join(formatted_dialogue)',
+        'conversation = [{"role": "system", "content": "You are a concise AI teacher."}, {"role": "user", "content": "What is cosine similarity?"}]\nformatted_dialogue = [f"{m[\'role\'].upper()}: {m[\'content\']}" for m in conversation]\nrendered = "\\n".join(formatted_dialogue)',
+        'conversation = [{"role": "system", "content": "You are a concise AI teacher."}, {"role": "user", "content": "What is cosine similarity?"}]\nformatted_dialogue = [f"[{m[\'role\'].upper()}]: {m[\'content\']}" for m in conversation]\nrendered = " ".join(formatted_dialogue)'
+      ],
+      'lesson-0-3-3': [
+        'simulate_token_sampling = lambda t: "greedy_argmax"',
+        'simulate_token_sampling = lambda t: "balanced_sampling" if t < 0.8 else "high_entropy_creative"',
+        'simulate_token_sampling = lambda t: "greedy_argmax" if t <= 0.3 else ("balanced_sampling" if t < 0.8 else "high_entropy_creative")'
+      ]
+    };
+
+    let totalMutants = 0;
+    let killedMutants = 0;
+    const survivingMutants: string[] = [];
+
+    track0.modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        const mutants = track0Mutants[lesson.id] || [];
+        mutants.forEach((mutantCode, mIdx) => {
+          totalMutants++;
+          const pyCode = `${mutantCode}\n\n# --- Test Harness ---\n${lesson.testCode || ''}`;
+          const res = spawnSync('python', ['-c', pyCode], {
+            encoding: 'utf-8',
+            timeout: 10000,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
+          });
+
+          if (res.status !== 0 || res.error) {
+            killedMutants++;
+          } else {
+            survivingMutants.push(`[${lesson.id}] Mutant #${mIdx + 1} survived:\n${mutantCode}`);
+          }
+        });
+      });
+    });
+
+    console.log(`\n=== MUTATION AUDIT BREAKDOWN ===`);
+    console.log(`Total Mutants Tested: ${totalMutants}`);
+    console.log(`Killed Mutants: ${killedMutants}`);
+    console.log(`Kill Rate: ${((killedMutants / totalMutants) * 100).toFixed(1)}%`);
+
+    expect(survivingMutants, `Mutants survived! Autograder failed to detect flawed code:\n${survivingMutants.join('\n\n')}`).toEqual([]);
+    expect(totalMutants).toBe(27);
+    expect(killedMutants).toBe(27);
+  });
+
 });
 
