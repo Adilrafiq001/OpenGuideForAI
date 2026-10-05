@@ -53,3 +53,17 @@ Every interactive lab across Tracks 0 through 4 must include:
 2. **The Architecture:** Interactive mental models or visual representations before coding.
 3. **Multi-Stage Challenge:** Guided implementation $\to$ edge-case handling $\to$ production challenge.
 4. **Actionable Autograder Feedback:** Specific compiler and logic diagnostic hints when the student fails, not raw stack traces.
+
+---
+
+## 7. Anti-Tautological Testing & Verification Integrity Standard
+1. **Zero Self-Fulfilling Tests:** Automated tests must NEVER supply synthetic input fixtures or mocked lesson identifiers (e.g., `'4.1.2'`) that do not match production schemas (`'lesson-4-1-2'`). Tests MUST import or assert directly against production data models (`apps/web/src/data/track*.ts`).
+2. **Semantic Assertion Rigor:** Tests verifying diagnostics, feedback, or UI components must NEVER pass on shallow existence checks (e.g. `toBeVisible()` on an alert box or status 200). Tests MUST assert the exact expected semantic card title, concept explanation, and actionable tip string to prevent false-positive green passes.
+3. **End-to-End Live Interaction Proof:** Features claiming Socratic feedback or autograding must be physically verified by executing code inside a real browser DOM session with Playwright MCP, asserting the exact generated diagnostic output.
+
+---
+
+## 8. Production Deployment & Asset Hash Integrity Standard
+1. **Live Build Hash Matching:** Verifying deployment requires fetching the live HTML document from `https://openguideforai.dpdns.org`, parsing the main bundle script hash (`dist/assets/index-[hash].js`), and confirming it matches the local production build generated from git `HEAD`.
+2. **Zero Ignored Edge Console Errors:** Every console error or warning observed during live production navigation—including font fetching failures, analytics beacon timeouts, or Content Security Policy violations—must be formally diagnosed, triaged, and resolved or documented with root-cause proof. No console error may be dismissed as "harmless" without evidence.
+

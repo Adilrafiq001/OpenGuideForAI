@@ -26,6 +26,15 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
   const normalizedCode = code || '';
   const innermostLine = extractInnermostLineNumber(errorMessage);
 
+  // Normalize lessonId format: e.g. "lesson-4-1-2" -> track: "4", canonicalKey: "4.1.2"
+  const lessonMatch = lessonId?.match(/lesson-(\d+)-(\d+)-(\d+)/);
+  const trackNum = lessonMatch ? lessonMatch[1] : (lessonId?.match(/^(\d+)\./)?.[1] || null);
+  const canonicalKey = lessonMatch 
+    ? `${lessonMatch[1]}.${lessonMatch[2]}.${lessonMatch[3]}` 
+    : (lessonId || '');
+
+  const isLesson = (key: string, id: string) => canonicalKey === key || lessonId === id;
+
   // --------------------------------------------------------------------------
   // 1. AST / CODE-PATTERN PEDAGOGICAL TRAPS (Interception before generic traceback)
   // --------------------------------------------------------------------------
@@ -73,10 +82,10 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
   // --------------------------------------------------------------------------
 
   // TRACK 1: Vector Spaces & High-Dimensional Geometry
-  if (lessonId?.startsWith('1.') || /vector|cosine|dot_product|euclidean/i.test(normalizedCode)) {
+  if (trackNum === '1' || /vector|cosine|dot_product|euclidean/i.test(normalizedCode)) {
     // Missing square root in Euclidean norm / Cosine denominator
     if (
-      (lessonId?.startsWith('1.1') || /cosine_similarity|vector_norm/i.test(normalizedCode)) &&
+      (isLesson('1.1.2', 'lesson-1-1-2') || isLesson('1.1.3', 'lesson-1-1-3') || /cosine_similarity|vector_norm/i.test(normalizedCode)) &&
       !/math\.sqrt|\*\*\s*0\.5/.test(normalizedCode) &&
       (errorMessage.includes('AssertionError') || errorMessage.includes('ZeroDivisionError'))
     ) {
@@ -100,7 +109,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // Matrix multiplication dimension mismatch
     if (
-      (lessonId?.startsWith('1.2') || /matmul|matrix_multiply/i.test(normalizedCode)) &&
+      (isLesson('1.2.1', 'lesson-1-2-1') || /matmul|matrix_multiply/i.test(normalizedCode)) &&
       (errorMessage.includes('IndexError') || errorMessage.includes('AssertionError')) &&
       !/len\(\w+\[0\]\)/.test(normalizedCode)
     ) {
@@ -114,7 +123,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // Uncentered PCA / Covariance
     if (
-      (lessonId?.startsWith('1.3') || /pca|covariance/i.test(normalizedCode)) &&
+      (isLesson('1.3.1', 'lesson-1-3-1') || /pca|covariance/i.test(normalizedCode)) &&
       !/mean|avg/i.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -128,10 +137,10 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
   }
 
   // TRACK 2: LLM Core & Tokenization / Retrieval
-  if (lessonId?.startsWith('2.') || /token|bpe|sliding_window|prompt|jsonrpc/i.test(normalizedCode)) {
+  if (trackNum === '2' || /token|bpe|sliding_window|chunk_text|prompt|jsonrpc/i.test(normalizedCode)) {
     // Sliding window stride <= 0
     if (
-      (lessonId === '2.2.1' || /sliding_window|chunk_text/i.test(normalizedCode)) &&
+      (isLesson('2.1.1', 'lesson-2-1-1') || /sliding_window|chunk_text/i.test(normalizedCode)) &&
       (errorMessage.includes('must not be zero') ||
        errorMessage.includes('AssertionError') ||
        /stride\s*=\s*0|stride\s*=\s*chunk_size\s*-\s*overlap|overlap\s*>=\s*chunk/i.test(normalizedCode))
@@ -152,7 +161,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // Untrusted input delimiters in prompts
     if (
-      (lessonId === '2.2.2' || /sandbox_prompt|sanitize_prompt/i.test(normalizedCode)) &&
+      (isLesson('2.1.2', 'lesson-2-1-2') || /sandbox_prompt|sanitize_prompt|prompt_guardrail/i.test(normalizedCode)) &&
       !/<untrusted|<input|<user_data/i.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -166,7 +175,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // JSON-RPC 2.0 error codes
     if (
-      (lessonId === '2.3.1' || /jsonrpc|tool_call/i.test(normalizedCode)) &&
+      (isLesson('2.2.2', 'lesson-2-2-2') || /jsonrpc|tool_call/i.test(normalizedCode)) &&
       (!normalizedCode.includes('-32601') || !normalizedCode.includes('2.0')) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -180,10 +189,10 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
   }
 
   // TRACK 3: Fine-Tuning, Alignment & Evaluation
-  if (lessonId?.startsWith('3.') || /eval|pii|lora|scrub/i.test(normalizedCode)) {
+  if (trackNum === '3' || /eval|pii|lora|scrub|exact_match/i.test(normalizedCode)) {
     // Exact match normalization
     if (
-      (lessonId === '3.1.2' || /exact_match|evaluate_qa/i.test(normalizedCode)) &&
+      (isLesson('3.1.2', 'lesson-3-1-2') || /exact_match|evaluate_qa/i.test(normalizedCode)) &&
       !/\.strip\(\)/.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -197,7 +206,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // PII Masking / Regex boundary
     if (
-      (lessonId === '3.2.1' || /mask_pii|scrub_pii/i.test(normalizedCode)) &&
+      (isLesson('3.2.2', 'lesson-3-2-2') || /mask_pii|scrub_pii|redact/i.test(normalizedCode)) &&
       !/re\.sub/i.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -211,7 +220,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // LoRA alpha / r scaling factor
     if (
-      (lessonId === '3.3.1' || /lora|low_rank/i.test(normalizedCode)) &&
+      (/lora|low_rank/i.test(normalizedCode)) &&
       !/alpha\s*\/\s*r|alpha\s*\/\s*rank|scaling/i.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -225,24 +234,45 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
   }
 
   // TRACK 4: Transformer Architecture from Scratch
-  if (lessonId?.startsWith('4.') || /attention|causal_mask|transformer|multi_head/i.test(normalizedCode)) {
-    // Key matrix transposition (Q @ K^T)
+  if (trackNum === '4' || /attention|causal_mask|transformer|split_heads|multi_head/i.test(normalizedCode)) {
+    // Multi-head split_heads / concat_heads empty list trap (Lesson 4.1.2)
     if (
-      (lessonId === '4.1.2' || /scaled_dot_product_attention|attention/i.test(normalizedCode)) &&
-      !/\.T|transpose|permute|T\b/.test(normalizedCode) &&
+      isLesson('4.1.2', 'lesson-4-1-2') ||
+      (/split_heads/i.test(normalizedCode) && /concat_heads/i.test(normalizedCode))
+    ) {
+      if (
+        errorMessage.includes('IndexError') ||
+        errorMessage.includes('Must produce exactly') ||
+        errorMessage.includes('AssertionError')
+      ) {
+        if (/def split_heads[\s\S]*?return \[\]/.test(normalizedCode) || /heads count\s*:\s*0/i.test(errorMessage)) {
+          return {
+            type: 'Socratic Transformer Lens: Empty Subspace Decomposition',
+            line: innermostLine,
+            friendlyExplanation: 'Your split_heads function returned an empty list []. Multi-Head Attention requires partitioning the d_model dimensions into num_heads non-empty subspaces.',
+            actionableTip: 'Compute d_k = d_model // num_heads, then slice each token row: for h in range(num_heads): head.append(token[h*d_k : (h+1)*d_k]).'
+          };
+        }
+      }
+    }
+
+    // Key matrix transposition (Q @ K^T) (Lesson 4.1.1)
+    if (
+      (isLesson('4.1.1', 'lesson-4-1-1') || /scaled_dot_product_attention/i.test(normalizedCode)) &&
+      !/\.T\b|\.transpose\(|\.permute\(|matrix_transpose\s*\(/.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
       return {
         type: 'Socratic Transformer Lens: Key Matrix Transposition (Q @ K^T)',
         line: innermostLine,
         friendlyExplanation: 'Attention computes alignment between queries of shape (seq_len, d_k) and keys of shape (seq_len, d_k). You must transpose K to shape (d_k, seq_len) to compute Q @ K^T.',
-        actionableTip: 'Transpose the K matrix (or transpose its last two dimensions) before multiplying with Q: scores = Q @ K.T.'
+        actionableTip: 'Transpose the K matrix (or call matrix_transpose(K)) before multiplying with Q: scores = Q @ K.T.'
       };
     }
 
-    // Missing sqrt(d_k) scaling
+    // Missing sqrt(d_k) scaling (Lesson 4.1.1)
     if (
-      (lessonId === '4.1.2' || /scaled_dot_product_attention|attention/i.test(normalizedCode)) &&
+      (isLesson('4.1.1', 'lesson-4-1-1') || /scaled_dot_product_attention/i.test(normalizedCode)) &&
       !/sqrt|d_k\s*\*\*\s*0\.5/.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -256,7 +286,7 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
 
     // Causal masking with 0 instead of -inf
     if (
-      (lessonId === '4.1.3' || /causal_mask|mask/i.test(normalizedCode)) &&
+      (/causal_mask|mask/i.test(normalizedCode)) &&
       !/-1e9|-inf|float\('-inf'\)/i.test(normalizedCode) &&
       errorMessage.includes('AssertionError')
     ) {
@@ -265,20 +295,6 @@ export function diagnosePythonError(errorMessage: string, code?: string, lessonI
         line: innermostLine,
         friendlyExplanation: 'Setting masked attention logits to 0 does not prevent attention: softmax(0) produces a positive non-zero probability (e^0 = 1).',
         actionableTip: 'Set upper-triangular masked positions to -1e9 or float("-inf") so that softmax(logit) produces exactly 0.0 probability for future tokens.'
-      };
-    }
-
-    // Multi-head attention splitting
-    if (
-      (lessonId === '4.2.1' || /multi_head|mha/i.test(normalizedCode)) &&
-      !/d_model\s*\/\/\s*num_heads|head_dim/i.test(normalizedCode) &&
-      errorMessage.includes('AssertionError')
-    ) {
-      return {
-        type: 'Socratic Transformer Lens: Multi-Head Projection Invariant',
-        line: innermostLine,
-        friendlyExplanation: 'Multi-Head Attention projects d_model into num_heads subspaces of dimension d_k = d_model // num_heads.',
-        actionableTip: 'Ensure head_dim = d_model // num_heads and assert that num_heads * head_dim == d_model.'
       };
     }
   }

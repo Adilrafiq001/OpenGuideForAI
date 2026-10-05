@@ -82,5 +82,7 @@
   5. **Localhost vs. Production Honesty:** Never claim a fix is "deployed" or "productionized" when it exists only in the local workspace. Production status requires verified Cloudflare Pages edge deployment and dual-remote synchronization.
   6. **Mock/Toy Data vs. Real Operational Data:** Never claim an algorithm, pipeline, or exercise is "battle-tested" if it only runs against a 3-element hardcoded dummy array.
   7. **Curriculum Completeness (Zero Shortcuts Protocol):** Every curriculum lab must feature full, deep intuition, interactive visual models, multi-stage coding challenges with visible and hidden autograder tests, and actionable error diagnostics. No placeholder snippets, single-line asserts, or skipped tracks. Full spec in `.agents/rules/anti-bias-standards.md`.
+  8. **Anti-Tautological Testing & Semantic Assertions (Strict):** Tests must never use synthetic mocked IDs or parameters that deviate from production schemas (`track*.ts`). Tests for error feedback and UI must assert the exact semantic message content, never shallow boolean existence.
+  9. **Production Hash & Console Integrity (Strict):** Deploy verification must confirm edge HTML main bundle script hash matches local git HEAD build, and all production console errors (fonts, third-party scripts, CSP) must be triaged and resolved.
 
 

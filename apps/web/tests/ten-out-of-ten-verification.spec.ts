@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () => {
+test.describe('OpenGuide Universal Architectural Verification Suite', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('01. Verified 10/10: Portfolio Page renders W3C Verifiable Credential & Gist Sync controls', async ({ page }) => {
+  test('01. Portfolio Page renders W3C Verifiable Credential & Gist Sync controls', async ({ page }) => {
     await page.goto('/portfolio');
     await expect(page.locator('header').getByText('OpenGuide.')).toBeVisible();
     await expect(page.locator('text=PORTFOLIO LEDGER')).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(gistDialog).not.toBeVisible();
   });
 
-  test('02. Verified 10/10: In-Browser Pyodide CodeMirror IDE includes screen reader live region', async ({ page }) => {
+  test('02. In-Browser Pyodide CodeMirror IDE includes screen reader live region', async ({ page }) => {
     await page.goto('/track/0');
     await page.waitForLoadState('domcontentloaded');
 
@@ -32,7 +32,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(liveRegion).toHaveAttribute('aria-live', 'polite');
   });
 
-  test('03. Verified 10/10: Footer modals feature focus traps and ARIA dialog attributes', async ({ page }) => {
+  test('03. Footer modals feature focus traps and ARIA dialog attributes', async ({ page }) => {
     await page.goto('/');
     const privacyBtn = page.locator('button:has-text("Privacy Policy")').first();
     await privacyBtn.scrollIntoViewIfNeeded();
@@ -45,7 +45,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(dialog).not.toBeVisible();
   });
 
-  test('04. Verified 10/10: Service Worker file & manifest capabilities active', async ({ request }) => {
+  test('04. Service Worker file & manifest capabilities active', async ({ request }) => {
     const swRes = await request.get('/sw.js');
     expect(swRes.status()).toBe(200);
     const swText = await swRes.text();
@@ -56,7 +56,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     expect(manifestRes.status()).toBe(200);
   });
 
-  test('05. Verified 10/10: Studio Command Palette opens via search button and keyboard shortcut', async ({ page }) => {
+  test('05. Studio Command Palette opens via search button and keyboard shortcut', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
@@ -90,7 +90,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(paletteModal).not.toBeVisible();
   });
 
-  test('06. Verified 10/10: Portable Proof-of-Work Jupyter Notebook (.ipynb) Export', async ({ page }) => {
+  test('06. Portable Proof-of-Work Jupyter Notebook (.ipynb) Export', async ({ page }) => {
     await page.goto('/track/0');
     await page.waitForLoadState('domcontentloaded');
 
@@ -105,7 +105,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(portfolioExportBtn).toBeVisible();
   });
 
-  test('07. Verified 10/10: Trust Architecture & First-Principles Quotes on Landing Page', async ({ page }) => {
+  test('07. Trust Architecture & First-Principles Quotes on Landing Page', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
@@ -126,7 +126,7 @@ test.describe('OpenGuide 10/10 Universal Architectural Verification Suite', () =
     await expect(footer.getByText('MIT / Apache 2.0 Free Software')).toBeVisible();
   });
 
-  test('08. Verified 10/10: Cross-device responsiveness with zero horizontal overflow', async ({ page }) => {
+  test('08. Cross-device responsiveness with zero horizontal overflow', async ({ page }) => {
     const viewports = [
       { width: 375, height: 667, name: 'Mobile Small (SE)' },
       { width: 390, height: 844, name: 'Mobile Standard (iPhone 14)' },
