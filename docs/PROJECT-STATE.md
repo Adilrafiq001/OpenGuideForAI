@@ -2,6 +2,17 @@
 > Pre-flight freeze active per docs/PRODUCTION-READINESS-AUDIT.md. Zero self-awarded 10/10 ratings.
 
 **Done:**
+- **Phase F1: Autograder Rigor & Mutation Testing — Track 1 Complete (Commit `5a96adb`):**
+  - **1. Dual-Phase Test Harnesses with Hidden Invariants (`track1.ts`):** Upgraded all 9 Track 1 lessons (`lesson-1-1-1` through `lesson-1-3-3`) from simplistic single-assert checks to rigorous dual-phase test harnesses featuring visible checks followed by 5 hidden invariant assertions (Cauchy-Schwarz inequalities, metric symmetry, Euclidean norm $L_2 \le L_1$, unit hypersphere normalization, zero-vector handling, scale invariance, and dynamic seeded test probes).
+  - **2. Automated Mutation Testing Suite (`curriculum-solution-execution.spec.ts`):** Added Test 05 (`05. Mutation Testing & Autograder Resilience Audit (Track 1)`) asserting that 27 hand-crafted erroneous mutants across all 9 labs are killed 100% of the time (100.0% kill rate, 0% mutant survival) by the autograder.
+  - **3. Physical Browser Verification via Playwright MCP:** Physically tested on `localhost:5173/track/1`. Verified that starter code triggers `AssertionError: Delta vector must have 2 dimensions`, Pyodide runs in the Web Worker, and 0 console errors are reported.
+  - **4. 5-Point Local Pre-Flight Gate & Dual-Remote Deployment:**
+    - Dev server live check: HTTP 200 OK.
+    - Physical Playwright verification: 0 console errors.
+    - Linter: `oxlint` passed with 0 warnings and 0 errors across 106 files.
+    - Full test suite: 125/125 tests passed (100% passing, 0 failing, 0 skipped) in 9.8m.
+    - Build: `yarn build` succeeded in 3.47s with 0 errors.
+    - Dual-Remote Multi-Push: Synchronized commit `5a96adb` across both `openguideforai` and `Adilrafiq001` mirrors.
 - **Phase F1: Autograder Rigor & Mutation Testing — Track 0 Complete (Commit `954c7a5`):**
   - **1. Ungameable Dual-Phase Test Harnesses (`track0.ts`):** Upgraded all 9 Track 0 lessons (`lesson-0-1-1` through `lesson-0-3-3`) from simplistic single-assert checks to rigorous dual-phase test harnesses featuring visible output checks followed by 5 hidden invariant assertions (covering mathematical limits, type checking, boundary conditions, and deterministic seeded variations).
   - **2. Automated Mutation Testing Suite (`curriculum-solution-execution.spec.ts`):** Added Test 04 (`04. Mutation Testing & Autograder Resilience Audit (Track 0)`) verifying that 27 hand-crafted erroneous mutants across all 9 labs are killed 100% of the time (100.0% kill rate) by the autograder.
