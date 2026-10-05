@@ -114,7 +114,8 @@ export function PortfolioPage() {
   }, []);
 
   const totalCurriculumLabs = allTracks.reduce((acc, t) => acc + t.lessons.length, 0);
-  const completedCount = completedLessonIds.length;
+  const uniqueCompletedIds = useMemo(() => Array.from(new Set(completedLessonIds.map(id => id.replace(/^(\d+\.\d+\.\d+)$/, (m) => `lesson-${m.replace(/\./g, '-')}`)))), [completedLessonIds]);
+  const completedCount = uniqueCompletedIds.length;
   const progressPercent = Math.min(100, Math.round((completedCount / totalCurriculumLabs) * 100));
   const isCertified = completedCount >= totalCurriculumLabs;
   const canViewCertificate = isCertified || showSamplePreview;
@@ -136,7 +137,7 @@ export function PortfolioPage() {
           entity: 'OpenGuide. AI Studio',
           student: studentName.trim() || 'Anonymous Learner',
           curriculum: 'OpenGuide-Production-v2.0',
-          completedLabs: [...completedLessonIds].sort(),
+          completedLabs: [...uniqueCompletedIds].sort(),
           totalLabs: totalCurriculumLabs,
           architectCredit: 'Adil Rafiq Dar (ARD)',
           timestamp: '2026-IMMUTABLE-LEDGER'
@@ -267,7 +268,7 @@ export function PortfolioPage() {
         id: `did:key:${verificationHash.slice(2, 34)}`,
         name: studentName,
         competency: "Autonomous AI Engineering & Frontier Systems",
-        completedLabs: completedLessonIds.length,
+        completedLabs: completedCount,
         totalLabs: totalCurriculumLabs,
         integritySignatureSHA256: verificationHash
       },
@@ -324,6 +325,23 @@ export function PortfolioPage() {
     } else {
       setGistSyncStatus(`Restore failed: ${res.error}`);
     }
+  };
+
+  const handleShareToTwitter = () => {
+    const text = encodeURIComponent(
+      `I'm mastering sovereign AI engineering on OpenGuide AI Studio!\n` +
+      `Passed ${completedCount}/${totalCurriculumLabs} labs with deterministic WebAssembly proof.\n` +
+      `Cryptographic SHA-256 Digest: ${verificationHash.slice(0, 16)}...\n` +
+      `100% Free • Sovereign in Browser • $0 Cost\n\n` +
+      `Verify or start learning:`
+    );
+    const url = encodeURIComponent('https://openguideforai.dpdns.org/portfolio');
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleShareToLinkedIn = () => {
+    const url = encodeURIComponent('https://openguideforai.dpdns.org/portfolio');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -438,6 +456,26 @@ export function PortfolioPage() {
             </button>
 
             <button
+              onClick={handleShareToTwitter}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-sky-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Share verifiable proof-of-work on X / Twitter"
+              data-testid="share-twitter-btn"
+            >
+              <Share2 size={13} className="text-sky-400" />
+              <span>Share on X</span>
+            </button>
+
+            <button
+              onClick={handleShareToLinkedIn}
+              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-blue-500 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Share verifiable credential on LinkedIn"
+              data-testid="share-linkedin-btn"
+            >
+              <Share2 size={13} className="text-blue-500" />
+              <span>LinkedIn</span>
+            </button>
+
+            <button
               onClick={() => {
                 const sampleLesson = track0.modules[0].lessons[0];
                 const nb = generateJupyterNotebook(sampleLesson.title, sampleLesson.subtitle || sampleLesson.content, sampleLesson.solutionCode || sampleLesson.initialCode, sampleLesson.testCode);
@@ -524,7 +562,7 @@ export function PortfolioPage() {
               <Award size={20} className="text-emerald-400" />
             </div>
             <div className="text-3xl font-black font-mono text-[var(--color-text-primary)]">
-              {allTracks.filter(t => t.lessons.every(l => completedLessonIds.includes(l.id))).length} <span className="text-sm text-[var(--color-text-secondary)] font-normal">/ 4</span>
+              {allTracks.filter(t => t.lessons.every(l => completedLessonIds.includes(l.id))).length} <span className="text-sm text-[var(--color-text-secondary)] font-normal">/ {allTracks.length}</span>
             </div>
             <span className="text-[11px] font-mono text-emerald-400 block pt-4">
               9/9 labs required per track badge

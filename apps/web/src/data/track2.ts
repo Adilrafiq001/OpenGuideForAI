@@ -14,19 +14,27 @@ export const track2: Track = {
           id: 'lesson-2-1-1',
           title: 'Sliding-Window Chunking with Overlap (Stride)',
           subtitle: 'Eliminating Document Boundary Information Loss',
-          firstPrinciplesIntuition: 'If you split text strictly every 50 words, critical sentences will be sliced in half. Sliding-window chunking moves forward with an overlap (stride), ensuring every phrase is fully captured in at least one chunk.',
-          content: 'Implement a sliding-window text chunker that splits a sentence into 4-word chunks with a 2-word overlap.',
+          firstPrinciplesIntuition: 'If an 8,000-token document is naively partitioned every 500 tokens, the pivotal transition sentence explaining causality ("Consequently, Company X acquired Company Y") will be cleaved in half across the boundary. Downstream dense retrieval models fail to match either fragment. A sliding window advances with a stride S = C - O (chunk size minus overlap), ensuring every clause appears unbroken in at least one indexed passage.',
+          content: '### Mechanics of Sliding-Window Passage Extraction\n\nGiven token sequence $T = [t_0, t_1, \\dots, t_{N-1}]$:\n- **Chunk Size ($C$)**: The maximum span of tokens indexed into vector store.\n- **Overlap ($O$)**: The duplicate context prefix retained from the preceding window.\n- **Effective Stride ($S$)**: $S = C - O$.\n\n**Total Chunks Generated:**\n$$\\text{Count} = \\left\\lceil \\frac{N - O}{S} \\right\\rceil$$\n\n**Common Trap:** Setting overlap too high ($O \\ge 0.5C$) balloons vector storage costs and dilutes retrieval rankings with near-duplicate hits. In production RAG, an overlap of 10%–20% is optimal.',
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 2 - Lab 2.1.1
 # Objective: Sliding-Window Text Chunking with Overlap (Stride)
 # ============================================================
 
-# TODO: Step 1 - Complete chunk_text to produce overlapping word slices
 def chunk_text(text, chunk_size=4, overlap=2):
     words = text.split()
     step = chunk_size - overlap
     chunks = []
-    # TODO: Loop from 0 to len(words) with stride step and append word slices
+    
+    # Step 1: Iterate through words with stride step
+    # Slice words[i : i + chunk_size] and append " ".join(chunk)
+    for i in range(0, len(words), step):
+        chunk = words[i:i + chunk_size]
+        if chunk:
+            chunks.append(" ".join(chunk))
+        if i + chunk_size >= len(words):
+            break
+            
     return chunks
 
 doc = "Neural network embeddings represent semantic meaning as high dimensional vectors"
@@ -64,7 +72,12 @@ assert result[3] == "as high dimensional vectors", f"Unexpected Chunk 4: {result
 print("✓ [TEST PASSED] Sliding-window text chunking algorithm verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Sliding-window text chunking algorithm verified.',
-          hint: 'With chunk_size=4 and overlap=2, step is 2 words per iteration.'
+          hint: 'Step is chunk_size - overlap = 4 - 2 = 2. Advance range(0, len(words), 2).',
+          progressiveHints: [
+            'Notice that words[0:4] produces "Neural network embeddings represent".',
+            'With step = 2, the next window starts at index 2: words[2:6] produces "embeddings represent semantic meaning".',
+            'Overlap ensures the words "embeddings represent" appear in both Chunk 1 and Chunk 2.'
+          ]
         },
         {
           id: 'lesson-2-1-2',

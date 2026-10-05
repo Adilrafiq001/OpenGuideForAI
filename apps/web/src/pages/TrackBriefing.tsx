@@ -171,15 +171,19 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
                 <span>{t('briefing_directive')}</span>
               </h2>
 
-              <p className="text-sm text-[var(--color-text-primary)] leading-relaxed mb-2">
-                {activeTrack.id === 'track-1'
-                  ? "Before orchestrating multi-agent systems, master the representation of meaning in high-dimensional space."
-                  : "Before orchestrating multi-agent systems, master the execution layer."}
+              <p className="text-sm text-[var(--color-text-primary)] leading-relaxed mb-2 font-medium">
+                {activeTrack.id === 'track-0' && "Before orchestrating multi-agent systems, master the execution layer."}
+                {activeTrack.id === 'track-1' && "Before orchestrating multi-agent systems, master the representation of meaning in high-dimensional space."}
+                {activeTrack.id === 'track-2' && "Bridge semantic retrieval and autonomous reasoning loops with deterministic tools."}
+                {activeTrack.id === 'track-3' && "Fortify production AI systems against adversarial injection and align model behaviors with quantitative metrics."}
+                {activeTrack.id === 'track-4' && "Deconstruct frontier transformer mechanics, attention invariants, and KV-cache dynamics from scratch."}
               </p>
               <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-                {activeTrack.id === 'track-1'
-                  ? "In this track, explore vector embeddings, calculate angular dot-products, implement cosine distance metrics, and build your own in-memory semantic vector search engine."
-                  : "In this track, compile and execute real Python scripts natively inside your browser, dissect string tokenization mechanics, and inspect JSON payloads without leaving this workspace."}
+                {activeTrack.id === 'track-0' && "Compile and execute real Python scripts natively inside your browser, dissect string tokenization mechanics, and inspect JSON payloads without leaving this workspace."}
+                {activeTrack.id === 'track-1' && "Explore vector embeddings, calculate angular dot-products, implement cosine distance metrics, and build your own in-memory semantic vector search engine."}
+                {activeTrack.id === 'track-2' && "Build semantic chunking pipelines, context augmentation prompts, Model Context Protocol (MCP) dispatchers, and autonomous ReAct agents in pure client-side Python."}
+                {activeTrack.id === 'track-3' && "Implement OWASP Top 10 guardrails, construct synthetic evaluation datasets, run LLM-as-a-judge harnesses, and evaluate output quality without third-party API dependencies."}
+                {activeTrack.id === 'track-4' && "Implement multi-head attention mathematics, analyze KV-cache memory pressure, explore test-time compute search, and run quantized edge models with zero server bills."}
               </p>
             </div>
 

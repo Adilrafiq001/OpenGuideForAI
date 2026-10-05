@@ -7,6 +7,14 @@ export interface ProgressRecord {
   trackId?: string;
 }
 
+export function normalizeLessonId(id: string): string {
+  if (typeof id !== 'string') return '';
+  if (/^\d+\.\d+\.\d+$/.test(id)) {
+    return `lesson-${id.replace(/\./g, '-')}`;
+  }
+  return id;
+}
+
 // Dexie IndexedDB Schema Definition
 class OpenGuideDatabase extends Dexie {
   progress!: Table<ProgressRecord, string>;
@@ -38,8 +46,8 @@ function getInitialCachedProgress(): { ids: string[]; loaded: boolean } {
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const ids = parsed.filter(id => typeof id === 'string');
-          return { ids, loaded: true };
+          const ids = parsed.filter(id => typeof id === 'string').map(normalizeLessonId);
+          return { ids: Array.from(new Set(ids)), loaded: true };
         }
       }
     }
@@ -75,7 +83,7 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed)) {
-            initialIds = parsed.filter(id => typeof id === 'string');
+            initialIds = parsed.filter(id => typeof id === 'string').map(normalizeLessonId);
           }
         }
       } catch {
@@ -84,13 +92,13 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
 
       // Fast synchronous hydrate
       if (initialIds.length > 0) {
-        set({ completedLessonIds: initialIds, isLoaded: true });
+        set({ completedLessonIds: Array.from(new Set(initialIds)), isLoaded: true });
       }
 
       // 2. Hydrate from durable IndexedDB
       const records = await db.progress.toArray();
       if (records.length > 0) {
-        const idSet = new Set([...initialIds, ...records.map(r => r.lessonId)]);
+        const idSet = new Set([...initialIds, ...records.map(r => r.lessonId)].map(normalizeLessonId));
         const combined = Array.from(idSet);
         set({ completedLessonIds: combined, isLoaded: true });
         try {
@@ -100,7 +108,7 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
         // Sync cached localStorage items into IndexedDB
         const now = new Date().toISOString();
         await db.progress.bulkPut(
-          initialIds.map(id => ({ lessonId: id, completedAt: now }))
+          Array.from(new Set(initialIds)).map(id => ({ lessonId: id, completedAt: now }))
         );
         set({ isLoaded: true });
       } else {
@@ -124,15 +132,16 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
   },
 
   completeLesson: async (lessonId: string, trackId?: string) => {
-    const current = get().completedLessonIds;
-    if (current.includes(lessonId)) return;
+    const normalizedId = normalizeLessonId(lessonId);
+    const current = get().completedLessonIds.map(normalizeLessonId);
+    if (current.includes(normalizedId)) return;
 
-    const updated = [...current, lessonId];
+    const updated = [...current, normalizedId];
     
     // Performance optimization: Instantaneous in-memory cache update
     set({ completedLessonIds: updated });
     try {
-      progressBroadcast?.postMessage({ type: 'LESSON_COMPLETED', lessonId, updatedList: updated });
+      progressBroadcast?.postMessage({ type: 'LESSON_COMPLETED', lessonId: normalizedId, updatedList: updated });
     } catch {}
 
     // Sync to localStorage cache
@@ -143,7 +152,7 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
     // Asynchronously write to durable IndexedDB
     try {
       await db.progress.put({
-        lessonId,
+        lessonId: normalizedId,
         completedAt: new Date().toISOString(),
         trackId
       });
@@ -168,17 +177,18 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
   },
 
   simulateAllComplete: async (allLessonIds: string[]) => {
-    set({ completedLessonIds: allLessonIds });
+    const normalized = Array.from(new Set(allLessonIds.map(normalizeLessonId)));
+    set({ completedLessonIds: normalized });
     try {
-      progressBroadcast?.postMessage({ type: 'SIMULATE_ALL', allLessonIds });
+      progressBroadcast?.postMessage({ type: 'SIMULATE_ALL', allLessonIds: normalized });
     } catch {}
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(allLessonIds));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     } catch {}
     try {
       const now = new Date().toISOString();
       await db.progress.bulkPut(
-        allLessonIds.map(id => ({ lessonId: id, completedAt: now }))
+        normalized.map(id => ({ lessonId: id, completedAt: now }))
       );
     } catch (err) {
       console.warn('Could not bulk write to IndexedDB:', err);

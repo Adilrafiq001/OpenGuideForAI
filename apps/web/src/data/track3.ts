@@ -14,24 +14,29 @@ export const track3: Track = {
           id: 'lesson-3-1-1',
           title: 'Exact-Match & Normalized Assertion Evals',
           subtitle: 'Quantifying Deterministic Accuracy on Structured Tasks',
-          firstPrinciplesIntuition: 'Unit testing LLMs requires normalized assertions: stripping punctuation, trimming whitespace, and standardizing casing before equality comparison to measure genuine accuracy rather than formatting noise.',
-          content: 'Implement a normalized evaluation harness that benchmarks candidate outputs against gold standard references.',
+          firstPrinciplesIntuition: 'Unit testing non-deterministic language models requires robust normalization layers. Raw string comparison ("Paris." vs "Paris") creates false negatives due to arbitrary trailing punctuation, whitespace padding, or capitalization. Production AI teams compute Exact-Match (EM) over normalized equivalence classes, stripping surface-level typographic noise to evaluate true underlying semantic correctness.',
+          content: '### Formulation: Exact-Match (EM) & Equivalence Normalization\n\nGiven test dataset $D = \\{(x_1, y_1), (x_2, y_2), \\dots, (x_N, y_N)\\}$ and model $M$:\n$$\\text{EM Score} = \\frac{1}{N} \\sum_{i=1}^N \\mathbb{I}\\big(\\text{norm}(M(x_i)) = \\text{norm}(y_i)\\big) \\times 100\\%$$\n\n**Three Normalization Invariants:**\n1. **Case-Folding**: `text.lower()` eliminates capitalization variance.\n2. **Punctuation Invariance**: `re.sub(r"[^\\w\\s]", "", text)` strips periods, exclamation marks, and quotes.\n3. **Whitespace Canonicalization**: `" ".join(text.split())` collapses variable spacing and newlines into single spaces.\n\n**Common Trap:** Avoid aggressive stemming during normalization on fact-based QA; stripping grammatical suffixes can alter dates, units, or chemical formulas.',
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 3 - Lab 3.1.1
 # Objective: Exact-Match & Normalized Assertion Evals
 # ============================================================
 import re
 
-# TODO: Step 1 - Complete normalize_text to strip punctuation and extra spaces
+# Step 1: Complete normalize_text to strip punctuation and extra spaces
 def normalize_text(text):
-    # TODO: Lowercase, strip punctuation with regex, and collapse whitespace
-    return ""
+    text = text.lower().strip()
+    text = re.sub(r"[^\\w\\s]", "", text)
+    return " ".join(text.split())
 
-# TODO: Step 2 - Benchmark accuracy across dataset
+# Step 2: Benchmark accuracy across dataset
 def evaluate_accuracy(dataset, model_func):
     passed = 0
-    # TODO: Loop through dataset, compare normalize_text(pred) == normalize_text(ref)
-    return 0.0, passed, len(dataset)
+    for item in dataset:
+        pred = normalize_text(model_func(item["input"]))
+        ref = normalize_text(item["expected"])
+        if pred == ref:
+            passed += 1
+    return (passed / len(dataset)) * 100, passed, len(dataset)
 
 dataset = [
     {"input": "What is 12 + 15?", "expected": "27"},
@@ -87,7 +92,12 @@ assert passed == 3 and total == 3, "All 3 dataset items must pass evaluation"
 print("✓ [TEST PASSED] Normalized evaluation harness verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Normalized evaluation harness verified.',
-          hint: 'The normalize_text function removes punctuation and extra whitespace before checking equality.'
+          hint: 'Use re.sub(r"[^\\w\\s]", "", text) to strip punctuation, and " ".join(text.split()) to collapse whitespace.',
+          progressiveHints: [
+            'Notice that "27." contains a period. Without normalization, "27." == "27" evaluates to False!',
+            'normalize_text removes the punctuation so "27." becomes "27".',
+            'Similarly, "YES!" becomes "yes", and "  paris  " becomes "paris", yielding 100.0% Exact-Match accuracy.'
+          ]
         },
         {
           id: 'lesson-3-1-2',

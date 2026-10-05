@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -295,6 +295,10 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   const isCurrentCompleted = completedLessonIds.includes(currentLesson.id);
 
   const totalTrackLessons = track.modules.reduce((a, m) => a + m.lessons.length, 0);
+  const trackCompletedCount = useMemo(() => {
+    const trackLessonIdSet = new Set(track.modules.flatMap(m => m.lessons.map(l => l.id)));
+    return completedLessonIds.filter(id => trackLessonIdSet.has(id)).length;
+  }, [track, completedLessonIds]);
 
   return (
     <div className="h-[100dvh] w-full bg-[var(--color-primary)] text-[var(--color-text-primary)] font-sans overflow-hidden flex flex-col selection:bg-[var(--color-accent-trans)]">
@@ -441,7 +445,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 }`}
               >
                 <List size={13} />
-                <span>Modules ({completedLessonIds.length}/{totalTrackLessons})</span>
+                <span>Modules ({trackCompletedCount}/{totalTrackLessons})</span>
               </button>
             </div>
 
@@ -666,7 +670,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                               isSelected ? 'bg-[var(--color-primary)] text-[var(--color-accent)] font-bold border border-[var(--color-accent-trans)]' : 'hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                             }`}
                           >
-                            <span className="truncate pr-2">{lIdx + 1}. {les.title}</span>
+                            <span className="truncate pr-2">{trackNum}.{mIdx + 1}.{lIdx + 1} {les.title}</span>
                             {isDone && <Check size={12} className="text-emerald-400 shrink-0" />}
                           </button>
                         );

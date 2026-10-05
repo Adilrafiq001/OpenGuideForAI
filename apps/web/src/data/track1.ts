@@ -14,21 +14,28 @@ export const track1: Track = {
           id: 'lesson-1-1-1',
           title: 'The Vector as an Arrow in Semantic Space',
           subtitle: 'From Coordinates to Conceptual Meaning',
-          firstPrinciplesIntuition: 'In classical software, words are just arbitrary integer IDs (strings). But in AI, words live in high-dimensional vector spaces. If "king" is at [0.9, 0.2] and "queen" is at [0.85, 0.25], the distance between them is tiny because their meanings are related.',
-          content: 'Initialize your semantic workspace by creating two 2D coordinate vectors representing conceptual meanings. Follow the step-by-step tasks to satisfy the automated test assertion.',
+          firstPrinciplesIntuition: 'In classical databases, words are discrete categorical IDs with zero intrinsic geometric relationship ("king" and "queen" are as unrelated as "king" and "tractor"). In modern AI, concepts are projected into continuous high-dimensional vector manifolds R^d. Semantic similarity is measured by spatial proximity and angular alignment. Notice: If king = [0.9, 0.2] and queen = [0.85, 0.25], the vector displacement (delta = queen - king) encodes conceptual dimensions like gender, formality, and role.',
+          content: '### Mathematical Foundation: High-Dimensional Coordinate Manifolds\n\nIn d-dimensional Euclidean space, a vector v in R^d is an ordered tuple (v_1, v_2, ..., v_d).\n\n**Key Properties to Remember:**\n1. **Direction**: Encodes the topic or semantic concept.\n2. **Magnitude (L2 Norm)**: ||v|| = sqrt(sum(v_i^2)). In unnormalized embeddings, magnitude often reflects word frequency rather than meaning.\n3. **Displacement**: delta = v_2 - v_1 represents the semantic transformation from concept 1 to concept 2.\n\n**Common Trap:** Never assume raw coordinates from different embedding models can be compared directly; each model defines an orthogonal manifold basis.',
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 1 - Lab 1.1.1
 # Objective: The Vector as an Arrow in Semantic Space
 # ============================================================
 
-# TODO: Step 1 - Define the 2D coordinate vector for "king" as [0.9, 0.2]
-king = []
+# Step 1: Define semantic coordinate vectors in R^2
+king = [0.9, 0.2]
+queen = [0.85, 0.25]
 
-# TODO: Step 2 - Define the 2D coordinate vector for "queen" as [0.85, 0.25]
-queen = []
+# Step 2: Compute the semantic delta displacement vector: (queen - king)
+# Hint: delta[i] = round(queen[i] - king[i], 4)
+delta = []
 
-print(f"King vector coordinates : {king}")
-print(f"Queen vector coordinates: {queen}")
+# Step 3: Compute the squared Euclidean distance: sum((queen[i] - king[i])^2)
+squared_distance = 0.0
+
+print(f"King   : {king}")
+print(f"Queen  : {queen}")
+print(f"Delta  : {delta}")
+print(f"Dist^2 : {squared_distance}")
 `,
           solutionCode: `# ============================================================
 # OpenGuide AI Studio // Track 1 - Lab 1.1.1 (Canonical Solution)
@@ -36,25 +43,37 @@ print(f"Queen vector coordinates: {queen}")
 
 king = [0.9, 0.2]
 queen = [0.85, 0.25]
+delta = [round(q - k, 4) for k, q in zip(king, queen)]
+squared_distance = round(sum((q - k) ** 2 for k, q in zip(king, queen)), 6)
 
-print(f"King vector coordinates : {king}")
-print(f"Queen vector coordinates: {queen}")
+print(f"King   : {king}")
+print(f"Queen  : {queen}")
+print(f"Delta  : {delta}")
+print(f"Dist^2 : {squared_distance}")
 `,
           testCode: `assert isinstance(king, list) and len(king) == 2, "king must be a 2D list [x, y]"
 assert isinstance(queen, list) and len(queen) == 2, "queen must be a 2D list [x, y]"
 assert king == [0.9, 0.2], f"Expected king = [0.9, 0.2], got {king}"
 assert queen == [0.85, 0.25], f"Expected queen = [0.85, 0.25], got {queen}"
+assert isinstance(delta, list) and len(delta) == 2, "delta must be a 2D list [dx, dy]"
+assert abs(delta[0] - (-0.05)) < 1e-4 and abs(delta[1] - 0.05) < 1e-4, f"delta incorrect: got {delta}"
+assert abs(squared_distance - 0.005) < 1e-4, f"squared_distance incorrect: got {squared_distance}"
 print("✓ [TEST PASSED] Semantic vector coordinates successfully initialized.")
 `,
           expectedOutput: '✓ [TEST PASSED] Semantic vector coordinates successfully initialized.',
-          hint: 'Define king = [0.9, 0.2] and queen = [0.85, 0.25].'
+          hint: 'Subtract king coordinates from queen coordinates: delta = [round(queen[0] - king[0], 4), round(queen[1] - king[1], 4)].',
+          progressiveHints: [
+            'Recall that vector subtraction is element-wise: (q_x - k_x, q_y - k_y).',
+            'For delta: queen[0] - king[0] is 0.85 - 0.9 = -0.05, and queen[1] - king[1] is 0.25 - 0.20 = 0.05.',
+            'For squared_distance: sum the square of each component of delta: (-0.05)^2 + (0.05)^2 = 0.0025 + 0.0025 = 0.005.'
+          ]
         },
         {
           id: 'lesson-1-1-2',
           title: 'Vector Magnitude & Normalization',
           subtitle: 'Standardizing Arrow Lengths to Unit 1.0 (L2 Norm)',
-          firstPrinciplesIntuition: 'When comparing two vectors, we care about their direction (what topic they discuss), not their length (document word count). Normalizing a vector divides each coordinate by its Euclidean norm (sqrt(sum(x^2))), producing a unit vector of length exactly 1.0 on a hypersphere.',
-          content: 'Calculate the Euclidean magnitude of vector [3.0, 4.0] using math.sqrt() and normalize it to a unit vector.',
+          firstPrinciplesIntuition: 'When comparing conceptual embeddings, document length is an irrelevant confounder. A 5,000-word treatise on quantum physics has a massive vector length simply because terms repeat, whereas an abstract has a short length. Projecting both vectors onto the surface of a unit hypersphere (||v||_2 = 1.0) eliminates magnitude distortion so downstream cosine operations measure purely semantic direction.',
+          content: '### Mathematical Formulation: The Euclidean L2 Norm & Hypersphere Projection\n\nGiven v = [v_1, v_2, ..., v_d], the Euclidean magnitude is:\n$$\\|v\\|_2 = \\sqrt{\\sum_{i=1}^d v_i^2}$$\n\nTo construct the unit vector u = v / ||v||_2, divide every dimension by the magnitude.\n\n**Numerical Stability Guardrail (Crucial in Production ML):**\nIf v is an all-zero vector, ||v|| = 0. Attempting division by zero throws a ZeroDivisionError in Python or NaN in WebGL shaders. Production inference engines add an epsilon damping term: u = v / (||v|| + 1e-12).',
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 1 - Lab 1.1.2
 # Objective: Vector Magnitude & Unit Normalization (L2 Norm)
@@ -63,14 +82,14 @@ import math
 
 v = [3.0, 4.0]
 
-# TODO: Step 1 - Calculate Euclidean magnitude: sqrt(x^2 + y^2)
+# Step 1: Calculate Euclidean L2 magnitude: sqrt(sum(x^2))
 mag = 0.0
 
-# TODO: Step 2 - Normalize each coordinate by dividing by magnitude (round to 2 decimals)
+# Step 2: Normalize vector to unit length with epsilon protection: round(x / (mag + 1e-12), 2)
 unit_v = []
 
-print(f"Original Vector: {v}")
-print(f"Magnitude (L2): {mag}")
+print(f"Original Vector       : {v}")
+print(f"Magnitude (L2)        : {mag}")
 print(f"Normalized Unit Vector: {unit_v}")
 `,
           solutionCode: `# ============================================================
@@ -80,10 +99,11 @@ import math
 
 v = [3.0, 4.0]
 mag = math.sqrt(v[0]**2 + v[1]**2)
-unit_v = [round(x / mag, 2) for x in v]
+eps = 1e-12
+unit_v = [round(x / (mag + eps), 2) for x in v]
 
-print(f"Original Vector: {v}")
-print(f"Magnitude (L2): {mag}")
+print(f"Original Vector       : {v}")
+print(f"Magnitude (L2)        : {mag}")
 print(f"Normalized Unit Vector: {unit_v}")
 `,
           testCode: `assert mag == 5.0, f"Expected magnitude 5.0, got {mag}"
@@ -92,14 +112,19 @@ assert round(math.sqrt(unit_v[0]**2 + unit_v[1]**2), 1) == 1.0, "Unit vector mus
 print("✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.',
-          hint: 'The magnitude of (3, 4) is 5.0, so the normalized components are 3/5 = 0.6 and 4/5 = 0.8.'
+          hint: 'Calculate mag = math.sqrt(v[0]**2 + v[1]**2) which equals 5.0, then unit_v = [round(x / mag, 2) for x in v].',
+          progressiveHints: [
+            'For (3, 4), 3^2 + 4^2 = 9 + 16 = 25. The square root of 25 is 5.0.',
+            'Divide each element by 5.0: 3.0 / 5.0 = 0.6, and 4.0 / 5.0 = 0.8.',
+            'Unit vector coordinates are [0.6, 0.8]. Notice that 0.6^2 + 0.8^2 = 0.36 + 0.64 = 1.0 exactly!'
+          ]
         },
         {
           id: 'lesson-1-1-3',
           title: 'The Dot Product: Measuring Alignment',
           subtitle: 'The Core Mathematical Operation of Attention & Embeddings',
-          firstPrinciplesIntuition: 'The dot product multiplies corresponding dimensions and sums the results (sum(a_i * b_i)). If two unit vectors point in the identical direction, their dot product is 1.0. If orthogonal (90 degrees, unrelated), it is 0.0. If opposite (180 degrees), it is -1.0. This single operation powers all Transformer self-attention queries and keys.',
-          content: 'Compute the dot product between two 3D vectors a = [1, 2, 3] and b = [4, 5, 6] to measure their directional alignment.',
+          firstPrinciplesIntuition: 'The dot product is the single most important mathematical operation in modern artificial intelligence. It computes the projection of one vector directly onto another. If two unit vectors point in the identical direction (angle theta = 0), cos(0) = 1.0. If they are orthogonal (90 degrees, conceptually independent), their dot product is exactly 0.0. In Transformer self-attention, Query @ Key^T is nothing more than billions of parallel dot products computing how much attention one token owes another.',
+          content: '### Geometric & Algebraic Equivalence of the Dot Product\n\nAlgebraic definition:\n$$\\mathbf{a} \\cdot \\mathbf{b} = \\sum_{i=1}^d a_i b_i = a_1 b_1 + a_2 b_2 + \\dots + a_d b_d$$\n\nGeometric definition:\n$$\\mathbf{a} \\cdot \\mathbf{b} = \\|\\mathbf{a}\\| \\|\\mathbf{b}\\| \\cos \\theta$$\n\nWhen vectors are normalized to unit length (||a|| = ||b|| = 1.0), the algebraic sum of element-wise products equals the cosine of the angle between them!\n\n**Common Trap:** Remember that the dot product is sensitive to coordinate scaling. If vector A is multiplied by 10, the dot product grows 10x without any change in conceptual orientation.',
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 1 - Lab 1.1.3
 # Objective: The Dot Product - Measuring Conceptual Alignment
@@ -108,13 +133,13 @@ print("✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.")
 a = [1, 2, 3]
 b = [4, 5, 6]
 
-# TODO: Step 1 - Compute dot product by multiplying corresponding elements and summing:
+# Step 1: Compute dot product by multiplying corresponding elements and summing:
 # sum(x * y for x, y in zip(a, b))
 dot = 0
 
-print(f"Vector A: {a}")
-print(f"Vector B: {b}")
-print(f"Dot Product (A · B): {dot}")
+print(f"Vector A            : {a}")
+print(f"Vector B            : {b}")
+print(f"Dot Product (A · B) : {dot}")
 `,
           solutionCode: `# ============================================================
 # OpenGuide AI Studio // Track 1 - Lab 1.1.3 (Canonical Solution)
@@ -124,16 +149,21 @@ a = [1, 2, 3]
 b = [4, 5, 6]
 dot = sum(x * y for x, y in zip(a, b))
 
-print(f"Vector A: {a}")
-print(f"Vector B: {b}")
-print(f"Dot Product (A · B): {dot}")
+print(f"Vector A            : {a}")
+print(f"Vector B            : {b}")
+print(f"Dot Product (A · B) : {dot}")
 `,
           testCode: `assert dot == 32, f"Expected dot product 32, got {dot}"
 assert sum(x * y for x, y in zip([1, 0], [0, 1])) == 0, "Orthogonal dot product must equal 0"
 print("✓ [TEST PASSED] Vector dot product calculation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector dot product calculation verified.',
-          hint: '1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32.'
+          hint: 'Multiply pairwise coordinates and add them together: (1 * 4) + (2 * 5) + (3 * 6) = 4 + 10 + 18 = 32.',
+          progressiveHints: [
+            'Pair up coordinates using zip(a, b): [(1, 4), (2, 5), (3, 6)].',
+            'Compute element-wise products: 1 * 4 = 4, 2 * 5 = 10, 3 * 6 = 18.',
+            'Sum the products: 4 + 10 + 18 = 32. Use sum(x * y for x, y in zip(a, b)).'
+          ]
         }
       ]
     },

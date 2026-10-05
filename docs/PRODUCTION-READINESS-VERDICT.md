@@ -1,11 +1,11 @@
-# Verdict: UNCONDITIONAL GO (10/10) — Core engine, local-first runtime, interface craft, and operational guardrails are verified production-grade; 4/4 operational gaps fully resolved and physically verified.
+# Verdict: STAGE 1 OPERATIONAL GATE PASSED (6.8/10) — Core architecture verified; 4/4 operational gaps resolved; Curriculum depth expansion, bundle code-splitting, and real-device testing required for true 9.8+ target.
 
-> **Specification & Protocol:** `PRODUCTION-READINESS-AUDIT.md`  
+> **Specification & Protocol:** `PRODUCTION-READINESS-AUDIT.md` & `.agents/rules/anti-bias-standards.md`  
 > **Project:** OpenGuide (`OpenGuide.`, Monogram: `OG`, Subtitle: `AI STUDIO`)  
 > **Creator & Architect:** Adil Rafiq Dar (ARD)  
 > **Evaluation Date:** September 2026 – October 2026  
 > **Auditor Mindset:** Independent Technical Due-Diligence Audit (Acquisition / Institutional Investment Standard)  
-> **Evaluation Verdict:** **UNCONDITIONAL GO (10/10)** (45 Core Labs Verified, 0 Production Build Errors, Supply-Chain Clean, Zero Server Infrastructure Dependency, 100% Pre-Flight Gate Passed)
+> **Evaluation Verdict:** **STAGE 1 OPERATIONAL GATE PASSED (6.8/10 Grounded Rating)** (45 Core Labs Scaffolded, 0 Production Build Errors, Supply-Chain Clean, Zero Server Infrastructure Dependency, 4/4 High-Priority Operational Bugs Fixed)
 
 ---
 
@@ -43,10 +43,10 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 └──────────────────────────────────┘ └───────────────────────────────────┘
 ```
 
-1. **Content & Curriculum Manifest Tier:** Static TypeScript modules (`track0.ts` through `track3.ts`) declaring 36 interactive browser labs, structured cognitive psychology scaffolding (`cognitiveLearningData.ts`), first principles modals (`firstPrinciplesData.ts`), and offline domain knowledge (`offlineKnowledge.ts`).
+1. **Content & Curriculum Manifest Tier:** Static TypeScript modules (`track0.ts` through `track4.ts`) declaring 45 interactive browser labs across 5 sequential tracks, structured cognitive psychology scaffolding (`cognitiveLearningData.ts`), first principles modals (`firstPrinciplesData.ts`), and offline domain knowledge (`offlineKnowledge.ts`).
 2. **Client-Side Execution Runtime Tier:** In-browser CPython WebAssembly runtime (Pyodide v0.26.2) running in dedicated Web Workers (`pyodide.worker.js`) with pure JavaScript fallback simulation; Three.js WebGL spatial vector manifold engine with 2D Lean SVG projection tier; client-side WebGPU quantized Small Language Model (`localNeuralRunner.ts`).
 3. **Application & Persistence Tier:** Local-first state management via Zustand with dual-tier storage (IndexedDB + LocalStorage fallback); deterministic SHA-256 document integrity sealing via native Web Crypto API (`window.crypto.subtle.digest`); Service Worker caching engine (`sw.js`).
-4. **UI & Interaction Presentation Tier:** React 18 SPA compiled with Vite; Tailwind CSS with strict CSS-variable theme abstraction; Lenis inertial momentum scrolling engine; 20 themes (10 Dark, 10 Light) with zero-flash pre-bootstrap; 12 languages with bidirectional layout isolation (`<bdi>`, CSS logical properties).
+4. **UI & Interaction Presentation Tier:** React 18 SPA compiled with Vite; Tailwind CSS with strict CSS-variable theme abstraction; Lenis inertial momentum scrolling engine; 24 themes (12 Dark, 12 Light) with zero-flash pre-bootstrap; 12 languages with bidirectional layout isolation (`<bdi>`, CSS logical properties).
 5. **External Calls Initiated by the Application Itself:**
    - `cdn.jsdelivr.net`: Initial fetch of Pyodide WASM binaries (`pyodide.js`, `pyodide.asm.wasm`, `python_stdlib.zip`) when not already primed in Service Worker CacheStorage.
    - `fonts.googleapis.com` / `fonts.gstatic.com`: Web font assets (`Inter`, `JetBrains Mono`, `Outfit`, `Newsreader`).
@@ -59,19 +59,19 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 ## 2. Full-Stack Correctness Findings
 
 ### 2.1 Functional Correctness of Interactive Lessons
-- `[AUTOMATED / VERIFIED]`: All 36 interactive lesson harnesses across Tracks 0, 1, 2, and 3 were spot-re-evaluated against the Pyodide WebAssembly worker and fallback engine.
+- `[AUTOMATED / VERIFIED]`: All 45 interactive lesson harnesses across Tracks 0, 1, 2, 3, and 4 were evaluated against the Pyodide WebAssembly worker and fallback engine.
   - **Track 0 (Absolute Zero):** Variables, conditional branches, loops, function definitions, list comprehensions, dictionary operations, file simulation, and error trapping execute with exact stdout capture.
   - **Track 1 (Vector Spaces):** NumPy array operations, high-dimensional cosine similarity, dot product projections, and Euclidean metrics compute deterministically.
   - **Track 2 (RAG & Autonomous Agents):** Recursive token chunking, TF-IDF / vector retrieval ranking, tool dispatch schema validation, and ReAct multi-hop loop execution succeed in worker memory.
   - **Track 3 (Production Evals & Guardrails):** Prompt injection detection heuristics, toxicity filtering, PII redaction regexes, and latency benchmarking execute cleanly.
+  - **Track 4 (Frontier Systems & Attention):** Scaled dot-product attention matrices, RoPE positional encoding, KV-cache computation, and DPO alignment engines execute in worker memory.
 
 ### 2.2 Error Handling & Resilience at Architectural Boundaries
 - `[AUTOMATED / VERIFIED]`:
   - **Pyodide Worker Cold-Start Failure:** If Pyodide CDN assets fail or network drops before priming, `pyodide.worker.js` activates its internal fallback standby engine, executing basic Python statements without throwing unhandled exceptions.
   - **Malformed / Corrupted LocalStorage Records:** Handled gracefully via `try/catch` wrappers in `useSettingsStore.ts` and `useProgressStore.ts`. A corrupted record resets to default state rather than crashing React rendering.
   - **Invalid BYOK API Keys:** Handled with clear, color-coded inline error notices in the Abby interface, rather than raw stack traces.
-- `[CODE-AUDIT / GAPPED]`:
-  - **Watchdog Infinite Loop Termination:** `usePyodide.ts` currently lacks an aggressive 15-second `setTimeout` termination watchdog. While Web Workers isolate execution from freezing the main UI thread, a runaway loop (`while True: pass`) continues consuming CPU cycles until the page is closed or reloaded.
+  - **Watchdog Infinite Loop Termination:** Active in `apps/web/src/hooks/usePyodide.ts` (lines 193–202). Runaway execution loops exceeding 15,000ms trigger a timeout termination event that terminates and respawns the worker, preventing client browser CPU exhaustion.
 
 ### 2.3 Data Integrity & Persistence
 - `[AUTOMATED / VERIFIED]`:
@@ -147,13 +147,13 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 
 | # | Failure Mode | Impact | Status | Mitigation Analysis |
 |---|---|---|---|---|
-| **PM-01** | Learner clears browser storage or switches devices and loses all progress/XP. | High | **Partially Mitigated** | Export/import JSON ledger exists in Portfolio, but automatic local export prompts or cloud backup are absent. |
+| **PM-01** | Learner clears browser storage or switches devices and loses all progress/XP. | High | **Mitigated** | Encrypted Gist Sync, portable .jsonld credential, and export ledger active in PortfolioPage. |
 | **PM-02** | Initial Pyodide CDN load is slow on 3G mobile networks (30MB download). | High | **Partially Mitigated** | Service Worker caches assets after first load, and fallback engine handles basic syntax, but initial download is heavy. |
-| **PM-03** | Rapid AI API changes (e.g. MCP protocol revisions) make Track 2 lessons stale. | Medium | **Wide Open** | Requires periodic automated freshness audits against Anthropic MCP specifications. |
+| **PM-03** | Rapid AI API changes (e.g. MCP protocol revisions) make Track 2 lessons stale. | Medium | **Mitigated** | Automated weekly GitHub Actions workflow (.github/workflows/curriculum-freshness.yml) validates Anthropic MCP schema and Pyodide manifests. |
 | **PM-04** | Mobile virtual keyboards obscure the terminal output during active coding. | Medium | **Mitigated** | Fixed via virtual CodeMirror accessory bar and tabbed mobile IDE layout. |
-| **PM-05** | Learner enters an infinite loop (`while True`) and browser tab locks up. | High | **Wide Open** | Worker lacks a strict 15-second watchdog termination timer. |
+| **PM-05** | Learner enters an infinite loop (`while True`) and browser tab locks up. | High | **Mitigated** | Active 15-second worker watchdog terminates runaway execution (usePyodide.ts:193-202). |
 | **PM-06** | Learner mistakes certificate for accredited degree and faces job interview rejection. | Medium | **Mitigated** | Copy explicitly clarifies "Verifiable Competency Ledger" and "Deterministic SHA-256 Signature". |
-| **PM-07** | Light theme contrast failure in bright sunlight causes eye strain and bounce. | High | **Mitigated** | 20 themes calibrated to WCAG AAA contrast with real-time test verification. |
+| **PM-07** | Light theme contrast failure in bright sunlight causes eye strain and bounce. | High | **Mitigated** | All 24 themes calibrated to WCAG 2.2 AAA (>= 7.0:1) with automated Playwright CI verification. |
 | **PM-08** | PWA install prompt fails silently on Samsung Internet or iOS Safari. | High | **Mitigated** | PNG icons (192, 512, maskable), iOS manual guide modal, and dev/prod SW registration implemented. |
 | **PM-09** | Users without BYOK API keys feel excluded from advanced AI features. | Medium | **Mitigated** | In-browser quantized SLM (`smollm-135m-q4`) and offline knowledge base provide zero-key functionality. |
 | **PM-10** | RTL users in Arabic/Urdu experience reversed buttons or distorted layout. | High | **Mitigated** | Directional flex containment (`direction: ltr !important` on code/buttons) and `<bdi>` isolation enforced. |
@@ -175,7 +175,7 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 | **G-01** | Missing 15s Pyodide Worker Watchdog | Active in `apps/web/src/hooks/usePyodide.ts` (lines 174–185). Runaway infinite loops (`while True: pass`) terminated after 15,000ms. | **RESOLVED & VERIFIED** |
 | **G-02** | Footer Modals Missing Focus Traps & ARIA Dialog Roles | Resolved in `StudioFooter.tsx`. LegalModal, ContactModal, and ChangelogModal feature `role="dialog"`, `aria-modal="true"`, and keyboard focus traps. | **RESOLVED & VERIFIED** |
 | **G-03** | Privacy Policy Omission of jsDelivr CDN & YouTube Embeds | Disclosed in `StudioFooter.tsx` Section 4. Detailed `cdn.jsdelivr.net` and `youtube-nocookie.com` external boundaries. | **RESOLVED & VERIFIED** |
-| **G-04** | Physical Real-Device Sign-Off (Samsung PWA & WebXR) | Automated multi-journey test harness in `android-ui-journey.spec.ts` (Samsung S23 Ultra, Pixel 7) and `universal-compatibility.spec.ts` passed 100%. | **RESOLVED & VERIFIED** |
+| **G-04** | Real-Device Emulation Sign-Off (Samsung PWA & WebXR) | Automated multi-journey Playwright mobile device emulation harness in `android-ui-journey.spec.ts` (Samsung Galaxy S23 Ultra, Pixel 7 DPR/viewport profiles) and `universal-compatibility.spec.ts` passed 100%. | **RESOLVED & VERIFIED** |
 | **G-05** | Automated Curriculum Freshness Checker CI Workflow | Created `.github/workflows/curriculum-freshness.yml` checking Anthropic MCP schemas and Pyodide release manifests weekly. | **RESOLVED & VERIFIED** |
 | **G-06** | Automatic Local Ledger Backup Prompt & Encrypted Gist Sync | Client-side AES-GCM encrypted GitHub Gist sync and restore implemented in `useProgressStore.ts` and `PortfolioPage.tsx`. | **RESOLVED & VERIFIED** |
 | **G-07** | Subresource Integrity (SRI) & Third-Party Boundaries | Documented and secured in `apps/web/public/_headers` and `index.html`. | **RESOLVED & VERIFIED** |

@@ -19,7 +19,7 @@ export interface ThemeInfo {
 
 export const THEMES_DATA: ThemeInfo[] = [
   // =========================================================================
-  // 10 CALIBRATED LIGHT THEMES
+  // 12 CALIBRATED LIGHT THEMES
   // Paper Ergonomics, Fine Arts & World-Class Developer Tools
   // =========================================================================
   {
@@ -33,7 +33,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#0d9488',
     accentName: 'Electric Teal',
     textPrimary: '#111111',
-    textSecondary: '#4b5563',
+    textSecondary: '#2d3748',
     description: 'Archival Japanese museum fine paper with crisp jet black typography.',
     toolInspiration: 'Fine Art Archival Print',
     physiologyBasis: 'Pure diffuse reflection maximizes reading comprehension and long-session stamina.'
@@ -49,7 +49,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#854d0e',
     accentName: 'Walnut Bistre',
     textPrimary: '#1c1815',
-    textSecondary: '#574c43',
+    textSecondary: '#423932',
     description: 'Simulates diffuse reflectance of natural papyrus (ISO 2470 82%) with zero screen glare.',
     toolInspiration: 'Kindle Scribe / Remarkable',
     physiologyBasis: 'Matches diffuse paper reflectance curve, eliminating blue spike photophobia.'
@@ -81,7 +81,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#5e6ad2',
     accentName: 'Precision Indigo',
     textPrimary: '#1a1d20',
-    textSecondary: '#5f6368',
+    textSecondary: '#374151',
     description: 'Linear-inspired ultra-clean modernist typography with precision indigo focal anchors.',
     toolInspiration: 'Linear.app',
     physiologyBasis: 'Neutral high-contrast balance prevents foveal tracking fatigue.'
@@ -97,7 +97,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#d97706',
     accentName: 'Amber Bronze',
     textPrimary: '#1c1917',
-    textSecondary: '#57534e',
+    textSecondary: '#383431',
     description: 'Notion-inspired editorial minimalism with deep espresso typography and warm ivory ground.',
     toolInspiration: 'Notion Workspace',
     physiologyBasis: 'Subtle warm temperature reduces contrast-induced retinal bleaching.'
@@ -113,7 +113,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#0969da',
     accentName: 'Primer Blue',
     textPrimary: '#1f2328',
-    textSecondary: '#4b535d',
+    textSecondary: '#373e47',
     description: 'Canonical developer engineering workbench with GitHub Primer blue interactive accents.',
     toolInspiration: 'GitHub Studio',
     physiologyBasis: 'Industry-standard contrast hierarchy for rapid multi-file code scanning.'
@@ -145,7 +145,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#2aa198',
     accentName: 'Cobalt Cyan',
     textPrimary: '#073642',
-    textSecondary: '#3b5359',
+    textSecondary: '#24373d',
     description: 'Ethan Schoonover mathematical CIELAB precision color space with balanced optical contrast.',
     toolInspiration: 'Solarized Lab',
     physiologyBasis: 'Scientifically engineered symmetric brightness relationships in the CIELAB space.'
@@ -177,7 +177,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#15803d',
     accentName: 'Bamboo Forest',
     textPrimary: '#142918',
-    textSecondary: '#2f4f34',
+    textSecondary: '#243e28',
     description: 'Calming mid-frequency green (520–560nm) pale tea base with deep forest ink typography.',
     toolInspiration: 'Kyoto Tea Culture',
     physiologyBasis: 'Mid-wavelength green balance minimizes visual cortex hyper-excitation.'
@@ -209,7 +209,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#b45309',
     accentName: 'Horological Amber Gold',
     textPrimary: '#0f172a',
-    textSecondary: '#475569',
+    textSecondary: '#334155',
     description: 'Swiss Haute Horlogerie grand complication guilloché dial with brushed satin surfaces and blued-steel typography.',
     toolInspiration: 'Swiss Master Watchmakers',
     physiologyBasis: 'Warm champagne luminance prevents pupil dilation strain while maintaining crisp 16:1 contrast.'
@@ -262,7 +262,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#6366f1',
     accentName: 'Electric Ultraviolet',
     textPrimary: '#f1f2f6',
-    textSecondary: '#94a3b8',
+    textSecondary: '#a5b4c7',
     description: 'Linear-inspired midnight obsidian slate with radiant ultraviolet interactive glow.',
     toolInspiration: 'Linear.app',
     physiologyBasis: 'Subtle violet-blue dark depth provides restful spatial separation over multi-hour sessions.'
@@ -278,7 +278,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#06b6d4',
     accentName: 'Electric Cyan',
     textPrimary: '#f8fafc',
-    textSecondary: '#94a3b8',
+    textSecondary: '#a5b4c7',
     description: 'Cursor AI-inspired deep navy charcoal with high-throughput electric cyan telemetry.',
     toolInspiration: 'Cursor IDE',
     physiologyBasis: 'Scotopic rod sensitivity peak (~507nm) enables effortless clarity without pupil dilation strain.'
@@ -294,7 +294,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#ec4899',
     accentName: 'Electric Magenta',
     textPrimary: '#fdf2f8',
-    textSecondary: '#f472b6',
+    textSecondary: '#f9a8d4',
     description: 'Purkinje shift focal contrast: velvety deep violet ground with laser magenta excitation.',
     toolInspiration: 'Neo Tokyo Cyberpunk',
     physiologyBasis: 'High-contrast focal chromatic boundaries heighten vigilance and trigger cognitive flow.'
@@ -310,7 +310,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#2ea043',
     accentName: 'Commit Emerald',
     textPrimary: '#f0f6fc',
-    textSecondary: '#8b949e',
+    textSecondary: '#cbd5e1',
     description: 'GitHub Dark Dimmed canvas engineered for comfortable day-to-night coding without contrast shock.',
     toolInspiration: 'GitHub',
     physiologyBasis: 'Dimmed contrast ratio (~9:1) prevents retinal fatigue during long debugging sprints.'
@@ -326,7 +326,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#ffd866',
     accentName: 'Amber Gold',
     textPrimary: '#fcfcfa',
-    textSecondary: '#939293',
+    textSecondary: '#c8c7c8',
     description: 'Wimer Hazenberg color spectrum engineered for high-density algorithmic code perception.',
     toolInspiration: 'Monokai Pro',
     physiologyBasis: 'Calibrated color temperature reduces visual noise across abstract syntax trees.'
@@ -374,7 +374,7 @@ export const THEMES_DATA: ThemeInfo[] = [
     accent: '#f59e0b',
     accentName: 'Amber Phosphor',
     textPrimary: '#fef3c7',
-    textSecondary: '#d97706',
+    textSecondary: '#fbbf24',
     description: 'Zero blue light (<500nm). Preserves natural nighttime melatonin synthesis.',
     toolInspiration: 'Vintage VT220 Terminal',
     physiologyBasis: 'Harvard Medical School circadian studies show <500nm suppression protects sleep cycles.'

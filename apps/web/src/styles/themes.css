@@ -1,5 +1,5 @@
 /* ==========================================================================
-   20 WORLD-CLASS SPECIALIZED THEMES (10 LIGHT, 10 DARK)
+   24 WORLD-CLASS SPECIALIZED THEMES (12 LIGHT, 12 DARK)
    Strict WCAG AAA Contrast & Human Visual Physiology Optimization
    Inspired by Fine Paper Ergonomics & Premier Developer Tools
    ========================================================================== */
@@ -38,7 +38,7 @@ html[data-theme-mode="dark"] {
 }
 
 /* --------------------------------------------------------------------------
-   10 CALIBRATED LIGHT THEMES
+   12 CALIBRATED LIGHT THEMES
    -------------------------------------------------------------------------- */
 
 /* 1. Archival Fine Paper (Archival Museum White & Jet Black Ink) */
@@ -48,7 +48,7 @@ html[data-theme="pure-paper"], [data-theme="pure-paper"] {
   --bg-tertiary: #e5e5ea;
   --border-color: rgba(0, 0, 0, 0.12);
   --text-primary: #111111;
-  --text-secondary: #4b5563;
+  --text-secondary: #2d3748;
   --accent: #0d9488;
   --accent-transparent: rgba(13, 148, 136, 0.15);
 
@@ -57,7 +57,7 @@ html[data-theme="pure-paper"], [data-theme="pure-paper"] {
   --color-tertiary: #e5e5ea;
   --color-border: rgba(0, 0, 0, 0.12);
   --color-text-primary: #111111;
-  --color-text-secondary: #4b5563;
+  --color-text-secondary: #2d3748;
   --color-accent: #0d9488;
   --color-accent-trans: rgba(13, 148, 136, 0.15);
 }
@@ -69,7 +69,7 @@ html[data-theme="e-ink-papyrus"], [data-theme="e-ink-papyrus"] {
   --bg-tertiary: #e7decb;
   --border-color: rgba(133, 77, 14, 0.22);
   --text-primary: #1c1815;
-  --text-secondary: #574c43;
+  --text-secondary: #423932;
   --accent: #854d0e;
   --accent-transparent: rgba(133, 77, 14, 0.18);
 
@@ -78,7 +78,7 @@ html[data-theme="e-ink-papyrus"], [data-theme="e-ink-papyrus"] {
   --color-tertiary: #e7decb;
   --color-border: rgba(133, 77, 14, 0.22);
   --color-text-primary: #1c1815;
-  --color-text-secondary: #574c43;
+  --color-text-secondary: #423932;
   --color-accent: #854d0e;
   --color-accent-trans: rgba(133, 77, 14, 0.18);
 }
@@ -90,7 +90,7 @@ html[data-theme="claude-light"], [data-theme="claude-light"] {
   --bg-tertiary: #e3d7c5;
   --border-color: rgba(154, 52, 18, 0.22);
   --text-primary: #1e140d;
-  --text-secondary: #63391b;
+  --text-secondary: #3c220f;
   --accent: #9a3412;
   --accent-transparent: rgba(154, 52, 18, 0.18);
 
@@ -99,7 +99,7 @@ html[data-theme="claude-light"], [data-theme="claude-light"] {
   --color-tertiary: #e3d7c5;
   --color-border: rgba(154, 52, 18, 0.22);
   --color-text-primary: #1e140d;
-  --color-text-secondary: #63391b;
+  --color-text-secondary: #3c220f;
   --color-accent: #9a3412;
   --color-accent-text: #ffffff;
   --color-accent-trans: rgba(154, 52, 18, 0.18);
@@ -112,7 +112,7 @@ html[data-theme="linear-light"], [data-theme="linear-light"] {
   --bg-tertiary: #dfe3e8;
   --border-color: rgba(94, 106, 210, 0.2);
   --text-primary: #1a1d20;
-  --text-secondary: #5f6368;
+  --text-secondary: #374151;
   --accent: #5e6ad2;
   --accent-transparent: rgba(94, 106, 210, 0.16);
 
@@ -121,7 +121,7 @@ html[data-theme="linear-light"], [data-theme="linear-light"] {
   --color-tertiary: #dfe3e8;
   --color-border: rgba(94, 106, 210, 0.2);
   --color-text-primary: #1a1d20;
-  --color-text-secondary: #5f6368;
+  --color-text-secondary: #374151;
   --color-accent: #5e6ad2;
   --color-accent-trans: rgba(94, 106, 210, 0.16);
 }
@@ -133,7 +133,7 @@ html[data-theme="notion-cream"], [data-theme="notion-cream"] {
   --bg-tertiary: #e8e2d4;
   --border-color: rgba(217, 119, 6, 0.2);
   --text-primary: #1c1917;
-  --text-secondary: #57534e;
+  --text-secondary: #383431;
   --accent: #d97706;
   --accent-transparent: rgba(217, 119, 6, 0.16);
 
@@ -142,7 +142,7 @@ html[data-theme="notion-cream"], [data-theme="notion-cream"] {
   --color-tertiary: #e8e2d4;
   --color-border: rgba(217, 119, 6, 0.2);
   --color-text-primary: #1c1917;
-  --color-text-secondary: #57534e;
+  --color-text-secondary: #383431;
   --color-accent: #d97706;
   --color-accent-trans: rgba(217, 119, 6, 0.16);
 }
@@ -154,7 +154,7 @@ html[data-theme="github-light"], [data-theme="github-light"] {
   --bg-tertiary: #eaeef2;
   --border-color: rgba(31, 35, 40, 0.15);
   --text-primary: #1f2328;
-  --text-secondary: #4b535d;
+  --text-secondary: #373e47;
   --accent: #0969da;
   --accent-transparent: rgba(9, 105, 218, 0.15);
 
@@ -163,7 +163,7 @@ html[data-theme="github-light"], [data-theme="github-light"] {
   --color-tertiary: #eaeef2;
   --color-border: rgba(31, 35, 40, 0.15);
   --color-text-primary: #1f2328;
-  --color-text-secondary: #4b535d;
+  --color-text-secondary: #373e47;
   --color-accent: #0969da;
   --color-accent-trans: rgba(9, 105, 218, 0.15);
 }
@@ -196,7 +196,7 @@ html[data-theme="solarized-light"], [data-theme="solarized-light"] {
   --bg-tertiary: #e0d8c3;
   --border-color: rgba(38, 139, 210, 0.2);
   --text-primary: #073642;
-  --text-secondary: #3b5359;
+  --text-secondary: #24373d;
   --accent: #2aa198;
   --accent-transparent: rgba(42, 161, 152, 0.18);
 
@@ -205,7 +205,7 @@ html[data-theme="solarized-light"], [data-theme="solarized-light"] {
   --color-tertiary: #e0d8c3;
   --color-border: rgba(38, 139, 210, 0.2);
   --color-text-primary: #073642;
-  --color-text-secondary: #3b5359;
+  --color-text-secondary: #24373d;
   --color-accent: #2aa198;
   --color-accent-trans: rgba(42, 161, 152, 0.18);
 }
@@ -238,7 +238,7 @@ html[data-theme="matcha-ceremonial"], [data-theme="matcha-ceremonial"] {
   --bg-tertiary: #d3decf;
   --border-color: rgba(21, 128, 61, 0.22);
   --text-primary: #142918;
-  --text-secondary: #2f4f34;
+  --text-secondary: #243e28;
   --accent: #15803d;
   --accent-transparent: rgba(21, 128, 61, 0.18);
 
@@ -247,13 +247,13 @@ html[data-theme="matcha-ceremonial"], [data-theme="matcha-ceremonial"] {
   --color-tertiary: #d3decf;
   --color-border: rgba(21, 128, 61, 0.22);
   --color-text-primary: #142918;
-  --color-text-secondary: #2f4f34;
+  --color-text-secondary: #243e28;
   --color-accent: #15803d;
   --color-accent-trans: rgba(21, 128, 61, 0.18);
 }
 
 /* --------------------------------------------------------------------------
-   10 CALIBRATED DARK THEMES
+   12 CALIBRATED DARK THEMES
    -------------------------------------------------------------------------- */
 
 /* 11. Obsidian Deep Space (Default True Black & Matrix Emerald) */
@@ -305,7 +305,7 @@ html[data-theme="linear-dark"], [data-theme="linear-dark"] {
   --bg-tertiary: #1e2230;
   --border-color: rgba(99, 102, 241, 0.22);
   --text-primary: #f1f2f6;
-  --text-secondary: #94a3b8;
+  --text-secondary: #a5b4c7;
   --accent: #6366f1;
   --accent-transparent: rgba(99, 102, 241, 0.22);
 
@@ -314,7 +314,7 @@ html[data-theme="linear-dark"], [data-theme="linear-dark"] {
   --color-tertiary: #1e2230;
   --color-border: rgba(99, 102, 241, 0.22);
   --color-text-primary: #f1f2f6;
-  --color-text-secondary: #94a3b8;
+  --color-text-secondary: #a5b4c7;
   --color-accent: #6366f1;
   --color-accent-trans: rgba(99, 102, 241, 0.22);
 }
@@ -326,7 +326,7 @@ html[data-theme="cursor-dark"], [data-theme="cursor-dark"] {
   --bg-tertiary: #1e293b;
   --border-color: rgba(6, 182, 212, 0.25);
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-secondary: #a5b4c7;
   --accent: #06b6d4;
   --accent-transparent: rgba(6, 182, 212, 0.22);
 
@@ -335,7 +335,7 @@ html[data-theme="cursor-dark"], [data-theme="cursor-dark"] {
   --color-tertiary: #1e293b;
   --color-border: rgba(6, 182, 212, 0.25);
   --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
+  --color-text-secondary: #a5b4c7;
   --color-accent: #06b6d4;
   --color-accent-trans: rgba(6, 182, 212, 0.22);
 }
@@ -347,7 +347,7 @@ html[data-theme="cyberpunk-neon"], [data-theme="cyberpunk-neon"] {
   --bg-tertiary: #221538;
   --border-color: rgba(236, 72, 153, 0.25);
   --text-primary: #fdf2f8;
-  --text-secondary: #f472b6;
+  --text-secondary: #f9a8d4;
   --accent: #ec4899;
   --accent-transparent: rgba(236, 72, 153, 0.22);
 
@@ -356,7 +356,7 @@ html[data-theme="cyberpunk-neon"], [data-theme="cyberpunk-neon"] {
   --color-tertiary: #221538;
   --color-border: rgba(236, 72, 153, 0.25);
   --color-text-primary: #fdf2f8;
-  --color-text-secondary: #f472b6;
+  --color-text-secondary: #f9a8d4;
   --color-accent: #ec4899;
   --color-accent-trans: rgba(236, 72, 153, 0.22);
 }
@@ -368,7 +368,7 @@ html[data-theme="github-dark"], [data-theme="github-dark"] {
   --bg-tertiary: #30363d;
   --border-color: rgba(240, 246, 252, 0.15);
   --text-primary: #f0f6fc;
-  --text-secondary: #8b949e;
+  --text-secondary: #cbd5e1;
   --accent: #2ea043;
   --accent-transparent: rgba(46, 160, 67, 0.2);
 
@@ -377,7 +377,7 @@ html[data-theme="github-dark"], [data-theme="github-dark"] {
   --color-tertiary: #30363d;
   --color-border: rgba(240, 246, 252, 0.15);
   --color-text-primary: #f0f6fc;
-  --color-text-secondary: #8b949e;
+  --color-text-secondary: #cbd5e1;
   --color-accent: #2ea043;
   --color-accent-trans: rgba(46, 160, 67, 0.2);
 }
@@ -389,7 +389,7 @@ html[data-theme="monokai-pro"], [data-theme="monokai-pro"] {
   --bg-tertiary: #2d2c36;
   --border-color: rgba(255, 216, 102, 0.22);
   --text-primary: #fcfcfa;
-  --text-secondary: #939293;
+  --text-secondary: #c8c7c8;
   --accent: #ffd866;
   --accent-transparent: rgba(255, 216, 102, 0.2);
 
@@ -398,7 +398,7 @@ html[data-theme="monokai-pro"], [data-theme="monokai-pro"] {
   --color-tertiary: #2d2c36;
   --color-border: rgba(255, 216, 102, 0.22);
   --color-text-primary: #fcfcfa;
-  --color-text-secondary: #939293;
+  --color-text-secondary: #c8c7c8;
   --color-accent: #ffd866;
   --color-accent-trans: rgba(255, 216, 102, 0.2);
 }
@@ -452,7 +452,7 @@ html[data-theme="circadian-amber"], [data-theme="circadian-amber"] {
   --bg-tertiary: #231e17;
   --border-color: rgba(245, 158, 11, 0.25);
   --text-primary: #fef3c7;
-  --text-secondary: #d97706;
+  --text-secondary: #fbbf24;
   --accent: #f59e0b;
   --accent-transparent: rgba(245, 158, 11, 0.2);
 
@@ -461,7 +461,7 @@ html[data-theme="circadian-amber"], [data-theme="circadian-amber"] {
   --color-tertiary: #231e17;
   --color-border: rgba(245, 158, 11, 0.25);
   --color-text-primary: #fef3c7;
-  --color-text-secondary: #d97706;
+  --color-text-secondary: #fbbf24;
   --color-accent: #f59e0b;
   --color-accent-trans: rgba(245, 158, 11, 0.2);
 }
@@ -494,7 +494,7 @@ html[data-theme="champagne-luminary"], [data-theme="champagne-luminary"] {
   --bg-tertiary: #e7dfd1;
   --border-color: rgba(180, 83, 9, 0.18);
   --text-primary: #0f172a;
-  --text-secondary: #475569;
+  --text-secondary: #334155;
   --accent: #b45309;
   --accent-transparent: rgba(180, 83, 9, 0.15);
 
@@ -503,7 +503,7 @@ html[data-theme="champagne-luminary"], [data-theme="champagne-luminary"] {
   --color-tertiary: #e7dfd1;
   --color-border: rgba(180, 83, 9, 0.18);
   --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
+  --color-text-secondary: #334155;
   --color-accent: #b45309;
   --color-accent-trans: rgba(180, 83, 9, 0.15);
 }

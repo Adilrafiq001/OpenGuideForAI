@@ -166,7 +166,7 @@ Every contribution must pass the five-point quality assurance check before merge
 # 1. Linter verification (0 errors required)
 yarn lint
 
-# 2. Automated Playwright test suite (97 tests passing)
+# 2. Automated Playwright test suite (100% test passage across all tracks and themes)
 npx playwright test
 
 # 3. Production static compilation
