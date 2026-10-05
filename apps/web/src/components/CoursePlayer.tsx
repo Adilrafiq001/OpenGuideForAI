@@ -280,7 +280,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         ? `Assertion Failed: ${errMsg.split('AssertionError:')[1].trim()}`
         : errMsg;
       setFeedback({ type: 'error', message: cleanMsg || 'Execution failed' });
-      setSyntaxDiagnostic(diagnosePythonError(errMsg, code));
+      setSyntaxDiagnostic(diagnosePythonError(errMsg, code, currentLesson.id));
     }
   };
 
