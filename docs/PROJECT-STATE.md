@@ -2,6 +2,18 @@
 > Pre-flight freeze active per docs/PRODUCTION-READINESS-AUDIT.md. Zero self-awarded 10/10 ratings.
 
 **Done:**
+- **Phase F1: Autograder Rigor & Mutation Testing — Track 0 Complete (Commit `954c7a5`):**
+  - **1. Ungameable Dual-Phase Test Harnesses (`track0.ts`):** Upgraded all 9 Track 0 lessons (`lesson-0-1-1` through `lesson-0-3-3`) from simplistic single-assert checks to rigorous dual-phase test harnesses featuring visible output checks followed by 5 hidden invariant assertions (covering mathematical limits, type checking, boundary conditions, and deterministic seeded variations).
+  - **2. Automated Mutation Testing Suite (`curriculum-solution-execution.spec.ts`):** Added Test 04 (`04. Mutation Testing & Autograder Resilience Audit (Track 0)`) verifying that 27 hand-crafted erroneous mutants across all 9 labs are killed 100% of the time (100.0% kill rate) by the autograder.
+  - **3. Physical Browser Verification via Playwright MCP:** Physically tested on `localhost:5173/track/0`. Verified that starter code triggers actionable Syntax Doctor feedback and canonical solution passes all visible and hidden assertions in 4ms with 0 console errors.
+  - **4. 5-Point Local Pre-Flight Gate & Dual-Remote Deployment:**
+    - Dev server live check: HTTP 200 OK.
+    - Physical Playwright verification: 0 console errors.
+    - Linter: `oxlint` passed with 0 warnings and 0 errors across 106 files.
+    - Full test suite: 124/124 tests passed (100% passing, 0 failing, 0 skipped) in 9.9m.
+    - Build: `yarn build` succeeded in 5.30s.
+    - Dual-Remote Multi-Push: Synchronized commit `954c7a5` across both `openguideforai` and `Adilrafiq001` mirrors.
+    - Live Edge Verification: Verified at `https://openguideforai.dpdns.org` with edge HTML bundle script hash (`index-D5nf1jGz.js`) matching local build.
 - **Phase C, D & E: Socratic AST Error Diagnostics, Responsive Human QA & Production Gate (Complete):**
   - **1. Socratic Pedagogical Diagnostic Engine (`pythonDiagnostic.ts`, `CoursePlayer.tsx`):** Upgraded `pythonDiagnostic.ts` from a static traceback formatter into an intelligent AST and code-pattern diagnostic engine. Detects domain-specific conceptual traps across Tracks 0-4:
     - *Track 0:* Missing function `return` statements, string-integer concatenation type errors, and unallocated list assignment bounds.
