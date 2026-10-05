@@ -46,25 +46,46 @@ type CoursePlayerProps = {
 export function CoursePlayer({ track }: CoursePlayerProps) {
   const navigate = useNavigate();
   const { t } = useLanguageStore();
-  const [currentModuleIdx, setCurrentModuleIdx] = useState(0);
-  const [currentLessonIdx, setCurrentLessonIdx] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramMod = searchParams.get('module');
+  const paramLes = searchParams.get('lesson');
+
+  const resolvedModIdx = useMemo(() => {
+    if (paramMod !== null) {
+      const parsed = parseInt(paramMod, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  }, [paramMod, track.modules.length]);
+
+  const resolvedLesIdx = useMemo(() => {
+    if (paramLes !== null && track.modules[resolvedModIdx]) {
+      const parsed = parseInt(paramLes, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules[resolvedModIdx].lessons.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  }, [paramLes, track.modules, resolvedModIdx]);
+
+  const [currentModuleIdx, setCurrentModuleIdx] = useState(resolvedModIdx);
+  const [currentLessonIdx, setCurrentLessonIdx] = useState(resolvedLesIdx);
   const [isXRayOpen, setIsXRayOpen] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [hintTier, setHintTier] = useState(1);
   const [showSolution, setShowSolution] = useState(false);
   const [copiedSolution, setCopiedSolution] = useState(false);
   const [leftTab, setLeftTab] = useState<'briefing' | 'curriculum'>('briefing');
   const [mobileTab, setMobileTab] = useState<'briefing' | 'editor' | 'output'>('briefing');
   
   // Local-first persistent completed lesson store (IndexedDB + In-Memory Cache)
-  const { completedLessonIds, completeLesson, initProgress } = useProgressStore();
+  const { completedLessonIds, completeLesson, resetProgress, initProgress } = useProgressStore();
 
   useEffect(() => {
     initProgress();
   }, [initProgress]);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const paramMod = searchParams.get('module');
-  const paramLes = searchParams.get('lesson');
 
   const { theme, fontSize, wordWrap } = useSettingsStore();
 
@@ -87,33 +108,20 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
   }, [theme]);
 
   // Synchronize track.id and search parameters (module & lesson deep-linking)
-  const activeLessonKey = `${track.id}-${paramMod ?? '0'}-${paramLes ?? '0'}`;
+  const activeLessonKey = `${track.id}-${resolvedModIdx}-${resolvedLesIdx}`;
   const [prevLessonKey, setPrevLessonKey] = useState(activeLessonKey);
 
   if (activeLessonKey !== prevLessonKey) {
     setPrevLessonKey(activeLessonKey);
-    let modIdx = 0;
-    let lesIdx = 0;
-    if (paramMod !== null) {
-      const parsed = parseInt(paramMod, 10);
-      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules.length) {
-        modIdx = parsed;
-      }
-    }
-    if (paramLes !== null && track.modules[modIdx]) {
-      const parsed = parseInt(paramLes, 10);
-      if (!isNaN(parsed) && parsed >= 0 && parsed < track.modules[modIdx].lessons.length) {
-        lesIdx = parsed;
-      }
-    }
-    setCurrentModuleIdx(modIdx);
-    setCurrentLessonIdx(lesIdx);
-    const target = track.modules[modIdx]?.lessons[lesIdx] || track.modules[0]?.lessons[0];
+    setCurrentModuleIdx(resolvedModIdx);
+    setCurrentLessonIdx(resolvedLesIdx);
+    const target = track.modules[resolvedModIdx]?.lessons[resolvedLesIdx] || track.modules[0]?.lessons[0];
     if (target) {
       setCode(target.initialCode);
       setFeedback({ type: null, message: '' });
       setSyntaxDiagnostic(null);
       setShowHint(false);
+      setHintTier(1);
       setShowSolution(false);
       setCopiedSolution(false);
       setIsChallengePassed(completedLessonIds.includes(target.id));
@@ -138,6 +146,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
     setFeedback({ type: null, message: '' });
     setSyntaxDiagnostic(null);
     setShowHint(false);
+    setHintTier(1);
     setShowSolution(false);
     setCopiedSolution(false);
     setIsChallengePassed(completedLessonIds.includes(targetLesson.id));
@@ -199,6 +208,14 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         copySolutionTimerRef.current = setTimeout(() => setCopiedSolution(false), 2000);
       }
     } catch {}
+  };
+
+  const handleResetTrackProgress = async () => {
+    if (window.confirm('Reset all progress back to 0? This will clear all completed labs.')) {
+      await resetProgress();
+      setIsChallengePassed(false);
+      setFeedback({ type: 'success', message: 'Progress reset to 0. All labs ready for fresh execution.' });
+    }
   };
 
   const advanceNextLesson = () => {
@@ -552,23 +569,26 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
                   {/* Progressive Learning Support: Target, Clues & Solution Reveal */}
                   <div className="space-y-3 pt-1">
-                    {/* Expected Output Target */}
-                    <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-1.5 text-xs font-mono">
+                    {/* Expected Console Output Target */}
+                    <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-2 text-xs font-mono">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
-                          Expected Console Target:
+                          Target Output Specification:
                         </span>
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
-                          Pyodide Test
+                          Goal Criterion
                         </span>
                       </div>
-                      <div className="text-emerald-800 dark:text-emerald-300 bg-[var(--color-secondary)] p-2.5 rounded-lg border border-emerald-500/20 whitespace-pre-wrap text-[11px] leading-relaxed">
+                      <div className="text-[var(--color-text-primary)] bg-[var(--color-secondary)] p-2.5 rounded-lg border border-[var(--color-border)] whitespace-pre-wrap text-[11px] leading-relaxed font-mono">
                         {currentLesson.expectedOutput}
                       </div>
+                      <p className="text-[10px] text-[var(--color-text-secondary)] italic">
+                        This is the required stdout stream your Python solution must produce when verified.
+                      </p>
                     </div>
 
                     {/* Progressive Hint Accordion */}
-                    {currentLesson.hint && (
+                    {(currentLesson.hint || (currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0)) && (
                       <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
                         <button
                           onClick={() => setShowHint(!showHint)}
@@ -576,19 +596,46 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                         >
                           <span className="flex items-center gap-1.5">
                             <Lightbulb size={13} className="text-amber-500" />
-                            <span className="font-semibold">{showHint ? 'Hide Progressive Hint' : 'Need a Progressive Clue?'}</span>
+                            <span className="font-semibold">
+                              {showHint ? 'Hide Progressive Hints' : 'Need a Progressive Clue?'}
+                            </span>
                           </span>
                           <span className="text-[10px] font-mono opacity-70">
                             {showHint ? '[Collapse]' : '[Expand]'}
                           </span>
                         </button>
                         {showHint && (
-                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-2">
+                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-3">
                             <div className="font-bold flex items-center gap-1.5 text-[11px]">
                               <Lightbulb size={12} className="text-amber-500" />
-                              <span>Implementation Guidance:</span>
+                              <span>First-Principles Guidance:</span>
                             </div>
-                            <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
+
+                            {currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0 ? (
+                              <div className="space-y-2.5">
+                                {currentLesson.progressiveHints.slice(0, hintTier).map((hintText, idx) => (
+                                  <div key={idx} className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-amber-500/20 space-y-1">
+                                    <div className="flex items-center justify-between text-[10px] uppercase font-bold text-amber-800 dark:text-amber-400">
+                                      <span>Clue {idx + 1} of {currentLesson.progressiveHints!.length}</span>
+                                      <span className="opacity-60">{idx === 0 ? 'Conceptual' : idx === 1 ? 'Formula / Edge Case' : 'Code Pattern'}</span>
+                                    </div>
+                                    <p className="text-[11px] opacity-90 leading-relaxed">{hintText}</p>
+                                  </div>
+                                ))}
+
+                                {hintTier < currentLesson.progressiveHints.length && (
+                                  <button
+                                    onClick={() => setHintTier(prev => prev + 1)}
+                                    className="w-full py-1.5 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-900 dark:text-amber-200 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+                                  >
+                                    <Lightbulb size={12} />
+                                    <span>Reveal Next Clue ({hintTier + 1}/{currentLesson.progressiveHints.length})</span>
+                                  </button>
+                                )}
+                              </div>
+                            ) : (
+                              <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
+                            )}
                           </div>
                         )}
                       </div>
@@ -680,6 +727,20 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     </div>
                   </div>
                 ))}
+
+                <div className="pt-3 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono">
+                  <span className="text-[var(--color-text-secondary)]">
+                    Track: {trackCompletedCount} / {totalTrackLessons} completed
+                  </span>
+                  <button
+                    onClick={handleResetTrackProgress}
+                    aria-label="Reset Progress"
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-secondary)] hover:bg-rose-500/10 text-[var(--color-text-secondary)] hover:text-rose-400 border border-[var(--color-border)] hover:border-rose-500/30 transition-all cursor-pointer active:scale-95"
+                  >
+                    <ArrowCounterClockwise size={12} />
+                    <span>Reset Progress</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>

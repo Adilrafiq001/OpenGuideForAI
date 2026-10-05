@@ -6,6 +6,16 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     await page.setViewportSize({ width: 1280, height: 800 });
   });
 
+  test.afterEach(async ({ page }) => {
+    await page.evaluate(async () => {
+      try {
+        localStorage.removeItem('openguide_completed_lessons');
+        const req = indexedDB.deleteDatabase('OpenGuideDatabase');
+        await new Promise(r => { req.onsuccess = req.onerror = req.onblocked = r; });
+      } catch {}
+    });
+  });
+
   test('01. CodeMirror 6 Editor mounts with line numbers, Python syntax and 4-space Tab indentation', async ({ page }) => {
     await page.goto('/track/0', { waitUntil: 'domcontentloaded' });
 

@@ -650,7 +650,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=Module 1.1 • Lesson 1')).toBeVisible();
 
     // Verify Curriculum Drawer shows Module 1.1, 1.2, 1.3
-    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    const modulesTab = page.getByRole('button', { name: /Lessons|Modules/i }).first();
     await modulesTab.click();
     await page.waitForTimeout(300);
 
@@ -707,7 +707,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=Module 2.1 • Lesson 1')).toBeVisible();
 
     // Verify Curriculum Drawer shows Module 2.1, 2.2, 2.3
-    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    const modulesTab = page.getByRole('button', { name: /Lessons|Modules/i }).first();
     await modulesTab.click();
     await page.waitForTimeout(300);
 
@@ -764,7 +764,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=Module 3.1 • Lesson 1')).toBeVisible();
 
     // Verify Curriculum Drawer shows Module 3.1, 3.2, 3.3
-    const modulesTab = page.getByRole('button', { name: /Modules/i }).first();
+    const modulesTab = page.getByRole('button', { name: /Lessons|Modules/i }).first();
     await modulesTab.click();
     await page.waitForTimeout(300);
 
@@ -835,6 +835,13 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     // Verify Mastered badges (45 / 45 labs across 5 tracks)
     await expect(page.locator('text=45 / 45').first()).toBeVisible();
     await expect(page.locator('text=MASTERED').first()).toBeVisible();
+
+    // Reset progress so simulated completion does not persist into local dev environment
+    const resetProgressBtn = page.getByRole('button', { name: /Reset Progress/i }).first();
+    if (await resetProgressBtn.count() > 0) {
+      await resetProgressBtn.click();
+      await page.waitForTimeout(300);
+    }
 
     // 2. Verify The Synapse Lounge on Landing Page (/)
     await page.goto('/', { waitUntil: 'domcontentloaded' });

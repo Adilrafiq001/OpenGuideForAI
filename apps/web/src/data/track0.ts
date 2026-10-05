@@ -40,18 +40,43 @@ export const track0: Track = {
           id: 'lesson-0-1-1',
           title: 'Hello, World! & The CPython WASM Sandbox',
           subtitle: 'Your Very First Recipe in Code',
-          firstPrinciplesIntuition: 'Think of your computer as a friendly kitchen and Python as your favourite recipe book! When you want the kitchen to announce something, you use a magic word called print(). Just like a baker reading out "The cookies are ready!", print() speaks words directly onto your screen. Even better: in OpenGuide, this recipe cooks right inside your own browser—100% free, private, and with zero software to install!',
-          content: 'Let us introduce ourselves! Create a note called message that holds the exact phrase: "Hello, World! Running natively in browser." Then tell the computer to read it aloud using print(message).',
+          firstPrinciplesIntuition: 'Think of your computer as a friendly kitchen and Python as your favourite recipe book! When you want the kitchen to announce something, you use a built-in command called print(). Just like a baker reading out "The cookies are ready!", print() speaks words directly onto your screen. In OpenGuide, this recipe cooks right inside your own browser using WebAssembly—100% free, private, and with zero software or server installations required!',
+          content: `### The In-Browser WebAssembly Architecture
+
+Traditional Python courses force you to install Python, configure terminal PATHs, and pay $20/month for cloud containers. OpenGuide compiles CPython 3.12 directly into WebAssembly (WASM), executing inside your browser's dedicated Web Worker with 0ms network latency.
+
+\`\`\`
++-------------------------------------------------------------+
+|                     Client Web Browser                      |
+|  +-------------------+       postMessage(code)              |
+|  | Main UI Thread    | ------------------------------>      |
+|  | React 18 DOM      | <------------------------------      |
+|  +-------------------+       onmessage(stdout, result)      |
+|                                                             |
+|  +-------------------------------------------------------+  |
+|  | Web Worker Sandbox (Dedicated Thread)                 |  |
+|  | +---------------------------------------------------+ |  |
+|  | | Pyodide Runtime (CPython 3.12 WASM Virtual Mach.) | |  |
+|  | | Python AST -> Bytecode -> In-Memory Execution     | |  |
+|  | +---------------------------------------------------+ |  |
+|  +-------------------------------------------------------+  |
++-------------------------------------------------------------+
+\`\`\`
+
+#### Your Engineering Challenge:
+1. Create a variable called \`message\` holding the exact string:
+   \`"Hello, World! Running natively in browser."\`
+2. Direct the CPython runtime to stream this variable to standard output using \`print(message)\`.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.1.1
 # Welcome! Let's cook our very first recipe in code.
 # ============================================================
 
-# TODO: Step 1: Write down your greeting inside the quotation marks:
+# TODO: Step 1: Assign your greeting string to the variable 'message':
 # "Hello, World! Running natively in browser."
 message = ""
 
-# Step 2: Ask the computer to speak it aloud using print():
+# TODO: Step 2: Stream the greeting to stdout using print():
 # print(...)
 `,
           solutionCode: `# ============================================================
@@ -67,14 +92,43 @@ print(message)
 print("✓ [TEST PASSED] CPython stdout stream successfully verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] CPython stdout stream successfully verified.',
-          hint: 'Fill in: message = "Hello, World! Running natively in browser." and on the next line write: print(message).'
+          hint: 'Fill in: message = "Hello, World! Running natively in browser." and on the next line write: print(message).',
+          progressiveHints: [
+            'Tier 1 (Mental Model): A variable is a named memory box. Storing a string into message allows you to pass it to any function.',
+            'Tier 2 (Logic): Strings in Python must be enclosed in quotation marks: "Hello, World! Running natively in browser."',
+            'Tier 3 (Syntax): Complete lines: message = "Hello, World! Running natively in browser." followed by print(message).'
+          ]
         },
         {
           id: 'lesson-0-1-2',
           title: 'Standard Streams & Dynamic Prompt Formatting',
           subtitle: 'Fill-in-the-Blanks: Like a Birthday Invitation!',
-          firstPrinciplesIntuition: 'Have you ever played Mad Libs or filled out a party invitation? "Dear {name}, please come to my {party}!" Instead of writing a whole new letter for every friend, you leave blanks and fill them in with names. In Python, placing the little letter "f" right before quotation marks creates an "f-string"—a magic template that drops variables right into the blanks inside curly braces {}. That is how AI prompts are built!',
-          content: 'Combine our topic and audience variables into a friendly prompt template using an f-string: "Explain {topic} in one plain sentence for {audience}."',
+          firstPrinciplesIntuition: 'Have you ever played Mad Libs or filled out a party invitation? "Dear {name}, please come to my {party}!" Instead of writing a whole new letter for every friend, you leave blanks and fill them in with names. In Python, placing the letter "f" right before quotation marks creates an "f-string"—a dynamic template that drops runtime variables directly into the blanks inside curly braces {}. That is exactly how modern AI prompts are constructed!',
+          content: `### Dynamic Prompt Templates in Production AI
+
+Every frontier LLM application (ChatGPT, Claude, Gemini) relies on dynamic prompt composition. Rather than hardcoding static requests, engineers build parameterized templates that inject user inputs, retrieved context, and conversation history.
+
+\`\`\`
++-----------------------+     +------------------------+
+| Topic: "Vectors"      |     | Audience: "a beginner" |
++-----------------------+     +------------------------+
+           \\                              /
+            \\                            /
+             v                          v
+  +-------------------------------------------------------+
+  | f"Explain {topic} in one plain sentence for {audience}." |
+  +-------------------------------------------------------+
+                             |
+                             v
+  +-------------------------------------------------------+
+  | Output: "Explain Vectors in one plain sentence..."    |
+  +-------------------------------------------------------+
+\`\`\`
+
+#### Your Engineering Challenge:
+Construct a dynamic prompt template using an f-string:
+\`f"Explain {topic} in one plain sentence for {audience}."\`
+and store it in the variable \`prompt\`.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.1.2
 # Fill-in-the-Blanks: Crafting a Dynamic AI Prompt
@@ -83,7 +137,7 @@ print("✓ [TEST PASSED] CPython stdout stream successfully verified.")
 topic = "Vector Embeddings"
 audience = "a beginner"
 
-# Step: Fill in the blank using an f-string:
+# TODO: Step 1: Use an f-string to combine topic and audience:
 # "Explain {topic} in one plain sentence for {audience}."
 prompt = ""
 
@@ -104,23 +158,42 @@ assert prompt == expected_prompt, f"Expected '{expected_prompt}', got '{prompt}'
 print("✓ [TEST PASSED] Dynamic prompt template verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Dynamic prompt template verified.',
-          hint: 'Put an f in front of the quotes: prompt = f"Explain {topic} in one plain sentence for {audience}."'
+          hint: 'Put an f in front of the quotes: prompt = f"Explain {topic} in one plain sentence for {audience}."',
+          progressiveHints: [
+            'Tier 1 (Mental Model): F-strings evaluate expressions inside curly braces {} directly within text templates.',
+            'Tier 2 (Logic): Prefix the string literal with the letter f and place variable names inside curly brackets {topic} and {audience}.',
+            'Tier 3 (Syntax): Write: prompt = f"Explain {topic} in one plain sentence for {audience}."'
+          ]
         },
         {
           id: 'lesson-0-1-3',
           title: 'Web Worker Non-Blocking Execution',
           subtitle: 'Having a Sous-Chef in the Kitchen',
           firstPrinciplesIntuition: 'Imagine you are hosting a dinner party. If you stand frozen watching the soup simmer for an hour, nobody gets drinks and the music stops! A great host hires a sous-chef to chop vegetables in the back kitchen so the front room stays lively and fun. In your browser, a "Web Worker" is that sous-chef: it crunches big math numbers in the background so your buttons click instantly and your screen stays buttery smooth!',
-          content: 'Simulate our background helper processing 1,000 3D spatial points (each point has 3 coordinates: x, y, z) without making the user interface pause.',
+          content: `### Asynchronous IPC & Browser Thread Concurrency
+
+Web browsers run user interface interactions and DOM repaints on a single thread at 60 frames per second (16.6ms per frame). Executing heavy AI algorithms (like embedding cosine matrices or attention calculations) directly on the main thread causes UI stuttering and unresponsiveness.
+
+\`\`\`
+Main Thread (60 FPS):  [ Render ] -> [ Click Event ] -> [ Render ] -> (Smooth)
+                                   \\                   ^
+                                    \\ postMessage()   / onmessage()
+                                     v                 /
+Web Worker Thread:                    [ Heavy Math Loop (1000 items) ]
+\`\`\`
+
+#### Your Engineering Challenge:
+1. Initialize \`batch_count\` to \`1000\` items.
+2. Calculate the \`total_coordinates\` by multiplying the batch count by \`3\` (each 3D point has an $x, y, z$ coordinate).`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.1.3
 # Sous-Chef Helpers: Doing Big Work in the Background
 # ============================================================
 
-# Step 1: Set the batch count to 1000 items
+# TODO: Step 1: Set the batch count to 1000 items
 batch_count = 0
 
-# Step 2: Multiply by 3 (since every 3D point has an x, y, and z coordinate)
+# TODO: Step 2: Multiply by 3 (each 3D point contains x, y, and z)
 total_coordinates = 0
 
 print(f"Processed {batch_count} vectors ({total_coordinates} coordinates) in Web Worker.")
@@ -138,7 +211,12 @@ assert total_coordinates == 3000, f"Expected total_coordinates to be 3000, got {
 print("✓ [TEST PASSED] Background Web Worker simulation complete.")
 `,
           expectedOutput: '✓ [TEST PASSED] Background Web Worker simulation complete.',
-          hint: 'Set batch_count = 1000 and total_coordinates = batch_count * 3.'
+          hint: 'Set batch_count = 1000 and total_coordinates = batch_count * 3.',
+          progressiveHints: [
+            'Tier 1 (Mental Model): Web Workers run in isolated background threads so the browser main thread remains unblocked and responsive.',
+            'Tier 2 (Logic): Each 3D point contains 3 independent dimensions: x, y, and z.',
+            'Tier 3 (Syntax): Set batch_count = 1000 and total_coordinates = batch_count * 3.'
+          ]
         }
       ]
     },
@@ -151,20 +229,42 @@ print("✓ [TEST PASSED] Background Web Worker simulation complete.")
           id: 'lesson-0-2-1',
           title: 'Variables, Lists & Vector Primitives',
           subtitle: 'Treasure Map Coordinates on the Playground',
-          firstPrinciplesIntuition: 'People often make "vectors" sound scary, but it is just a playground treasure map! If grandma tells you: "Take 2 steps forward, 8 steps left, and climb 5 rungs up the ladder", those three directions [0.24, -0.89, 0.51] are your exact coordinates. In AI, a vector is simply a list of friendly numbers that pinpoints where an idea lives in a giant thinking space!',
-          content: 'Store our 3D treasure point [0.24, -0.89, 0.51], count its dimensions with len(), and find out how far it is from home (its magnitude).',
+          firstPrinciplesIntuition: 'People often make "vectors" sound intimidating, but it is just a playground treasure map! If grandma tells you: "Take 2 steps forward, 8 steps left, and climb 5 rungs up the ladder", those three directions [0.24, -0.89, 0.51] are your exact coordinates. In AI, a vector is simply an ordered list of friendly numbers that pinpoints where an idea lives in a giant high-dimensional thinking space!',
+          content: `### High-Dimensional Coordinate Systems
+
+In artificial intelligence, every word, sentence, and image is translated into a vector—a sequence of real numbers representing coordinates in continuous geometric space.
+
+\`\`\`
+       +Y (Up / Concept A)
+        ^
+        |   * Point P [0.24, -0.89, 0.51]
+        |  /
+        | / Magnitude ||P||
+        +----------------> +X (Right / Concept B)
+       /
+      /
+     v +Z (Depth / Concept C)
+\`\`\`
+
+The Euclidean distance from the origin (magnitude or $L_2$ norm) is given by:
+$$\\|\\mathbf{v}\\|_2 = \\sqrt{\\sum_{i=1}^d v_i^2} = \\sqrt{x^2 + y^2 + z^2}$$
+
+#### Your Engineering Challenge:
+1. Store the 3D coordinate point \`[0.24, -0.89, 0.51]\` in \`vector_point\`.
+2. Extract the number of dimensions using \`len(vector_point)\`.
+3. Compute the Euclidean magnitude using the square root of the sum of squared components.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.2.1
 # Treasure Maps: Points in 3D Space
 # ============================================================
 
-# Step 1: Write down the 3 coordinates: [0.24, -0.89, 0.51]
+# TODO: Step 1: Write down the 3 coordinates: [0.24, -0.89, 0.51]
 vector_point = []
 
-# Step 2: Count how many numbers are in the list using len()
+# TODO: Step 2: Count how many numbers are in the list using len()
 dimensions = 0
 
-# Step 3: Find the distance (magnitude) using sqrt(x^2 + y^2 + z^2)
+# TODO: Step 3: Find the Euclidean magnitude: sqrt(sum(x^2))
 magnitude = 0.0
 
 print(f"Dimensions: {dimensions} | Magnitude: {round(magnitude, 4)}")
@@ -185,14 +285,34 @@ assert round(magnitude, 3) == 1.053, f"Expected magnitude ≈ 1.053, got {magnit
 print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector primitives & geometric norm verified.',
-          hint: 'Set vector_point = [0.24, -0.89, 0.51], dimensions = len(vector_point), and magnitude = sum(x**2 for x in vector_point) ** 0.5.'
+          hint: 'Set vector_point = [0.24, -0.89, 0.51], dimensions = len(vector_point), and magnitude = sum(x**2 for x in vector_point) ** 0.5.',
+          progressiveHints: [
+            'Tier 1 (Mental Model): A vector in Euclidean space is represented in Python as an ordered list of numeric coordinates: [x, y, z].',
+            'Tier 2 (Logic): Use len(vector_point) to determine the dimensionality. To compute the Euclidean norm, sum the square of each coordinate and take the square root (** 0.5).',
+            'Tier 3 (Syntax): Write: magnitude = sum(x**2 for x in vector_point) ** 0.5.'
+          ]
         },
         {
           id: 'lesson-0-2-2',
           title: 'Dictionaries & Structured Message Serialization',
           subtitle: 'Labelled Toy Cubbies & Packing the Mailbox',
-          firstPrinciplesIntuition: 'If you throw your teddy bear and crayons into a dark closet, finding them later is hard! But if you put them in a cubby with a name tag: "toy: teddy bear" and "color: brown", everything is crystal clear. In Python, that labelled cubby is called a Dictionary. When we want to send our cubby across the internet to an AI assistant, we pack it into a neat letter called JSON using json.dumps()!',
-          content: 'Build a tidy message cubby with role="user" and content="What is an embedding?", then pack it into a JSON string ready to mail.',
+          firstPrinciplesIntuition: 'If you throw your teddy bear and crayons into a dark closet, finding them later is hard! But if you put them in a cubby with clear name tags: "toy: teddy bear" and "color: brown", everything is organized and crystal clear. In Python, that labelled cubby is called a Dictionary. When we send messages across the network to an AI model, we serialize our cubby into a standard JSON string using json.dumps()!',
+          content: `### JSON Serialization in Large Language Model APIs
+
+All major frontier LLM APIs (OpenAI, Anthropic, Google Gemini) exchange structured messages using JSON (JavaScript Object Notation). A chat exchange is structured as an array of message objects containing distinct \`role\` and \`content\` fields.
+
+\`\`\`
+Python Memory:
+  message = {"role": "user", "content": "What is an embedding?"}
+       |
+       v  json.dumps(message)
+Network Wire (JSON String):
+  '{"role": "user", "content": "What is an embedding?"}'
+\`\`\`
+
+#### Your Engineering Challenge:
+1. Create a Python dictionary \`message\` containing keys \`"role"\` (value \`"user"\`) and \`"content"\` (value \`"What is an embedding?"\`).
+2. Serialize this dictionary into a JSON string named \`json_string\` using \`json.dumps(message)\`.`,
           initialCode: `import json
 
 # ============================================================
@@ -200,10 +320,10 @@ print("✓ [TEST PASSED] Vector primitives & geometric norm verified.")
 # Labelled Cubbies: Packing Messages into JSON
 # ============================================================
 
-# Step 1: Put sticky notes inside our cubby: "role" and "content"
+# TODO: Step 1: Create a dictionary with "role": "user" and "content": "What is an embedding?"
 message = {}
 
-# Step 2: Pack it into a JSON letter using json.dumps(message)
+# TODO: Step 2: Serialize it into a JSON string using json.dumps(message)
 json_string = ""
 
 print("Serialized JSON Payload:")
@@ -230,14 +350,38 @@ assert parsed.get("content") == "What is an embedding?", "Content must be 'What 
 print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Structured JSON chat serialization verified.',
-          hint: 'Create message with {"role": "user", "content": "What is an embedding?"} and call json.dumps(message).'
+          hint: 'Create message with {"role": "user", "content": "What is an embedding?"} and call json.dumps(message).',
+          progressiveHints: [
+            'Tier 1 (Mental Model): A Python dictionary stores structured key-value pairs matching JSON object schemas.',
+            'Tier 2 (Logic): Assign keys "role" and "content" with string values, then use json.dumps() to serialize to string format.',
+            'Tier 3 (Syntax): Write: message = {"role": "user", "content": "What is an embedding?"} and json_string = json.dumps(message).'
+          ]
         },
         {
           id: 'lesson-0-2-3',
           title: 'Parsing & Validating Structured Output (Tool Calling)',
           subtitle: 'Reading a Grocery Note from a Friend',
-          firstPrinciplesIntuition: 'When grandma gives you a shopping note that says: "Item: Apples, Count: 3", what do you do? You open the note (json.loads), read the labels, and pick up 3 apples. That is exactly what an AI Agent does! When an AI needs to look up weather or search a book, it hands your program a note. You open the note, read what tool it asked for, and perform the job happily.',
-          content: 'Unpack a tool note from an AI assistant and extract the tool name, search query, and how many items to return (top_k).',
+          firstPrinciplesIntuition: 'When grandma gives you a shopping note that says: "Item: Apples, Count: 3", what do you do? You open the note (json.loads), read the labels, and pick up 3 apples. That is exactly how an AI Agent performs Tool Calling! When an AI needs to search a vector database or check live weather, it emits a structured JSON note. Your program opens the note, verifies the tool parameters, and executes the action safely.',
+          content: `### Agentic Tool Calling & Schema Deserialization
+
+When language models function as autonomous agents, they don't just output text; they invoke structured tools by emitting function signatures. The host application must safely deserialize the raw JSON payload and extract parameters defensively using \`.get()\` to avoid fatal runtime exceptions.
+
+\`\`\`
+Raw LLM Response:
+  '{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}'
+       |
+       v  json.loads()
+Validated Python Dictionary:
+  call = {"tool": "vector_search", "query": "cosine similarity", "top_k": 3}
+       |
+       v  Dispatch Pipeline
+  vector_search(query='cosine similarity', top_k=3)
+\`\`\`
+
+#### Your Engineering Challenge:
+1. Parse \`raw_tool_call\` using \`json.loads()\`.
+2. Defensively extract \`tool_name\`, \`query\`, and \`top_k\` using \`.get()\`.
+3. Construct the \`execution_signature\` string.`,
           initialCode: `import json
 
 # ============================================================
@@ -247,10 +391,10 @@ print("✓ [TEST PASSED] Structured JSON chat serialization verified.")
 
 raw_tool_call = '{"tool": "vector_search", "query": "cosine similarity", "top_k": 3}'
 
-# Step 1: Open the note using json.loads(raw_tool_call)
+# TODO: Step 1: Deserialize the string using json.loads(raw_tool_call)
 call = {}
 
-# Step 2: Read each label from the note using call.get(...)
+# TODO: Step 2: Read each property safely using call.get(key, default)
 tool_name = ""
 query = ""
 top_k = 0
@@ -281,7 +425,12 @@ assert execution_signature == "Calling: vector_search(query='cosine similarity',
 print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Agent tool calling dispatch verified.',
-          hint: 'Use call = json.loads(raw_tool_call), then read tool_name = call.get("tool"), query = call.get("query"), and top_k = call.get("top_k").'
+          hint: 'Use call = json.loads(raw_tool_call), then read tool_name = call.get("tool"), query = call.get("query"), and top_k = call.get("top_k").',
+          progressiveHints: [
+            'Tier 1 (Mental Model): Tool calling relies on deserializing incoming JSON strings into structured dictionaries using json.loads().',
+            'Tier 2 (Logic): Use the .get(key, default) method for safe parameter extraction without throwing KeyError.',
+            'Tier 3 (Syntax): Write: call = json.loads(raw_tool_call); tool_name = call.get("tool", ""); query = call.get("query", ""); top_k = call.get("top_k", 0).'
+          ]
         }
       ]
     },
@@ -294,8 +443,27 @@ print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
           id: 'lesson-0-3-1',
           title: 'Tokenization Mechanics & Byte-Pair Encoding',
           subtitle: 'How Babies Learn to Sound Out Syllables',
-          firstPrinciplesIntuition: 'When a baby learns to talk, they do not memorize an entire giant dictionary on day one! Instead, they learn puzzle pieces and sounds: "ba", "by", "play", "ing". AI models do the exact same thing! They chop sentences into bite-sized syllable blocks called "tokens". In English, 1 word is usually about 1.33 tokens (or 1 token is roughly 4 letters).',
-          content: 'Break a sentence into words, then calculate the estimated syllable tokens using both the word multiplier (1.33x) and the letter counter (divide by 4).',
+          firstPrinciplesIntuition: 'When a baby learns to talk, they do not memorize an entire giant dictionary on day one! Instead, they learn puzzle pieces and sounds: "ba", "by", "play", "ing". AI models do the exact same thing! They chop sentences into bite-sized syllable blocks called "tokens" using Byte-Pair Encoding (BPE). In English, 1 word is roughly 1.33 tokens (or 1 token is roughly 4 letters).',
+          content: `### The Subword Arithmetic of Tokenization
+
+Large Language Models do not process raw text or full dictionary words. Instead, they operate on numerical token IDs produced by subword tokenizers (such as Byte-Pair Encoding or WordPiece).
+
+\`\`\`
+Raw Text:    "OpenGuide makes AI engineering intuitive"
+                   |
+                   v BPE Tokenizer
+Token Chunks: ["Open", "Guide", " makes", " AI", " engineering", " intuitive"]
+Token IDs:    [ 12450,   8921,    1845,   9231,           4812,         16201]
+\`\`\`
+
+#### Production Heuristics:
+- **Word-to-Token Ratio:** $1 \\text{ word} \\approx 1.33 \\text{ tokens}$ ($N_{\\text{tokens}} \\approx \\lfloor N_{\\text{words}} \\times 1.33 \\rfloor$).
+- **Character-to-Token Ratio:** $1 \\text{ token} \\approx 4 \\text{ characters}$ ($N_{\\text{tokens}} \\approx \\text{round}(N_{\\text{chars}} / 4)$).
+
+#### Your Engineering Challenge:
+1. Split \`sentence\` into words with \`.split()\`.
+2. Compute \`estimated_tokens\` using the word multiplier: \`int(len(words) * 1.33)\`.
+3. Compute \`char_tokens\` using the character heuristic: \`round(len(sentence) / 4)\`.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.3.1
 # Bite-Sized Syllables: Counting Tokens
@@ -303,13 +471,13 @@ print("✓ [TEST PASSED] Agent tool calling dispatch verified.")
 
 sentence = "OpenGuide makes AI engineering intuitive"
 
-# Step 1: Cut the sentence into separate words using .split()
+# TODO: Step 1: Split the sentence into separate words using .split()
 words = []
 
-# Step 2: Guess the tokens: int(len(words) * 1.33)
+# TODO: Step 2: Estimate tokens from word count: int(len(words) * 1.33)
 estimated_tokens = 0
 
-# Step 3: Guess by characters: round(len(sentence) / 4)
+# TODO: Step 3: Estimate tokens from character count: round(len(sentence) / 4)
 char_tokens = 0
 
 print(f"Words: {len(words)} | BPE Word Est: {estimated_tokens} | Char Est: {char_tokens}")
@@ -332,14 +500,39 @@ assert char_tokens == 10, f"Expected 10 char tokens (41 chars / 4 ≈ 10), got {
 print("✓ [TEST PASSED] Token estimation heuristics verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Token estimation heuristics verified.',
-          hint: 'Use words = sentence.split(), estimated_tokens = int(len(words) * 1.33), and char_tokens = round(len(sentence) / 4).'
+          hint: 'Use words = sentence.split(), estimated_tokens = int(len(words) * 1.33), and char_tokens = round(len(sentence) / 4).',
+          progressiveHints: [
+            'Tier 1 (Mental Model): Byte-Pair Encoding (BPE) segments text into subword token chunks rather than whole dictionary words.',
+            'Tier 2 (Logic): Use sentence.split() to get words, then apply the 1.33x word multiplier and 4-character division rule.',
+            'Tier 3 (Syntax): Write: words = sentence.split(); estimated_tokens = int(len(words) * 1.33); char_tokens = round(len(sentence) / 4).'
+          ]
         },
         {
           id: 'lesson-0-3-2',
           title: 'System Prompts vs User Prompts',
           subtitle: 'The House Rules vs Today’s Question',
           firstPrinciplesIntuition: 'Before playtime starts, grandma sets the House Rules: "Rule 1: Always be polite, wash your hands, and tell the truth." That is a System Prompt! It gives the AI its character and safety guardrails. When you ask: "Can I have a cookie?", that is a User Prompt. Keeping the house rules in a separate box prevents anyone from tricking the AI into breaking rules!',
-          content: 'Format a tidy conversation log with clear name tags for both [SYSTEM] house rules and [USER] questions.',
+          content: `### Context Hierarchy & Role Separation in Chat ML
+
+Conversational models use structured role tags to distinguish between privileged developer instructions and unprivileged user inputs. Without strict separation, malicious inputs can easily trigger prompt injections and jailbreaks.
+
+\`\`\`
++-------------------------------------------------------------+
+| [SYSTEM] Root Authority: Sets persona, rules, and bounds.   |
+| "You are a concise AI teacher."                             |
++-------------------------------------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+| [USER] Task Request: Unprivileged learner inquiry.          |
+| "What is cosine similarity?"                                |
++-------------------------------------------------------------+
+\`\`\`
+
+#### Your Engineering Challenge:
+Iterate over the \`conversation\` turns and format each item into a clean dialogue log:
+\`"[ROLE]: Content"\`
+where \`ROLE\` is uppercase (e.g. \`[SYSTEM]\` or \`[USER]\`).`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.3.2
 # House Rules & Turn-Taking: Dialogue Formatting
@@ -350,7 +543,7 @@ conversation = [
     {"role": "user", "content": "What is cosine similarity?"}
 ]
 
-# Step: Format each message as "[ROLE]: Content"
+# TODO: Step 1: Format each message as "[ROLE]: Content"
 formatted_dialogue = []
 # for msg in conversation:
 #     ...
@@ -381,23 +574,45 @@ assert formatted_dialogue[1] == "[USER]: What is cosine similarity?"
 print("✓ [TEST PASSED] Multi-turn role separation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Multi-turn role separation verified.',
-          hint: 'Loop through conversation, turn msg["role"] uppercase with .upper(), and add f"[{role_tag}]: {msg[\'content\']}".'
+          hint: 'Loop through conversation, turn msg["role"] uppercase with .upper(), and add f"[{role_tag}]: {msg[\'content\']}".',
+          progressiveHints: [
+            'Tier 1 (Mental Model): Chat templates enforce strict privilege boundaries between system guardrails and user messages.',
+            'Tier 2 (Logic): Loop through each message, capitalize the role with .upper(), and construct the formatted "[ROLE]: content" string.',
+            'Tier 3 (Syntax): Inside the loop: role_tag = msg["role"].upper(); formatted_dialogue.append(f"[{role_tag}]: {msg[\'content\']}").'
+          ]
         },
         {
           id: 'lesson-0-3-3',
           title: 'Temperature & Sampling Distribution Simulation',
           subtitle: 'Picking Your Favorite Ice Cream Flavor',
           firstPrinciplesIntuition: 'What is "Temperature" in AI? Imagine stepping up to an ice cream counter! At Temperature 0, you are 100% predictable: you pick your all-time #1 favorite chocolate scoop every single visit without change (greedy argmax). But if you turn the temperature up, you feel playful and adventurous—you might try wild blueberry or swirl unexpected colors! That is how AI switches between strict facts and creative storytelling.',
-          content: 'Write a friendly temperature selector that returns "greedy_argmax" when temperature is below 0.3, "balanced_sampling" for middle values, and "high_entropy_creative" when you want wild ideas.',
+          content: `### Mathematical Mechanics of Softmax Temperature Scaling
+
+During generation, language models produce raw unnormalized log-odds (logits $z_i$) for every vocabulary token. Temperature $T$ scales these logits before applying the Softmax function:
+
+$$P(w_i) = \\frac{e^{z_i / T}}{\\sum_j e^{z_j / T}}$$
+
+\`\`\`
+Logits [2.0, 1.0, 0.1]:
+  T = 0.1 (Greedy Argmax):    P -> [0.999, 0.001, 0.000]  (Deterministic)
+  T = 0.7 (Balanced):         P -> [0.650, 0.250, 0.100]  (Reasoning & Flow)
+  T = 1.5 (High Entropy):     P -> [0.420, 0.330, 0.250]  (Creative & Varied)
+\`\`\`
+
+#### Your Engineering Challenge:
+Implement \`simulate_token_sampling(temperature: float) -> str\`:
+- If \`temperature < 0.3\`: return \`"greedy_argmax"\`.
+- If \`0.3 <= temperature <= 0.8\`: return \`"balanced_sampling"\`.
+- If \`temperature > 0.8\`: return \`"high_entropy_creative"\`.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 0 - Lab 0.3.3
 # Ice Cream Flavors: Controlling AI Creativity
 # ============================================================
 
 def simulate_token_sampling(temperature: float) -> str:
-    # Step 1: If temperature is below 0.3, stick to the predictable favorite: "greedy_argmax"
-    # Step 2: If temperature is between 0.3 and 0.8 (inclusive), choose: "balanced_sampling"
-    # Step 3: If temperature is above 0.8, go wild with: "high_entropy_creative"
+    # TODO: Step 1: If temperature is below 0.3, return "greedy_argmax"
+    # TODO: Step 2: If temperature is between 0.3 and 0.8 (inclusive), return "balanced_sampling"
+    # TODO: Step 3: If temperature is above 0.8, return "high_entropy_creative"
     return ""
 
 t0 = simulate_token_sampling(0.0)
@@ -429,7 +644,12 @@ assert simulate_token_sampling(1.2) == "high_entropy_creative", "High temp must 
 print("✓ [TEST PASSED] Temperature distribution simulation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Temperature distribution simulation verified.',
-          hint: 'Use if temperature < 0.3: return "greedy_argmax", elif temperature <= 0.8: return "balanced_sampling", else: return "high_entropy_creative".'
+          hint: 'Use if temperature < 0.3: return "greedy_argmax", elif temperature <= 0.8: return "balanced_sampling", else: return "high_entropy_creative".',
+          progressiveHints: [
+            'Tier 1 (Mental Model): Sampling temperature scales logits before softmax: low temperature sharpens probability around the argmax mode.',
+            'Tier 2 (Logic): Use an if/elif/else ladder to classify the float temperature into distinct sampling regimes.',
+            'Tier 3 (Syntax): if temperature < 0.3: return "greedy_argmax" elif temperature <= 0.8: return "balanced_sampling" else: return "high_entropy_creative".'
+          ]
         }
       ]
     }

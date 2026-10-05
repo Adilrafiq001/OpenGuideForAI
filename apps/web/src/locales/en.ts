@@ -129,6 +129,7 @@ export const en: Record<string, string> = {
   // CoursePlayer IDE
   ide_exit: 'Exit to Overview',
   ide_tab_briefing: 'Briefing',
+  ide_tab_lessons: 'Lessons',
   ide_tab_editor: 'Code & Run',
   ide_run_code: 'Run Code',
   ide_reset_code: 'Reset Code',

@@ -15,7 +15,36 @@ export const track4: Track = {
           title: 'Scaled Dot-Product Attention from Scratch (Q, K, V)',
           subtitle: 'The Invariant Mathematical Engine of Modern AI',
           firstPrinciplesIntuition: 'Attention is not magic—it is a content-addressable memory lookup. A Query vector asks "What am I looking for?", Key vectors declare "What information do I contain?", and Value vectors store the actual representation. The dot product Q · K measures conceptual relevance, scaled by 1/sqrt(d_k) to prevent softmax saturation, producing a probability distribution that weights the Values.',
-          content: 'Implement the scaled dot-product attention mechanism from scratch in pure Python. Given Q, K, and V matrices, compute attention scores, apply 1/sqrt(d_k) scaling, compute numerically stable row-wise softmax, and multiply by V.',
+          content: `### Scaled Dot-Product Attention Mathematical Formulation
+
+Introduced in *Attention Is All You Need* (Vaswani et al., 2017), the scaled dot-product attention function maps queries and key-value pairs to an output representation:
+
+$$\\text{Attention}(Q, K, V) = \\text{Softmax}\\left( \\frac{Q K^T}{\\sqrt{d_k}} \\right) V$$
+
+\`\`\`
+  Queries (Q)          Keys (K)                   Values (V)
+  [seq_len x d_k]    [seq_len x d_k]            [seq_len x d_v]
+         \\                 /                            |
+          \\               / (Transpose K -> K^T)        |
+           v             v                              |
+        [ Matrix Multiply: Q @ K^T ]                    |
+                     |                                  |
+                     v                                  |
+        [ Scale: Multiply by 1/sqrt(d_k) ]              |
+                     |                                  |
+                     v                                  |
+        [ Softmax (Row-wise Probabilities) ]            |
+                     \\                                 /
+                      \\                               /
+                       v                             v
+                   [ Matrix Multiply: Weights @ V ]
+                                 |
+                                 v
+                     [ Output: seq_len x d_v ]
+\`\`\`
+
+#### Why Scaling by $1/\\sqrt{d_k}$ Is Non-Negotiable
+For large key dimensions $d_k$, the dot products grow large in magnitude: $\\text{Var}(q \\cdot k) = d_k$. Without dividing by $\\sqrt{d_k}$, large logits push the softmax function into regions with vanishing gradients ($e^z / \\sum e^z \\approx 0$ or $1$), halting learning.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.1.1
 # Objective: Scaled Dot-Product Attention from Scratch (Q, K, V)
@@ -45,21 +74,11 @@ def scaled_dot_product_attention(Q, K, V):
     d_k = len(K[0])
     scale = 1.0 / math.sqrt(d_k)
     
-    # TODO: Step 1 - Compute raw scores = Q @ K^T
-    # Hint: use matrix_multiply(Q, matrix_transpose(K))
-    K_T = matrix_transpose(K)
-    raw_scores = matrix_multiply(Q, K_T)
-    
+    # TODO: Step 1 - Compute raw scores = Q @ K^T using matrix_multiply(Q, matrix_transpose(K))
     # TODO: Step 2 - Scale raw scores by scale (1 / sqrt(d_k))
-    scaled_scores = [[val * scale for val in row] for row in raw_scores]
-    
-    # TODO: Step 3 - Apply softmax to each row of scaled_scores to get attention weights
-    attention_weights = [softmax_row(row) for row in scaled_scores]
-    
-    # TODO: Step 4 - Compute final output = attention_weights @ V
-    output = matrix_multiply(attention_weights, V)
-    
-    return output, attention_weights
+    # TODO: Step 3 - Apply softmax_row to each row of scaled_scores to obtain attention_weights
+    # TODO: Step 4 - Compute final output = matrix_multiply(attention_weights, V)
+    return [], []
 
 # Sample 2-token sequence with d_model = 3
 Q = [[1.0, 0.0, 1.0], [0.0, 1.0, 0.0]]
@@ -149,8 +168,37 @@ print("[TEST PASSED] Scaled dot-product attention mathematically certified.")
           id: 'lesson-4-1-2',
           title: 'Multi-Head Attention & Linear Subspace Decomposition',
           subtitle: 'Parallel Cognitive Projections in Representation Space',
-          firstPrinciplesIntuition: 'A single attention head only looks at one relationship at a time (e.g. grammar). Multi-Head Attention splits the high-dimensional embedding space into multiple parallel subspaces (heads). One head attends to verb-object syntax, while another head attends to long-range entity coreference.',
-          content: 'Implement a multi-head projection splitter and recombiner. Given an input token tensor of dimension d_model, split the representation into h distinct heads, compute attention per head, concatenate the head outputs, and project back to d_model.',
+          firstPrinciplesIntuition: 'A single attention head only looks at one relationship at a time (e.g. grammar). Multi-Head Attention splits the high-dimensional embedding space into multiple parallel subspaces (heads). One head attends to verb-object syntax, while another head attends to long-range entity coreference. Projecting into subspaces allows the model to simultaneously attend to information from different representation subspaces at different positions.',
+          content: `### Multi-Head Subspace Decomposition Architecture
+
+Instead of performing a single attention function with $d_{\\text{model}}$-dimensional keys, queries, and values, Multi-Head Attention linearly projects queries, keys, and values $h$ times with distinct learned linear projections:
+
+$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, \\dots, \\text{head}_h) W^O$$
+$$\\text{where } \\text{head}_i = \\text{Attention}(Q W_i^Q, K W_i^K, V W_i^V)$$
+
+\`\`\`
+Input Tensor X: [ seq_len x d_model ] (e.g. 2 x 4)
+                  |
+     +------------+------------+
+     |                         |
+     v                         v
+Head 0 (Slice 0..2)       Head 1 (Slice 2..4)
+[ seq_len x d_k ]         [ seq_len x d_k ]
+     |                         |
+     v                         v
+[ Attention Engine ]      [ Attention Engine ]
+     |                         |
+     v                         v
+Output Head 0             Output Head 1
+     |                         |
+     +------------+------------+
+                  | (Concatenate along channel dimension)
+                  v
+Reconstructed Tensor: [ seq_len x d_model ]
+\`\`\`
+
+#### Dimensionality Invariant
+Each head operates on dimension $d_k = d_{\\text{model}} / h$. Due to the reduced dimension of each head, the total computational cost is similar to that of single-head attention with full dimensionality.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.1.2
 # Objective: Multi-Head Projection & Subspace Decomposition
@@ -160,35 +208,18 @@ def split_heads(X, num_heads):
     """
     Splits a 2D matrix (seq_len x d_model) into num_heads sub-matrices (seq_len x d_k).
     """
-    seq_len = len(X)
-    d_model = len(X[0])
-    d_k = d_model // num_heads
-    
-    heads = []
-    for h in range(num_heads):
-        head = []
-        for i in range(seq_len):
-            start = h * d_k
-            end = start + d_k
-            head.append(X[i][start:end])
-        heads.append(head)
-    return heads
+    # TODO: Step 1 - Compute d_k = len(X[0]) // num_heads
+    # TODO: Step 2 - For each head h in range(num_heads), extract slice [h*d_k : (h+1)*d_k]
+    # for each token in X, returning a list of num_heads sub-matrices
+    return []
 
 def concat_heads(heads):
     """
     Recombines num_heads sub-matrices into a single matrix (seq_len x d_model).
     """
-    num_heads = len(heads)
-    seq_len = len(heads[0])
-    d_k = len(heads[0][0])
-    
-    combined = []
-    for i in range(seq_len):
-        row = []
-        for h in range(num_heads):
-            row.extend(heads[h][i])
-        combined.append(row)
-    return combined
+    # TODO: Step 3 - For each token index across seq_len, concatenate slices across all heads
+    # into a single row of dimension d_model, returning the combined 2D matrix
+    return []
 
 # Verify splitting and concatenation identity
 sample_tokens = [
@@ -258,8 +289,9 @@ print("[TEST PASSED] Multi-head subspace decomposition certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Verify that each head slices the columns of each token row according to start = h * d_k and end = start + d_k.',
           progressiveHints: [
-            'd_k is computed as d_model // num_heads.',
-            'When concatenating heads, loop through tokens first, and for each token extend the row with slice from all heads.'
+            'Tier 1 (Mental Model): Multi-head attention projects token representations into h parallel lower-dimensional subspaces so the model can attend to different syntactic and semantic patterns simultaneously.',
+            'Tier 2 (Logic): Compute subspace dimension d_k = d_model // num_heads. For each head h, slice each token row from h * d_k to (h + 1) * d_k.',
+            'Tier 3 (Syntax): For concat_heads: for each token i across seq_len, concatenate row segments across all heads into a single flat list: row = []; for h in range(len(heads)): row.extend(heads[h][i]); combined.append(row).'
           ]
         },
         {
@@ -267,7 +299,32 @@ print("[TEST PASSED] Multi-head subspace decomposition certified.")
           title: 'KV-Cache Dynamics & Production Memory Sizing',
           subtitle: 'Why Inference Is Memory-Bandwidth Bound',
           firstPrinciplesIntuition: 'During LLM generation, computing token N requires attending to all N-1 past tokens. Without caching, generation takes O(N^2) compute. The KV-Cache stores the computed Key and Value vectors for all past tokens in GPU VRAM. However, as context grows to 128k tokens, the KV-cache can easily consume 40GB+ of VRAM! Calculating and managing KV-cache memory is the #1 operational skill for AI engineers.',
-          content: 'Build a production KV-Cache memory estimator and an interactive stateful generation cache that appends newly generated token keys and values without recomputing past states.',
+          content: `### KV-Cache Memory Kinematics & Scaling Laws
+
+During autoregressive token generation, past keys and values are cached in memory so new tokens only compute a single query vector:
+
+$$\\text{Memory}_{\\text{KV}} = 2 \\times L \\times H \\times d_{\\text{head}} \\times T \\times b \\text{ bytes}$$
+
+Where:
+- $2$: Accounts for both Key and Value matrices.
+- $L$: Total number of transformer layers (e.g. 32 in Llama-3 8B).
+- $H$: Number of attention heads per layer (or KV-heads in Grouped-Query Attention).
+- $d_{\\text{head}}$: Hidden dimension per head (e.g. 128).
+- $T$: Sequence length (context window tokens).
+- $b$: Precision bytes per element (2 bytes for FP16 / BF16).
+
+\`\`\`
+Token 0 (Prompt)   --> [ Compute Q0, K0, V0 ] --> Cache (K0, V0)
+Token 1 (Prompt)   --> [ Compute Q1, K1, V1 ] --> Cache (K1, V1)
+...
+Token N (Generate) --> [ Compute QN, KN, VN ] --> Append (KN, VN)
+                       Attend QN against [ K0...KN ], weight against [ V0...VN ]
+\`\`\`
+
+#### Production Memory Impact
+For Llama-3 8B at 8,192 context tokens in FP16:
+$$2 \\times 32 \\times 32 \\times 128 \\times 8,192 \\times 2 = 4,294,967,296 \\text{ bytes} = 4.0 \\text{ GB}$$
+At 128,000 tokens, the KV-cache alone requires over 62 GB of VRAM!`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.1.3
 # Objective: KV-Cache Dynamics & Production Memory Sizing
@@ -280,16 +337,12 @@ def estimate_kv_cache_memory(layers, heads, d_head, tokens, precision_bytes=2):
     Default precision_bytes=2 corresponds to FP16 / BF16.
     Factor of 2 accounts for both Keys and Values.
     """
-    # TODO: Step 1 - Compute total bytes
-    bytes_per_token_layer = 2 * heads * d_head * precision_bytes
-    total_bytes = layers * bytes_per_token_layer * tokens
-    
-    mb = total_bytes / (1024 * 1024)
-    gb = total_bytes / (1024 * 1024 * 1024)
+    # TODO: Step 1 - Compute total bytes = 2 (keys+values) * layers * heads * d_head * tokens * precision_bytes
+    # TODO: Step 2 - Compute mb = total_bytes / (1024 * 1024) and gb = total_bytes / (1024 ** 3)
     return {
-        "bytes": total_bytes,
-        "mb": round(mb, 2),
-        "gb": round(gb, 3)
+        "bytes": 0,
+        "mb": 0.0,
+        "gb": 0.0
     }
 
 class KVCache:
@@ -300,9 +353,9 @@ class KVCache:
         
     def append(self, new_k, new_v):
         """Appends new token key and value vectors to the persistent cache."""
-        self.k_cache.append(new_k)
-        self.v_cache.append(new_v)
-        return len(self.k_cache)
+        # TODO: Step 3 - Append new_k to self.k_cache and new_v to self.v_cache
+        # Return current length of self.k_cache
+        return 0
 
 # Example: Llama-3 8B (32 layers, 32 heads, d_head=128, 8,192 context tokens, FP16)
 llama8b_cache = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=8192, precision_bytes=2)
@@ -360,8 +413,9 @@ print("[TEST PASSED] KV-Cache memory scaling laws certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Remember that the factor of 2 accounts for both Keys and Values. Megabytes are bytes / (1024 * 1024).',
           progressiveHints: [
-            'Total bytes = 2 (keys+values) * layers * heads * d_head * tokens * precision_bytes.',
-            'For FP16 or BF16, precision_bytes = 2. For FP32, precision_bytes = 4.'
+            'Tier 1 (Mental Model): The KV-Cache eliminates quadratic recomputation by storing past Key and Value projection matrices in GPU memory during autoregressive generation.',
+            'Tier 2 (Logic): Calculate total bytes using 2 * layers * heads * d_head * tokens * precision_bytes, where 2 accounts for both Keys and Values. Divide by 1024^2 for MB and 1024^3 for GB.',
+            'Tier 3 (Syntax): In estimate_kv_cache_memory, total_bytes = layers * (2 * heads * d_head * precision_bytes) * tokens; return {"bytes": total_bytes, "mb": round(total_bytes / (1024*1024), 2), "gb": round(total_bytes / (1024**3), 3)}.'
           ]
         }
       ]
@@ -376,7 +430,33 @@ print("[TEST PASSED] KV-Cache memory scaling laws certified.")
           title: 'Tree-of-Thoughts & Self-Critique Search Trees',
           subtitle: 'The Test-Time Compute Revolution (o1/o3/Claude Thinking)',
           firstPrinciplesIntuition: 'Classic LLMs generate answers in a single feed-forward pass. Reasoning models spend "thinking tokens" during inference. They generate multiple candidate paths (branches), evaluate intermediate progress using a self-critique scoring function, and backtrack when a dead end is reached. Test-time search replaces blind token regurgitation with deliberate problem solving.',
-          content: 'Implement an in-browser Tree-of-Thoughts (ToT) search engine. Build a branch generator, a heuristic critique scorer, and a depth-first search that prunes invalid branches and selects the certified path.',
+          content: `### Tree-of-Thoughts (ToT) Search Architecture
+
+Yao et al. (2023) demonstrated that allowing language models to deliberately explore tree-structured thought spaces dramatically improves complex reasoning over linear Chain-of-Thought:
+
+\`\`\`
+                    [ Root State: Goal Inquiry ]
+                                 |
+         +-----------------------+-----------------------+
+         |                       |                       |
+         v                       v                       v
+    [ Branch A ]            [ Branch B ]            [ Branch C ]
+  "Direct Attack"      "Decompose Sub-prob"    "Adversarial Invert"
+    Critique: 0.30          Critique: 0.95          Critique: 0.70
+         |                       |                       |
+     (PRUNED)                (ENQUEUED)              (ENQUEUED)
+     score < 0.50            score >= 0.50           score >= 0.50
+                                 |
+                     +-----------+-----------+
+                     |                       |
+                     v                       v
+                [ Sub-path 1 ]          [ Sub-path 2 ]
+\`\`\`
+
+#### Search Mechanics & Pruning Invariant
+1. **Thought Generation**: Proposes candidate logical continuations from the current state.
+2. **Heuristic Self-Critique**: An evaluation function rates each candidate path $\\in [0.0, 1.0]$.
+3. **Threshold Pruning**: Any branch scoring below \`prune_threshold\` is discarded, preventing combinatorial explosion in search depth.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.2.1
 # Objective: Tree-of-Thoughts & Self-Critique Search Trees
@@ -409,33 +489,13 @@ def critique_score(thought_path):
     return 0.30
 
 def tree_of_thoughts_search(initial_state, max_depth=2, prune_threshold=0.5):
-    root = ThoughtNode(initial_state, score=1.0)
-    best_path = None
-    best_score = 0.0
-    
-    # Queue for breadth-first / beam search
-    queue = [root]
-    
-    while queue:
-        current = queue.pop(0)
-        
-        # If at max depth, check if best
-        if current.thought.count("->") >= max_depth:
-            if current.score > best_score:
-                best_score = current.score
-                best_path = current.thought
-            continue
-            
-        candidates = generate_candidate_thoughts(current.thought)
-        for cand in candidates:
-            score = critique_score(cand)
-            # Prune unpromising branches (Test-Time Compute efficiency)
-            if score >= prune_threshold:
-                child = ThoughtNode(cand, score=score, parent=current)
-                current.children.append(child)
-                queue.append(child)
-                
-    return best_path, best_score
+    # TODO: Step 1 - Initialize root = ThoughtNode(initial_state, score=1.0) and search queue = [root]
+    # TODO: Step 2 - Loop while queue is non-empty, popping candidate node
+    # TODO: Step 3 - When current.thought.count("->") >= max_depth, check and track best_path and best_score
+    # TODO: Step 4 - For other states, generate candidates, compute score = critique_score(cand),
+    # and enqueue child node ONLY if score >= prune_threshold
+    # TODO: Step 5 - Return (best_path, best_score)
+    return None, 0.0
 
 path, score = tree_of_thoughts_search("Solve Complex Proof", max_depth=1)
 print(f"Certified Reasoning Path: {path}")
@@ -509,8 +569,9 @@ print("[TEST PASSED] Tree-of-Thoughts test-time compute search certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Ensure that only candidate thoughts with score >= prune_threshold are enqueued as child nodes.',
           progressiveHints: [
-            'Tree search evaluates each candidate thought using critique_score.',
-            'Branches scoring below prune_threshold are discarded, drastically reducing search space.'
+            'Tier 1 (Mental Model): Tree-of-Thoughts enables test-time search by exploring alternative reasoning paths and pruning weak branches.',
+            'Tier 2 (Logic): Loop through queue. If thought has reached max_depth, compare against best_score. Otherwise, generate candidates, critique them, and enqueue only if score >= prune_threshold.',
+            'Tier 3 (Syntax): while queue: current = queue.pop(0); if current.thought.count("->") >= max_depth: if current.score > best_score: best_score = current.score; best_path = current.thought; continue; for cand in generate_candidate_thoughts(current.thought): score = critique_score(cand); if score >= prune_threshold: queue.append(ThoughtNode(cand, score=score, parent=current)).'
           ]
         },
         {
@@ -518,7 +579,32 @@ print("[TEST PASSED] Tree-of-Thoughts test-time compute search certified.")
           title: 'Constrained Decoding & Finite State Machine (FSM) Grammars',
           subtitle: 'Guaranteed 100% Valid JSON Schemas Without Retries',
           firstPrinciplesIntuition: 'Telling an LLM "Please return JSON" will inevitably fail on edge cases. Modern production inference solves this mathematically via Constrained Decoding (Grammar-guided sampling). An FSM monitors the generated tokens character-by-character and masks out all tokens in the vocabulary that would violate the grammar. The model literally CANNOT output invalid syntax.',
-          content: 'Build a miniature Finite State Machine constrained decoder in Python. Given a target schema for a key-value pair, validate candidate tokens and mask out illegal syntax.',
+          content: `### Grammar-Guided Constrained Decoding Architecture
+
+Rather than re-prompting on malformed syntax, constrained decoding applies an active vocabulary mask at each autoregressive step:
+
+\`\`\`
+Target Grammar: {"status": "ok", "code": <integer>}
+
+Vocabulary Logits from Model: [ '{', 'Hello', '42', 'def', ... ]
+               |
+               v
++--------------------------------------------------------------+
+| Finite State Machine (FSM) Transition Filter                 |
+| Current State: 0 (START)                                     |
+| Legal Next Characters: Only '{'                              |
+| Action: Mask out all tokens except '{' (set logit = -infinity)|
++--------------------------------------------------------------+
+               |
+               v
+Emitted Token: '{' --> Advances FSM to State 1
+               |
+               v
+State 1: Expects '"status":' --> Next Valid Transition
+\`\`\`
+
+#### Production Engineering Invariant
+A constrained decoding stream guarantees structural invariant conformance before token consumption. The validator concatenates streaming chunks and parses with \`json.loads()\`, rejecting malformed or partial fragments with structured error telemetry.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.2.2
 # Objective: Constrained Decoding & FSM Grammars
@@ -554,12 +640,10 @@ def validate_constrained_stream(token_stream):
     Simulates grammar-guided validation on an incoming token sequence.
     """
     import json
-    accumulated = "".join(token_stream)
-    try:
-        parsed = json.loads(accumulated)
-        return True, parsed
-    except Exception as e:
-        return False, str(e)
+    # TODO: Step 1 - Concatenate tokens in token_stream: accumulated = "".join(token_stream)
+    # TODO: Step 2 - Attempt to parse accumulated text with json.loads(accumulated)
+    # Return (True, parsed) on success, or (False, str(e)) if an Exception is caught
+    return False, None
 
 valid_tokens = ['{"status":', ' "ok",', ' "code":', ' 200}']
 success, data = validate_constrained_stream(valid_tokens)
@@ -598,8 +682,9 @@ print("[TEST PASSED] Grammar-guided constrained decoding verified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Verify that the token stream concatenates into a complete, well-formed JSON object before calling json.loads.',
           progressiveHints: [
-            'Constrained decoding operates by masking candidate logits at inference time.',
-            'Every emitted token must preserve valid JSON prefix semantics.'
+            'Tier 1 (Mental Model): Constrained grammar decoding ensures emitted token sequences adhere 100% to valid syntax by rejecting invalid state transitions.',
+            'Tier 2 (Logic): Concatenate incoming token strings into a single buffer and attempt to parse with json.loads().',
+            'Tier 3 (Syntax): accumulated = "".join(token_stream); try: return True, json.loads(accumulated); except Exception as e: return False, str(e).'
           ]
         },
         {
@@ -607,7 +692,31 @@ print("[TEST PASSED] Grammar-guided constrained decoding verified.")
           title: 'Model Context Protocol (MCP) JSON-RPC 2.0 Dispatcher',
           subtitle: 'The Universal Open Standard for AI Agent Tools',
           firstPrinciplesIntuition: 'Before MCP, every AI vendor invented their own proprietary tool-calling schema. Anthropic open-sourced Model Context Protocol (MCP) as the universal USB-C standard for AI. MCP standardizes tool listing (tools/list), execution (tools/call), resource reading, and prompt templates over JSON-RPC 2.0. Any agent can speak to any tool server globally.',
-          content: 'Implement an MCP JSON-RPC 2.0 server dispatcher. Register tools with parameter schemas, handle tools/list requests, execute tools/call invocations, and return standardized error codes (-32601 for Method Not Found).',
+          content: `### Model Context Protocol (MCP) Server Architecture
+
+An MCP server hosts tool capabilities, exposes input JSON schemas, and executes client requests via standard JSON-RPC 2.0 framing:
+
+\`\`\`
+Client (LLM Host)                               Server (MCPServer Instance)
+       |                                                    |
+       |--- 1. tools/list Request ------------------------->|
+       |    {"jsonrpc": "2.0", "id": 1, "method": ...}      |
+       |                                                    |
+       |<-- 2. Tool Registry Response ----------------------|
+       |    {"result": {"tools": [{"name": "calculator"}]}} |
+       |                                                    |
+       |--- 3. tools/call Request ------------------------->|
+       |    {"params": {"name": "calculator",               |
+       |               "arguments": {"a": 40, "b": 2}}}     |
+       |                                                    |
+       |                                              [Execute Handler]
+       |                                                    |
+       |<-- 4. Result Envelope -----------------------------|
+       |    {"result": {"content": [{"text": "42"}]}}       |
+\`\`\`
+
+#### Standardized Error Handling
+If an unregistered method or tool is requested, the dispatcher must return standard JSON-RPC error code \`-32601\` (\`Method not found\`). This enables universal client recovery without proprietary error parsing.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.2.3
 # Objective: Model Context Protocol (MCP) JSON-RPC 2.0 Dispatcher
@@ -628,45 +737,13 @@ class MCPServer:
         }
         
     def handle_request(self, request_json_str):
-        req = json.loads(request_json_str)
-        req_id = req.get("id")
-        method = req.get("method")
-        params = req.get("params", {})
-        
-        # Standard MCP JSON-RPC 2.0 Routing
-        if method == "tools/list":
-            tool_list = [
-                {"name": t["name"], "description": t["description"], "inputSchema": t["inputSchema"]}
-                for t in self.tools.values()
-            ]
-            return json.dumps({
-                "jsonrpc": "2.0",
-                "id": req_id,
-                "result": {"tools": tool_list}
-            })
-            
-        elif method == "tools/call":
-            tool_name = params.get("name")
-            arguments = params.get("arguments", {})
-            if tool_name not in self.tools:
-                return json.dumps({
-                    "jsonrpc": "2.0",
-                    "id": req_id,
-                    "error": {"code": -32601, "message": f"Tool '{tool_name}' not found"}
-                })
-            result = self.tools[tool_name]["handler"](arguments)
-            return json.dumps({
-                "jsonrpc": "2.0",
-                "id": req_id,
-                "result": {"content": [{"type": "text", "text": str(result)}]}
-            })
-            
-        else:
-            return json.dumps({
-                "jsonrpc": "2.0",
-                "id": req_id,
-                "error": {"code": -32601, "message": f"Method '{method}' not implemented"}
-            })
+        # TODO: Step 1 - Parse request_json_str: req = json.loads(request_json_str)
+        # TODO: Step 2 - If method == "tools/list", return JSON-RPC 2.0 envelope with {"tools": tool_list}
+        # TODO: Step 3 - If method == "tools/call", lookup params["name"] in self.tools.
+        # If present, call handler(params.get("arguments", {})) and return {"content": [{"type": "text", "text": str(result)}]}.
+        # If tool not found, return JSON-RPC error code -32601.
+        # TODO: Step 4 - For other methods, return error code -32601 ("Method not implemented")
+        return json.dumps({"jsonrpc": "2.0", "id": None, "error": {"code": -32601, "message": "Method not implemented"}})
 
 server = MCPServer()
 server.register_tool(
@@ -770,8 +847,9 @@ print("[TEST PASSED] Model Context Protocol (MCP) server dispatcher certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Confirm that all responses return a valid JSON-RPC 2.0 envelope with jsonrpc, id, and either result or error.',
           progressiveHints: [
-            'MCP specifies that tool results are returned inside content arrays of objects with type="text".',
-            'Error code -32601 is the standard JSON-RPC 2.0 error for Method not found.'
+            'Tier 1 (Mental Model): Model Context Protocol (MCP) establishes open JSON-RPC 2.0 message conventions so agents can discover and call tools universally.',
+            'Tier 2 (Logic): Inspect req["method"]. For "tools/list", return the registered tool metadata list. For "tools/call", lookup tool in self.tools, invoke with arguments, and wrap the output in a text content envelope.',
+            'Tier 3 (Syntax): If method not in ("tools/list", "tools/call") or tool_name not in self.tools, return json.dumps({"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": "Method not found"}}).'
           ]
         }
       ]
@@ -786,7 +864,34 @@ print("[TEST PASSED] Model Context Protocol (MCP) server dispatcher certified.")
           title: 'Weight Quantization from Scratch (FP32 to INT8)',
           subtitle: 'Running 8B Parameter Models in 4GB of Memory',
           firstPrinciplesIntuition: 'Neural network weights are initially stored as 32-bit floating point numbers (FP32, 4 bytes per weight). For an 8B model, that is 32GB of RAM! Symmetric quantization finds the maximum absolute weight scale = max(|W|) / 127 and maps every float into an 8-bit signed integer [-128, 127] (1 byte per weight). The model size shrinks by 4x with virtually zero loss in perceptual intelligence.',
-          content: 'Build a symmetric uniform 8-bit quantizer and dequantizer in pure Python. Given a weight matrix of FP32 values, compute the scale factor, quantize to INT8 integers, dequantize back to float, and calculate the Mean Squared Error (MSE).',
+          content: `### Symmetric Uniform INT8 Quantization Mechanics
+
+Quantization compresses continuous 32-bit floating point representations into discrete 8-bit integer bins:
+
+\`\`\`
+FP32 Weight Matrix: [ -0.891, 0.452, 0.985, -0.054 ]
+                          |
+                          v
+Step 1: Compute Maximum Absolute Value: max(|W|) = 0.985
+Step 2: Calculate Scale Factor: scale = max(|W|) / 127 = 0.007756
+                          |
+                          v
+Step 3: Quantize & Clip to Signed 8-bit Range:
+        q = clip(round(x / scale), -128, 127)
+        0.985  / 0.007756 =  127  (INT8)
+        -0.891 / 0.007756 = -115  (INT8)
+                          |
+                          v
+Step 4: Dequantization for Inference Computation:
+        x_hat = q * scale
+        127  * 0.007756 = 0.985002  (Reconstructed Float)
+        -115 * 0.007756 = -0.891940 (Reconstructed Float)
+\`\`\`
+
+#### Quantization Invariant & Error Bound
+The Mean Squared Error (MSE) between original float weights $W$ and reconstructed weights $\\hat{W}$:
+$$\\text{MSE} = \\frac{1}{N} \\sum_{i=1}^N (w_i - \\hat{w}_i)^2$$
+For uniform symmetric quantization across balanced distributions, MSE is bounded tightly beneath $0.001$, maintaining numerical fidelity while slashing memory footprints by $75\\%$.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.3.1
 # Objective: Weight Quantization from Scratch (FP32 to INT8)
@@ -797,32 +902,18 @@ def quantize_int8(weights):
     """
     Symmetric INT8 quantization.
     Returns: quantized_weights (list of ints), scale (float)
-    """
-    flat = [abs(w) for row in weights for w in row] if isinstance(weights[0], list) else [abs(w) for w in weights]
-    max_val = max(flat)
-    if max_val == 0:
-        scale = 1.0
-    else:
-        scale = max_val / 127.0
-        
-    def q_val(x):
-        val = round(x / scale)
-        return max(-128, min(127, val))
-        
-    if isinstance(weights[0], list):
-        quantized = [[q_val(x) for x in row] for row in weights]
-    else:
-        quantized = [q_val(x) for x in weights]
-        
-    return quantized, scale
+    # TODO: Step 1 - Find max absolute value in weights: max_val
+    # TODO: Step 2 - Compute scale = max_val / 127.0 if max_val != 0 else 1.0
+    # TODO: Step 3 - Map each float value to clipped 8-bit integer: max(-128, min(127, round(x / scale)))
+    # Return (quantized_weights, scale)
+    return [], 1.0
 
 def dequantize_int8(quantized, scale):
     """
     Reconstructs floating point weights from INT8 integers.
     """
-    if isinstance(quantized[0], list):
-        return [[q * scale for q in row] for row in quantized]
-    return [q * scale for q in quantized]
+    # TODO: Step 4 - Multiply each quantized integer by scale: q * scale
+    return []
 
 def compute_mse(original, reconstructed):
     flat_orig = [x for row in original for x in row] if isinstance(original[0], list) else original
@@ -903,8 +994,9 @@ print("[TEST PASSED] In-memory weight quantization certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Ensure that scale is max(|weights|) / 127 and values are clipped between -128 and 127.',
           progressiveHints: [
-            'Symmetric quantization centers values around zero with a single scale factor.',
-            'Dequantization simply multiplies the integer by scale: x_hat = q * scale.'
+            'Tier 1 (Mental Model): Symmetric quantization maps continuous 32-bit floats into signed 8-bit integers [-128, 127] by dividing by scale = max(|W|) / 127.',
+            'Tier 2 (Logic): Find maximum absolute weight value to derive scale. For each weight x, compute q = max(-128, min(127, round(x / scale))).',
+            'Tier 3 (Syntax): Dequantization reverses this with reconstructed = q * scale. MSE is sum((orig - rec)**2) / N.'
           ]
         },
         {
@@ -912,7 +1004,29 @@ print("[TEST PASSED] In-memory weight quantization certified.")
           title: 'Direct Preference Optimization (DPO) Loss from Scratch',
           subtitle: 'Mathematical Alignment Without Reinforcement Learning',
           firstPrinciplesIntuition: 'RLHF (Reinforcement Learning from Human Feedback) required training complex reward models and running fragile PPO loops. In 2023, DPO proved that the optimal policy can be extracted analytically in closed form. Given pairs of preferred (winning) and dispreferred (losing) responses, DPO directly computes the log-ratio loss between the current policy and reference model.',
-          content: 'Implement the mathematical DPO loss function in pure Python. Given winning and losing log-probabilities from the policy and reference models, compute implicit rewards and binary cross-entropy loss with beta temperature scaling.',
+          content: `### Direct Preference Optimization (DPO) Mathematical Derivation
+
+Rafailov et al. (2023) established that preference alignment can be solved directly by optimizing a binary cross-entropy loss over implicit language model probabilities without a separate reward model:
+
+$$\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta; \\pi_{\\text{ref}}) = -\\mathbb{E}_{(x, y_w, y_l)} \\left[ \\log \\sigma \\left( \\beta \\log \\frac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)} - \\beta \\log \\frac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)} \\right) \\right]$$
+
+\`\`\`
+Winning Pair (y_w): log_pi(y_w) - log_ref(y_w) = win_ratio
+Losing Pair (y_l) : log_pi(y_l) - log_ref(y_l) = lose_ratio
+                           |
+                           v
+Logits Difference: logits = beta * (win_ratio - lose_ratio)
+                           |
+                           v
+Probability: p = sigmoid(logits)
+                           |
+                           v
+DPO Objective Loss: L = -log( max(p, 1e-12) )
+\`\`\`
+
+#### Optimization Dynamics
+- When the policy $\\pi_\\theta$ assigns high probability to winning response $y_w$ and low probability to losing response $y_l$ relative to $\\pi_{\\text{ref}}$, \`logits\` is positive and large, $\\sigma(\\text{logits}) \\to 1.0$, and loss approaches $0$.
+- If the policy mistakenly assigns higher probability to the dispreferred response, \`logits\` is negative, $\\sigma(\\text{logits}) \\to 0$, producing high penalizing loss.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Lab 4.3.2
 # Objective: Direct Preference Optimization (DPO) Loss
@@ -933,20 +1047,12 @@ def compute_dpo_loss(pi_win_logprob, pi_lose_logprob, ref_win_logprob, ref_lose_
     """
     Computes DPO loss for a single preference pair.
     """
-    # TODO: Step 1 - Calculate log ratio for winning response: log(pi(y_w)) - log(ref(y_w))
-    win_log_ratio = pi_win_logprob - ref_win_logprob
-    
-    # TODO: Step 2 - Calculate log ratio for losing response: log(pi(y_l)) - log(ref(y_l))
-    lose_log_ratio = pi_lose_logprob - ref_lose_logprob
-    
-    # TODO: Step 3 - Compute logits difference scaled by beta
-    logits = beta * (win_log_ratio - lose_log_ratio)
-    
-    # TODO: Step 4 - Compute -log(sigmoid(logits))
-    prob = sigmoid(logits)
-    loss = -math.log(max(prob, 1e-12))
-    
-    return loss, logits
+    # TODO: Step 1 - Calculate log ratio for winning response: win_log_ratio = pi_win_logprob - ref_win_logprob
+    # TODO: Step 2 - Calculate log ratio for losing response: lose_log_ratio = pi_lose_logprob - ref_lose_logprob
+    # TODO: Step 3 - Compute logits difference scaled by beta: logits = beta * (win_log_ratio - lose_log_ratio)
+    # TODO: Step 4 - Compute DPO loss: -math.log(max(sigmoid(logits), 1e-12))
+    # Return (loss, logits)
+    return 0.0, 0.0
 
 # Scenario 1: Model prefers winning response over reference
 loss_good, logits_good = compute_dpo_loss(
@@ -1006,8 +1112,9 @@ print("[TEST PASSED] Direct Preference Optimization (DPO) mathematical loss cert
           expectedOutput: '[TEST PASSED]',
           hint: 'Remember that DPO loss minimizes -log(sigmoid(beta * (win_ratio - lose_ratio))).',
           progressiveHints: [
-            'win_log_ratio is pi_win_logprob - ref_win_logprob.',
-            'As the policy increases probability on y_w and decreases on y_l, logits increase, sigmoid approaches 1, and -log(1) approaches 0.'
+            'Tier 1 (Mental Model): Direct Preference Optimization (DPO) derives an exact closed-form alignment objective, eliminating the instability of training separate reward models and RL loops.',
+            'Tier 2 (Logic): Compute win_log_ratio = pi_win - ref_win and lose_log_ratio = pi_lose - ref_lose. Multiply difference by beta to obtain logits, apply sigmoid, and compute negative log-likelihood.',
+            'Tier 3 (Syntax): logits = beta * ((pi_win_logprob - ref_win_logprob) - (pi_lose_logprob - ref_lose_logprob)); prob = sigmoid(logits); loss = -math.log(max(prob, 1e-12)); return loss, logits.'
           ]
         },
         {
@@ -1015,7 +1122,42 @@ print("[TEST PASSED] Direct Preference Optimization (DPO) mathematical loss cert
           title: 'Boss Project: The Autonomous Frontier Reasoning Agent',
           subtitle: 'Composing Attention, KV-Cache, ToT Search & MCP Tools',
           firstPrinciplesIntuition: 'You have mastered the foundational mechanics of the AI frontier: the linear algebra of attention projections, memory-constrained KV-cache sizing, tree-of-thoughts reasoning search, and the standardized Model Context Protocol. In this capstone, you will compose all components into a production-grade autonomous agent architecture that searches, reasons, invokes tools, and self-evaluates.',
-          content: 'Synthesize your skills into an end-to-end AutonomousReasoningEngine class. Implement goal decomposition, multi-turn reasoning loops, MCP tool dispatching, and self-critique verification to output a certified mission report.',
+          content: `### Capstone Autonomous Frontier Reasoning Architecture
+
+The capstone agent orchestrates working KV context tokens, Model Context Protocol tool execution, and self-critique verification across an integrated reasoning cycle:
+
+\`\`\`
++--------------------------------------------------------------+
+| AutonomousReasoningEngine ("OpenGuide-Apex")                 |
+|                                                              |
+| Goal Ingress: "Synthesize Frontier Intelligence"             |
+|                                                              |
+| Cycle Step 1: Initialize Goal Audit Log                      |
+|                                                              |
+| Cycle Step 2: Formulate Multi-Stage Sub-Tasks                |
+|   - Inspect environment state                                |
+|   - Dispatch MCP tool calculation                            |
+|   - Verify and self-critique output                          |
+|                                                              |
+| Cycle Step 3: Tool Dispatch & KV Memory Tracking             |
+|   - Invoke tools["calc"]({"x": 21, "multiplier": 2}) -> 42   |
+|   - Track Working Context: kv_memory_tokens += 128 per step  |
+|                                                              |
+| Cycle Step 4: Self-Critique Verification Gate                |
+|   certified = (len(results) > 0 and kv_tokens > 0)           |
++--------------------------------------------------------------+
+                               |
+                               v
++--------------------------------------------------------------+
+| Certified Mission Report Output (JSON Formatted)             |
+| Status: certified = True | KV Tokens Consumed: >= 384        |
++--------------------------------------------------------------+
+\`\`\`
+
+#### Boss Project Criteria
+1. **MCP Tool Integration**: Must register and invoke tools using standardized schemas.
+2. **Context Kinematics**: Must simulate and track KV context memory growth across reasoning steps.
+3. **Trace Auditability**: Every sub-task thought and tool result must be logged chronologically in \`audit_log\`.`,
           initialCode: `# ============================================================
 # OpenGuide AI Studio // Track 4 - Capstone Boss Project
 # Objective: The Autonomous Frontier Reasoning Agent
@@ -1035,33 +1177,19 @@ class AutonomousReasoningEngine:
     def execute_reasoning_cycle(self, goal):
         self.audit_log.append(f"[GOAL] Initialized: {goal}")
         
-        # Step 1: Decompose problem
-        sub_tasks = [
-            f"Step 1: Inspect environment for '{goal}'",
-            f"Step 2: Dispatch MCP tool calculation",
-            f"Step 3: Verify and self-critique"
-        ]
-        
-        results = []
-        for step in sub_tasks:
-            self.audit_log.append(f"[THOUGHT] {step}")
-            if "tool calculation" in step:
-                if "calc" in self.tools:
-                    tool_out = self.tools["calc"]({"x": 21, "multiplier": 2})
-                    results.append(f"Tool Result: {tool_out}")
-                    self.audit_log.append(f"[MCP CALL] calc -> {tool_out}")
-            self.kv_memory_tokens += 128
-            
-        # Step 4: Self-critique synthesis
-        certified = len(results) > 0 and self.kv_memory_tokens > 0
-        self.audit_log.append(f"[VERDICT] Certified: {certified}")
-        
+        # TODO: Step 1 - Append f"[GOAL] Initialized: {goal}" to self.audit_log
+        # TODO: Step 2 - Formulate sub-tasks: inspect environment, dispatch MCP tool calculation, verify and self-critique
+        # TODO: Step 3 - For each step, append f"[THOUGHT] {step}" and increment self.kv_memory_tokens += 128
+        # If "tool calculation" in step and "calc" in self.tools, invoke tool and append f"[MCP CALL] calc -> {tool_out}"
+        # TODO: Step 4 - Determine certified = (len(results) > 0 and self.kv_memory_tokens > 0)
+        # and append f"[VERDICT] Certified: {certified}" to self.audit_log
+        # TODO: Step 5 - Return summary dict with "agent", "goal", "certified", "kv_tokens_consumed", and "log"
         return {
             "agent": self.agent_name,
             "goal": goal,
-            "certified": certified,
-            "kv_tokens_consumed": self.kv_memory_tokens,
-            "log": self.audit_log
+            "certified": False,
+            "kv_tokens_consumed": 0,
+            "log": []
         }
 
 agent = AutonomousReasoningEngine()
@@ -1132,8 +1260,9 @@ print("[TEST PASSED] Capstone Autonomous Frontier Reasoning Agent certified.")
           expectedOutput: '[TEST PASSED]',
           hint: 'Verify that the MCP tool is called and returns the product, updating audit_log and kv_memory_tokens.',
           progressiveHints: [
-            'Each reasoning step increments the active working KV context tokens.',
-            'The MCP tool invocation outputs [MCP CALL] calc -> 42 into the execution audit log.'
+            'Tier 1 (Mental Model): The Capstone Autonomous Frontier Reasoning Agent harmonizes internal context memory (KV cache tokens), structured MCP tool invocation, and self-critique verification.',
+            'Tier 2 (Logic): In execute_reasoning_cycle, log each reasoning thought step, execute MCP tools when requested, track context tokens (+= 128), and verify certification criteria.',
+            'Tier 3 (Syntax): for step in sub_tasks: self.audit_log.append(f"[THOUGHT] {step}"); if "tool calculation" in step: tool_out = self.tools["calc"]({"x": 21, "multiplier": 2}); self.audit_log.append(f"[MCP CALL] calc -> {tool_out}"); self.kv_memory_tokens += 128; certified = len(results) > 0 and self.kv_memory_tokens > 0; return {...}.'
           ]
         }
       ]
