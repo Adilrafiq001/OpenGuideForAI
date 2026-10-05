@@ -253,5 +253,116 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
     expect(killedMutants).toBe(27);
   });
 
+  test('05. Mutation Testing & Autograder Resilience Audit (Track 1)', async () => {
+    const track1Mutants: Record<string, string[]> = {
+      'lesson-1-1-1': [
+        // Mutant 1: Coordinate addition instead of subtraction (queen + king)
+        'king = [0.90, 0.20]\nqueen = [0.85, 0.25]\ndelta = [round(queen[0] + king[0], 4), round(queen[1] + king[1], 4)]\nsquared_distance = 0.005',
+        // Mutant 2: Reversed subtraction (king - queen instead of queen - king)
+        'king = [0.90, 0.20]\nqueen = [0.85, 0.25]\ndelta = [round(king[0] - queen[0], 4), round(king[1] - queen[1], 4)]\nsquared_distance = round(delta[0]**2 + delta[1]**2, 5)',
+        // Mutant 3: Manhattan distance squared instead of Euclidean (delta[0] + delta[1])**2
+        'king = [0.90, 0.20]\nqueen = [0.85, 0.25]\ndelta = [round(queen[0] - king[0], 4), round(queen[1] - king[1], 4)]\nsquared_distance = round((delta[0] + delta[1])**2, 5)'
+      ],
+      'lesson-1-1-2': [
+        // Mutant 1: Coordinate sum instead of Euclidean norm (v[0] + v[1])
+        'import math\nv = [3.0, 4.0]\nmag = v[0] + v[1]\nunit_v = [0.6, 0.8]',
+        // Mutant 2: L1 normalization (sum of absolute values) instead of L2
+        'import math\nv = [3.0, 4.0]\nmag = abs(v[0]) + abs(v[1])\nunit_v = [round(x / mag, 2) for x in v]',
+        // Mutant 3: Negated vector direction
+        'import math\nv = [3.0, 4.0]\nmag = math.sqrt(v[0]**2 + v[1]**2)\nunit_v = [round(-x / mag, 2) for x in v]'
+      ],
+      'lesson-1-1-3': [
+        // Mutant 1: Sum of pairs instead of product of pairs in dot product
+        'a = [1, 2, 3]\nb = [4, 5, 6]\ndot = sum(x + y for x, y in zip(a, b))',
+        // Mutant 2: Product of sums instead of sum of products
+        'a = [1, 2, 3]\nb = [4, 5, 6]\ndot = sum(a) * sum(b)',
+        // Mutant 3: Euclidean distance instead of dot product
+        'import math\na = [1, 2, 3]\nb = [4, 5, 6]\ndot = sum((x - y)**2 for x, y in zip(a, b))'
+      ],
+      'lesson-1-2-1': [
+        // Mutant 1: Hardcoded cosine_sim returning constant 1.0
+        'import math\nshort_doc = [1.0, 2.0]\nlong_doc = [10.0, 20.0]\ndef cosine_sim(v1, v2): return 1.0\nsim = cosine_sim(short_doc, long_doc)',
+        // Mutant 2: Dot product without magnitude normalization
+        'import math\nshort_doc = [1.0, 2.0]\nlong_doc = [10.0, 20.0]\ndef cosine_sim(v1, v2): return sum(a*b for a,b in zip(v1, v2))\nsim = cosine_sim(short_doc, long_doc)',
+        // Mutant 3: Cosine distance (1 - sim) instead of similarity
+        'import math\nshort_doc = [1.0, 2.0]\nlong_doc = [10.0, 20.0]\ndef cosine_sim(v1, v2):\n    d = sum(a*b for a,b in zip(v1,v2))\n    m1 = math.sqrt(sum(a*a for a in v1))\n    m2 = math.sqrt(sum(b*b for b in v2))\n    return 1.0 - (d / (m1*m2))\nsim = cosine_sim(short_doc, long_doc)'
+      ],
+      'lesson-1-2-2': [
+        // Mutant 1: Hardcoded scores list
+        'import math\ndef cosine_similarity(v1, v2): return 0.998\nquery = [0.8, 0.6]\ncandidates = [[0.85, 0.55], [0.10, 0.90], [-0.70, 0.70]]\nscores = [0.998, 0.685, -0.141]',
+        // Mutant 2: Reverse order scoring (candidate 3 first)
+        'import math\ndef cosine_similarity(v1, v2):\n    d = sum(a*b for a,b in zip(v1,v2))\n    m1 = math.sqrt(sum(a*a for a in v1))\n    m2 = math.sqrt(sum(b*b for b in v2))\n    return d / (m1*m2)\nquery = [0.8, 0.6]\ncandidates = [[0.85, 0.55], [0.10, 0.90], [-0.70, 0.70]]\nscores = [round(cosine_similarity(query, doc), 3) for doc in reversed(candidates)]',
+        // Mutant 3: Euclidean distance ranking instead of cosine similarity
+        'import math\ndef cosine_similarity(v1, v2):\n    return -math.sqrt(sum((a-b)**2 for a,b in zip(v1, v2)))\nquery = [0.8, 0.6]\ncandidates = [[0.85, 0.55], [0.10, 0.90], [-0.70, 0.70]]\nscores = [round(cosine_similarity(query, doc), 3) for doc in candidates]'
+      ],
+      'lesson-1-2-3': [
+        // Mutant 1: Squared differences instead of absolute differences for Manhattan
+        'import math\np = [1, 2]\nq = [4, 6]\nmanhattan = float(sum((a - b)**2 for a, b in zip(p, q)))\neuclidean = 5.0\ncos_dist = 0.0077',
+        // Mutant 2: Euclidean squared instead of Euclidean
+        'import math\np = [1, 2]\nq = [4, 6]\nmanhattan = float(sum(abs(a - b) for a, b in zip(p, q)))\neuclidean = float(sum((a - b)**2 for a, b in zip(p, q)))\ndot = sum(a * b for a, b in zip(p, q))\nmag_p = math.sqrt(sum(a*a for a in p))\nmag_q = math.sqrt(sum(b*b for b in q))\ncos_dist = round(1.0 - (dot / (mag_p * mag_q)), 4)',
+        // Mutant 3: Cosine similarity instead of cosine distance
+        'import math\np = [1, 2]\nq = [4, 6]\nmanhattan = float(sum(abs(a - b) for a, b in zip(p, q)))\neuclidean = float(math.sqrt(sum((a - b)**2 for a, b in zip(p, q))))\ndot = sum(a * b for a, b in zip(p, q))\nmag_p = math.sqrt(sum(a*a for a in p))\nmag_q = math.sqrt(sum(b*b for b in q))\ncos_dist = round(dot / (mag_p * mag_q), 4)'
+      ],
+      'lesson-1-3-1': [
+        // Mutant 1: Class-level shared documents list (mutable state bug)
+        'class SimpleVectorStore:\n    documents = []\n    def __init__(self): pass\n    def add(self, doc_id, text, vector):\n        self.documents.append({"id": doc_id, "text": text, "vector": vector})\n    def count(self):\n        return len(self.documents)\nstore = SimpleVectorStore()\nstore.add("doc1", "Intro", [0.9, 0.1, 0.4])\nstore.add("doc2", "French", [-0.2, 0.8, 0.1])',
+        // Mutant 2: Missing vector in stored document dictionary
+        'class SimpleVectorStore:\n    def __init__(self):\n        self.documents = []\n    def add(self, doc_id, text, vector):\n        self.documents.append({"id": doc_id, "text": text})\n    def count(self):\n        return len(self.documents)\nstore = SimpleVectorStore()\nstore.add("doc1", "Intro", [0.9, 0.1, 0.4])\nstore.add("doc2", "French", [-0.2, 0.8, 0.1])',
+        // Mutant 3: Always returning count = 2
+        'class SimpleVectorStore:\n    def __init__(self):\n        self.documents = []\n    def add(self, doc_id, text, vector):\n        self.documents.append({"id": doc_id, "text": text, "vector": vector})\n    def count(self):\n        return 2\nstore = SimpleVectorStore()\nstore.add("doc1", "Intro", [0.9, 0.1, 0.4])\nstore.add("doc2", "French", [-0.2, 0.8, 0.1])'
+      ],
+      'lesson-1-3-2': [
+        // Mutant 1: Hardcoded top_2 list
+        'import math\ndef cosine_sim(v1, v2): return 1.0\ndocuments = [{"id": "doc1", "text": "t1", "vector": [1,0]}]\nscored_docs = [(1.0, {"id": "doc1"})]\ntop_2 = [(0.92, {"id": "doc1", "text": "AI"}), (0.85, {"id": "doc3", "text": "ML"})]',
+        // Mutant 2: Ascending sort instead of descending (retrieving worst docs)
+        'import math\ndef cosine_sim(v1, v2):\n    d = sum(a*b for a,b in zip(v1,v2))\n    m1 = math.sqrt(sum(a*a for a in v1))\n    m2 = math.sqrt(sum(b*b for b in v2))\n    return d / (m1*m2)\nquery_vector = [0.82, 0.15, 0.38]\ndocuments = [\n    {"id": "doc1", "text": "Transformers", "vector": [0.90, 0.10, 0.40]},\n    {"id": "doc2", "text": "Gardening", "vector": [-0.55, 0.81, 0.12]},\n    {"id": "doc3", "text": "Backprop", "vector": [0.75, 0.20, 0.50]}\n]\nscored_docs = [(cosine_sim(query_vector, doc["vector"]), doc) for doc in documents]\nscored_docs.sort(key=lambda x: x[0], reverse=False)\ntop_2 = scored_docs[:2]',
+        // Mutant 3: Unsorted slice [:2] (first 2 regardless of score)
+        'import math\ndef cosine_sim(v1, v2):\n    d = sum(a*b for a,b in zip(v1,v2))\n    m1 = math.sqrt(sum(a*a for a in v1))\n    m2 = math.sqrt(sum(b*b for b in v2))\n    return d / (m1*m2)\nquery_vector = [0.82, 0.15, 0.38]\ndocuments = [\n    {"id": "doc1", "text": "Transformers", "vector": [0.90, 0.10, 0.40]},\n    {"id": "doc2", "text": "Gardening", "vector": [-0.55, 0.81, 0.12]},\n    {"id": "doc3", "text": "Backprop", "vector": [0.75, 0.20, 0.50]}\n]\nscored_docs = [(cosine_sim(query_vector, doc["vector"]), doc) for doc in documents]\ntop_2 = scored_docs[:2]'
+      ],
+      'lesson-1-3-3': [
+        // Mutant 1: Hardcoded search output
+        'class SemanticSearchEngine:\n    def __init__(self): self.documents = []\n    def add_document(self, id, text, vector): pass\n    def search(self, query, top_k=2): return [{"id": "doc-1", "score": 0.998, "text": "AI"}, {"id": "doc-3", "score": 0.88, "text": "ML"}]\nengine = SemanticSearchEngine()\nresults = engine.search([1, 0, 0], top_k=2)',
+        // Mutant 2: Zero-division crash on zero vector query
+        'import math\nclass SemanticSearchEngine:\n    def __init__(self): self.documents = []\n    def add_document(self, id, text, vector):\n        self.documents.append({"id": id, "text": text, "vector": vector})\n    def _cosine_similarity(self, v1, v2):\n        dot = sum(a * b for a, b in zip(v1, v2))\n        mag1 = math.sqrt(sum(a * a for a in v1))\n        mag2 = math.sqrt(sum(b * b for b in v2))\n        return dot / (mag1 * mag2)\n    def search(self, query, top_k=2):\n        scored = [{"id": d["id"], "text": d["text"], "score": round(self._cosine_similarity(query, d["vector"]), 3)} for d in self.documents]\n        scored.sort(key=lambda x: x["score"], reverse=True)\n        return scored[:top_k]\nengine = SemanticSearchEngine()\nengine.add_document("doc-1", "AI", [0.9, 0.1, 0.4])\nresults = engine.search([0.9, 0.1, 0.4], top_k=2)',
+        // Mutant 3: Unsorted search results (returns docs in arbitrary order)
+        'import math\nclass SemanticSearchEngine:\n    def __init__(self): self.documents = []\n    def add_document(self, id, text, vector):\n        self.documents.append({"id": id, "text": text, "vector": vector})\n    def _cosine_similarity(self, v1, v2):\n        dot = sum(a * b for a, b in zip(v1, v2))\n        mag1 = math.sqrt(sum(a * a for a in v1))\n        mag2 = math.sqrt(sum(b * b for b in v2))\n        if mag1 == 0 or mag2 == 0: return 0.0\n        return dot / (mag1 * mag2)\n    def search(self, query, top_k=2):\n        scored = [{"id": d["id"], "text": d["text"], "score": round(self._cosine_similarity(query, d["vector"]), 3)} for d in self.documents]\n        return scored[:top_k]\nengine = SemanticSearchEngine()\nengine.add_document("doc-1", "AI", [0.9, 0.1, 0.4])\nresults = engine.search([0.9, 0.1, 0.4], top_k=2)'
+      ]
+    };
+
+    let totalMutants = 0;
+    let killedMutants = 0;
+    const survivingMutants: string[] = [];
+
+    track1.modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        const mutants = track1Mutants[lesson.id] || [];
+        mutants.forEach((mutantCode, mIdx) => {
+          totalMutants++;
+          const pyCode = `${mutantCode}\n\n# --- Test Harness ---\n${lesson.testCode || ''}`;
+          const res = spawnSync('python', ['-c', pyCode], {
+            encoding: 'utf-8',
+            timeout: 10000,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
+          });
+
+          if (res.status !== 0 || res.error) {
+            killedMutants++;
+          } else {
+            survivingMutants.push(`[${lesson.id}] Mutant #${mIdx + 1} survived:\n${mutantCode}`);
+          }
+        });
+      });
+    });
+
+    console.log(`\n=== MUTATION AUDIT BREAKDOWN (TRACK 1) ===`);
+    console.log(`Total Mutants Tested: ${totalMutants}`);
+    console.log(`Killed Mutants: ${killedMutants}`);
+    console.log(`Kill Rate: ${((killedMutants / totalMutants) * 100).toFixed(1)}%`);
+
+    expect(survivingMutants, `Track 1 mutants survived! Autograder failed to detect flawed code:\n${survivingMutants.join('\n\n')}`).toEqual([]);
+    expect(totalMutants).toBe(27);
+    expect(killedMutants).toBe(27);
+  });
+
 });
 

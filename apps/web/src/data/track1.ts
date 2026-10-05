@@ -73,9 +73,30 @@ print(f"Queen Coordinates   : {queen}")
 print(f"Semantic Delta      : {delta}")
 print(f"Squared Distance    : {round(squared_distance, 5)}")
 `,
-          testCode: `assert len(delta) == 2, "Delta vector must have 2 dimensions"
+          testCode: `import math
+import random
+assert 'delta' in locals() or 'delta' in globals(), "delta must be defined"
+assert 'squared_distance' in locals() or 'squared_distance' in globals(), "squared_distance must be defined"
+assert len(delta) == 2, "Delta vector must have 2 dimensions"
 assert delta == [-0.05, 0.05], f"Expected delta [-0.05, 0.05], got {delta}"
 assert abs(squared_distance - 0.005) < 1e-4, f"squared_distance incorrect: got {squared_distance}"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert delta == [round(queen[0] - king[0], 4), round(queen[1] - king[1], 4)], "Delta formula violated"
+assert squared_distance >= 0.0, "Squared distance must be non-negative"
+assert abs(squared_distance - (delta[0]**2 + delta[1]**2)) < 1e-6, "Distance must equal sum of squared delta components"
+assert [round(p - p, 4) for p in king] == [0.0, 0.0], "Self-displacement must be zero vector"
+
+random.seed(42)
+for _ in range(5):
+    p1 = [random.uniform(-10, 10), random.uniform(-10, 10)]
+    p2 = [random.uniform(-10, 10), random.uniform(-10, 10)]
+    d_fwd = sum((a - b)**2 for a, b in zip(p1, p2))
+    d_rev = sum((b - a)**2 for a, b in zip(p1, p2))
+    assert abs(d_fwd - d_rev) < 1e-9, "Metric symmetry invariant violated"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 geometric displacement invariants satisfied.")
 print("✓ [TEST PASSED] Semantic vector coordinates successfully initialized.")
 `,
           expectedOutput: '✓ [TEST PASSED] Semantic vector coordinates successfully initialized.',
@@ -147,9 +168,31 @@ print(f"Original Vector       : {v}")
 print(f"Magnitude (L2)        : {mag}")
 print(f"Normalized Unit Vector: {unit_v}")
 `,
-          testCode: `assert mag == 5.0, f"Expected magnitude 5.0, got {mag}"
+          testCode: `import math
+import random
+assert mag == 5.0, f"Expected magnitude 5.0, got {mag}"
 assert unit_v == [0.6, 0.8], f"Expected normalized vector [0.6, 0.8], got {unit_v}"
 assert round(math.sqrt(unit_v[0]**2 + unit_v[1]**2), 1) == 1.0, "Unit vector must have magnitude 1.0"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(unit_v, list), "unit_v must be a list"
+assert len(unit_v) == len(v), "Normalized vector must have identical dimensions as input"
+assert abs(math.sqrt(sum(x**2 for x in unit_v)) - 1.0) < 0.01, "Unit vector Euclidean norm must equal 1.0 within tolerance"
+
+dot_orig_unit = sum(a * b for a, b in zip(v, unit_v))
+mag_orig = math.sqrt(sum(a*a for a in v))
+mag_unit = math.sqrt(sum(b*b for b in unit_v))
+assert abs(dot_orig_unit / (mag_orig * mag_unit) - 1.0) < 1e-4, "Normalization altered vector angle"
+
+random.seed(42)
+for _ in range(5):
+    rv = [random.uniform(-100, 100) for _ in range(random.randint(2, 6))]
+    r_mag = math.sqrt(sum(x**2 for x in rv))
+    r_unit = [x / (r_mag + 1e-12) for x in rv]
+    assert abs(math.sqrt(sum(x**2 for x in r_unit)) - 1.0) < 1e-6, "Random vector normalization failed"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 unit normalization invariants satisfied.")
 print("✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector L2 magnitude and unit normalization verified.',
@@ -217,8 +260,33 @@ print(f"Vector A            : {a}")
 print(f"Vector B            : {b}")
 print(f"Computed Dot Product: {dot}")
 `,
-          testCode: `assert dot == 32, f"Expected dot product 32 (1*4 + 2*5 + 3*6 = 4+10+18), got {dot}"
+          testCode: `import math
+import random
+assert dot == 32, f"Expected dot product 32 (1*4 + 2*5 + 3*6 = 4+10+18), got {dot}"
 assert sum(x * y for x, y in zip([1, 0], [0, 1])) == 0, "Orthogonal dot product must be 0"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert dot == sum(y * x for x, y in zip(a, b)), "Dot product must be commutative"
+
+c_vec = [2, -1, 4]
+dot_a_bc = sum(x * (y + z) for x, y, z in zip(a, b, c_vec))
+dot_ac = sum(x * z for x, z in zip(a, c_vec))
+assert dot_a_bc == dot + dot_ac, "Dot product distributivity violated"
+
+mag_a = math.sqrt(sum(x**2 for x in a))
+mag_b = math.sqrt(sum(y**2 for y in b))
+assert abs(dot) <= mag_a * mag_b + 1e-9, "Cauchy-Schwarz inequality violated"
+assert sum(x * y for x, y in zip(a, [0, 0, 0])) == 0, "Dot product with zero vector must be zero"
+
+random.seed(42)
+for _ in range(5):
+    v1 = [random.randint(-10, 10) for _ in range(4)]
+    v2 = [random.randint(-10, 10) for _ in range(4)]
+    expected_prod = sum(x * y for x, y in zip(v1, v2))
+    assert sum(x * y for x, y in zip(v1, v2)) == expected_prod, "Seeded dot product computation mismatch"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 dot product invariants satisfied.")
 print("✓ [TEST PASSED] Vector dot product calculation verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Vector dot product calculation verified.',
@@ -308,9 +376,32 @@ print(f"Short Document Vector: {short_doc}")
 print(f"10x Long Document Vector: {long_doc}")
 print(f"Angular Cosine Similarity: {round(sim, 2)}")
 `,
-          testCode: `assert round(sim, 2) == 1.0, f"Identical direction must yield 1.0 similarity, got {sim}"
+          testCode: `import math
+import random
+assert round(sim, 2) == 1.0, f"Identical direction must yield 1.0 similarity, got {sim}"
 assert cosine_sim([1, 0], [0, 1]) == 0.0, "Orthogonal vectors must yield 0.0 similarity"
 assert cosine_sim([1, 0], [-1, 0]) == -1.0, "Opposite vectors must yield -1.0 similarity"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert -1.0 - 1e-9 <= sim <= 1.0 + 1e-9, f"Cosine similarity out of range: {sim}"
+assert abs(cosine_sim(short_doc, long_doc) - cosine_sim(long_doc, short_doc)) < 1e-9, "Cosine similarity must be symmetric"
+
+scaled_v = [x * 50.0 for x in short_doc]
+assert abs(cosine_sim(scaled_v, long_doc) - 1.0) < 1e-9, "Scale invariance violated"
+assert abs(cosine_sim([3.14, -2.71], [3.14, -2.71]) - 1.0) < 1e-9, "Self-similarity must be 1.0"
+
+random.seed(42)
+for _ in range(5):
+    t1 = [random.uniform(-10, 10) for _ in range(3)]
+    t2 = [random.uniform(-10, 10) for _ in range(3)]
+    ref_dot = sum(a * b for a, b in zip(t1, t2))
+    ref_m1 = math.sqrt(sum(a*a for a in t1))
+    ref_m2 = math.sqrt(sum(b*b for b in t2))
+    expected_cs = ref_dot / (ref_m1 * ref_m2)
+    assert abs(cosine_sim(t1, t2) - expected_cs) < 1e-6, "Seeded cosine similarity computation mismatch"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 angular similarity invariants satisfied.")
 print("✓ [TEST PASSED] Angular cosine similarity function verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Angular cosine similarity function verified.',
@@ -392,11 +483,30 @@ scores = [round(cosine_similarity(query, doc), 3) for doc in candidates]
 print(f"Query Vector: {query}")
 print(f"Candidate Scores: {scores}")
 `,
-          testCode: `assert len(scores) == 3, "Must compute exactly 3 candidate scores"
+          testCode: `import math
+import random
+assert len(scores) == 3, "Must compute exactly 3 candidate scores"
 assert scores[0] == 0.998, f"Expected Doc 1 to score 0.998, got {scores[0]}"
 assert scores[1] == 0.685, f"Expected Doc 2 to score 0.685, got {scores[1]}"
 assert scores[2] == -0.141, f"Expected Doc 3 to score -0.141, got {scores[2]}"
 assert scores[0] > scores[1] > scores[2], "Scores must rank candidate 1 highest"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert isinstance(scores, list), "scores must be a list"
+for s in scores:
+    assert isinstance(s, (int, float)), "Each score must be numeric"
+    assert -1.0 <= s <= 1.0, f"Score out of cosine range: {s}"
+
+for doc, expected_s in zip(candidates, [0.998, 0.685, -0.141]):
+    calc_s = round(cosine_similarity(query, doc), 3)
+    assert calc_s == expected_s, f"Recalculated similarity mismatch: {calc_s} != {expected_s}"
+
+unseen_candidate = [-0.8, -0.6]
+unseen_score = round(cosine_similarity(query, unseen_candidate), 3)
+assert unseen_score == -1.0, f"Opposite vector score should be -1.0, got {unseen_score}"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 multi-candidate ranking invariants satisfied.")
 print("✓ [TEST PASSED] Multi-candidate cosine ranking matrix verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Multi-candidate cosine ranking matrix verified.',
@@ -478,9 +588,29 @@ print(f"L1 Manhattan Distance: {manhattan}")
 print(f"L2 Euclidean Distance: {euclidean}")
 print(f"Cosine Distance      : {cos_dist}")
 `,
-          testCode: `assert manhattan == 7.0, f"Expected Manhattan 7.0, got {manhattan}"
+          testCode: `import math
+import random
+assert manhattan == 7.0, f"Expected Manhattan 7.0, got {manhattan}"
 assert euclidean == 5.0, f"Expected Euclidean 5.0, got {euclidean}"
 assert cos_dist == 0.0077, f"Expected Cosine distance 0.0077, got {cos_dist}"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+assert euclidean <= manhattan, f"Euclidean distance ({euclidean}) cannot exceed Manhattan ({manhattan})"
+assert manhattan >= 0.0 and euclidean >= 0.0 and cos_dist >= 0.0, "All distance metrics must be non-negative"
+assert sum(abs(a - b) for a, b in zip(p, p)) == 0.0, "Self Manhattan distance must be 0"
+assert math.sqrt(sum((a - b)**2 for a, b in zip(p, p))) == 0.0, "Self Euclidean distance must be 0"
+assert 0.0 <= cos_dist <= 2.0, f"Cosine distance {cos_dist} out of bounds [0, 2]"
+
+random.seed(42)
+for _ in range(5):
+    t_p = [random.uniform(-10, 10) for _ in range(3)]
+    t_q = [random.uniform(-10, 10) for _ in range(3)]
+    l1 = sum(abs(a - b) for a, b in zip(t_p, t_q))
+    l2 = math.sqrt(sum((a - b)**2 for a, b in zip(t_p, t_q)))
+    assert l2 <= l1 + 1e-9, "L2 <= L1 invariant failed on random points"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 comparative metric invariants satisfied.")
 print("✓ [TEST PASSED] Tri-metric geometric comparison verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Tri-metric geometric comparison verified.',
@@ -567,10 +697,34 @@ print(f"Indexed {store.count()} documents successfully.")
 for doc in store.documents:
     print(f"  [{doc['id']}] {doc['text']}")
 `,
-          testCode: `assert store.count() == 2, f"Expected 2 documents, got {store.count()}"
+          testCode: `import random
+assert store.count() == 2, f"Expected 2 documents, got {store.count()}"
 assert store.documents[0]["id"] == "doc1"
 assert store.documents[1]["id"] == "doc2"
 assert len(store.documents[0]["vector"]) == 3
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+dyn_store = SimpleVectorStore()
+assert dyn_store.count() == 0, "Fresh vector store must have count 0"
+for i in range(5):
+    dyn_store.add(f"test_{i}", f"Text {i}", [0.1 * i, 0.2 * i])
+    assert dyn_store.count() == i + 1, f"Store count must match inserted documents: {dyn_store.count()}"
+
+assert set(dyn_store.documents[0].keys()) == {"id", "text", "vector"}, "Document dictionary schema must have id, text, vector"
+test_vec = [1.0, 2.0, 3.0]
+dyn_store.add("vec_test", "content", test_vec)
+assert dyn_store.documents[-1]["vector"] == [1.0, 2.0, 3.0], "Vector data corrupted on storage"
+
+ids = [d["id"] for d in dyn_store.documents]
+assert len(ids) == len(set(ids)), "Document IDs must be unique"
+
+store_a = SimpleVectorStore()
+store_b = SimpleVectorStore()
+store_a.add("a1", "t", [0.1])
+assert store_b.count() == 0, "VectorStore instances must not share class-level mutable state"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 vector store indexing invariants satisfied.")
 print("✓ [TEST PASSED] In-memory vector store indexing verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] In-memory vector store indexing verified.',
@@ -665,10 +819,31 @@ print("Top 2 Retrieved Documents:")
 for score, doc in top_2:
     print(f"  Score: {round(score, 4)} | [{doc['id']}] {doc['text']}")
 `,
-          testCode: `assert len(top_2) == 2, "Must return exactly top 2 items"
+          testCode: `import math
+import random
+assert len(top_2) == 2, "Must return exactly top 2 items"
 assert top_2[0][1]["id"] in ["doc1", "doc3"], "Top document must be doc1 or doc3"
 assert top_2[1][1]["id"] in ["doc1", "doc3"], "Second document must be doc1 or doc3"
 assert top_2[0][0] >= top_2[1][0], "Results must be sorted in descending order"
+print("✓ [VISIBLE TESTS PASSED]")
+
+# --- Hidden Invariant Verification ---
+doc2_score = [s for s, d in scored_docs if d["id"] == "doc2"][0]
+assert top_2[1][0] > doc2_score, f"Second retrieved score ({top_2[1][0]}) must exceed excluded doc2 ({doc2_score})"
+
+garden_query = [-0.55, 0.81, 0.12]
+garden_scores = [(cosine_sim(garden_query, d["vector"]), d) for d in documents]
+garden_scores.sort(key=lambda x: x[0], reverse=True)
+assert garden_scores[0][1]["id"] == "doc2", "Dynamic query test failed to retrieve closest match"
+assert abs(garden_scores[0][0] - 1.0) < 1e-4, "Exact match query must score ~1.0"
+
+for k in [1, 2, 3]:
+    assert len(scored_docs[:k]) == k, f"Top-{k} slice returned wrong count"
+
+for i in range(len(scored_docs) - 1):
+    assert scored_docs[i][0] >= scored_docs[i+1][0], "Full scored candidate list is not monotonically non-increasing"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 nearest neighbor retrieval invariants satisfied.")
 print("✓ [TEST PASSED] Top-K nearest neighbor ranking verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Top-K nearest neighbor ranking verified.',
@@ -793,18 +968,37 @@ print(f"Top {len(results)} Semantic Search Results:")
 for r in results:
     print(f"  [{r['id']}] Score: {r['score']} | {r['text']}")
 `,
-          testCode: `assert len(results) == 2, f"Expected 2 results, got {len(results)}"
+          testCode: `import math
+import random
+assert len(results) == 2, f"Expected 2 results, got {len(results)}"
 assert results[0]["id"] in ["doc-1", "doc-3"], "Top result must be an AI document"
 assert results[1]["id"] in ["doc-1", "doc-3"], "Second result must be an AI document"
 assert results[0]["score"] >= results[1]["score"], "Results must be ranked descending"
+print("✓ [VISIBLE TESTS PASSED]")
 
-# Dynamic Anti-Cheat Test: probe unseen vector on fresh instance
+# --- Hidden Invariant Verification ---
 test_engine = SemanticSearchEngine()
 test_engine.add_document("t1", "Cooking Pasta", [-0.8, 0.6, 0.0])
 test_engine.add_document("t2", "Neural Networks", [0.9, 0.1, 0.4])
 res = test_engine.search([0.9, 0.1, 0.4], top_k=1)
 assert len(res) == 1 and res[0]["id"] == "t2", "Dynamic query test failed"
 assert res[0]["score"] == 1.0, f"Identical vector must yield 1.0, got {res[0]['score']}"
+
+assert len(test_engine.search([0.9, 0.1, 0.4], top_k=100)) == 2, "Top-K > corpus size must return all indexed docs"
+for item in res:
+    assert set(item.keys()) == {"id", "text", "score"}, "Search result dictionary keys mismatch"
+
+test_engine.add_document("t3", "Semi-Supervised Learning", [0.7, 0.2, 0.5])
+res_all = test_engine.search([0.9, 0.1, 0.4], top_k=3)
+for i in range(len(res_all) - 1):
+    assert res_all[i]["score"] >= res_all[i+1]["score"], "Results not sorted in descending order"
+
+test_engine.add_document("t_zero", "Zero Vector", [0.0, 0.0, 0.0])
+res_zero = test_engine.search([1.0, 0.0, 0.0], top_k=4)
+zero_match = [r for r in res_zero if r["id"] == "t_zero"][0]
+assert zero_match["score"] == 0.0, "Zero vector must yield 0.0 similarity gracefully"
+
+print("✓ [HIDDEN TESTS PASSED] 5/5 semantic search engine invariants satisfied.")
 print("✓ [TEST PASSED] Phase 2 Boss Project Semantic Search Engine verified.")
 `,
           expectedOutput: '✓ [TEST PASSED] Phase 2 Boss Project Semantic Search Engine verified.',
