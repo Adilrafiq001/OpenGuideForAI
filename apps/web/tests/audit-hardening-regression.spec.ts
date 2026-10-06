@@ -59,11 +59,11 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     await page.reload();
 
     // The announcement pill should be rendered on landing page for new users
-    const announcementPill = page.locator('text=OpenGuide v1.1.0 Live');
+    const announcementPill = page.locator('text=/OpenGuide v\\d+\\.\\d+\\.\\d+ Live/');
     await expect(announcementPill).toBeVisible();
 
     // Verify announcement text contains Bluee mascot name
-    const subtext = page.locator('text=50+ Bluee answers');
+    const subtext = page.locator('text=/50\\+.*Bluee/i');
     await expect(subtext).toBeVisible();
 
     // Dismissing it updates storage and removes the pill

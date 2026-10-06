@@ -366,14 +366,14 @@ function StudioAnnouncementPill({
   if (lastSeenVersion === CURRENT_STUDIO_VERSION) return null;
 
   return (
-    <div className="fixed top-20 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-auto">
+    <div className="fixed bottom-28 md:bottom-32 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
       <div className="min-w-0">
         <div className="flex items-center gap-1.5 font-bold text-[var(--color-text-primary)]">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>OpenGuide v{CURRENT_STUDIO_VERSION} Live</span>
         </div>
         <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
-          Track 4, Mobile IDE Tabs, 50+ Bluee answers
+          Track 4, Mobile IDE Tabs, 50+ Bluee Offline Guides
         </p>
       </div>
       <div className="flex items-center gap-1.5 shrink-0">

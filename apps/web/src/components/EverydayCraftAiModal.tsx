@@ -4,6 +4,8 @@ import {
   X, 
   Compass, 
   HeartHandshake,
+  ShieldCheck,
+  BookOpen,
   Scissors, 
   Hammer, 
   GraduationCap, 
@@ -36,11 +38,13 @@ import {
   type SpectrumTier
 } from '../data/universalSpectrumData';
 
-export type CraftRole = SpectrumTier | 'salon' | 'cobbler' | 'mechanic' | 'mechanical' | 'software' | 'beginner' | 'family-budget';
+export type CraftRole = SpectrumTier | 'salon' | 'cobbler' | 'mechanic' | 'mechanical' | 'software' | 'beginner' | 'family-budget' | 'senior' | 'student' | string;
 
 const ICON_MAP: Record<string, typeof Compass> = {
   Compass,
   HeartHandshake,
+  ShieldCheck,
+  BookOpen,
   Scissors,
   Hammer,
   Wrench,

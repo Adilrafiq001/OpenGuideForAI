@@ -342,6 +342,7 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
   height: 100%;
   padding: 6px;
   opacity: 0;
+  overflow: hidden;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }

@@ -320,7 +320,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         {/* 6-Stage Universal Continuum Stage Switcher */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
             {SPECTRUM_TIERS.map((tier) => {
               const isSelected = activeLandingTier === tier.id;
               return (
@@ -330,14 +330,14 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                     setActiveLandingTier(tier.id);
                     setLandingSpectrumSearch('');
                   }}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono transition-all cursor-pointer whitespace-nowrap shadow-sm ${
+                  className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] xl:text-xs font-mono transition-all cursor-pointer shadow-sm text-center whitespace-nowrap ${
                     isSelected
-                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-105'
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-[1.02]'
                       : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)]'
                   }`}
                 >
                   <span 
-                    className="w-2 h-2 rounded-full"
+                    className="w-2 h-2 rounded-full shrink-0"
                     style={{ backgroundColor: tier.color }}
                   />
                   <span>Stage {tier.number}: {tier.shortTitle}</span>
@@ -350,7 +350,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           <div className="mt-4 p-4 rounded-2xl bg-[var(--color-secondary)]/50 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <span 
-                className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full text-black uppercase"
+                className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase text-white shadow-xs inline-block"
                 style={{ backgroundColor: activeTierDetails.color }}
               >
                 Stage {activeTierDetails.number} • {activeTierDetails.title}
@@ -375,18 +375,18 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         {/* Search Input across the entire continuum */}
         <div className="relative mb-8 max-w-xl">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
           <input
             type="text"
             value={landingSpectrumSearch}
             onChange={(e) => setLandingSpectrumSearch(e.target.value)}
-            placeholder="Type any trade, question, or role (e.g. hair salon, cobbler, engineer, budget, teacher, what is an LLM)..."
-            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
+            placeholder="Search trades, questions, or roles (e.g. cobbler, salon, plumber)..."
+            className="w-full pl-10 pr-12 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
           />
           {landingSpectrumSearch && (
             <button
               onClick={() => setLandingSpectrumSearch('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
             >
               Clear
             </button>
@@ -402,7 +402,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 setSelectedCraftRole(item.id as CraftRole);
                 setIsCraftModalOpen(true);
               }}
-              className="group p-5 rounded-2xl bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-between"
+              className="group p-5 rounded-2xl bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 flex flex-col justify-between min-h-[210px]"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -419,7 +419,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2">
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
                   {item.tagline}
                 </p>
               </div>
@@ -489,7 +489,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {LLM_PLAIN_ENGLISH_GUIDE.samplePrompts.map((s, idx) => (
                   <button
                     key={idx}

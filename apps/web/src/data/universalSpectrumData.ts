@@ -140,6 +140,54 @@ print(f"Weekly Budget: \${weekly_allowance:.2f}/week")`,
     recommendedTrack: 'Track 0: Absolute Zero (Variables & Math)',
     trackUrl: '/track/0/intro'
   },
+  {
+    id: 'senior',
+    tier: 'tier0',
+    title: 'Senior & Lifelong Learner',
+    badge: 'ACCESSIBLE & SAFE',
+    category: 'Universal Foundations',
+    accent: '#8b5cf6',
+    iconName: 'ShieldCheck',
+    tagline: 'Spot scam messages, write heartfelt family letters, and learn at your own comfortable pace.',
+    realWorldChallenge: 'Receiving suspicious text messages claiming a package is delayed, or feeling left behind by fast modern tech vocabulary.',
+    plainEnglishSolution: 'AI acts as your patient digital grandchild. It reads suspicious messages to explain if they are scams, formats clear emails, and never gets impatient when you ask questions twice.',
+    promptExample: 'Is this message a scam? "USPS: Your package has an incorrect zip code. Click this link within 12 hours or pay $3 penalty."',
+    simulatedOutput: 'YES, this is a 100% scam! Here is why: The official postal service never texts you with urgent 12-hour threats or asks for random $3 fees via text links. Do NOT click the link. Simply delete the text.',
+    interactiveCodeSnippet: `# Safe Message Checking Assistant
+message = "USPS: Click link to verify zip code or pay $3"
+is_suspicious = "Click link" in message or "pay" in message
+
+print("Analyzing incoming text...")
+if is_suspicious:
+    print("WARNING: This looks like a scam message! Do not click links.")
+else:
+    print("Message appears safe.")`,
+    recommendedTrack: 'Track 0: Absolute Zero (Start Here)',
+    trackUrl: '/track/0/intro'
+  },
+  {
+    id: 'student',
+    tier: 'tier0',
+    title: 'Student & Homework Concept Learner',
+    badge: 'SOCRATIC INTUITION',
+    category: 'Universal Foundations',
+    accent: '#a855f7',
+    iconName: 'BookOpen',
+    tagline: 'Understand difficult science and math concepts through vivid real-life analogies, not rote memorization.',
+    realWorldChallenge: 'Stuck on abstract textbook definitions like photosynthesis or gravity without understanding what is actually happening physically.',
+    plainEnglishSolution: 'AI uses the Socratic method to give you intuitive analogies using pizza slices, kitchen recipes, and sports rather than dry mathematical jargon.',
+    promptExample: 'Explain photosynthesis using the analogy of a solar-powered bakery making sugar cakes.',
+    simulatedOutput: 'Think of a leaf as a tiny green bakery:\\n1. Sunlight is the solar electricity powering the oven.\\n2. Water from roots is the dough liquid.\\n3. Carbon dioxide from the air is the flour.\\n4. Glucose (sugar) is the freshly baked cake the plant eats.\\n5. Oxygen is the clean steam released out the bakery window for us to breathe!',
+    interactiveCodeSnippet: `# Photosynthesis Recipe Model
+sunlight_hours = 6
+water_cups = 2
+energy_created = sunlight_hours * water_cups * 10
+
+print(f"Sunlight: {sunlight_hours} hrs | Water: {water_cups} cups")
+print(f"Energy produced for plant: {energy_created} Joules")`,
+    recommendedTrack: 'Track 0: Absolute Zero (Conditionals & Loops)',
+    trackUrl: '/track/0/intro'
+  },
 
   // ==========================================
   // TIER 1: EVERYDAY VOCATIONS & REAL-WORLD TRADES

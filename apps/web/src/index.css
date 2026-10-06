@@ -107,6 +107,15 @@ body {
   height: 0;
 }
 
+/* Cross-Browser Scrollbar Hiding Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Innovative Horizontal Scroll Fade Mask */
 .scroll-mask-x {
   mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
