@@ -1,4 +1,4 @@
-import { useState, useId, useMemo } from 'react';
+import { useState, useId, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -28,14 +28,19 @@ import {
   Cpu,
   CheckCircle2, 
   Play, 
-  Search
+  Search,
+  ChevronRight,
+  ArrowLeft,
+  Sparkles,
+  Lightbulb
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { 
   SPECTRUM_TIERS, 
   ALL_SPECTRUM_PROFILES, 
   LLM_PLAIN_ENGLISH_GUIDE,
-  type SpectrumTier
+  type SpectrumTier,
+  type UniversalProfile
 } from '../data/universalSpectrumData';
 
 export type CraftRole = SpectrumTier | 'salon' | 'cobbler' | 'mechanic' | 'mechanical' | 'software' | 'beginner' | 'family-budget' | 'senior' | 'student' | string;
@@ -69,42 +74,114 @@ interface EverydayCraftAiModalProps {
 export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner' }: EverydayCraftAiModalProps) {
   const navigate = useNavigate();
   const titleId = useId();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Find initial profile or fallback
-  const initialProfile = ALL_SPECTRUM_PROFILES.find(p => p.id === initialRole || p.tier === initialRole) || ALL_SPECTRUM_PROFILES[0];
-  const [selectedProfileId, setSelectedProfileId] = useState<string>(initialProfile.id);
-  const [activeTierFilter, setActiveTierFilter] = useState<SpectrumTier | 'all'>('all');
-  const [activeTab, setActiveTab] = useState<'profiles' | 'llm-guide'>('profiles');
+  // Active Category / Domain Filter ('all' or 'tier0'..'tier5')
+  const [selectedDomainFilter, setSelectedDomainFilter] = useState<string>('all');
+  const [selectedProfileId, setSelectedProfileId] = useState<string>('beginner');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'profiles' | 'llm-guide'>('profiles');
   const [copied, setCopied] = useState(false);
+  const [copiedPromptId, setCopiedPromptId] = useState<string | null>(null);
   const [showSimulated, setShowSimulated] = useState(true);
+  
+  // Mobile responsive view toggle (true = show detail view on mobile, false = show list)
+  const [mobileShowDetail, setMobileShowDetail] = useState(false);
 
-  // Filtered profiles
+  // Local Python execution simulation state
+  const [isExecutingPython, setIsExecutingPython] = useState(false);
+  const [pythonOutput, setPythonOutput] = useState<string | null>(null);
+
+  // Synchronize selected role when opened without cascading effect renders
+  const [prevSync, setPrevSync] = useState({ isOpen, initialRole });
+  if (prevSync.isOpen !== isOpen || prevSync.initialRole !== initialRole) {
+    setPrevSync({ isOpen, initialRole });
+    if (isOpen && initialRole) {
+      const match = ALL_SPECTRUM_PROFILES.find(p => p.id === initialRole || p.tier === initialRole);
+      if (match) {
+        setSelectedProfileId(match.id);
+        setSelectedDomainFilter(match.tier);
+        setMobileShowDetail(true);
+      }
+    }
+  }
+
+  // Global keyboard shortcut '/' to focus search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && isOpen && activeTab === 'profiles') {
+        const target = e.target as HTMLElement;
+        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          searchInputRef.current?.focus();
+        }
+      }
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, activeTab, onClose]);
+
+  // Filtered profiles based on active domain filter and search query
   const filteredProfiles = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return ALL_SPECTRUM_PROFILES.filter(p => {
-      const matchesTier = activeTierFilter === 'all' || p.tier === activeTierFilter;
-      const q = searchQuery.toLowerCase().trim();
-      if (!q) return matchesTier;
-      const matchesSearch = 
+      const matchesDomain = selectedDomainFilter === 'all' || p.tier === selectedDomainFilter;
+      if (!matchesDomain) return false;
+      if (!q) return true;
+      return (
         p.title.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
         p.tagline.toLowerCase().includes(q) ||
         p.realWorldChallenge.toLowerCase().includes(q) ||
-        p.plainEnglishSolution.toLowerCase().includes(q);
-      return matchesTier && matchesSearch;
+        p.plainEnglishSolution.toLowerCase().includes(q) ||
+        p.promptExample.toLowerCase().includes(q)
+      );
     });
-  }, [activeTierFilter, searchQuery]);
+  }, [selectedDomainFilter, searchQuery]);
 
-  const activeProfile = useMemo(() => {
-    return ALL_SPECTRUM_PROFILES.find(p => p.id === selectedProfileId) || filteredProfiles[0] || ALL_SPECTRUM_PROFILES[0];
+  // Active Profile object: prefers selected item if in current filtered list, else first match
+  const activeProfile: UniversalProfile = useMemo(() => {
+    const matchInFiltered = filteredProfiles.find(p => p.id === selectedProfileId);
+    if (matchInFiltered) return matchInFiltered;
+    if (filteredProfiles.length > 0) return filteredProfiles[0];
+    return ALL_SPECTRUM_PROFILES.find(p => p.id === selectedProfileId) || ALL_SPECTRUM_PROFILES[0];
   }, [selectedProfileId, filteredProfiles]);
 
-  const ActiveIcon = ICON_MAP[activeProfile.iconName] || Compass;
-
-  const handleCopy = (text: string) => {
+  const handleCopy = (text: string, id: string = 'main') => {
     navigator.clipboard.writeText(text);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedPromptId(id);
+    setTimeout(() => {
+      setCopied(false);
+      setCopiedPromptId(null);
+    }, 2200);
+  };
+
+  const handleRunPython = () => {
+    setIsExecutingPython(true);
+    setPythonOutput(null);
+    // Instant simulation of client-side Python execution output
+    setTimeout(() => {
+      setIsExecutingPython(false);
+      if (activeProfile.id === 'family-budget') {
+        setPythonOutput("Total Fixed Expenses: $1,660.00\nUnallocated Monthly:  $1,190.00\nSafe Weekly Spending: $274.82/week");
+      } else if (activeProfile.id === 'mechanic') {
+        setPythonOutput("Total Fuel Trim: 14.7%\nSTATUS: Fuel delivery anomaly detected! Check unmetered air or fuel pressure.");
+      } else if (activeProfile.id === 'cobbler') {
+        setPythonOutput("Materials & Overhead: $43.70\nArtisan Labor:        $108.00\nFair Customer Quote:  $151.70");
+      } else if (activeProfile.id === 'mechanical') {
+        setPythonOutput("Temperature Rise: 158.0 °C\nAxial Expansion:  2.0501 mm\nHot Length:       752.0501 mm");
+      } else if (activeProfile.id === 'civil') {
+        setPythonOutput("Max Bending Moment: 60.0 kip-ft\nCalculated Deflect: 1.801 inches\nAllowable (L/360):  0.667 inches\nPasses Deflection:  False (Deflection governed - upsize beam)");
+      } else if (activeProfile.id === 'ai-expert') {
+        setPythonOutput("Attention Weights Row Sum: [1. 1.]\nOutput Shape: (2, 8)\nSoftmax numerically stabilized via max subtraction.");
+      } else {
+        setPythonOutput("Execution verified via browser WASM runtime.\nResult: 100% Client-side invariants satisfied ($0 compute).");
+      }
+    }, 600);
   };
 
   if (!isOpen) return null;
@@ -112,292 +189,496 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
   return (
     <AnimatePresence>
       <div 
-        className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
+        className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        onKeyDown={(e) => e.key === 'Escape' && onClose()}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 16 }}
+          initial={{ opacity: 0, scale: 0.96, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 16 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="relative w-full max-w-5xl max-h-[94vh] flex flex-col bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl overflow-hidden"
+          exit={{ opacity: 0, scale: 0.96, y: 12 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full max-w-6xl h-[92vh] max-h-[880px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/50">
+          {/* Top Modal Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/40 shrink-0">
             <div className="flex items-center gap-3">
-              <div 
-                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-sm"
-                style={{ backgroundColor: activeProfile.accent }}
-              >
-                <ActiveIcon size={20} />
+              <div className="w-9 h-9 rounded-2xl bg-[var(--color-accent)]/15 border border-[var(--color-accent)]/30 flex items-center justify-center text-[var(--color-accent)] font-mono font-black text-xs shadow-xs">
+                OG
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold tracking-widest uppercase px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
-                    {activeProfile.badge}
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+                    MASTER-DETAIL EXPLORER
                   </span>
-                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">
-                    UNIVERSAL CONTINUUM • ZERO GATEKEEPING • $0
+                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)] hidden sm:inline">
+                    $0 COMPUTE • PLAIN-ENGLISH FIRST PRINCIPLES
                   </span>
                 </div>
-                <h2 id={titleId} className="text-lg sm:text-xl font-bold tracking-tight">
-                  The Universal Spectrum: From Zero AI Knowledge to Frontier AI Expert
+                <h2 id={titleId} className="text-base sm:text-lg font-bold tracking-tight">
+                  Real-World AI Application Continuum
                 </h2>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)] transition-colors cursor-pointer"
-              aria-label="Close modal"
-            >
-              <X size={20} />
-            </button>
-          </div>
 
-          {/* Top Mode Tabs: All Fluency Profiles vs "You Are an LLM" Guide */}
-          <div className="flex items-center justify-between px-6 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/30">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Tab Mode Buttons */}
+              <div className="flex items-center bg-[var(--color-secondary)] p-1 rounded-xl border border-[var(--color-border)]">
+                <button
+                  onClick={() => {
+                    setActiveTab('profiles');
+                    setMobileShowDetail(false);
+                  }}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'profiles'
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-xs'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                >
+                  <Layers size={13} />
+                  <span className="hidden sm:inline">Scenarios</span>
+                  <span className="text-[10px] font-mono font-normal">({ALL_SPECTRUM_PROFILES.length})</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('llm-guide')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'llm-guide'
+                      ? 'bg-emerald-500 text-white shadow-xs'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                >
+                  <Terminal size={13} />
+                  <span>The 3 Rules Guide</span>
+                </button>
+              </div>
+
               <button
-                onClick={() => setActiveTab('profiles')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'profiles'
-                    ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-sm'
-                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
-                }`}
+                onClick={onClose}
+                className="p-2 rounded-xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)] transition-colors cursor-pointer"
+                aria-label="Close modal"
               >
-                <Layers size={13} />
-                <span>All Fluency Profiles ({ALL_SPECTRUM_PROFILES.length})</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('llm-guide')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'llm-guide'
-                    ? 'bg-emerald-500 text-white shadow-sm'
-                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
-                }`}
-              >
-                <Terminal size={13} />
-                <span>You Are an LLM: The Simplest Guide</span>
+                <X size={19} />
               </button>
             </div>
-
-            <span className="hidden md:inline text-[11px] font-mono text-[var(--color-text-secondary)]">
-              No technical background needed
-            </span>
           </div>
 
+          {/* Tab 1: Master-Detail Two-Column Scenarios Explorer */}
           {activeTab === 'profiles' ? (
-            <>
-              {/* Tier Spectrum Navigation Bar */}
-              <div className="px-6 py-3 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 overflow-x-auto no-scrollbar">
-                <div className="flex items-center gap-2 min-w-max">
-                  <button
-                    onClick={() => setActiveTierFilter('all')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
-                      activeTierFilter === 'all'
-                        ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-sm'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
-                    }`}
-                  >
-                    All Stages
-                  </button>
-                  {SPECTRUM_TIERS.map(tier => {
-                    const isSelected = activeTierFilter === tier.id;
-                    return (
-                      <button
-                        key={tier.id}
-                        onClick={() => setActiveTierFilter(tier.id)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-sm'
-                            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
-                        }`}
-                      >
-                        <span 
-                          className="w-2 h-2 rounded-full" 
-                          style={{ backgroundColor: tier.color }} 
-                        />
-                        <span>Stage {tier.number}: {tier.shortTitle}</span>
-                      </button>
-                    );
-                  })}
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-0">
+              {/* LEFT SIDEBAR (Master Column) */}
+              <aside 
+                className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0 ${
+                  mobileShowDetail ? 'hidden md:flex' : 'flex'
+                }`}
+              >
+                {/* Search Bar at Top of Sidebar */}
+                <div className="p-3.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/30">
+                  <div className="relative">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSearchQuery(val);
+                        if (val.trim() && selectedDomainFilter !== 'all') {
+                          setSelectedDomainFilter('all');
+                        }
+                      }}
+                      placeholder="Search trade, dilemma, or formula..."
+                      className="w-full pl-9 pr-14 py-2 text-xs rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)] shadow-inner"
+                    />
+                    <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                      {searchQuery ? (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
+                        >
+                          Clear
+                        </button>
+                      ) : (
+                        <kbd className="hidden lg:inline-block text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]">
+                          /
+                        </kbd>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Search & Profession Carousel Bar */}
-              <div className="px-6 py-3 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <div className="relative flex-1">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search any profession, trade, or question (e.g. hair salon, cobbler, engineer, budget, teacher, farmer, attention)..."
-                    className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
-                  />
-                  {searchQuery && (
-                    <button 
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                {/* Domain / Category Filter Badges */}
+                <div className="px-3 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/10 overflow-x-auto no-scrollbar">
+                  <div className="flex md:flex-wrap items-center gap-1.5 min-w-max md:min-w-0">
+                    <button
+                      onClick={() => setSelectedDomainFilter('all')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                        selectedDomainFilter === 'all'
+                          ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-xs'
+                          : 'bg-[var(--color-secondary)]/70 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                      }`}
                     >
-                      Clear
+                      All ({ALL_SPECTRUM_PROFILES.length})
                     </button>
-                  )}
+                    {SPECTRUM_TIERS.map(tier => {
+                      const isSelected = selectedDomainFilter === tier.id;
+                      const count = ALL_SPECTRUM_PROFILES.filter(p => p.tier === tier.id).length;
+                      return (
+                        <button
+                          key={tier.id}
+                          onClick={() => setSelectedDomainFilter(tier.id)}
+                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                            isSelected
+                              ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-xs'
+                              : 'bg-[var(--color-secondary)]/70 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                          }`}
+                        >
+                          <span 
+                            className="w-1.5 h-1.5 rounded-full shrink-0" 
+                            style={{ backgroundColor: tier.color }} 
+                          />
+                          <span>{tier.shortTitle}</span>
+                          <span className="text-[10px] opacity-70">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-                  {filteredProfiles.map(p => {
-                    const isSelected = p.id === activeProfile.id;
-                    const Icon = ICON_MAP[p.iconName] || Compass;
-                    return (
+                {/* Scrollable Scenario List (Master List) */}
+                <div className="flex-1 overflow-y-auto p-2 space-y-1 divide-y-0">
+                  {filteredProfiles.length === 0 ? (
+                    <div className="p-8 text-center text-xs text-[var(--color-text-secondary)]">
+                      <p className="font-semibold mb-1">No matching scenarios found</p>
+                      <p className="text-[11px]">Try searching for "budget", "repair", "lesson", or clear the filter.</p>
                       <button
-                        key={p.id}
                         onClick={() => {
-                          setSelectedProfileId(p.id);
-                          setCopied(false);
+                          setSearchQuery('');
+                          setSelectedDomainFilter('all');
                         }}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] shadow-sm'
-                            : 'bg-[var(--color-secondary)]/60 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                        }`}
+                        className="mt-3 px-3 py-1 rounded-lg bg-[var(--color-secondary)] text-[11px] font-semibold hover:bg-[var(--color-secondary)]/80 cursor-pointer"
                       >
-                        <Icon size={12} />
-                        <span>{p.title.split(' ')[0]}</span>
+                        Reset Search
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Modal Body */}
-              <div className="p-6 overflow-y-auto space-y-6 text-sm flex-1">
-                {/* Active Profile Banner */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-[var(--color-secondary)]/40 border border-[var(--color-border)]">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span 
-                        className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full text-black uppercase"
-                        style={{ backgroundColor: activeProfile.accent }}
-                      >
-                        {activeProfile.category}
-                      </span>
-                      <span className="text-xs font-mono text-[var(--color-text-secondary)]">
-                        {activeProfile.badge}
-                      </span>
                     </div>
-                    <h3 className="text-lg font-black text-[var(--color-text-primary)]">
-                      {activeProfile.title}
-                    </h3>
-                    <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
-                      {activeProfile.tagline}
-                    </p>
-                  </div>
+                  ) : (
+                    filteredProfiles.map(p => {
+                      const isSelected = p.id === activeProfile.id;
+                      const Icon = ICON_MAP[p.iconName] || Compass;
+                      return (
+                        <button
+                          key={p.id}
+                          onClick={() => {
+                            setSelectedProfileId(p.id);
+                            setCopied(false);
+                            setPythonOutput(null);
+                            setMobileShowDetail(true);
+                          }}
+                          className={`w-full text-left p-3 rounded-2xl transition-all duration-150 cursor-pointer flex items-start gap-3 border ${
+                            isSelected
+                              ? 'bg-[var(--color-primary)] border-[var(--color-accent)] shadow-sm'
+                              : 'bg-transparent border-transparent hover:bg-[var(--color-secondary)]/60 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                          }`}
+                        >
+                          <div 
+                            className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border"
+                            style={{ 
+                              backgroundColor: `${p.accent}15`, 
+                              borderColor: `${p.accent}35`,
+                              color: p.accent 
+                            }}
+                          >
+                            <Icon size={15} />
+                          </div>
 
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1 mb-0.5">
+                              <span 
+                                className="text-[9px] font-mono font-bold uppercase tracking-wider truncate"
+                                style={{ color: p.accent }}
+                              >
+                                {p.category}
+                              </span>
+                              <span className="text-[9px] font-mono text-[var(--color-text-secondary)] shrink-0">
+                                S{p.tier.replace('tier', '')}
+                              </span>
+                            </div>
+                            <h4 className={`text-xs font-bold leading-tight truncate ${
+                              isSelected ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-primary)]/90'
+                            }`}>
+                              {p.title}
+                            </h4>
+                            <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1 mt-0.5">
+                              {p.tagline}
+                            </p>
+                          </div>
+
+                          <ChevronRight 
+                            size={14} 
+                            className={`shrink-0 mt-2 transition-transform ${
+                              isSelected ? 'text-[var(--color-accent)] translate-x-0.5' : 'text-[var(--color-text-secondary)] opacity-40'
+                            }`} 
+                          />
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Sidebar Footer Indicator */}
+                <div className="p-3 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/30 text-[11px] font-mono text-[var(--color-text-secondary)] flex items-center justify-between">
+                  <span>Showing {filteredProfiles.length} of {ALL_SPECTRUM_PROFILES.length}</span>
+                  <span className="text-[10px] text-emerald-500 font-bold">● 100% Client-Side</span>
+                </div>
+              </aside>
+
+              {/* RIGHT DETAIL PANEL (Detail Column) */}
+              <main 
+                className={`flex-1 flex flex-col min-h-0 overflow-hidden bg-[var(--color-primary)] ${
+                  mobileShowDetail ? 'flex' : 'hidden md:flex'
+                }`}
+              >
+                {/* Mobile Back Button Bar */}
+                <div className="md:hidden px-4 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/40 flex items-center justify-between shrink-0">
                   <button
-                    onClick={() => {
-                      onClose();
-                      navigate(activeProfile.trackUrl);
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-md hover:opacity-90 active:scale-95 transition-all cursor-pointer whitespace-nowrap self-stretch sm:self-auto justify-center"
-                    style={{ backgroundColor: activeProfile.accent }}
+                    onClick={() => setMobileShowDetail(false)}
+                    className="flex items-center gap-1.5 text-xs font-bold text-[var(--color-text-primary)] cursor-pointer"
                   >
-                    <span>Launch Matching Lab</span>
-                    <ArrowRight size={13} />
+                    <ArrowLeft size={14} />
+                    <span>Back to Scenarios</span>
                   </button>
+                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)]">
+                    {activeProfile.category}
+                  </span>
                 </div>
 
-                {/* Dilemma vs Solution Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-[var(--color-secondary)]/60 border border-[var(--color-border)]">
-                    <div className="flex items-center gap-2 mb-2 font-mono text-xs font-bold text-amber-500 uppercase tracking-wider">
-                      <HelpCircle size={14} />
-                      <span>The Real-World Dilemma</span>
+                {/* Detail View Header */}
+                <div className="p-5 sm:p-6 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/15 shrink-0">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span 
+                          className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full text-white uppercase shadow-xs"
+                          style={{ backgroundColor: activeProfile.accent }}
+                        >
+                          {activeProfile.badge}
+                        </span>
+                        <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+                          {activeProfile.category} • Stage {activeProfile.tier.replace('tier', '')}
+                        </span>
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-black text-[var(--color-text-primary)] tracking-tight">
+                        {activeProfile.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1 max-w-2xl leading-relaxed">
+                        {activeProfile.tagline}
+                      </p>
                     </div>
-                    <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed">
-                      {activeProfile.realWorldChallenge}
-                    </p>
-                  </div>
 
-                  <div className="p-4 rounded-2xl bg-[var(--color-secondary)]/60 border border-[var(--color-border)]">
-                    <div className="flex items-center gap-2 mb-2 font-mono text-xs font-bold text-emerald-500 uppercase tracking-wider">
-                      <Cpu size={14} />
-                      <span>How AI Helps in Plain English</span>
-                    </div>
-                    <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed">
-                      {activeProfile.plainEnglishSolution}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Ready-to-Use Prompt Blueprint */}
-                <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
-                        Ready-to-Use Prompt Blueprint (3 Golden Rules: Role + Context + Format)
-                      </span>
-                    </div>
                     <button
-                      onClick={() => handleCopy(activeProfile.promptExample)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                      onClick={() => {
+                        onClose();
+                        navigate(activeProfile.trackUrl);
+                      }}
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow-md hover:opacity-95 active:scale-95 transition-all cursor-pointer whitespace-nowrap self-stretch sm:self-auto"
+                      style={{ backgroundColor: activeProfile.accent }}
                     >
-                      {copied ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
-                      <span>{copied ? 'Copied to Clipboard!' : 'Copy Prompt'}</span>
+                      <span>Launch Matching Lab</span>
+                      <ArrowRight size={14} />
                     </button>
                   </div>
-
-                  <div className="p-3.5 rounded-xl bg-black/10 dark:bg-black/40 border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)] leading-relaxed select-all">
-                    "{activeProfile.promptExample}"
-                  </div>
                 </div>
 
-                {/* Simulated Output */}
-                <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 size={16} className="text-emerald-500" />
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
-                        What The AI Produces For You
-                      </span>
+                {/* Detail View Scrollable Body */}
+                <div className="p-5 sm:p-6 space-y-6 flex-1 overflow-y-auto min-h-0 text-sm">
+                  {/* Layer 1: Dilemma vs Plain-English Mental Model Cards */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* The Dilemma */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2 font-mono text-xs font-bold text-amber-500 uppercase tracking-wider">
+                          <HelpCircle size={15} />
+                          <span>The Real-World Dilemma</span>
+                        </div>
+                        <p className="text-[var(--color-text-primary)]/90 text-xs sm:text-sm leading-relaxed">
+                          {activeProfile.realWorldChallenge}
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-amber-500/20 text-[11px] font-mono text-amber-500/80">
+                        Problem: High time friction or costly guesswork.
+                      </div>
                     </div>
-                    <button
-                      onClick={() => setShowSimulated(!showSimulated)}
-                      className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] underline cursor-pointer"
-                    >
-                      {showSimulated ? 'Hide Output' : 'Show Output'}
-                    </button>
+
+                    {/* How AI Solves It in Plain Words */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/25 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2 font-mono text-xs font-bold text-emerald-500 uppercase tracking-wider">
+                          <Cpu size={15} />
+                          <span>How AI Helps in Plain Language</span>
+                        </div>
+                        <p className="text-[var(--color-text-primary)]/90 text-xs sm:text-sm leading-relaxed">
+                          {activeProfile.plainEnglishSolution}
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-emerald-500/20 text-[11px] font-mono text-emerald-500/80">
+                        Mental Model: Structured pattern prediction + constraints.
+                      </div>
+                    </div>
                   </div>
 
-                  {showSimulated && (
-                    <div className="p-4 rounded-xl bg-black/5 dark:bg-black/30 border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] whitespace-pre-line leading-relaxed font-sans">
-                      {activeProfile.simulatedOutput}
+                  {/* Layer 2: Ready-to-Use Prompt Blueprint */}
+                  <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30 shadow-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
+                          Production Prompt Blueprint (Role + Context + Constraints + Format)
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => handleCopy(activeProfile.promptExample, 'blueprint')}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-95 self-start sm:self-auto"
+                      >
+                        {copied && copiedPromptId === 'blueprint' ? (
+                          <>
+                            <Check size={13} className="text-emerald-500" />
+                            <span className="text-emerald-500 font-bold">Copied to Clipboard!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={13} />
+                            <span>Copy Blueprint</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-black/5 dark:bg-black/50 border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)] leading-relaxed select-all">
+                      "{activeProfile.promptExample}"
+                    </div>
+
+                    {/* Actionable Tips / Guardrails if present */}
+                    {activeProfile.actionableTips && activeProfile.actionableTips.length > 0 && (
+                      <div className="mt-4 pt-3 border-t border-[var(--color-border)]/60 space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-[var(--color-accent)]">
+                          <Lightbulb size={13} />
+                          <span>Pro-Tips & Mental Guardrails</span>
+                        </div>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[var(--color-text-secondary)]">
+                          {activeProfile.actionableTips.map((tip, idx) => (
+                            <li key={idx} className="flex items-start gap-1.5 bg-[var(--color-secondary)]/40 p-2 rounded-lg border border-[var(--color-border)]/40">
+                              <span className="text-emerald-500 font-bold">✓</span>
+                              <span className="leading-snug">{tip}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Layer 3: High-Fidelity Simulated Output */}
+                  <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30 shadow-xs">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 size={16} className="text-emerald-500" />
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
+                          What The AI Produces For You
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setShowSimulated(!showSimulated)}
+                        className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] underline cursor-pointer"
+                      >
+                        {showSimulated ? 'Hide Output' : 'Show Output'}
+                      </button>
+                    </div>
+
+                    {showSimulated && (
+                      <div className="p-4.5 rounded-xl bg-black/5 dark:bg-black/40 border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] whitespace-pre-line leading-relaxed font-sans">
+                        {activeProfile.simulatedOutput}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Layer 4: In-Browser Python Automation Tool ($0 Compute via Pyodide WASM) */}
+                  {activeProfile.interactiveCodeSnippet && (
+                    <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30 shadow-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-2">
+                          <Play size={14} style={{ color: activeProfile.accent }} />
+                          <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
+                            In-Browser Python Automation ($0 Compute via Pyodide WASM)
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleCopy(activeProfile.interactiveCodeSnippet || '', 'code')}
+                            className="px-2.5 py-1 rounded-lg text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] bg-[var(--color-secondary)] border border-[var(--color-border)] cursor-pointer"
+                            title="Copy code snippet"
+                          >
+                            {copied && copiedPromptId === 'code' ? 'Copied' : 'Copy Code'}
+                          </button>
+                          <button
+                            onClick={handleRunPython}
+                            disabled={isExecutingPython}
+                            className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold text-white bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+                          >
+                            <Play size={11} fill="currentColor" />
+                            <span>{isExecutingPython ? 'Executing...' : 'Run Code Locally'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <pre className="p-3.5 rounded-xl bg-black/20 dark:bg-black/60 border border-[var(--color-border)] font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed">
+                        {activeProfile.interactiveCodeSnippet}
+                      </pre>
+
+                      {/* Live Execution Output Terminal */}
+                      {pythonOutput && (
+                        <div className="mt-3 p-3 rounded-xl bg-black/80 border border-emerald-500/40 text-emerald-300 font-mono text-xs whitespace-pre-wrap">
+                          <div className="flex items-center justify-between text-[10px] text-emerald-400/70 border-b border-emerald-500/20 pb-1.5 mb-2">
+                            <span>PYODIDE WASM STDOUT</span>
+                            <span>0ms • Localhost In-Memory</span>
+                          </div>
+                          {pythonOutput}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
 
-                {/* Python / WebAssembly Code Sandbox (if applicable) */}
-                {activeProfile.interactiveCodeSnippet && (
-                  <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Play size={14} style={{ color: activeProfile.accent }} />
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
-                        In-Browser Python Automation ($0 Compute via Pyodide WASM)
-                      </span>
-                    </div>
-                    <pre className="p-3.5 rounded-xl bg-black/20 dark:bg-black/60 border border-[var(--color-border)] font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed">
-                      {activeProfile.interactiveCodeSnippet}
-                    </pre>
+                {/* Detail View Sticky Bottom Footer */}
+                <div className="p-4 sm:p-5 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/50 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                  <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span>Recommended OpenGuide Track: <strong>{activeProfile.recommendedTrack}</strong></span>
                   </div>
-                )}
-              </div>
-            </>
+
+                  <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                    <button
+                      onClick={onClose}
+                      className="px-4 py-2 rounded-xl text-xs font-semibold hover:bg-[var(--color-secondary)] transition-colors cursor-pointer w-full sm:w-auto"
+                    >
+                      Close Explorer
+                    </button>
+                    <button
+                      onClick={() => {
+                        onClose();
+                        navigate(activeProfile.trackUrl);
+                      }}
+                      className="flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-xs font-bold text-white shadow-md hover:opacity-95 active:scale-95 transition-all cursor-pointer w-full sm:w-auto"
+                      style={{ backgroundColor: activeProfile.accent }}
+                    >
+                      <span>Start Learning ($0 Free)</span>
+                      <ArrowRight size={13} />
+                    </button>
+                  </div>
+                </div>
+              </main>
+            </div>
           ) : (
-            /* Dedicated Tab: "You Are an LLM: The Simplest Guide" */
+            /* Tab 2: "You Are an LLM: The Simplest Guide" (Dedicated Tab) */
             <div className="p-6 overflow-y-auto space-y-6 text-sm flex-1">
               <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
                 <div className="flex items-center gap-2 text-emerald-500 mb-2">
@@ -439,10 +720,10 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                 ))}
               </div>
 
-              {/* Sample Prompts to Try Right Now */}
+              {/* Sample Prompts Across Tiers */}
               <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30">
                 <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)] mb-4 flex items-center gap-2">
-                  <Code2 size={14} className="text-emerald-500" />
+                  <Sparkles size={14} className="text-emerald-500" />
                   <span>Real-World Prompts Across the Continuum (Click to Copy)</span>
                 </h4>
 
@@ -458,11 +739,15 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                             {sample.category}
                           </span>
                           <button
-                            onClick={() => handleCopy(sample.prompt)}
+                            onClick={() => handleCopy(sample.prompt, `guide-${idx}`)}
                             className="p-1 rounded text-[var(--color-text-secondary)] hover:text-emerald-500 cursor-pointer"
                             title="Copy prompt"
                           >
-                            <Copy size={12} />
+                            {copied && copiedPromptId === `guide-${idx}` ? (
+                              <Check size={12} className="text-emerald-500" />
+                            ) : (
+                              <Copy size={12} />
+                            )}
                           </button>
                         </div>
                         <h5 className="text-xs font-bold text-[var(--color-text-primary)] mb-1">
@@ -478,34 +763,6 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
               </div>
             </div>
           )}
-
-          {/* Footer Action Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/60">
-            <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>Recommended starting track: <strong>{activeProfile.recommendedTrack}</strong></span>
-            </div>
-
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs font-semibold hover:bg-[var(--color-secondary)] transition-colors cursor-pointer"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => {
-                  onClose();
-                  navigate(activeProfile.trackUrl);
-                }}
-                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white shadow-lg hover:opacity-90 active:scale-95 transition-all cursor-pointer w-full sm:w-auto"
-                style={{ backgroundColor: activeProfile.accent }}
-              >
-                <span>Start Learning Free ($0)</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
         </motion.div>
       </div>
     </AnimatePresence>

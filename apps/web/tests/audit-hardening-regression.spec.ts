@@ -956,6 +956,72 @@ ZeroDivisionError: division by zero`;
     await btnTheta45.click();
     await expect(ropeWidget).toContainText('Total Angle: 135°');
   });
+
+  test('TC-AUDIT-027: EverydayCraftAiModal Master-Detail Psychological Usability & Ergonomics', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/');
+
+    // 1. Open Master-Detail Continuum Modal
+    const openBtn = page.locator('button:has-text("Real-World Scenarios in Depth")');
+    await expect(openBtn).toBeVisible();
+    await openBtn.click();
+
+    // 2. Verify modal opened with Master-Detail layout
+    const modal = page.locator('[role="dialog"]');
+    await expect(modal).toBeVisible();
+    await expect(modal).toContainText('Real-World AI Application Continuum');
+    await expect(modal).toContainText('MASTER-DETAIL EXPLORER');
+
+    // 3. Verify Master Sidebar & Search Input
+    const searchInput = modal.locator('input[placeholder*="Search trade, dilemma"]');
+    await expect(searchInput).toBeVisible();
+
+    // 4. Test Search Filtering in Real-Time
+    await searchInput.fill('thermal');
+    const thermalCard = modal.locator('button:has-text("Precision Thermal Expansion")');
+    await expect(thermalCard).toBeVisible();
+    await thermalCard.click();
+
+    // 5. Verify Detail Panel displays rich authentic scenario data
+    const detailPanel = modal.locator('main');
+    await expect(detailPanel).toContainText('Precision Thermal Expansion & Machining Tolerances');
+    await expect(detailPanel).toContainText('The Real-World Dilemma');
+    await expect(detailPanel).toContainText('How AI Helps in Plain Language');
+    await expect(detailPanel).toContainText('Production Prompt Blueprint');
+
+    // 6. Test Prompt Blueprint Copying Interaction
+    const copyBtn = detailPanel.locator('button:has-text("Copy Blueprint")');
+    await expect(copyBtn).toBeVisible();
+    await copyBtn.click();
+    await expect(detailPanel).toContainText('Copied to Clipboard!');
+
+    // 7. Test Python WASM Code Runner Execution
+    const runBtn = detailPanel.locator('button:has-text("Run Code Locally")');
+    await expect(runBtn).toBeVisible();
+    await runBtn.click();
+    await expect(detailPanel.locator('text=PYODIDE WASM STDOUT')).toBeVisible({ timeout: 5000 });
+
+    // 8. Test "The 3 Rules Guide" Tab Switch
+    const guideTab = modal.locator('button:has-text("The 3 Rules Guide")');
+    await expect(guideTab).toBeVisible();
+    await guideTab.click();
+    await expect(modal).toContainText('You Are an LLM: How Anyone Can Talk to an AI in 3 Simple Rules');
+    await expect(modal).toContainText('Rule 1: Role');
+    await expect(modal).toContainText('Rule 2: Context');
+    await expect(modal).toContainText('Rule 3: Format');
+
+    // 9. Close Modal Cleanly
+    const closeBtn = modal.locator('button[aria-label="Close modal"]');
+    await closeBtn.click();
+    await expect(modal).not.toBeVisible();
+
+    // Zero console errors
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
 });
 
 

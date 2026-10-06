@@ -367,7 +367,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer"
               style={{ color: activeTierDetails.color }}
             >
-              <span>Explore All {ALL_SPECTRUM_PROFILES.length} Profiles in Depth</span>
+              <span>Explore All {ALL_SPECTRUM_PROFILES.length} Real-World Scenarios in Depth</span>
               <ArrowRight size={13} />
             </button>
           </div>
@@ -380,7 +380,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             type="text"
             value={landingSpectrumSearch}
             onChange={(e) => setLandingSpectrumSearch(e.target.value)}
-            placeholder="Search trades, questions, or roles (e.g. cobbler, salon, plumber)..."
+            placeholder="Search trades, dilemmas, or scenarios (e.g. budget, diagnostic, quote)..."
             className="w-full pl-10 pr-12 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
           />
           {landingSpectrumSearch && (
