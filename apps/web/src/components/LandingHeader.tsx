@@ -359,11 +359,9 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
 
           {/* 3. Environment & Aesthetics Segmented Capsule */}
           <div className="flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
-            {/* Multi-Language Selector (visible on sm+) */}
-            <div className="hidden sm:flex items-center">
-              <LanguageSelector variant="capsule" />
-              <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
-            </div>
+            {/* Multi-Language Selector */}
+            <LanguageSelector variant="capsule" />
+            <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
 
             {/* Quick Theme Switcher Button with Swatch */}
             <Tooltip

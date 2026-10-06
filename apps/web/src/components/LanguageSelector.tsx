@@ -38,7 +38,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
   }, [isOpen]);
 
   const buttonClasses = variant === 'capsule'
-    ? 'inline-flex items-center justify-center gap-1 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer active:scale-95 group'
+    ? 'inline-flex items-center justify-center gap-1 px-2 sm:px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer active:scale-95 group'
     : 'inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group';
 
   return (
@@ -51,8 +51,8 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
         className={buttonClasses}
       >
         <Globe size={13} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
-        <span className="inline font-semibold uppercase tracking-wider text-[11px]">{currentLang.code}</span>
-        <ChevronDown size={10} className={`opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="hidden sm:inline font-semibold uppercase tracking-wider text-[11px]">{currentLang.code}</span>
+        <ChevronDown size={10} className={`hidden sm:inline opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>
@@ -64,7 +64,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
             transition={{ type: 'spring', stiffness: 280, damping: 22 }}
             role="listbox"
             aria-label={t('select_language')}
-            className="absolute right-0 mt-2 w-52 max-h-80 overflow-y-auto rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl backdrop-blur-xl z-[150] space-y-1 custom-scrollbar momentum-scroll-y"
+            className={`absolute ${variant === 'capsule' ? '-left-14 sm:left-auto sm:right-0' : 'right-0'} mt-2 w-48 sm:w-52 max-h-80 overflow-y-auto rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl backdrop-blur-xl z-[150] space-y-1 custom-scrollbar momentum-scroll-y`}
           >
             <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-[var(--color-text-secondary)] border-b border-[var(--color-border)] mb-1">
               {t('select_language')}

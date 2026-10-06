@@ -18,8 +18,8 @@ export function BrandLogo({ className = '', showBadge = true, size = 'md' }: Bra
         <span className="font-mono font-bold tracking-tighter">OG</span>
       </div>
 
-      {/* Brand Text (responsive on small viewports >= 360px) */}
-      <span className={`hidden min-[360px]:inline ${textSize} font-black tracking-tight text-[var(--color-text-primary)] transition-colors leading-none`}>
+      {/* Brand Text (responsive on viewports >= 390px) */}
+      <span className={`hidden min-[390px]:inline ${textSize} font-black tracking-tight text-[var(--color-text-primary)] transition-colors leading-none`}>
         OpenGuide<span className="text-[var(--color-accent)] font-mono">.</span>
       </span>
 

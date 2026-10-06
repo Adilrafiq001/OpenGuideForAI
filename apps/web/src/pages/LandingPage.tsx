@@ -320,7 +320,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         {/* 6-Stage Universal Continuum Stage Switcher */}
         <div className="mb-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
             {SPECTRUM_TIERS.map((tier) => {
               const isSelected = activeLandingTier === tier.id;
               return (
@@ -330,17 +330,24 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                     setActiveLandingTier(tier.id);
                     setLandingSpectrumSearch('');
                   }}
-                  className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] xl:text-xs font-mono transition-all cursor-pointer shadow-sm text-center whitespace-nowrap ${
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer shadow-xs border min-w-0 ${
                     isSelected
-                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-[1.02]'
-                      : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)]'
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-[1.02] border-[var(--color-text-primary)]'
+                      : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] border-[var(--color-border)]'
                   }`}
                 >
-                  <span 
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: tier.color }}
-                  />
-                  <span>Stage {tier.number}: {tier.shortTitle}</span>
+                  <div className="flex items-center gap-1.5 mb-1 shrink-0">
+                    <span 
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: tier.color }}
+                    />
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider">
+                      Stage {tier.number}
+                    </span>
+                  </div>
+                  <span className="text-[11px] leading-tight font-sans font-semibold text-center truncate max-w-full">
+                    {tier.shortTitle}
+                  </span>
                 </button>
               );
             })}
@@ -348,14 +355,14 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
           {/* Active Stage Description Banner */}
           <div className="mt-4 p-4 rounded-2xl bg-[var(--color-secondary)]/50 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
+            <div className="min-w-0 max-w-full">
               <span 
-                className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase text-white shadow-xs inline-block"
+                className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase text-white shadow-xs inline-block max-w-full truncate"
                 style={{ backgroundColor: activeTierDetails.color }}
               >
                 Stage {activeTierDetails.number} • {activeTierDetails.title}
               </span>
-              <p className="text-xs text-[var(--color-text-secondary)] mt-1">
+              <p className="text-xs text-[var(--color-text-secondary)] mt-1 break-words">
                 {activeTierDetails.tagline}
               </p>
             </div>
@@ -364,7 +371,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 setSelectedCraftRole(activeLandingTier);
                 setIsCraftModalOpen(true);
               }}
-              className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer"
+              className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer shrink-0"
               style={{ color: activeTierDetails.color }}
             >
               <span>Explore All {ALL_SPECTRUM_PROFILES.length} Real-World Scenarios in Depth</span>

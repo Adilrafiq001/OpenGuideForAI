@@ -320,4 +320,111 @@ test.describe('OpenGuide Mobile, Cross-Device & Small Screen Suite', () => {
     expect(emeraldContrast).toBe('rgb(4, 120, 87)');
   });
 
+  test('Mobile Header: Language selector icon, theme swatch, and toggle are visible and fit without overflow across compact viewports', async ({ page }) => {
+    const mobileWidths = [320, 360, 375, 412];
+
+    for (const width of mobileWidths) {
+      await page.setViewportSize({ width, height: 700 });
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(300);
+
+      const langBtn = page.locator('button[aria-label="Select interface language"]').first();
+      const themeBtn = page.locator('#header-theme-settings-btn').first();
+      const themeSwitch = page.locator('.theme-switch--header').first();
+      const menuBtn = page.locator('button[aria-label="Toggle navigation menu"]').first();
+
+      await expect(langBtn).toBeVisible();
+      await expect(themeBtn).toBeVisible();
+      await expect(themeSwitch).toBeVisible();
+      await expect(menuBtn).toBeVisible();
+
+      // Verify zero horizontal overflow in header and document
+      const geometry = await page.evaluate(() => {
+        const langRect = document.querySelector('button[aria-label="Select interface language"]')?.getBoundingClientRect();
+        const menuRect = document.querySelector('button[aria-label="Toggle navigation menu"]')?.getBoundingClientRect();
+        return {
+          windowWidth: window.innerWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          langLeft: langRect?.left ?? -1,
+          menuRight: menuRect?.right ?? -1,
+          hasOverflow: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+
+      expect(geometry.hasOverflow).toBeFalsy();
+      expect(geometry.langLeft).toBeGreaterThan(0);
+      expect(geometry.menuRight).toBeLessThanOrEqual(width);
+
+      // Open language selector dropdown
+      await langBtn.click();
+      await page.waitForTimeout(200);
+
+      const listbox = page.locator('div[role="listbox"]').first();
+      await expect(listbox).toBeVisible();
+
+      const dropdownBounds = await page.evaluate(() => {
+        const rect = document.querySelector('div[role="listbox"]')?.getBoundingClientRect();
+        if (!rect) return { fits: false };
+        return {
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          fits: rect.left >= 0 && rect.right <= window.innerWidth,
+          hasOverflow: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+
+      expect(dropdownBounds.fits).toBeTruthy();
+      expect(dropdownBounds.hasOverflow).toBeFalsy();
+
+      // Close dropdown by pressing Escape
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(150);
+      await expect(listbox).not.toBeVisible();
+    }
+  });
+
+  test('AI for Everyone (Section 0.5): Stages 0 to 5 buttons fit without text overflow on all compact viewports', async ({ page }) => {
+    const mobileWidths = [320, 360, 375, 412];
+
+    for (const width of mobileWidths) {
+      await page.setViewportSize({ width, height: 750 });
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(300);
+
+      const section = page.locator('#universal-spectrum');
+      await section.scrollIntoViewIfNeeded();
+
+      const stageButtonsFit = await page.evaluate(() => {
+        const sec = document.getElementById('universal-spectrum');
+        if (!sec) return { found: false, count: 0, allFit: false, docOverflow: true };
+        const buttons = Array.from(sec.querySelectorAll('button')).filter(b => b.textContent && b.textContent.includes('Stage '));
+        const allFit = buttons.length === 6 && buttons.every(b => {
+          const rect = b.getBoundingClientRect();
+          return b.scrollWidth <= Math.ceil(rect.width) + 1;
+        });
+        return {
+          found: true,
+          count: buttons.length,
+          allFit,
+          docOverflow: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+
+      expect(stageButtonsFit.found).toBeTruthy();
+      expect(stageButtonsFit.count).toBe(6);
+      expect(stageButtonsFit.allFit).toBeTruthy();
+      expect(stageButtonsFit.docOverflow).toBeFalsy();
+
+      // Test tapping Stage 5 button
+      const stage5Btn = section.locator('button', { hasText: 'Stage 5' }).first();
+      await stage5Btn.click();
+      await page.waitForTimeout(200);
+
+      const bannerText = await section.locator('.mt-4.p-4 span.font-mono').first().textContent();
+      expect(bannerText).toContain('Stage 5');
+    }
+  });
+
 });
+
+
