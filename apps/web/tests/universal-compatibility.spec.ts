@@ -76,11 +76,11 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
     }
   });
 
-  test('04. In-Browser WebGPU Local SLM Ingestion and CacheStorage persistence', async ({ page }) => {
+  test('04. In-Browser Sovereign Knowledge Engine & WebGPU Hardware Accelerator', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Open Abby Chatbot
+    // Open Abby / Bluee Chatbot
     await page.evaluate(() => {
       const cb = document.querySelector('#abby-toggle-checkbox') as HTMLInputElement | null;
       if (cb) {
@@ -90,16 +90,13 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
     });
     await page.waitForTimeout(400);
 
-    // Look for Local SLM Cache banner or active badge
-    const slmCacheBtn = page.locator('[data-testid="cache-slm-btn"]').first();
-    if (await slmCacheBtn.isVisible()) {
-      await slmCacheBtn.click();
-      // Wait for caching to complete
-      await page.waitForTimeout(1000);
-      await expect(page.locator('text=Cached').first()).toBeVisible({ timeout: 5000 });
-    } else {
-      await expect(page.locator('text=WebGPU SLM').first()).toBeVisible({ timeout: 5000 });
-    }
+    // Verify Truthful Embedded Sovereign Knowledge Engine Status Badge
+    const sovereignBadge = page.locator('[data-testid="sovereign-engine-badge"]').first();
+    await expect(sovereignBadge).toBeVisible({ timeout: 10000 });
+    await expect(sovereignBadge).toContainText(/Embedded Sovereign Engine/i);
+
+    // Verify $0 Rule indicator in chat header
+    await expect(page.locator('text=$0 Rule').first()).toBeVisible();
   });
 
   test('05. Spatial Holodeck WebXR Meta Quest & Apple Vision Pro Emulation', async ({ page }) => {

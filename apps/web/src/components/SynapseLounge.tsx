@@ -12,20 +12,7 @@ import {
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
-
-// Web Audio sound generator (Lazy Shared Singleton to prevent audio thread memory leaks)
-let sharedAudioCtx: AudioContext | null = null;
-function getAudioContext(): AudioContext | null {
-  if (typeof window === 'undefined') return null;
-  if (!sharedAudioCtx) {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-    if (AudioCtx) sharedAudioCtx = new AudioCtx();
-  }
-  if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
-    sharedAudioCtx.resume().catch(() => {});
-  }
-  return sharedAudioCtx;
-}
+import { getAudioContext } from '../services/soundHaptics';
 
 function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boolean) {
   if (!enabled) return;
@@ -162,9 +149,10 @@ export function SynapseLounge() {
   const targetWeight = targetTokenIdx >= 0 ? attentionWeights[targetTokenIdx] : 0;
   const isAttentionOptimized = targetWeight >= 0.40;
 
+  const hasInteractedAttentionRef = useRef(false);
   const hasAwardedAttentionRef = useRef(false);
   useEffect(() => {
-    if (isAttentionOptimized && !hasAwardedAttentionRef.current) {
+    if (isAttentionOptimized && !hasAwardedAttentionRef.current && hasInteractedAttentionRef.current) {
       hasAwardedAttentionRef.current = true;
       playSound('success', soundFx);
       const t = setTimeout(() => {
@@ -185,9 +173,10 @@ export function SynapseLounge() {
   const angularDistance = angleDelta > 180 ? 360 - angleDelta : angleDelta;
   const cosineSim = Math.cos((angularDistance * Math.PI) / 180);
   const isAngleAligned = cosineSim >= 0.92;
+  const hasInteractedAngleRef = useRef(false);
   const hasAwardedAngleRef = useRef(false);
   useEffect(() => {
-    if (isAngleAligned && !hasAwardedAngleRef.current) {
+    if (isAngleAligned && !hasAwardedAngleRef.current && hasInteractedAngleRef.current) {
       hasAwardedAngleRef.current = true;
       playSound('combo', soundFx);
       const t = setTimeout(() => {
@@ -273,8 +262,9 @@ export function SynapseLounge() {
   };
 
   // --- GAME 2: NEURAL GATE DEDUCTOR (Perceptron Logic) ---
-  const [neuronWeights, setNeuronWeights] = useState({ w1: 1.0, w2: 1.0, bias: -1.5 });
+  const [neuronWeights, setNeuronWeights] = useState({ w1: 0.0, w2: 0.0, bias: 0.0 });
   const [targetGate, setTargetGate] = useState<'AND' | 'OR' | 'NAND'>('AND');
+  const hasInteractedGateRef = useRef(false);
 
   // Perceptron function: f(x1, x2) = 1 if (x1*w1 + x2*w2 + bias) > 0 else 0
   const evaluatePerceptron = (x1: number, x2: number) => {
@@ -300,7 +290,7 @@ export function SynapseLounge() {
 
   const gateSolvedRef = useRef(false);
   useEffect(() => {
-    if (allPassed && !gateSolvedRef.current) {
+    if (allPassed && !gateSolvedRef.current && hasInteractedGateRef.current) {
       gateSolvedRef.current = true;
       playSound('combo', soundFx);
       const t = setTimeout(() => {
@@ -513,6 +503,7 @@ export function SynapseLounge() {
                       value={probeAngle}
                       aria-label="Probe Vector Angle"
                       onChange={(e) => {
+                        hasInteractedAngleRef.current = true;
                         setProbeAngle(Number(e.target.value));
                       }}
                       className="w-full h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
@@ -675,6 +666,7 @@ export function SynapseLounge() {
                         value={neuronWeights.w1}
                         aria-label="Neuron Weight 1 (W1)"
                         onChange={(e) => {
+                          hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, w1: Number(e.target.value) }));
                         }}
                         className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
@@ -684,6 +676,7 @@ export function SynapseLounge() {
                           <button
                             key={w}
                             onClick={() => {
+                              hasInteractedGateRef.current = true;
                               playSound('click', soundFx);
                               setNeuronWeights(nw => ({ ...nw, w1: w }));
                             }}
@@ -715,6 +708,7 @@ export function SynapseLounge() {
                         value={neuronWeights.w2}
                         aria-label="Neuron Weight 2 (W2)"
                         onChange={(e) => {
+                          hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, w2: Number(e.target.value) }));
                         }}
                         className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
@@ -724,6 +718,7 @@ export function SynapseLounge() {
                           <button
                             key={w}
                             onClick={() => {
+                              hasInteractedGateRef.current = true;
                               playSound('click', soundFx);
                               setNeuronWeights(nw => ({ ...nw, w2: w }));
                             }}
@@ -755,6 +750,7 @@ export function SynapseLounge() {
                         value={neuronWeights.bias}
                         aria-label="Activation Bias (B)"
                         onChange={(e) => {
+                          hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, bias: Number(e.target.value) }));
                         }}
                         className="flex-1 h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
@@ -764,6 +760,7 @@ export function SynapseLounge() {
                           <button
                             key={b}
                             onClick={() => {
+                              hasInteractedGateRef.current = true;
                               playSound('click', soundFx);
                               setNeuronWeights(nw => ({ ...nw, bias: b }));
                             }}
@@ -932,6 +929,7 @@ export function SynapseLounge() {
                       value={temperature}
                       aria-label="Softmax Temperature (τ)"
                       onChange={(e) => {
+                        hasInteractedAttentionRef.current = true;
                         setTemperature(Number(e.target.value));
                       }}
                       className="w-full h-2 bg-[var(--color-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
@@ -945,6 +943,7 @@ export function SynapseLounge() {
                         <button
                           key={preset.val}
                           onClick={() => {
+                            hasInteractedAttentionRef.current = true;
                             playSound('click', soundFx);
                             setTemperature(preset.val);
                           }}
@@ -1008,7 +1007,7 @@ export function SynapseLounge() {
                         <div key={i} className="space-y-1">
                           <div className="flex items-center justify-between text-xs font-mono">
                             <span className={isTarget ? 'font-bold text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'}>
-                              {token.word} {isTarget && '★'}
+                              {token.word} {isTarget && '(Target)'}
                             </span>
                             <span className="text-[11px] text-[var(--color-text-secondary)]">
                               raw: {token.rawDot.toFixed(1)} | <strong className={isTarget ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'}>{pct}%</strong>

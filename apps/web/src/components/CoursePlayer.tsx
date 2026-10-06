@@ -245,9 +245,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       const expected = currentLesson.expectedOutput.trim();
       const combinedOut = (stdout || (typeof result === 'string' ? result : '')).trim();
 
-      // If isolated testCode was present, surviving without Python exceptions means all assertions passed
+      // Verify that assertions ran to completion and emitted pass markers or expected output
       const passed = currentLesson.testCode 
-        ? true 
+        ? (combinedOut.includes('TESTS PASSED') || combinedOut.includes('TEST PASSED') || (expected.length > 0 && combinedOut.includes(expected)))
         : (combinedOut.includes(expected) || 
            combinedOut.includes('[TEST PASSED]') ||
            combinedOut.replace(/\s+/g, ' ') === expected.replace(/\s+/g, ' ') ||
@@ -263,13 +263,14 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         setFeedback({ 
           type: 'success', 
           message: isBoss 
-            ? '🏆 Boss Project Completed! Full First-Principles synthesis verified.' 
+            ? 'Boss Project Completed! Full First-Principles synthesis verified.' 
             : '✓ Challenge Passed! Output matches expected first-principles criteria.' 
         });
       } else {
+        setIsChallengePassed(false);
         setFeedback({ 
-          type: 'success', 
-          message: 'Execution finished. Output produced in terminal.' 
+          type: 'info', 
+          message: 'Execution finished. Output did not meet target specifications.' 
         });
       }
     } catch (e: any) {

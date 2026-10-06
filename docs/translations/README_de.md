@@ -116,6 +116,30 @@ graph TD
 
 ---
 
+## Universelles KI-Kontinuum für die Gesamte Menschheit
+
+OpenGuide richtet sich nicht an eine abgeschottete Elite. Es ist für das gesamte Spektrum menschlicher Bildung konzipiert — von Menschen ohne Programmiererfahrung bis hin zu KI-Forschern und Modellarchitekten an vorderster Front:
+
+| Stufe & Profil | Reale Lebens- & Arbeitswelt | Der Mehrwert von OpenGuide |
+|---|---|---|
+| **Stufe 0: Neugierige Einsteiger & Ohne Vorkenntnisse** | Erste Berührung mit KI. Überwältigt von Fachjargon und Bezahlgrenzen. | Anschauliche Denkmodelle („Du bist ein LLM“), die 3 Goldenen Prompting-Regeln (Rolle + Kontext + Format) und 0-Euro-Klarheit. |
+| **Stufe 1: Praktisches Handwerk & Gewerbe** | Kfz-Mechaniker, Schuhmacher, Schreiner, Friseure, Köche, Installateure. | Alltags-KI in der Praxis: konkrete Fehlerdiagnosen, automatische Kostenvoranschläge, Materialberechnungen und Werkstattabläufe. |
+| **Stufe 2: Wissens- & Dienstleistungsberufe** | Ärztinnen, Lehrkräfte, Steuerberater, Juristen, Landwirte. | Strukturierte Prompt-Vorlagen, tabellarische Datenextraktion, Lernleitfäden und vollständiger lokaler Datenschutz. |
+| **Stufe 3: Angewandte System-Entwickler** | Programmierer, die Softwareanwendungen mit LLMs und Agenten entwickeln. | Echtes Python im Browser, Tokenisierung, JSON-RPC-Schemata und Werkzeugaufrufe per Model Context Protocol (MCP). |
+| **Stufe 4: KI-Sicherheits- & Eval-Architekten** | Reliability Engineers, die produktive KI-Systeme abhärten. | OWASP AI Top 10 Abwehr, Delimiter-Sandboxes gegen Prompt-Injections, PII-Bereinigung und automatisierte Test-Suites. |
+| **Stufe 5: Frontier-Forscher & Modellbauer** | Spezialisten für grundlegende generative Modellarchitekturen. | Skalierte Dot-Product-Attention von Grund auf, KV-Cache-Speicherkinematik, INT8-Gleichverteilungsquantisierung und DPO-Loss-Mathematik. |
+
+---
+
+## Manipulationssichere Zwei-Phasen-Autograder
+
+Jedes einzelne der **45 Kurs-Labore** von OpenGuide wird durch ein rigides Zwei-Phasen-Prüfsystem geschützt:
+1. **Phase 1 (Sichtbare Challenge):** Validiert Rückgabetypen, Tensor-Dimensionen und Grundsyntax anhand von Referenzfällen.
+2. **Phase 2 (Verborgene mathematische Invarianten):** Prüft die Lösung gegen fünf verborgene mathematische Invarianten pro Labor: Cauchy-Schwarz-Ungleichungen, Varianzskalierung, Metriksymmetrie, dynamische Testvektoren und Randwertgrenzen.
+3. **Mutations-Test-Eliminierungsrate:** Geprüft durch eine Test-Suite mit 135 bösartigen Test-Mutanten, die eine **Eliminierungsrate von 100,0 % (135/135 Mutanten eliminiert)** ohne Fehlalarme erzielt.
+
+---
+
 <a id="desktop--und-pwa-installation"></a>
 ## Desktop- und PWA-Installation
 
@@ -190,3 +214,30 @@ yarn install
 yarn --cwd apps/web dev
 ```
 Rufen Sie `http://localhost:5173` in Ihrem Browser auf.
+
+---
+
+## Qualitätssicherungs-Gate
+
+Jeder Beitrag muss die 5-Punkte-Qualitätsprüfung vor dem Zusammenführen bestehen:
+```bash
+# 1. Linter-Prüfung (0 Warnungen, 0 Fehler in 108 Dateien)
+yarn lint
+
+# 2. Automatisierte Playwright-Test-Suite (128 / 128 Tests bestanden, 100% Erfolgsquote)
+npx playwright test
+
+# 3. Statische Produktions-Kompilierung (0 TypeScript/Vite-Fehler)
+yarn --cwd apps/web build
+```
+
+---
+
+## Technische Dokumentation & Referenzen
+
+* **[Versions-Changelog](../../CHANGELOG.md):** Chronologische Meilenstein-Releases und Systemevolution.
+* **[ASD-STE100 System-Spezifikation](../../explainer.md):** Umfassende Spezifikation in vereinfachtem technischem Englisch.
+* **[System-Architektur](../../ARCHITECTURE.md):** Tiefgehende Analyse von Web Workern, WebGPU und lokaler Persistenz.
+* **[Lehrplan-Spezifikationen](../CURRICULUM.md):** Vollständiges Curriculum und Lernziele aller 45 Labore.
+* **[Externes Audit- & QS-Dossier](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Architektur-Grundlegung, Invarianten-Matrizen und Reproduktionsanleitung.
+

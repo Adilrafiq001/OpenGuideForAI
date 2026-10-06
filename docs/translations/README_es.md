@@ -116,6 +116,30 @@ graph TD
 
 ---
 
+## Continuo Universal de IA para Toda la Humanidad
+
+OpenGuide no está diseñado para una élite reducida. Está diseñado para todo el espectro humano: desde personas sin conocimientos de programación hasta investigadores y arquitectos de modelos de frontera:
+
+| Etapa y Perfil | Contexto en el Mundo Real | Lo que Ofrece OpenGuide |
+|---|---|---|
+| **Etapa 0: Aprendiz Curioso y Personas sin Código** | Primer contacto con la IA. Abrumado por tecnicismos y muros de pago. | Modelos mentales en lenguaje sencillo ("Tú eres un LLM"), las 3 Reglas de Oro del Prompting (Rol + Contexto + Formato) y claridad de presupuesto de $0. |
+| **Etapa 1: Oficios y Profesiones Prácticas** | Mecánicos de automóviles, zapateros, carpinteros, estilistas, chefs, fontaneros. | IA Cotidiana en Acción: diagnósticos prácticos, generadores de presupuestos para clientes, calculadoras de materiales y flujos de taller. |
+| **Etapa 2: Profesionales de Conocimiento y Servicios** | Médicos, profesores, contables, investigadores jurídicos, agricultores. | Plantillas estructuradas de prompts, extracción de datos tabulares, guías de estudio sintéticas y privacidad local absoluta. |
+| **Etapa 3: Desarrolladores de Sistemas Aplicados** | Ingenieros de software que construyen aplicaciones con LLMs y agentes. | Ejecución real de Python en el navegador, tokenización, esquemas JSON-RPC y envío de herramientas con Model Context Protocol (MCP). |
+| **Etapa 4: Arquitectos de Seguridad y Evaluación de IA** | Ingenieros de fiabilidad que blindan modelos en producción. | Defensa OWASP AI Top 10, sandboxes de delimitadores para inyecciones de prompts, filtros de PII y bancos de evaluación automatizados. |
+| **Etapa 5: Investigadores y Constructores de Modelos de Frontera** | Especialistas que profundizan en arquitectura generativa. | Atención scaled dot-product desde cero, cinemática de KV-cache, cuantización uniforme INT8 y pérdida cerrada de DPO. |
+
+---
+
+## Autocalificadores Inmanipulables de Doble Fase
+
+Cada uno de los **45 laboratorios del currículo** de OpenGuide está protegido por un arnés de autocalificación de doble fase:
+1. **Fase 1 (Desafío Visible):** Valida tipos de retorno, formas de matrices y sintaxis estructural contra ejemplos base.
+2. **Fase 2 (Invariantes Matemáticos Ocultos):** Evalúa la solución del estudiante contra cinco invariantes matemáticos ocultos por laboratorio: desigualdades de Cauchy-Schwarz, escalado de varianza, simetría métrica, vectores de prueba dinámicos y casos límite.
+3. **Tasa de Eliminación en Pruebas de Mutación:** Sometido a una suite automatizada de pruebas de mutación sobre 135 mutantes adversarios, logrando una **Tasa de Eliminación del 100.0% (135/135 mutantes eliminados)** sin falsos positivos.
+
+---
+
 <a id="instalaci%C3%B3n-como-aplicaci%C3%B3n-de-escritorio-y-pwa"></a>
 ## Instalación como Aplicación de Escritorio y PWA
 
@@ -191,3 +215,30 @@ yarn install
 yarn --cwd apps/web dev
 ```
 Abre `http://localhost:5173` en tu navegador.
+
+---
+
+## Puerta de Garantía de Calidad
+
+Cada contribución debe superar la verificación de cinco puntos antes de fusionarse:
+```bash
+# 1. Verificación del linter (0 advertencias, 0 errores en 108 archivos)
+yarn lint
+
+# 2. Suite de pruebas automatizadas con Playwright (128 / 128 pruebas superadas con 100% de éxito)
+npx playwright test
+
+# 3. Compilación estática de producción (0 errores de TypeScript/Vite)
+yarn --cwd apps/web build
+```
+
+---
+
+## Documentación Técnica y Referencias
+
+* **[Historial de Versiones (Changelog)](../../CHANGELOG.md):** Lanzamientos cronológicos y evolución del sistema.
+* **[Explicación del Sistema ASD-STE100](../../explainer.md):** Especificación técnica detallada en inglés técnico simplificado.
+* **[Arquitectura del Sistema](../../ARCHITECTURE.md):** Análisis profundo de Web Workers, WebGPU y persistencia local.
+* **[Especificaciones del Currículo](../CURRICULUM.md):** Syllabus y objetivos de los 45 laboratorios interactivos.
+* **[Dossier de Auditoría Externa y Control de Calidad](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Fundamentación arquitectónica, matrices de invariantes y guía de reproducción.
+

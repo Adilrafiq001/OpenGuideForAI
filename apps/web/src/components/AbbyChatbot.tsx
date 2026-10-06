@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Settings, X, Copy, Check, Maximize2, Minimize2, Zap, Download } from 'lucide-react';
+import { Settings, X, Copy, Check, Maximize2, Minimize2, Zap } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
-import { isLocalSlmCached, cacheLocalSlmWeights, generateLocalSlmResponse } from '../services/localNeuralRunner';
 import { motion, type PanInfo, useAnimationControls } from 'framer-motion';
 import '../styles/abby-chatbot.css';
 
@@ -42,23 +41,6 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     }
   ]);
 
-  const [isSlmCached, setIsSlmCached] = useState(false);
-  const [isCachingSlm, setIsCachingSlm] = useState(false);
-  const [cachingProgress, setCachingProgress] = useState(0);
-
-  useEffect(() => {
-    isLocalSlmCached('smollm-135m-q4').then(setIsSlmCached);
-  }, []);
-
-  const handleCacheSlm = async () => {
-    setIsCachingSlm(true);
-    setCachingProgress(15);
-    const res = await cacheLocalSlmWeights('smollm-135m-q4', (p) => setCachingProgress(p));
-    setIsCachingSlm(false);
-    if (res.success) {
-      setIsSlmCached(true);
-    }
-  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -131,8 +113,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       };
     }
 
-    // 2. Identity & Capabilities
-    if (/who are you|what are you|what can you do|how can you help|help me/i.test(clean)) {
+    // 2. Identity & Capabilities (Strictly anchored so specific queries like 'help me with hair salon' or 'how can ai help me' are routed properly)
+    if (/^(who are you|what are you|what can you do|how can you help|help me|help|about you|who is bluee)$/i.test(clean)) {
       return {
         content: "I'm **Bluee**, OpenGuide's client-side engineering mentor.\n\nHere is how I can support your learning:\n\n• **First-Principles Explanations:** Intuitive, mathematical, and mechanical breakdowns of core AI algorithms.\n• **Executable Code:** Clean Python and TypeScript snippets designed to run directly in our in-browser Pyodide environment.\n• **Lab Guidance:** Navigating through our 5 Tracks (45 interactive browser labs).\n• **Frontier Models:** When you configure your own API key (BYOK) in Settings, I can also query frontier models (OpenAI, Gemini, OpenRouter) seamlessly.\n\nWhat would you like to build or understand today?",
         takeaway: "100% Client-Side • Local First • Sovereign Compute"
@@ -202,6 +184,52 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       return {
         content: "OpenGuide adheres to the **$0 Rule (Hard Constraint)**:\n\n• Zero paid cloud subscriptions\n• Zero middleman servers or API hosting costs\n• Zero data collection or telemetry tracking\n\nAll foundational compute runs via client-side CPython WebAssembly (Pyodide) and WebGPU in your own browser. If you choose to explore frontier models (OpenAI, Gemini, Anthropic), you simply Bring Your Own Key (BYOK) stored privately in your browser.",
         takeaway: "$0 Forever • Complete financial and computational sovereignty"
+      };
+    }
+
+    // 5b. Real-World Trades & Universal Everyday AI Guidance
+    if (qLower.includes('salon') || qLower.includes('hair') || qLower.includes('stylist') || qLower.includes('barber')) {
+      return {
+        content: "### AI for Hair Salons, Stylists & Barbers\n\nYou do not need to be a software developer to get immediate, daily value from AI! Here is how salon owners use AI right now for $0:\n\n1. **Appointment Reminders & Pre-Care:** Send polite, automated WhatsApp/SMS messages with pre-appointment instructions (e.g. 'Arrive with clean, dry hair for balayage').\n2. **Color Mixing & Margin Math:** Calculate your service margins (tube cost + developer + chair time) so you always make a healthy profit.\n3. **Client Care Cards:** Create custom care slips explaining how to maintain bleached, colored, or keratin-treated hair at home.\n4. **Turn Tough Reviews Around:** Draft warm, professional responses to unhappy reviews that win clients back.\n\n**Try this exact prompt in any AI:**\n> *\"Act as a boutique hair salon manager. Write a warm 2-sentence SMS reminder for my client Sarah coming tomorrow at 2 PM for a full foil highlight, reminding her to allow 3 hours and wear a button-down shirt.\"*",
+        codeSnippet: "# Salon Service Margin Calculator:\ncolor_tube = 12.00\ndeveloper = 2.50\nfoils_gloves = 3.00\nservice_fee = 145.00\nprofit = service_fee - (color_tube + developer + foils_gloves)\nmargin = (profit / service_fee) * 100\nprint(f'Net Profit: ${profit:.2f} ({margin:.1f}%)')",
+        takeaway: "AI acts as your free receptionist, marketing writer, and profit calculator."
+      };
+    }
+
+    if (qLower.includes('cobbler') || qLower.includes('shoe') || qLower.includes('boot') || qLower.includes('leather') || qLower.includes('resol')) {
+      return {
+        content: "### AI for Cobblers, Shoemakers & Leather Craftsmen\n\nTraditional physical trades benefit immensely from AI as a workshop knowledge assistant:\n\n1. **Adhesive Chemistry & Cure Times:** Ask about solvent compatibility and heat-activation temperatures (e.g. Barge all-purpose cement vs Renia polyurethane on oily leather vs Vibram rubber soles).\n2. **Fair Repair Quoting:** Calculate fair quotes factoring in leather cost, thread, welt stitching labor, and shop overhead.\n3. **Seasonal Care Slips:** Print slips to insert inside customers' repaired boots (e.g. how to condition oil-tanned leather and clean winter road salt).\n4. **Vintage Hardware Identification:** Describe vintage eyelets, speed hooks, and steel shanks to find modern replacements.\n\n**Try this exact prompt in any AI:**\n> *\"Act as a master shoe repair technician. I am resoling a pair of work boots with oily full-grain leather. Explain the surface preparation, scuffing grit, and open drying time needed before applying neoprene contact cement so the rubber half-sole never peels.\"*",
+        codeSnippet: "# Fair Repair Quote Estimator:\nmaterials = 28.50  # Sole, welt thread, cement\nhours_labor = 2.0\nhourly_rate = 45.00\noverhead = 12.00\nquote = materials + (hours_labor * hourly_rate) + overhead\nprint(f'Recommended Customer Quote: ${quote:.2f}')",
+        takeaway: "Master adhesive chemistry, repair pricing, and customer care instructions with AI."
+      };
+    }
+
+    if (qLower.includes('mechanical') || qLower.includes('mechanic') || (qLower.includes('engineer') && !qLower.includes('software')) || qLower.includes('thermal') || qLower.includes('beam')) {
+      return {
+        content: "### AI for Mechanical & Physical Engineers\n\nMechanical engineers use AI to automate math, parse telemetry, and verify physical specifications:\n\n1. **Formula Sanity Checks:** Rapid verification of beam deflection, thermal expansion, Reynolds numbers, and hoop stress.\n2. **Telemetry & Sensor Automation:** Writing Python scripts to parse thermocouple, accelerometer, and strain gauge CSV logs.\n3. **Standards & Tolerances:** Instant summaries of ASTM, ISO, or ASME machining limits and material yields (e.g. 6061-T6 vs 7075 aluminum).\n4. **Failure Analysis:** Structuring root cause analysis for fatigue fractures or pump cavitation.\n\n**Try this exact prompt in any AI:**\n> *\"Act as a senior mechanical engineer. Write a Python script using NumPy to calculate the thermal expansion of a 750mm 304 Stainless Steel shaft heated from 22°C to 180°C with thermal expansion coefficient alpha = 17.3e-6 /°C.\"*",
+        codeSnippet: "import numpy as np\n\n# Thermal expansion: delta_L = alpha * L_0 * delta_T\nL_0 = 750.0  # mm\nalpha = 17.3e-6  # 1/°C (304 Stainless Steel)\ndelta_T = 180.0 - 22.0  # °C\ndelta_L = alpha * L_0 * delta_T\nprint(f'Shaft Thermal Expansion: {delta_L:.4f} mm | Final Length: {L_0 + delta_L:.4f} mm')",
+        takeaway: "Automate sensor data pipelines, ASTM lookups, and physics formulas in seconds."
+      };
+    }
+
+    if (qLower.includes('what is llm') || qLower.includes('what is an llm') || qLower.includes('you are an llm') || qLower.includes('how can i use you') || qLower.includes('how do i use you') || qLower.includes('how to talk to you') || qLower.includes('how to prompt')) {
+      return {
+        content: "### You Are an LLM: What I Am & How Anyone Can Use Me\n\nI am a Large Language Model (LLM). Here is the simplest, most honest explanation of what that means:\n\n1. **What Am I?**\nThink of me like your smartphone's predictive keyboard, but expanded to remember whole libraries of books, manuals, recipes, and conversations. When you write to me, I don't \"think\" like a human; I calculate the most helpful, logical words to solve your dilemma.\n\n2. **The 3 Golden Rules to Talk to Me (Prompting):**\n• **Rule 1: Role (Who to be):** Tell me who to act as (e.g. *'Act as an inventive home chef'* or *'Act as a friendly car mechanic'*).\n• **Rule 2: Context (What you have):** Tell me your exact situation or ingredients in plain words.\n• **Rule 3: Format (What to give):** Tell me how to format the answer (*'Give me 3 bullet points'* or *'Write a warm 2-sentence text message'*).\n\n3. **Real-World Examples You Can Try Right Now:**\n• *Everyday:* \"Act as a chef. I have rice, eggs, and frozen peas. Give me a 10-minute dinner recipe.\"\n• *Small Business:* \"Act as a salon manager. Write a polite SMS reminder for Sarah coming for highlights tomorrow at 2 PM.\"\n• *Engineering:* \"Act as a mechanical engineer. Write a Python snippet to calculate thermal growth of a 750mm steel shaft at 180°C.\"\n\nWhat dilemma would you like me to help you solve?",
+        takeaway: "The 3 Golden Rules: Role + Context + Format. Talk like you would to an eager colleague."
+      };
+    }
+
+    if (qLower.includes('what is ai') || qLower.includes('what is an ai') || qLower.includes('explain ai') || qLower.includes('zero knowledge') || qLower.includes('zero literacy') || qLower.includes('never coded') || qLower.includes('know nothing') || qLower.includes('beginner')) {
+      return {
+        content: "### What is AI in Plain English? (Zero Jargon Guide)\n\nWelcome! If you have never touched a computer, never written code, or feel intimidated by AI hype, here is the plain truth:\n\n1. **What is Artificial Intelligence?**\nIt is not a magic creature or a robot that will take over the world. It is simply a computer program that learns patterns from millions of examples. If you show it thousands of pictures of cats, it learns what a cat looks like. If it reads millions of books, it learns how humans answer questions.\n\n2. **Why Does It Matter to You?**\nBecause it can do the boring, time-consuming parts of your day for free: explaining confusing letters, planning family budgets, writing polite messages to clients, checking calculations, and helping kids learn.\n\n3. **You Cannot Break Anything & It Is Free ($0 Rule):**\nOpenGuide runs entirely in your own web browser with zero subscription fees, zero cloud servers, and no credit cards. If you make a mistake, you can simply refresh the page!\n\nTake your first step by clicking **Track 0: Absolute Zero** on the homepage.",
+        takeaway: "100% free, zero fear, and you cannot break anything. Start exploring today!"
+      };
+    }
+
+    if (qLower.includes('from zero to expert') || qLower.includes('from 0 to expert') || qLower.includes('frontier expert') || qLower.includes('where do i start')) {
+      return {
+        content: "### The Universal Learning Path: From 0 Knowledge to Frontier AI Expert\n\nOpenGuide is engineered as a continuous, 5-track bridge across all of AI:\n\n1. **Track 0: Absolute Zero (Start Here):** Zero prior coding needed. In-browser Python, variables, basic logic, and understanding tokens.\n2. **Track 1: Embeddings & Vector Space:** Geometric intuition, cosine similarity, and finding similar items mathematically.\n3. **Track 2: RAG & Autonomous Agents:** Feeding documents into models, ReAct state loops, and tool-calling via MCP.\n4. **Track 3: Evals & WebGPU Inference:** Testing models for hallucination, local client-side neural inference with WebGPU.\n5. **Track 4: Frontier Intelligence:** Transformer math from scratch (QKV attention, RoPE, KV caching, and LoRA adaptation).\n\nNo matter where you start on this continuum, you learn by building real code in your browser for $0.",
+        takeaway: "5 Comprehensive Tracks • 45 Interactive Labs • 100% Free Forever"
       };
     }
 
@@ -358,26 +386,6 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
       }
     }
 
-    // Local WebGPU SLM Generative Inference (if cached in CacheStorage / IndexedDB)
-    if (isSlmCached) {
-      try {
-        const slmRes = await generateLocalSlmResponse(trimmed, 'smollm-135m-q4');
-        const offlineRes = generateOfflineResponse(trimmed);
-        const assistantMsg: Message = {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content: offlineRes.content,
-          codeSnippet: offlineRes.codeSnippet,
-          takeaway: `WebGPU Local SLM (${slmRes.modelName} • ~${slmRes.tokensPerSec} tok/s)`,
-          timestamp: 'Just now'
-        };
-        setMessages(prev => [...prev, assistantMsg]);
-        setIsTyping(false);
-        return;
-      } catch (e) {
-        console.warn('Local SLM generation failed, falling back to offline knowledge base:', e);
-      }
-    }
 
     // Default: Answer via embedded offline knowledge base
     if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
@@ -558,10 +566,10 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                 {/* Header with Title & Controls */}
                 <div className="abby-chat-header">
                   <div className="abby-chat-header-title">
-                    <div className="abby-avatar-badge">✦</div>
+                    <div className="abby-avatar-badge">OG</div>
                     <span className="abby-name">{t('abby_title')}</span>
                     <span className="abby-status-tag">
-                      {byokApiKey ? `BYOK (${byokProvider})` : isSlmCached ? '⚡ WebGPU SLM Active' : t('abby_subtitle')}
+                      {byokApiKey ? `BYOK (${byokProvider})` : t('abby_subtitle')}
                     </span>
                   </div>
                   <div className="abby-header-actions">
@@ -595,31 +603,17 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                   </div>
                 </div>
 
-                {/* Local WebGPU SLM Ingestion & Cache Banner */}
-                {!byokApiKey && (
-                  <div className="px-3.5 py-1.5 bg-[var(--color-primary)] border-b border-[var(--color-border)] text-[11px] font-mono flex items-center justify-between text-[var(--color-text-secondary)] shrink-0">
-                    {isSlmCached ? (
-                      <span className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-400 font-semibold">
-                        <Zap size={12} className="text-emerald-500 fill-emerald-500" />
-                        <span>SmolLM-135M Cached (100% Offline AI)</span>
-                      </span>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleCacheSlm}
-                        disabled={isCachingSlm}
-                        className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold transition-colors cursor-pointer disabled:opacity-60 active:scale-95"
-                        data-testid="cache-slm-btn"
-                      >
-                        <Download size={12} />
-                        <span>
-                          {isCachingSlm ? `Caching Local SLM (${cachingProgress}%)...` : '⚡ Cache 85MB Local SLM for Offline AI'}
-                        </span>
-                      </button>
-                    )}
-                    <span className="text-[10px] text-slate-500 hidden sm:inline">$0 Rule</span>
-                  </div>
-                )}
+                {/* Embedded Sovereign Knowledge Engine Status Banner */}
+                <div className="px-3.5 py-1.5 bg-[var(--color-primary)] border-b border-[var(--color-border)] text-[11px] font-mono flex items-center justify-between text-[var(--color-text-secondary)] shrink-0">
+                  <span 
+                    className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-medium"
+                    data-testid="sovereign-engine-badge"
+                  >
+                    <Zap size={12} className="text-emerald-500 fill-emerald-500" />
+                    <span>{byokApiKey ? `BYOK Active (${byokProvider})` : 'Embedded Sovereign Engine (100% Offline)'}</span>
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">$0 Rule</span>
+                </div>
 
                 {/* Conversation History */}
                 <div className="abby-messages-container">
@@ -641,11 +635,61 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                       )}
                       {msg.takeaway && (
                         <div className="abby-takeaway-chip">
-                          ✦ {msg.takeaway}
+                          <span className="font-semibold text-stone-900 dark:text-stone-100">Key Principle:</span> {msg.takeaway}
                         </div>
                       )}
                     </div>
                   ))}
+
+                  {messages.length <= 1 && (
+                    <div className="my-2 p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-[var(--color-border)] text-left">
+                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-1.5 px-1">
+                        Quick Questions:
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        {[
+                          { label: 'What is AI in zero jargon?', prompt: 'Explain AI to me like I know nothing about it in zero jargon' },
+                          { label: 'You are an LLM: How do I talk to you?', prompt: 'What is an LLM and how can I use you in the simplest way?' },
+                          { label: 'How does AI help everyday trades & jobs?', prompt: 'How can AI help everyday trades and jobs like a hair salon or mechanic?' },
+                          { label: 'From 0 to Frontier Expert: Where to start?', prompt: 'Where do I start to go from 0 AI knowledge to frontier expert?' }
+                        ].map((btn, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              const promptText = btn.prompt;
+                              const userMsg: Message = {
+                                id: `user-${Date.now()}`,
+                                role: 'user',
+                                content: promptText,
+                                timestamp: 'Just now'
+                              };
+                              setMessages(prev => [...prev, userMsg]);
+                              setQuery('');
+                              setIsTyping(true);
+                              setTimeout(() => {
+                                const response = generateOfflineResponse(promptText);
+                                const assistantMsg: Message = {
+                                  id: `assistant-${Date.now()}`,
+                                  role: 'assistant',
+                                  content: response.content,
+                                  codeSnippet: response.codeSnippet,
+                                  takeaway: response.takeaway,
+                                  timestamp: 'Just now'
+                                };
+                                setMessages(prev => [...prev, assistantMsg]);
+                                setIsTyping(false);
+                              }, 300);
+                            }}
+                            className="px-2.5 py-1.5 rounded-xl text-[11px] font-medium bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-all cursor-pointer text-left flex items-center justify-between group"
+                          >
+                            <span>{btn.label}</span>
+                            <span className="text-[10px] text-[var(--color-text-secondary)] group-hover:text-[var(--color-accent)] transition-colors">&rarr;</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   {isTyping && (
                     <div className="abby-message-bubble assistant">
                       <div className="flex items-center gap-1.5 py-1 text-slate-400 text-xs">

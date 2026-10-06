@@ -48,6 +48,78 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   },
 
   // ---------------------------------------------------------------------------
+  // 0.5 EVERYDAY REAL-WORLD TRADES & PLAIN-ENGLISH AI FOUNDATIONS
+  // ---------------------------------------------------------------------------
+  {
+    id: 'what-is-ai-everyday',
+    keywords: ['what is ai', 'explain ai', 'what does ai do', 'how does ai work', 'artificial intelligence', 'simple ai', 'ai meaning', 'definition of ai', 'ai for dummies', 'plain english', 'basics'],
+    title: 'What Exactly is Artificial Intelligence? (Zero Jargon)',
+    category: 'conversational',
+    summary: 'AI is not magic or a living creature. It is a lightning-fast pattern learner that predicts the most helpful answer based on millions of real-world examples.',
+    explanation: 'Think of AI like a master apprentice who has spent years reading every book, repair manual, dictionary, recipe, and tutorial in the world.\n\nWhen you ask it a question, it doesn\'t "think" like a human with feelings. Instead, it looks at the words you provided, recognizes patterns, and crafts the most accurate, helpful response based on what it learned.\n\nWhether you need to write a polite message, calculate job costs, diagnose a problem, or learn a new skill, AI works as your tireless assistant—completely free in OpenGuide.',
+    takeaway: 'AI is a pattern-matching helper. You talk to it in normal, everyday language.'
+  },
+  {
+    id: 'what-is-llm-how-to-use',
+    keywords: ['what is llm', 'large language model', 'how to use you', 'how to use an llm', 'how to prompt', 'how to talk to ai', 'prompting', 'how do i use ai', 'how can i use you'],
+    title: 'What is an LLM and How Can Anyone Use It? (The 3 Simple Rules)',
+    category: 'conversational',
+    summary: 'An LLM (Large Language Model) is a pattern-based language predictor. Learn the 3 simple rules to get the best results every time.',
+    explanation: 'You know how your smartphone tries to guess the next word when you type an SMS? An LLM does the exact same thing, but with deep understanding of context, grammar, and specialized knowledge across medicine, law, trades, and engineering.\n\nTo get great results, use The 3 Golden Rules:\n1. GIVE IT A ROLE: Tell it who to be ("Act as an expert hair stylist", "Act as a master shoe cobbler", "Act as a mechanical engineer").\n2. GIVE IT THE FACTS: Tell it your exact situation, constraints, or materials.\n3. SPECIFY THE FORMAT: Tell it how you want the answer (e.g. "Give me a 3-step checklist in simple bullet points").',
+    codeSnippet: '# Example of asking an AI with the 3 Rules:\n# Role: Friendly customer service expert\n# Context: Client is upset because their shoe repair was delayed by 1 day.\n# Format: 3-sentence polite SMS with a 10% discount offer.',
+    takeaway: 'The 3 Rules: Role + Context + Output Format. Talk to it like a skilled, eager colleague.'
+  },
+  {
+    id: 'ai-for-hair-salon',
+    keywords: ['salon', 'hair', 'hairdresser', 'stylist', 'barber', 'hair salon', 'beauty parlor', 'hair color', 'balayage', 'salon owner', 'haircut'],
+    title: 'AI for Hair Salons & Stylists: Practical Everyday Guide',
+    category: 'conversational',
+    summary: 'How a hair salon owner or stylist can use AI to save hours on appointments, client care, color math, and social media.',
+    explanation: 'Hair stylists and salon owners use AI every day for practical, money-saving tasks:\n\n1. CLIENT APPOINTMENTS & REMINDERS: Draft warm, personalized WhatsApp/SMS reminders with pre-appointment instructions (e.g. "Please come with clean, dry hair for your balayage").\n2. FORMULA & MARGIN MATH: Calculate your profit margins per service (tube cost + developer + chair time) to price treatments accurately.\n3. CLIENT AFTERCARE GUIDES: Create personalized post-appointment care slips for clients with bleached, curly, or keratin-treated hair.\n4. REPUTATION & REVIEWS: Draft kind, professional replies to Google reviews that turn unhappy customers into loyal regulars.\n5. SOCIAL MEDIA POSTS: Generate Instagram captions and hashtag sets for transformations in 10 seconds.\n\nExample Prompt to try right now:\n"Act as a boutique hair salon manager. Write a warm 2-sentence SMS reminder for a client coming tomorrow at 2 PM for a full foil highlight, reminding them to allow 3 hours and wear a comfortable button-down shirt."',
+    codeSnippet: '# Quick Python profit calculator for hair salon services:\ncolor_tube_cost = 12.00\ndeveloper_cost = 2.50\nfoils_and_gloves = 3.00\nservice_price = 140.00\nprofit = service_price - (color_tube_cost + developer_cost + foils_and_gloves)\nmargin = (profit / service_price) * 100\nprint(f"Net Profit: ${profit:.2f} | Profit Margin: {margin:.1f}%")',
+    takeaway: 'Use AI as your salon receptionist, marketing copywriter, and profit calculator for $0.'
+  },
+  {
+    id: 'ai-for-cobbler-craft',
+    keywords: ['cobbler', 'shoe', 'shoemaker', 'boot', 'leather', 'leathercraft', 'craftsman', 'resoling', 'welting', 'sole repair', 'barge cement', 'shoe repair'],
+    title: 'AI for Cobblers & Leather Craftsmen: Physical Craft Mastery',
+    category: 'conversational',
+    summary: 'How traditional shoe repairers and leather crafters use AI for adhesive chemistry, repair pricing, and customer care instructions.',
+    explanation: 'Shoemaking and repair are master physical crafts, but AI can be an invaluable workshop assistant:\n\n1. ADHESIVE & CHEMICAL SELECTION: Ask about solvent compatibility, cure times, and heat-activation temperatures for tough bonds (e.g. Barge all-purpose cement vs Renia polyurethane on oily pull-up leather vs Vibram rubber soles).\n2. FAIR LABOR PRICING: Calculate labor and materials for complex jobs (e.g. Goodyear welt replacement + leather midsole + rubber half-sole) to ensure your skilled handwork is properly compensated.\n3. SEASONAL CUSTOMER CARE SLIPS: Print custom advice slips to slip inside customers\' finished shoes (e.g., how to treat salt-stained winter boots with vinegar solution and Bick 4 conditioner).\n4. SOURCING HARD-TO-FIND HARDWARE: Describe antique eyelets, speed hooks, or steel shanks to identify modern equivalents.\n\nExample Prompt to try right now:\n"Act as a master shoe repair technician. I am resoling a pair of Red Wing boots with oily full-grain leather. Explain the step-by-step surface prep and open time needed before applying neoprene contact cement to ensure the rubber sole never delaminates."',
+    codeSnippet: '# Repair cost estimator for bespoke shoe resoling:\nmaterials = 28.50  # Vibram soles, thread, cork filler, cement\nhours_labor = 2.25\nhourly_rate = 45.00\noverhead_allowance = 12.00\nquote = materials + (hours_labor * hourly_rate) + overhead_allowance\nprint(f"Recommended Fair Customer Quote: ${quote:.2f}")',
+    takeaway: 'AI assists physical crafts with material chemistry, fair pricing, and custom care instructions.'
+  },
+  {
+    id: 'ai-for-mechanical-engineer',
+    keywords: ['mechanical', 'engineer', 'mechanics', 'physics', 'thermal', 'stress', 'cad', 'beam', 'sensor', 'telemetry', 'tolerance', 'vibration', 'motor'],
+    title: 'AI for Mechanical Engineers: Physics, Telemetry & Rapid Scripting',
+    category: 'conversational',
+    summary: 'How mechanical engineers use AI to automate sensor data pipelines, verify physical formulas, and analyze vibration telemetry.',
+    explanation: 'Mechanical engineers bridge the physical and digital worlds. AI excels at:\n\n1. FORMULA SANITY CHECKS: Instant calculation of beam deflection, thermal expansion, Reynolds numbers, and hoop stress.\n2. TELEMETRY AUTOMATION: Writing Python scripts to parse messy CSV logs from thermocouples, strain gauges, and accelerometers.\n3. STANDARDS & SPEC DIGESTION: Summarizing ASTM, ISO, or ASME machining tolerances and material properties (e.g., Yield strength of 6061-T6 vs 7075 aluminum).\n4. FAILURE MODE ANALYSIS: Brainstorming potential causes for bearing wear, pump cavitation, or fatigue cracking.\n\nExample Prompt to try right now:\n"Act as a senior mechanical engineer. Write a concise Python script using NumPy to calculate the thermal expansion delta L of a 750mm 304 Stainless Steel shaft heated from 22°C to 180°C with thermal expansion coefficient alpha = 17.3e-6 /°C."',
+    codeSnippet: 'import numpy as np\n\n# Thermal expansion: delta_L = alpha * L_0 * delta_T\nL_0 = 750.0  # mm\nalpha = 17.3e-6  # 1/°C for 304 Stainless Steel\nT_initial = 22.0  # °C\nT_final = 180.0  # °C\n\ndelta_T = T_final - T_initial\ndelta_L = alpha * L_0 * delta_T\nprint(f"Delta T: {delta_T:.1f}°C | Shaft Expansion: {delta_L:.4f} mm | Final Length: {L_0 + delta_L:.4f} mm")',
+    takeaway: 'Automate sensor math, standard spec lookups, and Python telemetry processing in seconds.'
+  },
+  {
+    id: 'ai-for-software-engineer',
+    keywords: ['software', 'developer', 'programmer', 'coder', 'full stack', 'architect', 'coding', 'debugging', 'testing', 'unit test'],
+    title: 'AI for Software Engineers: Architectures, Invariants & Verification',
+    category: 'conversational',
+    summary: 'How software engineers use AI as a tireless pair programmer for testing invariants, refactoring, and local-first architecture.',
+    explanation: 'Software engineers get 10x value from AI by using it not just to write code, but to verify systems:\n\n1. INVARIANT & TEST GENERATION: Generating property-based unit tests and testing boundary conditions (null values, race conditions, memory leaks).\n2. CODE EXPLANATION & REFACTORING: Explaining undocumented legacy code and identifying O(n²) bottlenecks.\n3. ARCHITECTURAL VALIDATION: Designing decoupled local-first state, Web Worker sandboxing, and WebAssembly pipelines.\n4. ERROR DIAGNOSTICS: Pasting a stack trace to pinpoint root cause before touching code.\n\nIn OpenGuide, you can test code natively in Pyodide WASM with zero server overhead!',
+    codeSnippet: '# Example: Invariant-based validation test pattern\ndef validate_transfer(balance: float, amount: float) -> float:\n    assert amount > 0, "Transfer amount must be positive"\n    assert balance >= amount, "Insufficient funds"\n    return balance - amount\n\nprint(f"Remaining balance: ${validate_transfer(100.0, 35.5):.2f}")',
+    takeaway: 'AI is your tireless pair programmer for rigorous testing, architecture, and edge-case verification.'
+  },
+  {
+    id: 'ai-for-beginners-zero-literacy',
+    keywords: ['beginner', 'zero literacy', 'no knowledge', 'never used computer', 'easy', 'simple', 'scared', 'free', 'how to start', 'poor', 'first time'],
+    title: 'AI for Absolute Beginners: You Cannot Break Anything & It Is Free',
+    category: 'conversational',
+    summary: 'A welcoming guide for anyone who has never touched AI or computers before. 100% free, zero fear, zero setup.',
+    explanation: 'If you have never coded, never used AI, or feel intimidated, welcome! You belong here.\n\nThree things you should know:\n1. IT IS 100% FREE: OpenGuide has zero subscription fees ($0 Rule forever). You never need to enter a credit card.\n2. YOU CANNOT BREAK ANYTHING: It is completely safe. Everything runs in your browser. If something looks strange, just refresh the page.\n3. TALK LIKE YOU TALK TO A PERSON: You do not need special computer code to talk to an AI. Just type your question like you would ask a kind neighbor.\n\nEveryday ways to use AI today:\n• Write a clear, polite letter or message\n• Explain a confusing government form or medical note in simple words\n• Help your child understand a school homework question\n• Plan a weekly grocery budget to save money\n\nClick on Track 0: Absolute Zero to take your very first steps in 2 minutes!',
+    takeaway: 'No experience needed. No fees. You cannot break anything. Start exploring today!'
+  },
+
+  // ---------------------------------------------------------------------------
   // 1. CORE ARCHITECTURE & THE $0 RULE
   // ---------------------------------------------------------------------------
   {
@@ -89,12 +161,12 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   },
   {
     id: 'webgpu-inference',
-    keywords: ['webgpu', 'gpu', 'local slm', 'smollm', 'neural engine', 'transformers.js', 'onnx', 'client model'],
-    title: 'In-Browser WebGPU Neural Engine',
+    keywords: ['webgpu', 'gpu', 'neural engine', 'wgsl', 'compute shader', 'hardware acceleration', 'tensor kernel'],
+    title: 'In-Browser WebGPU WGSL Compute Engine',
     category: 'architecture',
-    summary: 'OpenGuide executes quantized transformer models (SmolLM-135M) directly on your device GPU via WebGPU.',
-    explanation: 'Using modern WebGPU standards and ONNX/WASM runtimes, OpenGuide can download quantized small language models (like SmolLM-135M 4-bit) into browser CacheStorage and run token-by-token neural inference with zero cloud servers. This brings offline privacy to generative AI.',
-    takeaway: 'Run real neural networks in your browser at 20+ tokens/sec with zero cloud bills.'
+    summary: 'OpenGuide executes native WGSL compute shaders directly on the local GPU via WebGPU.',
+    explanation: 'OpenGuide probes the client GPU via navigator.gpu, compiling custom WGSL compute shaders to execute high-throughput tensor operations (such as parallel dot-product kernel passes) with zero cloud infrastructure and zero latency.',
+    takeaway: '100% sovereign client-side GPU compute compliant with the $0 Rule.'
   },
 
   // ---------------------------------------------------------------------------

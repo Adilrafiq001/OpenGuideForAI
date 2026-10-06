@@ -217,7 +217,12 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
               
               <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)]">
                 <div className="space-y-1">
-                  {activeTrack.id === 'track-3' ? (
+                  {activeTrack.id === 'track-4' ? (
+                    <>
+                      <p><span style={{ color: currentThemeInfo.accent }}>attn</span> = scaled_dot_product_attention(Q, K, V)</p>
+                      <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># Attention &amp; KV-Cache Dynamics</p>
+                    </>
+                  ) : activeTrack.id === 'track-3' ? (
                     <>
                       <p><span style={{ color: currentThemeInfo.accent }}>eval_suite</span> = ProductionEvalSuite()</p>
                       <p className="text-[10px] text-[var(--color-text-secondary)] opacity-60"># OWASP Defenses + Judge Evals</p>
@@ -313,7 +318,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
                 {mod.lessons.map((les, lIdx) => (
                   <div 
                     key={les.id}
-                    onClick={() => navigate(`/track/${trackNum}/engine`)}
+                    onClick={() => navigate(`/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`)}
                     className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
@@ -339,10 +344,10 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             style={{ backgroundColor: currentThemeInfo.accent }}
           />
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
-            {activeTrack.id === 'track-3' ? 'Ready to Deploy Enterprise AI Guardrails?' : activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
+            {activeTrack.id === 'track-4' ? 'Ready to Master Frontier Attention & Systems?' : activeTrack.id === 'track-3' ? 'Ready to Deploy Enterprise AI Guardrails?' : activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
           </h2>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
-            {activeTrack.id === 'track-3' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive model evaluation & OWASP defense labs.' : activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
+            {activeTrack.id === 'track-4' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive attention mechanics & MCP protocol labs.' : activeTrack.id === 'track-3' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive model evaluation & OWASP defense labs.' : activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
           </p>
           <InitializeWorkspaceButton
             onClick={() => navigate(`/track/${trackNum}/engine`)}

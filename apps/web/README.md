@@ -1,32 +1,25 @@
-# React + TypeScript + Vite
+# OpenGuide Web Application (`apps/web`)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> Production web client for [OpenGuide](https://openguideforai.dpdns.org) — The Sovereign In-Browser AI Engineering Studio.
 
-Currently, two official plugins are available:
+This package contains the Vite + React 18 + TypeScript web client, CPython WebAssembly runner (Pyodide v0.26 via Web Worker), 24 calibrated WCAG AAA themes, and 45 interactive curriculum labs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Development & Scripts
 
-## React Compiler
+From the repository root or inside `apps/web`:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# Start local development server (http://localhost:5173)
+yarn dev
 
-## Expanding the Oxlint configuration
+# Run Oxlint static analysis
+yarn lint
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+# Execute Playwright automated test suite (128 tests)
+yarn test:e2e
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Compile production bundle
+yarn build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+For full system architecture, curriculum specifications, and external audit dossiers, see the root [README.md](../../README.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), and [docs/EXTERNAL-AUDIT-QA-DOSSIER.md](../../docs/EXTERNAL-AUDIT-QA-DOSSIER.md).

@@ -578,7 +578,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     expect(chipCount).toBeGreaterThan(3);
 
     // Click the 4th chip
-    await chips.nth(3).click();
+    await chips.nth(3).click({ noWaitAfter: true });
     await page.waitForTimeout(300);
 
     // Studio Console on Landing page also has momentum-scroll-x

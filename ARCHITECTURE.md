@@ -9,10 +9,12 @@
 - **Code Editor Engine:** Embedded CodeMirror 6 Python editor with 4-space Tab indentation (`indentWithTab`), line numbering, auto-bracket closing, live CSS variable theme synchronization, and a mobile-optimized touch Virtual Accessory Bar (`codemirror-accessory-bar`) providing single-tap injection for syntax keys (`Tab`, `:`, `(`, `)`, `def`, `return`, etc.).
 - **Theory & Mathematical Typesetting:** In-browser Markdown renderer powered by `marked` with formula typesetting for vector geometry ($\mathbf{A} \cdot \mathbf{B}$, $L_2$ norm, $\cos(\theta)$).
 - **Client Runtime:** CPython compiled to WebAssembly (Pyodide v0.26) isolated in a dedicated Web Worker with decoupled hidden test assertion harness and Service Worker cache-first pre-caching for day-0 air-gapped operation.
-- **In-Browser WebGPU Local SLM:** Client-side quantized neural ingestion service (`localNeuralRunner.ts`) providing 100% private, local generative intelligence (`smollm-135m-q4` 85MB, `qwen2.5-0.5b-q4` 190MB) persisted into CacheStorage (`openguide-slm-cache-v1`) without paid external API keys ($0 Rule).
+- **WebGPU Hardware Detection & WGSL Compute Shader Kernel:** Client-side WebGPU capability detection and WGSL matrix multiplication compute shader execution (`localNeuralRunner.ts`) providing local hardware acceleration telemetry without paid external API keys ($0 Rule).
+- **Universal AI Fluency Spectrum & Everyday AI Workflows:** 6-tier human continuum data layer (`universalSpectrumData.ts`, `EverydayCraftAiModal.tsx`) spanning Stage 0 (curious non-coders, trade mechanics, artisans, healthcare, agriculture) to Stage 5 (frontier transformer researchers) with real-world dilemmas, prompt engineering blueprints, and interactive WASM calculators.
+- **Ungameable Dual-Phase Autograder Invariants & Mutation Suite:** Multi-stage hidden validation asserting variable mutations, return type invariants, edge-case tolerance, and mathematical bounds across all 45 curriculum labs with 100% mutation test coverage (135/135 mutants killed).
 - **Tiered Local-First Storage:** Dexie IndexedDB persistence with an instantaneous in-memory RAM cache tier, transparent `localStorage` fallback, and JSON export/import backup and restore.
 - **Error Boundaries:** Granular React Error Boundaries wrapping all route transitions with accessible error cards, reload actions, and local memory reset.
-- **BYOK AI & Bluee Copilot:** Direct client-side fetch to frontier endpoints using user-supplied API keys (OpenAI, Google Gemini, OpenRouter), local WebGPU SLM execution, and automatic fallback to embedded offline knowledge engine ($0 Rule).
+- **BYOK AI & Bluee Copilot:** Direct client-side fetch to frontier endpoints using user-supplied API keys (OpenAI, Google Gemini, OpenRouter), local WebGPU hardware telemetry, and automatic fallback to embedded offline knowledge engine ($0 Rule).
 - **Theming & Craft:** 24 WCAG AAA calibrated palettes (12 Dark, 12 Light) decoupled from OS media queries via Tailwind v4 `@custom-variant dark (&:where([data-theme-mode="dark"], [data-theme-mode="dark"] *));` and universal high-contrast light theme overrides (`--color-emerald-contrast`, `--color-cyan-contrast`, etc.). Inspired by developer tools (Claude, Linear, Cursor, GitHub, Notion), fine paper ergonomics (Archival Fine Paper, E-Ink Papyrus, Swiss Bauhaus Modernist), and magical atmospheric aesthetics (Sakura Blossom, Champagne Luminary, Aurora Borealis, Celestial Nebula), controlled by an animated Uiverse Sun/Moon Day/Night toggle switch with zero hover jitter, script-safe responsive typography, and spring physics (`stiffness: 280, damping: 22`).
 - **Developer Environment Customization:** 6 Apple-grade settings sections with Bracket Pair Colorization toggle card, body scroll lock with `overscroll-contain`, live stage transparency slider (`0.3` to `1.0` with peek mode), and Code Monospace font switcher (`jetbrains-mono`, `fira-code`, `source-code-pro`, `ibm-plex-mono`, `system-mono`) dynamically re-mounting CodeMirror 6.
 - **Universal Multilingual Subsystem & RTL Isolation:** 12 world languages (`en`, `ur`, `ar`, `es`, `zh`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) with automatic bidirectional `dir="rtl"` activation for Urdu and Arabic, script-safe line-height preservation, and strict LTR isolation for CodeMirror 6, Pyodide terminal output, code snippets, and mathematical formulas (`unicode-bidi: isolate; direction: ltr !important`) to prevent syntax inversion.
@@ -49,7 +51,7 @@
 - **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
 - **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 45-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
 - **007 Defense-in-Depth Security:** PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 16-byte random salt) + AES-256-GCM encrypted GitHub Gist backup, DOMPurify HTML/Markdown sanitization, Cloudflare Pages CSP/HSTS/COOP/COEP headers, and static tokenization in offline Pyodide worker fallback without `eval` or `Function`.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (70 comprehensive tests passing with 100% pass rate).
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (128 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
 
 ## Application Directory Structure
 - `/apps/web`: Production web application root.
@@ -58,7 +60,7 @@
   - `src/store/`: Tiered local-first state stores (`useProgressStore.ts`, `useSettingsStore.ts`, `useLanguageStore.ts`).
   - `src/worker/`: Dedicated Pyodide CPython WebAssembly Web Worker runner (`pyodide.worker.ts`).
   - `src/locales/`: Universal 12-language translation catalogs.
-  - `src/styles/`: Craft CSS sheets, 20 theme tokens, and GPU-composited animations.
+  - `src/styles/`: Craft CSS sheets, 24 theme tokens, and GPU-composited animations.
 
 ## Related Documentation
 - [ASD-STE100 System Explainer](explainer.md): High-level system breakdown written in Simplified Technical English (~80% conformance).

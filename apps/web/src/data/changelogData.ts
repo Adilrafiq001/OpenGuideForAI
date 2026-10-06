@@ -5,9 +5,22 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.1.0';
+export const CURRENT_STUDIO_VERSION = '1.2.0';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.2.0',
+    date: 'October 2026',
+    title: 'Universal AI Fluency Spectrum, Dual-Phase Autograders & Anti-AI-Slop Craft',
+    highlights: [
+      'Universal AI Fluency Spectrum: Extended curriculum from absolute zero knowledge (trades, crafts, non-coders) to frontier AI researchers.',
+      'Everyday AI in Action: Real-world operational workflows across mechanics, carpentry, retail, healthcare, agriculture, and culinary craft.',
+      'Ungameable Dual-Phase Autograders: Visible and hidden mathematical invariants across all 45 curriculum labs with 135/135 mutants killed.',
+      'Anti-AI-Slop UI/UX Overhaul: Purged all purple glowing pills, sparkle emojis, talisman symbols, and marketing buzzwords in favor of calm, high-craft ergonomics.',
+      'Authentic WebGPU Telemetry: Native WebGPU device detection and WGSL matrix multiplication compute shader execution.',
+      '128 Passing Automated Playwright Tests: 100% test passage across the full regression suite with zero console errors and zero lint warnings.'
+    ]
+  },
   {
     version: '1.1.0',
     date: 'October 2026',

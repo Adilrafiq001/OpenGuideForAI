@@ -13,7 +13,7 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  Sparkles
+  Sliders
 } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { detectHardwareSync } from '../../utils/hardwareDetection';
@@ -175,6 +175,16 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
   const proximityVerdict = getProximityVerdict(cosineSim);
 
+  const audioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioTimerRef.current) {
+        clearTimeout(audioTimerRef.current);
+      }
+    };
+  }, []);
+
   // Direct Web Audio Chord Synthesis with Guaranteed Resumption & Live Visual State
   const triggerDirectComparisonAudio = async (overrideSim?: number, overrideCluster?: string) => {
     const sim = overrideSim !== undefined ? overrideSim : cosineSim;
@@ -184,15 +194,11 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     triggerHaptic('light');
 
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioCtx) {
-        setTimeout(() => setIsPlayingAudio(false), 600);
-        return;
-      }
-
-      let ctx = getAudioContext();
+      const ctx = getAudioContext();
       if (!ctx) {
-        ctx = new AudioCtx();
+        if (audioTimerRef.current) clearTimeout(audioTimerRef.current);
+        audioTimerRef.current = setTimeout(() => setIsPlayingAudio(false), 600);
+        return;
       }
       if (ctx.state === 'suspended') {
         await ctx.resume().catch(() => {});
@@ -247,7 +253,8 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       }
     } catch {}
 
-    setTimeout(() => {
+    if (audioTimerRef.current) clearTimeout(audioTimerRef.current);
+    audioTimerRef.current = setTimeout(() => {
       setIsPlayingAudio(false);
     }, 750);
   };
@@ -967,7 +974,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       {/* 4. Curated 1-Click Discovery Presets Bar */}
       <div className="px-4 sm:px-6 py-2.5 bg-[var(--color-primary)]/60 border-b border-[var(--color-border)] flex flex-wrap items-center gap-2 text-xs font-mono">
         <span className="text-[10px] text-[var(--color-text-secondary)] font-semibold shrink-0 flex items-center gap-1">
-          <Sparkles size={12} className="text-amber-400" />
+          <Sliders size={12} className="text-amber-400" />
           Quick Discovery Presets:
         </span>
         <div className="flex flex-wrap items-center gap-1.5">
@@ -1192,6 +1199,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
               return (
                 <button
                   key={node.id}
+                  type="button"
                   onClick={() => {
                     if (node.id !== selectedNode.id) {
                       setComparedNode(selectedNode);

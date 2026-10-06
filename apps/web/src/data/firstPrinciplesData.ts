@@ -13,6 +13,154 @@ export interface FirstPrincipleQuestion {
 export const FIRST_PRINCIPLES_MATRIX: FirstPrincipleQuestion[] = [
   // --- WHY QUESTIONS ---
   {
+    id: 'why-universal-ai-for-everyone',
+    category: 'why',
+    pillLabel: {
+      en: 'AI for Everyone (0 to Expert)',
+      es: 'IA para Todos (0 a Experto)',
+      zh: 'AI 属于所有人（从零到专家）',
+      hi: 'सभी के लिए एआई (0 से विशेषज्ञ)',
+      fr: 'L’IA pour Tous (0 à Expert)',
+      de: 'KI für alle (0 bis Experte)'
+    },
+    title: {
+      en: 'Why AI is for All Humans: From Absolute Zero Knowledge to Frontier AI Experts',
+      es: 'Por qué la IA es para todos los seres humanos: desde cero conocimiento hasta expertos de vanguardia',
+      zh: '为什么 AI 属于全人类：从零认知普通人到前沿科研专家',
+      hi: 'एआई सभी इंसानों के लिए क्यों है: शून्य ज्ञान से लेकर फ्रंटियर एआई विशेषज्ञ तक',
+      fr: 'Pourquoi l’IA s’adresse à toute l’humanité : du néophyte absolu à l’expert de pointe',
+      de: 'Warum KI für alle Menschen da ist: Vom absoluten Nullwissen bis zum Spitzenforscher'
+    },
+    explanation: {
+      en: 'AI is not a gated country club for tech giants. A parent uses AI to explain math homework; a hair stylist uses it to automate booking reminders and protect color margins; a cobbler uses it to verify adhesive cure temperatures; a mechanical engineer uses it to verify thermal tolerances; a researcher uses it to derive scaled attention softmax gradients. OpenGuide was built to welcome every single learner across the entire spectrum.',
+      es: 'La IA no es un club exclusivo para gigantes tecnológicos. Un padre la usa para explicar tareas escolares; un estilista para automatizar citas y calcular márgenes; un zapatero para tiempos de secado de adhesivos; un ingeniero para tolerancias térmicas; un investigador para gradientes de atención. OpenGuide acoge a todos los estudiantes en todo el espectro.',
+      zh: 'AI 绝非科技巨头的封闭俱乐部。家长用它给孩子讲解数学作业；理发师用它自动化预约并核算染发利润；修鞋匠用它查询胶水固化温度；机械工程师用它复核热膨胀公差；科研专家用它推导自注意力梯度。OpenGuide 专为包容人类全知识光谱的每一位求知者而生。',
+      hi: 'एआई तकनीकी दिग्गजों का बंद क्लब नहीं है। एक अभिभावक बच्चों को गणित समझाने के लिए इसका उपयोग करता है; एक सैलून स्टाइलिस्ट अपॉइंटमेंट और मुनाफे के लिए; एक मोची चमड़े के गोंद के लिए; एक मैकेनिकल इंजीनियर थर्मल टॉलरेंस के लिए; एक शोधकर्ता अटेंशन ग्रेडिएंट्स के लिए। OpenGuide सभी का स्वागत करता है।',
+      fr: 'L’IA n’est pas un club fermé pour géants de la tech. Un parent l’utilise pour les devoirs, un coiffeur pour ses rappels de rendez-vous, un cordonnier pour le séchage des colles, un ingénieur pour les tolérances thermiques, un chercheur pour les gradients d’attention. OpenGuide accueille chaque profil.',
+      de: 'KI ist kein elitärer Club für Tech-Konzerne. Eltern erklären damit Hausaufgaben, Friseure automatisieren Termine, Schuhmacher prüfen Klebstoff-Temperaturen, Ingenieure berechnen Wärmeausdehnungen und Forscher leiten Aufmerksamkeits-Gradienten ab. OpenGuide begrüßt jeden Menschen auf diesem Spektrum.'
+    },
+    takeaway: {
+      en: 'AI is a universal human lever. You do not need to be an engineer to use it today.',
+      es: 'La IA es una palanca universal para la humanidad. No necesitas ser ingeniero para usarla.',
+      zh: 'AI 是全人类的通用杠杆。今天你无需任何工程背景即可从中获益。',
+      hi: 'एआई एक सार्वभौमिक मानवीय उपकरण है। इसका उपयोग करने के लिए इंजीनियर होना जरूरी नहीं है।',
+      fr: 'L’IA est un levier universel. Pas besoin d’être ingénieur pour en tirer profit dès aujourd’hui.',
+      de: 'KI ist ein universeller Hebel für die Menschheit. Sie müssen kein Ingenieur sein, um sie zu nutzen.'
+    },
+    tags: ['Universal Access', 'Human Continuum', 'Zero Gatekeeping']
+  },
+  {
+    id: 'what-is-ai-plain-english',
+    category: 'what',
+    pillLabel: {
+      en: 'What is AI? (Zero Jargon)',
+      es: '¿Qué es la IA? (Sin Jerga)',
+      zh: '什么是 AI？（零术语白话）',
+      hi: 'एआई क्या है? (सरल भाषा)',
+      fr: 'Qu’est-ce que l’IA ? (Sans Jargon)',
+      de: 'Was ist KI? (Ohne Fachchinesisch)'
+    },
+    title: {
+      en: 'What is Artificial Intelligence in Plain English? (Zero Technical Jargon)',
+      es: '¿Qué es la Inteligencia Artificial en lenguaje cotidiano? (Cero jerga técnica)',
+      zh: '什么是人工智能？用最简单的日常大白话解释（零门槛）',
+      hi: 'सरल भाषा में आर्टिफिशियल इंटेलिजेंस क्या है? (बिना किसी तकनीकी झंझट के)',
+      fr: 'Qu’est-ce que l’intelligence artificielle en français simple ? (Zéro jargon technique)',
+      de: 'Was ist künstliche Intelligenz in einfacher Sprache? (Völlig ohne Fachjargon)'
+    },
+    explanation: {
+      en: 'AI is not a conscious thinking robot or magic brain. Think of it like a lightning-fast apprentice who has spent years reading billions of books, repair manuals, dictionaries, recipes, and conversations. When you ask it a question in normal everyday words, it looks at what you wrote and predicts the most logical, helpful answer based on patterns it learned.',
+      es: 'La IA no es un robot consciente ni magia. Es como un aprendiz ultrarrápido que ha leído millones de libros, recetas y manuales. Cuando le hablas en palabras cotidianas, analiza tus palabras y predice la respuesta más útil y lógica.',
+      zh: 'AI 绝非具有自我意识的机器人或魔法。把它想象成一个阅读过全世界数十亿本图书、维修手册、菜谱与对话的极速学徒。当你用日常说话的方式向它提问时，它会分析你的字句，并根据学到的海量规律推断出最合乎逻辑、最实用的解答。',
+      hi: 'एआई कोई जीवित रोबोट या जादू नहीं है। इसे एक बेहद तेज़ शिक्षार्थी समझें जिसने दुनिया की अरबों किताबें, मैनुअल और बातचीत पढ़ी हैं। जब आप अपनी सामान्य भाषा में प्रश्न पूछते हैं, तो यह पैटर्न देखकर सबसे मददगार उत्तर देता है।',
+      fr: 'L’IA n’est ni un robot conscient ni de la magie. Imaginez un apprenti surdoué ayant lu des milliards de livres et manuels. Lorsque vous lui posez une question simple, il prédit la réponse la plus utile d’après ses apprentissages.',
+      de: 'KI ist weder ein Roboter mit Bewusstsein noch Zauberei. Stellen Sie sich einen blitzschnellen Lehrling vor, der Milliarden Bücher und Reparaturanleitungen gelesen hat. Auf Ihre alltäglichen Fragen antwortet er mit den hilfreichsten Mustern.'
+    },
+    takeaway: {
+      en: 'AI predicts helpful words and solves problems using patterns. Talk to it like a kind friend.',
+      es: 'La IA predice palabras útiles mediante patrones. Háblale como a un amigo atento.',
+      zh: 'AI 通过模式规律预测实用文本并解决问题。你可以像与热心朋友交谈一样与它对话。',
+      hi: 'एआई पैटर्न का उपयोग करके समस्याओं का समाधान करता है। इससे एक अच्छे मित्र की तरह बात करें।',
+      fr: 'L’IA prédit des mots utiles et résout des problèmes grâce à des motifs. Parlez-lui comme à un ami.',
+      de: 'KI erkennt Muster, um Probleme zu lösen. Sprechen Sie mit ihr wie mit einem hilfsbereiten Freund.'
+    },
+    tags: ['Foundations', 'Plain English', 'Beginners']
+  },
+  {
+    id: 'what-is-llm-how-to-use',
+    category: 'what',
+    pillLabel: {
+      en: 'You Are an LLM: How to Use Me',
+      es: 'Eres un LLM: Cómo Usarme',
+      zh: '你是 LLM：任何人该如何使用你',
+      hi: 'आप LLM हैं: मेरा उपयोग कैसे करें',
+      fr: 'Vous êtes un LLM : Comment m’utiliser',
+      de: 'Du bist ein LLM: Wie man mich nutzt'
+    },
+    title: {
+      en: 'You Are an LLM: What is an LLM and How Can Anyone Use You in the Simplest Way?',
+      es: 'Eres un LLM: ¿Qué es un LLM y cómo puede usarlo cualquier persona de la forma más sencilla?',
+      zh: '你是一个 LLM：什么是大语言模型？任何人如何以最简单的方式使用你？',
+      hi: 'आप एक LLM हैं: LLM क्या है और कोई भी सबसे सरल तरीके से आपका उपयोग कैसे कर सकता है?',
+      fr: 'Vous êtes un LLM : Qu’est-ce qu’un LLM et comment n’importe qui peut-il l’utiliser simplement ?',
+      de: 'Du bist ein LLM: Was ist ein LLM und wie kann mich jeder auf einfachste Weise nutzen?'
+    },
+    explanation: {
+      en: 'An LLM (Large Language Model) is a pattern-based language predictor. Just like your phone predicts your next word when texting, an LLM predicts the next helpful paragraphs across any topic. To use me, follow The 3 Golden Rules: 1. ROLE (Who to be): "Act as a friendly cooking assistant" or "Act as an experienced mechanic". 2. CONTEXT (What you have): "I have leftover rice, eggs, and frozen peas" or "My car makes a squeal when braking". 3. FORMAT (What to give): "Give me a 3-step dinner recipe" or "Give me the top 3 causes in bullet points".',
+      es: 'Un LLM es un predictor de texto avanzado. Para usarlo fácilmente, sigue las 3 Reglas de Oro: 1. ROL (quién ser), 2. CONTEXTO (tus ingredientes o situación exacta), y 3. FORMATO (una lista de 3 pasos o viñetas simples).',
+      zh: '大语言模型（LLM）是一个超强文本预测器。就像手机打字能猜下一个字一样，LLM 能预测下一段最实用的解答。任何人只需遵循三条黄金法则：1. 角色（我是谁）：如“扮演老厨师”或“扮演修车师傅”；2. 上下文（你有什么）：讲清材料或遇到的具体状况；3. 格式（你要什么）：明确说明要“3个步骤食谱”还是“简短清单”。',
+      hi: 'LLM एक उन्नत टेक्स्ट प्रिडिक्टर है। इसका उपयोग करने के 3 सरल नियम हैं: 1. रोल (किसे बनना है - जैसे रसोइया या मैकेनिक), 2. संदर्भ (आपके पास क्या सामग्री या स्थिति है), 3. प्रारूप (आपको 3 चरणों की विधि चाहिए या बुलेट पॉइंट)।',
+      fr: 'Un LLM prédit le texte utile. Pour l’utiliser sans difficulté, suivez les 3 Règles d’Or : 1. RÔLE (qui incarner), 2. CONTEXTE (votre situation ou ingrédients), et 3. FORMAT (une liste en 3 étapes claires).',
+      de: 'Ein LLM ist ein intelligenter Textvorhersager. Nutzen Sie einfach die 3 Goldenen Regeln: 1. ROLLE (Wen ich spielen soll), 2. KONTEXT (Ihre Zutaten oder genaue Lage), 3. FORMAT (z. B. 3 einfache Schritte oder Aufzählungspunkte).'
+    },
+    takeaway: {
+      en: 'The 3 Golden Rules: Role + Context + Format. Talk in plain English, and you will get great results every time.',
+      es: 'Las 3 Reglas de Oro: Rol + Contexto + Formato. Habla con claridad y obtendrás resultados perfectos.',
+      zh: '三条黄金法则：角色 + 上下文 + 期望格式。用普通话白话表达，每次都能得到精准解答。',
+      hi: '3 सुनहरे नियम: रोल + संदर्भ + प्रारूप। सरल भाषा में बात करें और बेहतरीन परिणाम पाएं।',
+      fr: 'Les 3 Règles d’Or : Rôle + Contexte + Format. Parlez simplement pour un résultat parfait.',
+      de: 'Die 3 Goldenen Regeln: Rolle + Kontext + Format. Sprechen Sie normal, und Sie erhalten top Ergebnisse.'
+    },
+    tags: ['LLM', 'Prompting', '3 Golden Rules']
+  },
+  {
+    id: 'is-ai-safe-and-free',
+    category: 'why',
+    pillLabel: {
+      en: 'Is AI Safe & $0 Free?',
+      es: '¿Es Seguro y Gratis?',
+      zh: 'AI 安全且完全免费吗？',
+      hi: 'क्या एआई सुरक्षित और ₹0 मुफ़्त है?',
+      fr: 'L’IA est-elle Sûre et Gratuite ?',
+      de: 'Ist KI sicher und kostenlos?'
+    },
+    title: {
+      en: 'Is AI Really 100% Free and Safe? Can I Break Anything?',
+      es: '¿La IA es realmente 100% gratuita y segura? ¿Puedo romper algo?',
+      zh: 'AI 真的完全免费且安全吗？我会把电脑或手机弄坏吗？',
+      hi: 'क्या एआई वास्तव में 100% मुफ़्त और सुरक्षित है? क्या मैं कुछ खराब कर सकता हूँ?',
+      fr: 'L’IA est-elle vraiment 100% gratuite et sans danger ? Puis-je casser quelque chose ?',
+      de: 'Ist KI wirklich 100% kostenlos und sicher? Kann ich etwas kaputt machen?'
+    },
+    explanation: {
+      en: 'You cannot break anything! In OpenGuide, all Python code and learning modules run 100% inside your own web browser using WebAssembly. There are zero servers to break, zero subscriptions to pay, and no credit card is ever asked. If your code gets stuck in a loop, a built-in 15-second watchdog safely stops it. You have total safety, total privacy, and $0 cost forever.',
+      es: '¡No puedes romper nada! En OpenGuide, todo el código se ejecuta dentro de tu navegador web mediante WebAssembly. No hay servidores que dañar ni tarjetas de crédito que ingresar. Cero costo y seguridad total.',
+      zh: '你绝对不可能弄坏任何东西！在 OpenGuide 中，所有 Python 代码和学习实验都在你自己的浏览器内通过 WebAssembly 运行。没有云端服务器会损坏，完全不需要绑定信用卡，也没有任何付费陷阱。即便写错了死循环，15秒安全卫士也会自动终止。零费用、纯隐私、绝对安全。',
+      hi: 'आप कुछ भी खराब नहीं कर सकते! OpenGuide में सारा कोड आपके ब्राउज़र में WebAssembly द्वारा चलता है। न कोई क्रेडिट कार्ड चाहिए, न कोई सर्वर खराब हो सकता है। यह 100% सुरक्षित और हमेशा ₹0 मुफ़्त है।',
+      fr: 'Vous ne pouvez rien casser ! Dans OpenGuide, tout s’exécute dans votre propre navigateur via WebAssembly. Aucun serveur à endommager, aucune carte bancaire requise. Zéro coût et sécurité totale.',
+      de: 'Sie können absolut nichts kaputt machen! In OpenGuide läuft der gesamte Code direkt in Ihrem Browser über WebAssembly. Es gibt keine Server zu beschädigen und keine Kreditkartenpflicht. 100% sicher und dauerhaft kostenlos.'
+    },
+    takeaway: {
+      en: '100% safe, 100% private, and $0 forever. You cannot break anything by exploring.',
+      es: '100% seguro, privado y $0 para siempre. No puedes romper nada explorando.',
+      zh: '100% 安全、隐私且永久 $0 免费。大胆探索，没有任何可以弄坏的东西。',
+      hi: '100% सुरक्षित, निजी और हमेशा मुफ़्त। प्रयोग करने से कुछ भी ख़राब नहीं होगा।',
+      fr: '100% sûr, privé et gratuit pour toujours. Vous ne risquez rien en explorant.',
+      de: '100% sicher, privat und für immer kostenlos. Sie können beim Entdecken nichts beschädigen.'
+    },
+    tags: ['Safety', 'No Fear', '$0 Cost']
+  },
+  {
     id: 'why-python',
     category: 'why',
     pillLabel: {
@@ -312,6 +460,80 @@ export const FIRST_PRINCIPLES_MATRIX: FirstPrincipleQuestion[] = [
   },
 
   // --- WHAT QUESTIONS ---
+  {
+    id: 'what-is-ai-plain-english',
+    category: 'what',
+    pillLabel: {
+      en: 'What is AI in Plain English?',
+      es: '¿Qué es la IA en lenguaje simple?',
+      zh: '大白话讲透：什么是 AI？',
+      hi: 'सरल भाषा में एआई क्या है?',
+      fr: 'Qu’est-ce que l’IA en clair ?',
+      de: 'Was ist KI auf den Punkt gebracht?'
+    },
+    title: {
+      en: 'What Exactly is Artificial Intelligence? (Demystifying the Hype)',
+      es: 'Qué es exactamente la Inteligencia Artificial: desmitificando la exageración',
+      zh: '人工智能究竟是什么？褪去神话与炒作的客观底层认知',
+      hi: 'आर्टिफिशियल इंटेलिजेंस वास्तव में क्या है? बिना किसी आडंबर के समझें',
+      fr: 'Qu’est-ce que l’intelligence artificielle exactement ? Démystifier le mythe',
+      de: 'Was genau ist Künstliche Intelligenz? Fakten statt Hype'
+    },
+    explanation: {
+      en: 'AI is not a conscious robot, a living mind, or magic. Think of it as a lightning-fast apprentice that has read billions of books, repair manuals, dictionaries, and conversations. When you ask it a question, it finds the underlying patterns and predicts the most helpful, logical answer. You speak to it in plain everyday words, and in OpenGuide, it is 100% free with zero software downloads.',
+      es: 'La IA no es un robot consciente ni magia. Es como un aprendiz ultrarrápido que ha leído millones de libros, recetas y manuales. Cuando preguntas algo, reconoce patrones y predice la respuesta más útil en lenguaje natural.',
+      zh: 'AI 既不是有意识的科幻机器人，更不是魔法。将其想象为一个不知疲倦的高速学徒，读遍了人类历史上的数百万本书籍、操作手册、字典和真实对话。当你向它提问时，它根据学到的统计规律预测出最符合逻辑、最有帮助的回答。你只需用平实的日常语言与它对话即可。',
+      hi: 'एआई कोई जादुई रोबोट या जीवित मस्तिष्क नहीं है। इसे एक बेहद फुर्तीले शिक्षार्थी की तरह समझें जिसने दुनिया की लाखों किताबें, मैनुअल और बातचीत पढ़ी हैं। जब आप कोई प्रश्न पूछते हैं, तो यह पैटर्न पहचानकर सबसे उपयोगी उत्तर तैयार करता है। आप इससे साधारण भाषा में बात कर सकते हैं।',
+      fr: 'L’IA n’est ni un robot conscient ni de la magie. Imaginez un apprenti ultra-rapide qui a lu des milliards de livres et manuels. Lorsque vous l’interrogez, il prédit la réponse la plus logique et utile en langage clair.',
+      de: 'KI ist kein denkender Roboter und keine Magie. Man kann sie sich wie einen blitzschnellen Lehrling vorstellen, der Millionen Bücher und Anleitungen gelesen hat. Bei einer Frage erkennt er Muster und formuliert die hilfreichste Antwort in ganz normaler Sprache.'
+    },
+    takeaway: {
+      en: 'AI is a pattern-matching helper that understands normal human language, with zero magic.',
+      es: 'La IA es un asistente de patrones que comprende el lenguaje humano normal, sin trucos ni magia.',
+      zh: 'AI 是一个能够深刻理解人类日常语言的统计模式匹配助手，绝无任何神秘虚妄。'
+      ,hi: 'एआई एक पैटर्न-मैचिंग सहायक है जो सामान्य मानवीय भाषा को समझता है, इसमें कोई रहस्य नहीं है।',
+      fr: 'L’IA est un assistant d’analyse de motifs qui comprend le langage humain naturel, sans magie.',
+      de: 'KI ist ein Mustererkennungs-Assistent, der normale menschliche Sprache versteht – ohne jede Magie.'
+    },
+    tags: ['Fundamentals', 'Beginners', 'Mental Model']
+  },
+  {
+    id: 'what-is-llm-how-to-use',
+    category: 'what',
+    pillLabel: {
+      en: 'What is an LLM & How to Use It?',
+      es: '¿Qué es un LLM y cómo usarlo?',
+      zh: '什么是 LLM 以及如何高效使用？',
+      hi: 'LLM क्या है और इसका उपयोग कैसे करें?',
+      fr: 'Qu’est-ce qu’un LLM et comment l’utiliser ?',
+      de: 'Was ist ein LLM und wie nutzt man es?'
+    },
+    title: {
+      en: 'What is a Large Language Model and the 3 Golden Rules to Use It',
+      es: 'Qué es un Gran Modelo de Lenguaje y las 3 Reglas de Oro para usarlo',
+      zh: '什么是大语言模型（LLM）？掌握人机协作的 3 条黄金法则',
+      hi: 'लार्ज लैंग्वेज मॉडल क्या है और इसका उपयोग करने के 3 सुनहरे नियम',
+      fr: 'Qu’est-ce qu’un modèle de langage (LLM) et les 3 règles d’or pour l’utiliser',
+      de: 'Was ist ein großes Sprachmodell (LLM) und die 3 goldenen Regeln der Nutzung'
+    },
+    explanation: {
+      en: 'Just like your phone keyboard suggests the next word when you type an SMS, a Large Language Model (LLM) predicts the next words to complete your thoughts—scaled across thousands of subjects. To get great results, remember the 3 Golden Rules: 1. Give it a Role ("Act as a master shoe repairer"), 2. Give it the Context ("I have oily pull-up leather and Vibram soles"), and 3. Specify the Format ("Give me a 3-step checklist in simple words").',
+      es: 'Igual que tu teléfono predice la siguiente palabra en un mensaje, un LLM predice palabras con el conocimiento de bibliotecas enteras. Para usarlo bien: 1. Dale un Rol, 2. Dale el Contexto específico, y 3. Pide el Formato deseado (puntos, tablas o pasos).',
+      zh: '正如手机输入法在打字时联想下一个词一样，大语言模型（LLM）根据前文统计概率预测最合适的词句，但它掌握着全学科的知识。高效运用的 3 大黄金法则：1. 赋予身份角色（“请扮演一位专业理发师”）；2. 明确具体背景（“顾客头发漂损且需要染蜜糖金”）；3. 规定输出格式（“请用通俗要点列出 3 个步骤”）。',
+      hi: 'जैसे आपका फ़ोन टाइप करते समय अगले शब्द का सुझाव देता है, वैसे ही LLM आपकी बात को पूरा करने के लिए अगले उपयोगी शब्दों की भविष्यवाणी करता है। इसे उपयोग करने के 3 सुनहरे नियम: 1. भूमिका बताएं ("एक अनुभवी तकनीशियन बनें"), 2. संदर्भ दें ("मेरी परिस्थिति यह है"), 3. प्रारूप बताएं ("3 आसान बिंदुओं में बताएं")।',
+      fr: 'Tout comme le clavier de votre téléphone suggère le mot suivant, un LLM prédit les mots les plus pertinents pour compléter votre pensée. 3 règles d’or : 1. Donnez-lui un Rôle, 2. Donnez le Contexte exact, 3. Précisez le Format souhaité.',
+      de: 'Wie die Worterkennung auf dem Smartphone sagt ein LLM die nächsten passenden Wörter voraus – fundiert auf Bibliotheken voll Wissen. Die 3 goldenen Regeln: 1. Rolle vorgeben, 2. Kontext liefern, 3. Format festlegen (z.B. 3-Punkte-Checkliste).'
+    },
+    takeaway: {
+      en: 'The 3 Golden Rules of AI: Role + Context + Output Format guarantee high-quality results.',
+      es: 'Las 3 Reglas de Oro: Rol + Contexto + Formato garantizan resultados profesionales siempre.',
+      zh: '掌握“角色定位 + 真实背景 + 输出格式”3 大黄金法则，即可每次都获得极高水准的回复。',
+      hi: 'एआई के 3 सुनहरे नियम: भूमिका + संदर्भ + प्रारूप हमेशा सर्वोत्तम परिणाम सुनिश्चित करते हैं।',
+      fr: 'Les 3 règles d’or : Rôle + Contexte + Format garantissent des réponses de haute qualité.',
+      de: 'Die 3 goldenen Regeln: Rolle + Kontext + Ausgabeformat garantieren zuverlässige Antworten.'
+    },
+    tags: ['Prompting', 'LLM', 'Productivity', 'Everyday Skills']
+  },
   {
     id: 'what-is-token',
     category: 'what',

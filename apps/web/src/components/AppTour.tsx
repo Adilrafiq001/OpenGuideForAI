@@ -17,12 +17,12 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
     popoverClass: 'openguide-tour-popover',
     nextBtnText: 'Next →',
     prevBtnText: '← Back',
-    doneBtnText: 'Start Exploring ✦',
+    doneBtnText: 'Start Exploring',
     steps: isMobile ? [
       {
         element: 'header',
         popover: {
-          title: '✦ Welcome to OpenGuide',
+          title: 'Welcome to OpenGuide',
           description: 'A 100% sovereign, local-first in-browser AI engineering studio. Built under the $0 Rule: zero server bills, zero telemetry, and zero tracking.'
         }
       },

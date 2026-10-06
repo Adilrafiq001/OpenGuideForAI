@@ -116,6 +116,30 @@ graph TD
 
 ---
 
+## Contínuo Universal de IA para Toda a Humanidade (Estágios 0–5)
+
+O OpenGuide não foi projetado para uma elite tecnológica restrita. Ele foi desenvolvido para todo o espectro humano: de pessoas sem conhecimento em programação a pesquisadores e arquitetos de modelos de fronteira:
+
+| Estágio e Perfil | Contexto no Mundo Real | O que o OpenGuide Oferece |
+|---|---|---|
+| **Estágio 0: Aprendiz Curioso e Sem Código** | Primeiro contato com a IA. Sobrecarregado por jargões e planos pagos. | Modelos mentais em linguagem clara ("Você é um LLM"), as 3 Regras de Ouro de Prompting (Papel + Contexto + Formato) e clareza de orçamento de $0. |
+| **Estágio 1: Profissões Práticas e Ofícios** | Mecânicos automotivos, sapateiros, marceneiros, cabeleireiros, chefs, encanadores. | IA Prática no Cotidiano: diagnósticos operacionais, geradores de orçamentos para clientes, calculadoras de materiais e fluxos de oficina. |
+| **Estágio 2: Profissionais do Conhecimento e Serviços** | Médicos, professores, contadores, pesquisadores jurídicos, agricultores. | Templates estruturados de prompts, extração de dados tabulares, guias de estudo sintéticos e privacidade 100% local. |
+| **Estágio 3: Desenvolvedores de Sistemas Aplicados** | Engenheiros de software construindo aplicações com LLMs e agentes autônomos. | Execução real de Python no navegador, tokenização BPE, esquemas JSON-RPC e chamadas de ferramentas com Model Context Protocol (MCP). |
+| **Estágio 4: Arquitetos de Segurança e Avaliação de IA** | Engenheiros de confiabilidade protegendo modelos em produção. | Defesa OWASP AI Top 10, sandboxes de delimitadores para injeções de prompt, filtros de dados pessoais (PII) e baterias de avaliação automatizadas. |
+| **Estágio 5: Pesquisadores e Construtores de Modelos de Fronteira** | Especialistas que se aprofundam na arquitetura de modelos generativos. | Scaled Dot-Product Attention do zero, dinâmica de memória KV-cache, quantização uniforme INT8 e motor de perda fechada DPO. |
+
+---
+
+## Autocorretores Antifraude de Dupla Fase (135/135 Mutantes Eliminados)
+
+Cada um dos **45 laboratórios do currículo** do OpenGuide é protegido por um sistema de autocorreção em duas fases:
+1. **Fase 1 (Desafio Visível):** Valida tipos de retorno, formas de tensores e sintaxe estrutural contra exemplos de referência.
+2. **Fase 2 (Invariantes Matemáticos Ocultos):** Avalia a solução do aluno contra cinco invariantes matemáticos ocultos por laboratório: desigualdades de Cauchy-Schwarz, escalonamento de variância, simetria métrica, vetores de teste dinâmicos e casos de borda extremos.
+3. **Taxa de Eliminação em Testes de Mutação:** Submetido a uma suíte automatizada de testes de mutação em 135 mutantes adversariais, alcançando uma **Taxa de Eliminação de 100,0% (135/135 mutantes eliminados)** sem falsos positivos.
+
+---
+
 <a id="instala%C3%A7%C3%A3o-no-desktop-e-como-pwa"></a>
 ## Instalação no Desktop e como PWA
 
@@ -189,3 +213,29 @@ yarn install
 yarn --cwd apps/web dev
 ```
 Abra `http://localhost:5173` no seu navegador.
+
+---
+
+## Portão de Garantia de Qualidade
+
+Todas as contribuições devem passar pela verificação de cinco pontos antes da mesclagem:
+```bash
+# 1. Verificação estática do linter (0 avisos, 0 erros em 108 arquivos)
+yarn lint
+
+# 2. Suíte de testes automatizados Playwright (128 / 128 testes aprovados com 100% de sucesso)
+npx playwright test
+
+# 3. Compilação estática de produção (0 erros de TypeScript/Vite)
+yarn --cwd apps/web build
+```
+
+---
+
+## Documentação Técnica e Referências
+
+* **[Histórico de Versões (Changelog)](../../CHANGELOG.md):** Lançamentos cronológicos e evolução do sistema.
+* **[Especificação do Sistema ASD-STE100](../../explainer.md):** Documentação técnica detalhada em inglês técnico simplificado.
+* **[Arquitetura do Sistema](../../ARCHITECTURE.md):** Análise profunda de Web Workers, WebGPU e persistência local.
+* **[Especificações do Currículo](../CURRICULUM.md):** Ementa e objetivos dos 45 laboratórios práticos.
+* **[Dossiê de Auditoria Externa e Garantia de Qualidade](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Relatório de validação arquitetural e guia de reprodução.

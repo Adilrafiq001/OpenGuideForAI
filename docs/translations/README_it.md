@@ -116,6 +116,30 @@ graph TD
 
 ---
 
+## Continuum Universale di IA per Tutta l'Umanità (Stadi 0–5)
+
+OpenGuide non è riservato a una ristretta élite tecnica. È progettato per l'intero spettro umano: da chi si avvicina per la prima volta al codice fino ai ricercatori e architetti di modelli di frontiera:
+
+| Stadio e Profilo | Contesto nel Mondo Reale | Cosa Offre OpenGuide |
+|---|---|---|
+| **Stadio 0: Studente Curioso e No-Code** | Primo approccio con l'IA; disorientato da gergo incomprensibile e abbonamenti a pagamento. | Modelli mentali in linguaggio chiaro ("Tu stesso sei un LLM"), le 3 Regole d'Oro del Prompting (Ruolo + Contesto + Formato) e trasparenza con budget a 0$. |
+| **Stadio 1: Mestieri Pratici e Professioni Operative** | Meccanici d'auto, calzolai, falegnami, parrucchieri, chef, idraulici. | IA Quotidiana in Azione: diagnostica guasti operativi, generatori di preventivi per clienti, calcolatori di materiali e flussi di officina. |
+| **Stadio 2: Professionisti della Conoscenza e Servizi** | Medici, insegnanti, commercialisti, consulenti legali, agricoltori. | Template strutturati di prompt, estrazione di dati tabellari, guide di studio sintetiche e privacy locale al 100%. |
+| **Stadio 3: Sviluppatori di Sistemi Applicati** | Ingegneri del software che sviluppano applicazioni con LLM e agenti autonomi. | Esecuzione Python nativa nel browser, tokenizzazione BPE, schemi JSON-RPC e chiamate a strumenti via Model Context Protocol (MCP). |
+| **Stadio 4: Architetti di Sicurezza e Valutazione IA** | Ingegneri dell'affidabilità che irrobustiscono modelli in produzione. | Difese OWASP AI Top 10, sandbox di delimitatori per iniezioni di prompt, filtri PII e batterie di test di valutazione automatizzate. |
+| **Stadio 5: Ricercatori e Creatori di Modelli di Frontiera** | Specialisti che approfondiscono l'architettura matematica dei sistemi generativi. | Scaled Dot-Product Attention da zero, dinamiche di memoria KV-cache, quantizzazione uniforme INT8 e motore di perdita chiusa DPO. |
+
+---
+
+## Autovalutatori Inviolabili a Doppia Fase (135/135 Mutanti Neutralizzati)
+
+Ciascuno dei **45 laboratori didattici** di OpenGuide è protetto da un'architettura di autovalutazione a doppia fase:
+1. **Fase 1 (Sfida Visibile):** Valida tipi restituiti, forme dei tensori e conformità sintattica su casi di esempio.
+2. **Fase 2 (Invarianti Matematici Nascosti):** Valuta la soluzione dello studente rispetto a 5 invarianti matematici invisibili per laboratorio: disuguaglianze di Cauchy-Schwarz, scaling della varianza, simmetria metrica, vettori di test dinamici e condizioni limite estreme.
+3. **Tasso di Eliminazione nei Test di Mutazione:** Testato su una suite automatizzata di 135 mutanti di codice fallati, raggiungendo un **Tasso di Eliminazione del 100,0% (135/135 mutanti neutralizzati)** senza falsi positivi.
+
+---
+
 <a id="installazione-desktop-e-applicazione-pwa"></a>
 ## Installazione Desktop e Applicazione PWA
 
@@ -191,3 +215,29 @@ yarn install
 yarn --cwd apps/web dev
 ```
 Apri `http://localhost:5173` nel tuo browser web.
+
+---
+
+## Gate di Garanzia della Qualità
+
+Tutti i contributi devono superare la procedura di verifica a cinque punti prima del merge:
+```bash
+# 1. Verifica statica del linter (0 avvisi, 0 errori su 108 file)
+yarn lint
+
+# 2. Suite di test automatizzati Playwright (128 / 128 test superati con successo al 100%)
+npx playwright test
+
+# 3. Compilazione statica di produzione (0 errori TypeScript / Vite)
+yarn --cwd apps/web build
+```
+
+---
+
+## Documentazione Tecnica e Riferimenti
+
+* **[Registro delle Versioni (Changelog)](../../CHANGELOG.md):** Cronologia dei rilasci ed evoluzione dell'architettura.
+* **[Specifica di Sistema ASD-STE100](../../explainer.md):** Documentazione tecnica in Simplified Technical English.
+* **[Architettura del Sistema](../../ARCHITECTURE.md):** Analisi dettagliata di Web Workers, WebGPU e persistenza locale.
+* **[Specifiche del Curriculum](../CURRICULUM.md):** Programma completo e obiettivi didattici dei 45 laboratori interattivi.
+* **[Dossier di Audit Esterno e Controllo Qualità](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Relazione tecnica per revisori indipendenti e guida alla riproduzione.

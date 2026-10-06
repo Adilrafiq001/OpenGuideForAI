@@ -8,6 +8,7 @@ import {
   Database, 
   Terminal, 
   Layers, 
+  Compass,
   Play, 
   CheckCircle2, 
   Zap, 
@@ -36,6 +37,7 @@ interface HeroPhysicsStageProps {
   onExplorePathways: () => void;
   onLaunchTrack0: () => void;
   onOpenMatrixModal: () => void;
+  onOpenEverydayCrafts?: (role?: 'salon' | 'cobbler' | 'mechanical' | 'software' | 'beginner') => void;
 }
 
 type StudioLens = 'wasm' | 'vector' | 'rag' | 'mcp' | 'webgpu';
@@ -48,6 +50,7 @@ export function HeroPhysicsStage({
   onExplorePathways,
   onLaunchTrack0,
   onOpenMatrixModal,
+  onOpenEverydayCrafts,
 }: HeroPhysicsStageProps) {
   const [activeLens, setActiveLens] = useState<StudioLens>('wasm');
   const [isSimRunning, setIsSimRunning] = useState(false);
@@ -181,12 +184,12 @@ export function HeroPhysicsStage({
         </a>
       </motion.div>
 
-      {/* 4b. Absolute Beginner Bridge: Zero-Friction First Steps */}
+      {/* 4b. Absolute Beginner & Real-World Trades Bridges: Zero-Friction First Steps */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
-        className="mb-14 flex items-center justify-center"
+        className="mb-14 flex flex-wrap items-center justify-center gap-3"
       >
         <button
           onClick={onLaunchTrack0}
@@ -206,6 +209,25 @@ export function HeroPhysicsStage({
             &rarr;
           </span>
         </button>
+
+        {onOpenEverydayCrafts && (
+          <button
+            onClick={() => onOpenEverydayCrafts('beginner')}
+            className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-100/95 dark:bg-stone-800/90 hover:bg-stone-200/90 dark:hover:bg-stone-700/90 text-stone-900 dark:text-stone-100 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Compass size={14} className="text-stone-600 dark:text-stone-300 transition-transform group-hover:rotate-45" />
+            <span className="font-bold text-stone-900 dark:text-stone-100">Universal Spectrum:</span>
+            <span className="text-stone-600 dark:text-stone-300 font-medium hidden sm:inline">
+              Zero Knowledge to Frontier AI Expert
+            </span>
+            <span className="text-stone-600 dark:text-stone-300 font-medium sm:hidden">
+              Zero to AI Expert
+            </span>
+            <span className="text-stone-900 dark:text-stone-100 font-bold transition-transform group-hover:translate-x-0.5 inline-block rtl:rotate-180">
+              &rarr;
+            </span>
+          </button>
+        )}
       </motion.div>
 
       {/* 5. Motionsites.ai-Inspired Cinematic 2.5D Studio Preview Console */}

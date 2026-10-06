@@ -116,6 +116,30 @@ graph TD
 
 ---
 
+## Continuum Universel de l'IA pour Toute l'Humanité
+
+OpenGuide n'est pas réservé à une élite fermée. Il est conçu pour couvrir l'intégralité du spectre humain — des personnes n'ayant jamais écrit une ligne de code jusqu'aux chercheurs et concepteurs de modèles d'avant-garde :
+
+| Étape et Profil | Contexte Réel | Ce qu'Apporte OpenGuide |
+|---|---|---|
+| **Étape 0 : Apprenant Curieux et Non-Codeur** | Premier contact avec l'IA. Dépassé par le jargon et les abonnements payants. | Modèles mentaux clairs ("Vous Êtes un LLM"), les 3 Règles d'Or du Prompting (Rôle + Contexte + Format) et garantie de budget $0. |
+| **Étape 1 : Métiers et Métiers Manuels** | Mécaniciens automobiles, cordonniers, menuisiers, coiffeurs, chefs, plombiers. | L'IA du Quotidien en Action : diagnostics pratiques, devis automatiques pour clients, calculs de matériaux et flux d'atelier. |
+| **Étape 2 : Professionnels des Services et du Savoir** | Médecins, enseignants, comptables, juristes, agriculteurs. | Modèles de prompts structurés, extraction de données tabulaires, synthèses d'apprentissage et respect absolu de la vie privée. |
+| **Étape 3 : Développeurs de Systèmes Appliqués** | Développeurs concevant des applications avec des LLM et des agents. | Exécution réelle de Python dans le navigateur, tokenisation, schémas JSON-RPC et dispatch d'outils Model Context Protocol (MCP). |
+| **Étape 4 : Architectes en Sécurité et Évaluation d'IA** | Ingénieurs en fiabilité sécurisant des modèles en production. | Défense OWASP AI Top 10, bacs à sable contre l'injection de prompts, nettoyage des données PII et bancs d'évaluation automatisés. |
+| **Étape 5 : Chercheurs et Créateurs de Modèles d'Avant-Garde** | Spécialistes approfondissant les architectures génératives. | Attention scaled dot-product de zéro, cinématique de mémoire KV-cache, quantification uniforme INT8 et perte mathématique DPO. |
+
+---
+
+## Autocalibrateurs Indétournables à Double Phase
+
+Chacun des **45 laboratoires du cursus** d'OpenGuide est protégé par un système de validation à double phase :
+1. **Phase 1 (Défi Visible) :** Vérifie les types de retour, les formes de tenseurs et la syntaxe par rapport aux exemples de référence.
+2. **Phase 2 (Invariants Mathématiques Masqués) :** Évalue la solution de l'élève par rapport à cinq invariants mathématiques masqués par laboratoire : inégalités de Cauchy-Schwarz, mise à l'échelle de la variance, symétrie métrique, vecteurs de test dynamiques et cas limites.
+3. **Taux d'Élimination en Tests de Mutation :** Éprouvé par une suite automatisée de 135 mutants adverses, atteignant un **Taux d'Élimination de 100,0 % (135/135 mutants éliminés)** sans faux positifs.
+
+---
+
 <a id="installation-sur-bureau-et-application-pwa"></a>
 ## Installation sur Bureau et Application PWA
 
@@ -191,3 +215,30 @@ yarn install
 yarn --cwd apps/web dev
 ```
 Ouvrez `http://localhost:5173` dans votre navigateur.
+
+---
+
+## Porte d'Assurance Qualité
+
+Chaque contribution doit valider le contrôle en cinq points avant d'être intégrée :
+```bash
+# 1. Vérification par le linter (0 avertissement, 0 erreur sur 108 fichiers)
+yarn lint
+
+# 2. Suite de tests automatisés Playwright (128 / 128 tests réussis avec 100% de succès)
+npx playwright test
+
+# 3. Compilation statique de production (0 erreur TypeScript/Vite)
+yarn --cwd apps/web build
+```
+
+---
+
+## Documentation Technique et Références
+
+* **[Journal des Modifications (Changelog)](../../CHANGELOG.md) :** Versions chronologiques et évolutions de l'architecture.
+* **[Spécification Système ASD-STE100](../../explainer.md) :** Description complète en anglais technique simplifié.
+* **[Architecture Système](../../ARCHITECTURE.md) :** Analyse approfondie des Web Workers, de WebGPU et de la persistance locale.
+* **[Spécifications Pédagogiques](../CURRICULUM.md) :** Programme détaillé et objectifs des 45 laboratoires interactifs.
+* **[Dossier d'Audit Technique Externe et Assurance Qualité](../EXTERNAL-AUDIT-QA-DOSSIER.md) :** Fondements architecturaux, matrices d'invariants et guide de reproduction indépendant.
+

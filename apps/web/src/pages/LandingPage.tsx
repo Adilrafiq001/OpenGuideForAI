@@ -1,6 +1,17 @@
 import { useState, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bot, Compass, ChevronRight, ArrowUpRight, Glasses } from 'lucide-react';
+import { 
+  Compass, 
+  Terminal,
+  MessageSquareCode,
+  ChevronRight, 
+  ArrowUpRight, 
+  Glasses, 
+  Copy, 
+  Check, 
+  Search, 
+  ArrowRight 
+} from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
@@ -12,11 +23,19 @@ import { HeroPhysicsStage } from '../components/HeroPhysicsStage';
 import { ScrollProgressBar, ScrollToTopButton } from '../components/ScrollIndicators';
 import { LandingHeader } from '../components/LandingHeader';
 import { StudioFooter } from '../components/StudioFooter';
+import { 
+  SPECTRUM_TIERS, 
+  ALL_SPECTRUM_PROFILES, 
+  LLM_PLAIN_ENGLISH_GUIDE, 
+  type SpectrumTier 
+} from '../data/universalSpectrumData';
 
 // Lazy-load offscreen modals so they are not included in the initial page bundle
 const FirstPrinciplesModal = lazy(() => import('../components/FirstPrinciplesModal').then(m => ({ default: m.FirstPrinciplesModal })));
 const FreeCoursesModal = lazy(() => import('../components/FreeCoursesModal').then(m => ({ default: m.FreeCoursesModal })));
 const FreeToolsModal = lazy(() => import('../components/FreeToolsModal').then(m => ({ default: m.FreeToolsModal })));
+const EverydayCraftAiModal = lazy(() => import('../components/EverydayCraftAiModal').then(m => ({ default: m.EverydayCraftAiModal })));
+import type { CraftRole } from '../components/EverydayCraftAiModal';
 
 interface LandingPageProps {
   onOpenThemes?: () => void;
@@ -42,12 +61,42 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   const { language, t } = useLanguageStore();
   const [isMatrixModalOpen, setIsMatrixModalOpen] = useState(false);
 
-  // In-app interactive modals for Free Courses and Free Tools
+  // In-app interactive modals for Free Courses, Free Tools, and Everyday Crafts
   const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState('karpathy');
   const [isToolsModalOpen, setIsToolsModalOpen] = useState(false);
   const [selectedToolCategory, setSelectedToolCategory] = useState<'MEMORY' | 'GLUE' | 'COMPUTE' | 'HOSTING'>('MEMORY');
   const [selectedToolId, setSelectedToolId] = useState<string | undefined>('chroma');
+  const [isCraftModalOpen, setIsCraftModalOpen] = useState(false);
+  const [selectedCraftRole, setSelectedCraftRole] = useState<CraftRole>('beginner');
+  const [activeLandingTier, setActiveLandingTier] = useState<SpectrumTier>('tier0');
+  const [landingSpectrumSearch, setLandingSpectrumSearch] = useState('');
+  const [activePromptSampleIdx, setActivePromptSampleIdx] = useState(0);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
+
+  const filteredLandingProfiles = useMemo(() => {
+    const q = landingSpectrumSearch.toLowerCase().trim();
+    if (!q) {
+      return ALL_SPECTRUM_PROFILES.filter(p => p.tier === activeLandingTier);
+    }
+    return ALL_SPECTRUM_PROFILES.filter(p => 
+      p.title.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.tagline.toLowerCase().includes(q) ||
+      p.realWorldChallenge.toLowerCase().includes(q) ||
+      p.plainEnglishSolution.toLowerCase().includes(q)
+    );
+  }, [activeLandingTier, landingSpectrumSearch]);
+
+  const activeTierDetails = useMemo(() => {
+    return SPECTRUM_TIERS.find(t => t.id === activeLandingTier) || SPECTRUM_TIERS[0];
+  }, [activeLandingTier]);
+
+  const handleCopyLandingPrompt = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedPrompt(true);
+    setTimeout(() => setCopiedPrompt(false), 2000);
+  };
 
   const currentThemeInfo = useMemo(() => {
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
@@ -243,7 +292,235 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         }}
         onLaunchTrack0={() => navigate('/track/0/intro')}
         onOpenMatrixModal={() => setIsMatrixModalOpen(true)}
+        onOpenEverydayCrafts={(role) => {
+          setSelectedCraftRole(role || 'salon');
+          setIsCraftModalOpen(true);
+        }}
       />
+
+      {/* SECTION 0.5: THE UNIVERSAL SPECTRUM: AI FOR EVERYONE (FROM 0 KNOWLEDGE TO ACTIVE AI EXPERT) */}
+      <section id="universal-spectrum" className="py-20 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
+        <div id="everyday-crafts" className="sr-only" aria-hidden="true" />
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 border-b border-[var(--color-border)] pb-8">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-mono font-bold tracking-[0.25em] uppercase text-[var(--color-text-secondary)]">
+                Universal Human Continuum • Zero Gatekeeping • $0 Cost
+              </span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)]">
+              AI for Everyone: From 0 Knowledge to Frontier AI Expert
+            </h2>
+          </div>
+          <p className="text-sm text-[var(--color-text-secondary)] max-w-md leading-relaxed">
+            Catering to every learner on earth—from someone with zero technical knowledge wondering what AI or an LLM is, to hairdressers, cobblers, mechanical engineers, and frontier AI researchers.
+          </p>
+        </div>
+
+        {/* 6-Stage Universal Continuum Stage Switcher */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+            {SPECTRUM_TIERS.map((tier) => {
+              const isSelected = activeLandingTier === tier.id;
+              return (
+                <button
+                  key={tier.id}
+                  onClick={() => {
+                    setActiveLandingTier(tier.id);
+                    setLandingSpectrumSearch('');
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono transition-all cursor-pointer whitespace-nowrap shadow-sm ${
+                    isSelected
+                      ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-105'
+                      : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)]'
+                  }`}
+                >
+                  <span 
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: tier.color }}
+                  />
+                  <span>Stage {tier.number}: {tier.shortTitle}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Stage Description Banner */}
+          <div className="mt-4 p-4 rounded-2xl bg-[var(--color-secondary)]/50 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <span 
+                className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full text-black uppercase"
+                style={{ backgroundColor: activeTierDetails.color }}
+              >
+                Stage {activeTierDetails.number} • {activeTierDetails.title}
+              </span>
+              <p className="text-xs text-[var(--color-text-secondary)] mt-1">
+                {activeTierDetails.tagline}
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedCraftRole(activeLandingTier);
+                setIsCraftModalOpen(true);
+              }}
+              className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer"
+              style={{ color: activeTierDetails.color }}
+            >
+              <span>Explore All {ALL_SPECTRUM_PROFILES.length} Profiles in Depth</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* Search Input across the entire continuum */}
+        <div className="relative mb-8 max-w-xl">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+          <input
+            type="text"
+            value={landingSpectrumSearch}
+            onChange={(e) => setLandingSpectrumSearch(e.target.value)}
+            placeholder="Type any trade, question, or role (e.g. hair salon, cobbler, engineer, budget, teacher, what is an LLM)..."
+            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
+          />
+          {landingSpectrumSearch && (
+            <button
+              onClick={() => setLandingSpectrumSearch('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {/* Dynamic Profile Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {filteredLandingProfiles.slice(0, 4).map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setSelectedCraftRole(item.id as CraftRole);
+                setIsCraftModalOpen(true);
+              }}
+              className="group p-5 rounded-2xl bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span 
+                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border"
+                    style={{ borderColor: `${item.accent}50`, color: item.accent }}
+                  >
+                    STAGE {item.tier.replace('tier', '')}
+                  </span>
+                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
+                    BLUEPRINT ↗
+                  </span>
+                </div>
+                <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2">
+                  {item.tagline}
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[var(--color-border)]/50 flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+                <span>View Solution & Code</span>
+                <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* "You Are an LLM: The Simplest Plain-English Guide" Interactive Feature Box */}
+        <div className="p-6 md:p-8 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-sm">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6 pb-6 border-b border-[var(--color-border)]">
+            <div>
+              <div className="flex items-center gap-2 mb-2 text-emerald-500 font-mono text-xs font-bold uppercase tracking-wider">
+                <Terminal size={18} />
+                <span>You Are an LLM: Plain-English Guide</span>
+              </div>
+              <h3 className="text-2xl font-black text-[var(--color-text-primary)]">
+                How Anyone on Earth Can Talk to an AI in 3 Simple Rules
+              </h3>
+              <p className="text-xs md:text-sm text-[var(--color-text-secondary)] mt-1 max-w-2xl leading-relaxed">
+                {LLM_PLAIN_ENGLISH_GUIDE.whatIsAnLlm}
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setSelectedCraftRole('beginner');
+                setIsCraftModalOpen(true);
+              }}
+              className="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-lg transition-all cursor-pointer whitespace-nowrap self-stretch lg:self-auto flex items-center justify-center gap-2"
+            >
+              <span>Open Universal Guide</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
+
+          {/* The 3 Golden Rules Bar */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {LLM_PLAIN_ENGLISH_GUIDE.threeGoldenRules.map((rule, idx) => (
+              <div 
+                key={idx}
+                className="p-4 rounded-2xl bg-[var(--color-primary)]/80 border border-[var(--color-border)]"
+              >
+                <div className="flex items-center gap-2 mb-1.5 font-mono text-xs font-bold text-emerald-500">
+                  <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px]">
+                    {idx + 1}
+                  </span>
+                  <span>{rule.rule}</span>
+                </div>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                  {rule.explanation}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Interactive Prompt Blueprint Switcher */}
+          <div className="p-4 rounded-2xl bg-[var(--color-primary)]/90 border border-[var(--color-border)]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)]">
+                  Copy-and-Run Real-World Prompts
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                {LLM_PLAIN_ENGLISH_GUIDE.samplePrompts.map((s, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActivePromptSampleIdx(idx)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer whitespace-nowrap ${
+                      activePromptSampleIdx === idx
+                        ? 'bg-emerald-500 text-white font-bold'
+                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
+                    }`}
+                  >
+                    {s.category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-black/10 dark:bg-black/40 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <p className="text-xs font-mono text-[var(--color-text-primary)] leading-relaxed select-all">
+                "{LLM_PLAIN_ENGLISH_GUIDE.samplePrompts[activePromptSampleIdx].prompt}"
+              </p>
+              <button
+                onClick={() => handleCopyLandingPrompt(LLM_PLAIN_ENGLISH_GUIDE.samplePrompts[activePromptSampleIdx].prompt)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] transition-all cursor-pointer whitespace-nowrap shrink-0"
+              >
+                {copiedPrompt ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                <span>{copiedPrompt ? 'Copied!' : 'Copy'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* SECTION 1: ADAPTIVE LEARNING PATHWAYS (Multi-Tier & Topic Deep Dives) */}
       <section id="pathways" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
@@ -724,7 +1001,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               </h3>
               
               <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
-                LLM-as-a-Judge rubrics, OWASP AI Top 10 security defenses, prompt injection canaries, and client WebGPU SLM runner.
+                LLM-as-a-Judge rubrics, OWASP AI Top 10 security defenses, prompt injection canaries, and automated evaluation pipelines.
               </p>
             </div>
 
@@ -835,7 +1112,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       <section id="offline-ai-studio" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)] text-center relative overflow-hidden">
         <div className="max-w-2xl mx-auto mb-8">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-600/30 dark:border-cyan-500/25 text-cyan-950 dark:text-cyan-300 font-mono text-xs font-bold mb-4 shadow-sm">
-            <Bot size={14} />
+            <MessageSquareCode size={14} />
             <span>Explore the Offline AI Copilot: Bluee</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-[var(--color-text-primary)] mb-4 tracking-tight">
@@ -854,7 +1131,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             }}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
-            <Bot size={15} />
+            <MessageSquareCode size={15} />
             <span>Ask Bluee Now</span>
             <span className="text-xs bg-[var(--color-primary)]/20 px-2 py-0.5 rounded-full font-mono">Offline</span>
           </button>
@@ -903,6 +1180,17 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             onClose={() => setIsToolsModalOpen(false)}
             initialCategory={selectedToolCategory}
             initialToolId={selectedToolId}
+          />
+        </Suspense>
+      )}
+
+      {/* Everyday Real-World Trades & Crafts Modal (Lazy Loaded) */}
+      {isCraftModalOpen && (
+        <Suspense fallback={null}>
+          <EverydayCraftAiModal
+            isOpen={isCraftModalOpen}
+            onClose={() => setIsCraftModalOpen(false)}
+            initialRole={selectedCraftRole}
           />
         </Suspense>
       )}

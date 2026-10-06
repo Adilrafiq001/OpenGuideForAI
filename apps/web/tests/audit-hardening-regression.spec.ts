@@ -41,8 +41,9 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
       sessionStorage.setItem('openguide_session_theme', 'sakura-blossom');
     });
     await page.goto('/');
-    const htmlTheme = await page.getAttribute('html', 'data-theme');
-    const htmlMode = await page.getAttribute('html', 'data-theme-mode');
+    await page.waitForLoadState('domcontentloaded');
+    const htmlTheme = await page.locator('html').getAttribute('data-theme');
+    const htmlMode = await page.locator('html').getAttribute('data-theme-mode');
     expect(htmlTheme).toBe('sakura-blossom');
     expect(htmlMode).toBe('light');
   });

@@ -40,7 +40,7 @@ export const track0: Track = {
           id: 'lesson-0-1-1',
           title: 'Hello, World! & The CPython WASM Sandbox',
           subtitle: 'Your Very First Recipe in Code',
-          firstPrinciplesIntuition: 'Think of your computer as a friendly kitchen and Python as your favourite recipe book! When you want the kitchen to announce something, you use a built-in command called print(). Just like a baker reading out "The cookies are ready!", print() speaks words directly onto your screen. In OpenGuide, this recipe cooks right inside your own browser using WebAssembly—100% free, private, and with zero software or server installations required!',
+          firstPrinciplesIntuition: 'Whether you run a hair salon calculating color mix ratios, work as a cobbler measuring leather sole area, build machines as a mechanical engineer, or have never touched a computer in your life: code is simply giving a clear recipe to an eager assistant. You do not need complex math. When you want your assistant to announce something on screen, you use a built-in command called print(). Just like a baker reading out "The cookies are ready!", print() speaks words directly onto your screen. In OpenGuide, this cooks right inside your own browser using WebAssembly—100% free, private, and with zero software installations!',
           content: `### The In-Browser WebAssembly Architecture
 
 Traditional Python courses force you to install Python, configure terminal PATHs, and pay $20/month for cloud containers. OpenGuide compiles CPython 3.12 directly into WebAssembly (WASM), executing inside your browser's dedicated Web Worker with 0ms network latency.

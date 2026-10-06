@@ -137,26 +137,52 @@ for r in output:
     print([round(val, 4) for val in r])
 `,
           testCode: `
-# Automated In-Browser Pyodide Verification
 test_q = [[1.0, 0.5], [0.2, 0.8]]
 test_k = [[1.0, 0.5], [0.2, 0.8]]
 test_v = [[5.0, 10.0], [15.0, 20.0]]
 
 out, w = scaled_dot_product_attention(test_q, test_k, test_v)
-
-# Test 1: Shape conformance
 assert len(out) == 2 and len(out[0]) == 2, "Output must have shape (seq_len, d_v)"
-
-# Test 2: Row-stochastic property (softmax weights must sum to 1.0 per row)
 for row in w:
     assert abs(sum(row) - 1.0) < 1e-5, "Each row of attention weights must sum to exactly 1.0"
-
-# Test 3: Numerical correctness
 assert out[0][0] > 0 and out[0][1] > 0, "Output values must be non-zero positive floats"
+print("✓ [VISIBLE TESTS PASSED] Attention baseline verified.")
 
-print("[TEST PASSED] Scaled dot-product attention mathematically certified.")
+# --- HIDDEN INVARIANT 1: Asymmetric Sequence Lengths (Q: 3 tokens, K: 2 tokens) ---
+q_asym = [[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]] # shape (3, 2)
+k_asym = [[1.0, 0.0], [0.0, 1.0]]              # shape (2, 2)
+v_asym = [[10.0, 20.0, 30.0], [40.0, 50.0, 60.0]] # shape (2, 3) (d_v = 3 != d_k = 2)
+out_asym, w_asym = scaled_dot_product_attention(q_asym, k_asym, v_asym)
+assert len(out_asym) == 3 and len(out_asym[0]) == 3, f"Output shape must be (3, 3), got ({len(out_asym)}, {len(out_asym[0])})"
+assert len(w_asym) == 3 and len(w_asym[0]) == 2, f"Weights shape must be (3, 2), got ({len(w_asym)}, {len(w_asym[0])})"
+
+# --- HIDDEN INVARIANT 2: Scaling Invariance (Variance Scaling by 1 / sqrt(d_k)) ---
+raw_dot = dot_product(q_asym[0], k_asym[0])
+assert raw_dot == 1.0
+scale_fact = 1.0 / math.sqrt(2)
+assert abs(w_asym[0][0] - (math.exp(1.0 * scale_fact) / (math.exp(1.0 * scale_fact) + math.exp(0.0)))) < 1e-4, "Attention weights must be scaled by 1/sqrt(d_k)"
+
+# --- HIDDEN INVARIANT 3: Row Stochasticity on Asymmetric Matrices ---
+for r in w_asym:
+    assert abs(sum(r) - 1.0) < 1e-5, "Asymmetric attention weights row must sum to 1.0"
+
+# --- HIDDEN INVARIANT 4: Orthogonal Key Attention Discrimination ---
+q_orth = [[1.0, 0.0]]
+k_orth = [[1.0, 0.0], [0.0, 10.0]]
+v_orth = [[100.0], [0.0]]
+out_orth, w_orth = scaled_dot_product_attention(q_orth, k_orth, v_orth)
+assert w_orth[0][0] > w_orth[0][1], "Query [1, 0] must attend much more heavily to key [1, 0] than orthogonal key [0, 10]"
+
+# --- HIDDEN INVARIANT 5: Softmax Numerical Stability under Large Logits ---
+q_large = [[100.0, 100.0]]
+k_large = [[100.0, 100.0], [100.0, 99.0]]
+v_large = [[1.0], [2.0]]
+out_l, w_l = scaled_dot_product_attention(q_large, k_large, v_large)
+assert not math.isnan(out_l[0][0]), "Must not produce NaN on large dot products"
+assert abs(sum(w_l[0]) - 1.0) < 1e-5
+print("✓ [TEST PASSED] Scaled dot-product attention mathematically certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Scaled dot-product attention mathematically certified.',
           hint: 'Remember that K must be transposed before multiplying by Q. Softmax must be applied across rows so every row sums to 1.0.',
           progressiveHints: [
             'Matrix multiplication of Q (shape M x K) by K_T (shape K x N) gives a score matrix of shape M x N.',
@@ -274,19 +300,39 @@ print("Reconstructed Tokens:", reconstructed)
 print("Heads count         :", len(heads), "with dimension:", len(heads[0][0]))
 `,
           testCode: `
-# Automated Pyodide Subspace Invariance Test
-test_matrix = [[float(i * 8 + j) for j in range(8)] for i in range(4)] # 4 tokens, d_model=8
-test_heads = split_heads(test_matrix, num_heads=4) # 4 heads, d_k=2
-
+test_matrix = [[float(i * 8 + j) for j in range(8)] for i in range(4)]
+test_heads = split_heads(test_matrix, num_heads=4)
 assert len(test_heads) == 4, "Must produce exactly 4 heads"
 assert len(test_heads[0][0]) == 2, "Each head dimension d_k must equal d_model // num_heads (8 // 4 = 2)"
-
 test_recon = concat_heads(test_heads)
 assert test_recon == test_matrix, "Concatenation must be an exact lossless inversion of split_heads"
+print("✓ [VISIBLE TESTS PASSED] Subspace decomposition baseline verified.")
 
-print("[TEST PASSED] Multi-head subspace decomposition certified.")
+# --- HIDDEN INVARIANT 1: Subspace Dimension Conservation ---
+assert sum(len(h[0]) for h in test_heads) == 8, "Sum of head dimensions must equal d_model (8)"
+
+# --- HIDDEN INVARIANT 2: Exact Column Slice Partitioning ---
+for h_idx in range(4):
+    expected_slice = [row[h_idx*2 : (h_idx+1)*2] for row in test_matrix]
+    assert test_heads[h_idx] == expected_slice, f"Head {h_idx} does not contain exact contiguous column slice"
+
+# --- HIDDEN INVARIANT 3: Lossless Round-Trip Inversion on Odd Dimensions ---
+odd_matrix = [[1.5, 2.5, 3.5, 4.5, 5.5, 6.5] for _ in range(3)]
+odd_heads = split_heads(odd_matrix, num_heads=2)
+assert len(odd_heads) == 2 and len(odd_heads[0][0]) == 3
+assert concat_heads(odd_heads) == odd_matrix, "Must achieve lossless inversion on d_model=6, num_heads=2"
+
+# --- HIDDEN INVARIANT 4: Single Token Sequence Invariance (seq_len = 1) ---
+single_token = [[10.0, 20.0, 30.0, 40.0]]
+st_heads = split_heads(single_token, num_heads=2)
+assert len(st_heads) == 2 and len(st_heads[0]) == 1 and len(st_heads[0][0]) == 2
+assert concat_heads(st_heads) == single_token
+
+# --- HIDDEN INVARIANT 5: Identity Structure Preservation ---
+assert isinstance(test_heads, list) and isinstance(test_heads[0], list) and isinstance(test_heads[0][0], list)
+print("✓ [TEST PASSED] Multi-head subspace decomposition certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Multi-head subspace decomposition certified.',
           hint: 'Verify that each head slices the columns of each token row according to start = h * d_k and end = start + d_k.',
           progressiveHints: [
             'Tier 1 (Mental Model): Multi-head attention projects token representations into h parallel lower-dimensional subspaces so the model can attend to different syntactic and semantic patterns simultaneously.',
@@ -397,20 +443,42 @@ llama8b_128k = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=
 print("Llama-3 8B (128k tokens) KV-Cache Memory:", llama8b_128k["gb"], "GB")
 `,
           testCode: `
-# Automated Pyodide KV Cache Assertion
 mem = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=1000, precision_bytes=2)
-# 2 * 32 * 32 * 128 * 1000 * 2 = 524,288,000 bytes = 500 MB = ~0.488 GB
 assert mem["bytes"] == 524288000, "Exact byte calculation mismatch"
 assert mem["mb"] == 500.0, "MB calculation must equal 500.0"
-
 cache = KVCache()
 assert cache.append([1, 2], [3, 4]) == 1
 assert cache.append([5, 6], [7, 8]) == 2
 assert len(cache.k_cache) == 2
+print("✓ [VISIBLE TESTS PASSED] KV-Cache memory baseline verified.")
 
-print("[TEST PASSED] KV-Cache memory scaling laws certified.")
+# --- HIDDEN INVARIANT 1: Precision Scaling (FP8 vs FP16 vs FP32) ---
+mem_fp8 = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=1000, precision_bytes=1)
+assert mem_fp8["bytes"] == 262144000, f"FP8 precision (1 byte) must consume exactly half the bytes, got {mem_fp8['bytes']}"
+assert mem_fp8["mb"] == 250.0, "FP8 MB must equal 250.0"
+
+mem_fp32 = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=1000, precision_bytes=4)
+assert mem_fp32["bytes"] == 1048576000, "FP32 precision (4 bytes) must consume exactly double FP16"
+
+# --- HIDDEN INVARIANT 2: Linear Context Token Scaling ---
+mem_2k = estimate_kv_cache_memory(layers=32, heads=32, d_head=128, tokens=2000, precision_bytes=2)
+assert mem_2k["bytes"] == mem["bytes"] * 2, "Doubling context tokens must double memory footprint exactly"
+
+# --- HIDDEN INVARIANT 3: Exact Gigabyte Conversion Factor (1024^3) ---
+assert round(mem["bytes"] / (1024**3), 3) == mem["gb"], f"GB conversion must divide by 1024^3, got {mem['gb']}"
+
+# --- HIDDEN INVARIANT 4: Factor of 2 Key-Value Conservation ---
+mem_zero = estimate_kv_cache_memory(layers=0, heads=32, d_head=128, tokens=1000)
+assert mem_zero["bytes"] == 0 and mem_zero["mb"] == 0.0
+
+# --- HIDDEN INVARIANT 5: Cache State Isolation Across Instances ---
+c1 = KVCache()
+c2 = KVCache()
+c1.append([1], [2])
+assert len(c1.k_cache) == 1 and len(c2.k_cache) == 0, "Distinct KVCache instances must maintain isolated internal caches"
+print("✓ [TEST PASSED] KV-Cache memory scaling laws certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] KV-Cache memory scaling laws certified.',
           hint: 'Remember that the factor of 2 accounts for both Keys and Values. Megabytes are bytes / (1024 * 1024).',
           progressiveHints: [
             'Tier 1 (Mental Model): The KV-Cache eliminates quadratic recomputation by storing past Key and Value projection matrices in GPU memory during autoregressive generation.',
@@ -555,18 +623,40 @@ print(f"Certified Reasoning Path: {path}")
 print(f"Confidence Score        : {score}")
 `,
           testCode: `
-# Automated Pyodide Test-Time Search Certification
 p, s = tree_of_thoughts_search("Root Goal", max_depth=1, prune_threshold=0.8)
 assert "Decompose Sub-problems" in p, "Search must select the highest-scoring reasoning path"
 assert s == 0.95, "Selected score must match best critique score"
-
-# Verify pruning threshold eliminates weak branches
 p_low, _ = tree_of_thoughts_search("Root Goal", max_depth=1, prune_threshold=0.99)
 assert p_low is None, "Threshold of 0.99 should prune all branches"
+print("✓ [VISIBLE TESTS PASSED] Tree-of-Thoughts search baseline verified.")
 
-print("[TEST PASSED] Tree-of-Thoughts test-time compute search certified.")
+# --- HIDDEN INVARIANT 1: Multi-Depth Search Traversal (max_depth = 2) ---
+p2, s2 = tree_of_thoughts_search("Root Goal", max_depth=2, prune_threshold=0.6)
+assert p2 is not None, "Search with depth 2 and threshold 0.6 must discover valid multi-step paths"
+assert p2.count("->") == 2, f"Path at max_depth=2 must contain exactly 2 transitions, got {p2.count('->')}"
+assert s2 >= 0.70, "Selected path must maintain a high critique score"
+
+# --- HIDDEN INVARIANT 2: Strict Pruning Enforcement ---
+p_pruned, s_pruned = tree_of_thoughts_search("Root Goal", max_depth=1, prune_threshold=0.96)
+assert p_pruned is None and s_pruned == 0.0, "Prune threshold 0.96 must prune all candidate branches scoring <= 0.95"
+
+# --- HIDDEN INVARIANT 3: Permissive Threshold Selection (threshold = 0.2) ---
+p_all, s_all = tree_of_thoughts_search("Root Goal", max_depth=1, prune_threshold=0.2)
+assert "Decompose Sub-problems" in p_all and s_all == 0.95
+
+# --- HIDDEN INVARIANT 4: ThoughtNode Tree Structure Integrity ---
+root_node = ThoughtNode("Origin", score=1.0)
+child_node = ThoughtNode("Origin -> Child", score=0.8, parent=root_node)
+root_node.children.append(child_node)
+assert child_node.parent is root_node and len(root_node.children) == 1
+
+# --- HIDDEN INVARIANT 5: Return Contract Invariant ---
+res_p, res_s = tree_of_thoughts_search("Goal", max_depth=1)
+assert isinstance(res_s, float), "Score must be float"
+assert isinstance(res_p, (str, type(None))), "Path must be str or None"
+print("✓ [TEST PASSED] Tree-of-Thoughts test-time compute search certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Tree-of-Thoughts test-time compute search certified.',
           hint: 'Ensure that only candidate thoughts with score >= prune_threshold are enqueued as child nodes.',
           progressiveHints: [
             'Tier 1 (Mental Model): Tree-of-Thoughts enables test-time search by exploring alternative reasoning paths and pruning weak branches.',
@@ -669,17 +759,39 @@ print("Constrained Stream Success:", success)
 print("Parsed JSON Payload       :", data)
 `,
           testCode: `
-# Automated Pyodide Constrained Decoding Verification
 ok, res = validate_constrained_stream(['{"status":', ' "ok",', ' "code":', ' 200}'])
 assert ok is True, "Valid tokens must successfully parse as JSON"
 assert res["status"] == "ok" and res["code"] == 200, "Payload keys must match schema"
-
 bad_ok, _ = validate_constrained_stream(['{"status":', ' "ok",', ' "code":'])
 assert bad_ok is False, "Incomplete or malformed tokens must be rejected"
+print("✓ [VISIBLE TESTS PASSED] Constrained decoding baseline verified.")
 
-print("[TEST PASSED] Grammar-guided constrained decoding verified.")
+# --- HIDDEN INVARIANT 1: Token Granularity Invariance ---
+char_stream = list('{"status": "ok", "code": 200}')
+ok_char, res_char = validate_constrained_stream(char_stream)
+assert ok_char is True and res_char == res, "Streaming chunk granularity must not affect final JSON parse"
+
+# --- HIDDEN INVARIANT 2: Malformed Syntax Rejection (Trailing Commas & Unquoted Keys) ---
+bad_comma, _ = validate_constrained_stream(['{"status": "ok", "code": 200,}'])
+assert bad_comma is False, "JSON with illegal trailing comma must be rejected"
+bad_key, _ = validate_constrained_stream(['{status: "ok", "code": 200}'])
+assert bad_key is False, "Unquoted key must be rejected by strict JSON grammar"
+
+# --- HIDDEN INVARIANT 3: Nested Data Structure Conformance ---
+nested_tokens = ['{"status": "ok", ', '"code": 200, ', '"details": {"model": "slm-1"}}']
+ok_nested, res_nested = validate_constrained_stream(nested_tokens)
+assert ok_nested is True and res_nested["details"]["model"] == "slm-1", "Valid nested objects must parse successfully"
+
+# --- HIDDEN INVARIANT 4: Empty Stream Rejection ---
+ok_empty, _ = validate_constrained_stream([])
+assert ok_empty is False, "Empty token stream must be rejected as invalid JSON"
+
+# --- HIDDEN INVARIANT 5: Whitespace-Only Stream Handling ---
+ok_blank, _ = validate_constrained_stream(["   "])
+assert ok_blank is False, "Whitespace-only stream must be rejected"
+print("✓ [TEST PASSED] Grammar-guided constrained decoding verified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Grammar-guided constrained decoding verified.',
           hint: 'Verify that the token stream concatenates into a complete, well-formed JSON object before calling json.loads.',
           progressiveHints: [
             'Tier 1 (Mental Model): Constrained grammar decoding ensures emitted token sequences adhere 100% to valid syntax by rejecting invalid state transitions.',
@@ -828,23 +940,57 @@ server.register_tool(
 )
 `,
           testCode: `
-# Automated Pyodide MCP Compliance Harness
 res = json.loads(server.handle_request(json.dumps({
     "jsonrpc": "2.0", "id": 10, "method": "tools/call",
     "params": {"name": "calculator", "arguments": {"a": 15, "b": 27}}
 })))
-
 assert res["id"] == 10, "Response ID must echo request ID"
 assert res["result"]["content"][0]["text"] == "42", "Tool call must correctly execute and return stringified result"
-
 err_res = json.loads(server.handle_request(json.dumps({
     "jsonrpc": "2.0", "id": 11, "method": "non_existent_method"
 })))
 assert err_res["error"]["code"] == -32601, "Unknown method must return standard JSON-RPC error code -32601"
+print("✓ [VISIBLE TESTS PASSED] MCP server baseline verified.")
 
-print("[TEST PASSED] Model Context Protocol (MCP) server dispatcher certified.")
+# --- HIDDEN INVARIANT 1: tools/list Protocol Compliance ---
+list_res = json.loads(server.handle_request(json.dumps({
+    "jsonrpc": "2.0", "id": 20, "method": "tools/list"
+})))
+assert list_res["id"] == 20
+assert "tools" in list_res["result"], "tools/list must return result.tools array"
+assert any(t["name"] == "calculator" for t in list_res["result"]["tools"]), "Calculator must appear in tool registry"
+
+# --- HIDDEN INVARIANT 2: Unknown Tool Name on tools/call (-32601) ---
+unkn_res = json.loads(server.handle_request(json.dumps({
+    "jsonrpc": "2.0", "id": 30, "method": "tools/call",
+    "params": {"name": "non_existent_tool", "arguments": {}}
+})))
+assert unkn_res["error"]["code"] == -32601, "Calling an unregistered tool must return code -32601"
+
+# --- HIDDEN INVARIANT 3: Multiple Tool Registration & Independent Execution ---
+server.register_tool(
+    name="echo",
+    description="Echoes text",
+    schema={"type": "object", "properties": {"msg": {"type": "string"}}},
+    handler=lambda args: f"Echo: {args.get('msg', '')}"
+)
+echo_res = json.loads(server.handle_request(json.dumps({
+    "jsonrpc": "2.0", "id": 40, "method": "tools/call",
+    "params": {"name": "echo", "arguments": {"msg": "hello OpenGuide"}}
+})))
+assert echo_res["result"]["content"][0]["text"] == "Echo: hello OpenGuide"
+
+# --- HIDDEN INVARIANT 4: Standard JSON-RPC 2.0 Envelope Structure ---
+assert res.get("jsonrpc") == "2.0" and err_res.get("jsonrpc") == "2.0"
+assert "result" in res and "error" not in res
+assert "error" in err_res and "result" not in err_res
+
+# --- HIDDEN INVARIANT 5: Server Instance Encapsulation ---
+clean_server = MCPServer("Isolated-MCP")
+assert len(clean_server.tools) == 0, "New MCPServer instance must have an empty registry"
+print("✓ [TEST PASSED] Model Context Protocol (MCP) server dispatcher certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Model Context Protocol (MCP) server dispatcher certified.',
           hint: 'Confirm that all responses return a valid JSON-RPC 2.0 envelope with jsonrpc, id, and either result or error.',
           progressiveHints: [
             'Tier 1 (Mental Model): Model Context Protocol (MCP) establishes open JSON-RPC 2.0 message conventions so agents can discover and call tools universally.',
@@ -976,22 +1122,42 @@ print("Quantization Scale      :", round(scale, 6))
 print("Mean Squared Error (MSE):", round(mse, 6))
 `,
           testCode: `
-# Automated Pyodide Quantization Certification
 test_tensor = [0.12, -0.85, 0.44, 0.99, -0.02]
 q, s = quantize_int8(test_tensor)
-
-# Assert all values are signed 8-bit integers
 for val in q:
     assert isinstance(val, int), "Quantized values must be integers"
     assert -128 <= val <= 127, f"Value {val} out of 8-bit range [-128, 127]"
-
 rec = dequantize_int8(q, s)
 loss = compute_mse(test_tensor, rec)
 assert loss < 0.001, f"Quantization MSE ({loss}) must be under 0.001 for uniform scale"
+print("✓ [VISIBLE TESTS PASSED] Quantization baseline verified.")
 
-print("[TEST PASSED] In-memory weight quantization certified.")
+# --- HIDDEN INVARIANT 1: Exact Scale Factor Derivation (max(|W|) / 127.0) ---
+assert abs(s - (0.99 / 127.0)) < 1e-7, f"Scale must equal max_abs / 127.0, got {s}"
+
+# --- HIDDEN INVARIANT 2: 2D Matrix Tensor Quantization Support ---
+matrix_2d = [[0.5, -0.5], [1.0, -1.0]]
+q_2d, s_2d = quantize_int8(matrix_2d)
+assert len(q_2d) == 2 and len(q_2d[0]) == 2, "Must preserve 2D tensor matrix structure"
+assert q_2d[1][0] == 127 and q_2d[1][1] == -127, "Max float (+1.0 and -1.0) must map to +127 and -127"
+rec_2d = dequantize_int8(q_2d, s_2d)
+assert compute_mse(matrix_2d, rec_2d) < 0.0001
+
+# --- HIDDEN INVARIANT 3: Symmetric Inversion Around Zero ---
+assert q_2d[0][0] == -q_2d[0][1], "Symmetric quantization must preserve exact sign antisymmetry"
+
+# --- HIDDEN INVARIANT 4: All-Zero Weight Tensor Handling ---
+zeros_tensor = [0.0, 0.0, 0.0]
+q_zeros, s_zeros = quantize_int8(zeros_tensor)
+assert q_zeros == [0, 0, 0] and s_zeros == 1.0, "Zero tensor must not crash on zero-division"
+
+# --- HIDDEN INVARIANT 5: Hard Range Clamping [-128, 127] ---
+outlier_tensor = [100.0, -100.0]
+q_out, _ = quantize_int8(outlier_tensor)
+assert all(-128 <= v <= 127 for v in q_out)
+print("✓ [TEST PASSED] In-memory weight quantization certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] In-memory weight quantization certified.',
           hint: 'Ensure that scale is max(|weights|) / 127 and values are clipped between -128 and 127.',
           progressiveHints: [
             'Tier 1 (Mental Model): Symmetric quantization maps continuous 32-bit floats into signed 8-bit integers [-128, 127] by dividing by scale = max(|W|) / 127.',
@@ -1096,20 +1262,38 @@ loss_good, logits_good = compute_dpo_loss(
 print(f"Aligned Model Logits: {round(logits_good, 4)} | DPO Loss: {round(loss_good, 4)}")
 `,
           testCode: `
-# Automated Pyodide DPO Verification
-# Case A: Policy strongly prefers winning response (Loss should be near 0)
 loss_aligned, _ = compute_dpo_loss(-0.5, -5.0, -2.0, -2.0, beta=0.5)
-
-# Case B: Policy mistakenly prefers losing response (Loss should be large)
 loss_misaligned, _ = compute_dpo_loss(-5.0, -0.5, -2.0, -2.0, beta=0.5)
-
 assert loss_aligned < loss_misaligned, "Aligned policy must produce strictly lower loss than misaligned policy"
 assert loss_aligned < 0.5, "Strongly aligned response should produce small loss"
 assert loss_misaligned > 1.5, "Inverted preferences must produce high penalizing loss"
+print("✓ [VISIBLE TESTS PASSED] DPO loss baseline verified.")
 
-print("[TEST PASSED] Direct Preference Optimization (DPO) mathematical loss certified.")
+# --- HIDDEN INVARIANT 1: Neutral Indifference Identity (pi == ref) ---
+loss_neutral, logits_neutral = compute_dpo_loss(-2.0, -2.0, -2.0, -2.0, beta=0.1)
+assert abs(logits_neutral) < 1e-7, "Neutral policy logits must be exactly 0.0"
+assert abs(loss_neutral - math.log(2.0)) < 1e-4, f"Loss when pi == ref must equal ln(2) (~0.6931), got {loss_neutral}"
+
+# --- HIDDEN INVARIANT 2: Beta Temperature Scaling Monotonicity ---
+l_b1, log_b1 = compute_dpo_loss(-1.0, -3.0, -2.0, -2.0, beta=0.1)
+l_b2, log_b2 = compute_dpo_loss(-1.0, -3.0, -2.0, -2.0, beta=0.5)
+assert log_b2 > log_b1, "Higher beta must scale logits proportionally"
+assert l_b2 < l_b1, "Higher beta on aligned responses must yield lower loss"
+
+# --- HIDDEN INVARIANT 3: Numerical Stability on Extreme Margins ---
+loss_extreme, _ = compute_dpo_loss(-0.01, -50.0, -5.0, -5.0, beta=1.0)
+assert not math.isnan(loss_extreme) and not math.isinf(loss_extreme), "Must not produce NaN/Inf on extreme logits"
+assert loss_extreme >= 0.0, "DPO loss must be strictly non-negative"
+
+# --- HIDDEN INVARIANT 4: 2-Tuple Return Contract ---
+ret_val = compute_dpo_loss(-1.0, -2.0, -1.0, -2.0)
+assert isinstance(ret_val, tuple) and len(ret_val) == 2, "Must return (loss, logits) 2-tuple"
+
+# --- HIDDEN INVARIANT 5: Strictly Positive Loss Floor ---
+assert loss_aligned > 0.0, "Loss must be bounded strictly above zero"
+print("✓ [TEST PASSED] Direct Preference Optimization (DPO) mathematical loss certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Direct Preference Optimization (DPO) mathematical loss certified.',
           hint: 'Remember that DPO loss minimizes -log(sigmoid(beta * (win_ratio - lose_ratio))).',
           progressiveHints: [
             'Tier 1 (Mental Model): Direct Preference Optimization (DPO) derives an exact closed-form alignment objective, eliminating the instability of training separate reward models and RL loops.',
@@ -1246,18 +1430,43 @@ report = agent.execute_reasoning_cycle("Synthesize Frontier Intelligence")
 print(json.dumps(report, indent=2))
 `,
           testCode: `
-# Automated Pyodide Capstone Certification
 test_agent = AutonomousReasoningEngine()
 test_agent.register_mcp_tool("calc", lambda args: args["x"] * args["multiplier"])
 res = test_agent.execute_reasoning_cycle("Autonomous Test")
-
 assert res["certified"] is True, "Autonomous cycle must verify and certify execution"
 assert res["kv_tokens_consumed"] >= 384, "KV memory token consumption must be tracked across steps"
 assert any("[MCP CALL]" in line for line in res["log"]), "Log must capture standardized MCP tool invocation"
+print("✓ [VISIBLE TESTS PASSED] Capstone agent baseline verified.")
 
-print("[TEST PASSED] Capstone Autonomous Frontier Reasoning Agent certified.")
+# --- HIDDEN INVARIANT 1: Exact KV Token Accumulation Kinematics ---
+assert res["kv_tokens_consumed"] == 384, f"Expected exactly 384 KV tokens for 3 steps, got {res['kv_tokens_consumed']}"
+
+# --- HIDDEN INVARIANT 2: Chronological Audit Trail Sequence ---
+log_entries = res["log"]
+assert log_entries[0].startswith("[GOAL] Initialized:"), "Log must begin with [GOAL]"
+assert any(l.startswith("[THOUGHT]") for l in log_entries), "Log must contain [THOUGHT] steps"
+assert any(l.startswith("[MCP CALL] calc -> 42") for l in log_entries), "Log must record exact MCP tool output (21 * 2 = 42)"
+assert log_entries[-1] == "[VERDICT] Certified: True", "Log must terminate with [VERDICT] Certified: True"
+
+# --- HIDDEN INVARIANT 3: Certification Failure on Missing Tool ---
+toolless_agent = AutonomousReasoningEngine("NoToolAgent")
+res_no_tool = toolless_agent.execute_reasoning_cycle("Fail Test")
+assert res_no_tool["certified"] is False, "Agent without required tools must fail certification"
+assert "[VERDICT] Certified: False" in res_no_tool["log"]
+
+# --- HIDDEN INVARIANT 4: Custom Goal Parameterization ---
+custom_goal = "Analyze WebAssembly Linear Memory Bounds"
+custom_res = test_agent.execute_reasoning_cycle(custom_goal)
+assert custom_res["goal"] == custom_goal, "Report must reflect specific input goal"
+
+# --- HIDDEN INVARIANT 5: Agent Instance State Isolation ---
+agent_a = AutonomousReasoningEngine("Agent-A")
+agent_b = AutonomousReasoningEngine("Agent-B")
+agent_a.execute_reasoning_cycle("Goal A")
+assert len(agent_a.audit_log) > 0 and len(agent_b.audit_log) == 0, "Distinct agents must maintain strictly isolated logs"
+print("✓ [TEST PASSED] Capstone Autonomous Frontier Reasoning Agent certified.")
 `,
-          expectedOutput: '[TEST PASSED]',
+          expectedOutput: '✓ [TEST PASSED] Capstone Autonomous Frontier Reasoning Agent certified.',
           hint: 'Verify that the MCP tool is called and returns the product, updating audit_log and kv_memory_tokens.',
           progressiveHints: [
             'Tier 1 (Mental Model): The Capstone Autonomous Frontier Reasoning Agent harmonizes internal context memory (KV cache tokens), structured MCP tool invocation, and self-critique verification.',

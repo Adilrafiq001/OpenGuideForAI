@@ -67,3 +67,22 @@ Every interactive lab across Tracks 0 through 4 must include:
 1. **Live Build Hash Matching:** Verifying deployment requires fetching the live HTML document from `https://openguideforai.dpdns.org`, parsing the main bundle script hash (`dist/assets/index-[hash].js`), and confirming it matches the local production build generated from git `HEAD`.
 2. **Zero Ignored Edge Console Errors:** Every console error or warning observed during live production navigation—including font fetching failures, analytics beacon timeouts, or Content Security Policy violations—must be formally diagnosed, triaged, and resolved or documented with root-cause proof. No console error may be dismissed as "harmless" without evidence.
 
+---
+
+## 9. Post-Mortem Anti-Regression & Never-Repeat Standards
+
+1. **Recursive Markdown Discovery (No Shallow Traversal):**
+   - When tasked with updating documentation, changelogs, or markdown files across the project, agents must never inspect only top-level directories.
+   - Agents MUST execute an exhaustive recursive discovery (`Get-ChildItem -Recurse -Filter *.md`) across all subpackages (`apps/web/README.md`) and translations (`docs/translations/*.md`) before planning or claiming completion.
+2. **Anti-Premature Declaration Protocol (Verification Before Assertion):**
+   - Never claim or declare that documentation, translations, tests, or features are "fully synchronized", "complete", or "production-ready" without generating and inspecting an explicit diff inventory of every target file against the master source of truth.
+   - Core principle: *EVIDENCE > ASSUMPTION; VERIFICATION > CONFIDENCE; UNVERIFIED = UNVERIFIED*.
+3. **Monorepo Package Scaffolding Standard:**
+   - Every package in a monorepo (`apps/web`, `packages/*`) must maintain curated, domain-specific documentation.
+   - Never leave default framework boilerplate (such as default Vite/Next.js/CRA templates) in subpackage READMEs.
+4. **Repository-Wide Audit Grounding (Zero Contradictory Sycophancy):**
+   - When grounding audit verdicts, scores, and status ratings against the Anti-Bias Protocol (e.g., 8.8/10 External Audit Ready vs 10/10), agents MUST grep and harmonize all audit artifacts (`docs/AUDIT_QA.md`, `docs/PRODUCTION-READINESS-VERDICT.md`, `docs/EXTERNAL-AUDIT-QA-DOSSIER.md`, `docs/PROJECT-STATE.md`).
+   - No lingering inflated claims (e.g., "10/10", "Unconditional Go", or stale test counts) may contradict the grounded verdict.
+5. **Clear Separation of Release Authoring vs. Deployment Execution:**
+   - When asked to update changelogs and git releases, explicitly differentiate documentation drafting (updating `CHANGELOG.md` & `package.json`) from operational release execution (git commit, git tag, dual-remote push, post-deploy verification).
+

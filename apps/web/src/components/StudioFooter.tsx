@@ -326,6 +326,15 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <span className="text-[10px] font-mono opacity-60 group-hover:text-amber-400">9 Labs</span>
               </button>
             </li>
+            <li>
+              <button 
+                onClick={() => navigate('/track/4/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track 4: Frontier Systems & Attention</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-rose-400">9 Labs</span>
+              </button>
+            </li>
           </ul>
         </div>
 
