@@ -23,6 +23,7 @@ import { PhysicsBarLoader } from './components/PhysicsBarLoader';
 import { startAppTour } from './components/AppTour';
 import Lenis from 'lenis';
 
+// OpenGuide AI Studio Sovereign Production Release 1.4.0
 // Auto-recover from stale chunk 404s after new deployments
 function lazyWithRetry<T extends React.ComponentType<any>>(
   componentImport: () => Promise<{ default: T }>
