@@ -245,7 +245,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             </div>
 
             {/* Navigation Tabs */}
-            <div className="px-4 sm:px-6 pt-2.5 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <div className="px-4 sm:px-6 pt-2.5 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex flex-wrap items-center gap-2">
               <button
                 onClick={() => setActiveTab('themes')}
                 data-testid="tab-themes-btn"

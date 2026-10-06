@@ -605,7 +605,7 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
                   </span>
                 </div>
                 <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
-                  Granular, idiot-proof walkthroughs for every layer of the $0 sovereign AI engineer stack.
+                  Granular, step-by-step walkthroughs for every layer of the $0 sovereign AI engineer stack.
                 </p>
               </div>
             </div>
@@ -620,7 +620,7 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
           </div>
 
           {/* Category Navigation Bar */}
-          <div role="tablist" aria-label="Tool Categories" className="flex items-center gap-2 px-5 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 overflow-x-auto shrink-0">
+          <div role="tablist" aria-label="Tool Categories" className="flex flex-wrap items-center gap-2 px-5 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
             {(['MEMORY', 'GLUE', 'COMPUTE', 'HOSTING'] as const).map(cat => {
               const isActive = selectedCategory === cat;
               return (

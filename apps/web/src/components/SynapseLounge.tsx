@@ -348,7 +348,7 @@ export function SynapseLounge() {
       </div>
 
       {/* Game Selector Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] mb-8 overflow-x-auto max-w-fit">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] mb-8 max-w-full">
         <button
           onClick={() => {
             playSound('click', soundFx);

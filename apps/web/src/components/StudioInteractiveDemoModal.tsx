@@ -352,7 +352,7 @@ export function StudioInteractiveDemoModal({
           {/* Main Layout: Flow Selector Sidebar + Interactive Detail Pane */}
           <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden">
             {/* Sidebar Navigation */}
-            <div role="tablist" aria-label="Demo Flows" className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#000)]/30 overflow-x-auto md:overflow-y-auto p-3 flex md:flex-col gap-1.5 shrink-0">
+            <div role="tablist" aria-label="Demo Flows" className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#000)]/30 overflow-y-auto max-h-48 md:max-h-none p-3 flex flex-col gap-1.5 shrink-0">
               {flows.map((flow) => {
                 const Icon = flow.icon;
                 const isActive = flow.id === activeFlowId;
@@ -366,7 +366,7 @@ export function StudioInteractiveDemoModal({
                       playTactileSound('click');
                       triggerHaptic('light');
                     }}
-                    className={`p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 shrink-0 md:shrink w-auto md:w-full ${
+                    className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 w-full shrink-0 ${
                       isActive
                         ? 'bg-[var(--color-secondary,#111)] border border-[var(--color-accent,#10b981)] shadow-sm'
                         : 'border border-transparent hover:border-[var(--color-border,rgba(255,255,255,0.08))] hover:bg-[var(--color-secondary,#111)]/50 text-[var(--color-text-secondary,#a1a1aa)]'

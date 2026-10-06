@@ -616,7 +616,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </div>
 
               {/* Tabs */}
-              <div className="flex border-b border-[var(--color-border)] px-4 bg-[var(--color-primary)]/40 overflow-x-auto text-xs font-mono shrink-0">
+              <div className="flex flex-wrap border-b border-[var(--color-border)] px-4 bg-[var(--color-primary)]/40 text-xs font-mono shrink-0">
                 <button
                   onClick={() => setLegalTab('terms')}
                   className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${

@@ -1345,8 +1345,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
             }`}>
               
               {/* Studio Tabs */}
-              <div role="tablist" aria-label="Course Sections" className="flex items-center justify-between px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
-                <div className="flex items-center gap-1 sm:gap-2">
+              <div role="tablist" aria-label="Course Sections" className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/20 shrink-0">
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                   {hasVideo && (
                     <button
                       role="tab"

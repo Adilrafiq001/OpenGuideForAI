@@ -260,7 +260,7 @@ export function HeroPhysicsStage({
 
         {/* Console Lens Switcher Bar */}
         <div className="px-3 sm:px-5 py-2.5 border-b border-[var(--color-border)] bg-black/[0.02] dark:bg-black/20 flex flex-wrap items-center justify-between gap-2 max-w-full">
-          <div className="flex items-center gap-1.5 max-w-full overflow-x-auto no-scrollbar py-0.5">
+          <div className="flex flex-wrap items-center gap-1.5 max-w-full py-0.5">
             {[
               { id: 'wasm' as const, label: t('hero_console_tab_wasm'), icon: Terminal },
               { id: 'vector' as const, label: t('hero_console_tab_vector'), icon: Database },

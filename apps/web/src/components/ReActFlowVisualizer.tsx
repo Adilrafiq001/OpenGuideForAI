@@ -336,7 +336,7 @@ export function ReActFlowVisualizer({ logs = [], activeLessonTitle = 'Interactiv
       </div>
 
       {/* Trace Archetype Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      <div className="flex flex-wrap items-center gap-2 pb-1">
         <button
           onClick={() => setSelectedTraceKey('live')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer whitespace-nowrap ${

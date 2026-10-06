@@ -67,7 +67,7 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Graphics Tier Selector Quick Bar */}
-        <div className="flex items-center gap-2 max-w-full overflow-x-auto no-scrollbar py-1">
+        <div className="flex flex-wrap items-center gap-2 max-w-full py-1">
           <span className="text-[11px] font-mono text-[var(--color-text-secondary)] font-semibold hidden sm:inline shrink-0">Compute Tier:</span>
           <div className="flex p-1 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-mono shadow-sm shrink-0" role="group" aria-label="Graphics Compute Tier Selector">
             <button
@@ -147,7 +147,7 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-[var(--color-border)] gap-2 overflow-x-auto no-scrollbar max-w-full whitespace-nowrap pb-0.5" role="tablist" aria-label="Holodeck Visualizer Views">
+        <div className="flex flex-wrap border-b border-[var(--color-border)] gap-2 max-w-full pb-0.5" role="tablist" aria-label="Holodeck Visualizer Views">
           <button
             id="tab-vectors"
             role="tab"

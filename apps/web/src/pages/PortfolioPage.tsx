@@ -930,7 +930,7 @@ export function PortfolioPage() {
             </div>
 
             {/* Filter buttons */}
-            <div className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] overflow-x-auto max-w-full">
+            <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] max-w-full">
               {(['all', '0', '1', '2', '3', '4'] as const).map(f => (
                 <button
                   key={f}

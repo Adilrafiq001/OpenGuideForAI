@@ -193,7 +193,7 @@ export function FirstTimeSetupModal({
 
           {/* Stepper Navigation Indicator */}
           <div className="px-6 sm:px-8 py-3 bg-[var(--color-primary,#000)]/30 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {[
                 { id: 1, label: 'Preferences' },
                 { id: 2, label: 'Native App' },

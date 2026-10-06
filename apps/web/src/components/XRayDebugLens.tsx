@@ -112,7 +112,7 @@ export function XRayDebugLens({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-2 px-6 py-3 border-b border-white/5 bg-black/40 shrink-0 overflow-x-auto">
+          <div className="flex flex-wrap items-center gap-2 px-4 sm:px-6 py-3 border-b border-white/5 bg-black/40 shrink-0">
             {[
               { id: 'telemetry' as const, label: 'Performance & Heap', icon: Cpu },
               { id: 'react' as const, label: 'Agent Flow DAG', icon: GitFork },

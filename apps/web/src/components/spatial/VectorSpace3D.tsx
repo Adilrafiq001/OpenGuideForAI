@@ -772,7 +772,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
       {/* 2. Spatial Sub-Manifold Cluster Slicer Bar */}
       <div className="px-4 sm:px-6 py-2 bg-[var(--color-secondary)] border-b border-[var(--color-border)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+        <div className="flex flex-wrap items-center gap-1.5 py-0.5">
           <Layers size={13} className="text-[var(--color-accent)] shrink-0" />
           <span className="text-[10px] text-[var(--color-text-secondary)] shrink-0">Filter Cluster:</span>
           {(['all', 'neural', 'vector', 'math', 'agents', 'frontier'] as const).map(c => (

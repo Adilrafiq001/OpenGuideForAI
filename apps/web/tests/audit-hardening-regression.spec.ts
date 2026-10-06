@@ -1022,6 +1022,77 @@ ZeroDivisionError: division by zero`;
     // Zero console errors
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
+
+  test('TC-AUDIT-028: Human Psychological Usability & Anti-Horizontal Overflow Invariants', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    // 1. Check Desktop & Mobile viewports for anti-horizontal cutoff invariants
+    await page.goto('/');
+
+    // Check Cognitive Accelerator Pareto chips have flex-wrap (no horizontal clipping)
+    const paretoChips = page.locator('[data-testid="pareto-chips-scroll"]');
+    await expect(paretoChips).toBeVisible();
+    await expect(paretoChips).toHaveClass(/flex-wrap/);
+
+    // 2. Open Theme Settings Modal and verify navigation tabs wrap cleanly
+    const themeTrigger = page.locator('[data-testid="open-themes-btn"]').first();
+    if (await themeTrigger.isVisible()) {
+      await themeTrigger.click();
+      const themeModal = page.locator('[data-testid="theme-settings-modal"]');
+      await expect(themeModal).toBeVisible();
+      const navTabs = themeModal.locator('button[data-testid="tab-themes-btn"]').locator('..');
+      await expect(navTabs).toHaveClass(/flex-wrap/);
+      const closeThemeBtn = page.locator('[data-testid="close-theme-modal-btn"]');
+      await closeThemeBtn.click();
+    }
+
+    // 3. Open Free Tools Modal and verify respectful plain language & wrapping tabs
+    const toolsFooterBtn = page.locator('button:has-text("Free Tools"), button:has-text("4 Tools"), button:has-text("Free Sovereign Stack")').first();
+    if (await toolsFooterBtn.isVisible()) {
+      await toolsFooterBtn.click();
+      const toolsModal = page.locator('div[role="dialog"][aria-labelledby="tools-modal-title"]');
+      await expect(toolsModal).toBeVisible();
+
+      // Verify respectful plain language: NO demeaning/condescending language
+      await expect(toolsModal).toContainText('Granular, step-by-step walkthroughs');
+      await expect(toolsModal).not.toContainText('idiot-proof');
+
+      // Verify Tool Categories tablist has flex-wrap
+      const categoryTablist = toolsModal.locator('div[role="tablist"][aria-label="Tool Categories"]');
+      await expect(categoryTablist).toHaveClass(/flex-wrap/);
+
+      // Close modal
+      const closeBtn = toolsModal.locator('button[aria-label="Close dialog"]');
+      await closeBtn.click();
+      await expect(toolsModal).not.toBeVisible();
+    }
+
+    // 4. Verify Spatial Holodeck tier bar and view tabs wrap cleanly
+    await page.goto('/holodeck');
+    const computeTierContainer = page.locator('div[role="group"][aria-label="Graphics Compute Tier Selector"]').locator('..');
+    await expect(computeTierContainer).toHaveClass(/flex-wrap/);
+
+    const holodeckTablist = page.locator('div[role="tablist"][aria-label="Holodeck Visualizer Views"]');
+    await expect(holodeckTablist).toHaveClass(/flex-wrap/);
+
+    // 5. Verify Portfolio Page track filters wrap cleanly
+    await page.goto('/portfolio');
+    const trackFilterContainer = page.locator('button:has-text("All 28"), button:has-text("All 45")').locator('..');
+    await expect(trackFilterContainer).toHaveClass(/flex-wrap/);
+
+    // 6. Test on narrow mobile screen (375x667)
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+    const paretoChipsMobile = page.locator('[data-testid="pareto-chips-scroll"]');
+    await expect(paretoChipsMobile).toBeVisible();
+    await expect(paretoChipsMobile).toHaveClass(/flex-wrap/);
+
+    // Verify 0 console errors
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
 });
 
 
