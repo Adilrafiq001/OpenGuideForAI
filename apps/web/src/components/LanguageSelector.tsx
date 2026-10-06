@@ -3,7 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Check, ChevronDown } from 'lucide-react';
 import { useLanguageStore, LANGUAGES } from '../store/useLanguageStore';
 
-export function LanguageSelector() {
+interface LanguageSelectorProps {
+  variant?: 'default' | 'capsule';
+}
+
+export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage, t } = useLanguageStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,6 +37,10 @@ export function LanguageSelector() {
     };
   }, [isOpen]);
 
+  const buttonClasses = variant === 'capsule'
+    ? 'inline-flex items-center justify-center gap-1 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer active:scale-95 group'
+    : 'inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group';
+
   return (
     <div ref={dropdownRef} className="relative inline-block text-left" dir="ltr">
       <button
@@ -40,11 +48,11 @@ export function LanguageSelector() {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-label="Select interface language"
-        className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer shadow-sm active:scale-95 group"
+        className={buttonClasses}
       >
-        <Globe size={14} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
-        <span className="inline font-semibold uppercase tracking-wider">{currentLang.code}</span>
-        <ChevronDown size={11} className={`opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <Globe size={13} className="text-[var(--color-accent)] opacity-80 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
+        <span className="inline font-semibold uppercase tracking-wider text-[11px]">{currentLang.code}</span>
+        <ChevronDown size={10} className={`opacity-60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>

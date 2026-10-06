@@ -13,7 +13,6 @@ import {
   ChevronDown,
   Menu,
   X,
-  Settings,
   ShieldCheck,
   Layers,
   Cpu,
@@ -29,7 +28,6 @@ import { LanguageSelector } from './LanguageSelector';
 import { Tooltip } from './Tooltip';
 import { ThemeSwitch } from './ThemeSwitch';
 import { startAppTour } from './AppTour';
-import { GitHubStarButton } from './GitHubStarButton';
 
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
@@ -83,403 +81,415 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
   }, [currentThemeInfo.accent]);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-6 md:px-8 xl:px-12 py-2.5 sm:py-3 flex items-center justify-between flex-nowrap backdrop-blur-xl transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-6 md:px-8 xl:px-12 py-2 sm:py-2.5 flex items-center justify-between gap-3 flex-nowrap backdrop-blur-xl transition-all duration-300 ${
       isScrolled 
-        ? 'bg-[var(--color-primary)]/95 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/20' 
-        : 'bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]/60 shadow-sm'
+        ? 'bg-[var(--color-primary)]/92 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/25 backdrop-blur-2xl' 
+        : 'bg-[var(--color-primary)]/75 border-b border-[var(--color-border)]/50 backdrop-blur-xl'
     }`}>
-      <div className="flex items-center gap-3 xl:gap-5 min-w-0 shrink-0">
+      <div className="flex items-center gap-3 xl:gap-6 min-w-0 shrink-0">
         {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
         <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl shrink-0">
           <BrandLogo size="md" />
         </a>
-        
-        {/* Desktop Streamlined Navigation with Hover Reveals */}
-        <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-3 2xl:gap-5 text-[var(--color-text-primary)]/85 hover:text-[var(--color-text-primary)] text-xs font-semibold tracking-tight whitespace-nowrap overflow-hidden">
-          <Tooltip
-            position="bottom"
-            content="10 Structured Pathways"
-            subtitle="From Absolute Zero to Autonomous Agents • 9 Interactive Labs"
-          >
-            <a href="#pathways" className="hover:text-[var(--color-text-primary)] transition-colors py-1 whitespace-nowrap">
-              {t('nav_tracks')}
-            </a>
-          </Tooltip>
           
+          {/* Desktop Streamlined Navigation with Hover Reveals */}
+          <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-1.5 2xl:gap-2 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+            <Tooltip
+              position="bottom"
+              content="10 Structured Pathways"
+              subtitle="From Absolute Zero to Autonomous Agents • 9 Interactive Labs"
+            >
+              <a 
+                href="#pathways" 
+                className="px-3 py-1.5 rounded-full hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]/80 transition-all cursor-pointer whitespace-nowrap"
+              >
+                {t('nav_tracks')}
+              </a>
+            </Tooltip>
+            
+            <Tooltip
+              position="bottom"
+              content="Curriculum Architecture"
+              subtitle="Foundations, Vector DBs, RAG, Pyodide & 100% Free Stack"
+            >
+              <a 
+                href="#curriculum" 
+                className="px-3 py-1.5 rounded-full hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]/80 transition-all cursor-pointer whitespace-nowrap"
+              >
+                {t('nav_curriculum')}
+              </a>
+            </Tooltip>
+
+            <div className="hidden min-[1680px]:flex">
+              <Tooltip
+                position="bottom"
+                content="Spatial Holodeck"
+                subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
+              >
+                <button 
+                  onClick={() => navigate('/holodeck')}
+                  className="px-3 py-1.5 rounded-full hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]/80 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                >
+                  <Glasses size={14} className="opacity-70 text-cyan-400" />
+                  <span>{t('nav_holodeck')}</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D</span>
+                </button>
+              </Tooltip>
+            </div>
+
+            {/* Credentials / Portfolio link */}
+            <div className="hidden min-[1680px]:flex">
+              <Tooltip
+                position="bottom"
+                content="Credentials & Portfolio [SHA-256]"
+                subtitle="Verifiable 36-lab accomplishments & cryptographic certificate"
+              >
+                <button 
+                  onClick={() => navigate('/portfolio')}
+                  className="px-3 py-1.5 rounded-full hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]/80 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                >
+                  <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
+                  <span>Portfolio</span>
+                </button>
+              </Tooltip>
+            </div>
+
+            {/* Hover Reveal Dropdown: Explore Labs & Ecosystem */}
+            <div 
+              className="relative hidden min-[1680px]:block"
+              onMouseEnter={() => setIsExploreOpen(true)}
+              onMouseLeave={() => setIsExploreOpen(false)}
+            >
+              <button 
+                onClick={() => setIsExploreOpen(!isExploreOpen)}
+                className="px-3 py-1.5 rounded-full hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)]/80 transition-all flex items-center gap-1 cursor-pointer font-medium whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                aria-expanded={isExploreOpen}
+                aria-haspopup="true"
+              >
+                <span>{t('nav_labs_science')}</span>
+                <ChevronDown size={12} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {isExploreOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    className="absolute top-full left-0 pt-2 z-50 pointer-events-auto"
+                  >
+                    <div className="w-72 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-border)] p-3 shadow-2xl backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold">
+                        {t('nav_labs_science')}
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <button 
+                          onClick={() => { setIsExploreOpen(false); navigate('/holodeck'); }}
+                          className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Glasses size={14} className="text-cyan-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5">
+                              <span>{t('nav_holodeck')}</span>
+                              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D & VR</span>
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              3D / WebXR neural topology holodeck
+                            </div>
+                          </div>
+                        </button>
+
+                        <a 
+                          href="#cognitive-accelerator" 
+                          onClick={() => setIsExploreOpen(false)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Zap size={14} className="text-emerald-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('nav_cognitive_accelerator')}
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Pareto, blurting retrieval & Feynman test
+                            </div>
+                          </div>
+                        </a>
+
+                        <a 
+                          href="#synapse-lounge" 
+                          onClick={() => setIsExploreOpen(false)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Brain size={14} className="text-violet-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('nav_synapse_lounge')}
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Diffuse-mode neuro-plasticity arcade
+                            </div>
+                          </div>
+                        </a>
+
+                        <a 
+                          href="#free-stack" 
+                          onClick={() => setIsExploreOpen(false)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Layers size={14} className="text-cyan-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('free_stack_heading')}
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              $0 Vector DBs, Pyodide & HuggingFace
+                            </div>
+                          </div>
+                        </a>
+
+                        <a 
+                          href="#vault" 
+                          onClick={() => setIsExploreOpen(false)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Award size={14} className="text-amber-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('nav_science_vault')}
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Ultralearning, Anki & research sheets
+                            </div>
+                          </div>
+                        </a>
+
+                        <a 
+                          href="#pillars" 
+                          onClick={() => setIsExploreOpen(false)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <ShieldCheck size={14} className="text-blue-400" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('nav_pillars')}
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Foundational principles for production AI
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </nav>
+        </div>
+
+        {/* Right High-Craft Unified Dock */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* 1. Global Search Command Pill */}
           <Tooltip
             position="bottom"
-            content="Curriculum Architecture"
-            subtitle="Foundations, Vector DBs, RAG, Pyodide & 100% Free Stack"
-          >
-            <a href="#curriculum" className="hover:text-[var(--color-text-primary)] transition-colors py-1 whitespace-nowrap">
-              {t('nav_curriculum')}
-            </a>
-          </Tooltip>
-
-          <div className="hidden 2xl:flex">
-            <Tooltip
-              position="bottom"
-              content="Spatial Holodeck"
-              subtitle="Interactive 3D / WebXR neural topology. Desktop, tablet & VR ready"
-            >
-              <button 
-                onClick={() => navigate('/holodeck')}
-                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
-              >
-                <Glasses size={14} className="opacity-70" />
-                <span>{t('nav_holodeck')}</span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D</span>
-              </button>
-            </Tooltip>
-          </div>
-
-          {/* Credentials / Portfolio link */}
-          <div className="hidden 2xl:flex">
-            <Tooltip
-              position="bottom"
-              content="Credentials & Portfolio [SHA-256]"
-              subtitle="Verifiable 36-lab accomplishments & cryptographic certificate"
-            >
-              <button 
-                onClick={() => navigate('/portfolio')}
-                className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5 text-xs font-medium cursor-pointer py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
-              >
-                <Award size={14} className="opacity-70 text-[var(--color-accent)]" />
-                <span>Portfolio</span>
-              </button>
-            </Tooltip>
-          </div>
-
-          {/* Hover Reveal Dropdown: Explore Labs & Ecosystem */}
-          <div 
-            className="relative hidden 2xl:block"
-            onMouseEnter={() => setIsExploreOpen(true)}
-            onMouseLeave={() => setIsExploreOpen(false)}
+            content="Search Studio"
+            subtitle="Jump to 45 labs, 24 themes, languages, tools"
+            shortcut="⌘K"
           >
             <button 
-              onClick={() => setIsExploreOpen(!isExploreOpen)}
-              className="hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1 py-1 cursor-pointer font-medium whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg"
-              aria-expanded={isExploreOpen}
-              aria-haspopup="true"
+              onClick={() => onOpenCommandPalette?.()}
+              data-testid="header-command-palette-btn"
+              className="hidden md:flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+              aria-label="Open Studio Search Palette"
             >
-              <span>{t('nav_labs_science')}</span>
-              <ChevronDown size={12} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
+              <Search size={13} className="text-[var(--color-accent)] opacity-80 group-hover:opacity-100 transition-opacity" />
+              <span className="hidden lg:inline text-xs">Search</span>
+              <kbd className="hidden sm:inline px-1.5 py-0.5 rounded text-[9px] font-mono bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">⌘K</kbd>
             </button>
+          </Tooltip>
 
+          {/* 2. Studio Utilities Segmented Capsule (Tour & Demo) */}
+          <div className="hidden xl:flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
+            <Tooltip
+              position="bottom"
+              content="Studio Tour"
+              subtitle="Guided walkthrough across features & capabilities"
+            >
+              <button 
+                onClick={() => startAppTour(false)}
+                data-testid="header-quick-tour-btn"
+                className="flex items-center gap-1.5 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                aria-label="Start Quick Studio Tour"
+              >
+                <Compass size={13} className="text-[var(--color-accent)]" />
+                <span>{t('nav_tour')}</span>
+              </button>
+            </Tooltip>
+            <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
+            <Tooltip
+              position="bottom"
+              content="Studio Flow Demo"
+              subtitle="Interactive walkthrough of all engines and workflows"
+            >
+              <button 
+                onClick={() => onOpenDemo?.()}
+                data-testid="header-interactive-demo-btn"
+                className="flex items-center gap-1.5 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                aria-label="Open Studio Interactive Flow Demo"
+              >
+                <Play size={12} className="text-[var(--color-accent)]" />
+                <span>Demo</span>
+              </button>
+            </Tooltip>
+          </div>
+
+          {/* 3. Environment & Aesthetics Segmented Capsule */}
+          <div className="flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
+            {/* Multi-Language Selector (visible on sm+) */}
+            <div className="hidden sm:flex items-center">
+              <LanguageSelector variant="capsule" />
+              <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
+            </div>
+
+            {/* Quick Theme Switcher Button with Swatch */}
+            <Tooltip
+              position="bottom"
+              content={t('theme_settings_label')}
+              subtitle={t('theme_settings_subtitle')}
+              shortcut="T"
+            >
+              <button 
+                id="header-theme-settings-btn"
+                onClick={onOpenThemes}
+                data-testid="header-theme-settings-btn"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98] group"
+                aria-label="Themes and Studio Settings"
+              >
+                <div 
+                  className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
+                  style={{ backgroundColor: currentThemeInfo.accent }}
+                />
+              </button>
+            </Tooltip>
+
+            <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
+
+            {/* Direct Day / Night Animated Switch */}
+            <Tooltip
+              position="bottom"
+              content={currentThemeInfo.mode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              subtitle={currentThemeInfo.mode === 'dark' ? 'Paper ergonomics & daylight workspaces' : 'Curated dark IDE palettes'}
+            >
+              <div className="px-1 flex items-center">
+                <ThemeSwitch 
+                  isDark={currentThemeInfo.mode === 'dark'}
+                  onToggle={toggleThemeMode}
+                  className="theme-switch--header"
+                />
+              </div>
+            </Tooltip>
+          </div>
+
+
+
+          {/* 5. Tracks Dropdown Selector */}
+          <div className="relative hidden lg:flex items-center shrink-0">
+            <button
+              onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
+              className="flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
+              aria-label="Select Learning Track"
+            >
+              <BookOpen size={13} className="text-[var(--color-accent)] opacity-85" />
+              <span>Tracks ▾</span>
+            </button>
             <AnimatePresence>
-              {isExploreOpen && (
+              {isTracksMenuOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 8, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                  className="absolute top-full left-0 pt-2 z-50 pointer-events-auto"
+                  className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-border)] p-2 shadow-2xl z-50 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                 >
-                  <div className="w-72 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-3 shadow-2xl backdrop-blur-2xl">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold">
-                      {t('nav_labs_science')}
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <button 
-                        onClick={() => { setIsExploreOpen(false); navigate('/holodeck'); }}
-                        className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                  <div className="px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold border-b border-[var(--color-border)]">
+                    Available Learning Tracks
+                  </div>
+                  <div className="p-1 space-y-1">
+                    {[
+                      { id: '0', title: 'Track 0: Absolute Zero', path: '/track/0/intro', icon: Terminal, badge: 'Beginner' },
+                      { id: '1', title: 'Track 1: Vectors', path: '/track/1/intro', icon: Layers, badge: 'Core Math' },
+                      { id: '2', title: 'Track 2: Agents', path: '/track/2/intro', icon: Cpu, badge: 'Applied AI' },
+                      { id: '3', title: 'Track 3: Evals', path: '/track/3/intro', icon: ShieldCheck, badge: 'Production' },
+                      { id: '4', title: 'Track 4: Frontier Attention', path: '/track/4/intro', icon: Brain, badge: 'Frontier' },
+                    ].map(trk => (
+                      <button
+                        key={trk.id}
+                        onClick={() => {
+                          setIsTracksMenuOpen(false);
+                          navigate(trk.path);
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-all flex items-center justify-between text-xs cursor-pointer group"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Glasses size={14} className="text-cyan-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5">
-                            <span>{t('nav_holodeck')}</span>
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-violet-500/15 text-violet-400 border border-violet-500/30">3D & VR</span>
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            3D / WebXR neural topology holodeck
-                          </div>
-                        </div>
+                        <span className="font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] truncate">
+                          {trk.title}
+                        </span>
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                          {trk.badge}
+                        </span>
                       </button>
-
-                      <a 
-                        href="#cognitive-accelerator" 
-                        onClick={() => setIsExploreOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Zap size={14} className="text-emerald-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('nav_cognitive_accelerator')}
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            Pareto, blurting retrieval & Feynman test
-                          </div>
-                        </div>
-                      </a>
-
-                      <a 
-                        href="#synapse-lounge" 
-                        onClick={() => setIsExploreOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Brain size={14} className="text-violet-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('nav_synapse_lounge')}
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            Diffuse-mode neuro-plasticity arcade
-                          </div>
-                        </div>
-                      </a>
-
-                      <a 
-                        href="#free-stack" 
-                        onClick={() => setIsExploreOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Layers size={14} className="text-cyan-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('free_stack_heading')}
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            $0 Vector DBs, Pyodide & HuggingFace
-                          </div>
-                        </div>
-                      </a>
-
-                      <a 
-                        href="#vault" 
-                        onClick={() => setIsExploreOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Award size={14} className="text-amber-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('nav_science_vault')}
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            Ultralearning, Anki & research sheets
-                          </div>
-                        </div>
-                      </a>
-
-                      <a 
-                        href="#pillars" 
-                        onClick={() => setIsExploreOpen(false)}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <ShieldCheck size={14} className="text-blue-400" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                            {t('nav_pillars')}
-                          </div>
-                          <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                            Foundational principles for production AI
-                          </div>
-                        </div>
-                      </a>
-                    </div>
+                    ))}
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-        </nav>
-      </div>
 
-      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-        {/* Direct Day / Night Animated Switch (visible on ultra-wide 1800px+) */}
-        <Tooltip
-          position="bottom"
-          content={currentThemeInfo.mode === 'dark' ? 'Switch to Light Themes' : 'Switch to Dark Themes'}
-          subtitle={currentThemeInfo.mode === 'dark' ? 'Paper ergonomics & daylight workspaces' : 'Curated dark IDE palettes'}
-        >
-          <div className="hidden min-[1800px]:flex items-center">
-            <ThemeSwitch 
-              isDark={currentThemeInfo.mode === 'dark'}
-              onToggle={toggleThemeMode}
-              className="scale-90 origin-center"
-            />
-          </div>
-        </Tooltip>
-
-        {/* Multi-Language Selector */}
-        <LanguageSelector />
-
-        {/* Quick Theme Switcher Button with Small Settings Gear */}
-        <Tooltip
-          position="bottom"
-          content={t('theme_settings_label')}
-          subtitle={t('theme_settings_subtitle')}
-          shortcut="T"
-        >
-          <button 
-            id="header-theme-settings-btn"
-            onClick={onOpenThemes}
-            data-testid="header-theme-settings-btn"
-            className="flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
-            aria-label="Themes and Studio Settings"
-          >
-            <div 
-              className="w-3.5 h-3.5 rounded-full border border-black/20 dark:border-white/20 shadow-inner shrink-0"
-              style={{ backgroundColor: currentThemeInfo.accent }}
-            />
-            <span className="hidden 2xl:inline font-mono text-[11px] truncate max-w-[90px]">{currentThemeInfo.name}</span>
-            <Palette size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
-            <span className="hidden 2xl:inline opacity-25 text-[10px] select-none">|</span>
-            <Settings size={13} className="hidden 2xl:inline opacity-70 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
-          </button>
-        </Tooltip>
-
-        {/* GitHub Star Button (visible on min-[1600px]+ to keep standard desktop clean) */}
-        <GitHubStarButton variant="compact" className="hidden min-[1600px]:inline-flex" />
-
-        {/* Quick Studio Tour Button (visible on xl+) */}
-        <Tooltip
-          position="bottom"
-          content="Studio Tour"
-          subtitle="Guided walkthrough across features & capabilities"
-        >
-          <button 
-            onClick={() => startAppTour(false)}
-            data-testid="header-quick-tour-btn"
-            className="hidden xl:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-            aria-label="Start Quick Studio Tour"
-          >
-            <Compass size={13} className="text-[var(--color-accent)]" />
-            <span>{t('nav_tour')}</span>
-          </button>
-        </Tooltip>
-
-        {/* Whole App Interactive Flow Demo Button (visible on xl+) */}
-        <Tooltip
-          position="bottom"
-          content="Studio Flow Demo"
-          subtitle="Interactive walkthrough of all engines and workflows"
-        >
-          <button 
-            onClick={() => onOpenDemo?.()}
-            data-testid="header-interactive-demo-btn"
-            className="hidden xl:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-            aria-label="Open Studio Interactive Flow Demo"
-          >
-            <Play size={12} className="text-[var(--color-accent)]" />
-            <span>Demo</span>
-          </button>
-        </Tooltip>
-
-        {/* Studio Command Palette Search Button */}
-        <Tooltip
-          position="bottom"
-          content="Search Studio"
-          subtitle="Jump to 45 labs, 24 themes, languages, tools"
-          shortcut="⌘K"
-        >
-          <button 
-            onClick={() => onOpenCommandPalette?.()}
-            data-testid="header-command-palette-btn"
-            className="hidden lg:flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-            aria-label="Open Studio Search Palette"
-          >
-            <Search size={13} className="text-[var(--color-accent)]" />
-            <span className="hidden sm:inline">Search</span>
-            <kbd className="hidden sm:inline px-1.5 py-0.5 rounded text-[9px] font-mono bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">⌘K</kbd>
-          </button>
-        </Tooltip>
-
-        {/* Tracks Dropdown Selector (uniform h-9 Apple pill) */}
-        <div className="relative hidden lg:flex items-center shrink-0">
-          <button
-            onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-            className="flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98]"
-            aria-label="Select Learning Track"
-          >
-            <BookOpen size={14} className="text-[var(--color-accent)]" />
-            <span>Tracks ▾</span>
-          </button>
-          <AnimatePresence>
-            {isTracksMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl z-50 backdrop-blur-xl"
-              >
-                <div className="px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold border-b border-[var(--color-border)]">
-                  Available Learning Tracks
-                </div>
-                <div className="p-1 space-y-1">
-                  {[
-                    { id: '0', title: 'Track 0: Absolute Zero', path: '/track/0/intro', icon: Terminal, badge: 'Beginner' },
-                    { id: '1', title: 'Track 1: Vectors', path: '/track/1/intro', icon: Layers, badge: 'Core Math' },
-                    { id: '2', title: 'Track 2: Agents', path: '/track/2/intro', icon: Cpu, badge: 'Applied AI' },
-                    { id: '3', title: 'Track 3: Evals', path: '/track/3/intro', icon: ShieldCheck, badge: 'Production' },
-                    { id: '4', title: 'Track 4: Frontier Attention', path: '/track/4/intro', icon: Brain, badge: 'Frontier' },
-                  ].map(trk => (
-                    <button
-                      key={trk.id}
-                      onClick={() => {
-                        setIsTracksMenuOpen(false);
-                        navigate(trk.path);
-                      }}
-                      className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-all flex items-center justify-between text-xs cursor-pointer group"
-                    >
-                      <span className="font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] truncate">
-                        {trk.title}
-                      </span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
-                        {trk.badge}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Launch Track Button (visible on lg+) */}
-        <div className="hidden lg:flex items-center shrink-0">
-          <Tooltip
-            position="bottom"
-            content="Track 0: Absolute Zero"
-            subtitle="Python WASM Interactive IDE • Zero setup"
-            shortcut="↵"
-          >
-            <button 
-              onClick={() => navigate('/track/0/intro')}
-              className="px-3.5 sm:px-4 h-9 rounded-full font-bold text-xs tracking-tight transition-all duration-300 flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 cursor-pointer shrink-0"
-              style={{
-                backgroundColor: currentThemeInfo.accent,
-                color: accentTextColor
-              }}
+          {/* 6. Primary Hero CTA: Launch Track Button */}
+          <div className="hidden lg:flex items-center shrink-0">
+            <Tooltip
+              position="bottom"
+              content="Track 0: Absolute Zero"
+              subtitle="Python WASM Interactive IDE • Zero setup"
+              shortcut="↵"
             >
-              <span>{t('nav_launch_track0')}</span>
-              <ChevronRight size={14} />
-            </button>
-          </Tooltip>
-        </div>
+              <button 
+                onClick={() => navigate('/track/0/intro')}
+                className="group px-4 h-9 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-black/10 hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] cursor-pointer shrink-0"
+                style={{
+                  backgroundColor: currentThemeInfo.accent,
+                  color: accentTextColor
+                }}
+              >
+                <span>{t('nav_launch_track0')}</span>
+                <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </Tooltip>
+          </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          onClick={onOpenDrawer || (() => setIsMobileMenuOpen(!isMobileMenuOpen))}
-          data-testid="landing-header-menu-btn"
-          className="xl:hidden h-9 w-9 flex items-center justify-center rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
-          aria-label="Toggle navigation menu"
-        >
-          {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-        </button>
-      </div>
+          {/* 7. Mobile Drawer Toggle Button */}
+          <button
+            onClick={onOpenDrawer || (() => setIsMobileMenuOpen(!isMobileMenuOpen))}
+            data-testid="landing-header-menu-btn"
+            className="xl:hidden h-9 w-9 flex items-center justify-center rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0 active:scale-95"
+            aria-label="Toggle navigation menu"
+          >
+            {isMobileMenuOpen ? <X size={17} /> : <Menu size={17} />}
+          </button>
+        </div>
 
       {/* Mobile Slide-Out Drawer */}
       <AnimatePresence>
