@@ -221,11 +221,11 @@ yarn --cwd apps/web dev
 
 每次合并与发布前，必须完全通过五点质量保障准入检查：
 ```bash
-# 1. 静态代码分析校验 (108 个文件 0 告警、0 错误)
+# 1. 静态代码分析校验 (代码库 0 告警、0 错误)
 yarn lint
 
-# 2. Playwright 自动化端到端测试套件 (128 / 128 项全部通过，通过率 100%)
-npx playwright test
+# 2. Playwright 自动化端到端回归测试套件 (所有回归套件 100% 通过)
+yarn --cwd apps/web test:e2e
 
 # 3. 生产环境静态打包编译 (0 个 TypeScript/Vite 错误)
 yarn --cwd apps/web build

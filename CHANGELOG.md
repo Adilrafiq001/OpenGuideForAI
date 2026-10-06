@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-10-06
+
+### Added
+- **Sovereign Offline Knowledge Bank Frontier Parity (`offlineKnowledge.ts`):** Expanded the zero-cost client-side knowledge engine from 48 to 65 deep, mathematically grounded topics covering 2024–2026 AI research:
+  - FlashAttention-2 & FlashAttention-3 (online softmax tiling and SRAM IO complexity).
+  - Mixture of Experts (MoE sparse top-2 gating router and load balancing auxiliary loss).
+  - Direct Preference Optimization (DPO vs PPO closed-form Bradley-Terry implicit reward).
+  - Speculative Decoding (small draft proposal with parallel target model verification).
+  - Hierarchical Navigable Small World (HNSW multi-layer proximity skip-list search).
+  - Constrained Decoding & Structured Outputs (pushdown automata and JSON Schema logit masking).
+  - Long-Context Extrapolation (RoPE frequency interpolation, YaRN ramp, and ALiBi linear bias).
+  - Activation-Aware Quantization (AWQ, GPTQ, GGUF, and INT4 affine block quantization).
+  - WebGPU WGSL Compute Shaders (workgroup memory, tiling, and browser matrix multiplication).
+  - Multi-Stage RAG & Re-ranking (bi-encoder retrieval paired with cross-encoder re-ranking).
+  - Socratic Chain-of-Thought (Self-Consistency majority voting and Tree of Thoughts).
+  - Senior Scam & Phishing Defense (heuristic plain-language fraud analysis).
+  - Student Feynman Concept Learning (physical water-pipe and bakery analogies for complex science).
+  - Multilingual AI Terminology Bridge (cross-lingual mental models across ES, ZH, HI, AR, FR, DE).
+  - Agentic Multi-Agent Orchestration (ReAct loops, Planner/Critic/Executor reflection states).
+  - Synthetic Data Curation & MinHash Deduplication (Jaccard k-shingles and heuristic quality filtering).
+  - PagedAttention & Virtual Memory KV-Cache Management (vLLM block allocation and fragmentation control).
+- **Domain Synonym & Search Scoring Engine (`offlineKnowledge.ts`):** Upgraded `searchOfflineKnowledge()` with a curated domain synonym dictionary (`DOMAIN_SYNONYMS`), stopword stripping, and term-frequency weighting for high-accuracy single-term retrieval (`flash`, `moe`, `dpo`, `hnsw`, `speculative`, `quant`, `pagedattention`, `synthetic`).
+- **Playwright Regression & Visual Boundary Test Invariants (`audit-hardening-regression.spec.ts`):**
+  - `TC-AUDIT-025`: Validates static contract parity for all 65 offline knowledge topics and verified executable Python/NumPy code snippets.
+  - `TC-AUDIT-026`: Validates continuum grid layout and visual bounds across mobile (375px), tablet (768px), and desktop (1280px) viewports with zero horizontal overflow.
+
+### Changed
+- **Responsive Continuum Grid Architecture (`LandingPage.tsx`, `index.css`):**
+  - Converted Stage Switcher from an overflowing row into an ergonomic responsive grid (`grid-cols-2 sm:grid-cols-3 lg:grid-cols-6`).
+  - Added `.no-scrollbar` cross-browser utility in `index.css` for clean touch panning without disruptive scrollbars.
+  - Shortened search input placeholder to prevent mobile edge truncation.
+  - Repositioned announcement pill to avoid collision with Stage 0 switcher.
+
+---
+
 ## [1.2.0] - 2026-10-06
 
 ### Added

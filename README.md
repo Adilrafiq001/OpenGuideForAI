@@ -57,9 +57,18 @@ OpenGuide is not a cloud service or a toy tutorial. It is a browser-native labor
 | **Instant Execution** | Real CPython 3.12 executes in your browser via WebAssembly (Pyodide v0.26) inside a dedicated Web Worker. | Zero setup. No Python, Anaconda, or Docker environment required on your machine. |
 | **3D Spatial Manifolds** | An interactive Three.js WebGL visualizer maps high-dimensional vector spaces into physical coordinates with harmonic audio feedback. | You see and hear how language models cluster words and calculate semantic distance. |
 | **Sovereign & Private** | 100% client-side computing. Data persists locally in browser IndexedDB. Zero telemetry. | Complete data privacy. Zero subscription fees. Zero unexpected cloud invoices. |
-| **Offline PWA** | Progressive Web App caches the curriculum and WebAssembly engine on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
+| **Offline PWA & Knowledge** | Progressive Web App caches the curriculum, CPython engine, and 65+ frontier AI knowledge topics with runnable Python code on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
 
 > 📖 **Deep Engineering Specification:** For the complete system architecture, execution pipeline, 15-second watchdog supervisor, and progressive disclosure design, read the [ASD-STE100 Technical Explainer](explainer.md).
+
+---
+
+## Sovereign Offline Knowledge Bank
+
+OpenGuide features an embedded, client-side engineering knowledge base with zero external cloud dependencies ($0 Rule):
+- **65+ Deep Engineering Topics:** Comprehensive coverage spanning Transformer Attention Mechanics (FlashAttention-2/3, PagedAttention/vLLM), Alignment & Optimization (DPO, LoRA, QLoRA), Vector Geometries (HNSW, Cosine Skip-Lists), Constrained Decoding (Pushdown Automata, JSON Schema), and Data Engineering (MinHash Deduplication, Heuristic Filtering).
+- **Executable Python / NumPy Snippets:** Every topic includes a self-contained, runnable Python code example executing locally in the Pyodide WebAssembly runtime.
+- **Intelligent Local Retrieval:** Powered by domain abbreviation and synonym mapping (`DOMAIN_SYNONYMS`), stopword stripping, and weighted scoring for instantaneous sub-millisecond retrieval.
 
 ---
 
@@ -176,11 +185,11 @@ graph LR
 
 Every contribution must pass the five-point quality assurance check before merge:
 ```bash
-# 1. Linter verification (0 warnings, 0 errors across 108 files)
+# 1. Linter verification (0 warnings, 0 errors across codebase)
 yarn lint
 
-# 2. Automated Playwright test suite (128 / 128 tests passing with 100% pass rate)
-npx playwright test
+# 2. Automated Playwright regression test suite (100% pass rate, 0 skips)
+yarn --cwd apps/web test:e2e
 
 # 3. Production static compilation (0 TypeScript/Vite errors)
 yarn --cwd apps/web build

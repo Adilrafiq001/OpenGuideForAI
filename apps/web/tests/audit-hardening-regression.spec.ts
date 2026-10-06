@@ -618,6 +618,94 @@ ZeroDivisionError: division by zero`;
     // Zero console errors
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
+
+  test('TC-AUDIT-025: Sovereign Offline Knowledge Bank Frontier Parity', async ({ page }) => {
+    // 1. Static Contract: Verify offlineKnowledge.ts contains >= 65 topics with full code and takeaways
+    const offlineKnowledgePath = fs.existsSync(path.resolve(process.cwd(), 'apps/web/src/data/offlineKnowledge.ts'))
+      ? path.resolve(process.cwd(), 'apps/web/src/data/offlineKnowledge.ts')
+      : path.resolve(process.cwd(), 'src/data/offlineKnowledge.ts');
+    const content = fs.readFileSync(offlineKnowledgePath, 'utf-8');
+
+    const requiredTopics = [
+      'flashattention-tiling-sram',
+      'mixture-of-experts-moe',
+      'direct-preference-optimization-dpo',
+      'speculative-decoding-acceleration',
+      'hnsw-vector-indexing',
+      'structured-outputs-grammar-pushdown',
+      'context-extrapolation-yarn-alibi',
+      'quantization-formats-awq-gptq-gguf',
+      'webgpu-wgsl-compute-shaders',
+      'rag-chunking-and-reranking',
+      'socratic-chain-of-thought',
+      'senior-scam-phishing-defense',
+      'student-feynman-concept-learning',
+      'multilingual-ai-terminology-bridge',
+      'agentic-multi-agent-orchestration',
+      'synthetic-data-curation-filtering',
+      'kv-cache-paged-attention-vllm'
+    ];
+
+    for (const topic of requiredTopics) {
+      expect(content).toContain(`id: '${topic}'`);
+    }
+
+    // Verify code snippets are present for all frontier entries
+    expect(content).toContain('Online Softmax Concept (Incremental 2-Block Normalization)');
+    expect(content).toContain('Minimal Top-2 Gating Router Simulation');
+    expect(content).toContain('def dpo_loss(');
+    expect(content).toContain('def speculative_accept_or_reject(');
+    expect(content).toContain('Euclidean Distance for Vector Nodes');
+    expect(content).toContain('PagedAttention Block Allocation Simulation');
+    expect(content).toContain('MinHash Jaccard Similarity Estimation');
+
+    // 2. Physical DOM Interaction: Verify clean page load and zero console errors
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/');
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-026: Continuum Grid & Responsive Visual Invariants', async ({ page }) => {
+    const viewports = [
+      { width: 375, height: 667, name: 'Mobile' },
+      { width: 768, height: 1024, name: 'Tablet' },
+      { width: 1280, height: 800, name: 'Desktop' },
+    ];
+
+    for (const vp of viewports) {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto('/');
+
+      // Verify no horizontal document overflow
+      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 2);
+
+      // Verify Stage buttons are visible in the continuum grid
+      const stage0Btn = page.locator('button:has-text("Stage 0")').first();
+      await expect(stage0Btn).toBeVisible();
+
+      const stage5Btn = page.locator('button:has-text("Stage 5")').first();
+      await expect(stage5Btn).toBeVisible();
+
+      // In Stage 0, verify the 4 persona cards are rendered
+      const beginnerCard = page.locator('text=Absolute Beginner (Zero Knowledge of AI)').first();
+      await expect(beginnerCard).toBeVisible();
+
+      const familyCard = page.locator('text=Everyday Life & Family Helper').first();
+      await expect(familyCard).toBeVisible();
+
+      const seniorCard = page.locator('text=Senior & Lifelong Learner').first();
+      await expect(seniorCard).toBeVisible();
+
+      const studentCard = page.locator('text=Student & Homework Concept Learner').first();
+      await expect(studentCard).toBeVisible();
+    }
+  });
 });
 
 

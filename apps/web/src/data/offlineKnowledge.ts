@@ -507,11 +507,205 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     explanation: 'When implementing self-attention from scratch without PyTorch:\n1. Broadcasting Rules: Two dimensions are compatible when they are equal, or one of them is 1. Operations expand the singleton dimension to match.\n2. Stable Softmax: To prevent numerical overflow with exponentiated logits, subtract max along axis=-1 before exp: np.exp(x - np.max(x, axis=-1, keepdims=True)).\n3. Scaled Attention Score: S = (Q @ K.T) / np.sqrt(d_k). Scaling prevents gradients from vanishing in extreme softmax regions.\n4. Causal Masking: Add an upper-triangular negative infinity mask (-1e9) to logits before softmax to prevent attending to future tokens.',
     codeSnippet: 'import numpy as np\n\ndef stable_softmax(logits):\n    exp_x = np.exp(logits - np.max(logits, axis=-1, keepdims=True))\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)\n\n# Q: (seq, d_k), K: (seq, d_k)\nQ = np.random.randn(4, 16)\nK = np.random.randn(4, 16)\nscores = (Q @ K.T) / np.sqrt(16)\nweights = stable_softmax(scores)\nprint("Attention Matrix Shape:", weights.shape)',
     takeaway: 'Numerically stable softmax and sqrt(d_k) scaling are non-negotiable requirements for training and evaluating attention models.'
+  },
+
+  // ---------------------------------------------------------------------------
+  // 6. MODERN FRONTIER AI PARADIGMS (2024–2026 RESEARCH BENCHMARKS)
+  // ---------------------------------------------------------------------------
+  {
+    id: 'flashattention-tiling-sram',
+    keywords: ['flashattention', 'flash attention', 'flashattention 2', 'flashattention 3', 'tiling', 'sram', 'hbm', 'online softmax', 'io complexity', 'memory bound', 'gpu cache', 'flash'],
+    title: 'FlashAttention-2 & FlashAttention-3: SRAM Tiling & Online Softmax',
+    category: 'math',
+    summary: 'Eliminating the O(N^2) memory bandwidth bottleneck by fusing matrix multiplication and softmax inside GPU SRAM.',
+    explanation: 'Standard attention materializes the full N x N attention matrix S = (Q @ K.T) / sqrt(d) in slow High-Bandwidth Memory (HBM). FlashAttention computes attention in blocks (tiles) that fit entirely within fast On-Chip SRAM:\n1. Tiling: Q, K, and V are split into blocks (e.g. Br, Bc = 64 or 128 tokens).\n2. Online Softmax Normalization: Softmax is computed incrementally without materializing the full matrix. For each new block, running max m_new = max(m_old, row_max) and denominator l_new = exp(m_old - m_new) * l_old + row_sum are updated, rescaling the accumulated output vector O.\n3. FlashAttention-2 reduces non-matmul FLOPs and parallelizes across sequence length; FlashAttention-3 leverages asynchronous Tensor Core hardware (Hopper TMA & FP8).\n4. Memory Complexity: Drops from O(N^2) to O(N), saving up to 8x VRAM for long contexts.',
+    codeSnippet: 'import numpy as np\n\n# Online Softmax Concept (Incremental 2-Block Normalization)\ndef online_softmax_demo(block1, block2):\n    m1 = np.max(block1)\n    d1 = np.sum(np.exp(block1 - m1))\n    \n    m2 = np.max(block2)\n    m_combined = max(m1, m2)\n    # Rescale block 1 denominator to combined max\n    d_combined = d1 * np.exp(m1 - m_combined) + np.sum(np.exp(block2 - m_combined))\n    \n    # Exact equivalence to full standard softmax\n    full = np.concatenate([block1, block2])\n    standard = np.exp(full - np.max(full)) / np.sum(np.exp(full - np.max(full)))\n    return m_combined, d_combined, standard\n\nb1 = np.array([2.0, 1.5, 0.1])\nb2 = np.array([3.2, 0.5, 1.1])\nm_c, d_c, std = online_softmax_demo(b1, b2)\nprint(f"Combined Max: {m_c:.2f} | Standard Softmax Sum: {np.sum(std):.4f}")',
+    takeaway: 'FlashAttention turns memory-bandwidth-bound attention into compute-bound execution by fusing math inside GPU SRAM.'
+  },
+  {
+    id: 'mixture-of-experts-moe',
+    keywords: ['moe', 'mixture of experts', 'sparse moe', 'top-2 routing', 'expert capacity', 'load balancing', 'switch transformer', 'mixtral', 'gating network'],
+    title: 'Mixture of Experts (MoE) Architecture & Sparse Routing',
+    category: 'curriculum',
+    summary: 'Scaling parameter count without linear inference cost by dynamically activating only top-K sub-networks per token.',
+    explanation: 'Instead of passing every token through a dense Feed-Forward Network (FFN), a Mixture of Experts model routes tokens to a subset of specialized expert layers:\n1. Router / Gating Network: A linear layer with softmax calculates gating weights G(x) = Softmax(KeepTopK(H(x), k)). For example, Mixtral 8x7B routes each token to top-2 out of 8 experts.\n2. Sparse Execution: y = sum_{i in TopK} G(x)_i * E_i(x). Even though the model has 47B total parameters, only 13B parameters are active per token during inference.\n3. Load Balancing Loss: To prevent token collapse (where all tokens route to 1 or 2 popular experts while others starve), an auxiliary loss L_aux = alpha * N * sum(f_i * P_i) is added during training.\n4. Expert Capacity Factor: Limits the maximum tokens an expert can process in a batch before overflowing.',
+    codeSnippet: 'import numpy as np\n\n# Minimal Top-2 Gating Router Simulation\ndef top2_moe_router(token_emb, num_experts=8):\n    # Synthetic router projection matrix\n    W_gate = np.random.randn(token_emb.shape[-1], num_experts)\n    logits = token_emb @ W_gate\n    \n    # Top-2 selection\n    top2_idx = np.argsort(logits)[-2:]\n    top2_logits = logits[top2_idx]\n    \n    # Softmax over top-2 only\n    exp_vals = np.exp(top2_logits - np.max(top2_logits))\n    weights = exp_vals / np.sum(exp_vals)\n    return top2_idx, weights\n\nx = np.random.randn(64)  # Token embedding\nexperts, gates = top2_moe_router(x)\nprint(f"Selected Experts: {experts} with Weights: {gates.round(3)}")',
+    takeaway: 'MoE decouples total model capacity from per-token compute cost by selectively routing tokens to top-K expert networks.'
+  },
+  {
+    id: 'direct-preference-optimization-dpo',
+    keywords: ['dpo', 'direct preference optimization', 'ppo', 'rlhf', 'preference optimization', 'alignment', 'bradley-terry', 'reward model', 'simpo', 'kto'],
+    title: 'Direct Preference Optimization (DPO) vs PPO Alignment',
+    category: 'curriculum',
+    summary: 'Aligning LLMs directly on human preference pairs (chosen vs rejected) without training a complex reinforcement learning reward model.',
+    explanation: 'Traditional RLHF requires 3 phases: Supervised Fine-Tuning (SFT), training an explicit Reward Model, and PPO reinforcement learning with policy gradient updates. DPO proves mathematically that the optimal policy under the Bradley-Terry preference model can be derived in closed form directly from the language model log-likelihoods:\n1. Implicit Reward: r(x, y) = beta * log(pi_theta(y|x) / pi_ref(y|x)).\n2. DPO Loss Objective: L_DPO = -E_{(x, y_w, y_l)} [ log sigma( beta * log(pi_theta(y_w|x) / pi_ref(y_w|x)) - beta * log(pi_theta(y_l|x) / pi_ref(y_l|x)) ) ].\n3. Mechanics: Increases probability of chosen output y_w while decreasing probability of rejected output y_l, penalized by KL divergence from reference model pi_ref.\n4. Advantage: Zero actor-critic instability, 50% less GPU memory (no separate reward model in VRAM).',
+    codeSnippet: 'import numpy as np\n\ndef dpo_loss(pi_chosen_logp, pi_reject_logp, ref_chosen_logp, ref_reject_logp, beta=0.1):\n    # Implicit reward differences\n    pi_diff = pi_chosen_logp - pi_reject_logp\n    ref_diff = ref_chosen_logp - ref_reject_logp\n    logits = beta * (pi_diff - ref_diff)\n    \n    # Stable sigmoid cross-entropy: -log(sigmoid(logits))\n    loss = np.log1p(np.exp(-logits))\n    return loss\n\nloss = dpo_loss(pi_chosen_logp=-1.2, pi_reject_logp=-3.4, ref_chosen_logp=-2.0, ref_reject_logp=-2.1)\nprint(f"DPO Loss: {loss:.4f}")',
+    takeaway: 'DPO replaces complex RLHF reward modeling with an exact, stable binary classification loss over chosen vs. rejected pairs.'
+  },
+  {
+    id: 'speculative-decoding-acceleration',
+    keywords: ['speculative decoding', 'speculative sampling', 'draft model', 'target model', 'inference speedup', 'speculation', 'rejection sampling'],
+    title: 'Speculative Decoding: Parallelizing Autoregressive Inference',
+    category: 'architecture',
+    summary: 'Accelerating LLM token generation 2x–3x without altering output distribution via small draft model proposals and parallel verification.',
+    explanation: 'Standard LLM inference generates 1 token per forward pass, which is memory-bandwidth bound. Speculative Decoding solves this:\n1. Draft Proposal: A small, fast draft model (e.g. 1B parameter model) generates K speculative tokens autoregressively in rapid succession.\n2. Parallel Target Verification: The large target model (e.g. 70B parameter model) evaluates all K tokens in a single parallel forward pass (O(1) memory transfers).\n3. Rejection Sampling Criterion: Accept token x_i with probability min(1, p_target(x_i) / p_draft(x_i)). If a token is rejected, sample a recovery token and discard the remaining speculative candidates.\n4. Mathematical Guarantee: The final generated text follows the exact probability distribution of the target model.',
+    codeSnippet: 'import numpy as np\n\ndef speculative_accept_or_reject(p_draft, p_target):\n    # Acceptance probability min(1, p_target / p_draft)\n    acceptance_ratio = min(1.0, p_target / p_draft)\n    u = np.random.uniform(0, 1)\n    return u <= acceptance_ratio\n\naccepted = speculative_accept_or_reject(p_draft=0.4, p_target=0.6)\nprint(f"Token Speculatively Accepted: {accepted}")',
+    takeaway: 'Speculative Decoding trades cheap compute to reduce memory-bandwidth reads, speeding up generation with zero loss in output quality.'
+  },
+  {
+    id: 'hnsw-vector-indexing',
+    keywords: ['hnsw', 'hierarchical navigable small world', 'vector index', 'approximate nearest neighbor', 'ann', 'ivf', 'vector database', 'graph search'],
+    title: 'HNSW (Hierarchical Navigable Small World) Vector Search',
+    category: 'math',
+    summary: 'Sub-linear vector search scaling via multi-layered proximity graphs with skip-list mechanics.',
+    explanation: 'Brute-force vector search requires calculating Cosine similarity against all N vectors (O(N * d) complexity), which becomes unusable at millions of vectors. HNSW structures vectors into a multi-layer graph:\n1. Hierarchical Skip-List: Top layers have sparse, long-distance links between distant vector clusters. Lower layers have dense, local connections.\n2. Greedy Routing: Search begins at the top layer, finding the nearest local neighbor greedily. Once a local minimum is reached, routing drops down to the next finer layer.\n3. Bottom Layer: Performs greedy search among immediate neighbors up to parameter efSearch.\n4. Query Complexity: Drops from O(N) to O(log N) with recall rates exceeding 98%.',
+    codeSnippet: 'import numpy as np\n\n# Euclidean Distance for Vector Nodes\ndef dist(u, v): return np.linalg.norm(u - v)\n\n# Minimal 1D Greedy Graph Hop Simulation\nnodes = np.array([[0.1, 0.2], [0.5, 0.4], [0.8, 0.9], [1.2, 1.1]])\nquery = np.array([0.7, 0.8])\n\ncurrent = 0\nfor hop in range(len(nodes)):\n    d_curr = dist(nodes[current], query)\n    next_node = np.argmin([dist(n, query) for n in nodes])\n    if dist(nodes[next_node], query) < d_curr:\n        current = next_node\n\nprint(f"Nearest Node Found: Node {current} at distance {dist(nodes[current], query):.4f}")',
+    takeaway: 'HNSW enables sub-millisecond similarity search across millions of embedding vectors using logarithmic graph routing.'
+  },
+  {
+    id: 'structured-outputs-grammar-pushdown',
+    keywords: ['structured output', 'json schema', 'grammar', 'constrained decoding', 'cfg', 'pushdown automata', 'outlines', 'regex constraint'],
+    title: 'Constrained Decoding & Structured Outputs (Grammars & JSON Schema)',
+    category: 'tools',
+    summary: 'Guaranteeing 100% valid JSON and type invariants by masking invalid tokens directly in the LLM logits.',
+    explanation: 'Prompting an LLM with "Return valid JSON" fails unpredictably when the model outputs trailing commas or syntax errors. Constrained Decoding guarantees compliance at the token sampler level:\n1. Finite State Machine (FSM) / Pushdown Automata: The target JSON Schema or Context-Free Grammar (CFG) is compiled into a state transition graph.\n2. Logit Masking: At each generation step t, the tokenizer checks which tokens in the vocabulary V are valid next transitions from state S_t. Tokens that violate the schema receive logit = -infinity before softmax.\n3. Zero Hallucination of Schema: The model is physically incapable of emitting an invalid syntax token or missing a required field.\n4. Zero Re-prompting: Never requires retry loops or secondary regex parsers.',
+    codeSnippet: 'import numpy as np\n\ndef mask_logits_with_grammar(logits, valid_token_ids):\n    masked = np.full_like(logits, -np.inf)\n    masked[valid_token_ids] = logits[valid_token_ids]\n    return masked\n\nvocab_logits = np.array([2.1, 0.5, 4.3, 1.2, -0.8])\n# Only token 2 (e.g. quote char) is valid JSON transition next\nmasked_logits = mask_logits_with_grammar(vocab_logits, valid_token_ids=[2])\nprobs = np.exp(masked_logits - np.max(masked_logits[2]))\nprobs = probs / np.sum(probs)\nprint(f"Probabilities with Grammar Constraint: {probs.round(2)}")',
+    takeaway: 'Constrained decoding enforces schema guarantees at generation time by physically masking illegal tokens in the logits.'
+  },
+  {
+    id: 'context-extrapolation-yarn-alibi',
+    keywords: ['yarn', 'rope scaling', 'alibi', 'context extrapolation', 'long context', 'position interpolation', 'rotary embeddings'],
+    title: 'Context Length Extrapolation: YaRN, ALiBi & Dynamic RoPE Scaling',
+    category: 'math',
+    summary: 'Extending LLM context windows (e.g. from 4K to 128K tokens) without retraining from scratch via frequency interpolation.',
+    explanation: 'Standard Rotary Position Embeddings (RoPE) assign token positions using rotation angles theta_i = base^(-2(i-1)/d). When evaluating beyond training length L, rotation angles exceed seen values, causing attention failure:\n1. Linear RoPE Scaling: Divides position index by scale factor s (m / s). Compresses all frequencies uniformly, degrading high-frequency local relationships.\n2. YaRN (Yet another RoPE extensioN): Treats high-frequency and low-frequency RoPE dimensions differently:\n   - High-frequency dimensions (short-range syntax): No interpolation (preserves fine-grained local grammar).\n   - Low-frequency dimensions (long-range distance): Full interpolation (smoothly expands long context).\n   - Medium frequencies: Smooth ramp function between the two.\n3. ALiBi (Attention with Linear Biases): Replaces positional embeddings with a static linear distance penalty (-m * |i - j|) added directly to attention logits.',
+    codeSnippet: 'import numpy as np\n\ndef yarn_ramp(dimension_indices, d_model=64, low=16, high=32):\n    # Calculates smooth interpolation factor between 0 (no scaling) and 1 (full scaling)\n    ramp = np.clip((dimension_indices - low) / (high - low), 0.0, 1.0)\n    return ramp\n\ndim_idx = np.arange(64)\nfactors = yarn_ramp(dim_idx)\nprint(f"YaRN Interpolation Scale Ramp (First 5): {factors[:5]} | (Last 5): {factors[-5:]}")',
+    takeaway: 'YaRN selectively interpolates low-frequency RoPE dimensions to preserve local grammar while expanding long-range context.'
+  },
+  {
+    id: 'quantization-formats-awq-gptq-gguf',
+    keywords: ['quantization', 'awq', 'gptq', 'gguf', 'int4', 'int8', 'activation aware', 'model compression', 'vram reduction', 'quant'],
+    title: 'Model Quantization: AWQ, GPTQ, GGUF & FP4/INT4 Precision',
+    category: 'architecture',
+    summary: 'Compressing 16-bit neural weights into 4-bit representations to run 70B parameter models on consumer hardware.',
+    explanation: 'A FP16 parameter requires 2 bytes of VRAM (e.g., 70B model = 140GB VRAM). Quantization maps continuous FP16 values to discrete 4-bit integers (0.5 bytes per parameter = 35GB VRAM):\n1. Uniform Affine Quantization: X_quant = round(X / scale) + zero_point. Dequantize: X_approx = (X_quant - zero_point) * scale.\n2. AWQ (Activation-aware Weight Quantization): Observes that only 1% of weights (salient channels) protect model perplexity. AWQ protects these salient weights from quantization error by scaling them before INT4 rounding.\n3. GPTQ: Uses second-order Taylor expansion (Hessian matrix) to greedily quantize weights while updating remaining weights to compensate for error.\n4. GGUF / GGML: The universal CPU/GPU binary format used by llama.cpp for fast quantized execution with CPU memory mapping (mmap).',
+    codeSnippet: 'import numpy as np\n\n# INT4 Affine Quantization (-8 to 7)\ndef quantize_int4(weights):\n    w_min, w_max = np.min(weights), np.max(weights)\n    scale = (w_max - w_min) / 15.0\n    zero_point = np.round(-w_min / scale) - 8\n    q = np.clip(np.round(weights / scale) + zero_point, -8, 7)\n    dequant = (q - zero_point) * scale\n    return q.astype(np.int8), scale, dequant\n\nw = np.random.randn(8) * 0.5\nq_weights, s, reconstructed = quantize_int4(w)\nerr = np.mean(np.abs(w - reconstructed))\nprint(f"Original: {w.round(2)}\\nQuantized INT4: {q_weights}\\nMean Error: {err:.4f}")',
+    takeaway: 'AWQ protects the top 1% salient activation channels to achieve near-lossless 4-bit quantization.'
+  },
+  {
+    id: 'webgpu-wgsl-compute-shaders',
+    keywords: ['webgpu', 'wgsl', 'shader', 'compute shader', 'gpu compute', 'hardware acceleration', 'workgroup', 'matrix multiplication webgpu'],
+    title: 'In-Browser WebGPU & WGSL Parallel Tensor Compute',
+    category: 'tools',
+    summary: 'Executing parallel neural tensor operations directly on client GPU hardware through modern WebGPU pipelines.',
+    explanation: 'WebGPU replaces WebGL with low-overhead, explicit GPU control in modern browsers:\n1. Compute Pipelines: Unlike WebGL (which simulated math via 2D texture fragments), WebGPU provides direct compute pipelines via WGSL (WebGPU Shading Language).\n2. Workgroups & Threads: Compute shaders execute in 3D thread grids (workgroups, e.g. @workgroup_size(16, 16, 1)). Threads within a workgroup share ultra-fast on-chip workgroup memory (SRAM).\n3. Tile-based Matrix Multiplication: Tiling A and B matrices into shared memory reduces global VRAM memory reads by workgroup dimensions.\n4. Zero Cloud Cost: Enables real client-side embedding generation and transformer inference directly on the learner\'s laptop or mobile GPU.',
+    codeSnippet: '// Sample WGSL Vector Addition Compute Shader\n/*\n@group(0) @binding(0) var<storage, read> a: array<f32>;\n@group(0) @binding(1) var<storage, read> b: array<f32>;\n@group(0) @binding(2) var<storage, read_write> c: array<f32>;\n\n@compute @workgroup_size(64)\nfn main(@builtin(global_invocation_id) id: vec3<u32>) {\n    let idx = id.x;\n    if (idx < arrayLength(&a)) {\n        c[idx] = a[idx] + b[idx];\n    }\n}\n*/\nprint("WebGPU WGSL shaders compile directly to native Metal/Vulkan/DirectX kernels")',
+    takeaway: 'WebGPU provides direct compute shader execution with workgroup shared memory for local GPU acceleration.'
+  },
+  {
+    id: 'rag-chunking-and-reranking',
+    keywords: ['rag', 'retrieval augmented generation', 'chunking', 'reranker', 'cross encoder', 'bi encoder', 'semantic search', 'context retrieval'],
+    title: 'Production RAG: Chunking Strategies & Cross-Encoder Re-Ranking',
+    category: 'curriculum',
+    summary: 'Two-stage retrieval pipelines combining high-recall vector search with high-precision cross-encoder scoring.',
+    explanation: 'Naive RAG fails when vector similarity retrieves semantically similar but factually irrelevant paragraphs. Production RAG uses a two-stage pipeline:\n1. Stage 1 (High Recall): Bi-encoder embedding search retrieves top-50 candidate chunks from a vector database (fast, O(1) via HNSW index).\n2. Stage 2 (High Precision): A Cross-Encoder Re-ranker processes the query and each candidate chunk simultaneously (Query [SEP] Document) through cross-attention to output a calibrated relevance score (0.0 to 1.0).\n3. Re-ranking: Chunks are sorted by cross-encoder score, and only the top-3 to top-5 highest scoring passages are fed into the LLM context window.\n4. Chunking Trade-off: Small chunks (128 tokens) preserve fine-grained facts; large chunks (512 tokens) preserve narrative context.',
+    codeSnippet: 'import numpy as np\n\n# Simulated Two-Stage Retrieval Scoring\ncandidates = ["Revenue rose 12% in Q3", "The company picnic was sunny", "Operating margin hit 24%"]\nbi_encoder_scores = np.array([0.78, 0.76, 0.71])  # Fast cosine search\ncross_encoder_scores = np.array([0.94, 0.05, 0.91]) # Deep attention reranker\n\n# Final ranking by cross-encoder\nreranked_idx = np.argsort(cross_encoder_scores)[::-1]\nprint("Top Passages after Cross-Encoder:")\nfor rank, i in enumerate(reranked_idx[:2]):\n    print(f"{rank + 1}. {candidates[i]} (Score: {cross_encoder_scores[i]})")',
+    takeaway: 'Two-stage retrieval (Bi-Encoder search + Cross-Encoder re-ranking) filters out irrelevant vector matches to eliminate RAG hallucinations.'
+  },
+  {
+    id: 'socratic-chain-of-thought',
+    keywords: ['chain of thought', 'cot', 'reasoning', 'self consistency', 'tree of thoughts', 'test time compute', 'deliberation', 'socratic'],
+    title: 'Reasoning Mechanics: Chain-of-Thought, Self-Consistency & Tree of Thoughts',
+    category: 'curriculum',
+    summary: 'Trading test-time compute for answer accuracy by enforcing explicit step-by-step token verification.',
+    explanation: 'LLMs are autoregressive token predictors with fixed computation per token. When asked a complex multi-step puzzle directly, they often fail because they have insufficient compute per token to simulate intermediate steps:\n1. Chain-of-Thought (CoT): Prompts the model to emit intermediate reasoning steps ("Let\'s think step by step"). This expands the token buffer, giving the model additional self-attention steps to reason through each premise.\n2. Self-Consistency: Samples N parallel reasoning paths at temperature T > 0 and takes the majority vote among final answers, filtering out idiosyncratic reasoning errors.\n3. Tree of Thoughts (ToT): Explores multiple reasoning branches as a tree, evaluating branch promises and backtracking when an impasse is reached.\n4. Test-Time Compute Scaling: Modern reasoning models (e.g. o1, R1) are trained with reinforcement learning to generate extensive hidden thought tokens before producing their final response.',
+    codeSnippet: 'from collections import Counter\n\n# Simulated Self-Consistency Majority Vote Consensus\nreasoning_paths = [\n    {"path": "Step 1: 5*4=20. Step 2: 20+3=23", "answer": 23},\n    {"path": "Step 1: 4+3=7. Step 2: 7*5=35", "answer": 35},\n    {"path": "Step 1: 5*4=20. Step 2: 20+3=23", "answer": 23},\n    {"path": "Step 1: 5*4=20. Step 2: 20+3=23", "answer": 23}\n]\nanswers = [p["answer"] for p in reasoning_paths]\nconsensus, votes = Counter(answers).most_common(1)[0]\nprint(f"Self-Consistency Consensus Answer: {consensus} ({votes}/{len(answers)} votes)")',
+    takeaway: 'Chain-of-thought expands the computational token budget, allowing the model to self-correct intermediate logic.'
+  },
+  {
+    id: 'senior-scam-phishing-defense',
+    keywords: ['scam', 'phishing', 'fraud', 'senior', 'fake text', 'suspicious email', 'grandparent scam', 'security alert', 'plain english'],
+    title: 'AI Plain-English Guard: Scam, Phishing & Fraud Detection',
+    category: 'tools',
+    summary: 'How beginners and seniors can use local AI to safely verify suspicious text messages, bills, and emergency calls.',
+    explanation: 'Modern digital scams rely on artificial urgency, threats of penalties, and spoofed bank/postal identities. AI can serve as a calm, 24/7 personal fraud auditor:\n1. The Urgency Trap: Scammers demand action within "12 hours" or "immediate payment". Legitimate services (courts, utilities, postal services) send physical letters.\n2. Link Inspection: Look at the domain name. Official websites end in their exact verified name (e.g. usps.com). Scams use deceptive subdomains (e.g. usps-track-fee.top/pay).\n3. Gift Cards & Wire Transfers: No real company or government agency ever asks for payment in gift cards, crypto, or immediate wire transfers.\n4. How to Ask AI: Paste the suspicious text with the prompt: "Is this message a scam? Explain in simple everyday words without technical jargon."',
+    codeSnippet: '# Scam Heuristic Scanner:\nmessage = "URGENT: IRS tax penalty pending. Pay $150 via Apple Gift Card in 6 hours."\nred_flags = ["urgent", "gift card", "hours", "penalty", "wire transfer"]\ndetected = [flag for flag in red_flags if flag in message.lower()]\n\nprint("Scam Analysis:")\nif len(detected) >= 2:\n    print(f"DANGER: High probability scam! Triggered flags: {detected}")\nelse:\n    print("Message appears normal.")',
+    takeaway: 'AI serves as a patient digital second opinion to protect families from urgent fraud messages.'
+  },
+  {
+    id: 'student-feynman-concept-learning',
+    keywords: ['student', 'homework', 'feynman technique', 'socratic', 'analogy', 'learning', 'study', 'math tutor', 'science explanation', 'feynman'],
+    title: 'The Socratic Student Method: Feynman Technique & Concept Analogies',
+    category: 'curriculum',
+    summary: 'Mastering difficult school subjects through vivid physical analogies and Socratic active recall.',
+    explanation: 'Rote memorization causes students to forget formulas within days. The Feynman Technique and Socratic AI tutoring build lifelong intuition:\n1. The Feynman Rule: If you cannot explain a concept using simple words that an 8-year-old understands, you do not truly understand it yet.\n2. Analogies over Jargon: Translate abstract equations into tangible physical objects (e.g. Voltage is water pressure in a pipe, Current is the flow rate of water, and Resistance is a narrow pipe valve).\n3. Socratic Questioning: Ask the AI: "Don\'t give me the direct answer. Ask me one guiding question at a time to help me figure out how to solve this physics problem myself."\n4. Active Retrieval: Explain what you think happens back to the AI and ask it to spot any flaws in your reasoning.',
+    codeSnippet: '# Water Pipe Analogy for Ohm\'s Law (V = I * R)\npressure_volts = 120.0  # Volts (Water Pressure)\nvalve_resistance = 15.0 # Ohms (Narrow Valve)\nflow_current = pressure_volts / valve_resistance # Amperes (Water Flow Rate)\n\nprint(f"Water Pressure: {pressure_volts}V | Pipe Restriction: {valve_resistance} ohms")\nprint(f"Resulting Water Flow (Current): {flow_current:.1f} Amperes")',
+    takeaway: 'Learn by building intuitive physical mental models instead of memorizing abstract formulas.'
+  },
+  {
+    id: 'multilingual-ai-terminology-bridge',
+    keywords: ['multilingual', 'translation', 'spanish', 'chinese', 'hindi', 'arabic', 'french', 'german', 'terminology', 'global ai'],
+    title: 'Universal Multilingual AI Terminology & Concept Bridge',
+    category: 'conversational',
+    summary: 'Cross-language vocabulary mapping for core artificial intelligence concepts across 6 major global tongues.',
+    explanation: 'OpenGuide serves global learners without linguistic gatekeeping. Key terms translated with conceptual precision:\n• Attention: Atención (ES) • 注意力机制 (ZH) • ध्यान / अटेंशन (HI) • آلية الانتباه (AR) • Attention (FR) • Aufmerksamkeitsmechanismus (DE)\n• Embedding: Incrustación vectorial (ES) • 嵌入向量 (ZH) • एम्बेडिंग (HI) • التضمين الشعاعي (AR) • Plongement vectoriel (FR) • Einbettung (DE)\n• Weights: Pesos neuronales (ES) • 权重 (ZH) • वज़न / भार (HI) • الأوزان العصبية (AR) • Poids synaptiques (FR) • Gewichte (DE)\n• Hallucination: Alucinación (ES) • 幻觉 (ZH) • मतिभ्रम (HI) • الهلوسة (AR) • Hallucination (FR) • Halluzination (DE)\n• Tokens: Fichas léxicas (ES) • 标记 / 分词 (ZH) • टोकन (HI) • الرموز اللغوية (AR) • Jetons lexicaux (FR) • Token (DE)',
+    codeSnippet: 'terms = {\n    "attention": {"ES": "Atención", "ZH": "注意力机制", "HI": "अटेंशन", "AR": "الانتباه"},\n    "embedding": {"ES": "Incrustación", "ZH": "嵌入向量", "HI": "एम्बेडिंग", "AR": "التضمين الشعاعي"}\n}\nfor concept, trans in terms.items():\n    print(f"{concept.capitalize()}: ES={trans[\'ES\']} | ZH={trans[\'ZH\']} | HI={trans[\'HI\']}")',
+    takeaway: 'Mathematical truth is language-agnostic; clear conceptual intuition translates across every human tongue.'
+  },
+  {
+    id: 'agentic-multi-agent-orchestration',
+    keywords: ['multi-agent', 'agentic', 'react loop', 'reflection', 'critic', 'tools', 'autonomous agents', 'orchestrator', 'mcp', 'agent'],
+    title: 'Autonomous Multi-Agent Orchestration: ReAct, Critic & Reflection Loops',
+    category: 'architecture',
+    summary: 'Coordinating specialized LLM agents through structured message passing and self-correction reflection loops.',
+    explanation: 'A single prompt often fails at complex software tasks. Multi-agent systems decompose tasks into specialized roles:\n1. Planner / Architect Agent: Breaks down a complex user request into a sequence of small, verifiable milestones.\n2. Executor / Tool Caller: Invokes concrete tools (file reads, Python WASM execution, WebGPU kernels) using Model Context Protocol (MCP JSON-RPC 2.0 schemas).\n3. Critic / Evaluator Agent: Inspects the executor\'s output against acceptance criteria. If a test fails or a bug is detected, generates specific diagnostic feedback.\n4. Reflection Loop: The executor receives the critic\'s feedback and generates a surgical revision without restarting the task from scratch.\n5. Termination Condition: The orchestrator halts execution when all acceptance assertions pass or maximum iterations are reached.',
+    codeSnippet: '# Minimal ReAct State Machine Step\ndef react_step(state, observation):\n    thought = f"Observed: {observation}. Need to calculate final metric."\n    action = "compute_metric(alpha=0.2)"\n    return {"thought": thought, "action": action}\n\nstep = react_step(state="evaluating", observation="Accuracy at 92.4%")\nprint(f"Agent Thought: {step[\'thought\']}\\nAgent Action:  {step[\'action\']}")',
+    takeaway: 'Multi-agent architectures isolate planning, execution, and verification into modular, self-correcting feedback loops.'
+  },
+  {
+    id: 'synthetic-data-curation-filtering',
+    keywords: ['synthetic data', 'data curation', 'minhash', 'lsh', 'data deduplication', 'quality filter', 'cosmo', 'fineweb', 'synthetic pipeline'],
+    title: 'Synthetic Data Curation, Quality Filtering & MinHash Deduplication',
+    category: 'curriculum',
+    summary: 'Building high-signal training datasets through heuristic filtering, perplexity scoring, and near-duplicate removal.',
+    explanation: 'Frontier foundation models live or die by pre-training data cleanliness. Raw web text is saturated with boilerplate, machine-translated SEO spam, and toxic noise.\n1. Text Quality Filtering: Eliminating documents based on heuristic rules (stopword ratio, symbol-to-word ratio, line length distribution, and mean word length).\n2. MinHash & Locality-Sensitive Hashing (LSH): Grouping documents into k-shingles and hashing to detect near-duplicates with O(1) candidate lookup without pairwise O(N^2) comparison.\n3. Model-Based Quality Classifiers: Training lightweight fastText or deBERTa classifiers on Wikipedia/high-signal textbooks to score incoming web documents.\n4. Synthetic Generation & Re-writing: Using frontier models to rephrase complex technical forums into clear textbook explanations with step-by-step reasoning.',
+    codeSnippet: '# MinHash Jaccard Similarity Estimation for Text Deduplication\nimport hashlib\n\ndef get_shingles(text, k=3):\n    words = text.lower().split()\n    return set(" ".join(words[i:i+k]) for i in range(len(words)-k+1))\n\ndoc1 = "OpenGuide teaches neural networks from first principles with zero paywalls"\ndoc2 = "OpenGuide teaches neural networks from first principles with zero subscription costs"\n\ns1 = get_shingles(doc1)\ns2 = get_shingles(doc2)\njaccard = len(s1 & s2) / len(s1 | s2) if len(s1 | s2) > 0 else 0.0\nprint(f"Shingle Jaccard Similarity: {jaccard:.3f}")',
+    takeaway: 'High-signal pre-training requires aggressive deduplication via MinHash and strict heuristic filtering before tokenization.'
+  },
+  {
+    id: 'kv-cache-paged-attention-vllm',
+    keywords: ['pagedattention', 'paged attention', 'vllm', 'kv cache', 'virtual memory', 'page table', 'memory fragmentation', 'serving', 'throughput'],
+    title: 'PagedAttention & Virtual Memory KV-Cache Management (vLLM)',
+    category: 'architecture',
+    summary: 'Eliminating memory fragmentation in high-throughput LLM serving via OS-inspired virtual memory page tables.',
+    explanation: 'Standard Transformer inference allocates contiguous GPU memory for the maximum sequence length per request. This creates two fatal memory bottlenecks:\n1. Internal Fragmentation: Memory reserved for tokens that the user has not yet generated.\n2. External Fragmentation: Free memory scattered in non-contiguous chunks that cannot satisfy large allocation requests.\n\nPagedAttention resolves this by adapting OS virtual memory:\n• The Key-Value cache is divided into fixed-size physical blocks (e.g. 16 or 32 tokens).\n• A logical-to-physical block table maps non-contiguous GPU memory pages dynamically as each token is generated.\n• Parallel decoding requests can share physical blocks for prompt prefixes without duplication (Copy-on-Write for parallel sampling).\n• Result: Memory waste drops from ~60-80% down to under 4%, increasing inference throughput by 2-4x.',
+    codeSnippet: '# PagedAttention Block Allocation Simulation\nBLOCK_SIZE = 16\ntotal_gpu_blocks = 128\nallocated_blocks = 42\n\ndef allocate_token(seq_len):\n    required_blocks = (seq_len + BLOCK_SIZE - 1) // BLOCK_SIZE\n    return required_blocks\n\nseq_len = 150\nblocks_needed = allocate_token(seq_len)\nwasted_slots = (blocks_needed * BLOCK_SIZE) - seq_len\nprint(f"Tokens: {seq_len} -> {blocks_needed} Blocks allocated")\nprint(f"Memory Fragmentation: Only {wasted_slots} token slots idle in final block")\nprint(f"Fragmentation Rate: {(wasted_slots / (blocks_needed * BLOCK_SIZE)) * 100:.1f}%")',
+    takeaway: 'PagedAttention stores KV cache in non-contiguous virtual memory blocks, eliminating allocation waste and boosting serving throughput.'
   }
 ];
 
+// Abbreviation & Domain Synonym Mapping Dictionary
+const DOMAIN_SYNONYMS: Record<string, string[]> = {
+  moe: ['mixture', 'experts', 'routing', 'gate'],
+  dpo: ['preference', 'optimization', 'alignment', 'rlhf'],
+  flash: ['flashattention', 'tiling', 'sram', 'online', 'softmax'],
+  flashattention: ['tiling', 'sram', 'online', 'softmax'],
+  hnsw: ['graph', 'nearest', 'vector', 'index'],
+  speculative: ['draft', 'verification', 'acceleration'],
+  quant: ['quantization', 'awq', 'gptq', 'gguf', 'nf4'],
+  rag: ['retrieval', 'chunking', 'reranker', 'context'],
+  cot: ['chain', 'thought', 'reasoning', 'socratic'],
+  scam: ['phishing', 'fraud', 'suspicious', 'fake'],
+  feynman: ['student', 'analogy', 'homework', 'learning'],
+  multilingual: ['language', 'spanish', 'chinese', 'hindi', 'arabic'],
+  agent: ['multi-agent', 'react', 'tools', 'reflection'],
+  synthetic: ['minhash', 'deduplication', 'curation', 'filtering'],
+  pagedattention: ['kv', 'cache', 'vllm', 'virtual', 'memory'],
+  vllm: ['pagedattention', 'kv', 'cache', 'serving']
+};
+
 /**
- * High-precision offline search algorithm with token set matching and domain phrase weighting.
+ * High-precision offline search algorithm with token set matching, synonym expansion, and domain phrase weighting.
  */
 export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
   const clean = query.toLowerCase().trim();
@@ -529,6 +723,16 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
   const terms = rawTerms.filter(t => !stopWords.has(t));
   const effectiveTerms = terms.length > 0 ? terms : rawTerms;
 
+  // Expand query terms with domain synonyms
+  const expandedTerms = new Set<string>(effectiveTerms);
+  for (const term of effectiveTerms) {
+    if (DOMAIN_SYNONYMS[term]) {
+      for (const syn of DOMAIN_SYNONYMS[term]) {
+        expandedTerms.add(syn);
+      }
+    }
+  }
+
   return OFFLINE_KNOWLEDGE_BASE.map(entry => {
     let score = 0;
     const titleLower = entry.title.toLowerCase();
@@ -537,16 +741,16 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
     const idLower = entry.id.toLowerCase();
 
     // Exact full query match in title or keywords
-    if (titleLower.includes(clean)) score += 40;
-    if (entry.keywords.some(k => k === clean)) score += 50;
-    if (entry.keywords.some(k => clean.includes(k) && k.length >= 3)) score += 30;
+    if (titleLower.includes(clean)) score += 50;
+    if (entry.keywords.some(k => k === clean)) score += 60;
+    if (entry.keywords.some(k => clean.includes(k) && k.length >= 3)) score += 35;
 
-    for (const term of effectiveTerms) {
+    for (const term of expandedTerms) {
       // 1. Exact keyword match
       if (entry.keywords.includes(term)) {
         score += 35;
       } else if (entry.keywords.some(k => {
-        // Safe prefix match for terms >= 4 chars (e.g. "atten" in "attention"), avoiding "work" in "worker"
+        // Safe prefix match for terms >= 4 chars
         if (term.length >= 4 && k.startsWith(term)) return true;
         // Multi-word keyword contains single word term
         if (k.includes(' ') && k.split(/\s+/).includes(term)) return true;
@@ -557,22 +761,22 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
 
       // 2. Title word match
       if (titleLower.split(/\s+/).includes(term)) {
-        score += 25;
+        score += 30;
       } else if (titleLower.includes(term)) {
         score += 15;
       }
 
       // 3. ID match
       if (idLower.includes(term)) {
-        score += 18;
+        score += 20;
       }
 
       // 4. Summary & explanation matches
       if (summaryLower.includes(term)) {
-        score += 8;
+        score += 10;
       }
       if (explanationLower.includes(term)) {
-        score += 4;
+        score += 5;
       }
     }
 

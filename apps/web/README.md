@@ -15,7 +15,7 @@ yarn dev
 # Run Oxlint static analysis
 yarn lint
 
-# Execute Playwright automated test suite (128 tests)
+# Execute Playwright automated test suite
 yarn test:e2e
 
 # Compile production bundle

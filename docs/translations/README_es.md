@@ -222,11 +222,11 @@ Abre `http://localhost:5173` en tu navegador.
 
 Cada contribución debe superar la verificación de cinco puntos antes de fusionarse:
 ```bash
-# 1. Verificación del linter (0 advertencias, 0 errores en 108 archivos)
+# 1. Verificación del linter (0 advertencias, 0 errores en el código)
 yarn lint
 
-# 2. Suite de pruebas automatizadas con Playwright (128 / 128 pruebas superadas con 100% de éxito)
-npx playwright test
+# 2. Suite de pruebas automatizadas con Playwright (100% de éxito en todas las suites de regresión)
+yarn --cwd apps/web test:e2e
 
 # 3. Compilación estática de producción (0 errores de TypeScript/Vite)
 yarn --cwd apps/web build

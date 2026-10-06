@@ -220,11 +220,11 @@ Abra `http://localhost:5173` no seu navegador.
 
 Todas as contribuições devem passar pela verificação de cinco pontos antes da mesclagem:
 ```bash
-# 1. Verificação estática do linter (0 avisos, 0 erros em 108 arquivos)
+# 1. Verificação estática do linter (0 avisos, 0 erros no código)
 yarn lint
 
-# 2. Suíte de testes automatizados Playwright (128 / 128 testes aprovados com 100% de sucesso)
-npx playwright test
+# 2. Suíte de testes automatizados Playwright (100% de sucesso em todas as suítes de regressão)
+yarn --cwd apps/web test:e2e
 
 # 3. Compilação estática de produção (0 erros de TypeScript/Vite)
 yarn --cwd apps/web build

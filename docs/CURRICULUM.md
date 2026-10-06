@@ -165,6 +165,7 @@ Without altering the existing navigation, route structure, or module hierarchy, 
 - **Beginner-Friendly Python Syntax Doctor (`pythonDiagnostic.ts`):** Client-side zero-cost static diagnostic parser for Pyodide tracebacks converting cryptic compiler errors (`SyntaxError`, `IndentationError`, `NameError`, etc.) into conversational plain-English advice and concrete code fixes.
 - **Portable Proof-of-Work Jupyter (.ipynb) Engine (`notebookExport.ts`):** Zero-dependency JSON serializer generating standard Jupyter Notebook files conforming strictly to nbformat 4.5, packaging Markdown theory and executable Python solution cells for local execution in VS Code or JupyterLab.
 - **Studio Command Palette (`Cmd+K` / `Ctrl+K`):** Global omnibox modal with fuzzy search across all curriculum labs, direct modal triggers, theme switcher jumps, and keyboard navigation.
+- **Sovereign Offline Knowledge Bank (`offlineKnowledge.ts`):** 65+ deep engineering topics with self-contained, executable Python/NumPy snippets runnable directly in the CPython Web Worker. Covers FlashAttention-2/3, MoE routing, DPO alignment, Speculative Decoding, HNSW vector indexing, Pushdown Automata Structured Outputs, YaRN/ALiBi extrapolation, AWQ/GGUF quantization, WebGPU WGSL compute shaders, PagedAttention/vLLM, MinHash deduplication, Socratic Chain-of-Thought, senior scam detection, student Feynman learning, multilingual terminology bridge, and ReAct multi-agent state machines.
 
 ---
 

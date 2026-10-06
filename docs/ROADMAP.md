@@ -236,7 +236,14 @@
 - [x] **128 Automated Playwright Tests Passing:** 100% test passage across the full regression suite (`apps/web/tests/`) with 0 errors, 0 skips, and 0 console errors.
 - [x] **Clean Pre-Flight Gate:** 0 oxlint warnings/errors across 108 files, clean production compilation in under 3.5 seconds.
 
-## Phase 25: External Audit Execution & Production Edge Verification (Active / Immediate Focus)
+## Phase 25: Sovereign Offline Knowledge Bank Frontier Parity & Visual Invariants (Release v1.3.0)
+- [x] **Sovereign Offline Knowledge Bank Expansion:** Expanded client-side offline knowledge base from 48 to 65 deep frontier AI topics (FlashAttention-2/3, MoE top-2 routing, DPO loss, Speculative Decoding, HNSW vector skip-lists, Pushdown Grammar Structured Outputs, YaRN/ALiBi extrapolation, AWQ/GGUF quantization, WebGPU WGSL compute shaders, PagedAttention/vLLM, MinHash deduplication, Socratic Chain-of-Thought, senior scam detection, student Feynman learning, multilingual terminology bridge, and ReAct multi-agent state machines).
+- [x] **High-Precision Retrieval Engine Upgrade:** Upgraded `searchOfflineKnowledge()` with a curated domain synonym dictionary (`DOMAIN_SYNONYMS`), stopword stripping, and term-frequency weighting for sub-millisecond retrieval.
+- [x] **Responsive Continuum Grid Architecture:** Converted Stage Switcher into an ergonomic responsive grid (`grid-cols-2 sm:grid-cols-3 lg:grid-cols-6`), added `.no-scrollbar` cross-browser utility, shortened search placeholder, and repositioned announcement pill.
+- [x] **Playwright Regression & Visual Boundary Invariants:** Added `TC-AUDIT-025` (validating contract parity for 65 topics with executable Python snippets) and `TC-AUDIT-026` (validating continuum visual bounds across 375px, 768px, and 1280px viewports with zero horizontal overflow).
+- [x] **130 Automated Playwright Tests Passing:** 100% test passage across all suites with 0 failures, 0 skips, and 0 console errors.
+
+## Phase 26: External Audit Execution & Production Edge Verification (Active / Immediate Focus)
 - [ ] **External Auditor Technical Verification:** Independent verification using `docs/EXTERNAL-AUDIT-QA-DOSSIER.md` reproduction steps.
 - [ ] **Physical Hardware Testing:** Real-device human testing on physical iOS Safari (WebKit memory bounds) and physical Android mobile hardware.
 - [ ] **Edge Deployment Synchronization:** Dual-remote multi-push to Cloudflare Pages deploy target and personal archive mirror.

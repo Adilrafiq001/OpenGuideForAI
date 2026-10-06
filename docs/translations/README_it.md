@@ -222,11 +222,11 @@ Apri `http://localhost:5173` nel tuo browser web.
 
 Tutti i contributi devono superare la procedura di verifica a cinque punti prima del merge:
 ```bash
-# 1. Verifica statica del linter (0 avvisi, 0 errori su 108 file)
+# 1. Verifica statica del linter (0 avvisi, 0 errori nel codice)
 yarn lint
 
-# 2. Suite di test automatizzati Playwright (128 / 128 test superati con successo al 100%)
-npx playwright test
+# 2. Suite di test automatizzati Playwright (100% di successo su tutte le suite di regressione)
+yarn --cwd apps/web test:e2e
 
 # 3. Compilazione statica di produzione (0 errori TypeScript / Vite)
 yarn --cwd apps/web build

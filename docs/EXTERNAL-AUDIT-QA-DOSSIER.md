@@ -120,7 +120,7 @@ The curriculum consists of 5 tracks (45 labs total), each structured with First-
 | **Universal Human Spectrum** | 6-tier continuum | Stages 0 to 5, real-world trades covered | **PASS** |
 | **Browser Console Integrity** | 0 console errors | 0 errors on `/track/4` & active Pyodide run | **PASS** |
 | **Pyodide WASM Runtime Latency** | $< 1000$ms execution | 17ms local execution recorded in UI | **PASS** |
-| **Full Playwright Regression Suite** | 128 / 128 passing | 100% pass across complete test directory | **PASS** |
+| **Full Playwright Regression Suite** | 130 / 130 passing | 100% pass across complete test directory | **PASS** |
 | **Production Build** | Exit code 0 | Succeeded with 0 errors | **PASS** |
 
 ---

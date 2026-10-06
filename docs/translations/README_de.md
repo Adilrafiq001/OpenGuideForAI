@@ -221,11 +221,11 @@ Rufen Sie `http://localhost:5173` in Ihrem Browser auf.
 
 Jeder Beitrag muss die 5-Punkte-Qualitätsprüfung vor dem Zusammenführen bestehen:
 ```bash
-# 1. Linter-Prüfung (0 Warnungen, 0 Fehler in 108 Dateien)
+# 1. Linter-Prüfung (0 Warnungen, 0 Fehler im gesamten Codebase)
 yarn lint
 
-# 2. Automatisierte Playwright-Test-Suite (128 / 128 Tests bestanden, 100% Erfolgsquote)
-npx playwright test
+# 2. Automatisierte Playwright-Test-Suite (100% Erfolgsquote über alle Regressions-Suites)
+yarn --cwd apps/web test:e2e
 
 # 3. Statische Produktions-Kompilierung (0 TypeScript/Vite-Fehler)
 yarn --cwd apps/web build

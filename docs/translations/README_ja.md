@@ -220,11 +220,11 @@ yarn --cwd apps/web dev
 
 すべてのコミットおよびプルリクエストは、マージ前に以下の5項目検証をパスする必要があります：
 ```bash
-# 1. 静的解析・リンター検証（108 ファイル中 0 警告、0 エラー）
+# 1. 静的解析・リンター検証（コードベース全体で 0 警告、0 エラー）
 yarn lint
 
-# 2. Playwright 自動テストスイート（128 / 128 テスト、合格率 100%）
-npx playwright test
+# 2. Playwright 自動回帰テストスイート（すべての回帰スイートで合格率 100%）
+yarn --cwd apps/web test:e2e
 
 # 3. 本番用静的ビルド検証（TypeScript / Vite エラー 0 件）
 yarn --cwd apps/web build
