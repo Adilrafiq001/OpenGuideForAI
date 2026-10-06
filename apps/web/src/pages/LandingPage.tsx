@@ -1123,11 +1123,9 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           </p>
           <button
             type="button"
+            id="ask-bluee-now-btn"
             onClick={() => {
-              const el = document.getElementById('abby-toggle-checkbox') as HTMLInputElement | null;
-              if (el && !el.checked) {
-                el.click();
-              }
+              window.dispatchEvent(new CustomEvent('open-offline-copilot'));
             }}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >

@@ -5,9 +5,31 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.2.0';
+export const CURRENT_STUDIO_VERSION = '1.4.0';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.4.0',
+    date: 'October 2026',
+    title: 'Frontier Parity 250 Topics, Okapi BM25 Search Engine & Interactive Explainables',
+    highlights: [
+      'Frontier Knowledge Bank Parity: 250 deep, mathematically verified topics spanning 2024–2026 AI research, LLM systems, multimodal architectures, and non-coder everyday trade fluencies.',
+      'Information Retrieval Engine (Okapi BM25): Probabilistic ranking with length normalization (k1=1.2, b=0.75), smoothed inverse document frequency, and multi-field relevance scoring.',
+      'Cross-Lingual Retrieval Bridge: Cross-lingual synonym normalization across 11 world languages (English, Spanish, Hindi, Chinese, French, German, Arabic, Russian, Japanese, Urdu, Portuguese).',
+      'Client-Side Interactive Micro-Explainables: Zero-dependency interactive widgets for Softmax Temperature calibration, PagedAttention block mapping, Cosine Similarity angular dynamics, and RoPE phasor rotation.',
+      'Audited Regression Pass: 100% test passage across 29 automated Playwright invariants, zero console errors, zero lint warnings, and full offline caching.'
+    ]
+  },
+  {
+    version: '1.3.0',
+    date: 'October 2026',
+    title: 'Sovereign Knowledge Bank Expansion & Responsive Continuum Grid',
+    highlights: [
+      'Offline Knowledge Expansion: Expanded curated topics from 48 to 65 with deep architectural coverage of FlashAttention-2/3, MoE top-2 routing, DPO loss, and HNSW skip-lists.',
+      'Responsive Continuum Grid: Redesigned fluency stage navigation into an adaptive 6-stage responsive grid with cross-browser smooth panning.',
+      'Domain Synonym Resolution: Domain synonym dictionary for high-precision single-token queries.'
+    ]
+  },
   {
     version: '1.2.0',
     date: 'October 2026',

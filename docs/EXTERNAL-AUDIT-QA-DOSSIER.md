@@ -15,7 +15,7 @@ OpenGuide is an open-source, local-first interactive AI engineering studio desig
 ### Core Architectural Invariants ($0 Rule)
 1. **Client-Side Compute Engine:** Foundational code execution runs entirely inside the user's browser using CPython WebAssembly (Pyodide v0.26) inside dedicated Web Workers. A watchdog timer terminates runaway code after 15 seconds, preventing memory leaks and browser main-thread freezes.
 2. **Local-First State & Persistence:** Learner progress milestones and completed lab states persist locally via IndexedDB (Dexie), while active code editor state and live execution terminal logs remain in reactive browser memory. No user data or telemetry is transmitted to remote databases.
-3. **Bring Your Own Key (BYOK) & Sovereign Intelligence:** The assistant ("Bluee") operates dual-mode: a 100% client-side embedded first-principles knowledge engine requiring zero network connectivity, or user-supplied frontier model API keys (BYOK) stored ephemerally in browser memory.
+3. **Bring Your Own Key (BYOK) & Sovereign Intelligence:** The assistant ("Bluee") operates dual-mode: a 100% client-side embedded first-principles knowledge engine with 250 deep topics, Okapi BM25 probabilistic ranking, cross-lingual search across 11 languages, and interactive visual explainables requiring zero network connectivity, or user-supplied frontier model API keys (BYOK) stored ephemerally in browser memory.
 4. **Zero Paid Infrastructure:** The static application is bundled via Vite/React 18/TypeScript and deployed directly to Cloudflare Pages edge CDN.
 
 ---
@@ -121,6 +121,10 @@ The curriculum consists of 5 tracks (45 labs total), each structured with First-
 | **Browser Console Integrity** | 0 console errors | 0 errors on `/track/4` & active Pyodide run | **PASS** |
 | **Pyodide WASM Runtime Latency** | $< 1000$ms execution | 17ms local execution recorded in UI | **PASS** |
 | **Full Playwright Regression Suite** | 130 / 130 passing | 100% pass across complete test directory | **PASS** |
+| **Sovereign Offline Knowledge Bank** | 250 core topics | 250 topics verified in runtime memory (`offlineKnowledge.ts`) | **PASS** |
+| **Information Retrieval Engine** | Okapi BM25 ($k_1=1.2, b=0.75$) | Field-weighted scoring verified by `TC-AUDIT-027` | **PASS** |
+| **Cross-Lingual Multi-Script Bridge** | 11 world languages | Native queries verified by `TC-AUDIT-028` (ES, HI, ZH, FR, DE, AR) | **PASS** |
+| **Interactive Visual Explainables** | 4 micro-widgets | Verified by `TC-AUDIT-029` (Softmax, PagedAttention, Cosine, RoPE) | **PASS** |
 | **Production Build** | Exit code 0 | Succeeded with 0 errors | **PASS** |
 
 ---

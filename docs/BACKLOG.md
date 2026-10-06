@@ -52,6 +52,9 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
   - Native WebGPU adapter inspection and WGSL matrix multiplication compute shader execution (`localNeuralRunner.ts`).
 - [x] **Mobile Haptic Feedback:**
   - Added native multi-tier haptic vibration profiles (`'light'`, `'success'`, `'error'`, and `'boss'`).
-- [x] **Sovereign Offline Knowledge Bank Frontier Parity:**
-  - Pre-packaged 65 comprehensive offline frontier AI engineering topics with runnable Python code snippets and domain synonym mapping in `offlineKnowledge.ts`.
+- [x] **Sovereign Offline Knowledge Bank Frontier Parity (250 Core Topics):**
+  - Expanded offline knowledge engine to 250 deep, mathematically verified topics (`frontierKnowledgeBatch1.ts`, `frontierKnowledgeBatch2.ts`, `offlineKnowledge.ts`) covering 2024–2026 AI research, LLM systems, multimodal architectures, and non-coder everyday trade fluencies.
+  - Okapi BM25 information retrieval engine ($k_1=1.2, b=0.75$) with smoothed IDF and field-weighted relevance scoring.
+  - Multi-script cross-lingual bridge across 11 world languages (`multilingualLexicon.ts`).
+  - Client-side interactive visual explainable micro-widgets (Softmax Temperature, PagedAttention block mapping, Cosine Similarity angular dial, RoPE phasor dynamics).
 

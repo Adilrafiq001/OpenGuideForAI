@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Lightbulb, X, Search, ShieldCheck, Cpu, Copy, Check } from 'lucide-react';
 import { searchOfflineKnowledge } from '../data/offlineKnowledge';
+import { InteractiveMicroWidget } from './interactive/InteractiveMicroWidget';
 import '../styles/offline-copilot.css';
 
 interface OfflineAICopilotProps {
@@ -163,6 +164,12 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
                         <Copy className="w-3.5 h-3.5" />
                       )}
                     </button>
+                  </div>
+                )}
+
+                {entry.interactiveWidgetId && (
+                  <div className="copilot-interactive-widget-wrapper my-2">
+                    <InteractiveMicroWidget widgetId={entry.interactiveWidgetId} />
                   </div>
                 )}
 

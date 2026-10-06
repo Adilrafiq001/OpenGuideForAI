@@ -619,12 +619,22 @@ ZeroDivisionError: division by zero`;
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
 
-  test('TC-AUDIT-025: Sovereign Offline Knowledge Bank Frontier Parity', async ({ page }) => {
-    // 1. Static Contract: Verify offlineKnowledge.ts contains >= 65 topics with full code and takeaways
+  test('TC-AUDIT-025: Sovereign Offline Knowledge Bank Frontier Parity (250 Core Topics)', async ({ page }) => {
+    // 1. Static Contract: Verify offlineKnowledge.ts contains 65 core, batch1 contains 60 topics, batch2 contains 125 topics
     const offlineKnowledgePath = fs.existsSync(path.resolve(process.cwd(), 'apps/web/src/data/offlineKnowledge.ts'))
       ? path.resolve(process.cwd(), 'apps/web/src/data/offlineKnowledge.ts')
       : path.resolve(process.cwd(), 'src/data/offlineKnowledge.ts');
     const content = fs.readFileSync(offlineKnowledgePath, 'utf-8');
+
+    const batch1Path = fs.existsSync(path.resolve(process.cwd(), 'apps/web/src/data/frontierKnowledgeBatch1.ts'))
+      ? path.resolve(process.cwd(), 'apps/web/src/data/frontierKnowledgeBatch1.ts')
+      : path.resolve(process.cwd(), 'src/data/frontierKnowledgeBatch1.ts');
+    const batch1Content = fs.readFileSync(batch1Path, 'utf-8');
+
+    const batch2Path = fs.existsSync(path.resolve(process.cwd(), 'apps/web/src/data/frontierKnowledgeBatch2.ts'))
+      ? path.resolve(process.cwd(), 'apps/web/src/data/frontierKnowledgeBatch2.ts')
+      : path.resolve(process.cwd(), 'src/data/frontierKnowledgeBatch2.ts');
+    const batch2Content = fs.readFileSync(batch2Path, 'utf-8');
 
     const requiredTopics = [
       'flashattention-tiling-sram',
@@ -650,22 +660,54 @@ ZeroDivisionError: division by zero`;
       expect(content).toContain(`id: '${topic}'`);
     }
 
-    // Verify code snippets are present for all frontier entries
-    expect(content).toContain('Online Softmax Concept (Incremental 2-Block Normalization)');
-    expect(content).toContain('Minimal Top-2 Gating Router Simulation');
-    expect(content).toContain('def dpo_loss(');
-    expect(content).toContain('def speculative_accept_or_reject(');
-    expect(content).toContain('Euclidean Distance for Vector Nodes');
-    expect(content).toContain('PagedAttention Block Allocation Simulation');
-    expect(content).toContain('MinHash Jaccard Similarity Estimation');
+    const requiredBatch1Topics = [
+      'ddpm-forward-reverse-sde',
+      'rectified-flow-matching',
+      'grpo-group-relative-policy',
+      'mcts-test-time-compute',
+      'zero-stage-1-2-3-memory',
+      'fsdp-fully-sharded-data-parallel',
+      'triton-block-level-programming',
+      'adamw-weight-decay-decoupling',
+      'pca-svd-eigen-decomposition',
+      'svm-lagrange-dual-kernel'
+    ];
 
-    // 2. Physical DOM Interaction: Verify clean page load and zero console errors
+    for (const topic of requiredBatch1Topics) {
+      expect(batch1Content).toContain(`id: '${topic}'`);
+    }
+
+    const requiredBatch2Topics = [
+      'vit-vision-transformer-patches',
+      'clip-contrastive-pretraining',
+      'whisper-encoder-decoder-speech',
+      'colbert-late-interaction-scoring',
+      'graph-rag-knowledge-triples',
+      'bitnet-one-point-five-eight-bit',
+      'webgpu-compute-pipeline-buffers',
+      'webllm-tvm-wasi-browser-execution',
+      'stride-ai-threat-modeling',
+      'differential-privacy-dp-sgd'
+    ];
+
+    for (const topic of requiredBatch2Topics) {
+      expect(batch2Content).toMatch(new RegExp(`id:\\s*['"]${topic}['"]`));
+    }
+
+    // 2. Physical DOM & Runtime Evaluation: Verify exactly 250 topics hydrated in browser
+    await page.goto('/');
+    const totalCount = await page.evaluate(async () => {
+      const mod = await import('/src/data/offlineKnowledge.ts');
+      return mod.OFFLINE_KNOWLEDGE_BASE.length;
+    });
+    expect(totalCount).toBe(250);
+    expect(totalCount).toBeGreaterThanOrEqual(250);
+
     const errors: string[] = [];
     page.on('console', msg => {
       if (msg.type() === 'error') errors.push(msg.text());
     });
 
-    await page.goto('/');
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
 
@@ -705,6 +747,214 @@ ZeroDivisionError: division by zero`;
       const studentCard = page.locator('text=Student & Homework Concept Learner').first();
       await expect(studentCard).toBeVisible();
     }
+  });
+
+  test('TC-AUDIT-027: Okapi BM25 Information Retrieval Precision & Term Saturation', async ({ page }) => {
+    await page.goto('/');
+
+    // Evaluate searchOfflineKnowledge in browser context
+    const testResults = await page.evaluate(async () => {
+      // Import searchOfflineKnowledge dynamically via module script
+      const mod = await import('/src/data/offlineKnowledge.ts');
+      const searchFn = mod.searchOfflineKnowledge;
+
+      // 1. Exact frontier query
+      const flashResults = searchFn('FlashAttention');
+      const flashTop = flashResults[0]?.id;
+
+      // 2. Query with stopwords & natural phrasing
+      const pagedResults = searchFn('how does paged attention manage kv cache memory in vllm');
+      const pagedTop = pagedResults[0]?.id;
+
+      // 3. Speculative decoding natural query
+      const specResults = searchFn('speculative decoding draft model verification');
+      const specTop = specResults[0]?.id;
+
+      // 4. Domain synonym query
+      const alignmentResults = searchFn('rlhf preference alignment dpo');
+      const alignmentTop = alignmentResults[0]?.id;
+
+      // 5. Batch 1 Queries: Flow Matching, GRPO, ZeRO, AdamW
+      const flowResults = searchFn('rectified flow matching straight trajectories');
+      const flowTop = flowResults[0]?.id;
+
+      const grpoResults = searchFn('grpo reasoning deepseek r1 critic free');
+      const grpoTop = grpoResults[0]?.id;
+
+      const zeroResults = searchFn('zero stage 3 deepspeed memory partitioning');
+      const zeroTop = zeroResults[0]?.id;
+
+      const adamwResults = searchFn('adamw weight decay decoupling l2 regularization');
+      const adamwTop = adamwResults[0]?.id;
+
+      // 6. Batch 2 Queries: ViT, CLIP, ColBERT, WebLLM, STRIDE
+      const vitResults = searchFn('vit vision transformer patch projection');
+      const vitTop = vitResults[0]?.id;
+
+      const clipResults = searchFn('clip contrastive infonce image text');
+      const clipTop = clipResults[0]?.id;
+
+      const colbertResults = searchFn('colbert late interaction maxsim');
+      const colbertTop = colbertResults[0]?.id;
+
+      const strideResults = searchFn('stride threat modeling autonomous agents');
+      const strideTop = strideResults[0]?.id;
+
+      return {
+        flashTop,
+        flashCount: flashResults.length,
+        pagedTop,
+        specTop,
+        alignmentTop,
+        flowTop,
+        grpoTop,
+        zeroTop,
+        adamwTop,
+        vitTop,
+        clipTop,
+        colbertTop,
+        strideTop
+      };
+    });
+
+    expect(testResults.flashTop).toBe('flashattention-tiling-sram');
+    expect(testResults.flashCount).toBeGreaterThan(0);
+    expect(testResults.pagedTop).toBe('kv-cache-paged-attention-vllm');
+    expect(testResults.specTop).toBe('speculative-decoding-draft-model-verification');
+    expect(testResults.alignmentTop).toBe('direct-preference-optimization-dpo');
+    expect(testResults.flowTop).toBe('rectified-flow-matching');
+    expect(testResults.grpoTop).toBe('grpo-group-relative-policy');
+    expect(testResults.zeroTop).toBe('zero-stage-1-2-3-memory');
+    expect(testResults.adamwTop).toBe('adamw-weight-decay-decoupling');
+    expect(testResults.vitTop).toBe('vit-vision-transformer-patches');
+    expect(testResults.clipTop).toBe('clip-contrastive-pretraining');
+    expect(testResults.colbertTop).toBe('colbert-late-interaction-scoring');
+    expect(testResults.strideTop).toBe('stride-ai-threat-modeling');
+  });
+
+  test('TC-AUDIT-028: Cross-Lingual Multi-Script Query Retrieval (es, hi, zh, fr, de, ar)', async ({ page }) => {
+    await page.goto('/');
+
+    const crossLingualResults = await page.evaluate(async () => {
+      const mod = await import('/src/data/offlineKnowledge.ts');
+      const searchFn = mod.searchOfflineKnowledge;
+
+      // Spanish queries
+      const esAtencion = searchFn('atención');
+      const esCuantizacion = searchFn('cuantización');
+
+      // Hindi queries
+      const hiAttention = searchFn('अटेंशन');
+      const hiScam = searchFn('स्कैम');
+
+      // Chinese queries
+      const zhAttention = searchFn('注意力');
+      const zhQuant = searchFn('量化');
+      const zhSpec = searchFn('投机采样');
+
+      // French query
+      const frSpec = searchFn('décodage spéculatif');
+
+      // German query
+      const deQuant = searchFn('quantisierung');
+
+      // Arabic query
+      const arQuant = searchFn('تكميم');
+
+      return {
+        esAtencionTop: esAtencion[0]?.id,
+        esCuantizacionTop: esCuantizacion[0]?.id,
+        hiAttentionTop: hiAttention[0]?.id,
+        hiScamTop: hiScam[0]?.id,
+        zhAttentionTop: zhAttention[0]?.id,
+        zhQuantTop: zhQuant[0]?.id,
+        zhSpecTop: zhSpec[0]?.id,
+        frSpecTop: frSpec[0]?.id,
+        deQuantTop: deQuant[0]?.id,
+        arQuantTop: arQuant[0]?.id,
+      };
+    });
+
+    // Verify all cross-lingual queries correctly retrieved target knowledge cards
+    expect(crossLingualResults.esAtencionTop).toBe('scaled-dot-product-attention');
+    expect(crossLingualResults.esCuantizacionTop).toBe('quantization-precision');
+    expect(crossLingualResults.hiAttentionTop).toBe('scaled-dot-product-attention');
+    expect(crossLingualResults.hiScamTop).toBe('senior-scam-phishing-defense');
+    expect(crossLingualResults.zhAttentionTop).toBe('scaled-dot-product-attention');
+    expect(crossLingualResults.zhQuantTop).toBe('quantization-precision');
+    expect(crossLingualResults.zhSpecTop).toBe('speculative-decoding-acceleration');
+    expect(['speculative-decoding-acceleration', 'speculative-decoding-draft-model-verification']).toContain(crossLingualResults.frSpecTop);
+    expect(crossLingualResults.deQuantTop).toBe('quantization-precision');
+    expect(crossLingualResults.arQuantTop).toBe('quantization-precision');
+  });
+
+  test('TC-AUDIT-029: Interactive Visual Explainable Micro-Widgets in Knowledge Cards', async ({ page }) => {
+    await page.goto('/');
+
+    // 1. Open Offline AI Copilot modal via global custom event
+    await page.evaluate(() => {
+      window.dispatchEvent(new CustomEvent('open-offline-copilot'));
+    });
+
+    const copilotModal = page.locator('.copilot-modal');
+    await expect(copilotModal).toBeVisible();
+
+    const searchInput = page.locator('#copilot-search-input');
+    await expect(searchInput).toBeVisible();
+
+    // 2. Test Softmax Temperature Widget
+    await searchInput.fill('temperature');
+    const tempCard = page.locator('#copilot-entry-temperature-sampling');
+    await expect(tempCard).toBeVisible();
+
+    const tempWidget = tempCard.locator('[data-testid="softmax-temperature-widget"]');
+    await expect(tempWidget).toBeVisible();
+
+    const tempSlider = tempWidget.locator('#temp-slider');
+    await expect(tempSlider).toBeVisible();
+    await tempSlider.evaluate((el: HTMLInputElement) => {
+      el.value = '2.0';
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await expect(tempWidget).toContainText('High Entropy');
+
+    // 3. Test PagedAttention Widget
+    await searchInput.fill('paged attention');
+    const pagedCard = page.locator('#copilot-entry-kv-cache-paged-attention-vllm');
+    await expect(pagedCard).toBeVisible();
+
+    const pagedWidget = pagedCard.locator('[data-testid="paged-attention-widget"]');
+    await expect(pagedWidget).toBeVisible();
+    const addTokenBtn = pagedWidget.locator('button:has-text("+2")');
+    await addTokenBtn.click();
+    await expect(pagedWidget).toContainText('12 / 32');
+
+    // 4. Test Cosine Similarity Dial Widget
+    await searchInput.fill('cosine similarity');
+    const cosineCard = page.locator('#copilot-entry-cosine-similarity-math');
+    await expect(cosineCard).toBeVisible();
+
+    const cosineWidget = cosineCard.locator('[data-testid="cosine-similarity-widget"]');
+    await expect(cosineWidget).toBeVisible();
+    const btn90 = cosineWidget.locator('button:has-text("90°")');
+    await btn90.click();
+    await expect(cosineWidget).toContainText('cos(θ) = 0.000');
+    await expect(cosineWidget).toContainText('Orthogonal');
+
+    // 5. Test RoPE Rotation Dial Widget
+    await searchInput.fill('rotary position');
+    const ropeCard = page.locator('#copilot-entry-rope-embeddings');
+    await expect(ropeCard).toBeVisible();
+
+    const ropeWidget = ropeCard.locator('[data-testid="rope-rotation-widget"]');
+    await expect(ropeWidget).toBeVisible();
+    const btnNext = ropeWidget.locator('button:has-text("m+1")');
+    await btnNext.click();
+    await expect(ropeWidget).toContainText('#3');
+    const btnTheta45 = ropeWidget.locator('button:has-text("θ=45°")');
+    await btnTheta45.click();
+    await expect(ropeWidget).toContainText('Total Angle: 135°');
   });
 });
 

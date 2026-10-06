@@ -50,6 +50,7 @@ const HelpModal = lazyWithRetry(() => import('./components/HelpModal').then(m =>
 const FirstTimeSetupModal = lazyWithRetry(() => import('./components/FirstTimeSetupModal').then(m => ({ default: m.FirstTimeSetupModal })));
 const StudioInteractiveDemoModal = lazyWithRetry(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
 const CommandPaletteModal = lazyWithRetry(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
+const OfflineAICopilot = lazyWithRetry(() => import('./components/OfflineAICopilot').then(m => ({ default: m.OfflineAICopilot })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazyWithRetry(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -75,6 +76,14 @@ function AppContent() {
   });
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+
+  // Global listener to open the Offline AI Copilot Knowledge Bank
+  useEffect(() => {
+    const handleOpenCopilot = () => setIsCopilotOpen(true);
+    window.addEventListener('open-offline-copilot', handleOpenCopilot);
+    return () => window.removeEventListener('open-offline-copilot', handleOpenCopilot);
+  }, []);
 
   // Eagerly hydrate learner progress from Dexie IndexedDB on application boot
   useEffect(() => {
@@ -326,6 +335,16 @@ function AppContent() {
               onClose={() => setIsCommandPaletteOpen(false)}
               onOpenThemes={handleOpenThemes}
               onOpenDemo={handleOpenDemo}
+            />
+          </Suspense>
+        )}
+
+        {/* Offline First-Principles AI Copilot (100% In-Browser Knowledge Bank) */}
+        {isCopilotOpen && (
+          <Suspense fallback={null}>
+            <OfflineAICopilot
+              isOpen={isCopilotOpen}
+              onClose={() => setIsCopilotOpen(false)}
             />
           </Suspense>
         )}

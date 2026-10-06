@@ -243,7 +243,15 @@
 - [x] **Playwright Regression & Visual Boundary Invariants:** Added `TC-AUDIT-025` (validating contract parity for 65 topics with executable Python snippets) and `TC-AUDIT-026` (validating continuum visual bounds across 375px, 768px, and 1280px viewports with zero horizontal overflow).
 - [x] **130 Automated Playwright Tests Passing:** 100% test passage across all suites with 0 failures, 0 skips, and 0 console errors.
 
-## Phase 26: External Audit Execution & Production Edge Verification (Active / Immediate Focus)
+## Phase 26: Frontier Knowledge Parity (250 Topics), Okapi BM25 Engine, Cross-Lingual Bridge & Interactive Explainables (Release v1.4.0)
+- [x] **Frontier Knowledge Bank Expansion to 250 Topics:** Expanded offline knowledge base to 250 deep, mathematically verified topics (`frontierKnowledgeBatch1.ts`, `frontierKnowledgeBatch2.ts`, `offlineKnowledge.ts`) covering ViT, CLIP, DPR, ColBERT, MLA, Stride/Dilation Convolutions, Cross-Attention, Linear Attention SSMs, LoRA/QLoRA NF4, KTO, ORPO, DeepSpeed ZeRO-1/2/3, FlashDecoding, Online Softmax, FP8 E4M3/E5M2 dynamics, INT8 SmoothQuant, Medusa speculative draft trees, BitNet b1.58, Continuous Batching, Needle In A Haystack (NIAH), Llama-Guard / NeMo Guardrails, TruthfulQA, Jailbreak defense, Membership Inference Attacks (MIA), and 17+ universal vocational everyday AI workflows.
+- [x] **Okapi BM25 Information Retrieval Engine:** Full probabilistic BM25 ranking ($k_1=1.2, b=0.75$) with smoothed inverse document frequency, document length normalization, multi-field weighting (Title $\times 3.5$, Keywords $\times 4.0$, Summary $\times 1.5$, Explanation $\times 1.0$), exact phrase bonus (+25), and cross-lingual match boost (+35).
+- [x] **Cross-Lingual Semantic Normalization Bridge:** Native multi-script query resolution across 11 world languages (`es`, `hi`, `zh`, `fr`, `de`, `ar`, `ru`, `ja`, `pt`, `it`, `ur`).
+- [x] **Client-Side Interactive Visual Explainable Micro-Widgets:** Zero-dependency interactive widgets for Softmax Temperature calibration, PagedAttention block mapping, Cosine Similarity angular dynamics, and RoPE phasor rotation mounted directly in `OfflineAICopilot.tsx` knowledge cards.
+- [x] **Playwright Regression & Verification Suite Hardening:** Added `TC-AUDIT-027` (Okapi BM25 precision and ranking), `TC-AUDIT-028` (cross-lingual query retrieval), and `TC-AUDIT-029` (interactive explainable micro-widgets DOM rendering and user interaction).
+- [x] **100% Pre-Flight Gate Pass:** 29/29 tests in `audit-hardening-regression.spec.ts` passing, 0 console errors, 0 oxlint warnings/errors, clean production build in under 3.9 seconds.
+
+## Phase 27: External Audit Execution & Production Edge Verification (Active / Immediate Focus)
 - [ ] **External Auditor Technical Verification:** Independent verification using `docs/EXTERNAL-AUDIT-QA-DOSSIER.md` reproduction steps.
 - [ ] **Physical Hardware Testing:** Real-device human testing on physical iOS Safari (WebKit memory bounds) and physical Android mobile hardware.
 - [ ] **Edge Deployment Synchronization:** Dual-remote multi-push to Cloudflare Pages deploy target and personal archive mirror.

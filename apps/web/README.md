@@ -2,7 +2,7 @@
 
 > Production web client for [OpenGuide](https://openguideforai.dpdns.org) — The Sovereign In-Browser AI Engineering Studio.
 
-This package contains the Vite + React 18 + TypeScript web client, CPython WebAssembly runner (Pyodide v0.26 via Web Worker), 24 calibrated WCAG AAA themes, and 45 interactive curriculum labs.
+This package contains the Vite + React 18 + TypeScript web client, CPython WebAssembly runner (Pyodide v0.26 via Web Worker), 24 calibrated WCAG AAA themes, 45 interactive curriculum labs, and the 250-topic Sovereign Offline Knowledge Bank with Okapi BM25 search and interactive visual explainables.
 
 ## Development & Scripts
 

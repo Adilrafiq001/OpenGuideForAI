@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-10-06
+
+### Added
+- **Frontier Parity 250 Core Topics (`offlineKnowledge.ts`, `frontierKnowledgeBatch1.ts`, `frontierKnowledgeBatch2.ts`):** Complete expansion of the zero-cost Sovereign Offline Knowledge Bank to 250 deep, mathematically rigorous topics spanning 2024–2026 AI research:
+  - *Advanced Architectures & Attention Mechanics:* Vision Transformer (ViT patch projection), CLIP contrastive learning, Dense Passage Retrieval (DPR), ColBERT late interaction multivector scoring, Multi-Head Latent Attention (MLA KV compression), Stride & Dilation Convolutions, Cross-Attention conditioning, Linear Attention state-space models.
+  - *Optimization, Alignment & Training:* Low-Rank Adaptation (LoRA $W + BA$), QLoRA 4-bit NormalFloat NF4, KTO (Kahneman-Tversky Optimization), ORPO reference-free alignment, DeepSpeed ZeRO-1/2/3 stage sharding, FlashDecoding split-KV parallel reduction, Online Softmax streaming normalization.
+  - *Quantization, Compression & Inference:* FP8 E4M3 vs E5M2 numerical dynamics, INT8 SmoothQuant activation smoothing, Speculative Medusa multi-head draft trees, BitNet b1.58 1.58-bit ternary weights ($\{-1, 0, 1\}$), Continuous Batching iteration-level scheduling.
+  - *Evaluation, Safety & Guardrails:* Needle In A Haystack (NIAH) long-context recall, Llama-Guard / NeMo Guardrails taxonomy, TruthfulQA epistemic calibration, Jailbreak attack mitigations & adversarial prompt fuzzing, Membership Inference Attacks (MIA).
+  - *Everyday AI & Non-Coder Vocations:* Complete coverage of universal vocational AI workflows across 17+ trades (Apparel Tailor, Electrician, Auto Mechanic, Salon Stylist, Bakery Owner, Plumbing Contractor, Farm Manager, Dental Hygienist, Warehouse Logistics, and more).
+- **Okapi BM25 Information Retrieval Engine (`offlineKnowledge.ts`):** Replaced simplistic lexical substring search with full probabilistic Okapi BM25 ranking:
+  - Strict mathematical formula: $IDF(q_i) = \ln\left(\frac{N - n(q_i) + 0.5}{n(q_i) + 0.5} + 1\right)$ with $k_1 = 1.2$ and $b = 0.75$ document length normalization.
+  - Field-weighted scoring architecture: Title ($\times 3.5$), Keywords ($\times 4.0$), Summary ($\times 1.5$), and Deep Explanation ($\times 1.0$).
+  - Exact phrase boosting (+25.0) and high-priority keyword match (+35.0).
+- **Cross-Lingual Synonym Normalization Bridge (`multilingualLexicon.ts`):** Universal cross-lingual search mapping native query terms across 11 world languages (`es`, `hi`, `zh`, `fr`, `de`, `ar`, `ru`, `ja`, `pt`, `it`, `ur`) directly to canonical AI concepts with +35.0 cross-lingual match boost.
+- **Client-Side Interactive Visual Explainable Micro-Widgets (`apps/web/src/components/interactive/`):**
+  - `SoftmaxTemperatureWidget`: Interactive $T \in [0.1, 3.0]$ slider dynamically recalculating probability distributions in real time.
+  - `PagedAttentionWidget`: Visual allocation mapping logical KV tokens to non-contiguous physical DRAM blocks with live fragmentation counters.
+  - `CosineSimilarityWidget`: Dual-vector unit circle dial calculating Euclidean inner product across arbitrary and preset angles ($0^\circ, 45^\circ, 90^\circ, 180^\circ$).
+  - `RopeRotationWidget`: 2D phasor rotation simulator calculating complex embedding transformations with token position stepping and base frequency selection.
+  - Dynamic integration directly inside `OfflineAICopilot.tsx` knowledge cards.
+- **Playwright Regression & Verification Suite Hardening (`audit-hardening-regression.spec.ts`):**
+  - `TC-AUDIT-025`: Validates runtime hydration of exactly 250 core topics in browser memory with verified code snippets.
+  - `TC-AUDIT-027`: Validates Okapi BM25 precision, term saturation, and ranking order across Batches 1 and 2 topics (`vit`, `clip`, `colbert`, `stride`).
+  - `TC-AUDIT-028`: Validates cross-lingual query retrieval in Spanish, Hindi, Chinese, French, German, and Arabic.
+  - `TC-AUDIT-029`: Validates real-time DOM rendering and interaction of all 4 interactive explainable micro-widgets.
+
+---
+
 ## [1.3.0] - 2026-10-06
 
 ### Added

@@ -57,7 +57,7 @@ OpenGuide is not a cloud service or a toy tutorial. It is a browser-native labor
 | **Instant Execution** | Real CPython 3.12 executes in your browser via WebAssembly (Pyodide v0.26) inside a dedicated Web Worker. | Zero setup. No Python, Anaconda, or Docker environment required on your machine. |
 | **3D Spatial Manifolds** | An interactive Three.js WebGL visualizer maps high-dimensional vector spaces into physical coordinates with harmonic audio feedback. | You see and hear how language models cluster words and calculate semantic distance. |
 | **Sovereign & Private** | 100% client-side computing. Data persists locally in browser IndexedDB. Zero telemetry. | Complete data privacy. Zero subscription fees. Zero unexpected cloud invoices. |
-| **Offline PWA & Knowledge** | Progressive Web App caches the curriculum, CPython engine, and 65+ frontier AI knowledge topics with runnable Python code on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
+| **Offline PWA & Knowledge** | Progressive Web App caches the curriculum, CPython engine, and 250 frontier AI and everyday trade knowledge topics with runnable Python code on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
 
 > 📖 **Deep Engineering Specification:** For the complete system architecture, execution pipeline, 15-second watchdog supervisor, and progressive disclosure design, read the [ASD-STE100 Technical Explainer](explainer.md).
 
@@ -66,9 +66,11 @@ OpenGuide is not a cloud service or a toy tutorial. It is a browser-native labor
 ## Sovereign Offline Knowledge Bank
 
 OpenGuide features an embedded, client-side engineering knowledge base with zero external cloud dependencies ($0 Rule):
-- **65+ Deep Engineering Topics:** Comprehensive coverage spanning Transformer Attention Mechanics (FlashAttention-2/3, PagedAttention/vLLM), Alignment & Optimization (DPO, LoRA, QLoRA), Vector Geometries (HNSW, Cosine Skip-Lists), Constrained Decoding (Pushdown Automata, JSON Schema), and Data Engineering (MinHash Deduplication, Heuristic Filtering).
-- **Executable Python / NumPy Snippets:** Every topic includes a self-contained, runnable Python code example executing locally in the Pyodide WebAssembly runtime.
-- **Intelligent Local Retrieval:** Powered by domain abbreviation and synonym mapping (`DOMAIN_SYNONYMS`), stopword stripping, and weighted scoring for instantaneous sub-millisecond retrieval.
+- **250 Core Frontier & Everyday Topics:** Comprehensive coverage spanning Transformer Attention Mechanics (FlashAttention-2/3, PagedAttention/vLLM, MLA), Alignment & Optimization (DPO, KTO, ORPO, LoRA, QLoRA), Vector Geometries (HNSW, ColBERT, Cosine Skip-Lists), Constrained Decoding (Pushdown Automata, JSON Schema), Quantization (FP8, INT8, AWQ, BitNet b1.58), Multimodal Architectures (ViT, CLIP), and universal everyday trade fluencies across 17+ vocations.
+- **Okapi BM25 Retrieval Engine:** Probabilistic ranking ($k_1=1.2, b=0.75$) with smoothed inverse document frequency, document length normalization, and multi-field weighting (Title, Keywords, Summary, Explanation).
+- **Multilingual Cross-Lingual Bridge:** Instant query resolution across 11 world languages (English, Spanish, Hindi, Chinese, French, German, Arabic, Russian, Japanese, Urdu, Portuguese).
+- **Interactive Visual Explainables:** Zero-dependency client-side micro-widgets (Softmax Temperature slider, PagedAttention block allocation, Cosine Similarity angular dial, RoPE phasor rotation) mounted directly into knowledge cards.
+- **Executable Python / NumPy Snippets:** Every technical topic includes a self-contained, runnable Python code example executing locally in the Pyodide WebAssembly runtime.
 
 ---
 

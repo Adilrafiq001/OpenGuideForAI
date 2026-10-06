@@ -4,6 +4,10 @@
  * Comprehensive domain intelligence across all 5 tracks (45 labs), tools, architecture, and science.
  */
 
+import { resolveMultilingualTerms } from './multilingualLexicon';
+import { FRONTIER_KNOWLEDGE_BATCH_1 } from './frontierKnowledgeBatch1';
+import { FRONTIER_KNOWLEDGE_BATCH_2 } from './frontierKnowledgeBatch2';
+
 export interface KnowledgeEntry {
   id: string;
   keywords: string[];
@@ -13,6 +17,8 @@ export interface KnowledgeEntry {
   explanation: string;
   codeSnippet?: string;
   takeaway: string;
+  multilingualKeywords?: Partial<Record<'es' | 'hi' | 'zh' | 'fr' | 'de' | 'ar' | 'ru' | 'ja', string[]>>;
+  interactiveWidgetId?: 'softmax-temperature' | 'paged-attention' | 'vector-similarity' | 'rope-rotation';
 }
 
 export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
@@ -209,7 +215,8 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     summary: 'Temperature (T) scales raw output logits before Softmax to control generation randomness.',
     explanation: 'Logits z_i produced by the model are divided by temperature T before exponentiation: P(x_i) = exp(z_i / T) / sum(exp(z_j / T)). When T -> 0, the distribution approaches an argmax (greedy deterministic output). When T is high (e.g. 1.2+), the distribution flattens, increasing lexical diversity and creative hallucinations.',
     codeSnippet: 'import math\ndef softmax_with_temp(logits, temp=1.0):\n    exp_logits = [math.exp(l / temp) for l in logits]\n    total = sum(exp_logits)\n    return [p / total for p in exp_logits]',
-    takeaway: 'Use T=0 for extraction/code, and T=0.7 for creative synthesis.'
+    takeaway: 'Use T=0 for extraction/code, and T=0.7 for creative synthesis.',
+    interactiveWidgetId: 'softmax-temperature'
   },
 
   // ---------------------------------------------------------------------------
@@ -233,7 +240,8 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     summary: 'Measures the cosine of the angle θ between two non-zero vectors in an inner product space.',
     explanation: 'Cosine similarity is defined as: cos(θ) = (A · B) / (||A|| * ||B||). Because it divides by vector magnitudes, it is scale-invariant: a long document and a short summary discussing the same concept will have a cosine similarity near 1.0 even if their absolute word counts differ drastically.',
     codeSnippet: 'def cosine(u, v):\n    dot = sum(x*y for x, y in zip(u, v))\n    mag_u = sum(x*x for x in u) ** 0.5\n    mag_v = sum(y*y for y in v) ** 0.5\n    return dot / (mag_u * mag_v)',
-    takeaway: 'Cosine = 1.0 means identical orientation; 0.0 means orthogonal (unrelated); -1.0 means diametrically opposite.'
+    takeaway: 'Cosine = 1.0 means identical orientation; 0.0 means orthogonal (unrelated); -1.0 means diametrically opposite.',
+    interactiveWidgetId: 'vector-similarity'
   },
   {
     id: 'euclidean-vs-cosine',
@@ -346,6 +354,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'scaled-dot-product-attention',
     keywords: ['attention', 'attention mechanics', 'scaled dot-product', 'qkv', 'query key value', 'transformer formula', 'how attention works'],
+    multilingualKeywords: {
+      es: ['atención', 'atencion'],
+      hi: ['अटेंशन'],
+      zh: ['注意力'],
+      fr: ['attention'],
+      de: ['aufmerksamkeit'],
+      ar: ['انتباه'],
+      ru: ['внимание'],
+      ja: ['自己注意']
+    },
     title: 'Scaled Dot-Product Attention: Formula & Step-by-Step Math',
     category: 'math',
     summary: 'Attention(Q, K, V) = Softmax((Q · K^T) / √d_k) · V',
@@ -369,7 +387,8 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     category: 'math',
     summary: 'Encoding positional information by rotating query and key vectors in 2D coordinate planes.',
     explanation: 'Invented by Su et al. (2021), RoPE replaces absolute learned position embeddings with a multiplicative rotation matrix applied to Q and K. In 2D pairs, a token at position m is multiplied by complex rotation e^(i * m * θ). The inner product (R_m * q) · (R_n * k) naturally depends only on the relative distance (m - n), enabling superior context length extrapolation.',
-    takeaway: 'RoPE gives models an innate mathematical geometry for relative token distance.'
+    takeaway: 'RoPE gives models an innate mathematical geometry for relative token distance.',
+    interactiveWidgetId: 'rope-rotation'
   },
   {
     id: 'kv-cache',
@@ -393,6 +412,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'quantization-precision',
     keywords: ['quantization', 'fp16', 'int8', 'int4', 'nf4', 'gguf', 'precision', 'bits', 'memory footprint'],
+    multilingualKeywords: {
+      es: ['cuantización', 'cuantizacion'],
+      hi: ['क्वांटाइजेशन'],
+      zh: ['量化'],
+      fr: ['quantification'],
+      de: ['quantisierung'],
+      ar: ['تكميم'],
+      ru: ['квантование'],
+      ja: ['量子化']
+    },
     title: 'Model Quantization: FP16, INT8, INT4 & NormalFloat4 (NF4)',
     category: 'architecture',
     summary: 'Compressing 32-bit floating point weights into 8-bit or 4-bit integers to fit models into limited VRAM.',
@@ -545,6 +574,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'speculative-decoding-acceleration',
     keywords: ['speculative decoding', 'speculative sampling', 'draft model', 'target model', 'inference speedup', 'speculation', 'rejection sampling'],
+    multilingualKeywords: {
+      es: ['decodificación especulativa', 'decodificacion especulativa'],
+      hi: ['स्पेक्युलेटिव डिकोडिंग', 'स्पेक्युलेटिव'],
+      zh: ['投机采样', '投机解码'],
+      fr: ['décodage spéculatif', 'decodage speculatif'],
+      de: ['spekulative dekodierung'],
+      ar: ['فك التشفير التخميني'],
+      ru: ['спекулятивное декодирование'],
+      ja: ['投機的サンプリング']
+    },
     title: 'Speculative Decoding: Parallelizing Autoregressive Inference',
     category: 'architecture',
     summary: 'Accelerating LLM token generation 2x–3x without altering output distribution via small draft model proposals and parallel verification.',
@@ -625,6 +664,16 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'senior-scam-phishing-defense',
     keywords: ['scam', 'phishing', 'fraud', 'senior', 'fake text', 'suspicious email', 'grandparent scam', 'security alert', 'plain english'],
+    multilingualKeywords: {
+      es: ['estafa'],
+      hi: ['स्कैम', 'धोखाधड़ी'],
+      zh: ['诈骗'],
+      fr: ['escroquerie'],
+      de: ['betrug'],
+      ar: ['احتيال'],
+      ru: ['мошенничество'],
+      ja: ['詐欺']
+    },
     title: 'AI Plain-English Guard: Scam, Phishing & Fraud Detection',
     category: 'tools',
     summary: 'How beginners and seniors can use local AI to safely verify suspicious text messages, bills, and emergency calls.',
@@ -680,8 +729,11 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     summary: 'Eliminating memory fragmentation in high-throughput LLM serving via OS-inspired virtual memory page tables.',
     explanation: 'Standard Transformer inference allocates contiguous GPU memory for the maximum sequence length per request. This creates two fatal memory bottlenecks:\n1. Internal Fragmentation: Memory reserved for tokens that the user has not yet generated.\n2. External Fragmentation: Free memory scattered in non-contiguous chunks that cannot satisfy large allocation requests.\n\nPagedAttention resolves this by adapting OS virtual memory:\n• The Key-Value cache is divided into fixed-size physical blocks (e.g. 16 or 32 tokens).\n• A logical-to-physical block table maps non-contiguous GPU memory pages dynamically as each token is generated.\n• Parallel decoding requests can share physical blocks for prompt prefixes without duplication (Copy-on-Write for parallel sampling).\n• Result: Memory waste drops from ~60-80% down to under 4%, increasing inference throughput by 2-4x.',
     codeSnippet: '# PagedAttention Block Allocation Simulation\nBLOCK_SIZE = 16\ntotal_gpu_blocks = 128\nallocated_blocks = 42\n\ndef allocate_token(seq_len):\n    required_blocks = (seq_len + BLOCK_SIZE - 1) // BLOCK_SIZE\n    return required_blocks\n\nseq_len = 150\nblocks_needed = allocate_token(seq_len)\nwasted_slots = (blocks_needed * BLOCK_SIZE) - seq_len\nprint(f"Tokens: {seq_len} -> {blocks_needed} Blocks allocated")\nprint(f"Memory Fragmentation: Only {wasted_slots} token slots idle in final block")\nprint(f"Fragmentation Rate: {(wasted_slots / (blocks_needed * BLOCK_SIZE)) * 100:.1f}%")',
-    takeaway: 'PagedAttention stores KV cache in non-contiguous virtual memory blocks, eliminating allocation waste and boosting serving throughput.'
-  }
+    takeaway: 'PagedAttention stores KV cache in non-contiguous virtual memory blocks, eliminating allocation waste and boosting serving throughput.',
+    interactiveWidgetId: 'paged-attention'
+  },
+  ...FRONTIER_KNOWLEDGE_BATCH_1,
+  ...FRONTIER_KNOWLEDGE_BATCH_2
 ];
 
 // Abbreviation & Domain Synonym Mapping Dictionary
@@ -701,88 +753,198 @@ const DOMAIN_SYNONYMS: Record<string, string[]> = {
   agent: ['multi-agent', 'react', 'tools', 'reflection'],
   synthetic: ['minhash', 'deduplication', 'curation', 'filtering'],
   pagedattention: ['kv', 'cache', 'vllm', 'virtual', 'memory'],
-  vllm: ['pagedattention', 'kv', 'cache', 'serving']
+  vllm: ['pagedattention', 'kv', 'cache', 'serving'],
+  diffusion: ['ddpm', 'ddim', 'noise', 'score', 'denoising'],
+  flow: ['matching', 'rectified', 'trajectory', 'velocity'],
+  grpo: ['group', 'relative', 'policy', 'reasoning', 'deepseek'],
+  rl: ['reinforcement', 'reward', 'ppo', 'dpo', 'grpo', 'kto'],
+  mcts: ['tree', 'search', 'monte', 'carlo', 'uct'],
+  zero: ['deepspeed', 'sharding', 'optimizer', 'stage'],
+  fsdp: ['sharded', 'parallel', 'all-gather', 'reduce-scatter'],
+  triton: ['kernel', 'block', 'cuda', 'gpu'],
+  adamw: ['weight', 'decay', 'optimizer', 'regularization'],
+  pca: ['svd', 'principal', 'component', 'variance', 'projection'],
+  svm: ['kernel', 'margin', 'support', 'vector'],
+  vit: ['vision', 'transformer', 'patches', 'dosovitskiy'],
+  clip: ['contrastive', 'image', 'text', 'infonce', 'multimodal'],
+  whisper: ['speech', 'transcription', 'audio', 'mel', 'spectrogram'],
+  colbert: ['late', 'interaction', 'retrieval', 'multivector'],
+  sae: ['sparse', 'autoencoder', 'interpretability', 'monosemantic'],
+  dp: ['differential', 'privacy', 'sgd', 'noise', 'clipping'],
+  watermark: ['kirchenbauer', 'green', 'detection', 'synthetic']
 };
 
 /**
- * High-precision offline search algorithm with token set matching, synonym expansion, and domain phrase weighting.
+ * In-Browser Okapi BM25 Retrieval Engine with Cross-Lingual & Field-Weighted Scoring
+ * Parameters: k1 = 1.2 (saturation), b = 0.75 (length normalization)
+ */
+
+interface BM25CorpusIndex {
+  docTermFreqs: Map<string, number>[];
+  docLengths: number[];
+  avgDocLength: number;
+  docFreqs: Map<string, number>;
+  totalDocs: number;
+}
+
+let BM25_INDEX: BM25CorpusIndex | null = null;
+
+function tokenizeText(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s_$-]/gu, ' ')
+    .split(/\s+/)
+    .filter(t => t.length > 0);
+}
+
+export function getBM25Index(): BM25CorpusIndex {
+  if (BM25_INDEX && BM25_INDEX.totalDocs === OFFLINE_KNOWLEDGE_BASE.length) {
+    return BM25_INDEX;
+  }
+
+  const N = OFFLINE_KNOWLEDGE_BASE.length;
+  const docTermFreqs: Map<string, number>[] = [];
+  const docLengths: number[] = [];
+  const docFreqs = new Map<string, number>();
+
+  const W_TITLE = 3.5;
+  const W_KW = 4.0;
+  const W_SUM = 1.5;
+  const W_EXP = 1.0;
+
+  for (let i = 0; i < N; i++) {
+    const entry = OFFLINE_KNOWLEDGE_BASE[i];
+    const tf = new Map<string, number>();
+
+    const titleTokens = tokenizeText(entry.title);
+    const kwTokens = entry.keywords.flatMap(k => tokenizeText(k));
+    const mlTokens = entry.multilingualKeywords
+      ? Object.values(entry.multilingualKeywords).flat().flatMap(k => tokenizeText(k))
+      : [];
+    const sumTokens = tokenizeText(entry.summary);
+    const expTokens = tokenizeText(entry.explanation);
+
+    const length =
+      titleTokens.length * W_TITLE +
+      (kwTokens.length + mlTokens.length) * W_KW +
+      sumTokens.length * W_SUM +
+      expTokens.length * W_EXP;
+
+    docLengths.push(length);
+
+    const addTokens = (tokens: string[], weight: number) => {
+      for (const t of tokens) {
+        tf.set(t, (tf.get(t) || 0) + weight);
+      }
+    };
+
+    addTokens(titleTokens, W_TITLE);
+    addTokens(kwTokens, W_KW);
+    addTokens(mlTokens, W_KW);
+    addTokens(sumTokens, W_SUM);
+    addTokens(expTokens, W_EXP);
+
+    docTermFreqs.push(tf);
+
+    for (const term of tf.keys()) {
+      docFreqs.set(term, (docFreqs.get(term) || 0) + 1);
+    }
+  }
+
+  const avgDocLength = docLengths.reduce((acc, len) => acc + len, 0) / (N || 1);
+
+  BM25_INDEX = {
+    docTermFreqs,
+    docLengths,
+    avgDocLength,
+    docFreqs,
+    totalDocs: N
+  };
+
+  return BM25_INDEX;
+}
+
+/**
+ * Searches the offline knowledge base using an in-browser Okapi BM25 ranking algorithm,
+ * cross-lingual multi-script resolving, domain synonyms, and exact phrase boosting.
  */
 export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
-  const clean = query.toLowerCase().trim();
+  const clean = query.trim().toLowerCase();
   if (!clean) return OFFLINE_KNOWLEDGE_BASE;
 
-  // Normalize query and extract meaningful word tokens
-  const sanitized = clean.replace(/[^\w\s$]/g, ' ');
+  const index = getBM25Index();
+  const N = index.totalDocs;
+  const k1 = 1.2;
+  const b = 0.75;
+
+  // 1. Resolve cross-lingual translations and domain synonyms
+  const multilingualAdditions = resolveMultilingualTerms(clean);
+  const rawQueryTokens = tokenizeText(clean);
+
   const stopWords = new Set([
-    'what', 'is', 'the', 'how', 'does', 'do', 'in', 'my', 'a', 'an', 'to', 'and', 'for', 
-    'of', 'on', 'can', 'i', 'you', 'me', 'tell', 'about', 'explain', 'give', 'please', 
+    'what', 'is', 'the', 'how', 'does', 'do', 'in', 'my', 'a', 'an', 'to', 'and', 'for',
+    'of', 'on', 'can', 'i', 'you', 'me', 'tell', 'about', 'explain', 'give', 'please',
     'with', 'at', 'by', 'from', 'this', 'that', 'these', 'those', 'are', 'was', 'were'
   ]);
-  
-  const rawTerms = sanitized.split(/\s+/).filter(t => t.length > 0);
-  const terms = rawTerms.filter(t => !stopWords.has(t));
-  const effectiveTerms = terms.length > 0 ? terms : rawTerms;
 
-  // Expand query terms with domain synonyms
-  const expandedTerms = new Set<string>(effectiveTerms);
-  for (const term of effectiveTerms) {
+  const filteredQueryTokens = rawQueryTokens.filter(t => !stopWords.has(t));
+  const baseTokens = filteredQueryTokens.length > 0 ? filteredQueryTokens : rawQueryTokens;
+
+  const queryTerms = new Set<string>([...baseTokens, ...multilingualAdditions]);
+
+  // Expand with domain synonyms
+  for (const term of Array.from(queryTerms)) {
     if (DOMAIN_SYNONYMS[term]) {
       for (const syn of DOMAIN_SYNONYMS[term]) {
-        expandedTerms.add(syn);
+        queryTerms.add(syn);
       }
     }
   }
 
-  return OFFLINE_KNOWLEDGE_BASE.map(entry => {
-    let score = 0;
+  const termsArray = Array.from(queryTerms);
+  if (termsArray.length === 0) return OFFLINE_KNOWLEDGE_BASE;
+
+  // 2. Score each document with Okapi BM25 + Exact Phrase Boost
+  const results = OFFLINE_KNOWLEDGE_BASE.map((entry, idx) => {
+    let bm25Score = 0;
+    const docLen = index.docLengths[idx];
+    const tfMap = index.docTermFreqs[idx];
+
+    for (const term of termsArray) {
+      const tf = tfMap.get(term) || 0;
+      if (tf === 0) continue;
+
+      const df = index.docFreqs.get(term) || 0;
+      // Robertson-Sparck Jones smooth IDF
+      const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
+      // BM25 term saturation and length normalization
+      const normTF = (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (docLen / index.avgDocLength)));
+
+      bm25Score += idf * normTF;
+    }
+
+    // Exact phrase, title, and native multilingual keyword bonuses
     const titleLower = entry.title.toLowerCase();
-    const summaryLower = entry.summary.toLowerCase();
-    const explanationLower = entry.explanation.toLowerCase();
-    const idLower = entry.id.toLowerCase();
+    let bonus = 0;
+    if (titleLower.includes(clean)) bonus += 25.0;
+    if (entry.keywords.some(k => k.toLowerCase() === clean)) bonus += 30.0;
+    if (entry.id.toLowerCase() === clean.replace(/\s+/g, '-')) bonus += 35.0;
 
-    // Exact full query match in title or keywords
-    if (titleLower.includes(clean)) score += 50;
-    if (entry.keywords.some(k => k === clean)) score += 60;
-    if (entry.keywords.some(k => clean.includes(k) && k.length >= 3)) score += 35;
-
-    for (const term of expandedTerms) {
-      // 1. Exact keyword match
-      if (entry.keywords.includes(term)) {
-        score += 35;
-      } else if (entry.keywords.some(k => {
-        // Safe prefix match for terms >= 4 chars
-        if (term.length >= 4 && k.startsWith(term)) return true;
-        // Multi-word keyword contains single word term
-        if (k.includes(' ') && k.split(/\s+/).includes(term)) return true;
-        return false;
-      })) {
-        score += 20;
-      }
-
-      // 2. Title word match
-      if (titleLower.split(/\s+/).includes(term)) {
-        score += 30;
-      } else if (titleLower.includes(term)) {
-        score += 15;
-      }
-
-      // 3. ID match
-      if (idLower.includes(term)) {
-        score += 20;
-      }
-
-      // 4. Summary & explanation matches
-      if (summaryLower.includes(term)) {
-        score += 10;
-      }
-      if (explanationLower.includes(term)) {
-        score += 5;
+    if (entry.multilingualKeywords) {
+      for (const list of Object.values(entry.multilingualKeywords)) {
+        if (list && list.some(k => k.toLowerCase() === clean || clean.includes(k.toLowerCase()))) {
+          bonus += 35.0;
+          break;
+        }
       }
     }
 
-    return { entry, score };
-  })
-  .filter(item => item.score > 0)
-  .sort((a, b) => b.score - a.score)
-  .map(item => item.entry);
+    const totalScore = bm25Score + bonus;
+    return { entry, score: totalScore };
+  });
+
+  return results
+    .filter(item => item.score > 0.05)
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.entry);
 }
