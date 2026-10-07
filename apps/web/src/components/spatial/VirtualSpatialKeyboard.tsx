@@ -9,7 +9,8 @@ import {
   Check, 
   ArrowUp,
   Volume2,
-  VolumeX
+  VolumeX,
+  Compass
 } from 'lucide-react';
 import { useSpatialStore } from '../../store/useSpatialStore';
 
@@ -38,7 +39,8 @@ export function VirtualSpatialKeyboard() {
     keyboardPlacementMode,
     setKeyboardPlacementMode,
     keyboardTiltAngle,
-    setKeyboardTiltAngle
+    setKeyboardTiltAngle,
+    pitch
   } = useSpatialStore();
 
   const [isShift, setIsShift] = useState(false);
@@ -107,25 +109,52 @@ export function VirtualSpatialKeyboard() {
   const isFlatSurface = keyboardPlacementMode === 'flat-surface';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92, y: 30 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.92, y: 30 }}
-      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-      data-testid="virtual-spatial-keyboard"
-      style={{
-        transform: isFlatSurface 
-          ? `perspective(1000px) rotateX(${keyboardTiltAngle}deg)` 
-          : 'none',
-        transformOrigin: 'bottom center',
-        transition: 'transform 0.3s ease-out'
-      }}
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[250] w-[95vw] max-w-2xl rounded-3xl p-4 backdrop-blur-2xl text-slate-100 font-mono select-none ${
-        isFlatSurface 
-          ? 'bg-[#090d16]/98 border-2 border-cyan-400 shadow-[0_30px_90px_rgba(0,0,0,0.95)] shadow-cyan-950'
-          : 'bg-[#090d16]/95 border border-cyan-500/40 shadow-2xl shadow-cyan-950/80'
-      }`}
-    >
+    <div className="fixed inset-x-0 bottom-3 pointer-events-none z-[250] flex justify-center items-end px-3">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1, 
+          y: 0,
+          rotateX: isFlatSurface ? keyboardTiltAngle : 0 
+        }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 26 }}
+        data-testid="virtual-spatial-keyboard"
+        style={{
+          transformPerspective: 1000,
+          transformOrigin: 'bottom center',
+        }}
+        className={`pointer-events-auto w-full max-w-2xl rounded-3xl p-4 backdrop-blur-2xl text-slate-100 font-mono select-none ${
+          isFlatSurface 
+            ? 'bg-[#070b14]/98 border-2 border-cyan-400 shadow-[0_30px_90px_rgba(0,0,0,0.95)]'
+            : 'bg-[#090d16]/95 border border-cyan-500/40 shadow-2xl shadow-cyan-950/80'
+        }`}
+      >
+      {/* 3D Holographic Desk Contact Plane (Rendered in Flat Surface Mode) */}
+      {isFlatSurface && (
+        <div 
+          className="absolute -inset-x-6 -bottom-6 -top-4 -z-10 rounded-3xl pointer-events-none border border-cyan-400/30 overflow-hidden"
+          style={{
+            background: 'radial-gradient(ellipse at bottom, rgba(6, 182, 212, 0.18) 0%, rgba(9, 13, 22, 0.85) 60%, transparent 100%)',
+            boxShadow: 'inset 0 0 40px rgba(6, 182, 212, 0.15), 0 35px 80px rgba(0, 0, 0, 0.9)'
+          }}
+        >
+          {/* Tabletop Optical Perspective Grid Lines */}
+          <div 
+            className="w-full h-full opacity-20"
+            style={{
+              backgroundImage: 'linear-gradient(to right, rgba(6, 182, 212, 0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(6, 182, 212, 0.45) 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+            }}
+          />
+          <div className="absolute -top-2.5 left-6 px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-400/50 text-[9px] font-mono text-cyan-300 font-bold uppercase tracking-wider flex items-center gap-1 shadow-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span>Tabletop Desk Plane Anchor • Calibrated Surface</span>
+          </div>
+        </div>
+      )}
+
       {/* Top Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-cyan-500/20 mb-3 text-xs">
         <div className="flex items-center gap-2">
@@ -161,7 +190,7 @@ export function VirtualSpatialKeyboard() {
             </button>
           </div>
 
-          {/* Desk Tilt Angle Slider (Visible in flat-surface mode) */}
+          {/* Desk Tilt Angle & Gaze Snap (Visible in flat-surface mode) */}
           {isFlatSurface && (
             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-700 text-[10px]">
               <span className="text-slate-400">Tilt:</span>
@@ -172,10 +201,25 @@ export function VirtualSpatialKeyboard() {
                 step="5"
                 value={keyboardTiltAngle}
                 onChange={(e) => setKeyboardTiltAngle(Number(e.target.value))}
-                className="w-16 accent-cyan-400 cursor-pointer"
+                className="w-14 accent-cyan-400 cursor-pointer"
                 title="Adjust desk tilt angle to match physical tabletop"
               />
               <span className="text-cyan-300 font-bold">{keyboardTiltAngle}°</span>
+
+              {/* Innovative 3DOF IMU Downward Gaze Pitch Snap */}
+              <button
+                type="button"
+                data-testid="keyboard-snap-gaze-btn"
+                onClick={() => {
+                  const deskAngle = Math.min(75, Math.max(30, Math.round(Math.abs(pitch)) || 55));
+                  setKeyboardTiltAngle(deskAngle);
+                }}
+                className="ml-1 px-1.5 py-0.5 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/20 text-[9px] font-bold cursor-pointer transition-colors flex items-center gap-1"
+                title="Snap tilt to your AR glasses' downward desk gaze pitch"
+              >
+                <Compass size={10} />
+                <span>Gaze Snap</span>
+              </button>
             </div>
           )}
 
@@ -201,7 +245,7 @@ export function VirtualSpatialKeyboard() {
 
       {/* Live Text Buffer Preview */}
       <div className="flex items-center gap-2 p-2.5 mb-3 bg-black/60 rounded-xl border border-cyan-500/20 text-xs">
-        <div className="flex-1 truncate font-mono text-cyan-100 min-h-[1.25rem]">
+        <div data-testid="virtual-keyboard-text-buffer" className="flex-1 truncate font-mono text-cyan-100 min-h-[1.25rem]">
           {virtualKeyboardText || <span className="text-slate-500 italic">Type with virtual laser pointer or gaze...</span>}
         </div>
 
@@ -247,6 +291,7 @@ export function VirtualSpatialKeyboard() {
               <button
                 key={char}
                 type="button"
+                data-testid={`spatial-key-${char}`}
                 onClick={() => handleKeyPress(char)}
                 className="flex-1 min-w-[28px] sm:min-w-[38px] max-w-[48px] py-2 sm:py-2.5 rounded-xl bg-slate-900/80 hover:bg-cyan-500/20 active:bg-cyan-400 active:text-black border border-slate-700/80 hover:border-cyan-400/60 text-xs sm:text-sm font-semibold transition-all cursor-pointer text-center"
               >
@@ -297,5 +342,6 @@ export function VirtualSpatialKeyboard() {
         </div>
       </div>
     </motion.div>
+  </div>
   );
 }

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type SpatialAnchorMode = 'fixed-pin' | 'smooth-follow' | 'body-anchor';
-export type SpatialPassthroughMode = 'true-black' | 'camera-ar' | 'cinema-dark';
+export type SpatialPassthroughMode = 'true-black' | 'camera-ar' | 'cinema-dark' | 'native-theme';
 export type ARDeviceProfile = 'universal' | 'viture' | 'xreal' | 'rayneo' | 'rokid' | 'quest' | 'visionpro';
 export type KeyboardPlacementMode = 'mid-air' | 'flat-surface';
 

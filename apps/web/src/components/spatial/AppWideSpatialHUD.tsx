@@ -110,14 +110,23 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       setPinching(frame.isPinching);
       setDetectedGesture(frame.gesture);
 
-      // Debounced single-event click dispatch on pinch trigger (rising edge only)
+      // Robust synthetic pointer event dispatch on pinch trigger (rising edge only)
       if (frame.isPinching && !wasPinchingRef.current) {
         wasPinchingRef.current = true;
         const clientX = (frame.cursorX / 100) * window.innerWidth;
         const clientY = (frame.cursorY / 100) * window.innerHeight;
         const targetEl = document.elementFromPoint(clientX, clientY);
-        if (targetEl && (targetEl as HTMLElement).click) {
-          (targetEl as HTMLElement).click();
+        if (targetEl) {
+          const eventInit = { bubbles: true, cancelable: true, clientX, clientY, view: window };
+          targetEl.dispatchEvent(new PointerEvent('pointerdown', eventInit));
+          targetEl.dispatchEvent(new MouseEvent('mousedown', eventInit));
+          targetEl.dispatchEvent(new PointerEvent('pointerup', eventInit));
+          targetEl.dispatchEvent(new MouseEvent('mouseup', eventInit));
+          if ((targetEl as HTMLElement).click) {
+            (targetEl as HTMLElement).click();
+          } else {
+            targetEl.dispatchEvent(new MouseEvent('click', eventInit));
+          }
         }
       } else if (!frame.isPinching) {
         wasPinchingRef.current = false;
@@ -159,12 +168,20 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
     return <>{children}</>;
   }
 
+  const isBezelMode = passthroughMode !== 'native-theme';
+  const containerBg = passthroughMode === 'true-black' 
+    ? '#000000' 
+    : passthroughMode === 'cinema-dark' 
+      ? '#05070d' 
+      : 'var(--color-primary)';
+
   return (
     <div 
       data-testid="app-wide-spatial-hud"
-      className="relative min-h-screen w-full overflow-x-hidden bg-[#000000] text-slate-100 select-none"
+      className="relative min-h-screen w-full overflow-x-hidden select-none transition-colors duration-300"
       style={{
-        backgroundColor: passthroughMode === 'true-black' ? '#000000' : passthroughMode === 'cinema-dark' ? '#05070d' : '#000000'
+        backgroundColor: containerBg,
+        color: passthroughMode === 'native-theme' ? 'var(--color-text-primary)' : '#f8fafc'
       }}
     >
       {/* SpaceWalker Top Control Bar */}
@@ -263,6 +280,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
           {/* More Settings */}
           <button
             onClick={() => setIsControlsExpanded(!isControlsExpanded)}
+            data-testid="spatial-settings-drawer-btn"
             className="p-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 cursor-pointer transition-colors"
             title="Spatial Curvature & Distance Sliders"
           >
@@ -289,6 +307,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
+            data-testid="spatial-controls-drawer"
             className="fixed top-14 inset-x-0 z-[210] p-4 bg-black/95 border-b border-cyan-500/30 flex flex-wrap items-center justify-around gap-6 text-xs font-mono shadow-2xl backdrop-blur-xl"
           >
             {/* Virtual Screen Distance Slider */}
@@ -325,15 +344,15 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
             <div className="flex items-center gap-2">
               <span className="text-slate-400">Optics:</span>
               <div className="flex p-0.5 rounded-lg bg-slate-900 border border-slate-700">
-                {(['true-black', 'cinema-dark'] as SpatialPassthroughMode[]).map((mode) => (
+                {(['native-theme', 'true-black', 'cinema-dark'] as SpatialPassthroughMode[]).map((mode) => (
                   <button
                     key={mode}
                     onClick={() => setPassthroughMode(mode)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer ${
-                      passthroughMode === mode ? 'bg-cyan-500 text-black' : 'text-slate-400'
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors ${
+                      passthroughMode === mode ? 'bg-cyan-500 text-black' : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    {mode === 'true-black' ? 'OLED True-Black' : 'Dark Cinema'}
+                    {mode === 'native-theme' ? 'Native Theme (PC)' : mode === 'true-black' ? 'OLED True-Black (AR)' : 'Dark Cinema'}
                   </button>
                 ))}
               </div>
@@ -371,56 +390,36 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
         </div>
       )}
 
-      {/* Live Camera Hand Tracking Monitor PIP (Bottom-Right Floating) */}
+      {/* Live Camera Hand Tracking Monitor PIP (Top-Right Floating, Zero Keyboard Collision) */}
       {isHandTrackingEnabled && showCameraPip && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.85, y: 20 }}
-          className="fixed bottom-6 right-6 z-[240] p-3 rounded-2xl bg-black/90 border border-emerald-500/50 shadow-2xl backdrop-blur-xl text-xs font-mono max-w-xs space-y-2 pointer-events-auto"
-        >
-          <div className="flex items-center justify-between border-b border-emerald-500/30 pb-1.5">
-            <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-              <Camera size={13} className="animate-pulse" />
-              <span>HAND CV MONITOR</span>
-            </div>
-            <button
-              onClick={() => setShowCameraPip(false)}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
-              aria-label="Hide camera monitor"
-            >
-              <X size={12} />
-            </button>
-          </div>
-          <div className="space-y-1 text-[11px]">
-            <div className="flex items-center justify-between text-slate-300">
-              <span>Status:</span>
-              <span className="font-bold text-emerald-300">
-                {isPinching ? 'PINCH CLICK ACTIVE' : detectedGesture === 'palm' ? 'PALM SCROLL' : 'TRACKING RETICLE'}
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-slate-400 text-[10px]">
-              <span>Laser Coordinates:</span>
-              <span className="text-cyan-400">{Math.round(cursorPos.x)}%, {Math.round(cursorPos.y)}%</span>
-            </div>
-            <p className="text-[10px] text-slate-500 pt-1 leading-snug">
-              Point index finger towards buttons. Pinch thumb & index together to trigger primary click.
-            </p>
-          </div>
-        </motion.div>
+        <HandCvPipMonitor
+          isPinching={isPinching}
+          detectedGesture={detectedGesture}
+          cursorPos={cursorPos}
+          onClose={() => setShowCameraPip(false)}
+        />
       )}
 
-      {/* Razor-Sharp 1:1 Spatial Workspace Container - Zero Font Rasterization Blur */}
+      {/* Razor-Sharp 1:1 Native Resolution Spatial Workspace - Direct ClearType Font Vectors */}
       <div 
         data-testid="spatial-canvas-stage"
         style={{
-          transform: spatialAnchorMode === 'smooth-follow'
-            ? `translate3d(${rotateYDeg * 2}px, ${rotateXDeg * 2}px, 0)`
-            : 'none',
-          transition: spatialAnchorMode === 'smooth-follow' ? 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
-          willChange: 'transform',
+          transform: spatialAnchorMode === 'smooth-follow' && (rotateYDeg !== 0 || rotateXDeg !== 0)
+            ? `translate3d(${Math.round(rotateYDeg * 2)}px, ${Math.round(rotateXDeg * 2)}px, 0)`
+            : undefined,
+          transition: spatialAnchorMode === 'smooth-follow' ? 'transform 0.25s ease-out' : undefined,
+          maxWidth: isBezelMode 
+            ? (virtualDistance <= 1.5 ? '98vw' : virtualDistance <= 2.5 ? '94vw' : virtualDistance <= 3.5 ? '88vw' : '82vw')
+            : '100%',
+          margin: '0 auto',
+          borderRadius: isBezelMode ? `${Math.max(16, Math.round(screenCurvature / 3) + 16)}px` : undefined,
+          border: isBezelMode ? '1px solid rgba(6, 182, 212, 0.3)' : undefined,
+          boxShadow: isBezelMode 
+            ? '0 25px 70px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(6, 182, 212, 0.08)' 
+            : undefined,
+          overflow: isBezelMode ? 'hidden' : undefined,
         }}
-        className="w-full min-h-screen pt-16 bg-transparent"
+        className="w-full min-h-screen pt-16 bg-transparent transition-all duration-300"
       >
         {children}
       </div>
@@ -428,5 +427,83 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       {/* On-Demand Virtual Keyboard Overlay */}
       <VirtualSpatialKeyboard />
     </div>
+  );
+}
+
+function HandCvPipMonitor({
+  isPinching,
+  detectedGesture,
+  cursorPos,
+  onClose,
+}: {
+  isPinching: boolean;
+  detectedGesture: string | null;
+  cursorPos: { x: number; y: number };
+  onClose: () => void;
+}) {
+  const mountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const canvas = handGestureEngine.getDisplayCanvas();
+    if (canvas) {
+      canvas.className = 'w-full h-auto block rounded-lg';
+      mount.innerHTML = '';
+      mount.appendChild(canvas);
+    }
+
+    return () => {
+      if (mount) mount.innerHTML = '';
+    };
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.85, y: -20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.85, y: -20 }}
+      data-testid="hand-cv-monitor-pip"
+      className="fixed top-16 right-6 z-[240] p-3 rounded-2xl bg-black/95 border border-emerald-500/50 shadow-2xl backdrop-blur-xl text-xs font-mono w-72 space-y-2 pointer-events-auto"
+    >
+      <div className="flex items-center justify-between border-b border-emerald-500/30 pb-1.5">
+        <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+          <Camera size={13} className="animate-pulse" />
+          <span>HAND CV MONITOR</span>
+          <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold">LIVE</span>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
+          aria-label="Hide camera monitor"
+        >
+          <X size={12} />
+        </button>
+      </div>
+
+      {/* Live Video / Canvas Viewport */}
+      <div 
+        ref={mountRef} 
+        data-testid="hand-cv-canvas-mount"
+        className="w-full aspect-[4/3] bg-black/90 rounded-xl overflow-hidden border border-emerald-500/30 flex items-center justify-center relative shadow-inner"
+      />
+
+      <div className="space-y-1 text-[11px]">
+        <div className="flex items-center justify-between text-slate-300">
+          <span>Action:</span>
+          <span className="font-bold text-emerald-300">
+            {isPinching ? '★ PINCH CLICK TRIGGER' : detectedGesture === 'palm' ? 'OPEN PALM HOVER' : 'TRACKING RETICLE'}
+          </span>
+        </div>
+        <div className="flex items-center justify-between text-slate-400 text-[10px]">
+          <span>Laser Target:</span>
+          <span className="text-cyan-400">{Math.round(cursorPos.x)}%, {Math.round(cursorPos.y)}%</span>
+        </div>
+        <p className="text-[9px] text-slate-400 pt-0.5 leading-snug">
+          Host Webcam • Optical Frame Differencing + YCbCr Skin Cluster • 0 Cloud Data
+        </p>
+      </div>
+    </motion.div>
   );
 }

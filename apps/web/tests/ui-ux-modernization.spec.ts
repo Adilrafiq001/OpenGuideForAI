@@ -335,19 +335,45 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await deskSnapBtn.click();
     await expect(page.locator('text=Tabletop Desk Plane Active')).toBeVisible();
 
+    // Verify keyboard horizontal centering
+    const isCentered = await page.evaluate(() => {
+      const kb = document.querySelector('[data-testid="virtual-spatial-keyboard"]');
+      if (!kb) return false;
+      const rect = kb.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      return Math.abs(center - window.innerWidth / 2) < 15;
+    });
+    expect(isCentered).toBe(true);
+
+    // Test Gaze Snap button
+    const gazeSnapBtn = page.locator('[data-testid="keyboard-snap-gaze-btn"]');
+    await expect(gazeSnapBtn).toBeVisible();
+    await gazeSnapBtn.click();
+
+    // Type letters on the virtual spatial keyboard
+    await page.locator('[data-testid="spatial-key-o"]').click();
+    await page.locator('[data-testid="spatial-key-g"]').click();
+    await expect(page.locator('[data-testid="virtual-keyboard-text-buffer"]')).toHaveText(/og/i);
+
     // Switch back to Mid-Air Mode
     const midAirBtn = page.locator('[data-testid="keyboard-midair-btn"]');
     await expect(midAirBtn).toBeVisible();
     await midAirBtn.click();
     await expect(page.locator('text=Mid-Air Floating Mode')).toBeVisible();
 
-    // Type letters on the virtual spatial keyboard
-    await page.locator('button:has-text("O")').first().click();
-    await page.locator('button:has-text("G")').first().click();
-
     // Close virtual keyboard
     await page.locator('[data-testid="close-spatial-keyboard-btn"]').click();
     await expect(virtualKeyboard).toBeHidden();
+
+    // Test Hand Tracking CV Engine & PIP Monitor
+    const handToggleBtn = page.locator('[data-testid="toggle-hand-tracking-btn"]');
+    await expect(handToggleBtn).toBeVisible();
+    await handToggleBtn.click();
+
+    const handPip = page.locator('[data-testid="hand-cv-monitor-pip"]');
+    await expect(handPip).toBeVisible();
+    await expect(page.locator('[data-testid="hand-cv-canvas-mount"] canvas')).toBeVisible();
+    await expect(page.locator('[data-testid="spatial-hand-laser-cursor"]')).toBeVisible();
 
     // Recenter Gaze
     const recenterBtn = page.locator('[data-testid="spatial-recenter-btn"]');
