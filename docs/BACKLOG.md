@@ -47,7 +47,7 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
   - Purged purple glowing pills, sparkle emojis, talisman symbols, and promotional buzzwords across components.
   - Clean high-craft ergonomics adhering to `baseline-ui` and `design-taste-frontend`.
 - [x] **Comprehensive Automated Playwright Regression Suite:**
-  - 140 / 140 tests passing with 100% pass rate, 0 failures, 0 skips, and 0 console errors.
+  - 145 / 145 tests passing with 100% pass rate, 0 failures, 0 skips, and 0 console errors.
 - [x] **WebGPU Hardware Detection & WGSL Compute Kernel:**
   - Native WebGPU adapter inspection and WGSL matrix multiplication compute shader execution (`localNeuralRunner.ts`).
 - [x] **Mobile Haptic Feedback:**

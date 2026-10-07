@@ -11,7 +11,7 @@ Every feature in OpenGuide MUST be tested before deployment. No exceptions.
 | Unit tests | Vitest / Node.js test runner | Business logic, utilities, curriculum parsing |
 | In-browser runtime tests | Pyodide Web Worker | Python execution, stdout/stderr, execution timeouts |
 | E2E tests | Playwright MCP | Full user journeys, theme switching, route navigation |
-| Visual & contrast tests | Playwright screenshots & DOM eval | 20 themes (10 dark, 10 light) AAA contrast verification |
+| Visual & contrast tests | Playwright screenshots & DOM eval | 24 themes (12 dark, 12 light) AAA contrast verification |
 | Local storage / Offline tests | IndexedDB / ServiceWorker tests | Offline availability, progress persistence, workspace state |
 | Security tests | Manual + script validation | BYOK key isolation, Web Worker sandboxing, XSS sanitization |
 
@@ -33,9 +33,9 @@ Every feature in OpenGuide MUST be tested before deployment. No exceptions.
 | Curriculum & Tracks | 5 | Track index load, Track 0/1/2 navigation, module briefings, challenge state, progress persistence |
 | In-Browser Pyodide IDE | 5 | Worker init, CPython execution, stdout/stderr capture, syntax error handling, infinite loop timeout |
 | Local-First Persistence | 3 | IndexedDB save/load, lesson completion status, reset workspace |
-| Theme System & Contrast | 5 | 20 themes (10 Dark, 10 Light), WCAG AAA contrast, semantic CSS tokens, light-theme text readability |
+| Theme System & Contrast | 5 | 24 themes (12 Dark, 12 Light), WCAG AAA contrast, semantic CSS tokens, light-theme text readability |
 | Command Dock & Controls | 4 | Dock floating/docking, theme picker, sound toggle, X-Ray lens toggle, offline copilot trigger |
-| Multi-Language i18n | 4 | Language switch (`en`, `es`, `zh`, `hi`, `fr`, `de`), English default, script-safe line heights |
+| Multi-Language i18n | 4 | Language switch across 12 world languages, English default, script-safe line heights |
 | First Principles & Modals | 4 | Modal open/close, search intuition, keyboard Escape, high-contrast text across themes |
 | Offline Copilot & 404 Duck | 4 | 404 duck animation, offline copilot query response, $0 rule compliance, 100% offline |
 | Responsive & Accessibility | 4 | Mobile (375px), Tablet (768px), Desktop (1440px), keyboard focus navigation (`:focus-visible`) |

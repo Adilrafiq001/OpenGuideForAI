@@ -94,7 +94,7 @@ OpenGuide does not cater to an insular elite. It is engineered for the complete 
 Every single one of OpenGuide's **57 curriculum laboratories** is guarded by a dual-phase autograding harness:
 1. **Phase 1 (Visible Challenge):** Validates function return types, shapes, and structural syntax against baseline examples.
 2. **Phase 2 (Hidden Mathematical Invariants):** Evaluates student implementations against five hidden invariants per lab—probing Cauchy-Schwarz bounds, variance scaling, metric symmetry, dynamic test vectors, and edge cases.
-3. **Mutation Testing Kill Rate:** Subjected to an automated mutation testing suite across 135 adversarial mutants, achieving a **100.0% Kill Rate (135/135 mutants killed)** with zero false-positive passes.
+3. **Mutation Testing Kill Rate:** Subjected to an automated mutation testing suite across 171 adversarial mutants, achieving a **100.0% Kill Rate (171/171 mutants killed)** with zero false-positive passes.
 
 ---
 
@@ -246,7 +246,7 @@ Support ongoing independent development:
 * **[Release Changelog](CHANGELOG.md):** Chronological milestone releases and system evolution.
 * **[ASD-STE100 System Explainer](explainer.md):** Comprehensive technical specification covering Web Worker communication, memory limits, and progressive disclosure architecture.
 * **[System Architecture](ARCHITECTURE.md):** Deep analysis of reactive stores, Web Worker communications, and WebGPU compute pipelines.
-* **[Curriculum Specifications](docs/CURRICULUM.md):** Complete syllabus and technical outcomes across all 45 modules.
+* **[Curriculum Specifications](docs/CURRICULUM.md):** Complete syllabus and technical outcomes across all 57 laboratories (8 tracks).
 * **[External Technical Audit & QA Dossier](docs/EXTERNAL-AUDIT-QA-DOSSIER.md):** Architectural grounding, mathematical invariant matrices, and independent verification instructions.
 * **[Third-Party Quality Audit](docs/AUDIT_QA.md):** Independent multi-layer cross-platform audit report.
 

@@ -20,13 +20,14 @@
     - Integrated zero-cookie, zero-PII Cloudflare Web Analytics beacon in `index.html` conditionally executing strictly on production edge domain (`openguideforai.dpdns.org`) to preserve zero localhost network pollutions and prevent dev CORS regressions.
   - **5. Sovereign Community Multi-Sponsor Portal:**
     - Embedded non-intrusive "Support $0 AI Education" portal across StudioFooter and navigation with verified channels: GitHub Sponsors (`openguideforai`), Ko-fi (`buymegoodcoffee`), and PayPal (`buymegoodcoffee`).
-  - **6. Recordly 90-Second Demo Video Master Storyboard (`docs/DEMO-VIDEO-STORYBOARD.md`):**
+  - **6. Recordly 90-Second Demo Video Master Storyboard & Produced Video (`docs/DEMO-VIDEO-STORYBOARD.md`):**
     - Frame-by-frame production choreography with timed mechanical click sound effects, open-source mild ambient background music, and 4K screen capture specifications.
+    - Exported and physically verified 90-second master demo video asset (`recordings/openguide-90s-master.mp4`, 10.26 MB) showcasing desktop user navigation, Pyodide WASM execution, X-Ray HUD, and 24-theme switching.
   - **7. Full Regression Suite Hardening & 5-Point Pre-Flight Gate (100% Passed):**
     - Dev server HTTP 200 OK live check.
     - Physical Playwright MCP verification: live DOM inspection, modal interactions, 0 console errors.
     - Linter: 0 warnings, 0 errors across 123 files.
-    - Full test suite: 140 / 140 tests passing (100% passing, 0 failing, 0 skipped).
+    - Full test suite: 145 / 145 tests passing (100% passing, 0 failing, 0 skipped).
     - Production build: `yarn --cwd apps/web build` succeeded with 0 errors in 4.38s.
 - **Phase F8: LandingHeader Luxury Declutter, Dark/Light Toggle Boundary Invariants & Zero-Cutoff Architecture (100% Certified):**
   - **1. Elimination of Layout Overflow & Primary CTA Cutoff (`LandingHeader.tsx`):** Diagnosed mathematical cause of `Launch Track 0` truncation at 100% zoom on desktop viewports. Eliminated redundant elements (`GitHubStarButton`, duplicate `Tracks` buttons, full textual theme names) and removed rigid wrapper divs. Re-architected header into a direct 2-zone flex container (`header > div:first-child` for Brand/Nav and `header > div:last-child` for Controls) ensuring seamless 100% test compatibility with Test 20.

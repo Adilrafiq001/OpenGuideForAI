@@ -28,10 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Zero-cookie RUM beacon configured strictly for production edge (`openguideforai.dpdns.org`) with localhost bypass.
 - **Client-Side Daily Streak Reminder Engine (`streakNotification.ts`):**
   - Offline streak reminder system with Service Worker integration (`apps/web/public/sw.js`) and Synapse Lounge toggle.
-- **Recordly 90-Second Demo Storyboard (`docs/DEMO-VIDEO-STORYBOARD.md`):**
+- **Recordly 90-Second Demo Storyboard & Master Video Production (`docs/DEMO-VIDEO-STORYBOARD.md`):**
   - Frame-by-frame 90s screen capture choreography with timed click sound effects, mild ambient background music, and 4K recording specs.
+  - Produced and physically verified 90-second master demonstration video asset (`recordings/openguide-90s-master.mp4`, 10.26 MB) capturing full desktop journey, in-browser CPython WASM execution, X-Ray HUD, and 24 themes.
 - **Full Automated Regression Hardening:**
-  - 140 / 140 Playwright tests passing (100% pass rate). 0 lint warnings/errors across 123 files. 0 production build errors.
+  - 145 / 145 Playwright tests passing (100% pass rate). 0 lint warnings/errors across 123 files. 0 production build errors.
 
 ---
 

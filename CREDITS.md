@@ -40,7 +40,7 @@ OpenGuide stands on the shoulders of remarkable open-source engineering achievem
 
 ### 5. **Dexie.js & IndexedDB**
 * **Project:** [Dexie.js](https://dexie.org/) (David Fahlander)
-* **Contribution:** High-performance, minimalist wrapper around browser IndexedDB, providing local-first persistence for 45 curriculum labs, code artifacts, and cryptographic verification digests.
+* **Contribution:** High-performance, minimalist wrapper around browser IndexedDB, providing local-first persistence for 57 curriculum labs across 8 tracks, code artifacts, and cryptographic verification digests.
 * **License:** Apache-2.0
 
 ### 6. **Framer Motion & Modern Web Animation**
@@ -50,7 +50,7 @@ OpenGuide stands on the shoulders of remarkable open-source engineering achievem
 
 ### 7. **Tailwind CSS & Design Tokens**
 * **Project:** [Tailwind CSS](https://tailwindcss.com/) (Adam Wathan & Tailwind Labs)
-* **Contribution:** Utility-first CSS framework enabling our 20 WCAG AAA calibrated design themes (10 Dark, 10 Light) across OLED, Nordic, Cyberpunk, and Pure Paper palettes.
+* **Contribution:** Utility-first CSS framework enabling our 24 WCAG AAA calibrated design themes (12 Dark, 12 Light) across OLED, Nordic, Cyberpunk, and Pure Paper palettes.
 * **License:** MIT License
 
 ### 8. **Lucide Icons**

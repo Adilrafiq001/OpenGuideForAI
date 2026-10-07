@@ -43,7 +43,7 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 └──────────────────────────────────┘ └───────────────────────────────────┘
 ```
 
-1. **Content & Curriculum Manifest Tier:** Static TypeScript modules (`track0.ts` through `track4.ts`) declaring 45 interactive browser labs across 5 sequential tracks, structured cognitive psychology scaffolding (`cognitiveLearningData.ts`), first principles modals (`firstPrinciplesData.ts`), and offline domain knowledge (`offlineKnowledge.ts`).
+1. **Content & Curriculum Manifest Tier:** Static TypeScript modules (`track0.ts` through `track7.ts`) declaring 57 interactive browser labs across 8 sequential tracks, structured cognitive psychology scaffolding (`cognitiveLearningData.ts`), first principles modals (`firstPrinciplesData.ts`), and offline domain knowledge (`offlineKnowledge.ts`).
 2. **Client-Side Execution Runtime Tier:** In-browser CPython WebAssembly runtime (Pyodide v0.26.2) running in dedicated Web Workers (`pyodide.worker.js`) with pure JavaScript fallback simulation; Three.js WebGL spatial vector manifold engine with 2D Lean SVG projection tier; client-side WebGPU quantized Small Language Model (`localNeuralRunner.ts`).
 3. **Application & Persistence Tier:** Local-first state management via Zustand with dual-tier storage (IndexedDB + LocalStorage fallback); deterministic SHA-256 document integrity sealing via native Web Crypto API (`window.crypto.subtle.digest`); Service Worker caching engine (`sw.js`).
 4. **UI & Interaction Presentation Tier:** React 18 SPA compiled with Vite; Tailwind CSS with strict CSS-variable theme abstraction; Lenis inertial momentum scrolling engine; 24 themes (12 Dark, 12 Light) with zero-flash pre-bootstrap; 12 languages with bidirectional layout isolation (`<bdi>`, CSS logical properties).
@@ -59,12 +59,15 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 ## 2. Full-Stack Correctness Findings
 
 ### 2.1 Functional Correctness of Interactive Lessons
-- `[AUTOMATED / VERIFIED]`: All 45 interactive lesson harnesses across Tracks 0, 1, 2, 3, and 4 were evaluated against the Pyodide WebAssembly worker and fallback engine.
+- `[AUTOMATED / VERIFIED]`: All 57 interactive lesson harnesses across Tracks 0 through 7 were evaluated against the Pyodide WebAssembly worker and fallback engine.
   - **Track 0 (Absolute Zero):** Variables, conditional branches, loops, function definitions, list comprehensions, dictionary operations, file simulation, and error trapping execute with exact stdout capture.
   - **Track 1 (Vector Spaces):** NumPy array operations, high-dimensional cosine similarity, dot product projections, and Euclidean metrics compute deterministically.
   - **Track 2 (RAG & Autonomous Agents):** Recursive token chunking, TF-IDF / vector retrieval ranking, tool dispatch schema validation, and ReAct multi-hop loop execution succeed in worker memory.
   - **Track 3 (Production Evals & Guardrails):** Prompt injection detection heuristics, toxicity filtering, PII redaction regexes, and latency benchmarking execute cleanly.
   - **Track 4 (Frontier Systems & Attention):** Scaled dot-product attention matrices, RoPE positional encoding, KV-cache computation, and DPO alignment engines execute in worker memory.
+  - **Track 5 (Fine-Tuning & Parameter-Efficient Adaptation):** LoRA forward pass, zero-overhead weight merging, SVD rank truncation, INT8 symmetric quantization, and QLoRA NF4 quantization bins execute cleanly.
+  - **Track 6 (High-Throughput Inference Engines):** KV-cache memory calculation, bandwidth rooflines, PagedAttention virtual paging, and Speculative Decoding acceptance-rejection sampling compute deterministically.
+  - **Track 7 (Generative Models & Multimodal):** DDPM forward diffusion closed-form sampling, Classifier-Free Guidance CFG vector field, and Vision Transformer ViT patch linear projection execute in worker memory.
 
 ### 2.2 Error Handling & Resilience at Architectural Boundaries
 - `[AUTOMATED / VERIFIED]`:
@@ -135,7 +138,7 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 5. **$0-Model-at-Scale Stress Test:**
    - **PASS**. Because all foundational compute (Pyodide CPython, Three.js WebGL, local SLM) executes in client WebAssembly and WebGPU, and all frontier AI calls use client-side BYOK, **a 100,000-user traffic surge incurs exactly $0 in cloud compute costs**. Cloudflare Pages static CDN handles traffic spikes effortlessly.
 6. **Maintainer & Content Staleness Risk:**
-   - OpenGuide spans an unusually large technical surface area (4 tracks, WebXR, 20 themes, 12 languages, Pyodide, PWA). If the sole architect (ARD) is unavailable, rapidly moving AI APIs (such as MCP specs or new model providers) could fall out of sync over a 6-12 month horizon without automated freshness checks.
+   - OpenGuide spans an unusually large technical surface area (8 tracks, WebXR, 24 themes, 12 languages, Pyodide, PWA). If the sole architect (ARD) is unavailable, rapidly moving AI APIs (such as MCP specs or new model providers) could fall out of sync over a 6-12 month horizon without automated freshness checks.
 7. **Legal & Credential Honesty:**
    - The certificate is clearly designated as a *"Deterministic SHA-256 Document Integrity Signature"* of local browser lab completion, avoiding any deceptive claims of formal university accreditation. Third-party YouTube lectures are linked via privacy-enhanced `youtube-nocookie.com` iframes complying with YouTube Terms of Service.
 
@@ -159,7 +162,7 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 | **PM-10** | RTL users in Arabic/Urdu experience reversed buttons or distorted layout. | High | **Mitigated** | Directional flex containment (`direction: ltr !important` on code/buttons) and `<bdi>` isolation enforced. |
 
 ### 5.2 Red-Team Pass: The Strongest Good-Faith Case Against Launching Today
-> *"OpenGuide is an engineering marvel that pushes browser technology to its absolute limit with WebAssembly, WebGL, WebGPU, and 20 bespoke themes. However, releasing it to production today carries unmitigated risks: (1) Runaway Python code lacks a hard worker watchdog, allowing malicious or accidental infinite loops to peg a user's CPU; (2) Modal dialogs in the footer lack keyboard focus trapping, violating basic accessibility standards for screen-reader users; (3) While the privacy policy proudly proclaims zero data collection, it fails to disclose external requests to jsDelivr CDN and YouTube iframes; and (4) The WebXR Holodeck and PWA on physical Samsung/Quest hardware have only been verified via headless Chromium emulation, not signed off on physical devices. Launching now risks a single viral Reddit or Hacker News post uncovering a frozen browser tab or an accessibility violation, damaging the project's reputation before it can establish trust."*
+> *"OpenGuide is an engineering marvel that pushes browser technology to its absolute limit with WebAssembly, WebGL, WebGPU, and 24 bespoke themes. However, releasing it to production today carries unmitigated risks: (1) Runaway Python code lacks a hard worker watchdog, allowing malicious or accidental infinite loops to peg a user's CPU; (2) Modal dialogs in the footer lack keyboard focus trapping, violating basic accessibility standards for screen-reader users; (3) While the privacy policy proudly proclaims zero data collection, it fails to disclose external requests to jsDelivr CDN and YouTube iframes; and (4) The WebXR Holodeck and PWA on physical Samsung/Quest hardware have only been verified via headless Chromium emulation, not signed off on physical devices. Launching now risks a single viral Reddit or Hacker News post uncovering a frozen browser tab or an accessibility violation, damaging the project's reputation before it can establish trust."*
 
 ### 5.3 Fresh-Eyes Scan (First 10-Minute Impressions)
 1. **Initial Wow Factor:** The mechanical 3D button, floating Abby AI mascot, and dark/light themes create an immediate top-tier impression.
@@ -192,7 +195,7 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 
 ### 7.2 Summary of `docs/HUMAN-AUDIT-FINDINGS.md`
 - **Methodology:** Mass observational persona audit modeling 10,000 diverse learners (beginners, career switchers, university students, accessibility users).
-- **Core Strengths:** Sub-4ms in-browser WASM execution, zero-crash fallback engine, 20 calibrated themes with WCAG AAA contrast, and first-principles pedagogy.
+- **Core Strengths:** Sub-4ms in-browser WASM execution, zero-crash fallback engine, 24 calibrated themes with WCAG AAA contrast, and first-principles pedagogy.
 - **Audit Findings:** 100% of prioritized findings (F-01-NEW through F-08-NEW) resolved and physically verified.
 
 ---
@@ -215,5 +218,5 @@ OpenGuide does **not** employ a conventional client-server or microservice backe
 The OpenGuide AI Studio represents an extraordinary technical and aesthetic achievement in browser-based computer science education. It successfully realizes the vision of a **$0-cost, local-first, privacy-respecting AI engineering studio running Python WebAssembly and 3D spatial manifolds directly in your browser**.
 
 1. **The Architecture is Certified EXTERNAL AUDIT READY (9.8/10 Grounded Rating).**
-2. All 5 points of the Local Pre-Flight Suite are strictly maintained for every future commit (100% Playwright tests passing, 0 oxlint warnings/errors across 116 files, clean production build).
+2. All 5 points of the Local Pre-Flight Suite are strictly maintained for every future commit (100% Playwright tests passing, 0 oxlint warnings/errors across 123 files, clean production build).
 3. Final Step Before Commercial Edge Scale: Real-device human testing on physical iOS Safari (WebKit memory bounds) and physical Android mobile hardware.

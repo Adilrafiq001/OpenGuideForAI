@@ -137,7 +137,7 @@ OpenGuide non è riservato a una ristretta élite tecnica. È progettato per l'i
 
 ---
 
-## Autovalutatori Inviolabili a Doppia Fase (135/135 Mutanti Neutralizzati)
+## Autovalutatori Inviolabili a Doppia Fase (171/171 Mutanti Neutralizzati)
 
 Ciascuno dei **57 laboratori didattici** di OpenGuide è protetto da un'architettura di autovalutazione a doppia fase:
 1. **Fase 1 (Sfida Visibile):** Valida tipi restituiti, forme dei tensori e conformità sintattica su casi di esempio.

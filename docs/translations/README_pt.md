@@ -137,7 +137,7 @@ O OpenGuide não foi projetado para uma elite tecnológica restrita. Ele foi des
 
 ---
 
-## Autocorretores Antifraude de Dupla Fase (135/135 Mutantes Eliminados)
+## Autocorretores Antifraude de Dupla Fase (171/171 Mutantes Eliminados)
 
 Cada um dos **57 laboratórios do currículo** do OpenGuide é protegido por um sistema de autocorreção em duas fases:
 1. **Fase 1 (Desafio Visível):** Valida tipos de retorno, formas de tensores e sintaxe estrutural contra exemplos de referência.

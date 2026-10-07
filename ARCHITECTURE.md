@@ -58,7 +58,7 @@
 - **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
 - **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 57-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
 - **007 Defense-in-Depth Security:** PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 16-byte random salt) + AES-256-GCM encrypted GitHub Gist backup, DOMPurify HTML/Markdown sanitization, Cloudflare Pages CSP/HSTS/COOP/COEP headers, and static tokenization in offline Pyodide worker fallback without `eval` or `Function`.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (140 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (145 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
 
 ## Application Directory Structure
 - `/apps/web`: Production web application root.
@@ -71,5 +71,5 @@
 
 ## Related Documentation
 - [ASD-STE100 System Explainer](explainer.md): High-level system breakdown written in Simplified Technical English (~80% conformance).
-- [Curriculum Specifications](docs/CURRICULUM.md): Detailed syllabus and lab outcomes across all 45 hands-on modules.
+- [Curriculum Specifications](docs/CURRICULUM.md): Detailed syllabus and lab outcomes across all 57 hands-on laboratories (8 tracks).
 - [Project State](docs/PROJECT-STATE.md): Operational architecture and audit ledger.

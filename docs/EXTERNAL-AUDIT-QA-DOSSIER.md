@@ -144,7 +144,7 @@ The curriculum consists of 8 tracks (57 labs total), each structured with First-
 | **Universal Human Spectrum** | 6-tier continuum | Stages 0 to 5, real-world trades covered | **PASS** |
 | **Browser Console Integrity** | 0 console errors | 0 errors on `/track/5`, `/track/6`, `/track/7` | **PASS** |
 | **Pyodide WASM Runtime Latency** | $< 1000$ms execution | 17ms local execution recorded in UI | **PASS** |
-| **Full Playwright Regression Suite** | 140 / 140 passing | 100% pass across complete test directory | **PASS** |
+| **Full Playwright Regression Suite** | 145 / 145 passing | 100% pass across complete test directory | **PASS** |
 | **Sovereign Offline Knowledge Bank** | 250 core topics | 250 topics verified in runtime memory (`offlineKnowledge.ts`) | **PASS** |
 | **Information Retrieval Engine** | Okapi BM25 ($k_1=1.2, b=0.75$) | Field-weighted scoring verified by `TC-AUDIT-027` | **PASS** |
 | **Cross-Lingual Multi-Script Bridge** | 11 world languages | Native queries verified by `TC-AUDIT-028` (ES, HI, ZH, FR, DE, AR) | **PASS** |
@@ -169,9 +169,9 @@ yarn lint
 yarn --cwd apps/web playwright test tests/curriculum-solution-execution.spec.ts
 # Expected: 8 passed (All 57 labs verified, 0 pre-solved, 171/171 mutants killed).
 
-# 4. Run the complete automated regression suite (140 tests)
+# 4. Run the complete automated regression suite (145 tests)
 yarn --cwd apps/web playwright test
-# Expected: 140 passed.
+# Expected: 145 passed.
 
 # 5. Compile production bundle
 yarn --cwd apps/web build

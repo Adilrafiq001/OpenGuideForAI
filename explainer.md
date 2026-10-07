@@ -285,9 +285,9 @@ The learner hears mathematical alignment directly.
 
 ---
 
-## 6. Pedagogical Architecture & 5-Track Computational Engine
+## 6. Pedagogical Architecture & 8-Track Computational Engine
 
-The curriculum comprises **45 interactive laboratories** divided into five sequential tracks:
+The curriculum comprises **57 interactive laboratories** divided into eight sequential tracks:
 
 ```mermaid
 graph LR
@@ -296,8 +296,11 @@ graph LR
     T2["Track 2: Agents & RAG<br/>(ReAct Cycles, MCP Protocols)"]
     T3["Track 3: Evals & Guardrails<br/>(OWASP Defenses, WebGPU SLM)"]
     T4["Track 4: Frontier Systems<br/>(Self-Attention, RoPE, DPO)"]
+    T5["Track 5: Fine-Tuning & Adapters<br/>(LoRA, SVD, QLoRA NF4)"]
+    T6["Track 6: Inference Engines<br/>(PagedAttention, KV Rooflines)"]
+    T7["Track 7: Generative Synthesis<br/>(Diffusion, CFG, ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 ### Track 0: Absolute Zero (9 Labs)
@@ -330,6 +333,21 @@ graph LR
   - Direct Preference Optimization (DPO) mathematical loss:
   $$\mathcal{L}_{\text{DPO}}(\pi_\theta; \pi_{\text{ref}}) = -\mathbb{E}_{(x, y_w, y_l)}\left[\log \sigma\left(\beta \log \frac{\pi_\theta(y_w|x)}{\pi_{\text{ref}}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{\text{ref}}(y_l|x)}\right)\right]$$
 - **Capstone Lab:** Build an interactive Transformer Attention Head Dissection tool and DPO alignment calculation engine.
+
+### Track 5: Fine-Tuning & Parameter-Efficient Adaptation (6 Labs)
+- **Pedagogical Objective:** Master low-rank parameter adaptation, weight decomposition, and 4-bit quantization without destroying base model intelligence.
+- **Underlying Mechanics:** Low-Rank Adaptation (LoRA $W + \frac{\alpha}{r}BA$), zero-overhead weight merging, truncated SVD dimensionality reduction, INT8 uniform quantization, and QLoRA NF4 normal float bin mapping.
+- **Capstone Lab:** Implement an in-memory LoRA zero-overhead weight merger and DPO alignment gradient estimator.
+
+### Track 6: High-Throughput Inference Engines (3 Labs)
+- **Pedagogical Objective:** Understand memory kinematics, latency bottlenecks, and serving concurrency in production LLM inference.
+- **Underlying Mechanics:** Memory bandwidth vs compute rooflines, PagedAttention block mapping tables eliminating external fragmentation, and Speculative Decoding rejection sampling.
+- **Capstone Lab:** Build an in-browser virtual memory PagedAttention simulator with live fragmentation telemetry.
+
+### Track 7: Generative Models & Multimodal Foundations (3 Labs)
+- **Pedagogical Objective:** Explore the continuous physics of image generation and vision-language architectures.
+- **Underlying Mechanics:** DDPM closed-form forward diffusion, Classifier-Free Guidance (CFG) vector field extrapolation, and Vision Transformer (ViT) patch linear projection.
+- **Capstone Lab:** Build a working 2D patch linear projector flattening spatial images into sequence embeddings.
 
 ### 6.1 The Syntax Doctor Diagnostic System
 When learner code raises an exception, OpenGuide does not display raw confusing tracebacks alone:

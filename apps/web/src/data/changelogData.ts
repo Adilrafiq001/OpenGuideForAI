@@ -5,9 +5,22 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.4.0';
+export const CURRENT_STUDIO_VERSION = '1.5.0';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.5.0',
+    date: 'October 2026',
+    title: 'Content Moat Expansion, Multi-Modal Learning Engines, 171/171 Mutation Kills & Master Demo Video',
+    highlights: [
+      'Content Moat Expansion: 8 Tracks & 57 Laboratories with dual-phase autograders, verified reference solutions, and active synthesis starter codes across fine-tuning, inference engines, and generative synthesis.',
+      'Ungameable Mutation Rigor: 171 adversarial mutants tested across all 57 labs, achieving a 100.0% Kill Rate (171/171 killed) with zero false-positive passes.',
+      'Pedagogical Diversity Widgets: 0-day Bug Hunter Challenge with 4-tier progressive hints, Tensor Surgery 4D visualizer with stride physics, and Hardware Roofline & VRAM Profiler modal.',
+      'Community Multi-Sponsor Portal & Privacy Analytics: Embedded support portal (GitHub Sponsors, Ko-fi, PayPal) and zero-cookie Cloudflare Web Analytics edge beacon.',
+      'Master 90-Second Demo Production: Exported full high-definition 4K master demo video (openguide-90s-master.mp4) showcasing real in-browser CPython WASM execution, X-Ray HUD, and 24 themes.',
+      '145 Automated Regression Invariants: 100% test passage across the full test directory, zero console errors, and zero lint warnings.'
+    ]
+  },
   {
     version: '1.4.0',
     date: 'October 2026',
