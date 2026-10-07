@@ -10,7 +10,9 @@ import {
   Copy, 
   Check, 
   Search, 
-  ArrowRight 
+  ArrowRight,
+  Sliders,
+  Zap
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
@@ -35,6 +37,9 @@ const FirstPrinciplesModal = lazy(() => import('../components/FirstPrinciplesMod
 const FreeCoursesModal = lazy(() => import('../components/FreeCoursesModal').then(m => ({ default: m.FreeCoursesModal })));
 const FreeToolsModal = lazy(() => import('../components/FreeToolsModal').then(m => ({ default: m.FreeToolsModal })));
 const EverydayCraftAiModal = lazy(() => import('../components/EverydayCraftAiModal').then(m => ({ default: m.EverydayCraftAiModal })));
+const ArchitecturalPillarsModal = lazy(() => import('../components/ArchitecturalPillarsModal').then(m => ({ default: m.ArchitecturalPillarsModal })));
+const NeuralMysteryLabModal = lazy(() => import('../components/NeuralMysteryLabModal').then(m => ({ default: m.NeuralMysteryLabModal })));
+const ARGlassesGuideModal = lazy(() => import('../components/spatial/ARGlassesGuideModal').then(m => ({ default: m.ARGlassesGuideModal })));
 import type { CraftRole } from '../components/EverydayCraftAiModal';
 
 interface LandingPageProps {
@@ -69,6 +74,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   const [selectedToolId, setSelectedToolId] = useState<string | undefined>('chroma');
   const [isCraftModalOpen, setIsCraftModalOpen] = useState(false);
   const [selectedCraftRole, setSelectedCraftRole] = useState<CraftRole>('beginner');
+  const [isPillarsModalOpen, setIsPillarsModalOpen] = useState(false);
+  const [selectedPillarId, setSelectedPillarId] = useState<number | undefined>(undefined);
+  const [isMysteryLabOpen, setIsMysteryLabOpen] = useState(false);
+  const [isARGlassesGuideOpen, setIsARGlassesGuideOpen] = useState(false);
   const [activeLandingTier, setActiveLandingTier] = useState<SpectrumTier>('tier0');
   const [landingSpectrumSearch, setLandingSpectrumSearch] = useState('');
   const [activePromptSampleIdx, setActivePromptSampleIdx] = useState(0);
@@ -276,7 +285,20 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       <ScrollProgressBar />
 
       {/* Top Glass Navigation Header (Isolated Leaf Component) */}
-      <LandingHeader onOpenThemes={onOpenThemes} onOpenHelp={onOpenHelp} onOpenDrawer={onOpenDrawer} onOpenDemo={onOpenDemo} onOpenCommandPalette={onOpenCommandPalette} />
+      <LandingHeader 
+        onOpenThemes={onOpenThemes} 
+        onOpenHelp={onOpenHelp} 
+        onOpenDrawer={onOpenDrawer} 
+        onOpenDemo={onOpenDemo} 
+        onOpenCommandPalette={onOpenCommandPalette}
+        onOpenPillars={(idx) => {
+          setSelectedPillarId(idx ?? 1);
+          setIsPillarsModalOpen(true);
+        }}
+        onOpenMysteryLab={() => {
+          setIsMysteryLabOpen(true);
+        }}
+      />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
       <main id="main-content">
@@ -738,31 +760,44 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pillars.map((pillar, idx) => (
-            <div 
+            <button 
               key={idx}
-              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between"
+              type="button"
+              onClick={() => {
+                setSelectedPillarId(idx + 1);
+                setIsPillarsModalOpen(true);
+              }}
+              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between text-left cursor-pointer group hover:scale-[1.01] hover:shadow-lg"
             >
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div 
-                    className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
-                    style={{
-                      backgroundColor: `${currentThemeInfo.accent}20`,
-                      color: currentThemeInfo.accent
-                    }}
-                  >
-                    {idx + 1}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
+                      style={{
+                        backgroundColor: `${currentThemeInfo.accent}20`,
+                        color: currentThemeInfo.accent
+                      }}
+                    >
+                      {idx + 1}
+                    </div>
+                    <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                      {pillar.title}
+                    </h3>
                   </div>
-                  <h3 className="text-base font-bold text-[var(--color-text-primary)]">
-                    {pillar.title}
-                  </h3>
+                  <ArrowUpRight size={15} className="text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors" />
                 </div>
 
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                   {pillar.desc}
                 </p>
               </div>
-            </div>
+
+              <div className="mt-4 pt-3 border-t border-[var(--color-border)]/60 flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+                <span>EXPLORE FORMULA & FAULT MODES</span>
+                <span className="text-[var(--color-accent)] group-hover:translate-x-0.5 transition-transform">→</span>
+              </div>
+            </button>
           ))}
         </div>
       </section>
@@ -829,6 +864,84 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         </div>
       </section>
 
+      {/* SECTION 4.6: UNIVERSAL SPATIAL HOLODECK & SMART AR GLASSES */}
+      <section id="holodeck-showcase" className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
+        <div className="p-8 md:p-12 rounded-[2.5rem] bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10 relative z-10">
+            <div className="max-w-2xl">
+              <span className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3 text-cyan-400">
+                UNIVERSAL SPATIAL COMPUTING & HARDWARE PASSTHROUGH
+              </span>
+              <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
+                Spatial Holodeck on Smart AR Glasses
+              </h2>
+              <p className="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed">
+                OpenGuide runs natively in 3D across <strong className="text-[var(--color-text-primary)]">Xreal, Viture, RayNeo, Rokid Max, and Meta Quest</strong>. Plug your glasses via USB-C DisplayPort Alt-Mode—our True-Black Micro-OLED optics turn pitch black into 100% optical transparency, allowing neural networks to float weightlessly in your real room.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+              <button
+                onClick={() => navigate('/holodeck')}
+                className="px-6 py-3.5 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs font-mono flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
+              >
+                <Glasses size={16} />
+                <span>Launch Spatial Holodeck</span>
+                <span>↗</span>
+              </button>
+
+              <button
+                onClick={() => setIsARGlassesGuideOpen(true)}
+                className="px-6 py-3.5 rounded-2xl bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/80 border border-[var(--color-border)] text-xs font-mono font-semibold text-[var(--color-text-primary)] flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+              >
+                <Sliders size={14} className="text-cyan-400" />
+                <span>How to Connect AR Glasses</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
+            <div className="p-5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2.5">
+              <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold">
+                <Glasses size={16} />
+              </div>
+              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
+                Micro-OLED Optical Waveguides
+              </h3>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Birdbath prisms and diffractive waveguides emit 0 photons on pure black (#000000). Your physical room remains fully visible while high-dimensional embedding clusters hover mid-air.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2.5">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+                <Zap size={16} />
+              </div>
+              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
+                Plug & Play USB-C DP Alt-Mode
+              </h3>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Zero third-party drivers or paid subscriptions. Works out-of-the-box with MacBook, Windows PC, Steam Deck, iPad, Android, and iPhone 15/16.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-2.5">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold">
+                <Compass size={16} />
+              </div>
+              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
+                3DOF Head-Gaze & Ring Controls
+              </h3>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Pin neural manifolds in room coordinates with gyroscopic 3DOF lock. Interact via head gaze, keyboard hotkeys, or Bluetooth rings.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 5: CURRICULUM OVERVIEW & TRACK 0 LAUNCH */}
       <section id="curriculum" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
         <div className="flex justify-between items-end mb-16 border-b border-[var(--color-border)] pb-8">
@@ -844,12 +957,12 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             </p>
           </div>
           <span className="hidden md:block text-[var(--color-text-secondary)] text-xs font-mono uppercase tracking-widest">
-            5 Core Tracks • 45 Interactive Labs
+            8 Core Tracks • 57 Interactive Labs
           </span>
         </div>
 
-        {/* 5 Core Tracks Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {/* 8 Core Tracks Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {/* Track 0: Absolute Zero */}
           <article 
             tabIndex={0}
@@ -1060,6 +1173,129 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               </span>
             </div>
           </article>
+
+          {/* Track 5: Fine-Tuning, LoRA & Parameter-Efficient Adaptation */}
+          <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 5: Fine-Tuning & LoRA briefing"
+            onClick={() => navigate('/track/5/intro')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/5/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-pink-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-pink-500/15 border-pink-500/30 text-pink-600 dark:text-pink-400">
+                  Track 05 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-pink-500/10 text-pink-600 dark:text-pink-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
+                Track 5: Fine-Tuning & LoRA
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                Low-Rank Adaptation (LoRA), rank decomposition math, QLoRA 4-bit NormalFloat, and Direct Preference Optimization (DPO).
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>3 Modules • 6 Labs</span>
+              <span className="font-semibold text-pink-600 dark:text-pink-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
+              </span>
+            </div>
+          </article>
+
+          {/* Track 6: Production MLOps, Hardware Memory & vLLM */}
+          <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 6: Production MLOps briefing"
+            onClick={() => navigate('/track/6/intro')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/6/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-teal-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-teal-500/15 border-teal-500/30 text-teal-600 dark:text-teal-400">
+                  Track 06 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Track 6: Production MLOps
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                KV-cache byte sizing, PagedAttention block paging, FlashAttention online softmax, and vLLM speculative decoding loops.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>2 Modules • 3 Labs</span>
+              <span className="font-semibold text-teal-600 dark:text-teal-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
+              </span>
+            </div>
+          </article>
+
+          {/* Track 7: Generative Diffusion & Vision Transformers */}
+          <article 
+            tabIndex={0}
+            role="link"
+            aria-label="Track 7: Generative Diffusion briefing"
+            onClick={() => navigate('/track/7/intro')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/track/7/intro');
+              }
+            }}
+            className="group cursor-pointer bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-fuchsia-500/60 rounded-[2rem] p-6 transition-all duration-300 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/50"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-fuchsia-500/15 border-fuchsia-500/30 text-fuchsia-600 dark:text-fuchsia-400">
+                  Track 07 • Active
+                </span>
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">
+                Track 7: Generative Diffusion
+              </h3>
+              
+              <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-6">
+                DDPM forward noise scheduling, Classifier-Free Guidance (CFG), and Vision Transformer patch projections.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+              <span>2 Modules • 3 Labs</span>
+              <span className="font-semibold text-fuchsia-600 dark:text-fuchsia-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                Briefing →
+              </span>
+            </div>
+          </article>
         </div>
 
         {/* Panoramic Spatial Holodeck Showcase Banner */}
@@ -1196,6 +1432,38 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             isOpen={isCraftModalOpen}
             onClose={() => setIsCraftModalOpen(false)}
             initialRole={selectedCraftRole}
+          />
+        </Suspense>
+      )}
+
+      {/* 11 Architectural Pillars Deep Dive Modal */}
+      {isPillarsModalOpen && (
+        <Suspense fallback={null}>
+          <ArchitecturalPillarsModal
+            isOpen={isPillarsModalOpen}
+            onClose={() => setIsPillarsModalOpen(false)}
+            initialPillarId={selectedPillarId}
+          />
+        </Suspense>
+      )}
+
+      {/* Knight Lab Inspired Autonomous Breach Mystery Forensic Lab */}
+      {isMysteryLabOpen && (
+        <Suspense fallback={null}>
+          <NeuralMysteryLabModal
+            isOpen={isMysteryLabOpen}
+            onClose={() => setIsMysteryLabOpen(false)}
+          />
+        </Suspense>
+      )}
+
+      {/* Smart AR Glasses Onboarding & Setup Guide Modal */}
+      {isARGlassesGuideOpen && (
+        <Suspense fallback={null}>
+          <ARGlassesGuideModal
+            isOpen={isARGlassesGuideOpen}
+            onClose={() => setIsARGlassesGuideOpen(false)}
+            onLaunchAR={() => navigate('/holodeck')}
           />
         </Suspense>
       )}

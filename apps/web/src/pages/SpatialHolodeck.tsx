@@ -6,12 +6,12 @@ import {
   Network, 
   Glasses, 
   Cpu, 
-  ShieldCheck, 
   Atom
 } from 'lucide-react';
 import { VectorSpace3D } from '../components/spatial/VectorSpace3D';
 import { NeuralSynapse3D } from '../components/spatial/NeuralSynapse3D';
 import { WebXRControls } from '../components/spatial/WebXRControls';
+import { ARGlassesGuideModal } from '../components/spatial/ARGlassesGuideModal';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { detectHardwareFull, type HardwareTelemetry } from '../utils/hardwareDetection';
 
@@ -23,6 +23,7 @@ export function SpatialHolodeck() {
 
   const [activeTab, setActiveTab] = useState<HolodeckTab>('vectors');
   const [telemetry, setTelemetry] = useState<HardwareTelemetry | null>(null);
+  const [isARGlassesGuideOpen, setIsARGlassesGuideOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -111,6 +112,14 @@ export function SpatialHolodeck() {
               Spatial XR
             </button>
           </div>
+
+          <button
+            onClick={() => setIsARGlassesGuideOpen(true)}
+            className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono shadow-xs shrink-0"
+          >
+            <Glasses size={14} />
+            <span>AR Glasses Guide (Xreal • Viture • RayNeo)</span>
+          </button>
         </div>
       </header>
 
@@ -188,12 +197,15 @@ export function SpatialHolodeck() {
             onClick={() => setActiveTab('webxr')}
             className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'webxr'
-                ? 'border-violet-400 text-violet-400'
+                ? 'border-cyan-400 text-cyan-400'
                 : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
             }`}
           >
             <Glasses size={16} />
-            <span>WebXR Spatial Gateway</span>
+            <span>Smart AR Glasses & WebXR Gateway</span>
+            <span className="hidden sm:inline px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              Xreal • Viture • RayNeo
+            </span>
           </button>
         </div>
 
@@ -249,14 +261,14 @@ export function SpatialHolodeck() {
               </p>
             </div>
 
-            {/* Card 3: $0 Rule & Device Adaptation */}
+            {/* Card 3: Smart AR Glasses & WebXR */}
             <div className="p-5 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] space-y-2">
               <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-2">
-                <ShieldCheck size={15} className="text-cyan-400" />
-                Hardware-Adaptive Tiering ($0 Cost)
+                <Glasses size={15} className="text-cyan-400" />
+                Smart AR Glasses & True-Black Passthrough
               </div>
               <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-                OpenGuide is designed to run anywhere. If you are on an older laptop or battery saver, <strong className="text-[var(--color-text-primary)]">2D Lean Mode</strong> renders pure SVG with 0% GPU load. If you have a GPU, <strong className="text-[var(--color-text-primary)]">3D WebGL</strong> activates 60FPS orbit. And if you wear a Meta Quest or Apple Vision Pro, <strong className="text-[var(--color-text-primary)]">WebXR</strong> places the vectors directly in your room.
+                Plug your Xreal, Viture, or RayNeo smart glasses directly via USB-C DisplayPort Alt-Mode. In True-Black mode, the Micro-OLED panels emit zero photons on dark pixels, rendering the optical lenses 100% transparent while luminous 3D neural topologies float weightlessly in your physical room.
               </p>
             </div>
 
@@ -265,6 +277,14 @@ export function SpatialHolodeck() {
 
       </main>
 
+      {/* Smart AR Glasses Onboarding Modal */}
+      <ARGlassesGuideModal
+        isOpen={isARGlassesGuideOpen}
+        onClose={() => setIsARGlassesGuideOpen(false)}
+        onLaunchAR={() => setActiveTab('webxr')}
+      />
+
     </div>
   );
 }
+

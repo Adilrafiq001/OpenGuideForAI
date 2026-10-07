@@ -88,7 +88,9 @@ export function WebXRControls({ className = '' }: { className?: string }) {
   };
 
   const [isSimulatorActive, setIsSimulatorActive] = useState<boolean>(false);
-  const [simulatorProfile, setSimulatorProfile] = useState<'quest' | 'visionpro'>('quest');
+  const [simulatorProfile, setSimulatorProfile] = useState<'quest' | 'visionpro' | 'arglasses'>('arglasses');
+  const [arDeviceModel, setArDeviceModel] = useState<'xreal' | 'viture' | 'rayneo' | 'metaglass'>('xreal');
+  const [activeSpatialTrack, setActiveSpatialTrack] = useState<number>(0);
 
   // WebXR Native Session Request with honest cross-platform detection
   const requestXRSession = async (mode: 'immersive-vr' | 'immersive-ar') => {
@@ -132,11 +134,11 @@ export function WebXRControls({ className = '' }: { className?: string }) {
             <h3 className="text-sm font-bold text-[var(--color-text-primary)] tracking-tight flex items-center gap-2">
               Spatial Holodeck WebXR & AR Gateway
               <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-violet-500/20 text-violet-400 border border-violet-500/30">
-                6-DOF & Webcam AR
+                AR Glasses • 6-DOF • WebXR
               </span>
             </h3>
             <p className="text-xs text-[var(--color-text-secondary)]">
-              Immersive spatial computing for Meta Quest, Apple Vision Pro, and universal camera passthrough.
+              Optical Micro-OLED passthrough for Xreal, Viture, RayNeo, Rokid, Meta Quest, and Apple Vision Pro.
             </p>
           </div>
         </div>
@@ -149,7 +151,7 @@ export function WebXRControls({ className = '' }: { className?: string }) {
             </span>
           ) : (
             <span className="flex items-center gap-1.5 text-[var(--color-text-secondary)]">
-              <Laptop size={14} /> Screen Display (Ready for AR Passthrough)
+              <Laptop size={14} /> Screen Display (Ready for AR Glasses &amp; Passthrough)
             </span>
           )}
         </div>
@@ -227,14 +229,14 @@ export function WebXRControls({ className = '' }: { className?: string }) {
           <Layers size={16} className="text-emerald-400 group-hover:scale-110 transition-transform" />
         </button>
 
-        {/* Headset Simulator Mode (Preview Quest / Vision Pro without physical hardware) */}
+        {/* Headset Simulator Mode (Preview Quest / Vision Pro / AR Glasses) */}
         <button
           data-testid="xr-simulator-btn"
           onClick={() => {
             const next = !isSimulatorActive;
             setIsSimulatorActive(next);
             setStatusMsg(next 
-              ? `XR Headset Simulator Active: Testing ${simulatorProfile === 'quest' ? 'Meta Quest 3 (Dual 6-DOF Controllers)' : 'Apple Vision Pro (Gaze + Micro-Pinch)'} stereo viewport.`
+              ? `XR Simulator Active: Emulating ${simulatorProfile === 'arglasses' ? 'Smart AR Glasses (Xreal/Viture/RayNeo)' : simulatorProfile === 'quest' ? 'Meta Quest 3' : 'Apple Vision Pro'} optics.`
               : 'XR Headset Simulator deactivated.'
             );
           }}
@@ -247,10 +249,10 @@ export function WebXRControls({ className = '' }: { className?: string }) {
           <div className="space-y-1">
             <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
               <Glasses size={15} className="text-amber-400" />
-              <span>{isSimulatorActive ? 'Exit Simulator' : 'XR Headset Simulator'}</span>
+              <span>{isSimulatorActive ? 'Exit Simulator' : 'XR Spatial Simulator'}</span>
             </div>
             <div className="text-[11px] text-[var(--color-text-secondary)]">
-              Quest 3 &amp; Vision Pro Preview
+              AR Glasses, Quest &amp; Vision Pro
             </div>
           </div>
           <Activity size={16} className="text-amber-400 group-hover:scale-110 transition-transform" />
@@ -259,14 +261,22 @@ export function WebXRControls({ className = '' }: { className?: string }) {
 
       {/* Headset Simulator Interactive HUD */}
       {isSimulatorActive && (
-        <div data-testid="xr-simulator-viewport" className="p-5 rounded-2xl bg-black/90 border border-amber-500/40 flex flex-col gap-4 text-xs font-mono shadow-2xl">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/20 pb-3">
+        <div data-testid="xr-simulator-viewport" className="p-5 rounded-2xl bg-black border border-cyan-500/40 flex flex-col gap-4 text-xs font-mono shadow-2xl">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-              <span className="font-bold text-amber-400">HARDWARE EMULATION ACTIVE</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="font-bold text-cyan-400">SPATIAL OPTICAL EMULATION ACTIVE</span>
             </div>
             {/* Profile Selector */}
-            <div className="flex items-center p-0.5 rounded-xl bg-slate-900 border border-amber-500/30">
+            <div className="flex flex-wrap items-center p-0.5 rounded-xl bg-slate-900 border border-cyan-500/30 gap-1">
+              <button
+                type="button"
+                data-testid="profile-arglasses-btn"
+                onClick={() => setSimulatorProfile('arglasses')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${simulatorProfile === 'arglasses' ? 'bg-cyan-500 text-black font-bold' : 'text-slate-400'}`}
+              >
+                Smart AR Glasses (Xreal / Viture / RayNeo)
+              </button>
               <button
                 type="button"
                 data-testid="profile-quest-btn"
@@ -279,57 +289,162 @@ export function WebXRControls({ className = '' }: { className?: string }) {
                 type="button"
                 data-testid="profile-visionpro-btn"
                 onClick={() => setSimulatorProfile('visionpro')}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${simulatorProfile === 'visionpro' ? 'bg-amber-500 text-black font-bold' : 'text-slate-400'}`}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${simulatorProfile === 'visionpro' ? 'bg-violet-500 text-black font-bold' : 'text-slate-400'}`}
               >
                 Apple Vision Pro (Gaze)
               </button>
             </div>
           </div>
 
-          {/* Dual Eye Stereoscopic Simulation Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
-              <div className="text-[10px] text-slate-500 font-bold uppercase">LEFT EYE (Stereo IPD: 64mm)</div>
-              <div className="text-center text-slate-400 text-xs py-4">
-                {simulatorProfile === 'quest' ? (
-                  <div>
-                    <span className="text-violet-400">Left Controller: Tracked-Pointer</span>
-                    <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 0.0 • Thumbstick: (0.0, 0.0)</div>
+          {/* AR Glasses Micro-OLED Optical Waveguide Viewport */}
+          {simulatorProfile === 'arglasses' ? (
+            <div className="p-5 rounded-2xl bg-[#000000] border border-cyan-500/40 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[11px] font-bold">
+                    TRUE-BLACK MICRO-OLED WAVEGUIDE
                   </div>
-                ) : (
-                  <div>
-                    <span className="text-cyan-400">Gaze Vector (Left Fovea)</span>
-                    <div className="text-[10px] text-slate-500 mt-1">Ray: [0.02, -0.01, -1.00] • Pupil Dilation: 3.4mm</div>
-                  </div>
-                )}
-              </div>
-              <div className="text-[10px] text-emerald-400 flex items-center justify-between">
-                <span>FPS: 90.0</span>
-                <span>Pose: [X: 0.00, Y: 1.65m, Z: 0.00]</span>
-              </div>
-            </div>
+                  <span className="text-[11px] text-slate-400">
+                    Background #000000 is 100% transparent in physical birdbath optics. UI floats over reality.
+                  </span>
+                </div>
 
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
-              <div className="text-[10px] text-slate-500 font-bold uppercase">RIGHT EYE (Stereo IPD: 64mm)</div>
-              <div className="text-center text-slate-400 text-xs py-4">
-                {simulatorProfile === 'quest' ? (
-                  <div>
-                    <span className="text-violet-400">Right Controller: Ray Hit Active</span>
-                    <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 1.0 (Pinch) • Target: Node 04</div>
-                  </div>
-                ) : (
-                  <div>
-                    <span className="text-cyan-400">Pinch Gesture: Micro-Tap Detected</span>
-                    <div className="text-[10px] text-slate-500 mt-1">Thumb-Index Distance: 2.1mm • Target: Semantic Vector 04</div>
-                  </div>
-                )}
+                {/* Device Profile */}
+                <div className="flex items-center gap-1.5 text-[11px]">
+                  <span className="text-slate-500">Device Spec:</span>
+                  {(['xreal', 'viture', 'rayneo', 'metaglass'] as const).map(d => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => setArDeviceModel(d)}
+                      className={`px-2 py-0.5 rounded uppercase font-bold text-[10px] cursor-pointer ${
+                        arDeviceModel === d ? 'bg-cyan-400 text-black' : 'bg-slate-900 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="text-[10px] text-emerald-400 flex items-center justify-between">
-                <span>FOV: 110° Diag</span>
-                <span>Latency: ~11ms (Motion-to-Photon)</span>
+
+              {/* Holographic Floating Spatial HUD */}
+              <div className="relative p-6 rounded-xl border border-cyan-500/30 bg-slate-950/60 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col md:flex-row gap-6 items-start justify-between min-h-[220px]">
+                {/* Left: Spatial Head-Tracking Reticle & Device Telemetry */}
+                <div className="space-y-3 max-w-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-cyan-300 font-bold text-xs uppercase tracking-wider">
+                      {arDeviceModel === 'xreal' && 'Xreal Air 2 Ultra • 52° FOV • 120Hz'}
+                      {arDeviceModel === 'viture' && 'Viture Pro XR • 135" Micro-OLED • Electrochromic'}
+                      {arDeviceModel === 'rayneo' && 'RayNeo Air 2 • Sony Micro-OLED 600 Nits'}
+                      {arDeviceModel === 'metaglass' && 'Meta Glass / Ray-Ban • Audio HUD + Visual AI'}
+                    </span>
+                  </div>
+
+                  <p className="text-slate-300 text-xs leading-relaxed">
+                    3DOF Spatial Anchoring active. Floating virtual screen pinned at 3.0m depth. High-contrast neon vectors prevent optical glare while letting the physical environment remain 100% visible.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400 pt-1">
+                    <div className="p-2 rounded bg-slate-900 border border-slate-800">
+                      <span className="text-slate-500 block">Head Yaw / Pitch</span>
+                      <span className="text-emerald-400 font-bold">0.0° / +2.4° (Centered)</span>
+                    </div>
+                    <div className="p-2 rounded bg-slate-900 border border-slate-800">
+                      <span className="text-slate-500 block">Gesture Pointer</span>
+                      <span className="text-cyan-400 font-bold">Air Tap / Beam Ray</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Spatial Holographic Curriculum Quick Explorer */}
+                <div className="flex-1 w-full p-4 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-3">
+                  <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
+                    <span className="text-slate-300 font-bold">Spatial Curriculum Selector</span>
+                    <span className="text-cyan-400 font-mono text-[11px]">Track {activeSpatialTrack} of 7</span>
+                  </div>
+
+                  <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
+                    {[0, 1, 2, 3, 4, 5, 6, 7].map(tNum => (
+                      <button
+                        key={tNum}
+                        type="button"
+                        onClick={() => setActiveSpatialTrack(tNum)}
+                        className={`p-2 rounded-lg text-center font-bold text-xs cursor-pointer transition-all ${
+                          activeSpatialTrack === tNum 
+                            ? 'bg-cyan-400 text-black shadow-md shadow-cyan-400/30 scale-105' 
+                            : 'bg-slate-950 text-slate-400 hover:text-white hover:bg-slate-800'
+                        }`}
+                      >
+                        T{tNum}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-black/80 border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                    <div className="font-bold text-cyan-300">
+                      {activeSpatialTrack === 0 && 'Track 0: Absolute Zero — CPython WASM Sandbox & Vector Primitives'}
+                      {activeSpatialTrack === 1 && 'Track 1: Embeddings & Vectors — Cosine Distance & Semantic Projections'}
+                      {activeSpatialTrack === 2 && 'Track 2: Agents & RAG — ReAct Loop, Memory & Tool Calling Protocols'}
+                      {activeSpatialTrack === 3 && 'Track 3: Production Evals — LLM-as-a-Judge & OWASP Security Defenses'}
+                      {activeSpatialTrack === 4 && 'Track 4: Frontier Attention — Scaled Dot-Product & KV-Cache Dynamics'}
+                      {activeSpatialTrack === 5 && 'Track 5: Fine-Tuning & LoRA — Low-Rank Adaptations & QLoRA 4-bit Weights'}
+                      {activeSpatialTrack === 6 && 'Track 6: Production MLOps — vLLM PagedAttention & Speculative Decoding'}
+                      {activeSpatialTrack === 7 && 'Track 7: Generative Diffusion — DDPM Noise Schedules & CFG Mathematics'}
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      Air gesture pinch or companion tap immediately projects code into floating spatial editor.
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            /* Dual Eye Stereoscopic Simulation Grid for Quest & Vision Pro */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
+                <div className="text-[10px] text-slate-500 font-bold uppercase">LEFT EYE (Stereo IPD: 64mm)</div>
+                <div className="text-center text-slate-400 text-xs py-4">
+                  {simulatorProfile === 'quest' ? (
+                    <div>
+                      <span className="text-violet-400">Left Controller: Tracked-Pointer</span>
+                      <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 0.0 • Thumbstick: (0.0, 0.0)</div>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-cyan-400">Gaze Vector (Left Fovea)</span>
+                      <div className="text-[10px] text-slate-500 mt-1">Ray: [0.02, -0.01, -1.00] • Pupil Dilation: 3.4mm</div>
+                    </div>
+                  )}
+                </div>
+                <div className="text-[10px] text-emerald-400 flex items-center justify-between">
+                  <span>FPS: 90.0</span>
+                  <span>Pose: [X: 0.00, Y: 1.65m, Z: 0.00]</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
+                <div className="text-[10px] text-slate-500 font-bold uppercase">RIGHT EYE (Stereo IPD: 64mm)</div>
+                <div className="text-center text-slate-400 text-xs py-4">
+                  {simulatorProfile === 'quest' ? (
+                    <div>
+                      <span className="text-violet-400">Right Controller: Ray Hit Active</span>
+                      <div className="text-[10px] text-slate-500 mt-1">Grip: 0.0 • Trigger: 1.0 (Pinch) • Target: Node 04</div>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-cyan-400">Pinch Gesture: Micro-Tap Detected</span>
+                      <div className="text-[10px] text-slate-500 mt-1">Thumb-Index Distance: 2.1mm • Target: Semantic Vector 04</div>
+                    </div>
+                  )}
+                </div>
+                <div className="text-[10px] text-emerald-400 flex items-center justify-between">
+                  <span>FOV: 110° Diag</span>
+                  <span>Latency: ~11ms (Motion-to-Photon)</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

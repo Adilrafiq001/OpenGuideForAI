@@ -103,17 +103,17 @@ export function StudioInteractiveDemoModal({
     },
     {
       id: 'tracks-flow',
-      badge: '5 Tracks • 45 Labs',
+      badge: '8 Tracks • 57 Labs',
       badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
-      title: '2. The 5-Track Sovereign AI Curriculum',
-      subtitle: 'From Absolute Zero to Attention heads, KV-Cache & Autograd',
+      title: '2. The 8-Track Sovereign AI Curriculum',
+      subtitle: 'From Absolute Zero to Attention heads, LoRA, vLLM & Generative Diffusion',
       icon: Layers,
-      overview: 'A continuous, unbroken learning path designed so a high schooler or seasoned developer can master AI systems engineering from scratch.',
+      overview: 'A continuous, unbroken learning path designed so anyone can master AI systems engineering from scratch to frontier production.',
       steps: [
         {
           number: '01',
           stepTitle: 'Track 0: Absolute Zero (9 Labs)',
-          detail: 'Python variables, loops, tensors, and Byte-Pair Encoding (BPE) tokenizers using warm kitchen & playground analogies.'
+          detail: 'Python variables, loops, tensors, and Byte-Pair Encoding (BPE) tokenizers using warm first-principles analogies.'
         },
         {
           number: '02',
@@ -132,12 +132,27 @@ export function StudioInteractiveDemoModal({
         },
         {
           number: '05',
-          stepTitle: 'Track 4: Frontier Systems (9 Labs)',
-          detail: 'Scaled dot-product attention Softmax(QK^T/√d)V, RoPE rotary embeddings, KV-cache dynamics, and DPO mathematical loss.'
+          stepTitle: 'Track 4: Frontier Attention (9 Labs)',
+          detail: 'Scaled dot-product attention Softmax(QK^T/√d)V, RoPE rotary embeddings, and KV-cache dynamics.'
+        },
+        {
+          number: '06',
+          stepTitle: 'Track 5: Fine-Tuning & LoRA (6 Labs)',
+          detail: 'Low-Rank Adaptation ΔW = B · A, QLoRA 4-bit NormalFloat quantization, and Direct Preference Optimization (DPO).'
+        },
+        {
+          number: '07',
+          stepTitle: 'Track 6: Production MLOps (3 Labs)',
+          detail: 'High-throughput vLLM serving, PagedAttention virtual memory block allocation, and speculative decoding loops.'
+        },
+        {
+          number: '08',
+          stepTitle: 'Track 7: Generative Diffusion (3 Labs)',
+          detail: 'Denoising Diffusion Probabilistic Models (DDPM), Classifier-Free Guidance (CFG), and Diffusion Transformers (DiT).'
         }
       ],
-      technicalPill: '45 Interactive Labs • 100% Client-Side Evaluation • Automated CI Gates',
-      actionText: 'Browse All 5 Tracks →',
+      technicalPill: '57 Interactive Labs • 100% Client-Side Evaluation • Automated CI Gates',
+      actionText: 'Browse All 8 Tracks →',
       actionRoute: '/#curriculum'
     },
     {

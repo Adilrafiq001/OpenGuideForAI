@@ -20,7 +20,9 @@ import {
   Compass,
   Brain,
   Download,
-  Search
+  Search,
+  Sparkles,
+  Boxes
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/useLanguageStore';
@@ -141,6 +143,36 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       icon: Brain,
       path: '/track/4/intro',
       color: '#f43f5e'
+    },
+    {
+      id: 'track5',
+      num: '5',
+      title: 'Fine-Tuning, LoRA & Adaptation',
+      badge: 'LoRA & DPO',
+      desc: 'Rank decomposition, QLoRA 4-bit NormalFloat & alignment',
+      icon: Sparkles,
+      path: '/track/5/intro',
+      color: '#ec4899'
+    },
+    {
+      id: 'track6',
+      num: '6',
+      title: 'Production MLOps & Inference',
+      badge: 'vLLM Systems',
+      desc: 'PagedAttention block paging, KV-cache & speculative decoding',
+      icon: Zap,
+      path: '/track/6/intro',
+      color: '#14b8a6'
+    },
+    {
+      id: 'track7',
+      num: '7',
+      title: 'Generative Diffusion & ViTs',
+      badge: 'Diffusion & ViT',
+      desc: 'DDPM noise scheduling, CFG vectors & Vision Transformers',
+      icon: Boxes,
+      path: '/track/7/intro',
+      color: '#d946ef'
     }
   ];
 

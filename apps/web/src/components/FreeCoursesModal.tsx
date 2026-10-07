@@ -1430,7 +1430,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     {/* Security Hardened YouTube Player */}
                     <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black/90 border border-[var(--color-border)] shadow-xl">
                       <iframe
-                        src={`https://www.youtube.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0`}
+                        src={`https://www.youtube-nocookie.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0&enablejsapi=1`}
                         title={currentLecture.title}
                         className="absolute inset-0 w-full h-full border-0"
                         referrerPolicy="no-referrer-when-downgrade"

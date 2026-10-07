@@ -49,8 +49,8 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     title: 'How Bluee Can Help You Learn & Build',
     category: 'conversational',
     summary: 'A quick overview of Bluee’s capabilities and how to navigate OpenGuide.',
-    explanation: 'You can ask me to:\n• Explain complex math (Attention Softmax, Cosine Similarity, RoPE, LoRA low-rank math)\n• Walk through any lab across Track 0 to Track 4\n• Debug Python code executing in the Pyodide WebAssembly worker\n• Explain OpenGuide’s architecture ($0 compute, Web Workers, IndexedDB, WebGPU)\n• Provide keyboard shortcuts (Ctrl+Enter to run, Alt+X for X-Ray lens)\n• Suggest next steps in your learning path.',
-    takeaway: 'Try asking: "How does attention work?" or "Explain LoRA fine-tuning".'
+    explanation: 'You can ask me to:\n• Explain complex math (Attention Softmax, Cosine Similarity, RoPE, LoRA low-rank math, DDPM diffusion)\n• Walk through any lab across Track 0 to Track 7 (all 57 interactive labs)\n• Debug Python code executing in the Pyodide WebAssembly worker\n• Explain OpenGuide’s architecture ($0 compute, Web Workers, IndexedDB, WebGPU)\n• Provide keyboard shortcuts (Ctrl+Enter to run, Alt+X for X-Ray lens)\n• Suggest next steps in your learning path.',
+    takeaway: 'Try asking: "How does attention work?" or "Explain LoRA fine-tuning" or "How does DDPM diffusion work?".'
   },
 
   // ---------------------------------------------------------------------------
@@ -181,11 +181,11 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     id: 'curriculum-overview',
     keywords: ['curriculum', 'tracks', 'all tracks', 'syllabus', 'roadmap', 'what to learn', 'labs count'],
-    title: 'The OpenGuide 5-Track Mastery Curriculum (45 Labs)',
+    title: 'The OpenGuide 8-Track Mastery Curriculum (57 Labs)',
     category: 'curriculum',
-    summary: '5 progressive tracks spanning 45 hands-on labs from CPython WASM to Frontier Attention Mechanics.',
-    explanation: '• Track 0: Absolute Zero (9 Labs) - CPython WASM, vectors, BPE tokenization\n• Track 1: Vector Spaces (9 Labs) - High-dimensional geometry, Cosine similarity, Top-K search\n• Track 2: RAG & Agents (9 Labs) - Sliding chunking, ReAct state loops, MCP Protocol, multi-agent swarms\n• Track 3: Evals & Guardrails (9 Labs) - Synthetic fuzzing, OWASP Top 10, canary tokens, WebGPU\n• Track 4: Frontier Intelligence (9 Labs) - QKV Attention mechanics, RoPE, KV Cache, LoRA, Reasoning & MCP.',
-    takeaway: 'From absolute raw compute to autonomous agents and frontier transformer mechanics.'
+    summary: '8 progressive tracks spanning 57 hands-on labs from CPython WASM to Generative Diffusion & Production MLOps.',
+    explanation: '• Track 0: Absolute Zero (9 Labs) - CPython WASM, vectors, BPE tokenization\n• Track 1: Vector Spaces (9 Labs) - High-dimensional geometry, Cosine similarity, Top-K search\n• Track 2: RAG & Agents (9 Labs) - Sliding chunking, ReAct state loops, MCP Protocol, multi-agent swarms\n• Track 3: Evals & Guardrails (9 Labs) - Synthetic fuzzing, OWASP Top 10, canary tokens, WebGPU\n• Track 4: Frontier Attention (9 Labs) - QKV Attention mechanics, RoPE, KV Cache, LoRA, Reasoning & MCP\n• Track 5: Fine-Tuning & LoRA (6 Labs) - Low-rank updates, weight merging, SVD, NF4, DPO loss\n• Track 6: Production MLOps (3 Labs) - High-throughput vLLM serving, PagedAttention block paging, speculative decoding\n• Track 7: Generative Diffusion (3 Labs) - DDPM closed-form sampling, CFG vectors, Vision Transformers (ViT).',
+    takeaway: 'From absolute raw compute to autonomous agents, LoRA adaptation, and generative diffusion models.'
   },
   {
     id: 'track-0-absolute-zero',

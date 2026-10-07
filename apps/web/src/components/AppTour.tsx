@@ -43,7 +43,7 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
       {
         element: '#curriculum',
         popover: {
-          title: '5 Core Tracks • 45 Interactive Labs',
+          title: '8 Core Tracks • 57 Interactive Labs',
           description: 'Code Python directly in your mobile browser with CPython 3.12 WebAssembly (Pyodide). Features our 20-key touch-friendly mobile accessory bar!'
         }
       },
@@ -114,7 +114,7 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
       {
         element: '#curriculum',
         popover: {
-          title: '5 Core Tracks • 45 Interactive Labs',
+          title: '8 Core Tracks • 57 Interactive Labs',
           description: 'Scaffolded real-world challenges executed in-browser via CPython 3.12 WebAssembly (Pyodide v0.26). Automated test suites grade your code with 0ms server latency.'
         }
       },

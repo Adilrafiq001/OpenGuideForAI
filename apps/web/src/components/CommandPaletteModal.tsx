@@ -16,13 +16,18 @@ import {
   BookOpen,
   Workflow,
   Zap,
-  Target
+  Target,
+  Sparkles,
+  Boxes
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
 import { track4 } from '../data/track4';
+import { track5 } from '../data/track5';
+import { track6 } from '../data/track6';
+import { track7 } from '../data/track7';
 import { THEMES_DATA } from '../data/themesData';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, type SupportedLanguage } from '../store/useLanguageStore';
@@ -94,6 +99,9 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
       { track: track2, id: '2', icon: Cpu, categoryLabel: 'RAG & Agents' },
       { track: track3, id: '3', icon: ShieldCheck, categoryLabel: 'Evals & Security' },
       { track: track4, id: '4', icon: Brain, categoryLabel: 'Frontier Attention' },
+      { track: track5, id: '5', icon: Sparkles, categoryLabel: 'Fine-Tuning & LoRA' },
+      { track: track6, id: '6', icon: Zap, categoryLabel: 'Production MLOps' },
+      { track: track7, id: '7', icon: Boxes, categoryLabel: 'Generative Diffusion' },
     ];
 
     trackConfigs.forEach(({ track, id, icon, categoryLabel }) => {
@@ -296,7 +304,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
                 value={query}
                 onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
                 onKeyDown={handleKeyDown}
-                placeholder="Search 45 labs, 24 themes, 12 languages, tools..."
+                placeholder="Search 57 labs, 24 themes, 12 languages, tools..."
                 className="w-full bg-transparent text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/60 focus:outline-none font-medium"
                 data-testid="command-palette-input"
               />
@@ -362,10 +370,10 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
           </div>
 
           {/* Footer Navigation Bar */}
-          <div className="px-4 py-2.5 border-t border-[var(--color-border)] bg-[var(--color-primary)]/40 flex items-center justify-between text-[10px] font-mono text-[var(--color-text-secondary)] shrink-0">
+          <div data-testid="command-palette-footer" className="px-4 py-2.5 border-t border-[var(--color-border)] bg-[var(--color-primary)]/40 flex items-center justify-between text-[10px] font-mono text-[var(--color-text-secondary)] shrink-0">
             <span className="hidden sm:inline">↑↓ Navigate • Enter Select • Esc Close</span>
             <span className="sm:hidden">Tap any result</span>
-            <span className="text-[var(--color-accent)] font-semibold">45 Labs • 24 Themes • 12 Languages</span>
+            <span className="text-[var(--color-accent)] font-semibold">57 Labs • 24 Themes • 12 Languages</span>
           </div>
         </motion.div>
       </div>

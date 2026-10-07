@@ -421,8 +421,9 @@ export function PortfolioPage() {
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 overflow-x-hidden">
         
         {/* Hero Banner */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-8 border-b border-[var(--color-border)] no-print">
-          <div className="space-y-3">
+        {/* Hero Banner */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 pb-8 border-b border-[var(--color-border)] no-print">
+          <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/30 text-[var(--color-accent)] text-xs font-mono font-bold uppercase tracking-wider">
               <Award size={14} />
               <span>Verifiable Competency Ledger</span>
@@ -430,115 +431,188 @@ export function PortfolioPage() {
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-[var(--color-text-primary)]">
               AI Engineering Credentials & Portfolio.
             </h1>
-            <p className="text-sm md:text-base text-[var(--color-text-secondary)] max-w-3xl leading-relaxed">
+            <p className="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed">
               Every lab solved in OpenGuide validates your execution against real Python WebAssembly kernels and unit test harnesses. Your accomplishments are recorded locally and sealed with a deterministic SHA-256 cryptographic verification digest.
             </p>
           </div>
 
-          {/* Quick Sandbox Controls & Durability Ledger */}
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              onClick={() => setShowGistSyncModal(true)}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-cyan-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Sync encrypted progress to your private GitHub Gist"
-            >
-              <Cloud size={13} className="text-cyan-400" />
-              <span>Encrypted Gist Sync</span>
-            </button>
+          {/* Quick Ledger Status Card */}
+          <div className="p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-center gap-4 shrink-0 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
+                Verification Status
+              </div>
+              <div className="text-sm font-bold text-[var(--color-text-primary)] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                <span>SHA-256 Validated</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <button
-              onClick={handleExportW3CCredential}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-violet-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Download official W3C Verifiable Credential (JSON-LD)"
-            >
-              <ShieldCheck size={13} className="text-violet-400" />
-              <span>W3C Credential (.jsonld)</span>
-            </button>
+        {/* LEDGER COMMAND & PORTABILITY SUITE */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 no-print">
+          {/* Deck 1: Sovereign Portability & Storage */}
+          <div className="p-5 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col justify-between space-y-4 shadow-sm hover:border-[var(--color-accent)]/50 transition-colors">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                  <Cloud size={14} />
+                </div>
+                <h2 className="text-sm font-bold text-[var(--color-text-primary)]">
+                  Sovereign Portability
+                </h2>
+              </div>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Local-first data ownership. Export verifiable cryptographic proofs or backup to private encrypted GitHub Gists.
+              </p>
+            </div>
 
-            <button
-              onClick={handleCopyBadgeMarkdown}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Copy verified badge markdown for your GitHub Profile README"
-            >
-              <Share2 size={13} className="text-emerald-400" />
-              <span>{copiedBadge ? 'Badge Copied!' : 'GitHub Badge'}</span>
-            </button>
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
+              <button
+                onClick={() => setShowGistSyncModal(true)}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-cyan-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Sync encrypted progress to your private GitHub Gist"
+              >
+                <Cloud size={13} className="text-cyan-400" />
+                <span>Encrypted Gist Sync</span>
+              </button>
 
-            <button
-              onClick={handleShareToTwitter}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-sky-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Share verifiable proof-of-work on X / Twitter"
-              data-testid="share-twitter-btn"
-            >
-              <Share2 size={13} className="text-sky-400" />
-              <span>Share on X</span>
-            </button>
+              <button
+                onClick={handleExportW3CCredential}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-violet-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Download official W3C Verifiable Credential (JSON-LD)"
+              >
+                <ShieldCheck size={13} className="text-violet-400" />
+                <span>W3C Credential (.jsonld)</span>
+              </button>
 
-            <button
-              onClick={handleShareToLinkedIn}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-blue-500 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Share verifiable credential on LinkedIn"
-              data-testid="share-linkedin-btn"
-            >
-              <Share2 size={13} className="text-blue-500" />
-              <span>LinkedIn</span>
-            </button>
+              <button
+                onClick={handleExportBackup}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Download your cryptographic learning ledger as a JSON file"
+              >
+                <Download size={13} className="text-[var(--color-accent)]" />
+                <span>Export Ledger (.json)</span>
+              </button>
 
-            <button
-              onClick={() => {
-                const sampleLesson = track0.modules[0].lessons[0];
-                const nb = generateJupyterNotebook(sampleLesson.title, sampleLesson.subtitle || sampleLesson.content, sampleLesson.solutionCode || sampleLesson.initialCode, sampleLesson.testCode);
-                downloadFile(nb, 'openguide_sovereign_ai_curriculum.ipynb', 'application/x-ipynb+json');
-              }}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-amber-400 text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Download sovereign curriculum starter as a Jupyter Notebook (.ipynb)"
-              data-testid="portfolio-export-ipynb-btn"
-            >
-              <Download size={13} className="text-amber-400" />
-              <span>Jupyter (.ipynb)</span>
-            </button>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Restore completed labs from a previous JSON backup"
+              >
+                <Upload size={13} className="text-[var(--color-accent)]" />
+                <span>Import Backup</span>
+              </button>
 
-            <button
-              onClick={handleExportBackup}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Download your cryptographic learning ledger as a JSON file"
-            >
-              <Download size={13} className="text-[var(--color-accent)]" />
-              <span>Export Ledger (.json)</span>
-            </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,application/json"
+                className="hidden"
+                onChange={handleImportBackup}
+              />
 
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[11px] font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Restore completed labs from a previous JSON backup"
-            >
-              <Upload size={13} className="text-[var(--color-accent)]" />
-              <span>Import Backup</span>
-            </button>
+              <button
+                onClick={() => {
+                  const sampleLesson = track0.modules[0].lessons[0];
+                  const nb = generateJupyterNotebook(sampleLesson.title, sampleLesson.subtitle || sampleLesson.content, sampleLesson.solutionCode || sampleLesson.initialCode, sampleLesson.testCode);
+                  downloadFile(nb, 'openguide_sovereign_ai_curriculum.ipynb', 'application/x-ipynb+json');
+                }}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-amber-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Download sovereign curriculum starter as a Jupyter Notebook (.ipynb)"
+                data-testid="portfolio-export-ipynb-btn"
+              >
+                <Download size={13} className="text-amber-400" />
+                <span>Jupyter (.ipynb)</span>
+              </button>
+            </div>
+          </div>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json,application/json"
-              className="hidden"
-              onChange={handleImportBackup}
-            />
+          {/* Deck 2: Public Proof & Social Showcase */}
+          <div className="p-5 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col justify-between space-y-4 shadow-sm hover:border-[var(--color-accent)]/50 transition-colors">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                  <Share2 size={14} />
+                </div>
+                <h2 className="text-sm font-bold text-[var(--color-text-primary)]">
+                  Public Proof & Badges
+                </h2>
+              </div>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Broadcast your authentic proof-of-work, cryptographic signature, and curriculum milestone credentials to GitHub, X, or LinkedIn.
+              </p>
+            </div>
 
-            <button
-              onClick={handleSimulateCompletion}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/50 text-[11px] font-mono text-emerald-400 transition-all cursor-pointer"
-              title="Unlock all curriculum labs for certificate testing"
-            >
-              Simulate 100% Complete
-            </button>
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
+              <button
+                onClick={handleCopyBadgeMarkdown}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-emerald-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Copy verified badge markdown for your GitHub Profile README"
+              >
+                <Share2 size={13} className="text-emerald-400" />
+                <span>{copiedBadge ? 'Badge Copied!' : 'GitHub Badge'}</span>
+              </button>
 
-            <button
-              onClick={handleResetProgress}
-              className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-rose-500/50 text-[11px] font-mono text-rose-400 transition-all cursor-pointer"
-              title="Reset progress to 0"
-            >
-              Reset
-            </button>
+              <button
+                onClick={handleShareToTwitter}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-sky-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Share verifiable proof-of-work on X / Twitter"
+                data-testid="share-twitter-btn"
+              >
+                <Share2 size={13} className="text-sky-400" />
+                <span>Share on X</span>
+              </button>
+
+              <button
+                onClick={handleShareToLinkedIn}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-blue-500 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                title="Share verifiable credential on LinkedIn"
+                data-testid="share-linkedin-btn"
+              >
+                <Share2 size={13} className="text-blue-500" />
+                <span>LinkedIn</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Deck 3: Developer Testing Sandbox */}
+          <div className="p-5 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] flex flex-col justify-between space-y-4 shadow-sm hover:border-[var(--color-accent)]/50 transition-colors">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                  <Terminal size={14} />
+                </div>
+                <h2 className="text-sm font-bold text-[var(--color-text-primary)]">
+                  Sandbox Testing Suite
+                </h2>
+              </div>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                Developer diagnostics for verifying completed certificate states, SHA-256 rendering, and local-first persistence recovery.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
+              <button
+                onClick={handleSimulateCompletion}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono text-emerald-400 transition-all cursor-pointer shadow-xs"
+                title="Unlock all curriculum labs for certificate testing"
+              >
+                Simulate 100% Complete
+              </button>
+
+              <button
+                onClick={handleResetProgress}
+                className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-rose-500/30 hover:border-rose-400 text-xs font-mono text-rose-400 transition-all cursor-pointer shadow-xs"
+                title="Reset progress to 0"
+              >
+                Reset Progress
+              </button>
+            </div>
           </div>
         </div>
 
@@ -607,7 +681,7 @@ export function PortfolioPage() {
           </div>
         </div>
 
-        {/* SECTION: 4 Master Milestone Track Badges */}
+        {/* SECTION: 8 Master Milestone Track Badges */}
         <div className="space-y-6 no-print">
           <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">
