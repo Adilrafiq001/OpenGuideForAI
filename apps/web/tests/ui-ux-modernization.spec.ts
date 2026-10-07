@@ -294,11 +294,16 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
   test('09. App-Wide Spatial AR Glasses Mode toggles floating SpaceWalker HUD, virtual keyboard, and curvature across whole app', async ({ page }) => {
     await page.goto('/');
 
-    // Verify spatial mode button exists in header
+    // Verify unified spatial & holodeck group button exists in header
+    const spatialGroupBtn = page.locator('[data-testid="header-spatial-group-btn"]');
+    await expect(spatialGroupBtn).toBeVisible();
+
+    // Click header group button to open dropdown
+    await spatialGroupBtn.click();
+
+    // Verify spatial mode item in dropdown and click it
     const spatialHeaderBtn = page.locator('[data-testid="header-spatial-mode-btn"]');
     await expect(spatialHeaderBtn).toBeVisible();
-
-    // Click header button to engage App-Wide Spatial Mode
     await spatialHeaderBtn.click();
 
     // Verify App-Wide Spatial HUD is active
@@ -323,6 +328,18 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     // Verify Virtual Keyboard is visible
     const virtualKeyboard = page.locator('[data-testid="virtual-spatial-keyboard"]');
     await expect(virtualKeyboard).toBeVisible();
+
+    // Test Flat-Surface Desk Snap Mode
+    const deskSnapBtn = page.locator('[data-testid="keyboard-flat-surface-btn"]');
+    await expect(deskSnapBtn).toBeVisible();
+    await deskSnapBtn.click();
+    await expect(page.locator('text=Tabletop Desk Plane Active')).toBeVisible();
+
+    // Switch back to Mid-Air Mode
+    const midAirBtn = page.locator('[data-testid="keyboard-midair-btn"]');
+    await expect(midAirBtn).toBeVisible();
+    await midAirBtn.click();
+    await expect(page.locator('text=Mid-Air Floating Mode')).toBeVisible();
 
     // Type letters on the virtual spatial keyboard
     await page.locator('button:has-text("O")').first().click();

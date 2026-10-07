@@ -208,6 +208,14 @@ class HandGestureEngine {
     this.ctx = null;
     this.onGestureCallback = null;
   }
+
+  public getVideoElement(): HTMLVideoElement | null {
+    return this.videoEl;
+  }
+
+  public getCanvasElement(): HTMLCanvasElement | null {
+    return this.canvasEl;
+  }
 }
 
 export const handGestureEngine = new HandGestureEngine();

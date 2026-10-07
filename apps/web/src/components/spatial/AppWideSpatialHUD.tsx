@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Glasses, 
@@ -6,7 +6,8 @@ import {
   Hand, 
   RotateCcw, 
   Sliders, 
-  X
+  Camera,
+  X 
 } from 'lucide-react';
 import { useSpatialStore, type SpatialPassthroughMode } from '../../store/useSpatialStore';
 import { handGestureEngine } from '../../utils/handGestureEngine';
@@ -49,7 +50,9 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
   } = useSpatialStore();
 
   const [isControlsExpanded, setIsControlsExpanded] = useState(false);
+  const [showCameraPip, setShowCameraPip] = useState(true);
   const [_cameraError, setCameraError] = useState<string | null>(null);
+  const wasPinchingRef = useRef(false);
 
   // Global hotkeys for AR Glasses wearers
   useEffect(() => {
@@ -98,6 +101,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
   useEffect(() => {
     if (!isSpatialModeActive || !isHandTrackingEnabled) {
       handGestureEngine.stopWebcamHandTracking();
+      wasPinchingRef.current = false;
       return;
     }
 
@@ -106,14 +110,17 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       setPinching(frame.isPinching);
       setDetectedGesture(frame.gesture);
 
-      // Virtual primary click dispatch on pinch trigger
-      if (frame.isPinching) {
+      // Debounced single-event click dispatch on pinch trigger (rising edge only)
+      if (frame.isPinching && !wasPinchingRef.current) {
+        wasPinchingRef.current = true;
         const clientX = (frame.cursorX / 100) * window.innerWidth;
         const clientY = (frame.cursorY / 100) * window.innerHeight;
         const targetEl = document.elementFromPoint(clientX, clientY);
         if (targetEl && (targetEl as HTMLElement).click) {
           (targetEl as HTMLElement).click();
         }
+      } else if (!frame.isPinching) {
+        wasPinchingRef.current = false;
       }
     }).then((res) => {
       if (!res.success) {
@@ -125,6 +132,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
 
     return () => {
       handGestureEngine.stopWebcamHandTracking();
+      wasPinchingRef.current = false;
     };
   }, [isSpatialModeActive, isHandTrackingEnabled, setCursorPos, setPinching, setDetectedGesture]);
 
@@ -160,8 +168,8 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       }}
     >
       {/* SpaceWalker Top Control Bar */}
-      <header className="fixed top-0 inset-x-0 z-[220] p-3 flex flex-wrap items-center justify-between gap-3 bg-black/85 backdrop-blur-xl border-b border-cyan-500/30 text-xs font-mono shadow-2xl">
-        <div className="flex items-center gap-3">
+      <header className="fixed top-0 inset-x-0 z-[220] px-4 py-2.5 flex items-center justify-between gap-3 bg-black/95 backdrop-blur-2xl border-b border-cyan-500/30 text-xs font-mono shadow-2xl overflow-x-auto whitespace-nowrap">
+        <div className="flex items-center gap-3 shrink-0">
           <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
             <Glasses size={16} />
           </div>
@@ -179,7 +187,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
         </div>
 
         {/* Quick Actions Bar */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Recenter 3DOF button */}
           <button
             onClick={resetCenter}
@@ -363,24 +371,58 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
         </div>
       )}
 
-      {/* 3D Floating Spatial Stage Container */}
-      <div 
-        className="w-full min-h-screen pt-16 flex items-center justify-center perspective-[1200px]"
-        style={{
-          perspective: '1200px',
-        }}
-      >
-        <div
-          data-testid="spatial-canvas-stage"
-          style={{
-            transform: `rotateY(${rotateYDeg}deg) rotateX(${rotateXDeg}deg) scale(${1 / (virtualDistance * 0.4)})`,
-            transformStyle: 'preserve-3d',
-            transition: spatialAnchorMode === 'smooth-follow' ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
-          }}
-          className="w-full max-w-7xl mx-auto rounded-[2.5rem] border border-cyan-500/30 shadow-[0_0_80px_rgba(6,182,212,0.18)] overflow-hidden bg-transparent"
+      {/* Live Camera Hand Tracking Monitor PIP (Bottom-Right Floating) */}
+      {isHandTrackingEnabled && showCameraPip && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.85, y: 20 }}
+          className="fixed bottom-6 right-6 z-[240] p-3 rounded-2xl bg-black/90 border border-emerald-500/50 shadow-2xl backdrop-blur-xl text-xs font-mono max-w-xs space-y-2 pointer-events-auto"
         >
-          {children}
-        </div>
+          <div className="flex items-center justify-between border-b border-emerald-500/30 pb-1.5">
+            <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+              <Camera size={13} className="animate-pulse" />
+              <span>HAND CV MONITOR</span>
+            </div>
+            <button
+              onClick={() => setShowCameraPip(false)}
+              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
+              aria-label="Hide camera monitor"
+            >
+              <X size={12} />
+            </button>
+          </div>
+          <div className="space-y-1 text-[11px]">
+            <div className="flex items-center justify-between text-slate-300">
+              <span>Status:</span>
+              <span className="font-bold text-emerald-300">
+                {isPinching ? 'PINCH CLICK ACTIVE' : detectedGesture === 'palm' ? 'PALM SCROLL' : 'TRACKING RETICLE'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-slate-400 text-[10px]">
+              <span>Laser Coordinates:</span>
+              <span className="text-cyan-400">{Math.round(cursorPos.x)}%, {Math.round(cursorPos.y)}%</span>
+            </div>
+            <p className="text-[10px] text-slate-500 pt-1 leading-snug">
+              Point index finger towards buttons. Pinch thumb & index together to trigger primary click.
+            </p>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Razor-Sharp 1:1 Spatial Workspace Container - Zero Font Rasterization Blur */}
+      <div 
+        data-testid="spatial-canvas-stage"
+        style={{
+          transform: spatialAnchorMode === 'smooth-follow'
+            ? `translate3d(${rotateYDeg * 2}px, ${rotateXDeg * 2}px, 0)`
+            : 'none',
+          transition: spatialAnchorMode === 'smooth-follow' ? 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+          willChange: 'transform',
+        }}
+        className="w-full min-h-screen pt-16 bg-transparent"
+      >
+        {children}
       </div>
 
       {/* On-Demand Virtual Keyboard Overlay */}

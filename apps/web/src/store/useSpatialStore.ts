@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 export type SpatialAnchorMode = 'fixed-pin' | 'smooth-follow' | 'body-anchor';
 export type SpatialPassthroughMode = 'true-black' | 'camera-ar' | 'cinema-dark';
 export type ARDeviceProfile = 'universal' | 'viture' | 'xreal' | 'rayneo' | 'rokid' | 'quest' | 'visionpro';
+export type KeyboardPlacementMode = 'mid-air' | 'flat-surface';
 
 interface SpatialState {
   // Global Mode
@@ -25,6 +26,8 @@ interface SpatialState {
   isHandTrackingEnabled: boolean;
   isVirtualLaserActive: boolean;
   isVirtualKeyboardOpen: boolean;
+  keyboardPlacementMode: KeyboardPlacementMode;
+  keyboardTiltAngle: number;
   virtualKeyboardText: string;
   cursorPos: { x: number; y: number };
   isPinching: boolean;
@@ -44,6 +47,8 @@ interface SpatialState {
   setHandTrackingEnabled: (enabled: boolean) => void;
   toggleVirtualKeyboard: () => void;
   setVirtualKeyboardOpen: (open: boolean) => void;
+  setKeyboardPlacementMode: (mode: KeyboardPlacementMode) => void;
+  setKeyboardTiltAngle: (angle: number) => void;
   setVirtualKeyboardText: (text: string) => void;
   appendVirtualKeyboardChar: (char: string) => void;
   deleteVirtualKeyboardChar: () => void;
@@ -71,6 +76,8 @@ export const useSpatialStore = create<SpatialState>()(
       isHandTrackingEnabled: false,
       isVirtualLaserActive: true,
       isVirtualKeyboardOpen: false,
+      keyboardPlacementMode: 'mid-air',
+      keyboardTiltAngle: 55,
       virtualKeyboardText: '',
       cursorPos: { x: 50, y: 50 },
       isPinching: false,
@@ -98,6 +105,8 @@ export const useSpatialStore = create<SpatialState>()(
 
       toggleVirtualKeyboard: () => set((state) => ({ isVirtualKeyboardOpen: !state.isVirtualKeyboardOpen })),
       setVirtualKeyboardOpen: (open) => set({ isVirtualKeyboardOpen: open }),
+      setKeyboardPlacementMode: (mode) => set({ keyboardPlacementMode: mode }),
+      setKeyboardTiltAngle: (angle) => set({ keyboardTiltAngle: angle }),
       setVirtualKeyboardText: (text) => set({ virtualKeyboardText: text }),
       appendVirtualKeyboardChar: (char) => set((state) => ({ virtualKeyboardText: state.virtualKeyboardText + char })),
       deleteVirtualKeyboardChar: () => set((state) => ({ virtualKeyboardText: state.virtualKeyboardText.slice(0, -1) })),

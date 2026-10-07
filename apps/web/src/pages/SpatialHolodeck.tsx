@@ -224,7 +224,22 @@ export function SpatialHolodeck() {
           )}
 
           {activeTab === 'webxr' && (
-            <div id="tabpanel-webxr" role="tabpanel" aria-labelledby="tab-webxr" className="space-y-4">
+            <div id="tabpanel-webxr" role="tabpanel" aria-labelledby="tab-webxr" className="space-y-6">
+              {/* Live Interactive 3D Semantic Vector Space embedded within the WebXR Gateway */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-4 py-2 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 text-xs font-mono">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                    <span className="font-bold text-cyan-300">Live Spatial Vector Canvas</span>
+                    <span className="text-[10px] text-slate-400 hidden sm:inline">• Orbit & Calibrate with AR Glasses</span>
+                  </div>
+                  <span className="text-[10px] text-cyan-400 font-semibold bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
+                    Interactive 3D / 2D
+                  </span>
+                </div>
+                <VectorSpace3D force2D={graphicsTier === '2d-lean'} />
+              </div>
+
               <WebXRControls />
             </div>
           )}

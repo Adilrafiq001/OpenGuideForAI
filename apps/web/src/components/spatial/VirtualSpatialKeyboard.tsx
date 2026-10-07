@@ -34,7 +34,11 @@ export function VirtualSpatialKeyboard() {
     virtualKeyboardText,
     appendVirtualKeyboardChar,
     deleteVirtualKeyboardChar,
-    setVirtualKeyboardText
+    setVirtualKeyboardText,
+    keyboardPlacementMode,
+    setKeyboardPlacementMode,
+    keyboardTiltAngle,
+    setKeyboardTiltAngle
   } = useSpatialStore();
 
   const [isShift, setIsShift] = useState(false);
@@ -100,6 +104,7 @@ export function VirtualSpatialKeyboard() {
   if (!isVirtualKeyboardOpen) return null;
 
   const currentRows = isShift ? KEYBOARD_ROWS_UPPER : KEYBOARD_ROWS_LOWER;
+  const isFlatSurface = keyboardPlacementMode === 'flat-surface';
 
   return (
     <motion.div
@@ -108,19 +113,72 @@ export function VirtualSpatialKeyboard() {
       exit={{ opacity: 0, scale: 0.92, y: 30 }}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
       data-testid="virtual-spatial-keyboard"
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[250] w-[95vw] max-w-2xl bg-[#090d16]/95 border border-cyan-500/40 rounded-3xl p-4 shadow-2xl shadow-cyan-950/80 backdrop-blur-2xl text-slate-100 font-mono select-none"
+      style={{
+        transform: isFlatSurface 
+          ? `perspective(1000px) rotateX(${keyboardTiltAngle}deg)` 
+          : 'none',
+        transformOrigin: 'bottom center',
+        transition: 'transform 0.3s ease-out'
+      }}
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[250] w-[95vw] max-w-2xl rounded-3xl p-4 backdrop-blur-2xl text-slate-100 font-mono select-none ${
+        isFlatSurface 
+          ? 'bg-[#090d16]/98 border-2 border-cyan-400 shadow-[0_30px_90px_rgba(0,0,0,0.95)] shadow-cyan-950'
+          : 'bg-[#090d16]/95 border border-cyan-500/40 shadow-2xl shadow-cyan-950/80'
+      }`}
     >
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20 mb-3 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-cyan-500/20 mb-3 text-xs">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
           <span className="font-bold text-cyan-300">SPATIAL VIRTUAL KEYBOARD</span>
           <span className="text-[10px] text-slate-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
-            AR Glasses • 3DOF Laser / Pointer Compatible
+            {isFlatSurface ? 'Tabletop Desk Plane Active' : 'Mid-Air Floating Mode'}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Surface Placement Mode Switch */}
+          <div className="flex p-0.5 rounded-lg bg-slate-900 border border-slate-700 text-[10px]">
+            <button
+              type="button"
+              data-testid="keyboard-midair-btn"
+              onClick={() => setKeyboardPlacementMode('mid-air')}
+              className={`px-2 py-1 rounded font-bold cursor-pointer transition-colors ${
+                !isFlatSurface ? 'bg-cyan-500 text-black' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Mid-Air
+            </button>
+            <button
+              type="button"
+              data-testid="keyboard-flat-surface-btn"
+              onClick={() => setKeyboardPlacementMode('flat-surface')}
+              className={`px-2 py-1 rounded font-bold cursor-pointer transition-colors ${
+                isFlatSurface ? 'bg-cyan-500 text-black' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Desk Snap
+            </button>
+          </div>
+
+          {/* Desk Tilt Angle Slider (Visible in flat-surface mode) */}
+          {isFlatSurface && (
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-700 text-[10px]">
+              <span className="text-slate-400">Tilt:</span>
+              <input
+                type="range"
+                min="30"
+                max="75"
+                step="5"
+                value={keyboardTiltAngle}
+                onChange={(e) => setKeyboardTiltAngle(Number(e.target.value))}
+                className="w-16 accent-cyan-400 cursor-pointer"
+                title="Adjust desk tilt angle to match physical tabletop"
+              />
+              <span className="text-cyan-300 font-bold">{keyboardTiltAngle}°</span>
+            </div>
+          )}
+
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="p-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"

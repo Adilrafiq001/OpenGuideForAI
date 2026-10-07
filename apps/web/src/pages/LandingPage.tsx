@@ -298,6 +298,9 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         onOpenMysteryLab={() => {
           setIsMysteryLabOpen(true);
         }}
+        onOpenARGlassesGuide={() => {
+          setIsARGlassesGuideOpen(true);
+        }}
       />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}

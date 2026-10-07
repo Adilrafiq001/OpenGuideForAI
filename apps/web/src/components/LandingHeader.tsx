@@ -21,7 +21,9 @@ import {
   Sparkles,
   Boxes,
   Target,
-  CheckSquare
+  CheckSquare,
+  Keyboard as KeyboardIcon,
+  Hand
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -42,6 +44,7 @@ interface LandingHeaderProps {
   onOpenCommandPalette?: () => void;
   onOpenPillars?: (pillarIdx?: number) => void;
   onOpenMysteryLab?: () => void;
+  onOpenARGlassesGuide?: () => void;
 }
 
 const ALL_TRACKS_NAV = [
@@ -65,16 +68,24 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab, onOpenARGlassesGuide }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, toggleThemeMode } = useSettingsStore();
   const { t } = useLanguageStore();
-  const { isSpatialModeActive, toggleSpatialMode } = useSpatialStore();
+  const { 
+    isSpatialModeActive, 
+    toggleSpatialMode,
+    isVirtualKeyboardOpen,
+    toggleVirtualKeyboard,
+    isHandTrackingEnabled,
+    toggleHandTracking
+  } = useSpatialStore();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isTracksMenuOpen, setIsTracksMenuOpen] = useState(false);
+  const [isSpatialMenuOpen, setIsSpatialMenuOpen] = useState(false);
 
   // Dynamic header elevation state (only updates when crossing threshold, zero per-frame re-renders)
   useEffect(() => {
@@ -230,22 +241,200 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               </a>
             </Tooltip>
 
-            {/* Spatial Holodeck Pill (2xl) */}
-            <div className="hidden 2xl:flex">
-              <Tooltip
-                position="bottom"
-                content="Spatial Holodeck"
-                subtitle="Interactive 3D / WebXR neural topology. Smart AR glasses & VR ready"
+            {/* Unified Spatial & Holodeck Group Dropdown */}
+            <div 
+              className="relative hidden lg:block"
+              onMouseEnter={() => setIsSpatialMenuOpen(true)}
+              onMouseLeave={() => setIsSpatialMenuOpen(false)}
+            >
+              <button 
+                id="nav-spatial-menu"
+                data-testid="header-spatial-group-btn"
+                aria-label="Spatial AR & Holodeck Controls"
+                onClick={() => setIsSpatialMenuOpen(!isSpatialMenuOpen)}
+                className={`inline-flex items-center gap-1.5 px-3 h-9 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
+                  isSpatialModeActive
+                    ? 'bg-cyan-500/15 border-cyan-400 text-cyan-400 shadow-cyan-500/20 shadow-sm'
+                    : 'border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+                aria-expanded={isSpatialMenuOpen}
+                aria-haspopup="true"
               >
-                <button 
-                  onClick={() => navigate('/holodeck')}
-                  className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
-                >
-                  <Glasses size={13} className="text-cyan-400" />
-                  <span>{t('nav_holodeck')}</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">XR & 3D</span>
-                </button>
-              </Tooltip>
+                <Glasses size={13} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400'} />
+                <span>Spatial & Holodeck</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                  {isSpatialModeActive ? 'ACTIVE' : 'XR'}
+                </span>
+                <ChevronDown size={12} className={`opacity-60 transition-transform duration-200 ${isSpatialMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Solid 100% Opaque Dropdown Flyout (Zero Overlay Bleed-Through Invariant) */}
+              <AnimatePresence>
+                {isSpatialMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="absolute top-full left-0 mt-1.5 w-80 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-2xl p-2.5 z-50 overflow-hidden"
+                  >
+                    <div className="px-2.5 py-1.5 border-b border-[var(--color-border)]/60 mb-1 flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--color-text-secondary)] flex items-center gap-1.5">
+                        <Glasses size={11} className="text-cyan-400" />
+                        Spatial Computing Suite
+                      </span>
+                      <span className="text-[9px] font-mono text-cyan-400 font-semibold">SpaceWalker • Nebula</span>
+                    </div>
+
+                    <div className="space-y-1">
+                      {/* 1. Launch 3D Spatial Holodeck */}
+                      <button
+                        onClick={() => {
+                          setIsSpatialMenuOpen(false);
+                          navigate('/holodeck');
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors flex items-center justify-between group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors">
+                            <Boxes size={14} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-cyan-400 transition-colors">
+                              3D Spatial Holodeck
+                            </div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)]">
+                              3D vector space & neural synapses
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400">
+                          /holodeck
+                        </span>
+                      </button>
+
+                      {/* 2. Toggle App-Wide Spatial AR Glasses Mode */}
+                      <button
+                        data-testid="header-spatial-mode-btn"
+                        onClick={() => {
+                          toggleSpatialMode();
+                        }}
+                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
+                          isSpatialModeActive 
+                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
+                            : 'hover:bg-[var(--color-primary)]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                            <Glasses size={14} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-1.5">
+                              <span>Spatial AR Glasses Mode</span>
+                              {isSpatialModeActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />}
+                            </div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)]">
+                              Whole-app 3D floating cockpit & HUD
+                            </div>
+                          </div>
+                        </div>
+                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
+                          isSpatialModeActive ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400'
+                        }`}>
+                          {isSpatialModeActive ? 'ON' : 'Alt+S'}
+                        </span>
+                      </button>
+
+                      {/* 3. Floating Spatial Keyboard Toggle */}
+                      <button
+                        onClick={() => {
+                          toggleVirtualKeyboard();
+                        }}
+                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
+                          isVirtualKeyboardOpen 
+                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
+                            : 'hover:bg-[var(--color-primary)]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                            <KeyboardIcon size={14} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-[var(--color-text-primary)]">
+                              Spatial Keyboard
+                            </div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)]">
+                              Flat-surface desk snap & in-air typing
+                            </div>
+                          </div>
+                        </div>
+                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
+                          isVirtualKeyboardOpen ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
+                        }`}>
+                          {isVirtualKeyboardOpen ? 'OPEN' : 'OFF'}
+                        </span>
+                      </button>
+
+                      {/* 4. Software Hand Tracking Gestures */}
+                      <button
+                        onClick={() => {
+                          toggleHandTracking();
+                        }}
+                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
+                          isHandTrackingEnabled 
+                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
+                            : 'hover:bg-[var(--color-primary)]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                            <Hand size={14} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-[var(--color-text-primary)]">
+                              Camera Hand Tracking
+                            </div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)]">
+                              Optical pinch gesture without glasses camera
+                            </div>
+                          </div>
+                        </div>
+                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
+                          isHandTrackingEnabled ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
+                        }`}>
+                          {isHandTrackingEnabled ? 'ON' : 'OFF'}
+                        </span>
+                      </button>
+
+                      {/* 5. AR Glasses Hardware Setup Guide */}
+                      <button
+                        onClick={() => {
+                          setIsSpatialMenuOpen(false);
+                          onOpenARGlassesGuide?.();
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors flex items-center justify-between group cursor-pointer border-t border-[var(--color-border)]/60 pt-2.5 mt-1"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 flex items-center justify-center text-[var(--color-accent)]">
+                            <Glasses size={14} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              Hardware Setup Guide
+                            </div>
+                            <div className="text-[10px] text-[var(--color-text-secondary)]">
+                              Viture, Xreal, RayNeo, Rokid & Quest
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight size={13} className="text-[var(--color-text-secondary)] group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Credentials / Portfolio link (2xl) */}
@@ -551,30 +740,6 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             </Tooltip>
           </div>
 
-          {/* 4. Spatial AR Glasses Mode (App-Wide SpaceWalker / Nebula / 3DOF) */}
-          <Tooltip
-            position="bottom"
-            content={isSpatialModeActive ? "Exit Spatial AR Mode (Alt+S)" : "Spatial AR Glasses Mode (Alt+S)"}
-            subtitle="Whole-app 3D floating cockpit for Viture, Xreal, RayNeo, Quest & Vision Pro"
-            shortcut="Alt+S"
-          >
-            <button 
-              onClick={() => toggleSpatialMode()}
-              data-testid="header-spatial-mode-btn"
-              className={`hidden sm:flex items-center gap-1.5 px-3 h-9 rounded-full border transition-all text-xs font-semibold cursor-pointer active:scale-[0.98] select-none ${
-                isSpatialModeActive 
-                  ? 'bg-cyan-500/20 text-cyan-400 border-cyan-400 shadow-lg shadow-cyan-500/20' 
-                  : 'bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] hover:border-cyan-500/50 text-[var(--color-text-secondary)] hover:text-cyan-400'
-              }`}
-              aria-label="Toggle App-Wide Spatial AR Glasses Mode"
-            >
-              <Glasses size={14} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400/80'} />
-              <span className="hidden xl:inline">Spatial AR</span>
-              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                {isSpatialModeActive ? 'ON' : '3DOF'}
-              </span>
-            </button>
-          </Tooltip>
 
           {/* 6. Primary Hero CTA: Launch Track Button */}
           <div className="hidden lg:flex items-center shrink-0">
