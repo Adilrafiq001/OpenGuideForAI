@@ -23,6 +23,7 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileNavDrawer } from './components/MobileNavDrawer';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import { PhysicsBarLoader } from './components/PhysicsBarLoader';
+import { AppWideSpatialHUD } from './components/spatial/AppWideSpatialHUD';
 import { startAppTour } from './components/AppTour';
 import Lenis from 'lenis';
 
@@ -234,39 +235,42 @@ function AppContent() {
   return (
     <div className="bg-[var(--color-primary)] text-[var(--color-text-primary)] min-h-screen relative transition-colors duration-300">
         <ErrorBoundary fallbackTitle="Application Shell Recovery">
-          <Suspense fallback={<PhysicsBarLoader />}>
-            <Routes>
-              <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} onOpenDemo={handleOpenDemo} onOpenCommandPalette={handleOpenCommandPalette} />} />
-              <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/0" element={<CoursePlayer track={track0} />} />
-              <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
-              <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/1" element={<CoursePlayer track={track1} />} />
-              <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
-              <Route path="/track/2/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/2" element={<CoursePlayer track={track2} />} />
-              <Route path="/track/2/engine" element={<CoursePlayer track={track2} />} />
-              <Route path="/track/3/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/3" element={<CoursePlayer track={track3} />} />
-              <Route path="/track/3/engine" element={<CoursePlayer track={track3} />} />
-              <Route path="/track/4/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/4" element={<CoursePlayer track={track4} />} />
-              <Route path="/track/4/engine" element={<CoursePlayer track={track4} />} />
-              <Route path="/track/5/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/5" element={<CoursePlayer track={track5} />} />
-              <Route path="/track/5/engine" element={<CoursePlayer track={track5} />} />
-              <Route path="/track/6/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/6" element={<CoursePlayer track={track6} />} />
-              <Route path="/track/6/engine" element={<CoursePlayer track={track6} />} />
-              <Route path="/track/7/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
-              <Route path="/track/7" element={<CoursePlayer track={track7} />} />
-              <Route path="/track/7/engine" element={<CoursePlayer track={track7} />} />
-              <Route path="/holodeck" element={<SpatialHolodeck />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Suspense>
+          <AppWideSpatialHUD>
+            <Suspense fallback={<PhysicsBarLoader />}>
+              <Routes>
+                <Route path="/" element={<LandingPage onOpenThemes={handleOpenThemes} onOpenHelp={() => setIsHelpModalOpen(true)} onOpenDrawer={() => setIsNavDrawerOpen(prev => !prev)} onOpenDemo={handleOpenDemo} onOpenCommandPalette={handleOpenCommandPalette} />} />
+                <Route path="/track/0/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/0" element={<CoursePlayer track={track0} />} />
+                <Route path="/track/0/engine" element={<CoursePlayer track={track0} />} />
+                <Route path="/track/1/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/1" element={<CoursePlayer track={track1} />} />
+                <Route path="/track/1/engine" element={<CoursePlayer track={track1} />} />
+                <Route path="/track/2/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/2" element={<CoursePlayer track={track2} />} />
+                <Route path="/track/2/engine" element={<CoursePlayer track={track2} />} />
+                <Route path="/track/3/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/3" element={<CoursePlayer track={track3} />} />
+                <Route path="/track/3/engine" element={<CoursePlayer track={track3} />} />
+                <Route path="/track/4/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/4" element={<CoursePlayer track={track4} />} />
+                <Route path="/track/4/engine" element={<CoursePlayer track={track4} />} />
+                <Route path="/track/5/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/5" element={<CoursePlayer track={track5} />} />
+                <Route path="/track/5/engine" element={<CoursePlayer track={track5} />} />
+                <Route path="/track/6/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/6" element={<CoursePlayer track={track6} />} />
+                <Route path="/track/6/engine" element={<CoursePlayer track={track6} />} />
+                <Route path="/track/7/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+                <Route path="/track/7" element={<CoursePlayer track={track7} />} />
+                <Route path="/track/7/engine" element={<CoursePlayer track={track7} />} />
+                <Route path="/holodeck" element={<SpatialHolodeck />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </AppWideSpatialHUD>
         </ErrorBoundary>
+
 
         {/* Global Floating Magnification Dock (Desktop md:flex only) */}
         <CommandDock 

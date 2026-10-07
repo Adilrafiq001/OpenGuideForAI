@@ -32,6 +32,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { Tooltip } from './Tooltip';
 import { ThemeSwitch } from './ThemeSwitch';
 import { startAppTour } from './AppTour';
+import { useSpatialStore } from '../store/useSpatialStore';
 
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
@@ -68,6 +69,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
   const navigate = useNavigate();
   const { theme, toggleThemeMode } = useSettingsStore();
   const { t } = useLanguageStore();
+  const { isSpatialModeActive, toggleSpatialMode } = useSpatialStore();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
@@ -549,9 +551,30 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             </Tooltip>
           </div>
 
-
-
-
+          {/* 4. Spatial AR Glasses Mode (App-Wide SpaceWalker / Nebula / 3DOF) */}
+          <Tooltip
+            position="bottom"
+            content={isSpatialModeActive ? "Exit Spatial AR Mode (Alt+S)" : "Spatial AR Glasses Mode (Alt+S)"}
+            subtitle="Whole-app 3D floating cockpit for Viture, Xreal, RayNeo, Quest & Vision Pro"
+            shortcut="Alt+S"
+          >
+            <button 
+              onClick={() => toggleSpatialMode()}
+              data-testid="header-spatial-mode-btn"
+              className={`hidden sm:flex items-center gap-1.5 px-3 h-9 rounded-full border transition-all text-xs font-semibold cursor-pointer active:scale-[0.98] select-none ${
+                isSpatialModeActive 
+                  ? 'bg-cyan-500/20 text-cyan-400 border-cyan-400 shadow-lg shadow-cyan-500/20' 
+                  : 'bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] hover:border-cyan-500/50 text-[var(--color-text-secondary)] hover:text-cyan-400'
+              }`}
+              aria-label="Toggle App-Wide Spatial AR Glasses Mode"
+            >
+              <Glasses size={14} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400/80'} />
+              <span className="hidden xl:inline">Spatial AR</span>
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                {isSpatialModeActive ? 'ON' : '3DOF'}
+              </span>
+            </button>
+          </Tooltip>
 
           {/* 6. Primary Hero CTA: Launch Track Button */}
           <div className="hidden lg:flex items-center shrink-0">
@@ -686,6 +709,25 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               >
                 {t('nav_curriculum')}
               </a>
+              <button 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  toggleSpatialMode();
+                }}
+                className={`flex items-center justify-between p-2.5 rounded-xl transition-colors text-left cursor-pointer ${
+                  isSpatialModeActive 
+                    ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30' 
+                    : 'hover:bg-[var(--color-primary)] text-[var(--color-text-primary)]'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Glasses size={16} className="text-cyan-400" />
+                  <span>Spatial AR Glasses Mode</span>
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-bold">
+                  {isSpatialModeActive ? 'ACTIVE' : 'Alt+S'}
+                </span>
+              </button>
               <button 
                 onClick={() => { setIsMobileMenuOpen(false); navigate('/holodeck'); }}
                 className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer"

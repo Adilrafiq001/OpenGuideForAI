@@ -75,11 +75,17 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await expect(page.locator('#mystery-lab-title')).toBeVisible();
     await expect(page.locator('text=SEV-1 Autonomous Agent Containment Failure')).toBeVisible();
 
-    // Navigate to Tab 2: Evidence Locker
-    const evidenceTabBtn = page.locator('button:has-text("2. Evidence Locker")');
+    // Navigate to Tab 2: Forensic Artifacts Locker
+    const evidenceTabBtn = page.locator('button:has-text("2. Forensic Artifacts Locker")');
     await expect(evidenceTabBtn).toBeVisible();
     await evidenceTabBtn.click();
     await expect(page.locator('button:has-text("Table: ingestion_batch_log")')).toBeVisible();
+
+    // Toggle Raw Files view
+    const rawFilesBtn = page.locator('button:has-text("Raw Files (.json / .jsonl)")');
+    await expect(rawFilesBtn).toBeVisible();
+    await rawFilesBtn.click();
+    await expect(page.locator('text=ingestion_batch_4092.jsonl').first()).toBeVisible();
 
     // Navigate to Tab 3: Vector Crime Lab
     const labTabBtn = page.locator('button:has-text("3. Vector Crime Lab")');
@@ -94,8 +100,19 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     // Verify Forensic Output appears
     await expect(page.locator('text=FORENSIC VECTOR COSINE AUDIT')).toBeVisible();
 
-    // Navigate to Tab 5: Submit Indictment
-    const indictmentTabBtn = page.locator('button:has-text("5. Submit Indictment")');
+    // Navigate to Tab 4: Guardrail Patch Studio
+    const guardrailTabBtn = page.locator('button:has-text("4. Guardrail Patch Studio")');
+    await expect(guardrailTabBtn).toBeVisible();
+    await guardrailTabBtn.click();
+
+    // Test Guardrail against attack suite
+    const testGuardrailBtn = page.locator('button:has-text("Test Guardrail Against Attack Suite")');
+    await expect(testGuardrailBtn).toBeVisible();
+    await testGuardrailBtn.click();
+    await expect(page.locator('text=Automated Guardrail Battery: 4 / 4 Test Cases Passed')).toBeVisible();
+
+    // Navigate to Tab 6: Submit Indictment
+    const indictmentTabBtn = page.locator('button:has-text("6. Indictment & Certificate")');
     await expect(indictmentTabBtn).toBeVisible();
     await indictmentTabBtn.click();
 
@@ -105,7 +122,7 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await page.locator('form button[type="submit"]:has-text("Submit Indictment")').click();
 
     // Verify Stage 1 is solved and reveals the mastermind clue
-    await expect(page.locator('text=STAGE 1 SOLVED')).toBeVisible();
+    await expect(page.locator('text=STAGE 1 SOLVED').first()).toBeVisible();
 
     // Submit Stage 2 Indictment (Miranda Vance)
     const stage2Input = page.locator('input[placeholder*="Miranda Vance"]');
@@ -113,8 +130,8 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await page.locator('button:has-text("Indict Mastermind")').click();
 
     // Verify Full Case is Cracked with Cryptographic Certificate
-    await expect(page.locator('text=FULL CASE CRACKED')).toBeVisible();
-    await expect(page.locator('text=OPENGUIDE FORENSIC AI AUDITOR CERTIFICATE')).toBeVisible();
+    await expect(page.locator('text=FULL CASE CRACKED').first()).toBeVisible();
+    await expect(page.locator('text=OPENGUIDE FORENSIC AI AUDITOR CERTIFICATE').first()).toBeVisible();
 
     // Close modal
     await page.locator('button[aria-label="Close mystery modal"]').click();
@@ -274,6 +291,60 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await expect(page.locator('#ar-guide-title')).toBeHidden();
   });
 
+  test('09. App-Wide Spatial AR Glasses Mode toggles floating SpaceWalker HUD, virtual keyboard, and curvature across whole app', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify spatial mode button exists in header
+    const spatialHeaderBtn = page.locator('[data-testid="header-spatial-mode-btn"]');
+    await expect(spatialHeaderBtn).toBeVisible();
+
+    // Click header button to engage App-Wide Spatial Mode
+    await spatialHeaderBtn.click();
+
+    // Verify App-Wide Spatial HUD is active
+    const spatialHud = page.locator('[data-testid="app-wide-spatial-hud"]');
+    await expect(spatialHud).toBeVisible();
+    await expect(page.locator('text=SpaceWalker 3DOF HUD Active')).toBeVisible();
+
+    // Verify Anchor Mode switching (Fixed, Follow, Body)
+    const fixedModeBtn = page.locator('button:has-text("Fixed")');
+    await expect(fixedModeBtn).toBeVisible();
+    await fixedModeBtn.click();
+
+    const followModeBtn = page.locator('button:has-text("Follow")');
+    await expect(followModeBtn).toBeVisible();
+    await followModeBtn.click();
+
+    // Open Virtual Spatial Keyboard
+    const keyboardToggleBtn = page.locator('[data-testid="spatial-keyboard-toggle-btn"]');
+    await expect(keyboardToggleBtn).toBeVisible();
+    await keyboardToggleBtn.click();
+
+    // Verify Virtual Keyboard is visible
+    const virtualKeyboard = page.locator('[data-testid="virtual-spatial-keyboard"]');
+    await expect(virtualKeyboard).toBeVisible();
+
+    // Type letters on the virtual spatial keyboard
+    await page.locator('button:has-text("O")').first().click();
+    await page.locator('button:has-text("G")').first().click();
+
+    // Close virtual keyboard
+    await page.locator('[data-testid="close-spatial-keyboard-btn"]').click();
+    await expect(virtualKeyboard).toBeHidden();
+
+    // Recenter Gaze
+    const recenterBtn = page.locator('[data-testid="spatial-recenter-btn"]');
+    await expect(recenterBtn).toBeVisible();
+    await recenterBtn.click();
+
+    // Exit Spatial Mode via top toolbar button
+    const exitSpatialBtn = page.locator('button:has-text("Exit AR")');
+    await expect(exitSpatialBtn).toBeVisible();
+    await exitSpatialBtn.click();
+
+    // Verify Spatial HUD is dismissed
+    await expect(spatialHud).toBeHidden();
+  });
 
 });
 
