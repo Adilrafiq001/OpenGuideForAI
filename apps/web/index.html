@@ -178,6 +178,18 @@
         } catch (e) {}
       })();
     </script>
+    <!-- Cloudflare Web Analytics (Zero-Cookie, Zero-PII, 100% Privacy Compliant, Production Edge Only) -->
+    <script>
+      (function() {
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+          var cfScript = document.createElement('script');
+          cfScript.defer = true;
+          cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+          cfScript.setAttribute('data-cf-beacon', '{"token": "f47cb826efea4a95a1215b3992b95c96"}');
+          document.head.appendChild(cfScript);
+        }
+      })();
+    </script>
     <style>
       html, body, #root {
         min-height: 100vh;
@@ -188,13 +200,16 @@
     <div id="root">
       <header style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">
         <h1>OpenGuide — Free In-Browser AI Engineering Studio</h1>
-        <p>Zero-cost, sovereign, browser-native AI engineering curriculum with client-side Python WebAssembly (Pyodide v0.26), 3D vector manifolds, and transformer mechanics. 45 interactive labs, zero telemetry, local-first. Master embeddings, vector search, autograd backpropagation from scratch, KV-cache sizing, and frontier model context protocol. Architected by Adil Rafiq Dar.</p>
+        <p>Zero-cost, sovereign, browser-native AI engineering curriculum with client-side Python WebAssembly (Pyodide v0.26), 3D vector manifolds, and transformer mechanics. 57 interactive labs, zero telemetry, local-first. Master embeddings, vector search, autograd backpropagation from scratch, KV-cache sizing, and frontier model context protocol. Architected by Adil Rafiq Dar.</p>
         <nav aria-label="Sovereign AI Curriculum Directory">
           <a href="/track/0">Track 0: Absolute Zero AI Engineering</a>
           <a href="/track/1">Track 1: Embeddings, Vector Spaces and Semantic Search</a>
           <a href="/track/2">Track 2: RAG, Retrieval &amp; Autonomous Agents</a>
           <a href="/track/3">Track 3: Production Evals, Guardrails &amp; Security</a>
           <a href="/track/4">Track 4: Frontier Attention, Systems &amp; Reasoning</a>
+          <a href="/track/5">Track 5: Fine-Tuning, LoRA &amp; Quantization (INT8/NF4)</a>
+          <a href="/track/6">Track 6: High-Throughput Inference Engines &amp; KV Paging</a>
+          <a href="/track/7">Track 7: Multimodal, Vision Transformers &amp; Diffusion</a>
           <a href="/holodeck">Spatial Holodeck: 3D Vector Manifolds</a>
           <a href="/portfolio">Portfolio and Verifiable Credentials</a>
         </nav>

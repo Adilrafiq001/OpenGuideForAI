@@ -11,7 +11,14 @@
 - **Client Runtime:** CPython compiled to WebAssembly (Pyodide v0.26) isolated in a dedicated Web Worker with decoupled hidden test assertion harness and Service Worker cache-first pre-caching for day-0 air-gapped operation.
 - **WebGPU Hardware Detection & WGSL Compute Shader Kernel:** Client-side WebGPU capability detection and WGSL matrix multiplication compute shader execution (`localNeuralRunner.ts`) providing local hardware acceleration telemetry without paid external API keys ($0 Rule).
 - **Universal AI Fluency Spectrum & Everyday AI Workflows:** 6-tier human continuum data layer (`universalSpectrumData.ts`, `EverydayCraftAiModal.tsx`) spanning Stage 0 (curious non-coders, trade mechanics, artisans, healthcare, agriculture) to Stage 5 (frontier transformer researchers) with real-world dilemmas, prompt engineering blueprints, and interactive WASM calculators.
-- **Ungameable Dual-Phase Autograder Invariants & Mutation Suite:** Multi-stage hidden validation asserting variable mutations, return type invariants, edge-case tolerance, and mathematical bounds across all 45 curriculum labs with 100% mutation test coverage (135/135 mutants killed).
+- **Ungameable Dual-Phase Autograder Invariants & Mutation Suite:** Multi-stage hidden validation asserting variable mutations, return type invariants, edge-case tolerance, and mathematical bounds across all 57 curriculum labs across 8 tracks (Tracks 0–7) with 100% mutation test coverage (100% mutants killed).
+- **Pedagogical Diversity Engine & Multi-Modal Modalities:**
+  - *Bug Hunter Challenge (`BugHunterChallenge.tsx`):* Adversarial 0-day bug hunting with 4-tier progressive hints, failure diagrams, and mutant-kill explanations.
+  - *Tensor Surgery Visualizer (`TensorSurgeryVisualizer.tsx`):* Interactive 4D shape `[B, H, S, D]`, stride physics, and contiguous memory inspector with element-stride sliders.
+  - *Hardware & VRAM Profiler (`HardwareProfilerModal.tsx`):* Real-time Roofline analysis calculating Model Weights VRAM, KV-cache memory, and hardware feasibility across FP16, INT8, and INT4 precisions.
+  - *Client-Side Daily Streak Engine (`streakNotification.ts`):* PWA offline-first streak reminder engine integrated with Service Worker push notifications and Synapse Lounge reminder bell.
+- **Privacy-First Cloudflare Web Analytics (Zero-Cookie, Edge-Only):** Integrated zero-cookie, zero-PII beacon in `index.html` executing conditionally strictly on production edge domain (`openguideforai.dpdns.org`) with zero localhost network pollutions.
+- **Sovereign Community Multi-Sponsor Portal:** Embedded non-intrusive "Support $0 AI Education" portal across StudioFooter with verified channels: GitHub Sponsors (`openguideforai`), Ko-fi (`buymegoodcoffee`), and PayPal (`buymegoodcoffee`).
 - **Tiered Local-First Storage:** Dexie IndexedDB persistence with an instantaneous in-memory RAM cache tier, transparent `localStorage` fallback, and JSON export/import backup and restore.
 - **Error Boundaries:** Granular React Error Boundaries wrapping all route transitions with accessible error cards, reload actions, and local memory reset.
 - **BYOK AI & Bluee Copilot:** Direct client-side fetch to frontier endpoints using user-supplied API keys (OpenAI, Google Gemini, OpenRouter), local WebGPU hardware telemetry, and automatic fallback to embedded offline knowledge engine featuring 250 deep frontier AI and everyday trade topics with executable Python code snippets, Okapi BM25 information retrieval ($k_1=1.2, b=0.75$), cross-lingual normalization across 11 languages, and interactive client-side visual explainables ($0 Rule).
@@ -49,14 +56,14 @@
 - **Responsive Header Layout Architecture:** Unified header architecture with adaptive collapsing (`Tracks ▾` dropdown on desktop `lg:`, `Launch Track 0` primary CTA, responsive `BrandLogo`, and zero horizontal collisions from 375px to 1440px).
 - **Agency-Grade Studio Footer Architecture (`StudioFooter`):** Comprehensive footer subsystem with 4-column dynamic sitemap, WASM kernel status telemetry, local-first newsletter dispatch, interactive Legal modal (5 policy tabs), Contact & Inquiries modal with direct founder dispatch, and release changelog.
 - **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
-- **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 45-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
+- **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 57-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
 - **007 Defense-in-Depth Security:** PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 16-byte random salt) + AES-256-GCM encrypted GitHub Gist backup, DOMPurify HTML/Markdown sanitization, Cloudflare Pages CSP/HSTS/COOP/COEP headers, and static tokenization in offline Pyodide worker fallback without `eval` or `Function`.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (130 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (140 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
 
 ## Application Directory Structure
 - `/apps/web`: Production web application root.
-  - `src/components/`: Core UI components (`CodeEditor.tsx`, `MarkdownRenderer.tsx`, `ErrorBoundary.tsx`, `CoursePlayer.tsx`, `Holodeck.tsx`, `AbbyChatbot.tsx`).
-  - `src/data/`: First-principles curriculum blueprints (`track0.ts`, `track1.ts`, `track2.ts`, `track3.ts`, `track4.ts`) with 45 scaffolded labs and offline knowledge base.
+  - `src/components/`: Core UI components (`CodeEditor.tsx`, `MarkdownRenderer.tsx`, `ErrorBoundary.tsx`, `CoursePlayer.tsx`, `Holodeck.tsx`, `AbbyChatbot.tsx`, `StudioFooter.tsx`).
+  - `src/data/`: First-principles curriculum blueprints (`track0.ts` through `track7.ts`) with 57 scaffolded labs and offline knowledge base.
   - `src/store/`: Tiered local-first state stores (`useProgressStore.ts`, `useSettingsStore.ts`, `useLanguageStore.ts`).
   - `src/worker/`: Dedicated Pyodide CPython WebAssembly Web Worker runner (`pyodide.worker.ts`).
   - `src/locales/`: Universal 12-language translation catalogs.

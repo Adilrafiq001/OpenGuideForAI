@@ -19,7 +19,7 @@
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Laufzeit-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/Architektur-Lokal--Zuerst%20$0-0f172a.svg?style=flat)](#souveräne-client-seitige-architektur)
-[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Lehrplan-5%20Tracks%20%E2%80%A2%2045%20Labs-0f172a.svg?style=flat)](#lehrplan-%C3%BCbersicht)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/Lehrplan-8%20Tracks%20%E2%80%A2%2057%20Labs-0f172a.svg?style=flat)](#lehrplan-%C3%BCbersicht)
 [![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#barrierefreiheit-und-standards)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-Vollst%C3%A4ndig%20Offline-0f172a.svg?style=flat)](#desktop--und-pwa-installation)
 
@@ -93,17 +93,20 @@ OpenGuide arbeitet strikt nach der **0-Dollar-Regel**. **Es gibt keinen Backend-
 <a id="lehrplan-%C3%BCbersicht"></a>
 ## Lehrplan-Übersicht
 
-Fünf anspruchsvolle Lernpfade mit insgesamt **45 interaktiven, direkt ausführbaren Labs**:
+Acht anspruchsvolle Lernpfade mit insgesamt **57 interaktiven, direkt ausführbaren Labs**:
 
 ```mermaid
-graph TD
-    T0["Track 0: Absolute Zero<br/>(CPython WASM, Variablen, Schleifen, BPE Tokenizer)"]
-    T1["Track 1: Vektorräume<br/>(Hochdimensionale Geometrie, Kosinus-Ähnlichkeit, Vektorsuche)"]
-    T2["Track 2: RAG & Autonome Agenten<br/>(ReAct-Zyklen, Text-Chunking, Anthropic MCP)"]
-    T3["Track 3: Evals & Leitplanken<br/>(OWASP AI Top 10, Prompt-Injection-Schutz, WebGPU)"]
-    T4["Track 4: Frontier Intelligence<br/>(Scaled Dot-Product Attention, KV-Cache, RoPE, DPO)"]
+graph LR
+    T0["Track 0: Absolute Zero<br/>(CPython WASM, Schleifen, BPE)"]
+    T1["Track 1: Vektorräume<br/>(Geometrie, Kosinus-Suche)"]
+    T2["Track 2: RAG & Agenten<br/>(ReAct-Zyklen, MCP)"]
+    T3["Track 3: Evals & Sicherheit<br/>(OWASP AI Top 10, WebGPU)"]
+    T4["Track 4: Frontier Systeme<br/>(Attention, RoPE, DPO)"]
+    T5["Track 5: Fine-Tuning<br/>(LoRA, SVD, NF4)"]
+    T6["Track 6: Inferenz-Engines<br/>(PagedAttention, Spekulativ)"]
+    T7["Track 7: Generative Modelle<br/>(Diffusion, CFG, ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 | Track | Labs | Mentales Kernmodell | Abschluss-Projekt |
@@ -113,6 +116,9 @@ graph TD
 | **Track 2: RAG & Agenten** | 9 | Gedanken $\rightarrow$ Aktion $\rightarrow$ Beobachtung Zustandsmaschinen | Autonomer Forschungs-Agent mit mehrstufiger Logik |
 | **Track 3: Evals & Sicherheit**| 9 | Rote-Team-Tests, Abwehr von Prompt Injections und Metriken | Automatisiertes Testsystem mit lokaler WebGPU-Inferenz |
 | **Track 4: Frontier Systeme** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, KV-Cache-Speicher, RoPE | Transformer-Attention-Head-Analyse und DPO-Loss-Engine |
+| **Track 5: Fine-Tuning & LoRA**| 6 | Niedrigrangige Anpassung, SVD-Kompression und NF4-Quantisierung | Zero-Overhead LoRA Weight Merging Engine |
+| **Track 6: Inferenz-Engines** | 3 | Durchsatzoptimierung, Bandbreiten-Roofline und spekulatives Decoding | PagedAttention Virtueller Paging-Simulator |
+| **Track 7: Multimodal & Diffusion**| 3 | Vorwärts-Rauschen, CFG-Vektorfeld und Vision-Transformer-Patches | ViT Patch Linearer Projektor |
 
 ---
 
@@ -133,10 +139,10 @@ OpenGuide richtet sich nicht an eine abgeschottete Elite. Es ist für das gesamt
 
 ## Manipulationssichere Zwei-Phasen-Autograder
 
-Jedes einzelne der **45 Kurs-Labore** von OpenGuide wird durch ein rigides Zwei-Phasen-Prüfsystem geschützt:
+Jedes einzelne der **57 Kurs-Labore** von OpenGuide wird durch ein rigides Zwei-Phasen-Prüfsystem geschützt:
 1. **Phase 1 (Sichtbare Challenge):** Validiert Rückgabetypen, Tensor-Dimensionen und Grundsyntax anhand von Referenzfällen.
 2. **Phase 2 (Verborgene mathematische Invarianten):** Prüft die Lösung gegen fünf verborgene mathematische Invarianten pro Labor: Cauchy-Schwarz-Ungleichungen, Varianzskalierung, Metriksymmetrie, dynamische Testvektoren und Randwertgrenzen.
-3. **Mutations-Test-Eliminierungsrate:** Geprüft durch eine Test-Suite mit 135 bösartigen Test-Mutanten, die eine **Eliminierungsrate von 100,0 % (135/135 Mutanten eliminiert)** ohne Fehlalarme erzielt.
+3. **Mutations-Test-Eliminierungsrate:** Geprüft durch eine Test-Suite mit 171 bösartigen Test-Mutanten, die eine **Eliminierungsrate von 100,0 % (171/171 Mutanten eliminiert)** ohne Fehlalarme erzielt.
 
 ---
 
@@ -195,9 +201,11 @@ Wenn Ihnen OpenGuide geholfen hat, können Sie die unabhängige Weiterentwicklun
 
 <div align="center">
 
-[![Über PayPal fördern](https://img.shields.io/badge/F%C3%B6rdern%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsern-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
 &nbsp;&nbsp;
 [![Auf Ko-fi unterstützen](https://img.shields.io/badge/Unterst%C3%BCtzen%20auf-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![Über PayPal fördern](https://img.shields.io/badge/F%C3%B6rdern%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
 
 </div>
 
@@ -238,6 +246,6 @@ yarn --cwd apps/web build
 * **[Versions-Changelog](../../CHANGELOG.md):** Chronologische Meilenstein-Releases und Systemevolution.
 * **[ASD-STE100 System-Spezifikation](../../explainer.md):** Umfassende Spezifikation in vereinfachtem technischem Englisch.
 * **[System-Architektur](../../ARCHITECTURE.md):** Tiefgehende Analyse von Web Workern, WebGPU und lokaler Persistenz.
-* **[Lehrplan-Spezifikationen](../CURRICULUM.md):** Vollständiges Curriculum und Lernziele aller 45 Labore.
+* **[Lehrplan-Spezifikationen](../CURRICULUM.md):** Vollständiges Curriculum und Lernziele aller 57 Labore.
 * **[Externes Audit- & QS-Dossier](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Architektur-Grundlegung, Invarianten-Matrizen und Reproduktionsanleitung.
 

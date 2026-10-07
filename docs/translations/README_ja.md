@@ -19,7 +19,7 @@
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/ライセンス-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/実行環境-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/アーキテクチャ-ローカルファースト%20$0-0f172a.svg?style=flat)](#自律型クライアントサイドアーキテクチャ)
-[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/カリキュラム-5%20トラック%20%E2%80%A2%2045%20ラボ-0f172a.svg?style=flat)](#カリキュラム概要)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/カリキュラム-8%20トラック%20%E2%80%A2%2057%20ラボ-0f172a.svg?style=flat)](#カリキュラム概要)
 [![Design: WCAG AAA](https://img.shields.io/badge/デザイン-WCAG%20AAA-0f172a.svg?style=flat)](#ユニバーサルアクセシビリティと標準規格)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-完全オフライン対応-0f172a.svg?style=flat)](#デスクトップおよび-pwa-アプリのインストール)
 
@@ -93,17 +93,20 @@ OpenGuide は**「完全0ドル原則（$0 Rule）」**で動作します。**�
 <a id="カリキュラム概要"></a>
 ## カリキュラム概要
 
-ブラウザ上で直接動作・検証できる **45 の実践的コーディングラボ**で構成された 5 つの体系的トラック：
+ブラウザ上で直接動作・検証できる **57 の実践的コーディングラボ**で構成された 8 つの体系的トラック：
 
 ```mermaid
-graph TD
-    T0["トラック 0: 絶対零度<br/>(CPython WASM、変数、ループ、BPE トークナイザー)"]
-    T1["トラック 1: ベクトル空間と多様体<br/>(高次元幾何、コサイン類似度、メモリ内ベクトル検索)"]
-    T2["トラック 2: RAG と自律エージェント<br/>(ReAct ループ、チャンキング、Anthropic MCP 規格)"]
-    T3["トラック 3: 評価指標とガードレール<br/>(OWASP AI Top 10、プロンプト注入防御、WebGPU)"]
-    T4["トラック 4: フロンティア・インテリジェンス<br/>(Scaled Dot-Product Attention、KV-Cache、RoPE、DPO)"]
+graph LR
+    T0["トラック 0: 絶対零度<br/>(CPython WASM、ループ、BPE)"]
+    T1["トラック 1: ベクトル空間<br/>(幾何学、コサイン類似度)"]
+    T2["トラック 2: RAG とエージェント<br/>(ReAct ループ、MCP)"]
+    T3["トラック 3: 評価とガードレール<br/>(OWASP AI Top 10、WebGPU)"]
+    T4["トラック 4: フロンティアシステム<br/>(アテンション、RoPE、DPO)"]
+    T5["トラック 5: ファインチューニング<br/>(LoRA、SVD、NF4)"]
+    T6["トラック 6: 推論エンジン<br/>(PagedAttention、投機的サンプリング)"]
+    T7["トラック 7: 生成・マルチモーダル<br/>(拡散モデル、CFG、ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 | トラック | ラボ数 | 基礎メンタルモデル | 卒業制作プロジェクト |
@@ -113,6 +116,9 @@ graph TD
 | **トラック 2: RAG とエージェント**| 9 | 思考 $\rightarrow$ 行動 $\rightarrow$ 観察のステートマシンと MCP ツール | 多段推論を実行する自律型研究調査エージェント |
 | **トラック 3: 評価とガードレール**| 9 | レッドチーム検証、プロンプト注入防御、安全性評価 | ブラウザ内 WebGPU 推論を活用した自動評価システム |
 | **トラック 4: フロンティアシステム**| 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$、KV キャッシュ計算、RoPE | Transformer アテンションヘッドの解体と DPO 損失エンジン |
+| **トラック 5: 微調と LoRA**| 6 | 低ランク適応、SVD ランク切り捨て、NF4 量子化 | オーバーヘッドゼロの LoRA 重み動的統合エンジン |
+| **トラック 6: 推論エンジン**| 3 | スループット、帯域幅ルーフライン、投機的デコーディング | PagedAttention 仮想ページングシミュレータ |
+| **トラック 7: マルチモーダル・拡散**| 3 | 前方向ノイズ拡散、CFG ベクトル場、画像パッチ線形射影 | Vision Transformer パッチ線形プロジェクター |
 
 ---
 
@@ -131,12 +137,12 @@ OpenGuide は特定の技術エリート層のためだけのものではあり�
 
 ---
 
-## 2段階の改ざん耐性オートグレーダー（135/135 ミュータント完全検出）
+## 2段階の改ざん耐性オートグレーダー（171/171 ミュータント完全検出）
 
-OpenGuide の**全45カリキュラムラボ**は、堅牢な2段階自動採点ハーネスによって保護されています：
+OpenGuide の**全57カリキュラムラボ**は、堅牢な2段階自動採点ハーネスによって保護されています：
 1. **フェーズ 1（公開チャレンジ）:** 基本的な入出力の型、テンソルの形状、構文の正当性を基本サンプルで検証。
 2. **フェーズ 2（非公開数学的不変条件）:** 各ラボごとに 5 つの隠蔽された数学的不変条件で厳密に評価（コーシー・シュワルツの不等式、分散スケーリング、距離の対称性、動的テストベクトル、極限境界値）。
-3. **ミューテーションテスト殺傷率:** 人為的に不具合を埋め込んだ 135 個のミュータントコードで検証され、偽陽性ゼロで**100.0% の殺傷率（135/135 ミュータント完全検出）**を達成。
+3. **ミューテーションテスト殺傷率:** 人为的に不具合を埋め込んだ 171 個のミュータントコードで検証され、偽陽性ゼロで**100.0% の殺傷率（171/171 ミュータント完全検出）**を達成。
 
 ---
 
@@ -194,9 +200,11 @@ OpenGuide がお役に立った場合は、ぜひ開発の継続をサポート�
 
 <div align="center">
 
-[![PayPal でスポンサーになる](https://img.shields.io/badge/スポンサー-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![GitHub Sponsors](https://img.shields.io/badge/スポンサー-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
 &nbsp;&nbsp;
 [![Ko-fi で支援する](https://img.shields.io/badge/支援する-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![PayPal でスポンサーになる](https://img.shields.io/badge/スポンサー-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
 
 </div>
 
@@ -237,5 +245,5 @@ yarn --cwd apps/web build
 * **[バージョン履歴 (Changelog)](../../CHANGELOG.md):** リリース履歴とシステムの進化。
 * **[システム設計解説 (ASD-STE100)](../../explainer.md):** Plain English による詳細な技術仕様。
 * **[システムアーキテクチャ](../../ARCHITECTURE.md):** Web Worker、WebGPU、ローカル永続化のアーキテクチャ。
-* **[カリキュラム詳細仕様](../CURRICULUM.md):** 全45ラボのシラバスと学習到達目標。
+* **[カリキュラム詳細仕様](../CURRICULUM.md):** 全57ラボのシラバスと学習到達目標。
 * **[外部監査・品質保証ドシエ](../EXTERNAL-AUDIT-QA-DOSSIER.md):** 外部監査人向け検証レポートと再現ガイド。

@@ -50,7 +50,7 @@ Under Section 43A of the IT Act and the *Information Technology (Reasonable Secu
 
 ### B. California Consumer Privacy Act & CPRA (California, USA)
 * **"Do Not Sell or Share My Personal Information":** OpenGuide does **NOT** sell, rent, monetize, or share your personal data with any third party.
-* **Non-Discrimination:** All users enjoy identical access to all 45 labs and features regardless of location or privacy settings.
+* **Non-Discrimination:** All users enjoy identical access to all 57 labs and features regardless of location or privacy settings.
 
 ---
 
@@ -81,6 +81,7 @@ When you enter an API key for commercial frontier models (such as OpenAI, Google
 * **HTTP Cookies:** OpenGuide sets **ZERO** tracking, marketing, or profiling cookies.
 * **Web Storage API:** We utilize `localStorage` solely to preserve your non-sensitive UI settings (theme choice, font size, vim mode toggle, and onboarding completion status).
 * **IndexedDB:** We utilize native browser `indexedDB` to store curriculum lab code, completed checkpoints, and simulation states.
+* **Zero-Cookie Privacy Analytics:** On production (`openguideforai.dpdns.org`), privacy-first Cloudflare Web Analytics is enabled to monitor aggregate performance and page views. It uses zero cookies, zero local storage, zero cross-site fingerprinting, collects no personal identifiers, and is completely disabled in local environments.
 
 ---
 

@@ -25,6 +25,7 @@ import {
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
 import { CURRENT_STUDIO_VERSION, CHANGELOG_DATA } from '../data/changelogData';
+import { HardwareProfilerModal } from './interactive/HardwareProfilerModal';
 
 interface StudioFooterProps {
   onOpenThemes?: () => void;
@@ -69,19 +70,23 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   // Sponsor Modal state
   const [sponsorModalOpen, setSponsorModalOpen] = useState(false);
 
+  // Hardware Profiler Modal state
+  const [profilerModalOpen, setProfilerModalOpen] = useState(false);
+
   useEffect(() => {
-    if (!legalModalOpen && !contactModalOpen && !changelogModalOpen && !sponsorModalOpen) return;
+    if (!legalModalOpen && !contactModalOpen && !changelogModalOpen && !sponsorModalOpen && !profilerModalOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setLegalModalOpen(false);
         setContactModalOpen(false);
         setChangelogModalOpen(false);
         setSponsorModalOpen(false);
+        setProfilerModalOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [legalModalOpen, contactModalOpen, changelogModalOpen, sponsorModalOpen]);
+  }, [legalModalOpen, contactModalOpen, changelogModalOpen, sponsorModalOpen, profilerModalOpen]);
 
   // Commit hash copy state
   const [copiedHash, setCopiedHash] = useState(false);
@@ -199,6 +204,16 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               <ShieldCheck size={13} className="text-blue-400" />
               <span>Zero Telemetry • 100% Private</span>
             </div>
+
+            {/* Community Funded Support Badge */}
+            <button
+              onClick={() => setSponsorModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/25 text-rose-400 hover:bg-rose-500/20 text-xs font-mono transition-colors cursor-pointer group"
+              title="Support OpenGuide via GitHub Sponsors, Ko-fi, or PayPal"
+            >
+              <Heart size={13} className="text-rose-400 fill-rose-400/20 group-hover:scale-110 transition-transform" />
+              <span>Support $0 AI Education</span>
+            </button>
 
             {/* Open Source License Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs font-mono">
@@ -335,6 +350,33 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <span className="text-[10px] font-mono opacity-60 group-hover:text-rose-400">9 Labs</span>
               </button>
             </li>
+            <li>
+              <button 
+                onClick={() => navigate('/track/5/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track 5: Fine-Tuning & LoRA</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-pink-400">6 Labs</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/track/6/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track 6: Production MLOps & Memory</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-teal-400">3 Labs</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/track/7/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track 7: Diffusion & Multimodal ViT</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-fuchsia-400">3 Labs</span>
+              </button>
+            </li>
           </ul>
         </div>
 
@@ -363,6 +405,15 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               <a href="/#cognitive-accelerator" className="hover:text-[var(--color-text-primary)] transition-colors block">
                 Cognitive Accelerator Suite
               </a>
+            </li>
+            <li>
+              <button 
+                onClick={() => setProfilerModalOpen(true)}
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full cursor-pointer"
+              >
+                <span>Hardware & VRAM Profiler</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">Roofline</span>
+              </button>
             </li>
             <li>
               <button 
@@ -1118,6 +1169,12 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
           </div>
         )}
       </AnimatePresence>
+
+      {/* Hardware Profiler & VRAM Budget Modal */}
+      <HardwareProfilerModal
+        isOpen={profilerModalOpen}
+        onClose={() => setProfilerModalOpen(false)}
+      />
 
     </footer>
   );

@@ -11,6 +11,9 @@ import { track1 } from './data/track1';
 import { track2 } from './data/track2';
 import { track3 } from './data/track3';
 import { track4 } from './data/track4';
+import { track5 } from './data/track5';
+import { track6 } from './data/track6';
+import { track7 } from './data/track7';
 import { CURRENT_STUDIO_VERSION } from './data/changelogData';
 import './App.css';
 
@@ -249,6 +252,15 @@ function AppContent() {
               <Route path="/track/4/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
               <Route path="/track/4" element={<CoursePlayer track={track4} />} />
               <Route path="/track/4/engine" element={<CoursePlayer track={track4} />} />
+              <Route path="/track/5/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+              <Route path="/track/5" element={<CoursePlayer track={track5} />} />
+              <Route path="/track/5/engine" element={<CoursePlayer track={track5} />} />
+              <Route path="/track/6/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+              <Route path="/track/6" element={<CoursePlayer track={track6} />} />
+              <Route path="/track/6/engine" element={<CoursePlayer track={track6} />} />
+              <Route path="/track/7/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
+              <Route path="/track/7" element={<CoursePlayer track={track7} />} />
+              <Route path="/track/7/engine" element={<CoursePlayer track={track7} />} />
               <Route path="/holodeck" element={<SpatialHolodeck />} />
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="*" element={<NotFoundPage />} />

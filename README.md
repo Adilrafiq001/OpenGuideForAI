@@ -19,7 +19,7 @@
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/License-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Runtime-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/Architecture-Local--First%20$0-0f172a.svg?style=flat)](explainer.md)
-[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Curriculum-5%20Tracks%20%E2%80%A2%2045%20Labs-0f172a.svg?style=flat)](#curriculum-tracks)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/Curriculum-8%20Tracks%20%E2%80%A2%2057%20Labs-0f172a.svg?style=flat)](#curriculum-tracks)
 [![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#universal-design--accessibility)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-Offline%20Ready-0f172a.svg?style=flat)](#install-as-desktop--mobile-app)
 
@@ -91,7 +91,7 @@ OpenGuide does not cater to an insular elite. It is engineered for the complete 
 
 ## Ungameable Dual-Phase Autograders
 
-Every single one of OpenGuide's **45 curriculum laboratories** is guarded by a dual-phase autograding harness:
+Every single one of OpenGuide's **57 curriculum laboratories** is guarded by a dual-phase autograding harness:
 1. **Phase 1 (Visible Challenge):** Validates function return types, shapes, and structural syntax against baseline examples.
 2. **Phase 2 (Hidden Mathematical Invariants):** Evaluates student implementations against five hidden invariants per lab—probing Cauchy-Schwarz bounds, variance scaling, metric symmetry, dynamic test vectors, and edge cases.
 3. **Mutation Testing Kill Rate:** Subjected to an automated mutation testing suite across 135 adversarial mutants, achieving a **100.0% Kill Rate (135/135 mutants killed)** with zero false-positive passes.
@@ -140,7 +140,7 @@ OpenGuide functions as an **Installable Progressive Web App (PWA)** with native 
 
 | Shortcut | Tool Activated | Action Performed |
 |---|:---:|---|
-| **`Cmd + K` / `Ctrl + K`** | Command Palette | Fuzzy search across all 45 labs, 24 themes, 12 languages, and studio tools. |
+| **`Cmd + K` / `Ctrl + K`** | Command Palette | Fuzzy search across all 57 labs, 24 themes, 12 languages, and studio tools. |
 | **`Ctrl + Enter`** | Code Runner | Instantly compiles and executes active Python code in the Web Worker. |
 | **`Alt + X`** | X-Ray Debug Lens | Inspects real-time WebAssembly memory heap, AST nodes, and IndexedDB tables. |
 | **Touch Ribbon** | Mobile Editor | Single-tap access to syntax keys (`Tab`, `:`, `( )`, `[ ]`, `def`, `assert`). |
@@ -160,7 +160,7 @@ OpenGuide functions as an **Installable Progressive Web App (PWA)** with native 
 
 ## Curriculum Tracks
 
-Five sequential learning tracks comprising **45 interactive, runnable laboratories**:
+Eight sequential learning tracks comprising **57 interactive, runnable laboratories**:
 
 ```mermaid
 graph LR
@@ -169,8 +169,11 @@ graph LR
     T2["Track 2: Agents & RAG<br/>(ReAct Loops, FastMCP)"]
     T3["Track 3: Evals & Security<br/>(OWASP AI Top 10, WebGPU)"]
     T4["Track 4: Frontier Systems<br/>(Self-Attention, RoPE, DPO)"]
+    T5["Track 5: Fine-Tuning<br/>(LoRA, SVD, NF4 Bins)"]
+    T6["Track 6: Inference Engines<br/>(KV Paging, Speculative)"]
+    T7["Track 7: Generative Models<br/>(Diffusion, CFG, ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 | Track | Labs | Core Principle | Capstone Boss Project |
@@ -180,6 +183,9 @@ graph LR
 | **Track 2: RAG & Agents** | 9 | Thought $\rightarrow$ Action $\rightarrow$ Observation state machines | Autonomous Research Agent with multi-hop reasoning |
 | **Track 3: Evals & Guardrails** | 9 | Adversarial testing, prompt injection, and safety rules | Synthetic evaluation harness with WebGPU inference |
 | **Track 4: Frontier Systems** | 9 | Scaled dot-product attention, KV-cache math, and RoPE | Transformer Attention Dissection & DPO Loss Engine |
+| **Track 5: Fine-Tuning & LoRA** | 6 | Parameter-efficient low-rank adaptation and NF4 quantization | Zero-Overhead LoRA Weight Merging Engine |
+| **Track 6: Inference Engines** | 3 | High-throughput serving, KV paging, and speculative decoding | PagedAttention Virtual Paging Simulator |
+| **Track 7: Multimodal & Diffusion** | 3 | Forward diffusion noising, CFG vectors, and ViT patches | Vision Transformer Patch Linear Projector |
 
 ---
 
@@ -221,9 +227,11 @@ Support ongoing independent development:
 
 <div align="center">
 
-[![Sponsor via PayPal](https://img.shields.io/badge/Sponsor%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![Sponsor via GitHub](https://img.shields.io/badge/Sponsor%20via-GitHub-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
 &nbsp;&nbsp;
 [![Support on Ko-fi](https://img.shields.io/badge/Support%20on-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![Sponsor via PayPal](https://img.shields.io/badge/Sponsor%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
 
 <br/>
 

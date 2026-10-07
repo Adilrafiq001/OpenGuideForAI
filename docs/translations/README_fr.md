@@ -19,7 +19,7 @@
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/Licence-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Ex%C3%A9cution-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/Architecture-Local--First%20$0-0f172a.svg?style=flat)](#architecture-souveraine-c%C3%B4t%C3%A9-client)
-[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/Programme-5%20Parcours%20%E2%80%A2%2045%20Labs-0f172a.svg?style=flat)](#vue-densemble-du-programme)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/Programme-8%20Parcours%20%E2%80%A2%2057%20Labs-0f172a.svg?style=flat)](#vue-densemble-du-programme)
 [![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#accessibilit%C3%A9-universelle-et-normes)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-Pr%C3%AAt%20Hors--Ligne-0f172a.svg?style=flat)](#installation-sur-bureau-et-application-pwa)
 
@@ -93,17 +93,20 @@ OpenGuide fonctionne sous la **Règle des 0 $**. **Aucun serveur backend**. **Au
 <a id="vue-densemble-du-programme"></a>
 ## Vue d'Ensemble du Programme
 
-Cinq parcours d'apprentissage rigoureux comprenant **45 laboratoires interactifs directement exécutables** :
+Huit parcours d'apprentissage rigoureux comprenant **57 laboratoires interactifs directement exécutables** :
 
 ```mermaid
-graph TD
-    T0["Parcours 0: Zéro Absolu<br/>(CPython WASM, Variables, Boucles, Tokeniseur BPE)"]
-    T1["Parcours 1: Espaces Vectoriels<br/>(Géométrie Spatiale, Similarité Cosinus, Recherche Sémantique)"]
-    T2["Parcours 2: RAG et Agents Autonomes<br/>(Boucles ReAct, Découpage de Texte, Protocole Anthropic MCP)"]
-    T3["Parcours 3: Évaluations et Garde-Fous<br/>(OWASP AI Top 10, Pièges Canaris, Quantification WebGPU)"]
-    T4["Parcours 4: Intelligence Frontière<br/>(Scaled Dot-Product Attention, KV-Cache, RoPE, DPO)"]
+graph LR
+    T0["Parcours 0: Zéro Absolu<br/>(CPython WASM, Boucles, BPE)"]
+    T1["Parcours 1: Espaces Vectoriels<br/>(Géométrie, Cosinus)"]
+    T2["Parcours 2: RAG et Agents<br/>(Boucles ReAct, MCP)"]
+    T3["Parcours 3: Évals et Sécurité<br/>(OWASP AI Top 10, WebGPU)"]
+    T4["Parcours 4: Systèmes Frontières<br/>(Attention, RoPE, DPO)"]
+    T5["Parcours 5: Fine-Tuning<br/>(LoRA, SVD, NF4)"]
+    T6["Parcours 6: Moteurs d'Inférence<br/>(PagedAttention, Spéculatif)"]
+    T7["Parcours 7: Modèles Génératifs<br/>(Diffusion, CFG, ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 | Parcours | Labs | Modèle Mental Clé | Projet Final d'Élite |
@@ -113,6 +116,9 @@ graph TD
 | **Parcours 2: RAG et Agents** | 9 | Automates Pensée $\rightarrow$ Action $\rightarrow$ Observation et schémas MCP | Agent de Recherche Scientifique Autonome avec raisonnement multi-sauts |
 | **Parcours 3: Évaluations et Gardes**| 9 | Red-teaming contradictoire, défenses contre l'injection de prompts | Système d'évaluation synthétique avec inférence WebGPU locale |
 | **Parcours 4: Systèmes Frontières** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, gestion de mémoire KV-cache, RoPE | Dissection de Tête d'Attention Transformer et Moteur de Perte DPO |
+| **Parcours 5: Fine-Tuning et LoRA**| 6 | Adaptation de bas rang, troncature SVD et quantification NF4 | Moteur de Fusion de Poids LoRA à Surcoût Nul |
+| **Parcours 6: Moteurs d'Inférence**| 3 | Débit de calcul, roofline de bande passante et décodage spéculatif | Simulateur de Pagination Virtuelle PagedAttention |
+| **Parcours 7: Multimodal et Diffusion**| 3 | Processus de bruitage direct, vecteur CFG et patchs d'image | Projecteur Linéaire de Patchs Vision Transformer |
 
 ---
 
@@ -133,10 +139,10 @@ OpenGuide n'est pas réservé à une élite fermée. Il est conçu pour couvrir 
 
 ## Autocalibrateurs Indétournables à Double Phase
 
-Chacun des **45 laboratoires du cursus** d'OpenGuide est protégé par un système de validation à double phase :
+Chacun des **57 laboratoires du cursus** d'OpenGuide est protégé par un système de validation à double phase :
 1. **Phase 1 (Défi Visible) :** Vérifie les types de retour, les formes de tenseurs et la syntaxe par rapport aux exemples de référence.
 2. **Phase 2 (Invariants Mathématiques Masqués) :** Évalue la solution de l'élève par rapport à cinq invariants mathématiques masqués par laboratoire : inégalités de Cauchy-Schwarz, mise à l'échelle de la variance, symétrie métrique, vecteurs de test dynamiques et cas limites.
-3. **Taux d'Élimination en Tests de Mutation :** Éprouvé par une suite automatisée de 135 mutants adverses, atteignant un **Taux d'Élimination de 100,0 % (135/135 mutants éliminés)** sans faux positifs.
+3. **Taux d'Élimination en Tests de Mutation :** Éprouvé par une suite automatisée de 171 mutants adverses, atteignant un **Taux d'Élimination de 100,0 % (171/171 mutants éliminés)** sans faux positifs.
 
 ---
 
@@ -196,9 +202,11 @@ Si OpenGuide vous a aidé à comprendre l'IA ou a soutenu votre carrière d'ing�
 
 <div align="center">
 
-[![Soutenir via PayPal](https://img.shields.io/badge/Soutenir%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![Sponsors GitHub](https://img.shields.io/badge/Soutenir-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
 &nbsp;&nbsp;
 [![Soutenir sur Ko-fi](https://img.shields.io/badge/Soutenir%20sur-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![Soutenir via PayPal](https://img.shields.io/badge/Soutenir%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
 
 </div>
 
@@ -239,6 +247,6 @@ yarn --cwd apps/web build
 * **[Journal des Modifications (Changelog)](../../CHANGELOG.md) :** Versions chronologiques et évolutions de l'architecture.
 * **[Spécification Système ASD-STE100](../../explainer.md) :** Description complète en anglais technique simplifié.
 * **[Architecture Système](../../ARCHITECTURE.md) :** Analyse approfondie des Web Workers, de WebGPU et de la persistance locale.
-* **[Spécifications Pédagogiques](../CURRICULUM.md) :** Programme détaillé et objectifs des 45 laboratoires interactifs.
+* **[Spécifications Pédagogiques](../CURRICULUM.md) :** Programme détaillé et objectifs des 57 laboratoires interactifs.
 * **[Dossier d'Audit Technique Externe et Assurance Qualité](../EXTERNAL-AUDIT-QA-DOSSIER.md) :** Fondements architecturaux, matrices d'invariants et guide de reproduction indépendant.
 

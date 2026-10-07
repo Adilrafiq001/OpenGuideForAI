@@ -8,11 +8,13 @@ import {
   Flame,
   Compass,
   Layers,
-  Sliders
+  Sliders,
+  Bell
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
 import { getAudioContext } from '../services/soundHaptics';
+import { getStreakReminderStatus, requestAndScheduleStreakReminder } from '../utils/streakNotification';
 
 function playSound(type: 'success' | 'click' | 'error' | 'combo', enabled: boolean) {
   if (!enabled) return;
@@ -77,6 +79,7 @@ export function SynapseLounge() {
   const [activeGame, setActiveGame] = useState<'vector' | 'neuron' | 'attention'>('vector');
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [reminderActive, setReminderActive] = useState(() => getStreakReminderStatus().scheduled);
 
   // --- GAME 3: TRANSFORMER ATTENTION RADAR & SOFTMAX SCALER ---
   const attentionScenarios = [
@@ -343,6 +346,20 @@ export function SynapseLounge() {
           <div className="flex items-center gap-1.5 text-amber-500 font-mono font-bold text-sm">
             <Flame size={18} className={streak > 0 ? 'animate-bounce text-amber-500' : 'text-neutral-500'} />
             <span>{streak}x</span>
+            <button
+              onClick={async () => {
+                const ok = await requestAndScheduleStreakReminder(streak);
+                if (ok) {
+                  playSound('success', soundFx);
+                  setReminderActive(true);
+                }
+              }}
+              className="ml-1 p-1 rounded-lg hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-amber-400 transition-colors cursor-pointer"
+              title={reminderActive ? 'Daily Streak Reminder Active' : 'Enable Daily Streak Reminder'}
+              aria-label="Enable Daily Streak Reminder"
+            >
+              <Bell size={14} className={reminderActive ? 'text-amber-400 fill-amber-400/20' : 'opacity-60'} />
+            </button>
           </div>
         </div>
       </div>

@@ -106,6 +106,9 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     expect(indexHtml).toContain('Track 2: RAG, Retrieval &amp; Autonomous Agents');
     expect(indexHtml).toContain('Track 3: Production Evals, Guardrails &amp; Security');
     expect(indexHtml).toContain('Track 4: Frontier Attention, Systems &amp; Reasoning');
+    expect(indexHtml).toContain('Track 5: Fine-Tuning, LoRA &amp; Quantization (INT8/NF4)');
+    expect(indexHtml).toContain('Track 6: High-Throughput Inference Engines &amp; KV Paging');
+    expect(indexHtml).toContain('Track 7: Multimodal, Vision Transformers &amp; Diffusion');
   });
 
   test('TC-AUDIT-005: Offline Indicator Network Flipped Mid-Flight Without Errors', async ({ page }) => {
@@ -323,7 +326,7 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
   });
 
-  test('TC-AUDIT-016: Curriculum Integrity & Globally Unique Lesson IDs Across 45 Labs', async ({ page }) => {
+  test('TC-AUDIT-016: Curriculum Integrity & Globally Unique Lesson IDs Across 57 Labs', async ({ page }) => {
     await page.goto('/');
 
     const curriculumData = await page.evaluate(async () => {
@@ -332,8 +335,11 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
       const { track2 } = await import('/src/data/track2.ts');
       const { track3 } = await import('/src/data/track3.ts');
       const { track4 } = await import('/src/data/track4.ts');
+      const { track5 } = await import('/src/data/track5.ts');
+      const { track6 } = await import('/src/data/track6.ts');
+      const { track7 } = await import('/src/data/track7.ts');
 
-      const allTracks = [track0, track1, track2, track3, track4];
+      const allTracks = [track0, track1, track2, track3, track4, track5, track6, track7];
       const lessonIds: string[] = [];
       let totalLessons = 0;
       let missingVerificationCount = 0;
@@ -362,8 +368,8 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
       };
     });
 
-    expect(curriculumData.totalLessons).toBe(45);
-    expect(curriculumData.uniqueCount).toBe(45);
+    expect(curriculumData.totalLessons).toBe(57);
+    expect(curriculumData.uniqueCount).toBe(57);
     expect(curriculumData.hasDuplicates).toBe(false);
     expect(curriculumData.missingVerificationCount).toBe(0);
   });
@@ -700,7 +706,7 @@ ZeroDivisionError: division by zero`;
       const mod = await import('/src/data/offlineKnowledge.ts');
       return mod.OFFLINE_KNOWLEDGE_BASE.length;
     });
-    expect(totalCount).toBe(250);
+    expect(totalCount).toBe(255);
     expect(totalCount).toBeGreaterThanOrEqual(250);
 
     const errors: string[] = [];
@@ -1080,7 +1086,7 @@ ZeroDivisionError: division by zero`;
 
     // 5. Verify Portfolio Page track filters wrap cleanly
     await page.goto('/portfolio');
-    const trackFilterContainer = page.locator('button:has-text("All 28"), button:has-text("All 45")').locator('..');
+    const trackFilterContainer = page.locator('button:has-text("All 28"), button:has-text("All 45"), button:has-text("All 57")').first().locator('..');
     await expect(trackFilterContainer).toHaveClass(/flex-wrap/);
 
     // 6. Test on narrow mobile screen (375x667)
@@ -1092,6 +1098,148 @@ ZeroDivisionError: division by zero`;
 
     // Verify 0 console errors
     expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('REG-SPONSOR-PORTAL: Multi-Sponsor modal opens and displays verified donation links', async ({ page }) => {
+    await page.goto('/');
+    const sponsorBtn = page.locator('button:has-text("Support $0 AI Education")').first();
+    await expect(sponsorBtn).toBeVisible();
+    await sponsorBtn.click();
+
+    const sponsorModal = page.locator('#sponsor-modal-title');
+    await expect(sponsorModal).toBeVisible();
+
+    // Verify all 3 verified channels
+    const ghLink = page.locator('a[href*="github.com/sponsors/openguideforai"]');
+    await expect(ghLink).toBeVisible();
+    const kofiLink = page.locator('a[href*="ko-fi.com/buymegoodcoffee"]');
+    await expect(kofiLink).toBeVisible();
+    const paypalLink = page.locator('a[href*="paypal.me/buymegoodcoffee"]');
+    await expect(paypalLink).toBeVisible();
+
+    // Test Escape key closes cleanly
+    await page.keyboard.press('Escape');
+    await expect(sponsorModal).not.toBeVisible();
+  });
+
+  test('REG-ANALYTICS: Cloudflare Web Analytics beacon is configured for production edge without CSP violations', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+    await page.goto('/');
+
+    const indexHtmlPath = fs.existsSync(path.resolve(process.cwd(), 'apps/web/index.html'))
+      ? path.resolve(process.cwd(), 'apps/web/index.html')
+      : path.resolve(process.cwd(), 'index.html');
+    const indexHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
+    expect(indexHtml).toContain('f47cb826efea4a95a1215b3992b95c96');
+    expect(indexHtml).toContain('cloudflareinsights.com/beacon.min.js');
+    expect(errors.filter(e => e.includes('Content Security Policy'))).toHaveLength(0);
+  });
+
+  test('REG-PROFILER-MODAL: Hardware Profiler modal calculates VRAM rooflines correctly', async ({ page }) => {
+    await page.goto('/');
+    const profilerBtn = page.locator('button:has-text("Hardware & VRAM Profiler")').first();
+    await expect(profilerBtn).toBeVisible();
+    await profilerBtn.click();
+
+    const profilerModal = page.locator('#hardware-profiler-title');
+    await expect(profilerModal).toBeVisible();
+
+    // Verify weights and KV cache breakdown
+    await expect(page.locator('text=Model Weights VRAM')).toBeVisible();
+    await expect(page.locator('text=KV Cache Footprint')).toBeVisible();
+    await expect(page.locator('text=Total VRAM Required')).toBeVisible();
+
+    // Switch precision to INT4
+    const int4Btn = page.locator('button:has-text("INT4")');
+    await int4Btn.click();
+
+    // Test Abundant Progressive Hints in Hardware Profiler
+    const unlockHintBtn = page.locator('button:has-text("Unlock Next Tier")');
+    await expect(unlockHintBtn).toBeVisible();
+    await unlockHintBtn.click();
+    await expect(page.locator('text=Tier 1 (Mental Model)')).toBeVisible();
+
+    // Close profiler
+    await page.keyboard.press('Escape');
+    await expect(profilerModal).not.toBeVisible();
+  });
+
+  test('REG-TRACKS-5-6-7-DIRECT-ROUTING: Briefing pages render curriculum lessons, sandboxes, and 0 console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+    // Track 5: Fine-Tuning & Quantization Briefing
+    await page.goto('/track/5/intro');
+    await expect(page.locator('h1:has-text("Track 5: Fine-Tuning")')).toBeVisible();
+    await expect(page.locator('text=Low-Rank Matrix Factorization & LoRA Forward Pass').first()).toBeVisible();
+    await expect(page.locator('text=Direct Preference Optimization (DPO)').first()).toBeVisible();
+    await expect(page.locator('button:has-text("INITIALIZE WORKSPACE NOW")').first()).toBeVisible();
+
+    // Track 6: Inference Systems & Serving Briefing
+    await page.goto('/track/6/intro');
+    await expect(page.locator('h1:has-text("Track 6: Production MLOps")')).toBeVisible();
+    await expect(page.locator('text=KV-Cache Byte Footprint & Arithmetic Intensity').first()).toBeVisible();
+    await expect(page.locator('text=Speculative Decoding Acceptance-Rejection').first()).toBeVisible();
+    await expect(page.locator('button:has-text("INITIALIZE WORKSPACE NOW")').first()).toBeVisible();
+
+    // Track 7: Multimodal & Diffusion Models Briefing
+    await page.goto('/track/7/intro');
+    await expect(page.locator('h1:has-text("Track 7: Generative Diffusion")')).toBeVisible();
+    await expect(page.locator('text=Forward Diffusion Noise Scheduling').first()).toBeVisible();
+    await expect(page.locator('text=Vision Transformer (ViT) Patch Projection Mechanics').first()).toBeVisible();
+    await expect(page.locator('button:has-text("INITIALIZE WORKSPACE NOW")').first()).toBeVisible();
+
+    // Direct CoursePlayer IDE loading verification for Track 5
+    await page.goto('/track/5');
+    await expect(page.locator('text=Low-Rank Matrix Factorization & LoRA Forward Pass').first()).toBeVisible();
+
+    // Zero unexpected errors
+    expect(errors.filter(e => !e.includes('favicon'))).toHaveLength(0);
+  });
+
+  test('REG-OFFLINE-COPILOT-PEDAGOGICAL-WIDGETS: Bug Hunter and Tensor Surgery interactive widgets with progressive hints', async ({ page }) => {
+    await page.goto('/');
+
+    // Trigger Offline Copilot modal from landing page button
+    const askBlueeBtn = page.locator('#ask-bluee-now-btn');
+    await expect(askBlueeBtn).toBeVisible();
+    await askBlueeBtn.click();
+
+    const copilotModal = page.locator('div[role="dialog"][aria-label="Offline AI Copilot"]');
+    await expect(copilotModal).toBeVisible();
+
+    // 1. Search for Bug Hunter / mutation testing
+    const searchInput = page.locator('#copilot-search-input');
+    await searchInput.fill('mutation testing');
+    await page.waitForTimeout(500);
+
+    // Verify BugHunterChallenge rendered inside Copilot card
+    const bugHunterCard = page.locator('text=The Bug Hunter: Adversarial AI Code Auditing');
+    await expect(bugHunterCard).toBeVisible();
+
+    // Test Abundant Progressive Hints unlocking in BugHunterChallenge
+    const unlockHintBtn = page.locator('button:has-text("Unlock Next Tier")').first();
+    await expect(unlockHintBtn).toBeVisible();
+    await unlockHintBtn.click();
+
+    // Verify mental models and invariant hints are visible
+    await expect(page.locator('text=Tier 1 (Mental Model)')).toBeVisible();
+
+    // 2. Search for Tensor Surgery
+    await searchInput.fill('tensor surgery');
+    await page.waitForTimeout(500);
+
+    // Verify TensorSurgeryVisualizer rendered inside Copilot card
+    const tensorSurgeryCard = page.locator('text=Tensor Surgery: Shape, Strides & Memory Manifolds');
+    await expect(tensorSurgeryCard).toBeVisible();
+    await expect(page.locator('text=Physical Memory Strides')).toBeVisible();
+    await expect(page.locator('text=Physical Memory Buffer Architecture')).toBeVisible();
+
+    // Close Copilot via close button
+    const closeBtn = page.locator('#close-copilot-btn');
+    await closeBtn.click();
+    await expect(copilotModal).not.toBeVisible();
   });
 });
 

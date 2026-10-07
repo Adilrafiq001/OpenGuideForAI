@@ -16,6 +16,9 @@ import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
 import { track4 } from '../data/track4';
+import { track5 } from '../data/track5';
+import { track6 } from '../data/track6';
+import { track7 } from '../data/track7';
 import type { Track } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -46,6 +49,9 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
   const activeTrack: Track = propTrack || (
+    location.pathname.includes('/track/7') ? track7 :
+    location.pathname.includes('/track/6') ? track6 :
+    location.pathname.includes('/track/5') ? track5 :
     location.pathname.includes('/track/4') ? track4 :
     location.pathname.includes('/track/3') ? track3 :
     location.pathname.includes('/track/2') ? track2 :

@@ -19,7 +19,7 @@
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/开源协议-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/运行环境-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
 [![Architecture: Local--First $0](https://img.shields.io/badge/系统架构-本地优先%20$0-0f172a.svg?style=flat)](#自主客户端架构)
-[![Curriculum: 5 Tracks • 45 Labs](https://img.shields.io/badge/核心课程-5%20大方向%20%E2%80%A2%2045%20个实验-0f172a.svg?style=flat)](#课程体系全景)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/核心课程-8%20大方向%20%E2%80%A2%2057%20个实验-0f172a.svg?style=flat)](#课程体系全景)
 [![Design: WCAG AAA](https://img.shields.io/badge/设计标准-WCAG%20AAA-0f172a.svg?style=flat)](#无障碍与设计标准)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-完全离线运行-0f172a.svg?style=flat)](#桌面与离线-pwa-应用安装)
 
@@ -93,17 +93,20 @@ OpenGuide 严格恪守 **$0 成本法则**。**没有后端服务器**，**没�
 <a id="课程体系全景"></a>
 ## 课程体系全景
 
-包含 5 个严谨进阶方向、共 **45 个完全可直接在浏览器中编译运行的交互式实验**：
+包含 8 个严谨进阶方向、共 **57 个完全可直接在浏览器中编译运行的交互式实验**：
 
 ```mermaid
-graph TD
-    T0["方向 0: 绝对零度<br/>(CPython WASM、变量、循环、BPE 分词器)"]
-    T1["方向 1: 向量空间与流形<br/>(高维几何、余弦相似度投影、语义检索)"]
-    T2["方向 2: 检索增强生成与自主智能体<br/>(ReAct 决策闭环、文档切分、Anthropic MCP 协议)"]
-    T3["方向 3: 评测体系与工业安全护栏<br/>(OWASP AI Top 10、金丝雀陷阱、WebGPU 模型量化)"]
-    T4["方向 4: 前沿智能与大模型内核<br/>(缩放点积注意力、KV 缓存优化、RoPE 旋转位置编码、DPO)"]
+graph LR
+    T0["方向 0: 绝对零度<br/>(CPython WASM、循环、BPE)"]
+    T1["方向 1: 向量空间<br/>(高维几何、语义检索)"]
+    T2["方向 2: 智能体与 RAG<br/>(ReAct 决策环、MCP)"]
+    T3["方向 3: 评测与护栏<br/>(OWASP AI Top 10、WebGPU)"]
+    T4["方向 4: 前沿大模型内核<br/>(自注意力、RoPE、DPO)"]
+    T5["方向 5: 参数微调<br/>(LoRA 权重合并、NF4 量化)"]
+    T6["方向 6: 推理引擎<br/>(PagedAttention 虚拟分页)"]
+    T7["方向 7: 生成与多模态<br/>(DDPM 扩散、CFG 向量、ViT)"]
 
-    T0 --> T1 --> T2 --> T3 --> T4
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 | 方向 | 实验数 | 核心心智模型 | 压轴结课大项目 |
@@ -113,6 +116,9 @@ graph TD
 | **方向 2: RAG 与智能体**| 9 | 思考 $\rightarrow$ 行动 $\rightarrow$ 观察有限状态机与 MCP 规范 | 具备多跳推理能力的自主科研文献 Agent |
 | **方向 3: 评测与护栏** | 9 | 提示词注入攻防对抗、幻觉检测与量化评价标准 | 结合浏览器端 WebGPU 算力的自动化合成评测系统 |
 | **方向 4: 前沿大模型体系**| 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$、KV 缓存内存计算、RoPE | 深度拆解 Transformer 注意力头与 DPO 强化学习损失引擎 |
+| **方向 5: 参数微调与 LoRA**| 6 | 低秩适应矩阵分解、SVD 秩截断与 NF4 量化分箱 | 零运行时开销的 LoRA 权重动态折叠与合并引擎 |
+| **方向 6: 高性能推理引擎**| 3 | 吞吐量优化、KV 缓存带宽屋顶线与投机解码采样 | PagedAttention 虚拟内存块分页管理器 |
+| **方向 7: 多模态与扩散模型**| 3 | 前向扩散加噪过程、无分类器引导与图像块线性映射 | Vision Transformer 图像分块线性投射层 |
 
 ---
 
@@ -133,10 +139,10 @@ OpenGuide 绝非仅为少数技术精英打造，而是面向全人类的完整�
 
 ## 双阶段防作弊自动评分系统
 
-OpenGuide 全部 **45 个课程实验** 均由严格的双阶段自动化评估套件护航：
+OpenGuide 全部 **57 个课程实验** 均由严格的双阶段自动化评估套件护航：
 1. **第一阶段（可见挑战）：** 校验函数的返回值类型、张量形状以及基础样例语法。
 2. **第二阶段（隐藏数学不变量）：** 针对每道实验运行 5 个隐藏数学不变量断言：柯西-施瓦茨不等式、方差缩放、度量对称性、动态测试向量与极限边界条件。
-3. **变异测试击杀率：** 经由 135 个手工构造的对抗性变异代码库验证，达成 **100.0% 变异击杀率（135/135 变异体全部捕获淘汰）**，杜绝误判与虚假通过。
+3. **变异测试击杀率：** 经由 171 个手工构造的对抗性变异代码库验证，达成 **100.0% 变异击杀率（171/171 变异体全部捕获淘汰）**，杜绝误判与虚假通过。
 
 ---
 
@@ -195,9 +201,11 @@ OpenGuide 是我献给全世界的一份礼物。
 
 <div align="center">
 
-[![通过 PayPal 赞助](https://img.shields.io/badge/赞助支持-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/buymegoodcoffee/sponsor)
+[![GitHub Sponsors](https://img.shields.io/badge/赞助-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
 &nbsp;&nbsp;
 [![在 Ko-fi 上支持](https://img.shields.io/badge/支持作者-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![通过 PayPal 赞助](https://img.shields.io/badge/赞助支持-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
 
 </div>
 
@@ -238,6 +246,6 @@ yarn --cwd apps/web build
 * **[版本更新日志 (Changelog)](../../CHANGELOG.md):** 编年史版本发布记录与功能演进。
 * **[ASD-STE100 架构白皮书](../../explainer.md):** 采用简化技术英文撰写的完整系统设计规范。
 * **[系统深度架构](../../ARCHITECTURE.md):** Web Worker 通信、WebGPU 算力流水线与本地存储架构。
-* **[课程教学大纲与成果规范](../CURRICULUM.md):** 全部 45 个实验的设计宗旨与工程产出指标。
+* **[课程教学大纲与成果规范](../CURRICULUM.md):** 全部 57 个实验的设计宗旨与工程产出指标。
 * **[外部独立技术审计报告](../EXTERNAL-AUDIT-QA-DOSSIER.md):** 真实性声明、数学不变量验证矩阵与可复现执行指南。
 

@@ -27,10 +27,10 @@ In strict accordance with the project contract and anti-bias protocols, this dos
 | Dimension | Grounded Reality vs. Common Artificial Claims |
 | :--- | :--- |
 | **Hardware Testing** | Automated browser tests are executed in **Simulated Chromium Emulation** via Playwright. They do *not* constitute physical iOS Safari (WebKit memory limits) or physical Android device tests. Hardware testing must be evaluated on real devices. |
-| **Plumbing vs. Substance** | Scaffolding (Three.js canvas, 24 WCAG AAA themes, Web Worker runners, audio feedback) is merely a delivery vehicle. The genuine product substance resides in the **45 curriculum labs**, their mathematical intuitions, code challenges, hidden invariants, and autograder defenses. |
-| **Autograder Ungameability** | Autograders are not passive string matchers. All 45 labs enforce dual-phase validation: visible baseline assertions plus 5 strict mathematical hidden invariants per lab. |
-| **Mutation Testing Proof** | 135 adversarial mutant implementations (3 per lab across all 45 labs) were subjected to the autograder suites. **135 out of 135 mutants were eliminated (100.0% Kill Rate)**. |
-| **Starter Code Integrity** | 0 out of 45 labs provide pre-solved starter code. Every starter file requires genuine student implementation before passing assertions. |
+| **Plumbing vs. Substance** | Scaffolding (Three.js canvas, 24 WCAG AAA themes, Web Worker runners, audio feedback) is merely a delivery vehicle. The genuine product substance resides in the **57 curriculum labs**, their mathematical intuitions, code challenges, hidden invariants, and autograder defenses. |
+| **Autograder Ungameability** | Autograders are not passive string matchers. All 57 labs enforce dual-phase validation: visible baseline assertions plus 5 strict mathematical hidden invariants per lab. |
+| **Mutation Testing Proof** | 171 adversarial mutant implementations (3 per lab across all 57 labs) were subjected to the autograder suites. **171 out of 171 mutants were eliminated (100.0% Kill Rate)**. |
+| **Starter Code Integrity** | 0 out of 57 labs provide pre-solved starter code. Every starter file requires genuine student implementation before passing assertions. |
 | **Universal Human Spectrum** | The curriculum does not restrict itself to an insular persona archetype. It spans the full 6-tier human continuum (Stage 0 to Stage 5), providing operational prompt engineering and diagnostics for real-world trades (mechanics, carpentry, healthcare, cooking, agriculture). |
 | **Anti-AI-Slop Standard** | Eliminates purple glowing pills, sparkle emojis, talisman symbols, and promotional buzzwords across all components, adhering strictly to calm, high-craft ergonomics. |
 
@@ -38,7 +38,7 @@ In strict accordance with the project contract and anti-bias protocols, this dos
 
 ## 3. Curriculum Architecture & Mathematical Invariant Matrix
 
-The curriculum consists of 5 tracks (45 labs total), each structured with First-Principles Intuition, Interactive Visual Models, Mathematical Formulations, Progressive 3-Tier Hints, and Dual-Phase Ungameable Test Suites:
+The curriculum consists of 8 tracks (57 labs total), each structured with First-Principles Intuition, Interactive Visual Models, Mathematical Formulations, Progressive 3-Tier Hints, and Dual-Phase Ungameable Test Suites:
 
 ### Track 0: Absolute Zero (9 Labs)
 - **Lab 0.1.1:** Hello, World! & The In-Browser CPython WASM Sandbox (Pyodide v0.26 WebAssembly compilation, zero-install architecture).
@@ -100,31 +100,55 @@ The curriculum consists of 5 tracks (45 labs total), each structured with First-
 - **Lab 4.3.3:** Capstone Autonomous Frontier Reasoning Agent (MCP tools, KV context token tracking, Chronological audit trail).
 - **Mutation Resilience:** 27 / 27 mutants killed (**100.0%**).
 
+### Track 5: Fine-Tuning & Parameter-Efficient Adaptation (6 Labs)
+- **Lab 5.1.1:** LoRA Forward Pass & Low-Rank Factorization ($h = Wx + \frac{\alpha}{r} BAx$).
+- **Lab 5.1.2:** Zero-Overhead LoRA Weight Merging ($W_{\text{merged}} = W_0 + \frac{\alpha}{r} BA$).
+- **Lab 5.1.3:** SVD Matrix Factorization & Low-Rank Truncation ($W \approx U_r \Sigma_r V_r^T$).
+- **Lab 5.2.1:** Uniform Symmetric INT8 Quantization ($q = \text{clip}(\text{round}(x / s), -128, 127)$).
+- **Lab 5.2.2:** QLoRA NormalFloat4 (NF4) Quantization Bins.
+- **Lab 5.2.3:** Direct Preference Optimization (DPO) Loss Engine.
+- **Mutation Resilience:** 18 / 18 mutants killed (**100.0%**).
+
+### Track 6: High-Throughput Inference Engines (3 Labs)
+- **Lab 6.1.1:** KV-Cache Memory Calculation & Bandwidth Roofline.
+- **Lab 6.1.2:** PagedAttention Virtual Paging & Block Table Mapping.
+- **Lab 6.1.3:** Speculative Decoding Acceptance-Rejection Sampling.
+- **Mutation Resilience:** 9 / 9 mutants killed (**100.0%**).
+
+### Track 7: Generative Models & Multimodal Foundations (3 Labs)
+- **Lab 7.1.1:** DDPM Forward Diffusion Closed-Form Sampling ($q(x_t | x_0)$).
+- **Lab 7.1.2:** Classifier-Free Guidance (CFG) Vector Field ($v_{\text{cfg}} = v_{\text{uncond}} + s(v_{\text{cond}} - v_{\text{uncond}})$).
+- **Lab 7.1.3:** Vision Transformer (ViT) Patch Linear Projection.
+- **Mutation Resilience:** 9 / 9 mutants killed (**100.0%**).
+
 ---
 
 ## 4. Total Verification Telemetry
 
 | Audit Stage | Metric Target | Physically Verified Result | Status |
 | :--- | :--- | :--- | :--- |
-| **All 45 Labs Solution Execution** | 45 / 45 passed | 45 passed, 0 failed | **PASS** |
-| **Starter Code Challenge Non-Triviality** | 0 / 45 pre-solved | 0 pre-solved (45 / 45 fail initial assertions) | **PASS** |
-| **Pedagogical Substance & Hints** | 0 shallow / 0 banned | 0 banned terms, 45/45 3-tier progressive hints | **PASS** |
+| **All 57 Labs Solution Execution** | 57 / 57 passed | 57 passed, 0 failed | **PASS** |
+| **Starter Code Challenge Non-Triviality** | 0 / 57 pre-solved | 0 pre-solved (57 / 57 fail initial assertions) | **PASS** |
+| **Pedagogical Substance & Hints** | 0 shallow / 0 banned | 0 banned terms, 57/57 progressive hint engines | **PASS** |
 | **Track 0 Mutation Audit** | 27 mutants | 27 killed (100.0% Kill Rate) | **PASS** |
 | **Track 1 Mutation Audit** | 27 mutants | 27 killed (100.0% Kill Rate) | **PASS** |
 | **Track 2 Mutation Audit** | 27 mutants | 27 killed (100.0% Kill Rate) | **PASS** |
 | **Track 3 Mutation Audit** | 27 mutants | 27 killed (100.0% Kill Rate) | **PASS** |
 | **Track 4 Mutation Audit** | 27 mutants | 27 killed (100.0% Kill Rate) | **PASS** |
-| **Total Mutation Suite** | 135 mutants | **135 / 135 killed (100.0% Kill Rate)** | **PASS** |
-| **Oxlint Code Quality** | 0 errors, 0 warnings | 0 errors, 0 warnings across 108 files | **PASS** |
+| **Track 5 Mutation Audit** | 18 mutants | 18 killed (100.0% Kill Rate) | **PASS** |
+| **Track 6 Mutation Audit** | 9 mutants | 9 killed (100.0% Kill Rate) | **PASS** |
+| **Track 7 Mutation Audit** | 9 mutants | 9 killed (100.0% Kill Rate) | **PASS** |
+| **Total Mutation Suite** | 171 mutants | **171 / 171 killed (100.0% Kill Rate)** | **PASS** |
+| **Oxlint Code Quality** | 0 errors, 0 warnings | 0 errors, 0 warnings across 123 files | **PASS** |
 | **Anti-AI-Slop UI/UX Audit** | 0 purple pills, 0 sparkles | 0 emojis, 0 sparkles, 0 talisman badges | **PASS** |
 | **Universal Human Spectrum** | 6-tier continuum | Stages 0 to 5, real-world trades covered | **PASS** |
-| **Browser Console Integrity** | 0 console errors | 0 errors on `/track/4` & active Pyodide run | **PASS** |
+| **Browser Console Integrity** | 0 console errors | 0 errors on `/track/5`, `/track/6`, `/track/7` | **PASS** |
 | **Pyodide WASM Runtime Latency** | $< 1000$ms execution | 17ms local execution recorded in UI | **PASS** |
-| **Full Playwright Regression Suite** | 130 / 130 passing | 100% pass across complete test directory | **PASS** |
+| **Full Playwright Regression Suite** | 140 / 140 passing | 100% pass across complete test directory | **PASS** |
 | **Sovereign Offline Knowledge Bank** | 250 core topics | 250 topics verified in runtime memory (`offlineKnowledge.ts`) | **PASS** |
 | **Information Retrieval Engine** | Okapi BM25 ($k_1=1.2, b=0.75$) | Field-weighted scoring verified by `TC-AUDIT-027` | **PASS** |
 | **Cross-Lingual Multi-Script Bridge** | 11 world languages | Native queries verified by `TC-AUDIT-028` (ES, HI, ZH, FR, DE, AR) | **PASS** |
-| **Interactive Visual Explainables** | 4 micro-widgets | Verified by `TC-AUDIT-029` (Softmax, PagedAttention, Cosine, RoPE) | **PASS** |
+| **Interactive Visual Explainables** | 4 micro-widgets + 3 new engines | Softmax, PagedAttention, Cosine, RoPE + Bug Hunter, Tensor Surgery, Hardware Profiler | **PASS** |
 | **Production Build** | Exit code 0 | Succeeded with 0 errors | **PASS** |
 
 ---
@@ -139,17 +163,17 @@ yarn install
 
 # 2. Run static linter
 yarn lint
-# Expected: Found 0 warnings and 0 errors across 108 files.
+# Expected: Found 0 warnings and 0 errors across 123 files.
 
-# 3. Run the curriculum solution execution and 135-mutant audit suite
+# 3. Run the curriculum solution execution and 171-mutant audit suite
 yarn --cwd apps/web playwright test tests/curriculum-solution-execution.spec.ts
-# Expected: 8 passed (All 45 labs verified, 0 pre-solved, 135/135 mutants killed).
+# Expected: 8 passed (All 57 labs verified, 0 pre-solved, 171/171 mutants killed).
 
-# 4. Run the complete automated regression suite (128 tests)
+# 4. Run the complete automated regression suite (140 tests)
 yarn --cwd apps/web playwright test
-# Expected: 128 passed.
+# Expected: 140 passed.
 
 # 5. Compile production bundle
 yarn --cwd apps/web build
-# Expected: Built in ~3.5s with 0 errors.
+# Expected: Built in ~4.3s with 0 errors.
 ```

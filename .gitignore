@@ -18,6 +18,8 @@ dist-ssr/
 test-results/
 playwright-report/
 *.png
+*.mp4
+recordings/
 merge.py
 
 # Logs and System Files

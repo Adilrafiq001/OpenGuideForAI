@@ -1,7 +1,7 @@
 /**
  * OpenGuide Offline First-Principles Knowledge Engine
  * 100% In-Browser • $0 Forever • Zero External API Calls
- * Comprehensive domain intelligence across all 5 tracks (45 labs), tools, architecture, and science.
+ * Comprehensive domain intelligence across all 8 tracks (57 labs), tools, architecture, and science.
  */
 
 import { resolveMultilingualTerms } from './multilingualLexicon';
@@ -18,7 +18,7 @@ export interface KnowledgeEntry {
   codeSnippet?: string;
   takeaway: string;
   multilingualKeywords?: Partial<Record<'es' | 'hi' | 'zh' | 'fr' | 'de' | 'ar' | 'ru' | 'ja', string[]>>;
-  interactiveWidgetId?: 'softmax-temperature' | 'paged-attention' | 'vector-similarity' | 'rope-rotation';
+  interactiveWidgetId?: 'softmax-temperature' | 'paged-attention' | 'vector-similarity' | 'rope-rotation' | 'bug-hunter' | 'tensor-surgery';
 }
 
 export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
@@ -31,7 +31,7 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     title: 'Hello! I am Bluee, Your OpenGuide Engineering Mentor',
     category: 'conversational',
     summary: 'Warm greetings from Bluee, your client-side AI co-pilot and engineering mentor.',
-    explanation: 'Hello! I am Bluee, your built-in AI engineering guide. I run 100% locally in your browser and have deep first-principles knowledge of all 5 curriculum tracks (45 interactive labs), Python WebAssembly internals, vector geometry, agentic state machines, and frontier attention mechanics. How can I help you build today?',
+    explanation: 'Hello! I am Bluee, your built-in AI engineering guide. I run 100% locally in your browser and have deep first-principles knowledge of all 8 curriculum tracks (57 interactive labs), Python WebAssembly internals, vector geometry, agentic state machines, and frontier attention mechanics. How can I help you build today?',
     takeaway: 'Ask me anything about AI architecture, code snippets, or curriculum concepts!'
   },
   {
@@ -437,6 +437,58 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     explanation: 'Traditional LLMs produce answers token-by-token with constant compute per token. Reasoning models (like OpenAI o1/o3 or DeepSeek R1) are trained with Reinforcement Learning (RL) using algorithms like Group Relative Policy Optimization (GRPO). They spend hundreds of tokens generating internal "hidden thoughts", backtracking, verifying hypotheses, and self-correcting before outputting the final conclusion.',
     takeaway: 'Scaling test-time thinking compute is the newest frontier of artificial intelligence.'
   },
+  {
+    id: 'track-5-fine-tuning-quantization',
+    keywords: ['track 5', 'fine-tuning', 'quantization', 'lora', 'svd', 'nf4', 'dpo', 'peft', 'weight merging'],
+    title: 'Track 5: Fine-Tuning, Quantization & Model Adaptation',
+    category: 'curriculum',
+    summary: '6 master labs implementing LoRA zero-overhead merging, SVD rank truncation, INT8 symmetric quantization, QLoRA NF4 bins, and DPO objective.',
+    explanation: 'Track 5 covers practical parameter-efficient adaptation and compression:\n• Lab 5.1: Low-Rank Adaptation (LoRA) Forward Pass\n• Lab 5.2: Zero-Overhead Weight Merging (W_merged = W_0 + (alpha/r)*BA)\n• Lab 5.3: Truncated SVD for Matrix Factorization & Rank Reduction\n• Lab 5.4: Symmetric Uniform INT8 Quantization & Dequantization\n• Lab 5.5: QLoRA NormalFloat4 (NF4) Quantization Bins\n• Lab 5.6: Direct Preference Optimization (DPO) Loss Objective.',
+    codeSnippet: '# LoRA Forward Pass:\nh = W_0 @ x + (alpha / r) * (B @ (A @ x))',
+    takeaway: 'Adapt and compress billion-parameter frontier models on consumer-grade hardware with zero latency overhead.'
+  },
+  {
+    id: 'track-6-inference-serving-systems',
+    keywords: ['track 6', 'inference', 'serving', 'pagedattention', 'speculative decoding', 'kv cache memory', 'roofline', 'vllm'],
+    title: 'Track 6: Inference Systems, KV-Cache & Serving Mechanics',
+    category: 'curriculum',
+    summary: '3 master labs implementing KV-Cache VRAM Rooflines, PagedAttention Virtual Paging, and Speculative Decoding.',
+    explanation: 'Track 6 dives into high-throughput inference engineering:\n• Lab 6.1: KV-Cache Memory Calculation & Memory Bandwidth Roofline\n• Lab 6.2: PagedAttention Virtual Paging & Block Allocation\n• Lab 6.3: Speculative Decoding Acceptance-Rejection Sampling.',
+    codeSnippet: '# Speculative Decoding Verification:\nif r <= p_target / p_draft:\n    accept_draft_token()\nelse:\n    sample_from_residual()',
+    takeaway: 'Serving transformers is bandwidth-bound: PagedAttention and Speculative Decoding maximize GPU memory utilization and throughput.'
+  },
+  {
+    id: 'track-7-multimodal-diffusion-vision',
+    keywords: ['track 7', 'diffusion', 'vision transformer', 'vit', 'ddpm', 'cfg', 'multimodal', 'classifier-free guidance'],
+    title: 'Track 7: Multimodal Foundation Models & Generative Diffusion',
+    category: 'curriculum',
+    summary: '3 master labs implementing DDPM closed-form sampling, Classifier-Free Guidance (CFG), and Vision Transformer (ViT) patch projection.',
+    explanation: 'Track 7 explores multimodal architectures and generative physics:\n• Lab 7.1: DDPM Forward Diffusion Process Closed-Form Sampling (q(x_t | x_0))\n• Lab 7.2: Classifier-Free Guidance (CFG) Vector Field Linear Combination\n• Lab 7.3: Vision Transformer (ViT) Patch Linear Projection & Spatial Sequence Flattening.',
+    codeSnippet: '# CFG Vector Field:\nepsilon_guided = epsilon_uncond + s * (epsilon_cond - epsilon_uncond)',
+    takeaway: 'Diffusion turns Gaussian noise into structured reality; ViT treats image patches as visual sentences.'
+  },
+  {
+    id: 'mutation-testing-bug-hunter',
+    keywords: ['bug hunter', 'mutation testing', 'mutant kill', 'autograder', 'zero day', 'softmax overflow', 'numerical stability'],
+    title: 'Bug Hunter: Mutation Testing & Autograder Invariants',
+    category: 'math',
+    summary: 'Interactive 0-day bug hunting challenge testing numerical stability, causal masking, and invariant verification with 4-tier progressive hints.',
+    explanation: 'What is a Mutant Kill? In mutation testing, an automated engine intentionally injects syntactical mutants (e.g. replacing shifted logits with raw logits, or flipping causal masks) to test if autograders catch them. If an autograder raises an error, the mutant is KILLED. If tests pass, the mutant SURVIVED, indicating inadequate verification. OpenGuide uses dual-phase autograders with 5 hidden mathematical invariants per lab to ensure 100% mutant kill rates.',
+    codeSnippet: '# Numerically Stable Softmax:\nshifted = logits - np.max(logits, axis=-1, keepdims=True)\nexp_vals = np.exp(shifted)\nreturn exp_vals / np.sum(exp_vals, axis=-1, keepdims=True)',
+    takeaway: 'Never trust code that merely runs; verify that tests actively kill subtle mathematical mutants.',
+    interactiveWidgetId: 'bug-hunter'
+  },
+  {
+    id: 'tensor-surgery-memory-layout',
+    keywords: ['tensor surgery', 'tensor strides', 'memory layout', 'contiguous', '4d tensor', 'stride physics', 'batch head seq dim'],
+    title: 'Tensor Surgery: 4D Tensor Strides & Contiguous Memory Physics',
+    category: 'architecture',
+    summary: 'Interactive 4D shape [B, H, S, D], stride calculation, and physical flat memory byte-offset inspector.',
+    explanation: 'Multidimensional tensors do not physically exist in GPU RAM—memory is strictly a 1D flat linear byte array. A tensor with shape [B, H, S, D] calculates byte offsets using strides: offset(b, h, s, d) = b*stride[0] + h*stride[1] + s*stride[2] + d*stride[3]. For row-major contiguous memory, stride[3]=1, stride[2]=D, stride[1]=S*D, stride[0]=H*S*D. Non-contiguous views (e.g. transpose/permute) alter strides without copying data until .contiguous() is called.',
+    codeSnippet: '# Row-Major Strides Calculation:\nstrides = [H * S * D, S * D, D, 1]\noffset = b * strides[0] + h * strides[1] + s * strides[2] + d * strides[3]',
+    takeaway: 'Memory is 1D linear tape. Strides map multidimensional indices to hardware RAM addresses.',
+    interactiveWidgetId: 'tensor-surgery'
+  },
 
   // ---------------------------------------------------------------------------
   // 7. INTERACTIVE LABS & TOOLS
@@ -771,7 +823,11 @@ const DOMAIN_SYNONYMS: Record<string, string[]> = {
   colbert: ['late', 'interaction', 'retrieval', 'multivector'],
   sae: ['sparse', 'autoencoder', 'interpretability', 'monosemantic'],
   dp: ['differential', 'privacy', 'sgd', 'noise', 'clipping'],
-  watermark: ['kirchenbauer', 'green', 'detection', 'synthetic']
+  watermark: ['kirchenbauer', 'green', 'detection', 'synthetic'],
+  mutant: ['mutation', 'testing', 'kill', 'autograder', 'invariant'],
+  mutation: ['mutant', 'testing', 'kill', 'autograder', 'invariant'],
+  lora: ['low-rank', 'peft', 'fine-tuning', 'adaptation', 'weights'],
+  surgery: ['tensor', 'strides', 'memory', 'layout', 'contiguous']
 };
 
 /**

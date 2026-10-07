@@ -21,13 +21,19 @@ import {
   Network,
   Cloud,
   Share2,
-  X
+  X,
+  Sparkles,
+  Zap,
+  Boxes
 } from 'lucide-react';
 import { track0 } from '../data/track0';
 import { track1 } from '../data/track1';
 import { track2 } from '../data/track2';
 import { track3 } from '../data/track3';
 import { track4 } from '../data/track4';
+import { track5 } from '../data/track5';
+import { track6 } from '../data/track6';
+import { track7 } from '../data/track7';
 import { safeRandomUUID } from '../utils/uuid';
 import { useProgressStore } from '../store/useProgressStore';
 import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
@@ -75,7 +81,7 @@ export function PortfolioPage() {
 
   const [verificationHash, setVerificationHash] = useState<string>('Computing verification signature...');
   const [copiedHash, setCopiedHash] = useState(false);
-  const [selectedTrackFilter, setSelectedTrackFilter] = useState<'all' | '0' | '1' | '2' | '3' | '4'>('all');
+  const [selectedTrackFilter, setSelectedTrackFilter] = useState<'all' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'>('all');
   const [showSamplePreview, setShowSamplePreview] = useState(false);
 
   // Build uniform track structure
@@ -109,7 +115,10 @@ export function PortfolioPage() {
       formatTrack(track1, 1, 'Geometrician', 'High-Dimensional Manifolds & Semantic Vectors', Layers, 'text-cyan-700 dark:text-cyan-400', 'border-cyan-500/40'),
       formatTrack(track2, 2, 'Agent Commander', 'Multi-Hop RAG & Autonomous ReAct Loops', Terminal, 'text-violet-700 dark:text-violet-400', 'border-violet-500/40'),
       formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-700 dark:text-amber-400', 'border-amber-500/40'),
-      formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Network, 'text-rose-700 dark:text-rose-400', 'border-rose-500/40')
+      formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Network, 'text-rose-700 dark:text-rose-400', 'border-rose-500/40'),
+      formatTrack(track5, 5, 'Adaptation Engineer', 'Low-Rank Adaptation, QLoRA & DPO Alignment', Sparkles, 'text-pink-700 dark:text-pink-400', 'border-pink-500/40'),
+      formatTrack(track6, 6, 'Inference Operator', 'KV-Cache, PagedAttention & Speculative Systems', Zap, 'text-teal-700 dark:text-teal-400', 'border-teal-500/40'),
+      formatTrack(track7, 7, 'Generative Synthesis', 'Diffusion Models, CFG & Vision Transformers', Boxes, 'text-fuchsia-700 dark:text-fuchsia-400', 'border-fuchsia-500/40')
     ];
   }, []);
 
@@ -931,7 +940,7 @@ export function PortfolioPage() {
 
             {/* Filter buttons */}
             <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] max-w-full">
-              {(['all', '0', '1', '2', '3', '4'] as const).map(f => (
+              {(['all', '0', '1', '2', '3', '4', '5', '6', '7'] as const).map(f => (
                 <button
                   key={f}
                   onClick={() => setSelectedTrackFilter(f)}

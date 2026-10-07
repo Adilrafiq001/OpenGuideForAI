@@ -5,12 +5,15 @@ import { track1 } from '../src/data/track1';
 import { track2 } from '../src/data/track2';
 import { track3 } from '../src/data/track3';
 import { track4 } from '../src/data/track4';
+import { track5 } from '../src/data/track5';
+import { track6 } from '../src/data/track6';
+import { track7 } from '../src/data/track7';
 
-const allTracks = [track0, track1, track2, track3, track4];
+const allTracks = [track0, track1, track2, track3, track4, track5, track6, track7];
 
 test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
 
-  test('01. All 45 Labs: Solution Code Execution & Assertion Verification', async () => {
+  test('01. All 57 Labs: Solution Code Execution & Assertion Verification', async () => {
     const results: Array<{
       labId: string;
       title: string;
@@ -77,7 +80,7 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
       console.warn(`\nIdentical Code Warnings (${identicalCodeWarnings.length}):\n${identicalCodeWarnings.join('\n')}`);
     }
 
-    expect(results.length).toBe(45);
+    expect(results.length).toBe(57);
     expect(failures, `Curriculum solution execution failures:\n${failures.join('\n\n')}`).toEqual([]);
   });
 
@@ -125,7 +128,7 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
     console.log(`Banned Terms: ${demeaningTermsFound.length}`);
     console.log(`Shallow Content/Intuition: ${shallowIntuitions.length}`);
     console.log(`Missing TestCode: ${missingTestCode.length}`);
-    console.log(`Missing 3-Tier Hints: ${missingProgressiveHints.length} / 45`);
+    console.log(`Missing 3-Tier Hints: ${missingProgressiveHints.length} / 57`);
 
     expect(demeaningTermsFound).toEqual([]);
     expect(shallowIntuitions).toEqual([]);
@@ -161,7 +164,7 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
     }
 
     console.log(`\n=== PRE-SOLVED LABS AUDIT ===`);
-    console.log(`Pre-solved labs count: ${preSolvedLabs.length} / 45`);
+    console.log(`Pre-solved labs count: ${preSolvedLabs.length} / 57`);
     if (preSolvedLabs.length > 0) {
       console.log(`List of pre-solved labs:\n${preSolvedLabs.map((l, i) => `  ${i + 1}. ${l}`).join('\n')}`);
     }
@@ -697,6 +700,336 @@ test.describe('Curriculum Rigor & Python Sandbox Execution Audit', () => {
     expect(killedMutants).toBe(27);
   });
 
+  test('09. Mutation Testing & Autograder Resilience Audit (Track 5)', async () => {
+    const track5Mutants: Record<string, string[]> = {
+      'lesson-5-1-1': [
+        // Mutant 1: Missing alpha/r scaling factor
+        `import numpy as np
+def lora_forward(x, W0, A, B, alpha=16.0, r=4):
+    base_out = np.matmul(x, W0)
+    lora_out = np.matmul(np.matmul(x, A), B)
+    return base_out + lora_out`,
+        // Mutant 2: Missing base weights (returning only lora branch)
+        `import numpy as np
+def lora_forward(x, W0, A, B, alpha=16.0, r=4):
+    scale = alpha / r
+    return np.matmul(np.matmul(x, A), B) * scale`,
+        // Mutant 3: Inverted dimension multiplication order
+        `import numpy as np
+def lora_forward(x, W0, A, B, alpha=16.0, r=4):
+    scale = alpha / r
+    base_out = np.matmul(x, W0)
+    lora_out = np.matmul(x, np.matmul(A, B))
+    return base_out + lora_out`
+      ],
+      'lesson-5-1-2': [
+        // Mutant 1: Missing alpha/r scale in fusion
+        `import numpy as np
+def merge_lora_weights(W0, A, B, alpha=16.0, r=4):
+    return W0 + np.matmul(A, B)`,
+        // Mutant 2: Subtraction instead of addition
+        `import numpy as np
+def merge_lora_weights(W0, A, B, alpha=16.0, r=4):
+    scale = alpha / r
+    return W0 - np.matmul(A, B) * scale`,
+        // Mutant 3: Transposed dimension mismatch
+        `import numpy as np
+def merge_lora_weights(W0, A, B, alpha=16.0, r=4):
+    scale = alpha / r
+    return W0 + np.matmul(B, A) * scale`
+      ],
+      'lesson-5-1-3': [
+        // Mutant 1: 0-indexed rank return
+        `import numpy as np
+def find_minimal_lora_rank(delta_W, energy_threshold=0.90):
+    s = np.linalg.svd(delta_W, compute_uv=False)
+    squared = s ** 2
+    cumulative = np.cumsum(squared) / np.sum(squared)
+    return int(np.argmax(cumulative >= energy_threshold))`,
+        // Mutant 2: Missing squaring of singular values on non-uniform spectrum
+        `import numpy as np
+def find_minimal_lora_rank(delta_W, energy_threshold=0.90):
+    return int(len(delta_W) // 2)`,
+        // Mutant 3: Constant rank 1
+        `import numpy as np
+def find_minimal_lora_rank(delta_W, energy_threshold=0.90):
+    return 1`
+      ],
+      'lesson-5-2-1': [
+        // Mutant 1: Unsigned 8-bit scale factor (255.0 instead of 127.0)
+        `import numpy as np
+def quantize_int8_symmetric(W):
+    max_val = np.max(np.abs(W))
+    scale = float(max_val / 255.0) if max_val > 0 else 1.0
+    return np.clip(np.round(W / scale), -127, 127).astype(np.int8), scale
+def dequantize_int8_symmetric(W_int8, scale):
+    return W_int8.astype(np.float32) * scale`,
+        // Mutant 2: Dequantization divides by scale instead of multiplying
+        `import numpy as np
+def quantize_int8_symmetric(W):
+    max_val = np.max(np.abs(W))
+    scale = float(max_val / 127.0) if max_val > 0 else 1.0
+    return np.clip(np.round(W / scale), -127, 127).astype(np.int8), scale
+def dequantize_int8_symmetric(W_int8, scale):
+    return W_int8.astype(np.float32) / scale`,
+        // Mutant 3: Unclipped float cast
+        `import numpy as np
+def quantize_int8_symmetric(W):
+    max_val = np.max(np.abs(W))
+    scale = float(max_val / 127.0) if max_val > 0 else 1.0
+    return (W / scale).astype(np.int8), scale
+def dequantize_int8_symmetric(W_int8, scale):
+    return W_int8.astype(np.float32) * scale`
+      ],
+      'lesson-5-2-2': [
+        // Mutant 1: Returns raw float quantiles instead of integer bin indices
+        `import numpy as np
+NF4_QUANTILES = np.array([-1.0, -0.696, -0.525, -0.395, -0.284, -0.185, -0.091, 0.0, 0.08, 0.161, 0.246, 0.338, 0.441, 0.563, 0.723, 1.0])
+def quantize_nf4(weights, quantiles=NF4_QUANTILES):
+    return weights`,
+        // Mutant 2: Argmax instead of argmin (picking furthest bin)
+        `import numpy as np
+NF4_QUANTILES = np.array([-1.0, -0.6961928009986877, -0.5250730514526367, -0.39491748809814453, -0.28444138169288635, -0.18477343022823334, -0.09105003625154495, 0.0, 0.07958029955625534, 0.16093020141124725, 0.24611230194568634, 0.33791524171829224, 0.44070982933044434, 0.5626170039176941, 0.7229568362236023, 1.0])
+def quantize_nf4(weights, quantiles=NF4_QUANTILES):
+    max_abs = np.max(np.abs(weights))
+    norm_w = weights / max_abs if max_abs > 0 else weights
+    diffs = np.abs(norm_w[..., np.newaxis] - quantiles)
+    return np.argmax(diffs, axis=-1).astype(np.uint8)`,
+        // Mutant 3: Constant bin index
+        `import numpy as np
+def quantize_nf4(weights, quantiles=None):
+    return np.zeros(len(weights), dtype=np.uint8)`
+      ],
+      'lesson-5-3-1': [
+        // Mutant 1: Inverted margin (rewarding losing completion)
+        `import numpy as np
+def sigmoid(z): return np.where(z >= 0, 1.0 / (1.0 + np.exp(-z)), np.exp(z) / (1.0 + np.exp(z)))
+def dpo_loss(logp_policy_w, logp_policy_l, logp_ref_w, logp_ref_l, beta=0.1):
+    margin = beta * ((logp_policy_l - logp_ref_l) - (logp_policy_w - logp_ref_w))
+    return float(-np.mean(np.log(sigmoid(margin) + 1e-12)))`,
+        // Mutant 2: Added loss instead of subtracted in margin
+        `import numpy as np
+def sigmoid(z): return np.where(z >= 0, 1.0 / (1.0 + np.exp(-z)), np.exp(z) / (1.0 + np.exp(z)))
+def dpo_loss(logp_policy_w, logp_policy_l, logp_ref_w, logp_ref_l, beta=0.1):
+    margin = beta * ((logp_policy_w - logp_ref_w) + (logp_policy_l - logp_ref_l))
+    return float(-np.mean(np.log(sigmoid(margin) + 1e-12)))`,
+        // Mutant 3: Positive log-likelihood (returning negative loss)
+        `import numpy as np
+def sigmoid(z): return np.where(z >= 0, 1.0 / (1.0 + np.exp(-z)), np.exp(z) / (1.0 + np.exp(z)))
+def dpo_loss(logp_policy_w, logp_policy_l, logp_ref_w, logp_ref_l, beta=0.1):
+    margin = beta * ((logp_policy_w - logp_ref_w) - (logp_policy_l - logp_ref_l))
+    return float(np.mean(np.log(sigmoid(margin) + 1e-12)))`
+      ]
+    };
+
+    let totalMutants = 0;
+    let killedMutants = 0;
+    const survivingMutants: string[] = [];
+
+    track5.modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        const mutants = track5Mutants[lesson.id] || [];
+        mutants.forEach((mutantCode, mIdx) => {
+          totalMutants++;
+          const pyCode = `${mutantCode}\n\n# --- Test Harness ---\n${lesson.testCode || ''}`;
+          const res = spawnSync('python', ['-c', pyCode], {
+            encoding: 'utf-8',
+            timeout: 10000,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
+          });
+
+          if (res.status !== 0 || res.error) {
+            killedMutants++;
+          } else {
+            survivingMutants.push(`[${lesson.id}] Mutant #${mIdx + 1} survived:\n${mutantCode}`);
+          }
+        });
+      });
+    });
+
+    console.log(`\n=== MUTATION AUDIT BREAKDOWN (TRACK 5) ===`);
+    console.log(`Total Mutants Tested: ${totalMutants}`);
+    console.log(`Killed Mutants: ${killedMutants}`);
+    console.log(`Kill Rate: ${((killedMutants / totalMutants) * 100).toFixed(1)}%`);
+
+    expect(survivingMutants, `Track 5 mutants survived! Autograder failed to detect flawed code:\n${survivingMutants.join('\n\n')}`).toEqual([]);
+    expect(totalMutants).toBe(18);
+    expect(killedMutants).toBe(18);
+  });
+
+  test('10. Mutation Testing & Autograder Resilience Audit (Track 6)', async () => {
+    const track6Mutants: Record<string, string[]> = {
+      'lesson-6-1-1': [
+        // Mutant 1: Missing factor of 2 (counting only Keys)
+        `def calculate_kv_cache_bytes(layers, hidden_dim, seq_len, batch_size, precision='fp16'):
+    m = {'fp32': 4.0, 'fp16': 2.0, 'int8': 1.0, 'int4': 0.5}
+    return m.get(precision.lower(), 2.0) * layers * hidden_dim * seq_len * batch_size`,
+        // Mutant 2: INT8 maps to 2.0 bytes instead of 1.0
+        `def calculate_kv_cache_bytes(layers, hidden_dim, seq_len, batch_size, precision='fp16'):
+    m = {'fp32': 4.0, 'fp16': 2.0, 'int8': 2.0, 'int4': 0.5}
+    return 2 * m.get(precision.lower(), 2.0) * layers * hidden_dim * seq_len * batch_size`,
+        // Mutant 3: Constant return
+        `def calculate_kv_cache_bytes(layers, hidden_dim, seq_len, batch_size, precision='fp16'):
+    return 1024`
+      ],
+      'lesson-6-1-2': [
+        // Mutant 1: Inverted division and modulo
+        `def resolve_paged_memory_slot(token_idx, block_table, block_size=16):
+    return block_table[token_idx % block_size], token_idx // block_size`,
+        // Mutant 2: 1-indexed offset
+        `def resolve_paged_memory_slot(token_idx, block_table, block_size=16):
+    return block_table[token_idx // block_size], (token_idx % block_size) + 1`,
+        // Mutant 3: Hardcoded block 0
+        `def resolve_paged_memory_slot(token_idx, block_table, block_size=16):
+    return block_table[0], token_idx % block_size`
+      ],
+      'lesson-6-2-1': [
+        // Mutant 1: Rejection does not break early (accepts future valid tokens)
+        `def verify_speculative_tokens(draft_tokens, target_probs, draft_probs, rand_uniform_vals):
+    accepted = []
+    for t, p_target, p_draft, r_val in zip(draft_tokens, target_probs, draft_probs, rand_uniform_vals):
+        ratio = p_target / p_draft if p_draft > 0 else 0.0
+        if r_val < min(1.0, ratio): accepted.append(t)
+    return accepted`,
+        // Mutant 2: Inverted acceptance inequality (r_val >= accept_prob)
+        `def verify_speculative_tokens(draft_tokens, target_probs, draft_probs, rand_uniform_vals):
+    accepted = []
+    for t, p_target, p_draft, r_val in zip(draft_tokens, target_probs, draft_probs, rand_uniform_vals):
+        ratio = p_target / p_draft if p_draft > 0 else 0.0
+        if r_val >= min(1.0, ratio): accepted.append(t)
+        else: break
+    return accepted`,
+        // Mutant 3: Unconditional acceptance
+        `def verify_speculative_tokens(draft_tokens, target_probs, draft_probs, rand_uniform_vals):
+    return list(draft_tokens)`
+      ]
+    };
+
+    let totalMutants = 0;
+    let killedMutants = 0;
+    const survivingMutants: string[] = [];
+
+    track6.modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        const mutants = track6Mutants[lesson.id] || [];
+        mutants.forEach((mutantCode, mIdx) => {
+          totalMutants++;
+          const pyCode = `${mutantCode}\n\n# --- Test Harness ---\n${lesson.testCode || ''}`;
+          const res = spawnSync('python', ['-c', pyCode], {
+            encoding: 'utf-8',
+            timeout: 10000,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
+          });
+
+          if (res.status !== 0 || res.error) {
+            killedMutants++;
+          } else {
+            survivingMutants.push(`[${lesson.id}] Mutant #${mIdx + 1} survived:\n${mutantCode}`);
+          }
+        });
+      });
+    });
+
+    console.log(`\n=== MUTATION AUDIT BREAKDOWN (TRACK 6) ===`);
+    console.log(`Total Mutants Tested: ${totalMutants}`);
+    console.log(`Killed Mutants: ${killedMutants}`);
+    console.log(`Kill Rate: ${((killedMutants / totalMutants) * 100).toFixed(1)}%`);
+
+    expect(survivingMutants, `Track 6 mutants survived! Autograder failed to detect flawed code:\n${survivingMutants.join('\n\n')}`).toEqual([]);
+    expect(totalMutants).toBe(9);
+    expect(killedMutants).toBe(9);
+  });
+
+  test('11. Mutation Testing & Autograder Resilience Audit (Track 7)', async () => {
+    const track7Mutants: Record<string, string[]> = {
+      'lesson-7-1-1': [
+        // Mutant 1: Linear scaling without square roots
+        `import numpy as np
+def forward_diffusion_sample(x_0, noise, alpha_bar_t):
+    return alpha_bar_t * x_0 + (1.0 - alpha_bar_t) * noise`,
+        // Mutant 2: Inverted coefficients
+        `import numpy as np
+def forward_diffusion_sample(x_0, noise, alpha_bar_t):
+    return np.sqrt(1.0 - alpha_bar_t) * x_0 + np.sqrt(alpha_bar_t) * noise`,
+        // Mutant 3: Signal only
+        `import numpy as np
+def forward_diffusion_sample(x_0, noise, alpha_bar_t):
+    return np.sqrt(alpha_bar_t) * x_0`
+      ],
+      'lesson-7-1-2': [
+        // Mutant 1: Inverted guidance vector
+        `import numpy as np
+def apply_cfg(eps_uncond, eps_cond, guidance_scale=7.5):
+    return eps_uncond + guidance_scale * (eps_uncond - eps_cond)`,
+        // Mutant 2: Guidance vector added to eps_cond instead of eps_uncond
+        `import numpy as np
+def apply_cfg(eps_uncond, eps_cond, guidance_scale=7.5):
+    return eps_cond + guidance_scale * (eps_cond - eps_uncond)`,
+        // Mutant 3: Return unguided prediction
+        `import numpy as np
+def apply_cfg(eps_uncond, eps_cond, guidance_scale=7.5):
+    return eps_uncond`
+      ],
+      'lesson-7-2-1': [
+        // Mutant 1: Flattens wrong dimensions (returns 1D array instead of 2D)
+        `import numpy as np
+def project_image_patches(image, patch_size=16, projection_matrix=None):
+    return image.flatten()`,
+        // Mutant 2: Returns unprojected patches even when projection_matrix given
+        `import numpy as np
+def project_image_patches(image, patch_size=16, projection_matrix=None):
+    H, W, C = image.shape
+    num_h, num_w = H // patch_size, W // patch_size
+    patches = image.reshape(num_h, patch_size, num_w, patch_size, C).transpose(0, 2, 1, 3, 4).reshape(num_h*num_w, -1)
+    return patches`,
+        // Mutant 3: Project with zero matrix
+        `import numpy as np
+def project_image_patches(image, patch_size=16, projection_matrix=None):
+    H, W, C = image.shape
+    num_h, num_w = H // patch_size, W // patch_size
+    patches = image.reshape(num_h, patch_size, num_w, patch_size, C).transpose(0, 2, 1, 3, 4).reshape(num_h*num_w, -1)
+    if projection_matrix is not None:
+        return np.zeros((num_h*num_w, projection_matrix.shape[1]))
+    return patches`
+      ]
+    };
+
+    let totalMutants = 0;
+    let killedMutants = 0;
+    const survivingMutants: string[] = [];
+
+    track7.modules.forEach(mod => {
+      mod.lessons.forEach(lesson => {
+        const mutants = track7Mutants[lesson.id] || [];
+        mutants.forEach((mutantCode, mIdx) => {
+          totalMutants++;
+          const pyCode = `${mutantCode}\n\n# --- Test Harness ---\n${lesson.testCode || ''}`;
+          const res = spawnSync('python', ['-c', pyCode], {
+            encoding: 'utf-8',
+            timeout: 10000,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
+          });
+
+          if (res.status !== 0 || res.error) {
+            killedMutants++;
+          } else {
+            survivingMutants.push(`[${lesson.id}] Mutant #${mIdx + 1} survived:\n${mutantCode}`);
+          }
+        });
+      });
+    });
+
+    console.log(`\n=== MUTATION AUDIT BREAKDOWN (TRACK 7) ===`);
+    console.log(`Total Mutants Tested: ${totalMutants}`);
+    console.log(`Killed Mutants: ${killedMutants}`);
+    console.log(`Kill Rate: ${((killedMutants / totalMutants) * 100).toFixed(1)}%`);
+
+    expect(survivingMutants, `Track 7 mutants survived! Autograder failed to detect flawed code:\n${survivingMutants.join('\n\n')}`).toEqual([]);
+    expect(totalMutants).toBe(9);
+    expect(killedMutants).toBe(9);
+  });
+
 });
+
 
 

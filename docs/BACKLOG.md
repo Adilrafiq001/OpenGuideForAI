@@ -34,12 +34,12 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
 
 ## 2. Architectural Enhancements ($0 Rule Compliant) [COMPLETED]
 
-- [x] **Dual-Phase Ungameable Autograder Invariants Across All 45 Labs:**
-  - Upgraded Tracks 0–4 with visible baseline checks plus 5 hidden mathematical invariants per lab.
+- [x] **Dual-Phase Ungameable Autograder Invariants Across All 57 Labs:**
+  - Upgraded Tracks 0–7 with visible baseline checks plus 5 hidden mathematical invariants per lab.
   - Asserting Cauchy-Schwarz bounds, variance scaling, lossless column slice partitioning, and INT8 uniform clamping.
 - [x] **Curriculum Mutation Testing Suite:**
-  - 135 hand-crafted adversarial mutant implementations in `curriculum-solution-execution.spec.ts`.
-  - Certified 100.0% Kill Rate (135/135 mutants killed, 0 false-positive passes).
+  - 171 hand-crafted adversarial mutant implementations in `curriculum-solution-execution.spec.ts`.
+  - Certified 100.0% Kill Rate (171/171 mutants killed, 0 false-positive passes).
 - [x] **Universal Human AI Fluency Continuum (Stage 0 to Stage 5):**
   - Expanded data layer in `universalSpectrumData.ts` and interactive modal `EverydayCraftAiModal.tsx`.
   - Practical diagnostic workflows for everyday trades (mechanics, carpentry, healthcare, retail, agriculture).
@@ -47,7 +47,7 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
   - Purged purple glowing pills, sparkle emojis, talisman symbols, and promotional buzzwords across components.
   - Clean high-craft ergonomics adhering to `baseline-ui` and `design-taste-frontend`.
 - [x] **Comprehensive Automated Playwright Regression Suite:**
-  - 130 / 130 tests passing with 100% pass rate, 0 failures, 0 skips, and 0 console errors.
+  - 140 / 140 tests passing with 100% pass rate, 0 failures, 0 skips, and 0 console errors.
 - [x] **WebGPU Hardware Detection & WGSL Compute Kernel:**
   - Native WebGPU adapter inspection and WGSL matrix multiplication compute shader execution (`localNeuralRunner.ts`).
 - [x] **Mobile Haptic Feedback:**
@@ -57,4 +57,12 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
   - Okapi BM25 information retrieval engine ($k_1=1.2, b=0.75$) with smoothed IDF and field-weighted relevance scoring.
   - Multi-script cross-lingual bridge across 11 world languages (`multilingualLexicon.ts`).
   - Client-side interactive visual explainable micro-widgets (Softmax Temperature, PagedAttention block mapping, Cosine Similarity angular dial, RoPE phasor dynamics).
+- [x] **Pedagogical Diversity Widgets & Multi-Modal Engines (Release v1.5.0):**
+  - Bug Hunter Challenge (`BugHunterChallenge.tsx`) with 0-day failure diagnostics and mutant kill explanations.
+  - Tensor Surgery 4D Visualizer (`TensorSurgeryVisualizer.tsx`) for `[B, H, S, D]` strides and memory layouts.
+  - Hardware & VRAM Profiler Modal (`HardwareProfilerModal.tsx`) for Roofline bandwidth analysis and FP16/INT8/INT4 sizing.
+- [x] **Community Multi-Sponsor Portal & Production Analytics:**
+  - Embedded support modal (`SupportModal.tsx`) supporting GitHub Sponsors, Ko-fi, and PayPal.
+  - Zero-cookie Cloudflare Web Analytics beacon with localhost bypass in `index.html`.
+  - Offline Daily Streak Reminder engine (`streakNotification.ts`) with Service Worker integration.
 

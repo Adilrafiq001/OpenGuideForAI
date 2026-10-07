@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2026-10-07
+
+### Added
+- **Content Moat Expansion (8 Tracks • 57 Laboratories):**
+  - Track 5: Fine-Tuning & Parameter-Efficient Adaptation (`track5.ts` - 6 labs covering LoRA, SVD truncation, INT8, and QLoRA NF4).
+  - Track 6: High-Throughput Inference Engines (`track6.ts` - 3 labs covering KV roofline, PagedAttention, and Speculative Decoding).
+  - Track 7: Generative Models & Multimodal Foundations (`track7.ts` - 3 labs covering DDPM diffusion, CFG vector fields, and ViT patch linear projection).
+  - Dual-phase ungameable autograders with 5 hidden mathematical invariants per lab across all 57 labs.
+- **Pedagogical Diversity Widgets (`apps/web/src/components/interactive/`):**
+  - `BugHunterChallenge.tsx`: 0-day failure diagnosis engine with 4-tier progressive hints, failure diagrams, and mutant-kill explanations.
+  - `TensorSurgeryVisualizer.tsx`: 4D tensor shape `[B, H, S, D]`, stride physics, and contiguous memory inspector.
+  - `HardwareProfilerModal.tsx`: Real-time Roofline analysis calculating Model Weights VRAM, KV-cache memory, and hardware feasibility across FP16, INT8, and INT4 precisions.
+- **Mutation Testing Rigor & Documentation:**
+  - Authored `docs/MUTATION-TESTING-AND-AUTOGRADER-RIGOR.md` explaining mutation testing, mutant kills, and autograder invariants with ASCII diagrams.
+  - Expanded mutant test harness to 171 mutants (3 per lab across all 57 labs), achieving 100.0% Kill Rate (171/171 killed).
+- **Community Multi-Sponsor Portal (`SupportModal.tsx`):**
+  - Integrated support modal with verified channels: GitHub Sponsors (`openguideforai`), Ko-fi (`buymegoodcoffee`), and PayPal (`buymegoodcoffee`).
+- **Privacy-First Cloudflare Web Analytics (`index.html`):**
+  - Zero-cookie RUM beacon configured strictly for production edge (`openguideforai.dpdns.org`) with localhost bypass.
+- **Client-Side Daily Streak Reminder Engine (`streakNotification.ts`):**
+  - Offline streak reminder system with Service Worker integration (`apps/web/public/sw.js`) and Synapse Lounge toggle.
+- **Recordly 90-Second Demo Storyboard (`docs/DEMO-VIDEO-STORYBOARD.md`):**
+  - Frame-by-frame 90s screen capture choreography with timed click sound effects, mild ambient background music, and 4K recording specs.
+- **Full Automated Regression Hardening:**
+  - 140 / 140 Playwright tests passing (100% pass rate). 0 lint warnings/errors across 123 files. 0 production build errors.
+
+---
+
 ## [1.4.0] - 2026-10-06
 
 ### Added
