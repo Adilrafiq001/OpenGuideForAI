@@ -944,6 +944,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
       {/* SECTION 5: CURRICULUM OVERVIEW & TRACK 0 LAUNCH */}
       <section id="curriculum" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
+        <div id="tasks" className="sr-only" aria-hidden="true" />
         <div className="flex justify-between items-end mb-16 border-b border-[var(--color-border)] pb-8">
           <div>
             <h2 

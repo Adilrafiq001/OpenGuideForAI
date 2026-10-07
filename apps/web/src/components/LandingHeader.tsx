@@ -20,8 +20,10 @@ import {
   Search,
   Sparkles,
   Boxes,
-  Target
+  Target,
+  CheckSquare
 } from 'lucide-react';
+
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
@@ -123,6 +125,23 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 <span>Pathways</span>
               </a>
             </Tooltip>
+
+            {/* Tasks & Labs Pill */}
+            <Tooltip
+              position="bottom"
+              content="Engineering Tasks & Labs"
+              subtitle="57 hands-on in-browser coding tasks across 8 tracks"
+            >
+              <a 
+                href="#tasks" 
+                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
+              >
+                <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
+                <span>Tasks</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">57</span>
+              </a>
+            </Tooltip>
+
 
             {/* Unified Hover Reveal Dropdown: All 8 Tracks */}
             <div 

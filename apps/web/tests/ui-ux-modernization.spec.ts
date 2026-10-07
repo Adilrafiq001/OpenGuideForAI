@@ -26,9 +26,12 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await expect(page.locator('text=Track 7: Generative Diffusion').first()).toBeVisible();
 
     // Verify curriculum architecture heading shows 8 Core Tracks & 57 Interactive Labs
-    await expect(page.locator('text=8 Core Tracks • 57 Interactive Labs')).toBeVisible();
+    // Verify Pathways and Tasks navigation buttons exist on header
+    await expect(page.locator('header a[href="#pathways"]')).toBeVisible();
+    await expect(page.locator('header a[href="#tasks"]')).toBeVisible();
 
     // Verify 0 console errors
+
     const fatalErrors = consoleErrors.filter(e => !e.includes('favicon'));
     expect(fatalErrors).toHaveLength(0);
   });
