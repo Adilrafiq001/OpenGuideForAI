@@ -35,11 +35,9 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
   }, []);
 
   // Guarantee clean resting state upon route transition or return
-  const [prevLocationKey, setPrevLocationKey] = useState(location.key);
-  if (location.key !== prevLocationKey) {
-    setPrevLocationKey(location.key);
+  useEffect(() => {
     setIsChecked(true);
-  }
+  }, [location.key]);
 
   useEffect(() => {
     // Listen for BFCache restores and SPA popstate events

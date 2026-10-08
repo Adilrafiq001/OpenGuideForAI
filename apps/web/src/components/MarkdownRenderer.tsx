@@ -32,10 +32,27 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
     }) as string;
 
     // Hardened XSS Protection: Cleanse parsed HTML through DOMPurify
-    return DOMPurify.sanitize(rawHtml, {
+    const cleanHtml = DOMPurify.sanitize(rawHtml, {
       USE_PROFILES: { html: true },
       ADD_ATTR: ['target', 'rel']
     });
+
+    if (typeof window === 'undefined') return cleanHtml;
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(cleanHtml, 'text/html');
+      doc.querySelectorAll('a').forEach((anchor) => {
+        const href = anchor.getAttribute('href') || '';
+        if (/^https?:\/\//i.test(href)) {
+          anchor.setAttribute('target', '_blank');
+          anchor.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+      return doc.body.innerHTML;
+    } catch {
+      return cleanHtml;
+    }
   }, [content]);
 
   return (

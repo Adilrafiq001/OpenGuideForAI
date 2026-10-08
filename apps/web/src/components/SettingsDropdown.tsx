@@ -151,6 +151,7 @@ export function SettingsDropdown() {
                       min="12" 
                       max="24" 
                       value={fontSize}
+                      aria-label="Editor font size"
                       onChange={(e) => setFontSize(Number(e.target.value))}
                       aria-valuemin={12}
                       aria-valuemax={24}

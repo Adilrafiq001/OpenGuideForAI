@@ -498,19 +498,17 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
   const [selectedToolId, setSelectedToolId] = useState<string>(initialToolId || 'chroma');
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
 
-  const [prevProps, setPrevProps] = useState({ initialCategory, initialToolId, isOpen });
-  if (prevProps.initialCategory !== initialCategory || prevProps.initialToolId !== initialToolId || prevProps.isOpen !== isOpen) {
-    setPrevProps({ initialCategory, initialToolId, isOpen });
+  useEffect(() => {
     if (initialCategory) {
       setSelectedCategory(initialCategory);
     }
     if (initialToolId) {
       setSelectedToolId(initialToolId);
-    } else {
+    } else if (initialCategory) {
       const firstInCat = FREE_TOOLS_GUIDES.find(t => t.category === initialCategory);
       if (firstInCat) setSelectedToolId(firstInCat.id);
     }
-  }
+  }, [isOpen, initialCategory, initialToolId]);
 
   const modalRef = useRef<HTMLDivElement>(null);
 

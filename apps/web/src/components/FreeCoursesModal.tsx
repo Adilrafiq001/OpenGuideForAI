@@ -1086,18 +1086,14 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const [prevCourseProp, setPrevCourseProp] = useState(initialCourseId);
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-  if (initialCourseId !== prevCourseProp || (isOpen && !prevIsOpen)) {
-    setPrevCourseProp(initialCourseId);
-    setPrevIsOpen(isOpen);
-    if (initialCourseId) {
+  useEffect(() => {
+    if (isOpen && initialCourseId) {
       setSelectedCourseId(initialCourseId);
       setSelectedLectureIdx(0);
       setTranscriptSearch('');
       setPlayerStartTime(0);
     }
-  }
+  }, [isOpen, initialCourseId]);
 
   const copiedCodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

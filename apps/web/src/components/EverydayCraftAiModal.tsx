@@ -93,9 +93,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
   const [pythonOutput, setPythonOutput] = useState<string | null>(null);
 
   // Synchronize selected role when opened without cascading effect renders
-  const [prevSync, setPrevSync] = useState({ isOpen, initialRole });
-  if (prevSync.isOpen !== isOpen || prevSync.initialRole !== initialRole) {
-    setPrevSync({ isOpen, initialRole });
+  useEffect(() => {
     if (isOpen && initialRole) {
       const match = ALL_SPECTRUM_PROFILES.find(p => p.id === initialRole || p.tier === initialRole);
       if (match) {
@@ -104,24 +102,31 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
         setMobileShowDetail(true);
       }
     }
-  }
+  }, [isOpen, initialRole]);
 
-  // Global keyboard shortcut '/' to focus search
+  // Global keyboard shortcut '/' to focus search & body scroll lock
   useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === '/' && isOpen && activeTab === 'profiles') {
+      if (e.key === '/' && activeTab === 'profiles') {
         const target = e.target as HTMLElement;
         if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
           e.preventDefault();
           searchInputRef.current?.focus();
         }
       }
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, activeTab, onClose]);
 
   // Filtered profiles based on active domain filter and search query
@@ -150,14 +155,34 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
     return ALL_SPECTRUM_PROFILES.find(p => p.id === selectedProfileId) || ALL_SPECTRUM_PROFILES[0];
   }, [selectedProfileId, filteredProfiles]);
 
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
   const handleCopy = (text: string, id: string = 'main') => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setCopiedPromptId(id);
-    setTimeout(() => {
-      setCopied(false);
-      setCopiedPromptId(null);
-    }, 2200);
+    const doFeedback = () => {
+      setCopied(true);
+      setCopiedPromptId(id);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => {
+        setCopied(false);
+        setCopiedPromptId(null);
+      }, 2200);
+    };
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(doFeedback)
+        .catch(() => {
+          doFeedback();
+        });
+    } else {
+      doFeedback();
+    }
   };
 
   const handleRunPython = () => {
@@ -189,6 +214,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
   return (
     <AnimatePresence>
       <div 
+        onClick={onClose}
         className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
@@ -199,6 +225,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 12 }}
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          onClick={(e) => e.stopPropagation()}
           className="relative w-full max-w-6xl h-[92vh] max-h-[880px] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
         >
           {/* Top Modal Header */}

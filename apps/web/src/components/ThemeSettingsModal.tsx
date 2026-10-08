@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -94,9 +94,9 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const [activeMode, setActiveMode] = useState<'dark' | 'light'>(activeThemeInfo.mode || 'dark');
   const [hoveredTheme, setHoveredTheme] = useState<ThemeInfo | null>(null);
-  const [resetConfirmed, setResetConfirmed] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
   const [isPeeking, setIsPeeking] = useState(false);
+  const [resetConfirmed, setResetConfirmed] = useState(false);
 
   const displayedTheme = hoveredTheme || activeThemeInfo;
 
@@ -125,16 +125,19 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     }
   }, [isOpen, isPeeking]);
 
-  const [prevModalState, setPrevModalState] = useState({ isOpen, initialTab, themeMode: activeThemeInfo.mode });
-  if (prevModalState.isOpen !== isOpen || prevModalState.initialTab !== initialTab || prevModalState.themeMode !== activeThemeInfo.mode) {
-    setPrevModalState({ isOpen, initialTab, themeMode: activeThemeInfo.mode });
-    if (isOpen) {
+  const prevIsOpenRef = useRef(false);
+  const prevInitialTabRef = useRef(initialTab);
+
+  useEffect(() => {
+    if (isOpen && (!prevIsOpenRef.current || prevInitialTabRef.current !== initialTab)) {
       if (initialTab) {
         setActiveTab(initialTab);
       }
       setActiveMode(activeThemeInfo.mode || 'dark');
     }
-  }
+    prevIsOpenRef.current = isOpen;
+    prevInitialTabRef.current = initialTab;
+  }, [isOpen, initialTab, activeThemeInfo.mode]);
 
   const filteredThemes = THEMES_DATA.filter(t => t.mode === activeMode);
 

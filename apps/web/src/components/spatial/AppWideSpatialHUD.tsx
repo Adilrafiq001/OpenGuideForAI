@@ -65,18 +65,24 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       if (!isSpatialModeActive) return;
 
       // When inside spatial mode
+      const target = e.target as HTMLElement | null;
+      const isEditable = target && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable ||
+        Boolean(target.closest?.('[contenteditable="true"]')) ||
+        Boolean(target.closest?.('.cm-editor')) ||
+        Boolean(target.closest?.('.monaco-editor'))
+      );
+
+      if (isEditable) return;
+
       if (e.key === 'c' || e.key === 'C') {
-        if ((e.target as HTMLElement)?.tagName !== 'INPUT' && (e.target as HTMLElement)?.tagName !== 'TEXTAREA') {
-          resetCenter();
-        }
+        resetCenter();
       } else if (e.key === 'k' || e.key === 'K') {
-        if ((e.target as HTMLElement)?.tagName !== 'INPUT' && (e.target as HTMLElement)?.tagName !== 'TEXTAREA') {
-          toggleVirtualKeyboard();
-        }
+        toggleVirtualKeyboard();
       } else if (e.key === 'h' || e.key === 'H') {
-        if ((e.target as HTMLElement)?.tagName !== 'INPUT' && (e.target as HTMLElement)?.tagName !== 'TEXTAREA') {
-          toggleHandTracking();
-        }
+        toggleHandTracking();
       }
     };
 

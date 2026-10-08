@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -284,44 +284,62 @@ export function ArchitecturalPillarsModal({
   initialPillarId = 1
 }: ArchitecturalPillarsModalProps) {
   const navigate = useNavigate();
-  const [prevInitialId, setPrevInitialId] = useState(initialPillarId);
   const [selectedId, setSelectedId] = useState<number>(initialPillarId);
   const [copiedCode, setCopiedCode] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (initialPillarId !== prevInitialId) {
-    setPrevInitialId(initialPillarId);
+  useEffect(() => {
     setSelectedId(initialPillarId);
-  }
+  }, [initialPillarId]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
       };
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
   }, [isOpen, onClose]);
 
   const activePillar = PILLAR_DETAILS.find(p => p.id === selectedId) || PILLAR_DETAILS[0];
 
   const handleCopy = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(activePillar.pythonCode);
-      setCopiedCode(true);
-      setTimeout(() => setCopiedCode(false), 2000);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(activePillar.pythonCode)
+        .then(() => {
+          setCopiedCode(true);
+          if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+          copyTimerRef.current = setTimeout(() => setCopiedCode(false), 2000);
+        })
+        .catch(() => {});
     }
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-md">
+        <div 
+          onClick={onClose}
+          className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-md"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+            onClick={(e) => e.stopPropagation()}
             className="w-full max-w-5xl max-h-[90vh] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
             role="dialog"
             aria-modal="true"

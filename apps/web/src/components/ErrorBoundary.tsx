@@ -12,6 +12,30 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
+function safeGetSession(key: string): string | null {
+  try {
+    return typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(key) : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeSetSession(key: string, value: string): void {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem(key, value);
+    }
+  } catch {}
+}
+
+function safeRemoveSession(key: string): void {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem(key);
+    }
+  } catch {}
+}
+
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
@@ -32,15 +56,15 @@ export class ErrorBoundary extends Component<Props, State> {
     const isChunkError = errMsg.includes('Failed to fetch dynamically imported module') ||
                          errMsg.includes('Loading chunk') ||
                          error?.name === 'ChunkLoadError';
-    if (isChunkError && !sessionStorage.getItem('og_chunk_error_reloaded')) {
-      sessionStorage.setItem('og_chunk_error_reloaded', 'true');
+    if (isChunkError && !safeGetSession('og_chunk_error_reloaded')) {
+      safeSetSession('og_chunk_error_reloaded', 'true');
       window.location.reload();
     }
   }
 
   private handleReset = () => {
     this.setState({ hasError: false, error: null, errorInfo: null });
-    sessionStorage.removeItem('og_chunk_error_reloaded');
+    safeRemoveSession('og_chunk_error_reloaded');
     window.location.reload();
   };
 

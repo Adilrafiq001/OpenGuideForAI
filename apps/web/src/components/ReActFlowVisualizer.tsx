@@ -181,7 +181,8 @@ export function ReActFlowVisualizer({ logs = [], activeLessonTitle = 'Interactiv
     let stepCount = 1;
 
     for (const raw of logs) {
-      const line = typeof raw === 'string' ? raw : raw.text;
+      if (!raw) continue;
+      const line = typeof raw === 'string' ? raw : (typeof raw.text === 'string' ? raw.text : '');
       const trimmed = line.trim();
       if (!trimmed) continue;
 

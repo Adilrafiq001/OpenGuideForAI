@@ -5,9 +5,20 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.5.0';
+export const CURRENT_STUDIO_VERSION = '1.5.1';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.5.1',
+    date: 'October 2026',
+    title: 'Security Hardening, CI Pipeline Modernization & Responsive Header Continuum',
+    highlights: [
+      'GitHub CI Pipeline: Added Python 3.11 numpy test environment and build validation for zero-defect automated testing on every commit.',
+      'Security Vulnerability Remediation: Addressed Dependabot security advisory by updating core source-map compiler dependencies.',
+      'Responsive Continuum: Calibrated ultra-wide and compact header viewports to eliminate horizontal layout shifts across all devices.',
+      'Release Synchronization: Unified git release tags, package manifests, and studio release notes.'
+    ]
+  },
   {
     version: '1.5.0',
     date: 'October 2026',

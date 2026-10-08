@@ -123,6 +123,16 @@ export async function executeWebGpuKernel(
 ): Promise<WebGpuKernelResult> {
   const startTime = performance.now();
 
+  const n = (vecA && vecB) ? Math.min(vecA.length, vecB.length) : 0;
+  if (n <= 0) {
+    return {
+      dotProduct: 0,
+      durationMs: Number((performance.now() - startTime).toFixed(2)),
+      backend: 'WASM CPU Fallback',
+      adapterName: 'CPU Arithmetic Core'
+    };
+  }
+
   if (typeof navigator !== 'undefined' && navigator.gpu) {
     try {
       const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
@@ -134,7 +144,6 @@ export async function executeWebGpuKernel(
         let stagingBuffer: any = null;
         let isStagingMapped = false;
         try {
-          const n = Math.min(vecA.length, vecB.length);
           const aArray = new Float32Array(vecA.slice(0, n));
           const bArray = new Float32Array(vecB.slice(0, n));
           const byteSize = aArray.byteLength;
@@ -246,12 +255,14 @@ export async function executeWebGpuKernel(
 
   // Fallback to in-browser CPU vector computation
   let sum = 0;
-  const n = Math.min(vecA.length, vecB.length);
   for (let i = 0; i < n; i++) {
-    sum += vecA[i] * vecB[i];
+    const valA = vecA[i] || 0;
+    const valB = vecB[i] || 0;
+    sum += valA * valB;
   }
+  const safeSum = Number.isFinite(sum) ? sum : 0;
   return {
-    dotProduct: Number(sum.toFixed(4)),
+    dotProduct: Number(safeSum.toFixed(4)),
     durationMs: Number((performance.now() - startTime).toFixed(2)),
     backend: 'WASM CPU Fallback',
     adapterName: 'CPU Arithmetic Core'

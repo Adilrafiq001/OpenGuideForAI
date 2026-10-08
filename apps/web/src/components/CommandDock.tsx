@@ -63,13 +63,11 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  const [prevPath, setPrevPath] = useState(location.pathname);
-  if (location.pathname !== prevPath) {
-    setPrevPath(location.pathname);
+  useEffect(() => {
     if (isEngine) {
       setIsMinimized(true);
     }
-  }
+  }, [location.pathname, isEngine]);
 
   const dockItems: DockItemData[] = [
     {

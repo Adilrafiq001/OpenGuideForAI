@@ -28,8 +28,8 @@ export function detectHardwareSync(): { hasWebGL: boolean; isLowEnd: boolean; re
 
     // Identify low-end or software rasterizers (SwiftShader, llvmpipe, etc.)
     const isSoftware = /swiftshader|llvmpipe|software/i.test(renderer);
-    const cores = navigator.hardwareConcurrency || 4;
-    const memory = (navigator as any).deviceMemory || 4;
+    const cores = (typeof navigator !== 'undefined' && typeof navigator.hardwareConcurrency === 'number') ? navigator.hardwareConcurrency : 4;
+    const memory = (typeof navigator !== 'undefined' && typeof (navigator as any).deviceMemory === 'number') ? (navigator as any).deviceMemory : 4;
     const isLowEnd = isSoftware || cores <= 2 || memory <= 2;
 
     try {
@@ -47,24 +47,25 @@ export function detectHardwareSync(): { hasWebGL: boolean; isLowEnd: boolean; re
 }
 
 export async function detectHardwareFull(): Promise<HardwareTelemetry> {
-  const sync = detectHardwareSync();
-  const hasWebXR = typeof navigator !== 'undefined' && 'xr' in navigator && !!navigator.xr;
-  let hasImmersiveVR = false;
-  let hasImmersiveAR = false;
+  try {
+    const sync = detectHardwareSync();
+    const hasWebXR = typeof navigator !== 'undefined' && 'xr' in navigator && !!navigator.xr;
+    let hasImmersiveVR = false;
+    let hasImmersiveAR = false;
 
-  if (hasWebXR && navigator.xr) {
-    try {
-      hasImmersiveVR = await navigator.xr.isSessionSupported('immersive-vr');
-    } catch {
-      hasImmersiveVR = false;
-    }
+    if (hasWebXR && navigator.xr) {
+      try {
+        hasImmersiveVR = await navigator.xr.isSessionSupported('immersive-vr');
+      } catch {
+        hasImmersiveVR = false;
+      }
 
-    try {
-      hasImmersiveAR = await navigator.xr.isSessionSupported('immersive-ar');
-    } catch {
-      hasImmersiveAR = false;
+      try {
+        hasImmersiveAR = await navigator.xr.isSessionSupported('immersive-ar');
+      } catch {
+        hasImmersiveAR = false;
+      }
     }
-  }
 
   let recommendedTier: '2d-lean' | '3d-hardware' | 'spatial-xr' = '3d-hardware';
   if (hasImmersiveVR || hasImmersiveAR) {
@@ -73,13 +74,24 @@ export async function detectHardwareFull(): Promise<HardwareTelemetry> {
     recommendedTier = '2d-lean';
   }
 
-  return {
-    hasWebGL: sync.hasWebGL,
-    hasWebXR,
-    hasImmersiveVR,
-    hasImmersiveAR,
-    isLowEnd: sync.isLowEnd,
-    rendererName: sync.rendererName,
-    recommendedTier
-  };
+    return {
+      hasWebGL: sync.hasWebGL,
+      hasWebXR,
+      hasImmersiveVR,
+      hasImmersiveAR,
+      isLowEnd: sync.isLowEnd,
+      rendererName: sync.rendererName,
+      recommendedTier
+    };
+  } catch {
+    return {
+      hasWebGL: false,
+      hasWebXR: false,
+      hasImmersiveVR: false,
+      hasImmersiveAR: false,
+      isLowEnd: true,
+      rendererName: 'Safe Fallback',
+      recommendedTier: '2d-lean'
+    };
+  }
 }

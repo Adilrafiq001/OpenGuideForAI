@@ -134,6 +134,7 @@ export function FirstTimeSetupModal({
   return (
     <AnimatePresence>
       <div 
+        onClick={handleComplete}
         className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
         role="dialog"
         aria-modal="true"
@@ -154,6 +155,7 @@ export function FirstTimeSetupModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 16 }}
           transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+          onClick={(e) => e.stopPropagation()}
           className="relative w-full max-w-2xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-[0_25px_60px_rgba(0,0,0,0.6)] overflow-hidden z-10 text-[var(--color-text-primary,#fff)] flex flex-col my-auto max-h-[90vh]"
           data-testid="first-time-setup-modal"
         >

@@ -61,6 +61,17 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
     if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+
+      const focusTimer = window.setTimeout(() => {
+        const sheet = document.getElementById('mobile-nav-drawer-sheet');
+        if (sheet) {
+          const focusables = sheet.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (focusables.length > 0) {
+            focusables[0].focus();
+          }
+        }
+      }, 50);
+
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           onClose();
@@ -82,6 +93,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       };
       window.addEventListener('keydown', handleKeyDown);
       return () => {
+        window.clearTimeout(focusTimer);
         document.body.style.overflow = originalOverflow;
         window.removeEventListener('keydown', handleKeyDown);
       };

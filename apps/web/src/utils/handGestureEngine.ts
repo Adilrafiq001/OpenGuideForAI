@@ -35,6 +35,7 @@ class HandGestureEngine {
   private isRunning: boolean = false;
   private onGestureCallback: HandGestureCallback | null = null;
   private onOrientationCallback: OrientationCallback | null = null;
+  private boundOrientationHandler: ((e: DeviceOrientationEvent) => void) | null = null;
 
   // Computer Vision Temporal Buffers
   private prevFrameData: Uint8ClampedArray | null = null;
@@ -55,10 +56,11 @@ class HandGestureEngine {
    * Start 3DOF Gyroscope Head Tracking
    */
   public startOrientationTracking(cb: OrientationCallback): boolean {
+    this.stopOrientationTracking();
     this.onOrientationCallback = cb;
     if (typeof window === 'undefined') return false;
 
-    const handleOrientation = (e: DeviceOrientationEvent) => {
+    this.boundOrientationHandler = (e: DeviceOrientationEvent) => {
       const yaw = e.alpha ?? 0;
       const pitch = e.beta ?? 0;
       const roll = e.gamma ?? 0;
@@ -67,8 +69,8 @@ class HandGestureEngine {
       }
     };
 
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', handleOrientation, true);
+    if (window.DeviceOrientationEvent && this.boundOrientationHandler) {
+      window.addEventListener('deviceorientation', this.boundOrientationHandler, true);
       return true;
     }
     return false;
@@ -78,6 +80,10 @@ class HandGestureEngine {
    * Stop Gyroscope Tracking
    */
   public stopOrientationTracking() {
+    if (typeof window !== 'undefined' && this.boundOrientationHandler) {
+      window.removeEventListener('deviceorientation', this.boundOrientationHandler, true);
+      this.boundOrientationHandler = null;
+    }
     this.onOrientationCallback = null;
   }
 

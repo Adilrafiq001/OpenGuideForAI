@@ -83,7 +83,9 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           <div className="h-4 w-px bg-[var(--color-border)] hidden sm:block" />
 
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
-            <span className="font-bold" style={{ color: currentThemeInfo.accent }}>TRACK 0{trackNum}</span>
+            <span className="font-bold" style={{ color: currentThemeInfo.accent }}>
+              {trackNum === '0' || trackNum === '00' ? 'TRACK 0' : `TRACK 0${trackNum}`}
+            </span>
             <span className="text-[var(--color-text-secondary)]">/</span>
             <span className="font-medium text-[var(--color-text-primary)]">{activeTrack.title}</span>
           </div>

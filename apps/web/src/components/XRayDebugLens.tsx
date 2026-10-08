@@ -41,9 +41,11 @@ export function XRayDebugLens({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
       }
       if (e.altKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault();
         onClose();
       }
     };

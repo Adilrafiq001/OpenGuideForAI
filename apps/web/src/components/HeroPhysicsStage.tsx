@@ -52,6 +52,7 @@ export function HeroPhysicsStage({
   onOpenMatrixModal,
   onOpenEverydayCrafts,
 }: HeroPhysicsStageProps) {
+  const safeAccent = currentThemeInfo?.accent || '#10b981';
   const [activeLens, setActiveLens] = useState<StudioLens>('wasm');
   const [isSimRunning, setIsSimRunning] = useState(false);
   const [simOutput, setSimOutput] = useState<string | null>(null);
@@ -141,14 +142,14 @@ export function HeroPhysicsStage({
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.08] text-[var(--color-text-primary)] select-none">
           <span 
             className="font-mono font-bold ltr:mr-2 rtl:ml-2 inline-block select-none"
-            style={{ color: currentThemeInfo.accent }}
+            style={{ color: safeAccent }}
           >
             /
           </span>
           <bdi className="inline">{t('hero_title_prefix')} </bdi>
           <bdi 
             className="inline"
-            style={{ color: currentThemeInfo.accent }}
+            style={{ color: safeAccent }}
           >
             {t('hero_title_suffix')}
           </bdi>

@@ -971,10 +971,11 @@ export function searchOfflineKnowledge(query: string): KnowledgeEntry[] {
       if (tf === 0) continue;
 
       const df = index.docFreqs.get(term) || 0;
-      // Robertson-Sparck Jones smooth IDF
-      const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
-      // BM25 term saturation and length normalization
-      const normTF = (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (docLen / index.avgDocLength)));
+      // Robertson-Sparck Jones smooth IDF with non-negative guard
+      const idf = Math.max(0, Math.log(1 + Math.max(0, (N - df + 0.5) / Math.max(0.5, df + 0.5))));
+      // BM25 term saturation and length normalization with safe avgDocLength
+      const avgLen = index.avgDocLength > 0 ? index.avgDocLength : 1;
+      const normTF = (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (docLen / avgLen)));
 
       bm25Score += idf * normTF;
     }

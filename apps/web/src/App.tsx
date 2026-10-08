@@ -27,20 +27,44 @@ import { AppWideSpatialHUD } from './components/spatial/AppWideSpatialHUD';
 import { startAppTour } from './components/AppTour';
 import Lenis from 'lenis';
 
+function safeGetSessionItem(key: string): string | null {
+  try {
+    return typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(key) : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeSetSessionItem(key: string, value: string): void {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem(key, value);
+    }
+  } catch {}
+}
+
+function safeRemoveSessionItem(key: string): void {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem(key);
+    }
+  } catch {}
+}
+
 // OpenGuide AI Studio Sovereign Production Release 1.4.0
 // Auto-recover from stale chunk 404s after new deployments
 function lazyWithRetry<T extends React.ComponentType<any>>(
   componentImport: () => Promise<{ default: T }>
 ) {
   return lazy(async () => {
-    const pageHasBeenForceRefreshed = sessionStorage.getItem('og_chunk_retry');
+    const pageHasBeenForceRefreshed = safeGetSessionItem('og_chunk_retry');
     try {
       const component = await componentImport();
-      sessionStorage.removeItem('og_chunk_retry');
+      safeRemoveSessionItem('og_chunk_retry');
       return component;
     } catch (error) {
       if (!pageHasBeenForceRefreshed) {
-        sessionStorage.setItem('og_chunk_retry', 'true');
+        safeSetSessionItem('og_chunk_retry', 'true');
         window.location.reload();
         return { default: (() => null) as unknown as T };
       }

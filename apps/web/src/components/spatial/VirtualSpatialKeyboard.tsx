@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { 
   X, 
@@ -13,6 +13,7 @@ import {
   Compass
 } from 'lucide-react';
 import { useSpatialStore } from '../../store/useSpatialStore';
+import { getAudioContext } from '../../services/soundHaptics';
 
 const KEYBOARD_ROWS_LOWER = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
@@ -46,14 +47,25 @@ export function VirtualSpatialKeyboard() {
   const [isShift, setIsShift] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Synthesize tactile haptic click audio via Web Audio API ($0 Rule)
   const playClickSound = useCallback(() => {
     if (!soundEnabled || typeof window === 'undefined') return;
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -96,10 +108,16 @@ export function VirtualSpatialKeyboard() {
   };
 
   const handleCopy = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(virtualKeyboardText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(virtualKeyboardText)
+        .then(() => {
+          setCopied(true);
+          if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+          copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
+        })
+        .catch((err) => {
+          console.warn('[VirtualSpatialKeyboard] Failed to copy text:', err);
+        });
     }
   };
 

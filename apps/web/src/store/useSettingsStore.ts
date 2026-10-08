@@ -144,7 +144,7 @@ export const useSettingsStore = create<SettingsState>()(
       setLastSeenVersion: (lastSeenVersion) => set({ lastSeenVersion }),
       setCodeCompletion: (codeCompletion) => set({ codeCompletion }),
       setGraphicsTier: (graphicsTier) => set({ graphicsTier }),
-      setByokApiKey: (byokApiKey) => set({ byokApiKey: byokApiKey.trim() }),
+      setByokApiKey: (byokApiKey) => set({ byokApiKey: typeof byokApiKey === 'string' ? byokApiKey.trim() : '' }),
       clearByokApiKey: () => set({ byokApiKey: '' }),
       setByokProvider: (byokProvider) => set({ byokProvider }),
       setByokModel: (byokModel) => set({ byokModel }),

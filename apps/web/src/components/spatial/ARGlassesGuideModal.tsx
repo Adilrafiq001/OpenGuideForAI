@@ -25,11 +25,16 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
 
   useEffect(() => {
     if (isOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
       };
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
   }, [isOpen, onClose]);
 
@@ -108,7 +113,10 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+        <div 
+          onClick={onClose}
+          className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -119,6 +127,7 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
             role="dialog"
             aria-modal="true"
             aria-labelledby="ar-guide-title"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-primary)]/40 flex items-center justify-between shrink-0">
@@ -127,7 +136,7 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
                   <Glasses size={18} />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center flex-wrap gap-2">
                     <h2 id="ar-guide-title" className="text-base sm:text-lg font-bold tracking-tight">
                       Smart AR Glasses Mode: Setup & Controls (SpaceWalker & Nebula Architecture)
                     </h2>

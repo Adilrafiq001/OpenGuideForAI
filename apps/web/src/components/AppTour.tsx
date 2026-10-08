@@ -65,7 +65,7 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
         element: '[data-testid="mobile-nav-more"]',
         popover: {
           title: 'Themes & Global Localization',
-          description: 'Tap "More" to access 20 WCAG AAA themes, 12 world languages (including native Urdu & Arabic RTL), display scaling, and audio volume.'
+          description: 'Tap "More" to access 24 calibrated WCAG AAA themes, 12 world languages (including native Urdu & Arabic RTL), display scaling, and audio volume.'
         }
       },
       {
@@ -136,7 +136,7 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
         element: '[data-testid="command-dock-wrapper"]',
         popover: {
           title: 'Spring Magnification Command Dock',
-          description: 'Fluid macOS-style dock: launch curriculum tracks, open the 3D Vector Holodeck, switch across 20 calibrated WCAG AAA themes, and customize editor typography.'
+          description: 'Fluid macOS-style dock: launch curriculum tracks, open the 3D Vector Holodeck, switch across 24 calibrated WCAG AAA themes, and customize editor typography.'
         }
       },
       {

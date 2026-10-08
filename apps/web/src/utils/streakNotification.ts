@@ -10,6 +10,22 @@ export interface StreakReminderStatus {
 const STORAGE_KEY_ENABLED = 'openguide_streak_reminders_enabled';
 const STORAGE_KEY_LAST_SCHEDULED = 'openguide_streak_last_scheduled_ts';
 
+function safeGetStorage(key: string): string | null {
+  try {
+    return typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeSetStorage(key: string, value: string): void {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(key, value);
+    }
+  } catch {}
+}
+
 export function getStreakReminderStatus(): StreakReminderStatus {
   if (typeof window === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
     return {
@@ -19,7 +35,7 @@ export function getStreakReminderStatus(): StreakReminderStatus {
     };
   }
 
-  const enabled = localStorage.getItem(STORAGE_KEY_ENABLED) === 'true';
+  const enabled = safeGetStorage(STORAGE_KEY_ENABLED) === 'true';
   return {
     supported: true,
     permission: Notification.permission,
@@ -39,12 +55,12 @@ export async function requestAndScheduleStreakReminder(currentStreak: number): P
     }
 
     if (permission !== 'granted') {
-      localStorage.setItem(STORAGE_KEY_ENABLED, 'false');
+      safeSetStorage(STORAGE_KEY_ENABLED, 'false');
       return false;
     }
 
-    localStorage.setItem(STORAGE_KEY_ENABLED, 'true');
-    localStorage.setItem(STORAGE_KEY_LAST_SCHEDULED, Date.now().toString());
+    safeSetStorage(STORAGE_KEY_ENABLED, 'true');
+    safeSetStorage(STORAGE_KEY_LAST_SCHEDULED, Date.now().toString());
 
     // Schedule or show immediate confirmation notification
     const reg = await navigator.serviceWorker.ready;
@@ -65,7 +81,5 @@ export async function requestAndScheduleStreakReminder(currentStreak: number): P
 }
 
 export function disableStreakReminder(): void {
-  try {
-    localStorage.setItem(STORAGE_KEY_ENABLED, 'false');
-  } catch {}
+  safeSetStorage(STORAGE_KEY_ENABLED, 'false');
 }

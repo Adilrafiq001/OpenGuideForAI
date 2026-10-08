@@ -12,7 +12,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
   const { language, setLanguage, t } = useLanguageStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
+  const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0] || { code: 'en', name: 'English', nativeName: 'English' };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {

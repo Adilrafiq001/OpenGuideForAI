@@ -628,6 +628,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                             onClick={() => handleCopy(msg.id, msg.codeSnippet!)}
                             className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-slate-300 hover:text-white transition-colors cursor-pointer"
                             title="Copy snippet"
+                            aria-label="Copy snippet"
                           >
                             {copiedId === msg.id ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
                           </button>
@@ -667,7 +668,8 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                               setMessages(prev => [...prev, userMsg]);
                               setQuery('');
                               setIsTyping(true);
-                              setTimeout(() => {
+                              if (responseTimerRef.current) clearTimeout(responseTimerRef.current);
+                              responseTimerRef.current = setTimeout(() => {
                                 const response = generateOfflineResponse(promptText);
                                 const assistantMsg: Message = {
                                   id: `assistant-${Date.now()}`,
@@ -708,6 +710,7 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                   <textarea 
                     ref={textareaRef}
                     placeholder={t('abby_placeholder')} 
+                    aria-label={t('abby_placeholder') || 'Ask Bluee AI Mentor'}
                     name="chat_bot" 
                     id="chat_bot" 
                     value={query}

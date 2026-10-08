@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -111,6 +111,27 @@ print("\\n[FORENSIC VERDICT]: Chunk-007 is the poisoned injection vector!")`);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
   const [isRunningCode, setIsRunningCode] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const copyCodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyCodeTimerRef.current) clearTimeout(copyCodeTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   // Guardrail Patch Studio State
   const [guardrailCode, setGuardrailCode] = useState<string>(`# Security Guardrail Patch: Defend Against Ticket #4092 Attack
@@ -372,9 +393,15 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(terminalCode);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(terminalCode)
+        .then(() => {
+          setCopiedCode(true);
+          if (copyCodeTimerRef.current) clearTimeout(copyCodeTimerRef.current);
+          copyCodeTimerRef.current = setTimeout(() => setCopiedCode(false), 2000);
+        })
+        .catch(() => {});
+    }
   };
 
   // Indictment Submissions
@@ -409,7 +436,10 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md">
+        <div 
+          onClick={onClose}
+          className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 14 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -420,6 +450,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
             role="dialog"
             aria-modal="true"
             aria-labelledby="mystery-lab-title"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-primary)]/40 flex items-center justify-between shrink-0">

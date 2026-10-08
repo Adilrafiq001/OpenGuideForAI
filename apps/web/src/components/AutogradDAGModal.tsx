@@ -83,12 +83,30 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
         <div className="flex flex-wrap gap-6 items-center px-4 py-2.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)]">
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold">Input a:</span>
-            <input type="range" min="-5" max="5" step="0.5" value={a} onChange={(e) => setA(parseFloat(e.target.value))} className="w-24 accent-[var(--color-accent)] cursor-pointer" />
+            <input 
+              type="range" 
+              min="-5" 
+              max="5" 
+              step="0.5" 
+              value={a} 
+              aria-label="Input scalar value a"
+              onChange={(e) => setA(parseFloat(e.target.value))} 
+              className="w-24 accent-[var(--color-accent)] cursor-pointer" 
+            />
             <span className="text-xs font-mono text-[var(--color-accent)] font-bold">{a.toFixed(1)}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold">Input b:</span>
-            <input type="range" min="-5" max="5" step="0.5" value={b} onChange={(e) => setB(parseFloat(e.target.value))} className="w-24 accent-[var(--color-accent)] cursor-pointer" />
+            <input 
+              type="range" 
+              min="-5" 
+              max="5" 
+              step="0.5" 
+              value={b} 
+              aria-label="Input scalar value b"
+              onChange={(e) => setB(parseFloat(e.target.value))} 
+              className="w-24 accent-[var(--color-accent)] cursor-pointer" 
+            />
             <span className="text-xs font-mono text-[var(--color-accent)] font-bold">{b.toFixed(1)}</span>
           </div>
         </div>

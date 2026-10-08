@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -94,12 +94,25 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
   const buildVersion = `v${CURRENT_STUDIO_VERSION}`;
   const buildDate = '2026.10.03-PROD';
 
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const newsletterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const contactTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      if (newsletterTimerRef.current) clearTimeout(newsletterTimerRef.current);
+      if (contactTimerRef.current) clearTimeout(contactTimerRef.current);
+    };
+  }, []);
+
   const handleCopyHash = async () => {
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(buildHash);
         setCopiedHash(true);
-        setTimeout(() => setCopiedHash(false), 2000);
+        if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+        copyTimerRef.current = setTimeout(() => setCopiedHash(false), 2000);
       }
     } catch {}
   };
@@ -111,7 +124,8 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
         localStorage.setItem('openguide_newsletter_subscribed', newsletterEmail.trim());
       } catch {}
       setNewsletterSubmitted(true);
-      setTimeout(() => {
+      if (newsletterTimerRef.current) clearTimeout(newsletterTimerRef.current);
+      newsletterTimerRef.current = setTimeout(() => {
         setNewsletterEmail('');
       }, 3000);
     }
@@ -126,12 +140,15 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       );
       window.open(`mailto:openguideforai@gmail.com?subject=${subject}&body=${body}`, '_blank');
       try {
-        const stored = JSON.parse(localStorage.getItem('openguide_contact_messages') || '[]');
+        const raw = localStorage.getItem('openguide_contact_messages');
+        const parsed = raw ? JSON.parse(raw) : [];
+        const stored = Array.isArray(parsed) ? parsed : [];
         stored.push({ ...contactForm, timestamp: new Date().toISOString() });
         localStorage.setItem('openguide_contact_messages', JSON.stringify(stored));
       } catch {}
       setContactSubmitted(true);
-      setTimeout(() => {
+      if (contactTimerRef.current) clearTimeout(contactTimerRef.current);
+      contactTimerRef.current = setTimeout(() => {
         setContactModalOpen(false);
         setContactSubmitted(false);
         setContactForm({ name: '', email: '', category: 'Feedback', message: '' });
@@ -1122,7 +1139,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   <a
                     href="https://github.com/sponsors/openguideforai"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-pink-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-pink-400 transition-colors">
@@ -1134,7 +1151,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   <a
                     href="https://ko-fi.com/buymegoodcoffee"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-amber-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-amber-400 transition-colors">
@@ -1146,7 +1163,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   <a
                     href="https://paypal.me/buymegoodcoffee"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-blue-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-blue-400 transition-colors">

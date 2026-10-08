@@ -109,10 +109,8 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
   // Synchronize track.id and search parameters (module & lesson deep-linking)
   const activeLessonKey = `${track.id}-${resolvedModIdx}-${resolvedLesIdx}`;
-  const [prevLessonKey, setPrevLessonKey] = useState(activeLessonKey);
 
-  if (activeLessonKey !== prevLessonKey) {
-    setPrevLessonKey(activeLessonKey);
+  useEffect(() => {
     setCurrentModuleIdx(resolvedModIdx);
     setCurrentLessonIdx(resolvedLesIdx);
     const target = track.modules[resolvedModIdx]?.lessons[resolvedLesIdx] || track.modules[0]?.lessons[0];
@@ -126,7 +124,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       setCopiedSolution(false);
       setIsChallengePassed(completedLessonIds.includes(target.id));
     }
-  }
+  }, [activeLessonKey, resolvedModIdx, resolvedLesIdx, track, completedLessonIds]);
 
   useEffect(() => {
     clearLogs();
@@ -297,6 +295,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
         e.preventDefault();
         executeCodeRef.current();
       } else if (e.altKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault();
         setIsXRayOpen(prev => !prev);
       }
     };

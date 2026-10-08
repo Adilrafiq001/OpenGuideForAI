@@ -135,9 +135,10 @@ export function SynapseLounge() {
   const sqrtDk = Math.sqrt(dk); // 8
 
   // Scaled dot-product calculation
+  const safeTemp = Math.max(0.01, temperature);
   const scaledScores = currentAttention.tokens.map(t => {
     const raw = t.rawDot;
-    const scaled = useScaleFactor ? raw / (sqrtDk * temperature) : raw / temperature;
+    const scaled = useScaleFactor ? raw / (sqrtDk * safeTemp) : raw / safeTemp;
     return scaled;
   });
 
@@ -145,7 +146,8 @@ export function SynapseLounge() {
   const maxScore = Math.max(...scaledScores);
   const expScores = scaledScores.map(s => Math.exp(s - maxScore));
   const sumExp = expScores.reduce((a, b) => a + b, 0);
-  const attentionWeights = expScores.map(e => e / sumExp);
+  const safeSumExp = sumExp > 0 ? sumExp : 1;
+  const attentionWeights = expScores.map(e => e / safeSumExp);
 
   // Target token verification
   const targetTokenIdx = currentAttention.tokens.findIndex(t => t.word === currentAttention.targetToken);

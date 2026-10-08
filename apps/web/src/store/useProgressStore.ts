@@ -211,7 +211,14 @@ export const useProgressStore = create<ProgressStoreState>((set, get) => ({
       if (!Array.isArray(data.completedLessons)) {
         return false;
       }
-      const newIds = data.completedLessons.filter((id: any) => typeof id === 'string');
+      const newIds: string[] = Array.from(
+        new Set<string>(
+          data.completedLessons
+            .filter((id: any): id is string => typeof id === 'string')
+            .map((id: string) => normalizeLessonId(id))
+            .filter((id: string): id is string => Boolean(id))
+        )
+      );
       set({ completedLessonIds: newIds });
       try {
         progressBroadcast?.postMessage({ type: 'PROGRESS_IMPORTED', completedLessonIds: newIds });

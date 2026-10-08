@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Cpu, X, Activity, HardDrive, Zap, Lightbulb, ChevronRight } from 'lucide-react';
 
 interface HardwareProfileProps {
@@ -28,6 +28,20 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
   const [contextTokens, setContextTokens] = useState<number>(4096);
   const [batchSize, setBatchSize] = useState<number>(1);
   const [revealedHintTier, setRevealedHintTier] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const model = MODEL_PRESETS[selectedPreset];
 

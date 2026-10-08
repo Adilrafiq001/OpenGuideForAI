@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, PlusSquare, Smartphone, CheckCircle } from 'lucide-react';
@@ -17,6 +17,13 @@ export function PwaInstallPrompt() {
   const [showIosModal, setShowIosModal] = useState(false);
   const [showInstalledToast, setShowInstalledToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('OpenGuide App Installed Successfully! Launch from your Home Screen anytime.');
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
 
   const handleDismiss = () => {
@@ -37,12 +44,14 @@ export function PwaInstallPrompt() {
       if (res?.outcome === 'accepted') {
         setToastMessage('OpenGuide App Installed Successfully! Launch from your Home Screen anytime.');
         setShowInstalledToast(true);
-        setTimeout(() => setShowInstalledToast(false), 4000);
+        if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = setTimeout(() => setShowInstalledToast(false), 4000);
       }
     } else {
       setToastMessage('To install OpenGuide, click the Install App icon in your browser address bar.');
       setShowInstalledToast(true);
-      setTimeout(() => setShowInstalledToast(false), 4500);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = setTimeout(() => setShowInstalledToast(false), 4500);
     }
   };
 

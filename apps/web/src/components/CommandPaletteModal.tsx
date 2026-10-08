@@ -48,17 +48,10 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
   const { setTheme } = useSettingsStore();
   const { setLanguage } = useLanguageStore();
 
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-  if (isOpen !== prevIsOpen) {
-    setPrevIsOpen(isOpen);
+  useEffect(() => {
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
-    }
-  }
-
-  useEffect(() => {
-    if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 

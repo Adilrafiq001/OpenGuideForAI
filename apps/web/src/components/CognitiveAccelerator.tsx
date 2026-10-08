@@ -43,18 +43,15 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
 
   useEffect(() => {
     if (activeTab !== 'blurting' || blurtPhase !== 'study') return;
+    if (countdown <= 0) {
+      setBlurtPhase('recall');
+      return;
+    }
     const timer = setInterval(() => {
-      setCountdown(c => {
-        if (c <= 1) {
-          clearInterval(timer);
-          setBlurtPhase('recall');
-          return 0;
-        }
-        return c - 1;
-      });
+      setCountdown(c => Math.max(0, c - 1));
     }, 1000);
     return () => clearInterval(timer);
-  }, [activeTab, blurtPhase]);
+  }, [activeTab, blurtPhase, countdown]);
 
   // Feynman State
   const [selectedFeynman, setSelectedFeynman] = useState<FeynmanChallenge>(FEYNMAN_CHALLENGES[0]);
@@ -451,7 +448,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
 
             {/* Options */}
             <div className="space-y-3">
-              {selectedDrill.options.map((opt, oIdx) => {
+              {(selectedDrill?.options || []).map((opt, oIdx) => {
                 const isSelected = selectedOptionIdx === oIdx;
                 return (
                   <button
