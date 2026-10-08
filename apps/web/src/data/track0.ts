@@ -23,6 +23,13 @@ export type Lesson = {
   lastVerified?: string;
   reviewBy?: string;
   verificationRecord?: string;
+  blueprint?: string;
+  quiz?: Array<{
+    question: string;
+    options: string[];
+    answerIndex: number;
+    explanation: string;
+  }>;
 };
 
 export type Module = {

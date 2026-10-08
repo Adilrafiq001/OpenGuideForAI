@@ -33,7 +33,7 @@ interface CommandDockProps {
 export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDemo, onOpenCommandPalette }: CommandDockProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
+  const isEngine = (location.pathname.startsWith('/track/') || location.pathname.startsWith('/builder/')) && (location.pathname.endsWith('/engine') || /^\/(track|builder)\/[0-9]+$/.test(location.pathname));
   const [isMinimized, setIsMinimized] = useState(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
     return isEngine;

@@ -37,6 +37,8 @@ import { GitHubStarButton } from './GitHubStarButton';
 import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
 import { diagnosePythonError, type PythonDiagnostic } from '../utils/pythonDiagnostic';
 import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
+import { PromptToPreviewLab } from './builder/PromptToPreviewLab';
+import { CheckUnderstandingQuiz } from './builder/CheckUnderstandingQuiz';
 import type { Track } from '../data/track0';
 
 type CoursePlayerProps = {
@@ -573,130 +575,148 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     <MarkdownRenderer content={currentLesson.content} />
                   </div>
 
-                  {/* Progressive Learning Support: Target, Clues & Solution Reveal */}
+                  {/* Progressive Learning Support: Target, Clues & Solution Reveal (Engineer) OR Check Understanding Quiz (Builder) */}
                   <div className="space-y-3 pt-1">
-                    {/* Expected Console Output Target */}
-                    <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-2 text-xs font-mono">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
-                          Target Output Specification:
-                        </span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
-                          Goal Criterion
-                        </span>
-                      </div>
-                      <div className="text-[var(--color-text-primary)] bg-[var(--color-secondary)] p-2.5 rounded-lg border border-[var(--color-border)] whitespace-pre-wrap text-[11px] leading-relaxed font-mono">
-                        {currentLesson.expectedOutput}
-                      </div>
-                      <p className="text-[10px] text-[var(--color-text-secondary)] italic">
-                        This is the required stdout stream your Python solution must produce when verified.
-                      </p>
-                    </div>
-
-                    {/* Progressive Hint Accordion */}
-                    {(currentLesson.hint || (currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0)) && (
-                      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
-                        <button
-                          onClick={() => setShowHint(!showHint)}
-                          className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Lightbulb size={13} className="text-amber-500" />
-                            <span className="font-semibold">
-                              {showHint ? 'Hide Progressive Hints' : 'Need a Progressive Clue?'}
+                    {track.path === 'builder' ? (
+                      currentLesson.quiz && currentLesson.quiz.length > 0 && (
+                        <CheckUnderstandingQuiz
+                          questions={currentLesson.quiz}
+                          isCompleted={isChallengePassed || completedLessonIds.includes(currentLesson.id)}
+                          onPassed={() => {
+                            completeLesson(currentLesson.id, track.id);
+                            setIsChallengePassed(true);
+                            playTactileSound('success');
+                            triggerHaptic('success');
+                            setFeedback({ type: 'success', message: '✓ All questions passed! Lesson complete.' });
+                          }}
+                        />
+                      )
+                    ) : (
+                      <>
+                        {/* Expected Console Output Target */}
+                        <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-2 text-xs font-mono">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
+                              Target Output Specification:
                             </span>
-                          </span>
-                          <span className="text-[10px] font-mono opacity-70">
-                            {showHint ? '[Collapse]' : '[Expand]'}
-                          </span>
-                        </button>
-                        {showHint && (
-                          <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-3">
-                            <div className="font-bold flex items-center gap-1.5 text-[11px]">
-                              <Lightbulb size={12} className="text-amber-500" />
-                              <span>First-Principles Guidance:</span>
-                            </div>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                              Goal Criterion
+                            </span>
+                          </div>
+                          <div className="text-[var(--color-text-primary)] bg-[var(--color-secondary)] p-2.5 rounded-lg border border-[var(--color-border)] whitespace-pre-wrap text-[11px] leading-relaxed font-mono">
+                            {currentLesson.expectedOutput}
+                          </div>
+                          <p className="text-[10px] text-[var(--color-text-secondary)] italic">
+                            This is the required stdout stream your Python solution must produce when verified.
+                          </p>
+                        </div>
 
-                            {currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0 ? (
-                              <div className="space-y-2.5">
-                                {currentLesson.progressiveHints.slice(0, hintTier).map((hintText, idx) => (
-                                  <div key={idx} className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-amber-500/20 space-y-1">
-                                    <div className="flex items-center justify-between text-[10px] uppercase font-bold text-amber-800 dark:text-amber-400">
-                                      <span>Clue {idx + 1} of {currentLesson.progressiveHints!.length}</span>
-                                      <span className="opacity-60">{idx === 0 ? 'Conceptual' : idx === 1 ? 'Formula / Edge Case' : 'Code Pattern'}</span>
-                                    </div>
-                                    <p className="text-[11px] opacity-90 leading-relaxed">{hintText}</p>
+                        {/* Progressive Hint Accordion */}
+                        {(currentLesson.hint || (currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0)) && (
+                          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
+                            <button
+                              onClick={() => setShowHint(!showHint)}
+                              className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
+                            >
+                              <span className="flex items-center gap-1.5">
+                                <Lightbulb size={13} className="text-amber-500" />
+                                <span className="font-semibold">
+                                  {showHint ? 'Hide Progressive Hints' : 'Need a Progressive Clue?'}
+                                </span>
+                              </span>
+                              <span className="text-[10px] font-mono opacity-70">
+                                {showHint ? '[Collapse]' : '[Expand]'}
+                              </span>
+                            </button>
+                            {showHint && (
+                              <div className="p-3 border-t border-[var(--color-border)] bg-amber-500/10 dark:bg-amber-500/5 text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-mono space-y-3">
+                                <div className="font-bold flex items-center gap-1.5 text-[11px]">
+                                  <Lightbulb size={12} className="text-amber-500" />
+                                  <span>First-Principles Guidance:</span>
+                                </div>
+
+                                {currentLesson.progressiveHints && currentLesson.progressiveHints.length > 0 ? (
+                                  <div className="space-y-2.5">
+                                    {currentLesson.progressiveHints.slice(0, hintTier).map((hintText, idx) => (
+                                      <div key={idx} className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-amber-500/20 space-y-1">
+                                        <div className="flex items-center justify-between text-[10px] uppercase font-bold text-amber-800 dark:text-amber-400">
+                                          <span>Clue {idx + 1} of {currentLesson.progressiveHints!.length}</span>
+                                          <span className="opacity-60">{idx === 0 ? 'Conceptual' : idx === 1 ? 'Formula / Edge Case' : 'Code Pattern'}</span>
+                                        </div>
+                                        <p className="text-[11px] opacity-90 leading-relaxed">{hintText}</p>
+                                      </div>
+                                    ))}
+
+                                    {hintTier < currentLesson.progressiveHints.length && (
+                                      <button
+                                        onClick={() => setHintTier(prev => prev + 1)}
+                                        className="w-full py-1.5 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-900 dark:text-amber-200 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+                                      >
+                                        <Lightbulb size={12} />
+                                        <span>Reveal Next Clue ({hintTier + 1}/{currentLesson.progressiveHints.length})</span>
+                                      </button>
+                                    )}
                                   </div>
-                                ))}
-
-                                {hintTier < currentLesson.progressiveHints.length && (
-                                  <button
-                                    onClick={() => setHintTier(prev => prev + 1)}
-                                    className="w-full py-1.5 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-900 dark:text-amber-200 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
-                                  >
-                                    <Lightbulb size={12} />
-                                    <span>Reveal Next Clue ({hintTier + 1}/{currentLesson.progressiveHints.length})</span>
-                                  </button>
+                                ) : (
+                                  <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
                                 )}
                               </div>
-                            ) : (
-                              <p className="text-[11px] opacity-90">{currentLesson.hint}</p>
                             )}
                           </div>
                         )}
-                      </div>
-                    )}
 
-                    {/* Canonical Solution Reveal Card */}
-                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
-                      <button
-                        onClick={() => setShowSolution(!showSolution)}
-                        className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
-                      >
-                        <span className="flex items-center gap-1.5">
-                          {showSolution ? (
-                            <LockOpen size={13} className="text-emerald-400" />
-                          ) : (
-                            <Lock size={13} className="text-[var(--color-text-secondary)]" />
-                          )}
-                          <span className="font-semibold">{showSolution ? 'Hide Canonical Solution' : 'Reveal Canonical Solution'}</span>
-                        </span>
-                        <span className="text-[10px] font-mono text-[var(--color-accent)] font-semibold">
-                          {showSolution ? '[Hide]' : '[Reveal]'}
-                        </span>
-                      </button>
-
-                      {showSolution && (
-                        <div className="p-3 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/70 space-y-2.5">
-                          <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)] font-mono">
-                            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
-                              <CheckCircle size={12} />
-                              <span>Verified Implementation</span>
+                        {/* Canonical Solution Reveal Card */}
+                        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-primary)]/40 overflow-hidden">
+                          <button
+                            onClick={() => setShowSolution(!showSolution)}
+                            className="w-full px-3 py-2 text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-between transition-colors cursor-pointer"
+                          >
+                            <span className="flex items-center gap-1.5">
+                              {showSolution ? (
+                                <LockOpen size={13} className="text-emerald-400" />
+                              ) : (
+                                <Lock size={13} className="text-[var(--color-text-secondary)]" />
+                              )}
+                              <span className="font-semibold">{showSolution ? 'Hide Canonical Solution' : 'Reveal Canonical Solution'}</span>
                             </span>
-                            <div className="flex items-center gap-1.5">
-                              <button
-                                onClick={handleCopySolution}
-                                className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-[10px] font-mono text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-95"
-                              >
-                                {copiedSolution ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                                <span>{copiedSolution ? 'Copied!' : 'Copy'}</span>
-                              </button>
-                              <button
-                                onClick={handleInsertSolution}
-                                className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-accent)] hover:brightness-110 text-white text-[10px] font-mono font-bold transition-all cursor-pointer active:scale-95 shadow-sm"
-                              >
-                                <ArrowSquareIn size={11} />
-                                <span>Load into Editor</span>
-                              </button>
-                            </div>
-                          </div>
+                            <span className="text-[10px] font-mono text-[var(--color-accent)] font-semibold">
+                              {showSolution ? '[Hide]' : '[Reveal]'}
+                            </span>
+                          </button>
 
-                          <pre className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] text-[10px] sm:text-[11px] font-mono text-[var(--color-text-primary)] overflow-x-auto max-h-56 leading-relaxed selection:bg-[var(--color-accent-trans)]">
-                            <code>{currentLesson.solutionCode || currentLesson.initialCode}</code>
-                          </pre>
+                          {showSolution && (
+                            <div className="p-3 border-t border-[var(--color-border)] bg-[var(--color-secondary)]/70 space-y-2.5">
+                              <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)] font-mono">
+                                <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                                  <CheckCircle size={12} />
+                                  <span>Verified Implementation</span>
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    onClick={handleCopySolution}
+                                    className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-[10px] font-mono text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-95"
+                                  >
+                                    {copiedSolution ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                                    <span>{copiedSolution ? 'Copied!' : 'Copy'}</span>
+                                  </button>
+                                  <button
+                                    onClick={handleInsertSolution}
+                                    className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-accent)] hover:brightness-110 text-white text-[10px] font-mono font-bold transition-all cursor-pointer active:scale-95 shadow-sm"
+                                  >
+                                    <ArrowSquareIn size={11} />
+                                    <span>Load into Editor</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              <pre className="p-2.5 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] text-[10px] sm:text-[11px] font-mono text-[var(--color-text-primary)] overflow-x-auto max-h-56 leading-relaxed selection:bg-[var(--color-accent-trans)]">
+                                <code>{currentLesson.solutionCode || currentLesson.initialCode}</code>
+                              </pre>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -752,10 +772,28 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </div>
         </div>
 
-        {/* Right Column: IDE Editor & Output Terminal */}
-        <div className={`col-span-1 lg:col-span-7 xl:col-span-8 h-full flex flex-col gap-3 min-h-0 overflow-hidden ${
-          mobileTab === 'briefing' ? 'hidden lg:flex' : 'flex'
-        }`}>
+        {/* Right Column: Prompt-to-Preview Lab (Builder) OR Code Editor + Terminal (Engineer) */}
+        {track.path === 'builder' ? (
+          <div className={`col-span-1 lg:col-span-7 xl:col-span-8 h-full flex flex-col gap-3 min-h-0 overflow-hidden ${
+            mobileTab === 'briefing' ? 'hidden lg:flex' : 'flex'
+          }`}>
+            <PromptToPreviewLab
+              key={currentLesson.id}
+              initialPrompt={currentLesson.blueprint || currentLesson.initialCode || currentLesson.title}
+              lessonId={currentLesson.id}
+              onPreviewSuccess={() => {
+                completeLesson(currentLesson.id, track.id);
+                setIsChallengePassed(true);
+                playTactileSound('success');
+                triggerHaptic('success');
+                setFeedback({ type: 'success', message: '✓ App preview generated and verified in sandbox.' });
+              }}
+            />
+          </div>
+        ) : (
+          <div className={`col-span-1 lg:col-span-7 xl:col-span-8 h-full flex flex-col gap-3 min-h-0 overflow-hidden ${
+            mobileTab === 'briefing' ? 'hidden lg:flex' : 'flex'
+          }`}>
           
           {/* Code Editor Panel */}
           <div className={`flex-1 min-h-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl flex flex-col overflow-hidden shadow-sm ${
@@ -1002,6 +1040,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </div>
 
         </div>
+        )}
 
       </div>
 
