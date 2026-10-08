@@ -86,7 +86,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Amiri:ital,wght@0,400;0,700&family=Noto+Sans+Arabic:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Amiri:ital,wght@0,400;0,700&family=Noto+Sans+Arabic:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" crossorigin="anonymous">
     <script>
       (function() {
         try {
@@ -184,6 +184,7 @@
         if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
           var cfScript = document.createElement('script');
           cfScript.defer = true;
+          cfScript.crossOrigin = 'anonymous';
           cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js';
           cfScript.setAttribute('data-cf-beacon', '{"token": "f47cb826efea4a95a1215b3992b95c96"}');
           document.head.appendChild(cfScript);
