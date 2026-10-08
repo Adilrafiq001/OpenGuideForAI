@@ -1,6 +1,12 @@
 # State: External Audit Ready (Release v1.5.0 • Honest Reality-Grounded Benchmark: ~9.9/10)
 > Pre-flight freeze active per docs/PRODUCTION-READINESS-AUDIT.md. External Audit Dossier verified. Zero self-awarded 10/10 ratings.
 
+```
+GATE: CLOSED        <- the human flips this to OPEN in docs/PROJECT-STATE.md. Never flip it yourself.
+BRANCH: dev         <- active development and all testing strictly confined to dev branch per BUILDER-PATH-FINAL-GOAL.md
+```
+
+
 **Done:**
 - **Phase F11: Pre-Flight CI Hardening, Universal 1280px Header Geometry & 154-Test Full Suite Pass (100% Certified):**
   - **1. GitHub Actions CI Python Runtime & Autograder Dependencies (`.github/workflows/ci.yml`):** Configured Python 3.11 runtime (`actions/setup-python@v5`) and installed `numpy` so all 57 curriculum labs and 162 autograder mutants execute cleanly in headless GitHub Actions runners. Added production build verification (`yarn --cwd apps/web build`) gate in CI workflow.

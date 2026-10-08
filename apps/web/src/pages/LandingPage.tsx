@@ -40,6 +40,8 @@ const EverydayCraftAiModal = lazy(() => import('../components/EverydayCraftAiMod
 const ArchitecturalPillarsModal = lazy(() => import('../components/ArchitecturalPillarsModal').then(m => ({ default: m.ArchitecturalPillarsModal })));
 const NeuralMysteryLabModal = lazy(() => import('../components/NeuralMysteryLabModal').then(m => ({ default: m.NeuralMysteryLabModal })));
 const ARGlassesGuideModal = lazy(() => import('../components/spatial/ARGlassesGuideModal').then(m => ({ default: m.ARGlassesGuideModal })));
+const OnboardingForkModal = lazy(() => import('../components/OnboardingForkModal').then(m => ({ default: m.OnboardingForkModal })));
+import { usePathStore } from '../store/usePathStore';
 import type { CraftRole } from '../components/EverydayCraftAiModal';
 
 interface LandingPageProps {
@@ -78,6 +80,8 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   const [selectedPillarId, setSelectedPillarId] = useState<number | undefined>(undefined);
   const [isMysteryLabOpen, setIsMysteryLabOpen] = useState(false);
   const [isARGlassesGuideOpen, setIsARGlassesGuideOpen] = useState(false);
+  const [isOnboardingForkOpen, setIsOnboardingForkOpen] = useState(false);
+  const { setPath } = usePathStore();
   const [activeLandingTier, setActiveLandingTier] = useState<SpectrumTier>('tier0');
   const [landingSpectrumSearch, setLandingSpectrumSearch] = useState('');
   const [activePromptSampleIdx, setActivePromptSampleIdx] = useState(0);
@@ -315,6 +319,9 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         onOpenARGlassesGuide={() => {
           setIsARGlassesGuideOpen(true);
         }}
+        onOpenOnboardingFork={() => {
+          setIsOnboardingForkOpen(true);
+        }}
       />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
@@ -329,7 +336,15 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           const el = document.getElementById('pathways');
           el?.scrollIntoView({ behavior: 'smooth' });
         }}
-        onLaunchTrack0={() => navigate('/track/0/intro')}
+        onLaunchTrack0={() => {
+          setPath('engineer');
+          navigate('/track/0/intro');
+        }}
+        onLaunchBuilder0={() => {
+          setPath('builder');
+          navigate('/builder/0/intro');
+        }}
+        onOpenOnboardingFork={() => setIsOnboardingForkOpen(true)}
         onOpenMatrixModal={() => setIsMatrixModalOpen(true)}
         onOpenEverydayCrafts={(role) => {
           setSelectedCraftRole(role || 'salon');
@@ -1482,6 +1497,16 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             isOpen={isARGlassesGuideOpen}
             onClose={() => setIsARGlassesGuideOpen(false)}
             onLaunchAR={() => navigate('/holodeck')}
+          />
+        </Suspense>
+      )}
+
+      {/* Onboarding Pathway Fork Modal (Builder vs Engineer) */}
+      {isOnboardingForkOpen && (
+        <Suspense fallback={null}>
+          <OnboardingForkModal
+            isOpen={isOnboardingForkOpen}
+            onClose={() => setIsOnboardingForkOpen(false)}
           />
         </Suspense>
       )}

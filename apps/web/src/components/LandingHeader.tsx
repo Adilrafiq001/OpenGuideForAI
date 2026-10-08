@@ -35,6 +35,7 @@ import { Tooltip } from './Tooltip';
 import { ThemeSwitch } from './ThemeSwitch';
 import { startAppTour } from './AppTour';
 import { useSpatialStore } from '../store/useSpatialStore';
+import { usePathStore } from '../store/usePathStore';
 
 interface LandingHeaderProps {
   onOpenThemes?: () => void;
@@ -45,7 +46,19 @@ interface LandingHeaderProps {
   onOpenPillars?: (pillarIdx?: number) => void;
   onOpenMysteryLab?: () => void;
   onOpenARGlassesGuide?: () => void;
+  onOpenOnboardingFork?: () => void;
 }
+
+const ALL_BUILDER_TRACKS_NAV = [
+  { id: 'b0', title: 'Track B0: Say It', desc: 'Zero to working screen from plain English description', path: '/builder/0/intro', icon: Sparkles, badge: 'SAY IT' },
+  { id: 'b1', title: 'Track B1: Build It', desc: 'Specs not vibes, iteration loops & escaping fix loops', path: '/builder/1/intro', icon: Terminal, badge: 'SPECS' },
+  { id: 'b2', title: 'Track B2: Understand It', desc: 'App anatomy in plain words, Git safety & reading diffs', path: '/builder/2/intro', icon: Layers, badge: 'CODE & GIT' },
+  { id: 'b3', title: 'Track B3: Ship It', desc: 'Free hosting, preview vs prod, settings & zero-cost DBs', path: '/builder/3/intro', icon: Zap, badge: 'HOSTING' },
+  { id: 'b4', title: 'Track B4: Trust It', desc: 'Testing, access control, secrets, injection & review', path: '/builder/4/intro', icon: ShieldCheck, badge: 'SECURITY' },
+  { id: 'b5', title: 'Track B5: Direct It', desc: 'Rules & context files, spec-driven loops & cost', path: '/builder/5/intro', icon: Brain, badge: 'DIRECTING' },
+  { id: 'b6', title: 'Track B6: Run It', desc: 'CI/CD verification pipelines & rollback drills', path: '/builder/6/intro', icon: Cpu, badge: 'OPERATIONS' },
+  { id: 'b7', title: 'Track B7: Prove It', desc: 'Capstone architecture, adversarial audit & defense', path: '/builder/7/intro', icon: Award, badge: 'CAPSTONE' },
+];
 
 const ALL_TRACKS_NAV = [
   { id: '0', title: 'Track 0: Absolute Zero', desc: 'CPython WASM sandbox, standard streams & vector primitives', path: '/track/0/intro', icon: Terminal, badge: 'Beginner' },
@@ -68,10 +81,10 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab, onOpenARGlassesGuide }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab, onOpenARGlassesGuide, onOpenOnboardingFork }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, toggleThemeMode } = useSettingsStore();
-  const { t } = useLanguageStore();
+  const { t, language } = useLanguageStore();
   const { 
     isSpatialModeActive, 
     toggleSpatialMode,
@@ -80,6 +93,14 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
     isHandTrackingEnabled,
     toggleHandTracking
   } = useSpatialStore();
+
+  const { currentPath } = usePathStore();
+  const [tracksMenuTab, setTracksMenuTab] = useState<'builder' | 'engineer'>(currentPath);
+  const [prevPath, setPrevPath] = useState(currentPath);
+  if (prevPath !== currentPath) {
+    setPrevPath(currentPath);
+    setTracksMenuTab(currentPath);
+  }
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
@@ -116,11 +137,42 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
         ? 'bg-[var(--color-primary)]/92 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/25 backdrop-blur-2xl' 
         : 'bg-[var(--color-primary)]/75 border-b border-[var(--color-border)]/50 backdrop-blur-xl'
     }`}>
-      <div className="flex items-center gap-1.5 xl:gap-2.5 min-w-0 shrink-0">
+      <div className="flex items-center gap-1.5 xl:gap-2 min-w-0">
         {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
         <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl shrink-0">
           <BrandLogo size="md" />
         </a>
+
+        {/* Pathway Switcher Pill Button (Switch between Builder and Engineer anytime) */}
+        <Tooltip
+          position="bottom"
+          content={t('nav_switch_path') || 'Switch Learning Path'}
+          subtitle={currentPath === 'builder' ? 'Active: The Builder Path (B0–B7)' : 'Active: Deep AI Engineer (0–7)'}
+        >
+          <button
+            data-testid="header-path-switcher-btn"
+            onClick={() => onOpenOnboardingFork?.()}
+            className={`hidden sm:inline-flex items-center gap-1 px-2 xl:px-2.5 h-7 xl:h-7.5 rounded-full border text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-[0.98] select-none ${
+              currentPath === 'builder'
+                ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                : 'border-[var(--color-border)]/70 bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] text-[var(--color-accent)]'
+            }`}
+            aria-label={t('nav_switch_path') || 'Switch Learning Path'}
+          >
+            {currentPath === 'builder' ? (
+              <>
+                <Sparkles size={12} className="text-emerald-400 shrink-0" />
+                <span className="truncate">{t('nav_path_builder') || 'Builder'}</span>
+              </>
+            ) : (
+              <>
+                <Terminal size={12} className="text-[var(--color-accent)] shrink-0" />
+                <span className="truncate">{t('nav_path_engineer') || 'Engineer'}</span>
+              </>
+            )}
+            <ChevronDown size={10} className="opacity-60 shrink-0" />
+          </button>
+        </Tooltip>
           
           {/* Desktop Streamlined Navigation with Unified Tactile Pill Controls */}
           <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1 2xl:gap-1.5 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
@@ -155,8 +207,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               </a>
             </Tooltip>
 
-
-            {/* Unified Hover Reveal Dropdown: All 8 Tracks */}
+            {/* Unified Hover Reveal Dropdown: Tracks (Builder & Engineer) */}
             <div 
               className="relative"
               onMouseEnter={() => setIsTracksMenuOpen(true)}
@@ -170,7 +221,11 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 aria-expanded={isTracksMenuOpen}
                 aria-haspopup="true"
               >
-                <Terminal size={13} className="text-[var(--color-accent)] opacity-80" />
+                {currentPath === 'builder' ? (
+                  <Sparkles size={13} className="text-emerald-400 opacity-90" />
+                ) : (
+                  <Terminal size={13} className="text-[var(--color-accent)] opacity-80" />
+                )}
                 <span>{t('nav_tracks')}</span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -188,13 +243,43 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                       style={{ backgroundColor: 'var(--color-secondary)' }}
                       className="w-96 rounded-2xl border border-[var(--color-border)] p-2.5 shadow-2xl shadow-black/30 dark:shadow-black/70 backdrop-blur-2xl"
                     >
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold border-b border-[var(--color-border)] flex items-center justify-between">
-                        <span>8 Available Learning Tracks</span>
-                        <span className="text-[9px] text-[var(--color-accent)] font-semibold">57 Labs</span>
+                      {/* Pathway Category Tabs inside Dropdown */}
+                      <div className="p-1 border-b border-[var(--color-border)] mb-2 flex items-center gap-1">
+                        <button
+                          data-testid="tracks-tab-builder"
+                          onClick={(e) => { e.stopPropagation(); setTracksMenuTab('builder'); }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            tracksMenuTab === 'builder'
+                              ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-xs'
+                              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
+                          }`}
+                        >
+                          <Sparkles size={11} />
+                          <span>Builder Path (B0–B7)</span>
+                        </button>
+                        <button
+                          data-testid="tracks-tab-engineer"
+                          onClick={(e) => { e.stopPropagation(); setTracksMenuTab('engineer'); }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            tracksMenuTab === 'engineer'
+                              ? 'bg-[var(--color-primary)] border border-[var(--color-accent)]/40 text-[var(--color-accent)] shadow-xs'
+                              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
+                          }`}
+                        >
+                          <Terminal size={11} />
+                          <span>Engineer (0–7)</span>
+                        </button>
+                      </div>
+
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1 font-bold border-b border-[var(--color-border)]/50 flex items-center justify-between mb-1">
+                        <span>{tracksMenuTab === 'builder' ? '8 Builder Tracks' : '8 Engineering Tracks'}</span>
+                        <span className="text-[9px] text-[var(--color-accent)] font-semibold">
+                          {tracksMenuTab === 'builder' ? '24 Modules' : '57 Labs'}
+                        </span>
                       </div>
                       
-                      <div className="p-1 space-y-1 max-h-[75vh] overflow-y-auto">
-                        {ALL_TRACKS_NAV.map(trk => (
+                      <div className="p-1 space-y-1 max-h-[65vh] overflow-y-auto">
+                        {(tracksMenuTab === 'builder' ? ALL_BUILDER_TRACKS_NAV : ALL_TRACKS_NAV).map(trk => (
                           <button 
                             key={trk.id}
                             onClick={() => {
@@ -234,7 +319,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <a 
                 href="#curriculum" 
-                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
+                className="hidden 2xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
               >
                 <Layers size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>{t('nav_curriculum')}</span>
@@ -744,22 +829,23 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
 
 
           {/* 6. Primary Hero CTA: Launch Track Button */}
-          <div className="hidden lg:flex items-center shrink-0">
+          <div className="hidden lg:flex xl:hidden 2xl:flex items-center shrink-0">
             <Tooltip
               position="bottom"
-              content="Track 0: Absolute Zero"
-              subtitle="Python WASM Interactive IDE • Zero setup"
+              content={currentPath === 'builder' ? 'Track B0: Say It' : 'Track 0: Absolute Zero'}
+              subtitle={currentPath === 'builder' ? 'Prompt to live preview • Zero setup' : 'Python WASM Interactive IDE • Zero setup'}
               shortcut="↵"
             >
               <button 
-                onClick={() => navigate('/track/0/intro')}
+                data-testid="header-launch-track-btn"
+                onClick={() => navigate(currentPath === 'builder' ? '/builder/0/intro' : '/track/0/intro')}
                 className="group px-3 xl:px-3.5 h-8 xl:h-8.5 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-black/10 hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] cursor-pointer shrink-0"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor
                 }}
               >
-                <span>{t('nav_launch_track0')}</span>
+                <span>{currentPath === 'builder' ? (t('hero_start_as_builder') || 'Start Builder B0') : (language === 'ur' ? 'ٹریک 0' : t('nav_launch_track0'))}</span>
                 <ChevronRight size={13} className="transition-transform group-hover:translate-x-0.5" />
               </button>
             </Tooltip>
@@ -811,16 +897,43 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 </button>
               </div>
 
+              {/* Mobile Pathway Switcher */}
+              <button
+                data-testid="mobile-path-switcher-btn"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenOnboardingFork?.();
+                }}
+                className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)]/70 border border-[var(--color-border)] mb-1 text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  {currentPath === 'builder' ? <Sparkles size={16} className="text-emerald-400" /> : <Terminal size={16} className="text-[var(--color-accent)]" />}
+                  <div>
+                    <div className="text-xs font-bold text-[var(--color-text-primary)]">
+                      {currentPath === 'builder' ? (t('nav_path_builder') || 'Builder Path (B0–B7)') : (t('nav_path_engineer') || 'Engineer Path (0–7)')}
+                    </div>
+                    <div className="text-[10px] text-[var(--color-text-secondary)]">
+                      {t('nav_switch_path') || 'Tap to switch learning path'}
+                    </div>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-accent)] font-bold">
+                  SWITCH
+                </span>
+              </button>
+
               <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/0/intro'); }}
+                onClick={() => { setIsMobileMenuOpen(false); navigate(currentPath === 'builder' ? '/builder/0/intro' : '/track/0/intro'); }}
                 className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold"
                 style={{ color: currentThemeInfo.accent }}
               >
                 <span className="flex items-center gap-2">
                   <Zap size={16} />
-                  <span>{t('nav_launch_track0')}</span>
+                  <span>{currentPath === 'builder' ? (t('hero_start_as_builder') || 'Start Builder B0') : t('nav_launch_track0')}</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 0</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">
+                  {currentPath === 'builder' ? 'Track B0' : 'Track 0'}
+                </span>
               </button>
               <button 
                 onClick={() => { setIsMobileMenuOpen(false); navigate('/track/1/intro'); }}

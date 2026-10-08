@@ -10,7 +10,7 @@ export function BrandLogo({ className = '', showBadge = true, size = 'md' }: Bra
   const badgeSize = size === 'sm' ? 'text-[9px] px-1.5 py-0.5' : 'text-[10px] px-2 py-0.5';
 
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none cursor-pointer group ${className}`}>
+    <div className={`inline-flex items-center gap-2 xl:gap-1.5 2xl:gap-2.5 select-none cursor-pointer group ${className}`}>
       {/* High-Craft OG Monogram Icon */}
       <div 
         className={`${iconSize} rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-sm flex items-center justify-center font-black tracking-tight text-[var(--color-text-primary)] shrink-0 transition-all duration-300 group-hover:border-[var(--color-accent)] group-hover:scale-105`}

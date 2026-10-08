@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "sourceLocale": "en",
+  "generatedDate": "2026-10-08",
+  "status": "machine-translated",
+  "description": "Inventory of i18n keys translated via high-agency machine localization requiring native human review before external production certification.",
+  "pendingLocales": [
+    "es", "zh", "fr", "de", "ar", "ur", "hi", "it", "ja", "pt", "ru"
+  ],
+  "keys": [
+    "hero_title_suffix",
+    "hero_start_as_builder",
+    "hero_deep_ai_engineer",
+    "hero_builder_subtitle",
+    "hero_engineer_subtitle",
+    "hero_not_sure_guide",
+    "nav_path_builder",
+    "nav_path_engineer",
+    "nav_switch_path",
+    "onboarding_fork_badge",
+    "onboarding_fork_title",
+    "onboarding_fork_subtitle",
+    "onboarding_builder_title",
+    "onboarding_builder_tagline",
+    "onboarding_builder_desc",
+    "onboarding_builder_cta",
+    "onboarding_engineer_title",
+    "onboarding_engineer_tagline",
+    "onboarding_engineer_desc",
+    "onboarding_engineer_cta",
+    "onboarding_guide_tab",
+    "onboarding_fork_tab"
+  ]
+}

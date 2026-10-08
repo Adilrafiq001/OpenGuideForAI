@@ -331,7 +331,13 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             subtitle={`Return to ${track.title} Briefing & syllabus`}
           >
             <button
-              onClick={() => navigate(`/track/${trackNum}/intro`)}
+              onClick={() => {
+                const isBuilder = track.path === 'builder' || track.id.startsWith('builder-');
+                const exitPath = isBuilder 
+                  ? `/builder/${String(track.trackNumber || track.id).replace('builder-', '').replace('B', '')}/intro` 
+                  : `/track/${trackNum}/intro`;
+                navigate(exitPath);
+              }}
               aria-label={t('ide_exit')}
               className="flex items-center justify-center gap-1.5 p-2 sm:px-2.5 sm:py-1 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer active:scale-[0.98] min-h-[40px] min-w-[40px] sm:min-h-[32px] sm:min-w-0"
             >

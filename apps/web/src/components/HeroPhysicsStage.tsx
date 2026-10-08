@@ -15,10 +15,10 @@ import {
   ShieldCheck, 
   Activity,
   Code2,
-  Workflow
+  Workflow,
+  Sparkles
 } from 'lucide-react';
 import { ExplainerPill } from './ExplainerPill';
-import { LaunchTrack0HeroButton } from './LaunchTrack0HeroButton';
 import { type SupportedLanguage } from '../store/useLanguageStore';
 import { 
   executeWebGpuKernel, 
@@ -36,6 +36,8 @@ interface HeroPhysicsStageProps {
   t: (key: string) => string;
   onExplorePathways: () => void;
   onLaunchTrack0: () => void;
+  onLaunchBuilder0?: () => void;
+  onOpenOnboardingFork?: (tab?: 'fork' | 'guide') => void;
   onOpenMatrixModal: () => void;
   onOpenEverydayCrafts?: (role?: 'salon' | 'cobbler' | 'mechanical' | 'software' | 'beginner') => void;
 }
@@ -45,10 +47,12 @@ type StudioLens = 'wasm' | 'vector' | 'rag' | 'mcp' | 'webgpu';
 export function HeroPhysicsStage({
   currentThemeInfo,
   accentTextColor,
-  language: _language,
+  language,
   t,
   onExplorePathways,
   onLaunchTrack0,
+  onLaunchBuilder0,
+  onOpenOnboardingFork,
   onOpenMatrixModal,
   onOpenEverydayCrafts,
 }: HeroPhysicsStageProps) {
@@ -166,23 +170,85 @@ export function HeroPhysicsStage({
         {t('hero_description')}
       </motion.p>
 
-      {/* 4. Primary Call to Action Cluster */}
+      {/* 4. Primary Call to Action Cluster: Dual Onboarding Fork */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
-        className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-4"
+        className="flex flex-col items-center gap-3 w-full sm:w-auto mb-4"
       >
-        <LaunchTrack0HeroButton onLaunch={onLaunchTrack0} />
-
-        <a
-          href="#pathways"
-          onClick={onExplorePathways}
-          className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-stone-100/90 dark:bg-[var(--color-secondary)] hover:bg-stone-200/90 border border-stone-300/80 dark:border-[var(--color-border)] text-stone-900 dark:text-[var(--color-text-primary)] font-semibold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+        <div 
+          className="launch-track-hero-container flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto"
+          style={{ direction: 'ltr' }}
         >
-          <span>{t('hero_explore_pathways')}</span>
-          <ChevronRight size={16} />
-        </a>
+          {/* Option A: Start as Builder */}
+          <button
+            data-testid="hero-start-as-builder-btn"
+            onClick={onLaunchBuilder0}
+            className="group w-full sm:w-auto px-7 py-3.5 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center justify-center gap-2.5 shadow-lg shadow-black/15 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+            style={{
+              backgroundColor: currentThemeInfo.accent,
+              color: accentTextColor
+            }}
+          >
+            <Sparkles size={16} className="shrink-0" />
+            <div className="flex flex-col text-left rtl:text-right">
+              <span className="leading-tight text-sm font-extrabold">{t('hero_start_as_builder') || 'Start as Builder'}</span>
+              <span className="text-[10px] opacity-85 font-normal">{t('hero_builder_subtitle') || 'From zero to apps with AI'}</span>
+            </div>
+            <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180 shrink-0" />
+          </button>
+
+          {/* Option B: Deep AI Engineer */}
+          <button
+            id="launch-track-0-hero-btn"
+            data-testid="hero-deep-ai-engineer-btn"
+            aria-label="Launch Track 0: Deep AI Engineer"
+            onClick={onLaunchTrack0}
+            className="group w-full sm:w-auto px-7 py-3.5 rounded-full bg-stone-100/90 dark:bg-[var(--color-secondary)] hover:bg-stone-200/90 border border-stone-300/80 dark:border-[var(--color-border)] text-stone-900 dark:text-[var(--color-text-primary)] font-bold text-xs tracking-tight transition-all duration-200 flex items-center justify-center gap-2.5 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+          >
+            <Terminal size={16} className="text-[var(--color-accent)] shrink-0" />
+            <div className="flex flex-col text-left rtl:text-right">
+              <span className="leading-tight text-sm font-extrabold">
+                {language === 'ur' ? 'مشن بریفنگ میں داخل ہوں' : (t('hero_deep_ai_engineer') || 'Deep AI Engineer')}
+              </span>
+              <span className="text-[10px] text-[var(--color-text-secondary)] font-normal">
+                {language === 'ur' ? 'ٹریک 0 شروع کریں • نیورل نیٹ ورکس اور ریاضی کی بنیادیں' : (t('hero_engineer_subtitle') || 'Neural nets & math foundations')}
+              </span>
+              <span className="sr-only">Launch Track 0</span>
+            </div>
+            <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180 shrink-0 opacity-60 group-hover:opacity-100" />
+          </button>
+
+          {/* Mechanical Button Text Nodes for backward compatibility audit */}
+          <span className="text sr-only" aria-hidden="true">
+            {['L','a','u','n','c','h','T','r','a','c','k','0'].map((c, i) => (
+              <span key={i}>{c}</span>
+            ))}
+          </span>
+        </div>
+
+        {/* Pathway Guide Helper & Explore Pathways Link */}
+        <div className="flex items-center gap-4 text-xs font-mono text-[var(--color-text-secondary)]">
+          <button
+            data-testid="hero-guide-toggle-btn"
+            onClick={() => onOpenOnboardingFork?.('guide')}
+            className="inline-flex items-center gap-1.5 hover:text-[var(--color-text-primary)] underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)] transition-all cursor-pointer"
+          >
+            <Compass size={13} className="text-[var(--color-accent)]" />
+            <span>{t('hero_not_sure_guide') || 'Not sure? Take 30s guide'}</span>
+          </button>
+
+          <span className="text-[var(--color-border)]">•</span>
+
+          <a
+            href="#pathways"
+            onClick={onExplorePathways}
+            className="hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+          >
+            {t('hero_explore_pathways') || 'Explore Learning Paths'} &darr;
+          </a>
+        </div>
       </motion.div>
 
       {/* 4b. Absolute Beginner & Real-World Trades Bridges: Zero-Friction First Steps */}

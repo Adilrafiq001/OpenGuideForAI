@@ -69,7 +69,7 @@ export default defineConfig({
           if (id.includes('node_modules/lenis')) {
             return 'vendor-lenis';
           }
-          if (id.includes('src/data/track') || id.includes('src/data/offlineKnowledge') || id.includes('src/data/firstPrinciplesData') || id.includes('src/data/cognitiveLearningData')) {
+          if (id.includes('src/data/track') || id.includes('src/data/builderTracks') || id.includes('src/data/offlineKnowledge') || id.includes('src/data/firstPrinciplesData') || id.includes('src/data/cognitiveLearningData')) {
             return 'curriculum-data';
           }
         }

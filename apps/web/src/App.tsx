@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, useParams, Navigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { LandingPage } from './pages/LandingPage';
 import { CommandDock } from './components/CommandDock';
@@ -14,6 +14,7 @@ import { track4 } from './data/track4';
 import { track5 } from './data/track5';
 import { track6 } from './data/track6';
 import { track7 } from './data/track7';
+import { getBuilderTrack, trackB0 } from './data/builderTracks';
 import { CURRENT_STUDIO_VERSION } from './data/changelogData';
 import './App.css';
 
@@ -87,6 +88,18 @@ const CoursePlayer = lazyWithRetry(() => import('./components/CoursePlayer').the
 const SpatialHolodeck = lazyWithRetry(() => import('./pages/SpatialHolodeck').then(m => ({ default: m.SpatialHolodeck })));
 const PortfolioPage = lazyWithRetry(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
 const NotFoundPage = lazyWithRetry(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+
+function BuilderTrackBriefingWrapper({ onOpenThemes }: { onOpenThemes: () => void }) {
+  const { trackId } = useParams<{ trackId: string }>();
+  const track = getBuilderTrack(trackId || '0') || trackB0;
+  return <TrackBriefing onOpenThemes={onOpenThemes} track={track} />;
+}
+
+function BuilderCoursePlayerWrapper() {
+  const { trackId } = useParams<{ trackId: string }>();
+  const track = getBuilderTrack(trackId || '0') || trackB0;
+  return <CoursePlayer track={track} />;
+}
 
 function AppContent() {
   const navigate = useNavigate();
@@ -287,6 +300,11 @@ function AppContent() {
                 <Route path="/track/7/intro" element={<TrackBriefing onOpenThemes={handleOpenThemes} />} />
                 <Route path="/track/7" element={<CoursePlayer track={track7} />} />
                 <Route path="/track/7/engine" element={<CoursePlayer track={track7} />} />
+                {/* Builder Path Routes (B0–B7) */}
+                <Route path="/builder" element={<Navigate to="/builder/0/intro" replace />} />
+                <Route path="/builder/:trackId/intro" element={<BuilderTrackBriefingWrapper onOpenThemes={handleOpenThemes} />} />
+                <Route path="/builder/:trackId" element={<BuilderCoursePlayerWrapper />} />
+                <Route path="/builder/:trackId/engine" element={<BuilderCoursePlayerWrapper />} />
                 <Route path="/holodeck" element={<SpatialHolodeck />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="*" element={<NotFoundPage />} />

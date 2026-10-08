@@ -19,6 +19,7 @@ import { track4 } from '../data/track4';
 import { track5 } from '../data/track5';
 import { track6 } from '../data/track6';
 import { track7 } from '../data/track7';
+import { getBuilderTrack } from '../data/builderTracks';
 import type { Track } from '../data/track0';
 import { Tooltip } from '../components/Tooltip';
 import { LanguageSelector } from '../components/LanguageSelector';
@@ -48,16 +49,26 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
   const currentThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
+  const isBuilderPath = Boolean(propTrack?.path === 'builder' || location.pathname.startsWith('/builder'));
+  const builderMatch = location.pathname.match(/\/builder\/([^\/]+)/);
+  const builderTrackId = builderMatch ? builderMatch[1] : '0';
+
   const activeTrack: Track = propTrack || (
-    location.pathname.includes('/track/7') ? track7 :
-    location.pathname.includes('/track/6') ? track6 :
-    location.pathname.includes('/track/5') ? track5 :
-    location.pathname.includes('/track/4') ? track4 :
-    location.pathname.includes('/track/3') ? track3 :
-    location.pathname.includes('/track/2') ? track2 :
-    location.pathname.includes('/track/1') ? track1 : track0
+    isBuilderPath 
+      ? (getBuilderTrack(builderTrackId) || getBuilderTrack('0')!)
+      : (
+        location.pathname.includes('/track/7') ? track7 :
+        location.pathname.includes('/track/6') ? track6 :
+        location.pathname.includes('/track/5') ? track5 :
+        location.pathname.includes('/track/4') ? track4 :
+        location.pathname.includes('/track/3') ? track3 :
+        location.pathname.includes('/track/2') ? track2 :
+        location.pathname.includes('/track/1') ? track1 : track0
+      )
   );
-  const trackNum = activeTrack.id.replace('track-', '');
+  const trackNum = isBuilderPath 
+    ? String(activeTrack.trackNumber || 'B0')
+    : activeTrack.id.replace('track-', '');
   const totalLessons = activeTrack.modules.reduce((acc, mod) => acc + mod.lessons.length, 0);
 
   return (
@@ -84,7 +95,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
 
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
             <span className="font-bold" style={{ color: currentThemeInfo.accent }}>
-              {trackNum === '0' || trackNum === '00' ? 'TRACK 0' : `TRACK 0${trackNum}`}
+              {isBuilderPath ? `TRACK ${trackNum}` : (trackNum === '0' || trackNum === '00' ? 'TRACK 0' : `TRACK 0${trackNum}`)}
             </span>
             <span className="text-[var(--color-text-secondary)]">/</span>
             <span className="font-medium text-[var(--color-text-primary)]">{activeTrack.title}</span>
@@ -139,16 +150,26 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
         
         {/* Banner Hero */}
         <div className="mb-12">
-          <div 
-            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase mb-4 border"
-            style={{
-              backgroundColor: `${currentThemeInfo.accent}15`,
-              borderColor: `${currentThemeInfo.accent}30`,
-              color: currentThemeInfo.accent
-            }}
-          >
-            <Compass weight="bold" size={13} />
-            <span>{t('briefing_directive')}</span>
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <div 
+              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold tracking-wider uppercase border"
+              style={{
+                backgroundColor: `${currentThemeInfo.accent}15`,
+                borderColor: `${currentThemeInfo.accent}30`,
+                color: currentThemeInfo.accent
+              }}
+            >
+              <Compass weight="bold" size={13} />
+              <span>{t('briefing_directive')}</span>
+            </div>
+            {activeTrack.badge && (
+              <span 
+                data-testid="track-badge"
+                className="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase border border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+              >
+                {activeTrack.badge}
+              </span>
+            )}
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[var(--color-text-primary)] mb-4">
@@ -264,7 +285,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
               className="w-full mt-5"
             >
               <button
-                onClick={() => navigate(`/track/${trackNum}/engine`)}
+                onClick={() => navigate(isBuilderPath ? `/builder/${trackNum.replace('B', '')}/engine` : `/track/${trackNum}/engine`)}
                 className="w-full py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
@@ -326,7 +347,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
                 {mod.lessons.map((les, lIdx) => (
                   <div 
                     key={les.id}
-                    onClick={() => navigate(`/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`)}
+                    onClick={() => navigate(isBuilderPath ? `/builder/${trackNum.replace('B','')}/engine?module=${mIdx}&lesson=${lIdx}` : `/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`)}
                     className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
@@ -352,13 +373,13 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             style={{ backgroundColor: currentThemeInfo.accent }}
           />
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-text-primary)] mb-3">
-            {activeTrack.id === 'track-4' ? 'Ready to Master Frontier Attention & Systems?' : activeTrack.id === 'track-3' ? 'Ready to Deploy Enterprise AI Guardrails?' : activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
+            {isBuilderPath ? `Ready to Build with Track ${trackNum}?` : activeTrack.id === 'track-4' ? 'Ready to Master Frontier Attention & Systems?' : activeTrack.id === 'track-3' ? 'Ready to Deploy Enterprise AI Guardrails?' : activeTrack.id === 'track-2' ? 'Ready to Build Autonomous Agents?' : activeTrack.id === 'track-1' ? 'Ready to Construct the Vector Engine?' : t('briefing_title')}
           </h2>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-lg mb-8 leading-relaxed">
-            {activeTrack.id === 'track-4' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive attention mechanics & MCP protocol labs.' : activeTrack.id === 'track-3' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive model evaluation & OWASP defense labs.' : activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
+            {isBuilderPath ? 'Initialize your safe client-side workbench and begin with interactive prompt-to-app labs.' : activeTrack.id === 'track-4' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive attention mechanics & MCP protocol labs.' : activeTrack.id === 'track-3' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive model evaluation & OWASP defense labs.' : activeTrack.id === 'track-2' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive RAG & autonomous agent labs.' : activeTrack.id === 'track-1' ? 'Initialize your client-side Python Pyodide workspace and begin with 9 interactive vector geometry labs.' : t('briefing_subtitle')}
           </p>
           <InitializeWorkspaceButton
-            onClick={() => navigate(`/track/${trackNum}/engine`)}
+            onClick={() => navigate(isBuilderPath ? `/builder/${trackNum.replace('B','')}/engine` : `/track/${trackNum}/engine`)}
             label={t('briefing_launch_btn')}
           />
         </div>

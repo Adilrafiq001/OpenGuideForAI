@@ -1,3 +1,6 @@
+export type LessonAudience = 'all' | 'builder' | 'engineer';
+export type LessonKind = 'concept' | 'lab' | 'tool-playbook';
+
 export type Lesson = {
   id: string;
   title: string;
@@ -10,6 +13,16 @@ export type Lesson = {
   hint?: string;
   progressiveHints?: string[];
   solutionCode?: string;
+  // Extended Builder & Dual-Path Manifest Metadata
+  audience?: LessonAudience[];
+  level?: string;
+  kind?: LessonKind;
+  competencyIds?: string[];
+  claimIds?: string[];
+  readingLevel?: number;
+  lastVerified?: string;
+  reviewBy?: string;
+  verificationRecord?: string;
 };
 
 export type Module = {
@@ -17,13 +30,24 @@ export type Module = {
   title: string;
   description: string;
   lessons: Lesson[];
+  audience?: LessonAudience[];
 };
+
+export type TrackPath = 'engineer' | 'builder';
 
 export type Track = {
   id: string;
   title: string;
   description: string;
   modules: Module[];
+  path?: TrackPath;
+  trackNumber?: string | number;
+  badge?: string;
+  bossProject?: {
+    id: string;
+    title: string;
+    description: string;
+  };
 };
 
 export const track0: Track = {
