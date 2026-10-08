@@ -111,7 +111,7 @@ test.describe('Onboarding, Tour, Interactive Demo & SEO Suite', () => {
     const nextBtn = driverPopover.locator('.driver-popover-next-btn');
     await nextBtn.click();
     await expect(driverPopover).toContainText('2 of 10');
-    await expect(driverPopover).toContainText('Adaptive Learning Pathways');
+    await expect(driverPopover).toContainText('Adaptive Pathways & Forward AI Engineering');
 
     // Close tour popover
     const closeBtn = driverPopover.locator('.driver-popover-close-btn');

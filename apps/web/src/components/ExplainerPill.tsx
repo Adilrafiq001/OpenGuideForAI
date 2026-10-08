@@ -49,7 +49,7 @@ export function ExplainerPill({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
-        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] text-xs font-mono transition-all duration-200 shadow-sm active:scale-95 group cursor-pointer"
+        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] text-xs font-mono tabular-nums transition-all duration-200 shadow-sm active:scale-95 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
       >
         <span className="w-4 h-4 rounded-full bg-[var(--color-accent-trans,rgba(16,185,129,0.15))] text-[var(--color-accent)] flex items-center justify-center font-bold text-[10px] group-hover:scale-110 transition-transform">
           ?

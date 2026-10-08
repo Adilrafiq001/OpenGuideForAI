@@ -1327,7 +1327,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         }`}
                       >
                         <span className="truncate">{lec.title.replace('Lecture ', 'L')}</span>
-                        <span className="text-[9px] font-mono opacity-70 shrink-0">{lec.duration}</span>
+                        <span className="text-[9px] font-mono tabular-nums opacity-70 shrink-0">{lec.duration}</span>
                       </button>
                     ))}
                   </div>
@@ -1498,7 +1498,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                           value={transcriptSearch}
                           onChange={(e) => setTranscriptSearch(e.target.value)}
                           placeholder="Search lecture transcript text..."
-                          className="w-full pl-9 pr-3 py-1.5 text-xs bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)]"
+                          className="w-full pl-9 pr-3 py-1.5 text-xs bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)]"
                         />
                       </div>
 

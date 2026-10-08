@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   Play, 
   Stop, 
@@ -49,14 +49,14 @@ export function PromptToPreviewLab({
   const [isViewCodeOpen, setIsViewCodeOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
 
-  const assembleCurrentPrompt = (): string => {
+  const assembleCurrentPrompt = useCallback((): string => {
     if (blueprintMode === 'structured') {
       return `Goal: ${goal}. Controls: ${controls}. Rules: ${rules}.`;
     }
     return freeformPrompt;
-  };
+  }, [blueprintMode, goal, controls, rules, freeformPrompt]);
 
-  const handleGenerate = async (customPrompt?: string) => {
+  const handleGenerate = useCallback(async (customPrompt?: string) => {
     const promptToUse = customPrompt || assembleCurrentPrompt();
     if (!promptToUse.trim()) return;
 
@@ -83,12 +83,13 @@ export function PromptToPreviewLab({
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [assembleCurrentPrompt, provider, onPreviewSuccess]);
 
-  // Synchronize when initialPrompt changes per lesson
-  useEffect(() => {
+  // Synchronize state when initialPrompt or lessonId changes during render phase
+  const [prevLessonKey, setPrevLessonKey] = useState(`${lessonId}:${initialPrompt}`);
+  if (prevLessonKey !== `${lessonId}:${initialPrompt}`) {
+    setPrevLessonKey(`${lessonId}:${initialPrompt}`);
     setFreeformPrompt(initialPrompt);
-    // Parse into structured if formatted as blueprint
     if (initialPrompt.includes('1. Goal:')) {
       const gMatch = initialPrompt.match(/1\.\s*Goal:\s*([^\n]+)/i);
       const cMatch = initialPrompt.match(/2\.\s*Controls:\s*([^\n]+)/i);
@@ -100,9 +101,17 @@ export function PromptToPreviewLab({
     } else {
       setGoal(initialPrompt.slice(0, 40));
     }
-    // Auto-generate initial preview on lesson load
-    handleGenerate(initialPrompt);
-  }, [initialPrompt, lessonId]);
+  }
+
+  // Auto-generate initial preview once on lesson load
+  const initialGeneratedKeyRef = useRef<string>('');
+  useEffect(() => {
+    const key = `${lessonId || 'default'}:${initialPrompt}`;
+    if (initialGeneratedKeyRef.current !== key) {
+      initialGeneratedKeyRef.current = key;
+      handleGenerate(initialPrompt);
+    }
+  }, [initialPrompt, lessonId, handleGenerate]);
 
   const handleStopPreview = () => {
     setIsPreviewRunning(false);
@@ -273,7 +282,7 @@ export function PromptToPreviewLab({
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="e.g. Smart Tip Calculator"
                   data-testid="blueprint-goal-input"
-                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none"
+                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors"
                 />
               </div>
               <div className="space-y-1">
@@ -284,7 +293,7 @@ export function PromptToPreviewLab({
                   onChange={(e) => setControls(e.target.value)}
                   placeholder="e.g. Bill input & tip buttons"
                   data-testid="blueprint-controls-input"
-                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none"
+                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors"
                 />
               </div>
               <div className="space-y-1">
@@ -295,7 +304,7 @@ export function PromptToPreviewLab({
                   onChange={(e) => setRules(e.target.value)}
                   placeholder="e.g. Total = bill + tip"
                   data-testid="blueprint-rules-input"
-                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none"
+                  className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors"
                 />
               </div>
             </div>
@@ -306,7 +315,7 @@ export function PromptToPreviewLab({
               onChange={(e) => setFreeformPrompt(e.target.value)}
               placeholder="Describe the application you want to build..."
               data-testid="blueprint-freeform-textarea"
-              className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none resize-none"
+              className="w-full px-2.5 py-1.5 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-xs text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] resize-none transition-colors"
             />
           )}
 

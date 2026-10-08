@@ -81,6 +81,7 @@ const FirstTimeSetupModal = lazyWithRetry(() => import('./components/FirstTimeSe
 const StudioInteractiveDemoModal = lazyWithRetry(() => import('./components/StudioInteractiveDemoModal').then(m => ({ default: m.StudioInteractiveDemoModal })));
 const CommandPaletteModal = lazyWithRetry(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
 const OfflineAICopilot = lazyWithRetry(() => import('./components/OfflineAICopilot').then(m => ({ default: m.OfflineAICopilot })));
+const ForwardEngineerModal = lazyWithRetry(() => import('./components/ForwardEngineerModal').then(m => ({ default: m.ForwardEngineerModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazyWithRetry(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -119,6 +120,7 @@ function AppContent() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [isForwardEngineerOpen, setIsForwardEngineerOpen] = useState(false);
 
   // Global listener to open the Offline AI Copilot Knowledge Bank
   useEffect(() => {
@@ -343,6 +345,7 @@ function AppContent() {
           onOpenThemes={handleOpenThemes}
           onOpenSettings={handleOpenSettings}
           onOpenCommandPalette={handleOpenCommandPalette}
+          onOpenForwardEngineer={() => setIsForwardEngineerOpen(true)}
         />
 
         {/* Interactive 20-Theme Swatch & Settings Modal */}
@@ -390,6 +393,7 @@ function AppContent() {
               isOpen={isDemoModalOpen}
               onClose={() => setIsDemoModalOpen(false)}
               onOpenThemes={handleOpenThemes}
+              onOpenForwardEngineer={() => setIsForwardEngineerOpen(true)}
             />
           </Suspense>
         )}
@@ -402,6 +406,17 @@ function AppContent() {
               onClose={() => setIsCommandPaletteOpen(false)}
               onOpenThemes={handleOpenThemes}
               onOpenDemo={handleOpenDemo}
+              onOpenForwardEngineer={() => setIsForwardEngineerOpen(true)}
+            />
+          </Suspense>
+        )}
+
+        {/* Forward Deployed AI Engineering Blueprint Modal */}
+        {isForwardEngineerOpen && (
+          <Suspense fallback={null}>
+            <ForwardEngineerModal
+              isOpen={isForwardEngineerOpen}
+              onClose={() => setIsForwardEngineerOpen(false)}
             />
           </Suspense>
         )}
@@ -468,7 +483,7 @@ function StudioAnnouncementPill({
             onDismiss();
             onOpenSettings();
           }}
-          className="px-2.5 py-1 rounded-lg bg-[var(--color-accent)] text-black font-mono font-bold text-[11px] hover:opacity-90 transition-all cursor-pointer"
+          className="px-2.5 py-1 rounded-lg bg-[var(--color-accent)] text-[var(--color-primary)] font-mono font-bold text-[11px] hover:opacity-90 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         >
           What's New
         </button>

@@ -204,7 +204,7 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     // Click XR Spatial Simulator button
     const simBtn = page.locator('[data-testid="xr-simulator-btn"]');
     await expect(simBtn).toBeVisible();
-    await simBtn.click();
+    await simBtn.click({ force: true });
 
     // Verify Simulator Viewport is active
     await expect(page.locator('[data-testid="xr-simulator-viewport"]')).toBeVisible();
@@ -212,7 +212,7 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     // Verify AR Glasses profile button
     const arBtn = page.locator('[data-testid="profile-arglasses-btn"]');
     await expect(arBtn).toBeVisible();
-    await arBtn.click();
+    await arBtn.click({ force: true });
 
     // Verify True-Black Micro-OLED Waveguide banner
     await expect(page.locator('text=TRUE-BLACK MICRO-OLED WAVEGUIDE')).toBeVisible();

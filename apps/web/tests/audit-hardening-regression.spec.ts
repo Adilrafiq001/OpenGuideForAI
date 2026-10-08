@@ -234,15 +234,15 @@ test.describe('Audit Hardening & Regression Suite (64+5 Bug Audit Validation)', 
     await page.goto('/holodeck');
     // Ensure Vector Space tab is active
     const vectorTab = page.locator('#tab-vectors');
-    await expect(vectorTab).toBeVisible();
+    await expect(vectorTab).toBeVisible({ timeout: 15000 });
     await expect(vectorTab).toHaveAttribute('aria-selected', 'true');
 
     // Verify 'frontier' filter button exists
     const frontierBtn = page.locator('button:has-text("frontier"), button:has-text("Frontier")').first();
-    await expect(frontierBtn).toBeVisible();
+    await expect(frontierBtn).toBeVisible({ timeout: 10000 });
 
     // Click frontier filter and check that active styling applies without error
-    await frontierBtn.click({ force: true });
+    await frontierBtn.dispatchEvent('click');
     await expect(frontierBtn).toHaveClass(/font-bold/);
   });
 

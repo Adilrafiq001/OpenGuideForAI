@@ -41,6 +41,7 @@ const ArchitecturalPillarsModal = lazy(() => import('../components/Architectural
 const NeuralMysteryLabModal = lazy(() => import('../components/NeuralMysteryLabModal').then(m => ({ default: m.NeuralMysteryLabModal })));
 const ARGlassesGuideModal = lazy(() => import('../components/spatial/ARGlassesGuideModal').then(m => ({ default: m.ARGlassesGuideModal })));
 const OnboardingForkModal = lazy(() => import('../components/OnboardingForkModal').then(m => ({ default: m.OnboardingForkModal })));
+const ForwardEngineerModal = lazy(() => import('../components/ForwardEngineerModal').then(m => ({ default: m.ForwardEngineerModal })));
 import { usePathStore } from '../store/usePathStore';
 import type { CraftRole } from '../components/EverydayCraftAiModal';
 
@@ -81,6 +82,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   const [isMysteryLabOpen, setIsMysteryLabOpen] = useState(false);
   const [isARGlassesGuideOpen, setIsARGlassesGuideOpen] = useState(false);
   const [isOnboardingForkOpen, setIsOnboardingForkOpen] = useState(false);
+  const [isForwardEngineerModalOpen, setIsForwardEngineerModalOpen] = useState(false);
   const { setPath } = usePathStore();
   const [activeLandingTier, setActiveLandingTier] = useState<SpectrumTier>('tier0');
   const [landingSpectrumSearch, setLandingSpectrumSearch] = useState('');
@@ -322,6 +324,9 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         onOpenOnboardingFork={() => {
           setIsOnboardingForkOpen(true);
         }}
+        onOpenForwardEngineer={() => {
+          setIsForwardEngineerModalOpen(true);
+        }}
       />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
@@ -442,7 +447,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             value={landingSpectrumSearch}
             onChange={(e) => setLandingSpectrumSearch(e.target.value)}
             placeholder="Search trades, dilemmas, or scenarios (e.g. budget, diagnostic, quote)..."
-            className="w-full pl-10 pr-12 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)]"
+            className="w-full pl-10 pr-12 py-2.5 text-xs rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-primary)] placeholder:text-[var(--color-text-secondary)]"
           />
           {landingSpectrumSearch && (
             <button
@@ -1507,6 +1512,16 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           <OnboardingForkModal
             isOpen={isOnboardingForkOpen}
             onClose={() => setIsOnboardingForkOpen(false)}
+          />
+        </Suspense>
+      )}
+
+      {/* Forward Deployed AI Engineering Blueprint Modal (Lazy Loaded) */}
+      {isForwardEngineerModalOpen && (
+        <Suspense fallback={null}>
+          <ForwardEngineerModal
+            isOpen={isForwardEngineerModalOpen}
+            onClose={() => setIsForwardEngineerModalOpen(false)}
           />
         </Suspense>
       )}

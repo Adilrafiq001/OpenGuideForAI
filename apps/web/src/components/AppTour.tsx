@@ -86,8 +86,8 @@ export function startAppTour(isMobile: boolean = typeof window !== 'undefined' &
       {
         element: '#pathways',
         popover: {
-          title: 'Adaptive Learning Pathways',
-          description: 'Tailored learning roads for everyone: from "Zero to Python Engineer" through "Vector Database Architect" to "Autonomous Reasoning & Frontier Systems".'
+          title: 'Adaptive Pathways & Forward AI Engineering',
+          description: 'Tailored learning roads: from "Zero to Python Engineer" to the elite "Forward Deployed AI Engineer (FDE)" discipline unifying agentic building and mathematical foundations.'
         }
       },
       {

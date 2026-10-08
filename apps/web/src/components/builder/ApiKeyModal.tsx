@@ -15,16 +15,30 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
   const [persist, setPersist] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  useEffect(() => {
+  const [prevOpen, setPrevOpen] = useState(isOpen);
+  if (prevOpen !== isOpen) {
+    setPrevOpen(isOpen);
     if (isOpen) {
       const existing = getBuilderApiKey();
       if (existing) setKeyInput(existing);
       setIsSaved(false);
     }
-  }, [isOpen]);
+  }
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSave = () => {
-    setBuilderApiKey(keyInput, persist);
+    const sanitized = keyInput.trim();
+    setBuilderApiKey(sanitized, persist);
     setIsSaved(true);
     setTimeout(() => {
       onSaved?.();
@@ -116,7 +130,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                     onChange={(e) => setKeyInput(e.target.value)}
                     placeholder="AIzaSy..."
                     data-testid="gemini-api-key-input"
-                    className="w-full pr-10 pl-3 py-2 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-xl text-xs font-mono text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)]/50 focus:border-[var(--color-accent)] focus:outline-none transition-colors"
+                    className="w-full pr-10 pl-3 py-2 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-xl text-xs font-mono text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)]/50 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors"
                   />
                   <button
                     type="button"

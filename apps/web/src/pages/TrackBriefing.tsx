@@ -115,7 +115,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           >
             <button
               onClick={onOpenThemes}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer group"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               aria-label="Themes and Studio Settings"
             >
               <div 
@@ -136,7 +136,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           >
             <button
               onClick={() => navigate('/')}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border)] cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               aria-label="Close Briefing"
             >
               <X size={16} />
@@ -218,15 +218,15 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
 
             {/* Specs Strip */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-6 pt-5 border-t border-[var(--color-border)] font-mono text-xs">
-              <div className="p-2.5 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)]">
+              <div className="p-2.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)]">
                 <span className="text-[10px] text-[var(--color-text-secondary)] uppercase block">Engine</span>
                 <span className="font-bold text-[var(--color-text-primary)]">Pyodide 0.26</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)]">
+              <div className="p-2.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)]">
                 <span className="text-[10px] text-[var(--color-text-secondary)] uppercase block">Structure</span>
-                <span className="font-bold text-[var(--color-text-primary)]">{activeTrack.modules.length} Mods / {totalLessons} Labs</span>
+                <span className="font-bold tabular-nums text-[var(--color-text-primary)]">{activeTrack.modules.length} Mods / {totalLessons} Labs</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)]">
+              <div className="p-2.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)]">
                 <span className="text-[10px] text-[var(--color-text-secondary)] uppercase block">Compute</span>
                 <span className="font-bold text-emerald-400">$0 Zero Setup</span>
               </div>
@@ -286,7 +286,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             >
               <button
                 onClick={() => navigate(isBuilderPath ? `/builder/${trackNum.replace('B', '')}/engine` : `/track/${trackNum}/engine`)}
-                className="w-full py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor

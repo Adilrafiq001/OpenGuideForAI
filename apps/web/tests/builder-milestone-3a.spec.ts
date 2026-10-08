@@ -27,6 +27,8 @@ test.describe('Builder Path Milestone 3a & Hero Buttons Aesthetics Suite', () =>
 
     await expect(builderBtn).toBeVisible({ timeout: 10000 });
     await expect(engineerBtn).toBeVisible({ timeout: 10000 });
+    // Wait for hero entrance animation (0.5s duration + 0.25s delay) to fully settle
+    await page.waitForTimeout(800);
 
     const builderBox = await builderBtn.boundingBox();
     const engineerBox = await engineerBtn.boundingBox();

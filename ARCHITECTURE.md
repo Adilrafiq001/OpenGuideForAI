@@ -57,13 +57,20 @@
 - **Agency-Grade Studio Footer Architecture (`StudioFooter`):** Comprehensive footer subsystem with 4-column dynamic sitemap, WASM kernel status telemetry, local-first newsletter dispatch, interactive Legal modal (5 policy tabs), Contact & Inquiries modal with direct founder dispatch, and release changelog.
 - **Zero-Flash Pre-Mount Reload Architecture:** Injects evaluated theme background CSS variables and SVG monogram directly into `<head>` and `#root` before initial paint, eliminating dark/light mode refresh flickering.
 - **Milestone-Gated Credentialing & Local Conferral:** Gated certification engine with 57-lab completion validation, sample preview mode, deterministic W3C Verifiable Credentials (.jsonld), and zero-leak client-side name stamping for PDF/print export.
+- **Dual Learning Pathways Architecture:** Synchronized dual-curriculum system supporting both Pathway A (The Deep AI Engineer: Tracks 0–7 across 57 hands-on in-browser CPython laboratories) and Pathway B (The Builder Path: Tracks B0–B7 across 24 modules for Forward Deployed AI Engineers).
+- **Forward Deployed AI Engineering (FDE) Operational Blueprint:** Embedded interactive 6-tab modal (`ForwardEngineerModal.tsx`) providing the ASD-STE100 Role Matrix, Agentic IDE setups (Google Antigravity Desktop/CLI, Anthropic Claude Code CLI, OpenAI Codex & Cursor context rules), $0 Sovereign Stack pipeline (GitHub Actions, Cloudflare Pages, Neon Postgres, Pyodide v0.26 WebAssembly, Hugging Face Spaces), Secret Hygiene protocol, and repository governance constitutions.
+- **The Builder Path Interactive Laboratories:**
+  - *Prompt-to-Preview Lab (`PromptToPreviewLab.tsx`):* Sandboxed iframe preview generator with emergency stop execution guard, 3-sentence blueprints, and live editing.
+  - *Spec Studio Lab (`SpecStudioLab.tsx`):* Deterministic 5-rule rubric autograding engine for unambiguous system specifications with simulated agent execution.
+  - *Diff Reader Lab (`DiffReaderLab.tsx`):* AST-aware split/unified visual diff explorer with catastrophic hazard detection (secret leaks, dropped RLS).
+  - *Builder Tracks B0–B7 Data Architecture (`builderTracks.ts`, `builderTrackB3.ts`–`builderTrackB7.ts`):* Full typed curriculum schemas, mastery quizzes, and capstone architectural defenses.
 - **007 Defense-in-Depth Security:** PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 16-byte random salt) + AES-256-GCM encrypted GitHub Gist backup, DOMPurify HTML/Markdown sanitization, Cloudflare Pages CSP/HSTS/COOP/COEP headers, and static tokenization in offline Pyodide worker fallback without `eval` or `Function`.
-- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (145 comprehensive tests passing with 100% pass rate, 0 failures, 0 skipped).
+- **Testing:** Playwright MCP for physical browser inspection and automated regression tests (100% pass rate, 0 failures, 0 skipped across all test suites).
 
 ## Application Directory Structure
 - `/apps/web`: Production web application root.
-  - `src/components/`: Core UI components (`CodeEditor.tsx`, `MarkdownRenderer.tsx`, `ErrorBoundary.tsx`, `CoursePlayer.tsx`, `Holodeck.tsx`, `AbbyChatbot.tsx`, `StudioFooter.tsx`).
-  - `src/data/`: First-principles curriculum blueprints (`track0.ts` through `track7.ts`) with 57 scaffolded labs and offline knowledge base.
+  - `src/components/`: Core UI components (`CodeEditor.tsx`, `MarkdownRenderer.tsx`, `ErrorBoundary.tsx`, `CoursePlayer.tsx`, `Holodeck.tsx`, `AbbyChatbot.tsx`, `StudioFooter.tsx`, `ForwardEngineerModal.tsx`, `builder/`).
+  - `src/data/`: First-principles curriculum blueprints (`track0.ts` through `track7.ts`, `builderTracks.ts`, `builderTrackB3.ts` through `builderTrackB7.ts`) with 57 scaffolded labs and offline knowledge base.
   - `src/store/`: Tiered local-first state stores (`useProgressStore.ts`, `useSettingsStore.ts`, `useLanguageStore.ts`).
   - `src/worker/`: Dedicated Pyodide CPython WebAssembly Web Worker runner (`pyodide.worker.ts`).
   - `src/locales/`: Universal 12-language translation catalogs.

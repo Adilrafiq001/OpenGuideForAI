@@ -22,7 +22,8 @@ import {
   SlidersHorizontal,
   Boxes,
   Target,
-  CheckSquare
+  CheckSquare,
+  Workflow
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -46,6 +47,7 @@ interface LandingHeaderProps {
   onOpenMysteryLab?: () => void;
   onOpenARGlassesGuide?: () => void;
   onOpenOnboardingFork?: () => void;
+  onOpenForwardEngineer?: () => void;
 }
 
 const ALL_BUILDER_TRACKS_NAV = [
@@ -80,7 +82,7 @@ function getContrastColor(hexColor: string): string {
   return yiq >= 135 ? '#000000' : '#ffffff';
 }
 
-export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab, onOpenARGlassesGuide, onOpenOnboardingFork }: LandingHeaderProps) {
+export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDrawer, onOpenDemo, onOpenCommandPalette, onOpenPillars, onOpenMysteryLab, onOpenARGlassesGuide, onOpenOnboardingFork, onOpenForwardEngineer }: LandingHeaderProps) {
   const navigate = useNavigate();
   const { theme, toggleThemeMode } = useSettingsStore();
   const { t, language } = useLanguageStore();
@@ -146,22 +148,18 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           <button
             data-testid="header-path-switcher-btn"
             onClick={() => onOpenOnboardingFork?.()}
-            className={`hidden sm:inline-flex items-center gap-1 px-2 xl:px-2.5 h-7 xl:h-7.5 rounded-full border text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-[0.98] select-none ${
-              currentPath === 'builder'
-                ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-                : 'border-[var(--color-border)]/70 bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] text-[var(--color-accent)]'
-            }`}
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)] text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] select-none"
             aria-label={t('nav_switch_path') || 'Switch Learning Path'}
           >
             {currentPath === 'builder' ? (
               <>
-                <Code2 size={12} className="text-emerald-400 shrink-0" />
-                <span className="truncate">{t('nav_path_builder') || 'Builder'}</span>
+                <Code2 size={13} className="text-[var(--color-accent)] opacity-85 shrink-0" />
+                <span className="truncate">{t('nav_path_builder') || 'Builder Path'}</span>
               </>
             ) : (
               <>
-                <Terminal size={12} className="text-[var(--color-accent)] shrink-0" />
-                <span className="truncate">{t('nav_path_engineer') || 'Engineer'}</span>
+                <Terminal size={13} className="text-[var(--color-accent)] opacity-85 shrink-0" />
+                <span className="truncate">{t('nav_path_engineer') || 'Engineer Path'}</span>
               </>
             )}
             <ChevronDown size={10} className="opacity-60 shrink-0" />
@@ -179,17 +177,18 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 id="nav-tracks-menu"
                 aria-label="Select Learning Track"
                 onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-                className="inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
                 aria-expanded={isTracksMenuOpen}
                 aria-haspopup="true"
               >
                 {currentPath === 'builder' ? (
-                  <Code2 size={13} className="text-emerald-400 opacity-90" />
+                  <Code2 size={13} className="text-[var(--color-accent)] opacity-85" />
                 ) : (
-                  <Terminal size={13} className="text-[var(--color-accent)] opacity-80" />
+                  <Terminal size={13} className="text-[var(--color-accent)] opacity-85" />
                 )}
-                <span>{t('nav_tracks')} & Curriculum</span>
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                <span>{t('nav_tracks')}</span>
+                <span className="hidden xl:inline">& Curriculum</span>
+                <span className="hidden 2xl:inline text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
                   8 Tracks
                 </span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
@@ -271,8 +270,8 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         ))}
                       </div>
 
-                      {/* Footer Quick Access to Labs, Curriculum & Pathways */}
-                      <div className="border-t border-[var(--color-border)] mt-2 pt-2 grid grid-cols-3 gap-1">
+                      {/* Footer Quick Access to Labs, Curriculum, Pathways & Forward AI */}
+                      <div className="border-t border-[var(--color-border)] mt-2 pt-2 grid grid-cols-4 gap-1">
                         <button 
                           onClick={() => { setIsTracksMenuOpen(false); navigate('/#tasks'); }}
                           className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
@@ -285,7 +284,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                           className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
                         >
                           <Layers size={11} className="text-[var(--color-accent)]" />
-                          <span>Curriculum</span>
+                          <span>Tracks</span>
                         </button>
                         <button 
                           onClick={() => { setIsTracksMenuOpen(false); navigate('/#pathways'); }}
@@ -293,6 +292,13 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         >
                           <Compass size={11} className="text-[var(--color-accent)]" />
                           <span>Pathways</span>
+                        </button>
+                        <button 
+                          onClick={() => { setIsTracksMenuOpen(false); onOpenForwardEngineer?.(); }}
+                          className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-[10px] font-mono text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
+                        >
+                          <Workflow size={11} className="text-cyan-400" />
+                          <span>FDE Spec</span>
                         </button>
                       </div>
                     </div>
@@ -312,17 +318,18 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 data-testid="header-spatial-group-btn"
                 aria-label="Studio, Labs and Spatial Computing"
                 onClick={() => setIsExploreOpen(!isExploreOpen)}
-                className={`inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
+                className={`inline-flex items-center gap-1.5 px-3 h-8 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
                   isSpatialModeActive
-                    ? 'bg-cyan-500/15 border-cyan-400 text-cyan-400 shadow-cyan-500/20 shadow-sm'
-                    : 'border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)]'
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/15 text-[var(--color-accent)] shadow-xs'
+                    : 'border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)]'
                 }`}
                 aria-expanded={isExploreOpen}
                 aria-haspopup="true"
               >
-                <Glasses size={13} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400'} />
-                <span>Studio & Labs</span>
-                <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                <Glasses size={13} className={isSpatialModeActive ? 'text-[var(--color-accent)] animate-pulse' : 'text-[var(--color-accent)] opacity-85'} />
+                <span>Studio</span>
+                <span className="hidden xl:inline">& Labs</span>
+                <span className="hidden 2xl:inline text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
                   {isSpatialModeActive ? 'XR ON' : 'XR & Labs'}
                 </span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
@@ -384,7 +391,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                             <div className="text-xs font-semibold text-[var(--color-text-primary)] flex items-center justify-between">
                               <span>Spatial AR Glasses Mode</span>
                               <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
-                                isSpatialModeActive ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400'
+                                isSpatialModeActive ? 'bg-cyan-500 text-white' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400'
                               }`}>
                                 {isSpatialModeActive ? 'ACTIVE' : 'Alt+S'}
                               </span>
@@ -502,19 +509,36 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               </AnimatePresence>
             </div>
 
-            {/* 3. Tasks / Labs Direct Pill */}
+            {/* 3. Forward Deployed AI Engineer Blueprint Direct Pill */}
+            <Tooltip
+              position="bottom"
+              content="Forward Deployed AI Engineering Blueprint"
+              subtitle="ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack"
+            >
+              <button
+                onClick={() => onOpenForwardEngineer?.()}
+                data-testid="header-forward-engineer-btn"
+                className="hidden lg:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-cyan-400/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 select-none"
+              >
+                <Workflow size={13} className="text-cyan-400 opacity-90" />
+                <span>Forward AI</span>
+                <span className="hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">FDE</span>
+              </button>
+            </Tooltip>
+
+            {/* 4. Tasks / Labs Direct Pill */}
             <a 
               href="#tasks"
-              className="inline-flex items-center gap-1.5 px-2.5 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+              className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
             >
               <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
               <span>{t('nav_labs')}</span>
             </a>
 
-            {/* 4. Pathways Direct Pill */}
+            {/* 5. Pathways Direct Pill */}
             <a 
               href="#pathways"
-              className="inline-flex items-center gap-1.5 px-2.5 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+              className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
             >
               <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
               <span>{t('nav_pathways')}</span>
@@ -528,7 +552,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <button 
                 onClick={() => navigate('/portfolio')}
-                className="inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
               >
                 <Award size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>Portfolio</span>
@@ -549,7 +573,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             <button 
               onClick={() => onOpenCommandPalette?.()}
               data-testid="header-command-palette-btn"
-              className="hidden md:flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+              className="hidden md:flex items-center gap-1.5 px-2.5 h-8 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xs cursor-pointer active:scale-[0.98] group"
               aria-label="Open Studio Search Palette"
             >
               <Search size={13} className="text-[var(--color-accent)] opacity-80 group-hover:opacity-100 transition-opacity" />
@@ -559,7 +583,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           </Tooltip>
 
           {/* 2. Studio Utilities Segmented Capsule (Tour & Demo) */}
-          <div className="hidden xl:flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
+          <div className="hidden xl:flex items-center h-8 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] p-0.5 shadow-xs">
             <Tooltip
               position="bottom"
               content="Studio Tour"
@@ -568,10 +592,10 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               <button 
                 onClick={() => startAppTour(false)}
                 data-testid="header-quick-tour-btn"
-                className="flex items-center gap-1 px-2 h-7 xl:h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                className="flex items-center gap-1 px-2.5 h-7 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
                 aria-label="Start Quick Studio Tour"
               >
-                <Compass size={13} className="text-[var(--color-accent)]" />
+                <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>{t('nav_tour')}</span>
               </button>
             </Tooltip>
@@ -584,17 +608,17 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               <button 
                 onClick={() => onOpenDemo?.()}
                 data-testid="header-interactive-demo-btn"
-                className="flex items-center gap-1 px-2 h-7 xl:h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                className="flex items-center gap-1 px-2.5 h-7 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
                 aria-label="Open Studio Interactive Flow Demo"
               >
-                <Play size={12} className="text-[var(--color-accent)]" />
+                <Play size={12} className="text-[var(--color-accent)] opacity-80" />
                 <span>Demo</span>
               </button>
             </Tooltip>
           </div>
 
           {/* 3. Environment & Aesthetics Segmented Capsule */}
-          <div className="flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
+          <div className="flex items-center h-8 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] p-0.5 shadow-xs">
             {/* Multi-Language Selector */}
             <LanguageSelector variant="capsule" />
             <span className="w-px h-3.5 bg-[var(--color-border)] mx-0.5" />
@@ -610,7 +634,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 id="header-theme-settings-btn"
                 onClick={onOpenThemes}
                 data-testid="header-theme-settings-btn"
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98] group"
+                className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98] group"
                 aria-label="Themes and Studio Settings"
               >
                 <div 
@@ -638,7 +662,6 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             </Tooltip>
           </div>
 
-
           {/* 6. Primary Hero CTA: Launch Track Button */}
           <div className="hidden lg:flex xl:hidden 2xl:flex items-center shrink-0">
             <Tooltip
@@ -650,13 +673,13 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               <button 
                 data-testid="header-launch-track-btn"
                 onClick={() => navigate(currentPath === 'builder' ? '/builder/0/intro' : '/track/0/intro')}
-                className="group px-3 xl:px-3.5 h-8 xl:h-8.5 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-black/10 hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] cursor-pointer shrink-0"
+                className="group px-3.5 h-8 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor
                 }}
               >
-                <span>{currentPath === 'builder' ? (t('hero_start_as_builder') || 'Start Builder B0') : (language === 'ur' ? 'ٹریک 0' : t('nav_launch_track0'))}</span>
+                <span>{currentPath === 'builder' ? (t('hero_start_as_builder') || 'Start as Builder') : (language === 'ur' ? 'ٹریک 0' : t('nav_launch_track0'))}</span>
                 <ChevronRight size={13} className="transition-transform group-hover:translate-x-0.5" />
               </button>
             </Tooltip>
@@ -685,7 +708,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           >
             <nav aria-label="Mobile Navigation" className="flex flex-col gap-2 font-medium text-sm text-[var(--color-text-primary)]">
               {/* Mobile Quick Theme Switch & Mode */}
-              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)]/70 border border-[var(--color-border)] mb-1">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] mb-1 shadow-sm">
                 <div className="flex items-center gap-2">
                   <ThemeSwitch 
                     isDark={currentThemeInfo.mode === 'dark'}
@@ -715,7 +738,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                   setIsMobileMenuOpen(false);
                   onOpenOnboardingFork?.();
                 }}
-                className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)]/70 border border-[var(--color-border)] mb-1 text-left cursor-pointer"
+                className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] mb-1 text-left cursor-pointer shadow-sm hover:border-[var(--color-accent)]/50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   {currentPath === 'builder' ? <Code2 size={16} className="text-emerald-400" /> : <Terminal size={16} className="text-[var(--color-accent)]" />}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -22,7 +22,9 @@ import {
   Download,
   Search,
   SlidersHorizontal,
-  Boxes
+  Boxes,
+  Code2,
+  Terminal
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, LANGUAGES, type SupportedLanguage } from '../store/useLanguageStore';
@@ -37,6 +39,7 @@ interface MobileNavDrawerProps {
   onOpenThemes: () => void;
   onOpenSettings: () => void;
   onOpenCommandPalette?: () => void;
+  onOpenForwardEngineer?: () => void;
 }
 
 export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
@@ -44,13 +47,26 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
   onClose,
   onOpenThemes,
   onOpenSettings,
-  onOpenCommandPalette
+  onOpenCommandPalette,
+  onOpenForwardEngineer
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme, displaySize, setDisplaySize } = useSettingsStore();
   const { language, setLanguage } = useLanguageStore();
   const { isInstalled, promptInstall } = usePwaInstall();
+
+  const [pathwayTab, setPathwayTab] = useState<'builder' | 'engineer'>(
+    location.pathname.startsWith('/builder') ? 'builder' : 'engineer'
+  );
+
+  const [prevPathKey, setPrevPathKey] = useState(`${isOpen}:${location.pathname}`);
+  if (prevPathKey !== `${isOpen}:${location.pathname}`) {
+    setPrevPathKey(`${isOpen}:${location.pathname}`);
+    if (isOpen) {
+      setPathwayTab(location.pathname.startsWith('/builder') ? 'builder' : 'engineer');
+    }
+  }
 
   const currentThemeInfo = useMemo(() => {
     return THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
@@ -104,6 +120,89 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
     onClose();
     navigate(path);
   };
+
+  const builderTracks = [
+    {
+      id: 'b0',
+      num: 'B0',
+      title: 'Say It · Vibe Coding & Intuition',
+      badge: 'SAY IT',
+      desc: 'Plain language to working preview in sandbox',
+      icon: Code2,
+      path: '/builder/0/intro',
+      color: '#10b981'
+    },
+    {
+      id: 'b1',
+      num: 'B1',
+      title: 'Build It · Full-Stack Scaffold',
+      badge: 'BUILD IT',
+      desc: 'Look, Memory & Rules: buttons, state and math',
+      icon: Layers,
+      path: '/builder/1/intro',
+      color: '#06b6d4'
+    },
+    {
+      id: 'b2',
+      num: 'B2',
+      title: 'Understand It · Reading Code',
+      badge: 'UNDERSTAND IT',
+      desc: 'Reading AI code, diff audits & first principles',
+      icon: Compass,
+      path: '/builder/2/intro',
+      color: '#3b82f6'
+    },
+    {
+      id: 'b3',
+      num: 'B3',
+      title: 'Ship It · Edge Deployment & IDB',
+      badge: 'SHIP IT',
+      desc: 'Free edge deployment, custom domains & persistence',
+      icon: Zap,
+      path: '/builder/3/intro',
+      color: '#8b5cf6'
+    },
+    {
+      id: 'b4',
+      num: 'B4',
+      title: 'Trust It · Defensive Security & RLS',
+      badge: 'TRUST IT',
+      desc: 'CVE-2025-48757 Lovable RLS breach audit & testing',
+      icon: ShieldCheck,
+      path: '/builder/4/intro',
+      color: '#f59e0b'
+    },
+    {
+      id: 'b5',
+      num: 'B5',
+      title: 'Direct It · Spec-Driven Development',
+      badge: 'DIRECT IT',
+      desc: 'Spec-Driven Development & AGENTS.md constitutions',
+      icon: SlidersHorizontal,
+      path: '/builder/5/intro',
+      color: '#ec4899'
+    },
+    {
+      id: 'b6',
+      num: 'B6',
+      title: 'Run It · CI/CD & Observability',
+      badge: 'RUN IT',
+      desc: 'GitHub Actions CI gates & client error monitoring',
+      icon: Cpu,
+      path: '/builder/6/intro',
+      color: '#14b8a6'
+    },
+    {
+      id: 'b7',
+      num: 'B7',
+      title: 'Prove It · Capstone Portfolio',
+      badge: 'PROVE IT',
+      desc: 'Agentic Engineering Capstone & SHA-256 Ledger',
+      icon: Award,
+      path: '/builder/7/intro',
+      color: '#f43f5e'
+    }
+  ];
 
   const tracks = [
     {
@@ -192,7 +291,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div 
-          className="fixed inset-0 z-[120] flex flex-col justify-end select-none md:hidden"
+          className="fixed inset-0 z-[120] flex flex-col justify-end select-none xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile Navigation Hub"
@@ -352,7 +451,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                         data-testid={`drawer-display-${size}-btn`}
                         className={`py-1.5 px-2 rounded-lg text-xs capitalize font-medium transition-all cursor-pointer ${
                           displaySize === size
-                            ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
+                            ? 'bg-[var(--color-accent)] text-[var(--color-primary)] font-bold shadow-sm'
                             : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                         }`}
                       >
@@ -363,37 +462,67 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                 </div>
               </div>
 
-              {/* SECTION 2: Curriculum Tracks (Tracks 0–3) */}
+              {/* SECTION 2: Curriculum Tracks with Pathway Switcher */}
               <div className="space-y-2">
-                <div className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-1 flex items-center justify-between">
-                  <span>Curriculum Pathways</span>
-                  <span className="text-[10px] text-[var(--color-accent)] font-semibold">Tracks 0–3</span>
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)]">Curriculum Pathways</span>
+                  <span className="text-[10px] text-[var(--color-accent)] font-semibold font-mono">
+                    {pathwayTab === 'builder' ? '8 Builder Tracks' : '8 Deep Tracks'}
+                  </span>
                 </div>
 
-                <div className="grid grid-cols-1 gap-2">
-                  {tracks.map((trk) => {
+                {/* Pathway Category Tabs */}
+                <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)]">
+                  <button
+                    data-testid="mobile-drawer-tab-builder"
+                    onClick={() => setPathwayTab('builder')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-mono font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      pathwayTab === 'builder'
+                        ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-xs'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                    }`}
+                  >
+                    <Code2 size={13} />
+                    <span>Builder (B0–B7)</span>
+                  </button>
+                  <button
+                    data-testid="mobile-drawer-tab-engineer"
+                    onClick={() => setPathwayTab('engineer')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-mono font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      pathwayTab === 'engineer'
+                        ? 'bg-[var(--color-secondary)] border border-[var(--color-accent)]/40 text-[var(--color-accent)] shadow-xs'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                    }`}
+                  >
+                    <Terminal size={13} />
+                    <span>Engineer (0–7)</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 max-h-[40vh] overflow-y-auto pr-0.5 custom-scrollbar">
+                  {(pathwayTab === 'builder' ? builderTracks : tracks).map((trk) => {
                     const Icon = trk.icon;
                     return (
                       <button
                         key={trk.id}
-                        data-testid={`drawer-track-${trk.num}-btn`}
+                        data-testid={`drawer-track-${trk.num.toLowerCase()}-btn`}
                         onClick={() => handleNavigate(trk.path)}
-                        className="w-full p-3 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 flex items-center justify-between text-left transition-all cursor-pointer group"
+                        className="w-full p-2.5 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 flex items-center justify-between text-left transition-all cursor-pointer group"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0">
                           <div 
-                            className="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                            className="w-8 h-8 rounded-xl border border-[var(--color-border)] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
                             style={{ backgroundColor: `${trk.color}15`, color: trk.color }}
                           >
-                            <Icon size={18} />
+                            <Icon size={16} />
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-bold text-[var(--color-text-primary)]">
+                              <span className="text-xs font-bold text-[var(--color-text-primary)] truncate">
                                 Track {trk.num}: {trk.title}
                               </span>
                             </div>
-                            <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                            <p className="text-[10px] text-[var(--color-text-secondary)] truncate">
                               {trk.desc}
                             </p>
                           </div>
@@ -413,7 +542,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                   })}
                 </div>
 
-                <div className="flex items-center gap-2 pt-1">
+                <div className="grid grid-cols-3 gap-2 pt-1">
                   <a
                     href="#pathways"
                     onClick={(e) => {
@@ -423,9 +552,9 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                         navigate('/#pathways');
                       }
                     }}
-                    className="flex-1 text-center py-2 px-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors"
+                    className="text-center py-2 px-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[11px] font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors truncate"
                   >
-                    Pathways Overview
+                    Pathways
                   </a>
                   <a
                     href="#curriculum"
@@ -436,10 +565,23 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                         navigate('/#curriculum');
                       }
                     }}
-                    className="flex-1 text-center py-2 px-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors"
+                    className="text-center py-2 px-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[11px] font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40 transition-colors truncate"
                   >
-                    Full Syllabus
+                    Syllabus
                   </a>
+                  <button
+                    onClick={() => {
+                      onClose();
+                      if (onOpenForwardEngineer) {
+                        onOpenForwardEngineer();
+                      } else {
+                        window.dispatchEvent(new CustomEvent('open-forward-engineer'));
+                      }
+                    }}
+                    className="text-center py-2 px-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-[11px] font-semibold text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer truncate"
+                  >
+                    Forward AI
+                  </button>
                 </div>
               </div>
 
@@ -450,7 +592,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                   onClick={() => handleNavigate('/holodeck')}
                   className="p-3 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 text-left transition-all cursor-pointer group"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-400 border border-[var(--color-border)] flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/15 text-cyan-400 border border-[var(--color-border)] flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
                     <Box size={18} />
                   </div>
                   <div className="text-xs font-bold text-[var(--color-text-primary)]">3D Holodeck</div>

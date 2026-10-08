@@ -288,9 +288,11 @@ export function ArchitecturalPillarsModal({
   const [copiedCode, setCopiedCode] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
+  const [prevInitialId, setPrevInitialId] = useState(initialPillarId);
+  if (prevInitialId !== initialPillarId) {
+    setPrevInitialId(initialPillarId);
     setSelectedId(initialPillarId);
-  }, [initialPillarId]);
+  }
 
   useEffect(() => {
     return () => {
@@ -383,14 +385,14 @@ export function ArchitecturalPillarsModal({
                     <button
                       key={p.id}
                       onClick={() => setSelectedId(p.id)}
-                      className={`w-full text-left p-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-3 group ${
+                      className={`w-full text-left p-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                         isSelected 
-                          ? 'bg-[var(--color-accent)] text-black font-semibold shadow-sm' 
+                          ? 'bg-[var(--color-accent)] text-[var(--color-primary)] font-semibold shadow-sm' 
                           : 'hover:bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
                       <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-mono font-bold shrink-0 ${
-                        isSelected ? 'bg-black/20 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)]'
+                        isSelected ? 'bg-black/20 text-[var(--color-primary)]' : 'bg-[var(--color-primary)] border border-[var(--color-border)]'
                       }`}>
                         {p.id}
                       </span>
@@ -398,11 +400,11 @@ export function ArchitecturalPillarsModal({
                         <div className="text-xs truncate">
                           {p.title}
                         </div>
-                        <div className={`text-[10px] truncate ${isSelected ? 'text-black/80' : 'text-[var(--color-text-secondary)]'}`}>
+                        <div className={`text-[10px] truncate ${isSelected ? 'opacity-90' : 'text-[var(--color-text-secondary)]'}`}>
                           {p.category}
                         </div>
                       </div>
-                      {isSelected && <ChevronRight size={14} className="shrink-0 text-black" />}
+                      {isSelected && <ChevronRight size={14} className="shrink-0" />}
                     </button>
                   );
                 })}

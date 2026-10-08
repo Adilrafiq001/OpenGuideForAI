@@ -126,9 +126,9 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
             </div>
 
             {/* Category Tabs & Search Bar */}
-            <div className="px-6 py-3.5 bg-[var(--color-secondary)]/80 border-b border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="px-6 py-3.5 bg-[var(--color-secondary)] border-b border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
               {/* Category Pills */}
-              <div role="tablist" aria-label="Question Categories" className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] w-full sm:w-auto shadow-inner">
+              <div role="tablist" aria-label="Question Categories" className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] w-full sm:w-auto shadow-inner">
                 {(['why', 'how', 'what'] as const).map(cat => (
                   <button
                     key={cat}
@@ -163,7 +163,7 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
                   placeholder="Filter questions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent,#10b981)] shadow-inner"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)] focus:border-[var(--color-accent,#10b981)] shadow-inner"
                 />
               </div>
             </div>

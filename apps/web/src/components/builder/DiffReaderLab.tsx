@@ -151,7 +151,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             <button
               onClick={() => setViewMode('unified')}
               aria-label="Unified diff view"
-              className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 viewMode === 'unified'
                   ? 'bg-[var(--color-secondary)] text-[var(--color-accent)] shadow-xs'
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -163,7 +163,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             <button
               onClick={() => setViewMode('split')}
               aria-label="Split diff view"
-              className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 viewMode === 'split'
                   ? 'bg-[var(--color-secondary)] text-[var(--color-accent)] shadow-xs'
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -186,7 +186,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             key={s.id}
             data-testid={`scenario-btn-${s.id}`}
             onClick={() => handleSelectScenario(s.id)}
-            className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               activeScenarioId === s.id
                 ? s.hazardDetected
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
@@ -241,6 +241,8 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
 
       {/* Visual Diff Rendering Area */}
       <div
+        role="region"
+        aria-label="Code Diff Comparison Viewer"
         data-testid="diff-viewer-container"
         className="p-3 bg-black/60 font-mono text-xs overflow-x-auto min-h-[220px] max-h-[340px] overflow-y-auto"
       >
@@ -348,7 +350,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
           <button
             data-testid="diff-reject-btn"
             onClick={() => handleDecision('rejected')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-mono font-semibold transition-all cursor-pointer active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-mono font-semibold transition-all cursor-pointer active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
           >
             <X size={14} weight="bold" />
             <span>Reject Diff & Rollback</span>
@@ -357,10 +359,10 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
           <button
             data-testid="diff-accept-btn"
             onClick={() => handleDecision('accepted')}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer active:scale-[0.98] ${
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               scenario.hazardDetected
                 ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30'
-                : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-md shadow-emerald-500/20'
+                : 'bg-emerald-500 hover:bg-emerald-400 text-[var(--color-primary)] shadow-md shadow-emerald-500/20'
             }`}
           >
             <Check size={14} weight="bold" />

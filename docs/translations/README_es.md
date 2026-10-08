@@ -122,6 +122,22 @@ graph LR
 
 ---
 
+### Rutas de Aprendizaje Duales
+
+OpenGuide ofrece dos rutas sincronizadas y complementarias:
+1. **Ruta Deep AI Engineer (Rutas 0–7 • 57 Laboratorios):** CPython 3.12 WebAssembly, matemáticas de tensores, atención, RAG, evaluaciones y modelos de frontera desde primeros principios.
+2. **The Builder Path (Rutas B0–B7 • 24 Módulos):** Ingeniería de IA Desplegada al Frente (Forward Deployed AI Engineering) para construir sistemas de software en producción mediante especificaciones, diffs, persistencia local-first y sandboxes:
+   - **Ruta B0: Say It** (Instant Utility Studio • Lab Prompt-to-Preview).
+   - **Ruta B1: Spec It** (Especificaciones sin ambigüedad • Spec Studio Lab con autograduador de 5 reglas).
+   - **Ruta B2: Verify It** (Lectura de diffs y detección de riesgos de seguridad • Diff Reader Lab).
+   - **Ruta B3: Connect It** (Persistencia local en IndexedDB con Dexie y contratos de datos).
+   - **Ruta B4: Ground It** (Constituciones de contexto `AGENTS.md`, guardas y evaluaciones).
+   - **Ruta B5: Ship It** (Tubería de despliegue soberana $0 con Cloudflare Pages y GitHub Actions).
+   - **Ruta B6: Harden It** (Seguridad adversaria, higiene de secretos y escaneo pre-commit).
+   - **Ruta B7: Prove It** (Defensa de arquitectura capstone y credencial verificable W3C SHA-256).
+
+---
+
 ## Continuo Universal de IA para Toda la Humanidad
 
 OpenGuide no está diseñado para una élite reducida. Está diseñado para todo el espectro humano: desde personas sin conocimientos de programación hasta investigadores y arquitectos de modelos de frontera:

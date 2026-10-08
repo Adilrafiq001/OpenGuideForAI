@@ -884,7 +884,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await page.waitForTimeout(500);
 
     // Verify "Agent Flow DAG" tab exists and switch to it
-    const flowTab = page.getByRole('button', { name: /Agent Flow DAG/i });
+    const flowTab = page.getByRole('tab', { name: /Agent Flow DAG/i }).or(page.getByRole('button', { name: /Agent Flow DAG/i })).first();
     await expect(flowTab).toBeVisible({ timeout: 10000 });
     await flowTab.click();
     await page.waitForTimeout(300);

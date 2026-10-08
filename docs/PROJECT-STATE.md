@@ -1,4 +1,4 @@
-# State: External Audit Ready (Release v1.5.0 • Honest Reality-Grounded Benchmark: ~9.9/10)
+# State: External Audit Ready (Release v1.6.0 • Honest Reality-Grounded Benchmark: ~9.9/10)
 > Pre-flight freeze active per docs/PRODUCTION-READINESS-AUDIT.md. External Audit Dossier verified. Zero self-awarded 10/10 ratings.
 
 ```
@@ -8,6 +8,35 @@ BRANCH: dev         <- active development and all testing strictly confined to d
 
 
 **Done:**
+- **Phase F13: Forward Deployed AI Engineer Blueprint, Complete Builder Path (B0–B7) & 55 Project Defect Fixes (Release v1.6.0 • 100% Certified):**
+  - **1. Forward Deployed AI Engineer (FDE) Operational Blueprint (`ForwardEngineerModal.tsx`, `LandingHeader.tsx`, `MobileNavDrawer.tsx`, `CommandPaletteModal.tsx`, `StudioInteractiveDemoModal.tsx`, `AppTour.tsx`):**
+    - Built comprehensive 6-tab modal containing:
+      - ASD-STE100 Role Matrix: Rigorous comparison across 6 critical dimensions (Core Mental Model, Specification Discipline, Architectural Stance, Code Verification, Tooling & Automation, Security & Governance) contrasting Naive Vibe Coder, Traditional SWE, Deep AI Engineer, and Forward AI Engineer at $\ge 80\%$ STE conformance.
+      - Agentic IDE Setup Guides: Concrete CLI commands, keybindings, and config files for Google Antigravity IDE (Desktop/CLI on Linux/macOS/Windows), Anthropic Claude Code CLI, and OpenAI Codex & Cursor (`.cursorrules` context indexing).
+      - $0 Sovereign Stack Architecture: End-to-end $0 production pipeline using GitHub Actions, Cloudflare Pages edge deployment, Neon serverless Postgres, CPython WebAssembly (Pyodide v0.26 via Web Worker), and Hugging Face Spaces.
+      - Zero-Leakage Secret Hygiene Protocol: DOs and DONTs, in-memory BYOK API key isolation, pre-commit entropy scanning (`detect-secrets`, `trufflehog`), and canonical `.env.example` blueprint.
+      - Repository Governance Constitutions: Synchronized operational standards across `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, and `CODE_OF_CONDUCT.md`.
+      - Production Case Studies: Detailed architectures of OpenGuide AI Studio ($0 cloud bill, in-browser WASM) and FastMCP Model Context Protocol servers.
+    - Integrated direct trigger button in `LandingHeader` (`header-forward-engineer-btn`), omnibox search command in `CommandPaletteModal`, Flow 7 in `StudioInteractiveDemoModal`, tour stop in `AppTour`, and mobile dock in `MobileNavDrawer`.
+  - **2. The Builder Path Curriculum Implementation (Tracks B0–B7 Across 24 Modules):**
+    - Track B0 ("Say It"): Instant Utility Studio, prompt-to-preview sandboxed iframe lab, 3-sentence blueprints (`builderTracks.ts`).
+    - Track B1 ("Spec It"): Spec Studio Lab featuring deterministic 5-rule rubric autograding, live score indicators, template switching (`SpecStudioLab.tsx`, `builderTracks.ts`).
+    - Track B2 ("Verify It"): Diff Reader Lab with visual diff inspection, 3 real-world scenarios (Safe Refactor, Leaked Client Secret, Dropped RLS), and critical security hazard alert banners (`DiffReaderLab.tsx`, `builderTracks.ts`).
+    - Track B3 ("Connect It"): Client-side storage (Dexie IndexedDB / native IDB), mock endpoints, and offline data contracts (`builderTrackB3.ts`).
+    - Track B4 ("Ground It"): Context constitutions, task evaluation harnesses, guardrails, and deterministic evals (`builderTrackB4.ts`).
+    - Track B5 ("Ship It"): $0 Sovereign deployment pipeline: GitHub Actions CI, Cloudflare Pages edge hosting, preview environments (`builderTrackB5.ts`).
+    - Track B6 ("Harden It"): Adversarial security, red-teaming, secret hygiene, and pre-commit checks (`builderTrackB6.ts`).
+    - Track B7 ("Prove It"): Capstone architecture defense, W3C cryptographic SHA-256 verifiable credentialing (`builderTrackB7.ts`).
+    - Unified `BUILDER_TRACKS` export alias ensuring seamless integration with command palette, curriculum routes, and portfolio ledger.
+  - **3. Surgical Resolution of 55 Cataloged Project Defects:**
+    - Resolved UI collisions, horizontal overflow overlap in `LandingHeader` at 1440px viewports with responsive breathing room and tooltip.
+    - Fixed missing `Workflow` icon import in `LandingHeader`.
+    - Fixed `PromptToPreviewLab` auto-generate infinite overwrite loop using `initialGeneratedKeyRef`.
+    - Harmonized modal focus traps, dark/light theme contrast across 24 themes, and accessible ARIA attributes.
+  - **4. 100% Automated Test Suite & Pre-Flight Gate Pass:**
+    - New test suite `forward-engineer-blueprint.spec.ts` (3/3 passed).
+    - `builder-b0-playable.spec.ts` (8/8 passed), `builder-milestone-3a.spec.ts` (5/5 passed), `ui-ux-modernization.spec.ts` (9/9 passed).
+    - Dev server HTTP 200 OK, 0 console errors, 0 lint errors, production build succeeds with 0 errors.
 - **Phase F12: Builder Path Milestone 3a & Hero Button Baseline Harmonization (100% Certified):**
   - **1. Hero Dual-Action Baseline Alignment & Monospace Elevation (`HeroPhysicsStage.tsx`, `DeepAiEngineerHeroButton.tsx`, `LaunchTrack0HeroButton.tsx`, `deep-engineer-button.css`):** Corrected container clipping and isolated `.launch-track-hero-container` to the mechanical button; standardized `--btn-h: 52px; --btn-w: 244px;` across both buttons, guaranteeing $\Delta y \le 2\text{px}$ baseline parity on desktop viewports. Eliminated duplicate prompt characters (`>_ >_`) to display a razor-sharp monospace `<Terminal size={14} /> Deep AI Engineer` button with subtle pulsing cyan cursor. Enforced `min-h-[34px]` container height across both subtitles.
   - **2. Track B1 ("Build It") Complete Curriculum & Spec Studio Lab (`SpecStudioLab.tsx`, `builderTracks.ts`):** Authored 9 complete lessons across Modules B1.1–B1.3 with first-principles mental models, non-goals scoping, data contracts, and mastery quizzes. Implemented interactive `SpecStudioLab` featuring deterministic 5-rule rubric autograding, live score indicators, template switching (Production Spec 5/5, Vibe Prompt), and simulated agent runs.

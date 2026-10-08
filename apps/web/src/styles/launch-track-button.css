@@ -49,7 +49,7 @@
 
 /* Hover lift */
 .launch-track-hero-container .area-wrapper:hover .wrapper {
-  transform: translateY(0) scale(1);
+  transform: translateY(-1.5px);
 }
 
 .launch-track-hero-container .area-wrapper:hover .case .mask {
@@ -77,8 +77,8 @@
   border-radius: var(--rounded-max);
   position: relative;
   z-index: 2;
-  transition: all 0.6s var(--ease-elastic);
-  transform: translateY(-2px) scale(1.01);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0) scale(1);
 }
 
 .launch-track-hero-container .wrapper input {
@@ -263,7 +263,7 @@
 .launch-track-hero-container .part-2 {
   position: relative;
   height: var(--h);
-  width: 210px;
+  width: 212px;
   border-radius: var(--rounded-min) var(--rounded-max) var(--rounded-max) var(--rounded-min);
   display: flex;
   align-items: center;

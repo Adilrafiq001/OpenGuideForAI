@@ -205,9 +205,12 @@ export function PortfolioPage() {
     resetProgress();
   };
 
+  const [isExportedBackup, setIsExportedBackup] = useState(false);
   const handleExportBackup = () => {
     const json = exportProgressJSON();
     downloadFile(json, `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
+    setIsExportedBackup(true);
+    setTimeout(() => setIsExportedBackup(false), 2000);
   };
 
   const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -354,7 +357,7 @@ export function PortfolioPage() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--color-primary)] text-[var(--color-text-primary)] font-sans antialiased selection:bg-[var(--color-accent)] selection:text-black">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--color-primary)] text-[var(--color-text-primary)] font-sans antialiased selection:bg-[var(--color-accent)] selection:text-[var(--color-primary)]">
       
       {/* Print Stylesheet for High-Resolution PDF/Vector Export */}
       <style>{`
@@ -495,8 +498,8 @@ export function PortfolioPage() {
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Download your cryptographic learning ledger as a JSON file"
               >
-                <Download size={13} className="text-[var(--color-accent)]" />
-                <span>Export Ledger (.json)</span>
+                {isExportedBackup ? <Check size={13} className="text-emerald-400" /> : <Download size={13} className="text-[var(--color-accent)]" />}
+                <span>{isExportedBackup ? 'Exported!' : 'Export Ledger (.json)'}</span>
               </button>
 
               <button
@@ -979,7 +982,7 @@ export function PortfolioPage() {
                     <span className="text-[9px] font-mono text-[var(--color-text-secondary)] uppercase block">
                       Deterministic SHA-256 Document Integrity Signature
                     </span>
-                    <span className="text-[10px] font-mono text-[var(--color-text-primary)] truncate block select-all">
+                    <span className="text-[10px] font-mono tabular-nums text-[var(--color-text-primary)] truncate block select-all">
                       {verificationHash}
                     </span>
                   </div>
@@ -987,7 +990,7 @@ export function PortfolioPage() {
 
                 <button
                   onClick={handleCopyHash}
-                  className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[10px] font-mono text-[var(--color-text-primary)] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer no-print"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[10px] font-mono text-[var(--color-text-primary)] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer no-print focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                 >
                   {copiedHash ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
                   <span>{copiedHash ? 'Copied' : 'Copy Hash'}</span>
@@ -1151,7 +1154,7 @@ export function PortfolioPage() {
                     value={gistPat}
                     onChange={(e) => setGistPat(e.target.value)}
                     placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)] text-[var(--color-text-primary)] text-xs"
                   />
                 </div>
 
@@ -1162,7 +1165,7 @@ export function PortfolioPage() {
                     value={gistPassphrase}
                     onChange={(e) => setGistPassphrase(e.target.value)}
                     placeholder="Enter a secret passphrase"
-                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)] text-[var(--color-text-primary)] text-xs"
                   />
                 </div>
 
@@ -1173,7 +1176,7 @@ export function PortfolioPage() {
                     value={gistIdToRestore}
                     onChange={(e) => setGistIdToRestore(e.target.value)}
                     placeholder="e.g. 7f3b8c9d0e1f2a3b4c5d"
-                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none text-[var(--color-text-primary)] text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)] text-[var(--color-text-primary)] text-xs"
                   />
                 </div>
               </div>

@@ -107,7 +107,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             aria-label="Close profiler dialog"
           >
             <X size={18} />
@@ -127,10 +127,10 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
                 <button
                   key={m.name}
                   onClick={() => setSelectedPreset(idx)}
-                  className={`p-2.5 rounded-xl font-mono text-xs text-left transition-all cursor-pointer border ${
+                  className={`p-2.5 rounded-xl font-mono text-xs text-left transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                     selectedPreset === idx
                       ? 'bg-[var(--color-primary)] border-[var(--color-accent)] text-[var(--color-text-primary)] font-bold shadow-sm'
-                      : 'bg-[var(--color-primary)]/50 border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/50'
+                      : 'bg-[var(--color-primary)] border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/50'
                   }`}
                 >
                   <div className="truncate">{m.name}</div>
@@ -152,9 +152,9 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
                   <button
                     key={p}
                     onClick={() => setPrecision(p)}
-                    className={`flex-1 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer border ${
+                    className={`flex-1 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                       precision === p
-                        ? 'bg-[var(--color-accent)] text-black border-[var(--color-accent)] shadow-sm'
+                        ? 'bg-[var(--color-accent)] text-[var(--color-primary)] border-[var(--color-accent)] shadow-sm'
                         : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border)] hover:text-[var(--color-text-primary)]'
                     }`}
                   >
@@ -167,7 +167,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
             <div>
               <div className="flex items-center justify-between text-[10px] font-mono text-[var(--color-text-secondary)] uppercase mb-1 font-semibold">
                 <span>Context Window</span>
-                <span className="text-[var(--color-accent)] font-bold">{contextTokens.toLocaleString()} T</span>
+                <span className="text-[var(--color-accent)] font-bold tabular-nums">{contextTokens.toLocaleString()} T</span>
               </div>
               <input
                 type="range"
@@ -183,7 +183,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
             <div>
               <div className="flex items-center justify-between text-[10px] font-mono text-[var(--color-text-secondary)] uppercase mb-1 font-semibold">
                 <span>Batch Size</span>
-                <span className="text-[var(--color-accent)] font-bold">{batchSize}</span>
+                <span className="text-[var(--color-accent)] font-bold tabular-nums">{batchSize}</span>
               </div>
               <input
                 type="range"
@@ -205,7 +205,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
                 <HardDrive size={12} className="text-cyan-400" />
                 <span>Model Weights VRAM</span>
               </div>
-              <div className="text-xl font-bold text-cyan-400">
+              <div className="text-xl font-bold tabular-nums text-cyan-400">
                 {weightVramGb.toFixed(2)} GB
               </div>
               <p className="text-[10px] text-[var(--color-text-secondary)]">
@@ -218,7 +218,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
                 <Activity size={12} className="text-amber-400" />
                 <span>KV Cache Footprint</span>
               </div>
-              <div className="text-xl font-bold text-amber-400">
+              <div className="text-xl font-bold tabular-nums text-amber-400">
                 {totalKvVramGb.toFixed(2)} GB
               </div>
               <p className="text-[10px] text-[var(--color-text-secondary)]">
@@ -231,7 +231,7 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
                 <Zap size={12} className="text-emerald-400" />
                 <span>Total VRAM Required</span>
               </div>
-              <div className="text-xl font-bold text-emerald-400">
+              <div className="text-xl font-bold tabular-nums text-emerald-400">
                 {totalVramNeededGb.toFixed(2)} GB
               </div>
               <p className="text-[10px] text-[var(--color-text-secondary)]">

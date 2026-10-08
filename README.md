@@ -158,9 +158,12 @@ OpenGuide functions as an **Installable Progressive Web App (PWA)** with native 
 
 ---
 
-## Curriculum Tracks
+## Dual Learning Pathways
 
-Eight sequential learning tracks comprising **57 interactive, runnable laboratories**:
+OpenGuide offers two synchronized, world-class learning tracks designed to meet learners wherever they stand:
+
+### Pathway A: The Deep AI Engineer (Tracks 0–7 • 57 Laboratories)
+*Deep mathematical intuition, CPython 3.12 WebAssembly execution, and frontier model mechanics from first principles.*
 
 ```mermaid
 graph LR
@@ -189,17 +192,64 @@ graph LR
 
 ---
 
-## Quality Assurance Gate
+### Pathway B: The Builder Path (Tracks B0–B7 • 24 Modules)
+*Forward Deployed AI Engineering: Build real, production software systems using specifications, sandboxes, and agentic workflows.*
 
-Every contribution must pass the five-point quality assurance check before merge:
+```mermaid
+graph LR
+    B0["Track B0: Say It<br/>(Instant Utility Studio)"]
+    B1["Track B1: Spec It<br/>(Rubrics & Test Cases)"]
+    B2["Track B2: Verify It<br/>(Diff Reading & Hazards)"]
+    B3["Track B3: Connect It<br/>(IndexedDB & APIs)"]
+    B4["Track B4: Ground It<br/>(Context & Evals)"]
+    B5["Track B5: Ship It<br/>($0 Sovereign Cloud)"]
+    B6["Track B6: Harden It<br/>(Red-Teaming & Secrets)"]
+    B7["Track B7: Prove It<br/>(Capstone Defense)"]
+
+    B0 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
+```
+
+| Builder Track | Modules | Core Principle | Interactive Laboratory |
+|:---|:---:|:---|:---|
+| **Track B0: Say It** | 3 | Zero to your first running screen via 3-sentence blueprints | **Prompt-to-Preview Lab:** Sandboxed iframe generation |
+| **Track B1: Spec It** | 3 | Writing unambiguous specifications AI models cannot misunderstand | **Spec Studio Lab:** 5-rule rubric autograder |
+| **Track B2: Verify It** | 3 | Reading code diffs with expert precision; identifying regressions | **Diff Reader Lab:** Visual diff & security hazard audit |
+| **Track B3: Connect It** | 3 | Persistent client-side data (Dexie IndexedDB) and mock endpoints | **Storage Workbench:** Local-first schema modeling |
+| **Track B4: Ground It** | 3 | Context constitutions (`AGENTS.md`), guardrails, and evaluators | **Harness Studio:** E2E task evaluation |
+| **Track B5: Ship It** | 3 | $0 Sovereign stack deployment: GitHub Actions, Cloudflare Pages | **Pipeline Deployer:** Continuous delivery config |
+| **Track B6: Harden It** | 3 | Adversarial threat modeling, secret hygiene, and pre-commit checks | **Security Sandbox:** Zero-leakage key hygiene |
+| **Track B7: Prove It** | 3 | Architectural defense, portfolio credentialing, and live capstone | **Capstone Defense:** Cryptographic SHA-256 verification |
+
+---
+
+## Forward Deployed AI Engineering (FDE) Blueprint
+
+OpenGuide includes an embedded, interactive **Forward Deployed AI Engineering Blueprint** modal directly accessible from the header and Command Palette (`⌘K`):
+- **ASD-STE100 Role Matrix:** Contrasts Naive Vibe Coders, Traditional SWEs, Deep AI Engineers, and Forward AI Engineers across 6 dimensions at $\ge 80\%$ STE conformance.
+- **Agentic IDE Setups:** Concrete setup guides, terminal commands, and best practices for Google Antigravity IDE, Anthropic Claude Code CLI, and OpenAI Codex & Cursor (.cursorrules context indexing).
+- **$0 Sovereign Stack:** Full operational blueprint for GitHub Actions CI, Cloudflare Pages edge deployment, Neon serverless Postgres, CPython WebAssembly (Pyodide v0.26), and Hugging Face Spaces.
+- **Zero-Leakage Secret Hygiene:** Strict DOs and DONTs protocol, in-memory BYOK isolation, pre-commit scanners, and `.env.example` templates.
+- **Repository Governance Standards:** Synchronized constitutions (`AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`).
+
+---
+
+## Quality Assurance Gate (5-Point Pre-Flight Suite)
+
+Every contribution must pass the strict 5-point quality assurance check before merge:
 ```bash
-# 1. Linter verification (0 warnings, 0 errors across codebase)
+# 1. Dev Server Live Check (HTTP 200 OK)
+(Invoke-WebRequest http://localhost:5173).StatusCode == 200
+
+# 2. Physical Headless Browser Verification (0 console errors)
+# Verified via Playwright headless browser inspect
+
+# 3. Static Linter Verification (0 errors)
 yarn lint
 
-# 2. Automated Playwright regression test suite (100% pass rate, 0 skips)
-yarn --cwd apps/web test:e2e
+# 4. Automated Regression Test Suite (100% pass rate, 0 skips across all suites)
+npx playwright test --config apps/web/playwright.config.ts
 
-# 3. Production static compilation (0 TypeScript/Vite errors)
+# 5. Production Static Compilation (0 TypeScript/Vite errors)
 yarn --cwd apps/web build
 ```
 

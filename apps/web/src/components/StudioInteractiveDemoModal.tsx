@@ -20,6 +20,7 @@ interface StudioInteractiveDemoModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenThemes?: () => void;
+  onOpenForwardEngineer?: () => void;
 }
 
 interface DemoFlowItem {
@@ -40,7 +41,8 @@ interface DemoFlowItem {
 export function StudioInteractiveDemoModal({
   isOpen,
   onClose,
-  onOpenThemes: _onOpenThemes
+  onOpenThemes: _onOpenThemes,
+  onOpenForwardEngineer
 }: StudioInteractiveDemoModalProps) {
   const navigate = useNavigate();
 
@@ -286,6 +288,47 @@ export function StudioInteractiveDemoModal({
       technicalPill: 'Web Crypto API • AES-GCM 256-bit • W3C Verifiable Credentials',
       actionText: 'View Student Portfolio →',
       actionRoute: '/portfolio'
+    },
+    {
+      id: 'forward-engineer-flow',
+      badge: 'Forward AI Spec',
+      badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+      title: '7. Forward Deployed AI Engineer & Agentic Building',
+      subtitle: 'ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack • Secret Hygiene',
+      icon: Workflow,
+      overview: 'How elite Forward AI Engineers bridge frontier models into real-world software: specification-driven loops, sandboxed MCP tools, and deterministic CI evaluation gates.',
+      steps: [
+        {
+          number: '01',
+          stepTitle: 'Agentic IDE Workflows & Constitution',
+          detail: 'Setup Google Antigravity IDE, Claude Code CLI, and Cursor rules with an airtight AGENTS.md contract governing agent actions.'
+        },
+        {
+          number: '02',
+          stepTitle: 'Model Context Protocol (MCP) Tools',
+          detail: 'Expose local tools, databases, and filesystem operations via standardized FastMCP JSON-RPC servers.'
+        },
+        {
+          number: '03',
+          stepTitle: 'Zero-Leakage Secret Hygiene',
+          detail: 'Enforce .env.example discipline, pre-commit secret scanners, and client-side BYOK in-memory key storage.'
+        },
+        {
+          number: '04',
+          stepTitle: 'Zero-Dollar Production Deployment',
+          detail: 'Ship static SPAs on Cloudflare Pages and GitHub Actions with 5-point autonomous CI validation gates.'
+        }
+      ],
+      technicalPill: 'ASD-STE100 Conformance • MCP Tools • Cloudflare Edge • GitHub Actions',
+      actionText: 'View Forward Engineer Blueprint →',
+      actionCallback: () => {
+        onClose();
+        if (onOpenForwardEngineer) {
+          onOpenForwardEngineer();
+        } else {
+          window.dispatchEvent(new CustomEvent('open-forward-engineer'));
+        }
+      }
     }
   ];
 
@@ -326,7 +369,7 @@ export function StudioInteractiveDemoModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/80 backdrop-blur-xl"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md"
         />
 
         {/* Modal Dialog Window */}
@@ -357,7 +400,7 @@ export function StudioInteractiveDemoModal({
             <button
               onClick={onClose}
               data-testid="studio-demo-close-btn"
-              className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors cursor-pointer shrink-0"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)]"
               aria-label="Close interactive flow demo"
             >
               <X size={18} />
@@ -381,7 +424,7 @@ export function StudioInteractiveDemoModal({
                       playTactileSound('click');
                       triggerHaptic('light');
                     }}
-                    className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 w-full shrink-0 ${
+                    className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 w-full shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)] ${
                       isActive
                         ? 'bg-[var(--color-secondary,#111)] border border-[var(--color-accent,#10b981)] shadow-sm'
                         : 'border border-transparent hover:border-[var(--color-border,rgba(255,255,255,0.08))] hover:bg-[var(--color-secondary,#111)]/50 text-[var(--color-text-secondary,#a1a1aa)]'
@@ -389,7 +432,7 @@ export function StudioInteractiveDemoModal({
                   >
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
                       isActive 
-                        ? 'bg-[var(--color-accent,#10b981)] text-black font-bold' 
+                        ? 'bg-[var(--color-accent,#10b981)] text-[var(--color-primary,#000)] font-bold' 
                         : 'bg-[var(--color-surface,rgba(255,255,255,0.06))] text-[var(--color-text-secondary,#a1a1aa)]'
                     }`}>
                       <Icon size={16} />

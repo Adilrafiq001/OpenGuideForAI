@@ -226,7 +226,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     isPeeking
                       ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] border-[var(--color-accent)] shadow-lg'
-                      : 'border-[var(--color-border)] bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)]/80 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                      : 'border-[var(--color-border)] bg-[var(--color-primary)] hover:border-[var(--color-accent)]/50 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                   }`}
                   title="Peek live app behind settings"
                   data-testid="peek-stage-btn"
@@ -351,7 +351,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           className={`group w-full p-3 rounded-2xl cursor-pointer transition-all duration-200 border flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                             isSelected
                               ? 'border-[var(--color-accent)] bg-[var(--color-accent-trans,rgba(16,185,129,0.12))] shadow-md'
-                              : 'border-[var(--color-border)] bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)]/80 hover:border-[var(--color-accent)]/50'
+                              : 'border-[var(--color-border)] bg-[var(--color-primary)] hover:border-[var(--color-accent)]/50'
                           }`}
                         >
                           <div className="flex items-center gap-4">
@@ -422,7 +422,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                 </div>
 
                 {/* Right: Live Interactive Theme Inspector / Preview */}
-                <div className="hidden md:flex md:w-80 bg-[var(--color-secondary)]/90 border-t md:border-t-0 md:border-l border-[var(--color-border)] p-6 flex-col justify-between overflow-y-auto">
+                <div className="hidden md:flex md:w-80 bg-[var(--color-secondary)] border-t md:border-t-0 md:border-l border-[var(--color-border)] p-6 flex-col justify-between overflow-y-auto">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--color-text-secondary)]">

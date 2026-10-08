@@ -99,7 +99,7 @@ function DockItem({
             onClick?.();
           }
         }}
-        className={`relative flex items-center justify-center rounded-full bg-[var(--color-primary)]/80 hover:bg-[var(--color-secondary)] border-[var(--color-border)] border shadow-md cursor-pointer hover:border-[var(--color-accent)] hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${className}`}
+        className={`relative flex items-center justify-center rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border-[var(--color-border)] border shadow-md cursor-pointer hover:border-[var(--color-accent)] hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${className}`}
         tabIndex={0}
         role="button"
         aria-label={ariaLabel}
@@ -181,7 +181,7 @@ export function MagnificationDock({
         onMouseLeave={() => {
           mouseX.set(Infinity);
         }}
-        className={`${className} flex items-end w-max gap-2 sm:gap-2.5 rounded-[2.2rem] border border-[var(--color-border)] bg-[var(--color-secondary)]/90 backdrop-blur-2xl p-2 sm:p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-visible shrink-0`}
+        className={`${className} flex items-end w-max gap-2 sm:gap-2.5 rounded-[2.2rem] border border-[var(--color-border)] bg-[var(--color-secondary)] backdrop-blur-2xl p-2 sm:p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-visible shrink-0`}
         style={{ minHeight: panelHeight }}
         role="toolbar"
         aria-label="Application dock"

@@ -7,6 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.0] - 2026-10-08
+
+### Added
+- **Forward Deployed AI Engineering Blueprint (`ForwardEngineerModal.tsx`):**
+  - **ASD-STE100 Matrix:** 6-dimension comparative matrix (Core Mission, Agent Governance, IDE & Workflow, Compute Cost, Security & Secrets, Failure Metric) contrasting Naive Vibe Coder, Traditional SWE, Deep AI Engineer, and Forward AI Engineer.
+  - **Agentic IDE Mastery Guides:** Operational setup instructions, terminal commands, and engineering best practices for Google Antigravity IDE (Desktop, CLI, multi-platform), Anthropic Claude Code CLI, and OpenAI Codex & Cursor (.cursorrules context indexing).
+  - **$0 Sovereign Stack Architecture:** Complete operational breakdown of GitHub Actions CI, Cloudflare Pages edge deployment, Neon serverless Postgres, CPython WebAssembly (Pyodide v0.26), and Hugging Face Spaces.
+  - **Zero-Leakage Secret Hygiene:** Strict DOs and DONTs protocol, in-memory BYOK API key isolation, pre-commit entropy scanners, and canonical `.env.example` blueprint.
+  - **Repository Governance Standards:** Synchronized constitution ecosystem (`AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `.agents/rules/`).
+  - **Production Case Studies:** In-depth teardowns of OpenGuide AI Studio ($0 cloud bill, in-browser WASM) and FastMCP Model Context Protocol servers.
+- **The Builder Path (Tracks B0 through B7):**
+  - Complete curriculum specification and implementation for Forward AI Engineers and software builders:
+    - **Track B0: Say It:** Instant Utility Studio & interactive Prompt-to-Preview Lab.
+    - **Track B1: Spec It:** Product specifications & Spec Studio Lab with 5-rule rubric autograding.
+    - **Track B2: Verify It:** Code Diff Review & Diff Reader Lab with visual hazard detection.
+    - **Track B3: Connect It:** Client-Side Storage (IndexedDB/Dexie) & Mock APIs (`builderTrackB3.ts`).
+    - **Track B4: Ground It:** Context Constitution, Guardrails & Evaluation Harnesses (`builderTrackB4.ts`).
+    - **Track B5: Ship It:** $0 Sovereign Deployment Pipeline (`builderTrackB5.ts`).
+    - **Track B6: Harden It:** Adversarial Red-Teaming & Secret Hygiene (`builderTrackB6.ts`).
+    - **Track B7: Prove It:** Capstone Architecture Defense (`builderTrackB7.ts`).
+- **Interactive UI & Tour Integration:**
+  - Header direct trigger pill (`header-forward-engineer-btn`) with responsive breathing room and tooltip.
+  - Command Palette (`⌘K`) indexing all Builder Tracks (B0–B7) and Forward AI Blueprint actions.
+  - Studio Interactive Demo Modal: Added Flow 7 "Forward Deployed AI Engineer & Agentic Building".
+  - Guided App Tour step highlighting the Forward AI pathway.
+  - Mobile Navigation Drawer: 3-column quick access dock with Forward AI trigger.
+- **Automated Regression Suite (`forward-engineer-blueprint.spec.ts`):**
+  - Physical Playwright verification covering ASD-STE100 matrix, tab transitions, command palette indexing, and 0 console errors.
+
+### Fixed
+- **55 Project Defect Fixes:**
+  - Defect 01: CSS variable fallbacks harmonized in `deep-engineer-button.css`.
+  - Defect 02: `EverydayCraftAiModal.tsx` render-phase prop sync eliminating cascading `useEffect` re-renders.
+  - Defect 03: `DeepAiEngineerHeroButton.tsx` effect cleanup on route transitions.
+  - Defect 04: `CognitiveAccelerator.tsx` countdown timer callback refactor.
+  - Defect 05: `PromptToPreviewLab.tsx` `useCallback` on `handleGenerate` and render-phase lesson key sync.
+  - Defect 06, 10, 15: `ApiKeyModal.tsx` render-phase sync, `.trim()` whitespace sanitization, and escape key handling.
+  - Defect 07: `CoursePlayer.tsx` deep-link module/lesson key sync in render phase.
+  - Defect 08: `builder-b0-playable.spec.ts` unused catch parameters `_err`.
+  - Defect 12: `DiffReaderLab.tsx` added `role="region"` and accessible `aria-label`.
+  - Defect 13: `SpecStudioLab.tsx` textarea high-visibility `focus-visible:ring-2` focus ring.
+  - Defect 14: `newtons-cradle.css` token standardized to `var(--color-accent)`.
+  - Defect 19: `builderTracks.ts` regex prefix replacement fix (`.replace('b', '')` mangling `'builder-'`).
+  - Defect 20: `locales/en.ts` Forward AI tokens added.
+  - Defect 21: `CheckUnderstandingQuiz.tsx` added `aria-live="polite"` feedback announcement.
+  - Defect 43: `PortfolioPage.tsx` added visual confirmation feedback state on Export Ledger button.
+  - Defect 44: `LandingHeader.tsx` accessible `aria-label` for dual-track dropdown.
+  - Defect 48: `CommandPaletteModal.tsx` full indexing for Builder Path and Forward AI tools.
+  - Defect 49: `AppTour.tsx` tour step update for Forward AI pathway.
+  - Defect 50: `StudioInteractiveDemoModal.tsx` Flow 7 integration.
+  - Defect 51: `MobileNavDrawer.tsx` render-phase tab sync and quick access trigger.
+  - Defect 52: `LandingHeader.tsx` imported missing `Workflow` icon from `lucide-react`.
+  - Defect 53: `LandingHeader.tsx` responsive text and badge spacing preventing overlap with utility dock.
+  - Defect 54: `builderTracks.ts` exported `BUILDER_TRACKS` compatibility alias.
+  - Defect 55: `PromptToPreviewLab.tsx` imported `useCallback` and `useRef` preventing initial preview overwrite loop.
+
+---
+
 ## [1.5.1] - 2026-10-08
 
 ### Fixed

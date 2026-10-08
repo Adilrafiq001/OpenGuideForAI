@@ -98,7 +98,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
                       onClick={() => handleSelect(qIdx, oIdx)}
                       disabled={isSubmitted}
                       data-testid={`quiz-option-${qIdx}-${oIdx}`}
-                      className={`w-full text-left p-2 rounded-lg border text-[11px] transition-all flex items-center justify-between cursor-pointer ${borderClass} ${bgClass}`}
+                      className={`w-full text-left p-2 rounded-lg border text-[11px] transition-all flex items-center justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${borderClass} ${bgClass}`}
                     >
                       <span>{opt}</span>
                       {isSubmitted && oIdx === q.answerIndex && (
@@ -112,7 +112,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
                 })}
 
                 {isSubmitted && (
-                  <p className="text-[10px] text-[var(--color-text-secondary)] italic pt-1 leading-normal">
+                  <p aria-live="polite" className="text-[10px] text-[var(--color-text-secondary)] italic pt-1 leading-normal">
                     {q.explanation}
                   </p>
                 )}

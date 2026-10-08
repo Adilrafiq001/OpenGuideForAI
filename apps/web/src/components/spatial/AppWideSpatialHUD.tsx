@@ -328,7 +328,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
                 onChange={(e) => setVirtualDistance(parseFloat(e.target.value))}
                 className="w-32 accent-cyan-400 cursor-pointer"
               />
-              <span className="font-bold text-cyan-300">{virtualDistance}m</span>
+              <span className="font-bold text-cyan-300 tabular-nums">{virtualDistance}m</span>
             </div>
 
             {/* Screen Curvature Slider */}
@@ -343,7 +343,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
                 onChange={(e) => setScreenCurvature(parseInt(e.target.value))}
                 className="w-32 accent-cyan-400 cursor-pointer"
               />
-              <span className="font-bold text-cyan-300">{screenCurvature}°</span>
+              <span className="font-bold text-cyan-300 tabular-nums">{screenCurvature}°</span>
             </div>
 
             {/* Passthrough Mode Selector */}
@@ -355,7 +355,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
                     key={mode}
                     onClick={() => setPassthroughMode(mode)}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors ${
-                      passthroughMode === mode ? 'bg-cyan-500 text-black' : 'text-slate-400 hover:text-white'
+                      passthroughMode === mode ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     {mode === 'native-theme' ? 'Native Theme (PC)' : mode === 'true-black' ? 'OLED True-Black (AR)' : 'Dark Cinema'}

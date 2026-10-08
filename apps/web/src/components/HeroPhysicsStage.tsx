@@ -238,7 +238,7 @@ export function HeroPhysicsStage({
       >
         <button
           onClick={onLaunchTrack0}
-          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-600/50 dark:border-emerald-500/30 bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100/90 text-emerald-950 dark:text-emerald-300 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-600/50 dark:border-emerald-500/30 bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100/90 text-emerald-950 dark:text-emerald-300 font-mono tabular-nums text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-700 dark:bg-emerald-400 animate-pulse" />
           <span className="font-bold text-emerald-950 dark:text-emerald-300">

@@ -184,7 +184,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           <button
             onClick={handleCopySpec}
             aria-label="Copy spec to clipboard"
-            className="p-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer"
+            className="p-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             title="Copy spec"
           >
             {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -265,7 +265,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
               setActiveTemplate('custom');
             }}
             placeholder="Type or paste your specification here..."
-            className="w-full flex-1 min-h-[260px] p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/50 focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-all resize-y leading-relaxed"
+            className="w-full flex-1 min-h-[260px] p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] font-mono text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/50 focus-visible:outline-none focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-all resize-y leading-relaxed"
           />
 
           {/* Action Footer */}

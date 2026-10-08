@@ -24,7 +24,7 @@ Every module and curriculum milestone is anchored in three universal questions:
 
 ---
 
-## Tracks & Progression
+## Pathway A: The Deep AI Engineer (Tracks 0–7 • 57 Laboratories)
 
 ### Track 0: Absolute Zero
 **Goal:** Run first native Python script inside browser, understand tokens, JSON schemas, and command orchestration through warm, beginner-first layman analogies (kitchen recipes, invitations, toy cubbies, playground maps, grocery notes, syllables, house rules, and ice cream scoops).
@@ -128,6 +128,83 @@ Every module and curriculum milestone is anchored in three universal questions:
   - *Lesson 7.1.2:* Classifier-Free Guidance (CFG) Vector Field ($\tilde{\epsilon}_\theta(x_t, c) = \epsilon_\theta(x_t, \emptyset) + s \cdot (\epsilon_\theta(x_t, c) - \epsilon_\theta(x_t, \emptyset))$).
 - **Module 7.2: Vision Transformers (ViT)**
   - *Lesson 7.2.1:* Vision Transformer (ViT) Patch Linear Projection (Splitting images into non-overlapping patches $P \times P$, flattening and linearly projecting to hidden dimension $D$).
+
+---
+
+## Pathway B: The Builder Path (Tracks B0–B7 • 24 Modules)
+**Forward Deployed AI Engineering:** Build real, production software systems using specifications, sandboxes, and agentic workflows.
+
+```mermaid
+graph LR
+    B0["Track B0: Say It<br/>(Instant Utility Studio)"]
+    B1["Track B1: Spec It<br/>(Rubrics & Test Cases)"]
+    B2["Track B2: Verify It<br/>(Diff Reading & Hazards)"]
+    B3["Track B3: Connect It<br/>(IndexedDB & APIs)"]
+    B4["Track B4: Ground It<br/>(Context & Evals)"]
+    B5["Track B5: Ship It<br/>($0 Sovereign Cloud)"]
+    B6["Track B6: Harden It<br/>(Red-Teaming & Secrets)"]
+    B7["Track B7: Prove It<br/>(Capstone Defense)"]
+
+    B0 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
+```
+
+### Track B0: Say It (Instant Utility Studio)
+**Goal:** Zero to first running interactive screen via 3-sentence prompt blueprints and sandboxed iframe previews.
+- **Module B0.1: The 3-Sentence Prompt Blueprint** (Goal, Controls, Constraints).
+- **Module B0.2: Sandboxed Previews & Real-Time Editing** (Iframe isolation, live state, fast iteration).
+- **Module B0.3: Instant Utility Studio Lab** (`PromptToPreviewLab.tsx`): Interactive prompt-to-preview generator with emergency stop, safety sandbox, and multi-template presets.
+
+### Track B1: Spec It (Writing Specifications)
+**Goal:** Master writing unambiguous system specifications that AI agents cannot misinterpret.
+- **Module B1.1: Foundations of Functional Specs** (Scope, interfaces, boundary conditions).
+- **Module B1.2: Deterministic Rubrics & Edge Case Assertions** (5-rule rubric, failure modes, data contracts).
+- **Module B1.3: Spec Studio Lab** (`SpecStudioLab.tsx`): Interactive 5-rule rubric autograder evaluating spec completeness with simulated agent execution.
+
+### Track B2: Verify It (Code Diff Reading & Hazard Audit)
+**Goal:** Read code diffs with expert precision, detecting security hazards, regressions, and architectural drift before merge.
+- **Module B2.1: Filesystem & AST Mental Models** (Abstract Syntax Trees, git patch ergonomics).
+- **Module B2.2: Identifying Catastrophic Security Hazards** (Leaked secrets, dropped Row Level Security, unsanitized inputs).
+- **Module B2.3: Diff Reader Lab** (`DiffReaderLab.tsx`): Split/unified visual diff explorer with 3 real-world scenarios and security alert banners.
+
+### Track B3: Connect It (Client-Side Storage & Mock APIs)
+**Goal:** Implement resilient local-first data persistence using IndexedDB / Dexie and typed mock APIs.
+- **Module B3.1: Local-First Storage Architecture** (Dexie.js IndexedDB schema, in-memory caching tier).
+- **Module B3.2: Mock API Contracts & Data Serialization** (JSON schemas, deterministic mock services).
+- **Module B3.3: Storage Workbench Lab** (`builderTrackB3.ts`): Client-side state modeling and offline data validation.
+
+### Track B4: Ground It (Context Constitutions & Evals)
+**Goal:** Build context constitutions (`AGENTS.md`), guardrails, and deterministic task evaluation harnesses.
+- **Module B4.1: Repository Governance & Rules Files** (Constitution design, prompt anchoring).
+- **Module B4.2: Guardrail Systems & Invariant Checks** (Output filtering, semantic assertions).
+- **Module B4.3: Harness Studio Lab** (`builderTrackB4.ts`): End-to-end task evaluation and agent steering.
+
+### Track B5: Ship It ($0 Sovereign Deployment Pipeline)
+**Goal:** Automate continuous delivery using Cloudflare Pages, GitHub Actions CI, and preview branches for $0.
+- **Module B5.1: Zero-Cost CI/CD Architecture** (GitHub Actions workflows, automated build checks).
+- **Module B5.2: Edge Deployment & Static CDN Delivery** (Cloudflare Pages edge routing, custom headers, caching).
+- **Module B5.3: Pipeline Deployer Lab** (`builderTrackB5.ts`): Production delivery configuration and smoke testing.
+
+### Track B6: Harden It (Adversarial Security & Secret Hygiene)
+**Goal:** Threat-model agentic applications, enforce strict secret hygiene, and conduct red-team evaluations.
+- **Module B6.1: Threat Modeling & Red-Teaming** (STRIDE, prompt injection vectors, bypass detection).
+- **Module B6.2: Secret Hygiene & Pre-Commit Scanning** (Entropy scanners, BYOK memory isolation, `.env.example`).
+- **Module B6.3: Security Sandbox Lab** (`builderTrackB6.ts`): Zero-leakage key protection and vulnerability auditing.
+
+### Track B7: Prove It (Capstone Architecture Defense)
+**Goal:** Defend an end-to-end production architecture in a live capstone evaluation and earn W3C Verifiable Credentials.
+- **Module B7.1: Architecture Defense & Socratic Interview** (Defending system choices, trade-offs, scaling bottlenecks).
+- **Module B7.2: Cryptographic W3C Credential Conferral** (SHA-256 local verification, tamper-proof credentials).
+- **Module B7.3: Capstone Defense Lab** (`builderTrackB7.ts`): Comprehensive project defense and portfolio certification.
+
+---
+
+## Forward Deployed AI Engineering (FDE) Operational Blueprint
+OpenGuide embeds a complete operational blueprint for modern agentic software engineering:
+- **ASD-STE100 Role Matrix:** Contrasts Naive Vibe Coders, Traditional SWEs, Deep AI Engineers, and Forward AI Engineers across 6 core dimensions (Mental Model, Specification, Architecture, Verification, Tooling, Security) at $\ge 80\%$ STE conformance.
+- **Agentic IDE Setups:** Operational configurations, CLI commands, and rules files for Google Antigravity IDE (Desktop/CLI on Linux/macOS/Windows), Anthropic Claude Code CLI, and OpenAI Codex & Cursor (`.cursorrules`).
+- **$0 Sovereign Stack:** Production blueprint for GitHub Actions CI, Cloudflare Pages, Neon serverless Postgres, CPython WebAssembly (Pyodide v0.26 via Web Worker), and Hugging Face Spaces.
+- **Zero-Leakage Secret Hygiene:** DOs and DONTs protocol, in-memory BYOK API key isolation, pre-commit entropy scanning (`detect-secrets`, `trufflehog`), and canonical `.env.example`.
+- **Repository Governance Standards:** Synchronized constitutions across `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, and `CODE_OF_CONDUCT.md`.
 
 ---
 

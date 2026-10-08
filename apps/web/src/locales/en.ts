@@ -36,10 +36,6 @@ export const en: Record<string, string> = {
   nav_switch_path: 'Switch Learning Path',
   nav_labs: 'Labs',
   nav_pathways: 'Pathways',
-  nav_tracks: 'Tracks',
-  nav_tour: 'Tour',
-  nav_pillars: '11 Pillars',
-  nav_synapse_lounge: 'Synapse Lounge',
   onboarding_fork_badge: 'Choose Your Starting Pathway • Switch Anytime',
   onboarding_fork_title: 'How do you want to learn today?',
   onboarding_fork_subtitle: 'Switch between Builder and Engineer paths whenever you like. Your progress is always preserved.',
@@ -180,7 +176,12 @@ export const en: Record<string, string> = {
   // Controls & Tooltips
   theme_settings_label: 'Themes & Settings',
   theme_settings_subtitle: '20 WCAG AAA themes • Studio preferences & BYOK',
-  select_language: 'Select Language',
   footer_credit: 'Architected & Designed by Adil Rafiq Dar (ARD)',
-  footer_tagline: 'Open-Source AI Engineering Studio • 100% Free Forever'
+  footer_tagline: 'Open-Source AI Engineering Studio • 100% Free Forever',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'Forward AI',
+  nav_forward_engineer_desc: 'ASD-STE100 Blueprint, Agentic IDEs & $0 Stack',
+  forward_engineer_title: 'Forward Deployed AI Engineering',
+  forward_engineer_badge: 'ASD-STE100 • 0.001% Rigor'
 };

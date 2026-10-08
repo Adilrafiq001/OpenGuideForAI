@@ -1588,7 +1588,7 @@ Every software engineer, from solo creators to NASA teams, relies on Git as thei
           id: 'lesson-b2-2-2',
           title: 'Branching Strategy: Always Work on dev',
           subtitle: 'Protecting Production with Branch Isolation',
-          firstPrinciplesIntuition: 'Never touch production (\`main\`) directly. Create a playground branch (\`dev\`) where you can break things safely. Only merge into \`main\` when everything is physically verified and 100% tested.',
+          firstPrinciplesIntuition: 'Never touch production (`main`) directly. Create a playground branch (`dev`) where you can break things safely. Only merge into `main` when everything is physically verified and 100% tested.',
           content: `### In One Sentence
 Branching allows you to create parallel universes of your project: develop on \`dev\`, keep \`main\` rock-solid and deployable.
 
@@ -1739,7 +1739,7 @@ The Conventional Commits specification is used by thousands of open-source proje
           id: 'lesson-b2-3-1',
           title: 'Reading Red/Green Diffs Before Accepting Code',
           subtitle: 'The Inspector\'s Magnifying Glass',
-          firstPrinciplesIntuition: 'Never click "Accept All" blindly. A code diff shows you the exact delta: red lines with minus signs (\`-\`) are being removed, green lines with plus signs (\`+\`) are being added. Always read what is being deleted!',
+          firstPrinciplesIntuition: 'Never click "Accept All" blindly. A code diff shows you the exact delta: red lines with minus signs (`-`) are being removed, green lines with plus signs (`+`) are being added. Always read what is being deleted!',
           content: `### In One Sentence
 Reviewing the diff is your final defense against accidental deletions, silent logic changes, and unwanted architectural churn.
 
@@ -1945,175 +1945,13 @@ You have mastered app anatomy, client state vs databases, Git version control, b
   ]
 };
 
-export const trackB3: Track = {
-  id: 'builder-3',
-  title: 'Track B3: Ship It',
-  description: 'Put your application on the real internet with a live URL, free edge hosting, custom domains, and zero hardcoded client secrets.',
-  path: 'builder',
-  trackNumber: 'B3',
-  badge: 'SHIP IT',
-  bossProject: {
-    id: 'boss-b3',
-    title: 'Production Edge Deployment',
-    description: 'Deploy an app to Cloudflare Pages with zero leaked secrets, persistent storage across reloads, and mobile responsiveness.'
-  },
-  modules: [
-    {
-      id: 'module-b3-1',
-      title: 'Module B3.1: Free Hosting & Edge Deployment',
-      description: 'Static hosting, preview URLs vs production domains, and DNS basics.',
-      lessons: []
-    },
-    {
-      id: 'module-b3-2',
-      title: 'Module B3.2: Settings & Secrets Hygiene',
-      description: 'Client vs server execution: why API keys must never be compiled into browser bundles.',
-      lessons: []
-    },
-    {
-      id: 'module-b3-3',
-      title: 'Module B3.3: Data & Accounts on Free Tiers',
-      description: 'Client-side storage vs PostgreSQL databases, sign-in concepts, and handling free-tier pauses.',
-      lessons: []
-    }
-  ]
-};
+import { trackB3 } from './builderTrackB3';
+import { trackB4 } from './builderTrackB4';
+import { trackB5 } from './builderTrackB5';
+import { trackB6 } from './builderTrackB6';
+import { trackB7 } from './builderTrackB7';
 
-export const trackB4: Track = {
-  id: 'builder-4',
-  title: 'Track B4: Trust It',
-  description: 'Defensive engineering. Transform a vulnerable vibe-coded prototype into a secure, accessible, and automated-tested application.',
-  path: 'builder',
-  trackNumber: 'B4',
-  badge: 'TRUST IT',
-  bossProject: {
-    id: 'boss-b4',
-    title: 'The Hardened Application Audit',
-    description: 'Pass the Review Lab by eliminating 100% of planted flaws (RLS, exposed secrets, XSS, hallucinated packages) and passing automated tests.'
-  },
-  modules: [
-    {
-      id: 'module-b4-1',
-      title: 'Module B4.1: Automated Verification & Testing',
-      description: 'What tests actually prove, automated smoke tests, and Playwright verification.',
-      lessons: []
-    },
-    {
-      id: 'module-b4-2',
-      title: 'Module B4.2: Defensive Security & RLS',
-      description: 'Database Row-Level Security, secret isolation, input sanitization, and avoiding hallucinated packages.',
-      lessons: []
-    },
-    {
-      id: 'module-b4-3',
-      title: 'Module B4.3: The Review Lab & Accessibility',
-      description: 'Hands-on planted flaw review, WCAG contrast basics, and keyboard navigation.',
-      lessons: []
-    }
-  ]
-};
-
-export const trackB5: Track = {
-  id: 'builder-5',
-  title: 'Track B5: Direct It',
-  description: 'Spec-Driven Development (SDD) and Context Engineering. Guide autonomous coding agents under standing rules and architectural constitutions.',
-  path: 'builder',
-  trackNumber: 'B5',
-  badge: 'DIRECT IT',
-  bossProject: {
-    id: 'boss-b5',
-    title: 'Spec-Driven Feature Delivery',
-    description: 'Direct an autonomous agent through Specify → Plan → Tasks → Implement under an AGENTS.md constitution with zero prompt drift.'
-  },
-  modules: [
-    {
-      id: 'module-b5-1',
-      title: 'Module B5.1: Standing Rules & Context Engineering',
-      description: 'Authoring AGENTS.md, system rules, and preventing agent hallucination.',
-      lessons: []
-    },
-    {
-      id: 'module-b5-2',
-      title: 'Module B5.2: Spec-Driven Development (SDD)',
-      description: 'The 4-stage SDD loop: Specify, Plan, Tasks, Implement with human gates.',
-      lessons: []
-    },
-    {
-      id: 'module-b5-3',
-      title: 'Module B5.3: Tools & Agents Safely',
-      description: 'Model Context Protocol (MCP), tool permissions, cost control, and evaluating model capabilities.',
-      lessons: []
-    }
-  ]
-};
-
-export const trackB6: Track = {
-  id: 'builder-6',
-  title: 'Track B6: Run It',
-  description: 'Enterprise production readiness, CI/CD verification pipelines, observability, incident rollback drills, and software governance.',
-  path: 'builder',
-  trackNumber: 'B6',
-  badge: 'RUN IT',
-  bossProject: {
-    id: 'boss-b6',
-    title: 'Production Readiness & CI/CD Pipeline',
-    description: 'Set up automated GitHub Actions checks (lint, test, secret scan) and conduct a simulated incident rollback drill.'
-  },
-  modules: [
-    {
-      id: 'module-b6-1',
-      title: 'Module B6.1: CI/CD Pipelines & Approval Promotion',
-      description: 'Automated verification runners, preview environments, and promoting dev to main only with explicit approval.',
-      lessons: []
-    },
-    {
-      id: 'module-b6-2',
-      title: 'Module B6.2: Operations & Observability',
-      description: 'Error monitoring, telemetry dashboards, dependency patch management, and backups.',
-      lessons: []
-    },
-    {
-      id: 'module-b6-3',
-      title: 'Module B6.3: Software Governance & Team Handoff',
-      description: 'Architecture Decision Records (ADRs), open-source licensing, privacy regulations, and handing off code to engineers.',
-      lessons: []
-    }
-  ]
-};
-
-export const trackB7: Track = {
-  id: 'builder-7',
-  title: 'Track B7: Prove It',
-  description: 'The Agentic Engineering Capstone. Build, harden, test, deploy, and defend a complete software application with an honest portfolio ledger.',
-  path: 'builder',
-  trackNumber: 'B7',
-  badge: 'PROVE IT',
-  bossProject: {
-    id: 'boss-b7',
-    title: 'The Agentic Engineering Capstone Portfolio',
-    description: 'A verified, public, end-to-end production software system with passing test suite, security audit dossier, and bridges to Deep AI Engineering.'
-  },
-  modules: [
-    {
-      id: 'module-b7-1',
-      title: 'Module B7.1: The Capstone Architecture',
-      description: 'Scoping, designing, and establishing the verification criteria for your capstone.',
-      lessons: []
-    },
-    {
-      id: 'module-b7-2',
-      title: 'Module B7.2: Adversarial Self-Audit & Defense',
-      description: 'Auditing your project from an external reviewer perspective, documenting limitations honestly.',
-      lessons: []
-    },
-    {
-      id: 'module-b7-3',
-      title: 'Module B7.3: The Honest Portfolio & Engineering Bridge',
-      description: 'Publishing verifiable artifacts, knowing when NOT to vibe code, and progressing to the Deep Engineer tracks.',
-      lessons: []
-    }
-  ]
-};
+export { trackB3, trackB4, trackB5, trackB6, trackB7 };
 
 export const ALL_BUILDER_TRACKS: Track[] = [
   trackB0,
@@ -2125,11 +1963,16 @@ export const ALL_BUILDER_TRACKS: Track[] = [
   trackB6,
   trackB7
 ];
+export const BUILDER_TRACKS = ALL_BUILDER_TRACKS;
 
 export function getBuilderTrack(id: string): Track | undefined {
-  const normalized = id.toLowerCase().replace('track-', '').replace('trackb', '').replace('b', '');
+  const clean = id.toLowerCase().trim();
+  const normalizedNum = clean
+    .replace(/^track-?/, '')
+    .replace(/^builder-?/, '')
+    .replace(/^b/, '');
   return ALL_BUILDER_TRACKS.find(t => {
     const tNum = t.id.replace('builder-', '');
-    return t.id === id || tNum === normalized;
+    return t.id === clean || String(t.trackNumber).toLowerCase() === clean || tNum === normalizedNum;
   });
 }

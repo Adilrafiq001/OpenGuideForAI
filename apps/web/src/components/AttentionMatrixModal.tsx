@@ -113,9 +113,9 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
               role="tab"
               aria-selected={activeHead === idx}
               onClick={() => setActiveHead(idx)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-mono border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 activeHead === idx
-                  ? 'bg-[var(--color-accent)] text-black font-bold border-transparent shadow-md'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-primary)] font-bold border-transparent shadow-md'
                   : 'bg-[var(--color-primary)] border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
             >
@@ -140,7 +140,7 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
               onChange={(e) => setTemperature(parseFloat(e.target.value))}
               className="w-24 accent-[var(--color-accent)] cursor-pointer"
             />
-            <span className="font-bold text-[var(--color-accent)]">{temperature.toFixed(1)}</span>
+            <span className="font-bold tabular-nums text-[var(--color-accent)]">{temperature.toFixed(1)}</span>
           </div>
         </div>
 
@@ -165,7 +165,9 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
                     return (
                       <td key={kIdx} className="p-1">
                         <div
-                          className="h-8 w-12 rounded-lg flex items-center justify-center font-mono text-[10px] text-white font-bold transition-all shadow-sm"
+                          className={`h-8 w-12 rounded-lg flex items-center justify-center font-mono text-[10px] tabular-nums font-bold transition-all shadow-sm ${
+                            alpha > 0.45 ? 'text-white' : 'text-[var(--color-text-primary)]'
+                          }`}
                           style={{ backgroundColor: `rgba(16, 185, 129, ${alpha})` }}
                           title={`Attention(Q=${qTok}, K=${kTok}) = ${(weight * 100).toFixed(1)}%`}
                         >

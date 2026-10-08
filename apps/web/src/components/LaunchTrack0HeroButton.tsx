@@ -38,9 +38,11 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({
     setResetKey((k) => k + 1);
   }, []);
 
-  // Guarantee clean resting state upon route transition or return
+  // Guarantee clean resting state upon route transition or return via effect cleanup
   useEffect(() => {
-    setIsChecked(true);
+    return () => {
+      setIsChecked(true);
+    };
   }, [location.key]);
 
   useEffect(() => {

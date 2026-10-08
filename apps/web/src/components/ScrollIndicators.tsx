@@ -33,7 +33,7 @@ export const ScrollProgressBar: React.FC = () => {
       className="fixed top-0 left-0 right-0 h-[2.5px] z-[120] pointer-events-none origin-left"
       style={{
         transform: 'scaleX(0)',
-        background: 'linear-gradient(90deg, var(--color-accent) 0%, #38bdf8 50%, #a855f7 100%)',
+        background: 'var(--color-accent)',
         boxShadow: '0 0 10px var(--color-accent)',
         willChange: 'transform'
       }}
@@ -85,12 +85,12 @@ export const ScrollToTopButton: React.FC = () => {
     >
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] backdrop-blur-xl shadow-lg hover:shadow-xl text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer hover:border-[var(--color-accent)]/50 active:scale-95"
+        className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] shadow-lg hover:shadow-xl text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer hover:border-[var(--color-accent)]/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         title="Smooth scroll to top"
         aria-label="Scroll to top of page"
       >
         <ArrowUp size={13} className="text-[var(--color-accent)] group-hover:-translate-y-0.5 transition-transform" />
-        <span ref={percentRef} className="font-semibold">0%</span>
+        <span ref={percentRef} className="font-semibold tabular-nums">0%</span>
         <span className="opacity-40">|</span>
         <span>Top</span>
       </button>

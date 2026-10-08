@@ -660,7 +660,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                       {/* Ingestion Batch Log */}
                       {selectedTable === 'ingestion' && (
                         <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-[var(--color-primary)]/40">
-                          <div className="p-3 bg-[var(--color-primary)]/80 border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)] flex items-center justify-between">
+                          <div className="p-3 bg-[var(--color-primary)] border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)] flex items-center justify-between">
                             <span>SELECT * FROM ingestion_batch_log WHERE timestamp BETWEEN '03:00' AND '03:15';</span>
                             <span className="text-[10px] text-cyan-400">4 Records</span>
                           </div>
@@ -718,7 +718,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                       {/* Vector Embeddings Index */}
                       {selectedTable === 'vectors' && (
                         <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-[var(--color-primary)]/40">
-                          <div className="p-3 bg-[var(--color-primary)]/80 border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)]">
+                          <div className="p-3 bg-[var(--color-primary)] border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)]">
                             <span>SELECT chunk_id, source_doc, latent_vector_4d, is_quarantined FROM vector_index;</span>
                           </div>
                           <div className="overflow-x-auto">
@@ -786,7 +786,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                       {/* Board Registry */}
                       {selectedTable === 'board' && (
                         <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-[var(--color-primary)]/40">
-                          <div className="p-3 bg-[var(--color-primary)]/80 border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)]">
+                          <div className="p-3 bg-[var(--color-primary)] border-b border-[var(--color-border)] font-bold text-[var(--color-text-primary)]">
                             <span>SELECT executive, title, clearance, nexus_syndicate_ties FROM corporate_registry;</span>
                           </div>
                           <div className="overflow-x-auto">

@@ -34,9 +34,11 @@ export const DeepAiEngineerHeroButton: React.FC<DeepAiEngineerHeroButtonProps> =
     setIsActive(false);
   }, []);
 
-  // Guarantee idle resting state upon route transition
+  // Guarantee idle resting state upon route transition via effect cleanup
   useEffect(() => {
-    resetToIdle();
+    return () => {
+      resetToIdle();
+    };
   }, [location.key, resetToIdle]);
 
   useEffect(() => {
@@ -84,11 +86,37 @@ export const DeepAiEngineerHeroButton: React.FC<DeepAiEngineerHeroButtonProps> =
       >
         <span className="sr-only">Deep AI Engineer</span>
         
-        <div className="deep-engineer-content">
-          <span className="deep-engineer-prompt" aria-hidden="true">
-            <Terminal size={15} className="text-cyan-400 shrink-0" />
-          </span>
+        {/* Left Hardware Port with Titanium Accent & Terminal Glyph */}
+        <div className="deep-engineer-hardware-port" aria-hidden="true">
+          <div className="deep-engineer-port-case">
+            <Terminal size={14} className="deep-engineer-port-icon" />
+          </div>
+          {/* Glowing Electric Cyan Filament Separator */}
+          <div className="deep-engineer-filament-line" />
+        </div>
 
+        {/* Electronic Circuit Trace Graphic */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 32 52"
+          height={52}
+          width={32}
+          className="deep-engineer-circuit-trace"
+          aria-hidden="true"
+        >
+          <path
+            stroke="#38bdf8"
+            strokeWidth={1.2}
+            strokeLinecap="round"
+            strokeOpacity={0.65}
+            d="M2 26 H12 L18 16 H24 M12 26 L18 36 H24"
+          />
+          <circle cx="24" cy="16" r="1.5" fill="#38bdf8" />
+          <circle cx="24" cy="36" r="1.5" fill="#38bdf8" />
+        </svg>
+
+        <div className="deep-engineer-content">
           <span className="deep-engineer-label">
             {language === 'ur' ? (
               'ٹریک 0 شروع کریں'

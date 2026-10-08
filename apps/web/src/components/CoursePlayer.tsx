@@ -113,8 +113,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
   // Synchronize track.id and search parameters (module & lesson deep-linking)
   const activeLessonKey = `${track.id}-${resolvedModIdx}-${resolvedLesIdx}`;
-
-  useEffect(() => {
+  const [prevLessonKey, setPrevLessonKey] = useState(activeLessonKey);
+  if (prevLessonKey !== activeLessonKey) {
+    setPrevLessonKey(activeLessonKey);
     setCurrentModuleIdx(resolvedModIdx);
     setCurrentLessonIdx(resolvedLesIdx);
     const target = track.modules[resolvedModIdx]?.lessons[resolvedLesIdx] || track.modules[0]?.lessons[0];
@@ -128,7 +129,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
       setCopiedSolution(false);
       setIsChallengePassed(completedLessonIds.includes(target.id));
     }
-  }, [activeLessonKey, resolvedModIdx, resolvedLesIdx, track, completedLessonIds]);
+  }
 
   useEffect(() => {
     clearLogs();
@@ -596,7 +597,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     ) : (
                       <>
                         {/* Expected Console Output Target */}
-                        <div className="p-3 rounded-xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] space-y-2 text-xs font-mono">
+                        <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] shadow-xs space-y-2 text-xs font-mono">
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-secondary)] font-bold">
                               Target Output Specification:
@@ -839,7 +840,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 <button
                   data-testid="ide-toggle-abby-btn"
                   onClick={() => window.dispatchEvent(new CustomEvent('openguide:toggle-abby'))}
-                  className="px-2 py-0.5 rounded text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-2 py-0.5 rounded text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
                   title="Ask Bluee AI Assistant"
                 >
                   <Cpu size={13} className="text-cyan-400" />
@@ -853,7 +854,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 >
                   <button
                     onClick={handleResetCode}
-                    className="px-2 py-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                    className="px-2 py-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                   >
                     <ArrowCounterClockwise size={12} />
                     <span>{t('ide_reset_code')}</span>

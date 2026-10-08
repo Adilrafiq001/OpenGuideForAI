@@ -128,7 +128,7 @@ test.describe('Builder Path Milestone 2 — Track B0 Playable Slice & Sandboxed 
           // Attempt cross-origin access to parent document
           void window.parent.document;
           return false; // Did not throw -> vulnerability!
-        } catch (err: any) {
+        } catch {
           return true; // Threw SecurityError -> isolated!
         }
       });
@@ -139,7 +139,7 @@ test.describe('Builder Path Milestone 2 — Track B0 Playable Slice & Sandboxed 
         try {
           window.localStorage.setItem('og_exploit_test', 'leaked');
           return false; // Did not throw -> vulnerability!
-        } catch (err: any) {
+        } catch {
           return true; // Threw SecurityError -> isolated!
         }
       });

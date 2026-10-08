@@ -11,7 +11,7 @@
 .newtons-cradle {
   --uib-size: 56px;
   --uib-speed: 1.2s;
-  --uib-color: var(--color-accent, #45f8f8);
+  --uib-color: var(--color-accent);
   position: relative;
   display: flex;
   align-items: center;
@@ -79,5 +79,13 @@
   100% {
     transform: rotate(0deg);
     animation-timing-function: linear;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newtons-cradle__dot:first-child,
+  .newtons-cradle__dot:last-child {
+    animation: none;
+    opacity: 0.8;
   }
 }

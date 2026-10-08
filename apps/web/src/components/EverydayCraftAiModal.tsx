@@ -92,17 +92,16 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
   const [isExecutingPython, setIsExecutingPython] = useState(false);
   const [pythonOutput, setPythonOutput] = useState<string | null>(null);
 
-  // Synchronize selected role when opened without cascading effect renders
-  useEffect(() => {
-    if (isOpen && initialRole) {
-      const match = ALL_SPECTRUM_PROFILES.find(p => p.id === initialRole || p.tier === initialRole);
-      if (match) {
-        setSelectedProfileId(match.id);
-        setSelectedDomainFilter(match.tier);
-        setMobileShowDetail(true);
-      }
+  const [prevRole, setPrevRole] = useState(initialRole);
+  if (prevRole !== initialRole) {
+    setPrevRole(initialRole);
+    const match = ALL_SPECTRUM_PROFILES.find(p => p.id === initialRole || p.tier === initialRole);
+    if (match) {
+      setSelectedProfileId(match.id);
+      setSelectedDomainFilter(match.tier);
+      setMobileShowDetail(true);
     }
-  }, [isOpen, initialRole]);
+  }
 
   // Global keyboard shortcut '/' to focus search & body scroll lock
   useEffect(() => {
@@ -315,7 +314,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                         }
                       }}
                       placeholder="Search trade, dilemma, or formula..."
-                      className="w-full pl-9 pr-14 py-2 text-xs rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)] shadow-inner"
+                      className="w-full pl-9 pr-14 py-2 text-xs rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus:border-[var(--color-accent)] placeholder:text-[var(--color-text-secondary)] shadow-inner"
                     />
                     <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
                       {searchQuery ? (
@@ -383,7 +382,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                           setSearchQuery('');
                           setSelectedDomainFilter('all');
                         }}
-                        className="mt-3 px-3 py-1 rounded-lg bg-[var(--color-secondary)] text-[11px] font-semibold hover:bg-[var(--color-secondary)]/80 cursor-pointer"
+                        className="mt-3 px-3 py-1 rounded-lg bg-[var(--color-secondary)] text-[11px] font-semibold hover:bg-[var(--color-tertiary)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                       >
                         Reset Search
                       </button>
@@ -758,7 +757,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                   {LLM_PLAIN_ENGLISH_GUIDE.samplePrompts.map((sample, idx) => (
                     <div 
                       key={idx}
-                      className="p-3.5 rounded-xl bg-[var(--color-secondary)]/80 border border-[var(--color-border)] hover:border-emerald-500/50 transition-all flex flex-col justify-between"
+                      className="p-3.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-emerald-500/50 transition-all flex flex-col justify-between shadow-xs"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1.5">

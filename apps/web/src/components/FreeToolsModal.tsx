@@ -812,7 +812,7 @@ export const FreeToolsModal: React.FC<FreeToolsModalProps> = ({
                     )}
 
                     {step.note && (
-                      <div className="ml-8 p-2.5 rounded-lg bg-[var(--color-primary)]/70 border border-[var(--color-border)] text-[11px] text-[var(--color-text-secondary)] flex items-start gap-2">
+                      <div className="ml-8 p-2.5 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] shadow-xs text-[11px] text-[var(--color-text-secondary)] flex items-start gap-2">
                         <Info size={13} className="text-amber-400 shrink-0 mt-0.5" />
                         <span>{step.note}</span>
                       </div>

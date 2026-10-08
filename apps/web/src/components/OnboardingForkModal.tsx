@@ -104,7 +104,7 @@ export function OnboardingForkModal({ isOpen, onClose, onSelectPath }: Onboardin
           </div>
 
           {/* Mode Switch Tabs */}
-          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-primary)]/80 border border-[var(--color-border)] mb-8">
+          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] mb-8 shadow-inner">
             <button
               onClick={() => setActiveTab('fork')}
               className={`flex-1 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${

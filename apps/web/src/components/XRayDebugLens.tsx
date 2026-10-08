@@ -62,14 +62,19 @@ export function XRayDebugLens({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="xray-modal-title"
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/80 backdrop-blur-md"
+          className="absolute inset-0 bg-black/85 backdrop-blur-md"
         />
 
         {/* Hacker-Mode Terminal HUD Window */}
@@ -79,14 +84,14 @@ export function XRayDebugLens({
           exit={{ scale: 0.94, opacity: 0, y: 20 }}
           transition={{ type: 'spring', stiffness: 280, damping: 24 }}
           data-testid="xray-modal-hud"
-          className="relative w-full max-w-4xl max-h-[85vh] rounded-3xl bg-neutral-950/95 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden font-mono text-xs z-10"
+          className="relative w-full max-w-4xl max-h-[85vh] rounded-3xl bg-neutral-950 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden font-mono text-xs z-10"
         >
           {/* Header Bar */}
           <div className="px-6 py-4 border-b border-emerald-500/20 bg-emerald-950/20 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
               <div>
-                <span className="font-bold text-white tracking-wider uppercase text-sm">
+                <span id="xray-modal-title" className="font-bold text-white tracking-wider uppercase text-sm">
                   X-Ray Debug Lens // Runtime Telemetry
                 </span>
                 <span className="text-[10px] text-emerald-400/70 block">
@@ -105,8 +110,9 @@ export function XRayDebugLens({
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
                 title="Close X-Ray Lens (Esc)"
+                aria-label="Close X-Ray Lens"
               >
                 <X size={18} />
               </button>
@@ -114,7 +120,7 @@ export function XRayDebugLens({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap items-center gap-2 px-4 sm:px-6 py-3 border-b border-white/5 bg-black/40 shrink-0">
+          <div role="tablist" aria-label="X-Ray Tabs" className="flex flex-wrap items-center gap-2 px-4 sm:px-6 py-3 border-b border-white/5 bg-black/40 shrink-0">
             {[
               { id: 'telemetry' as const, label: 'Performance & Heap', icon: Cpu },
               { id: 'react' as const, label: 'Agent Flow DAG', icon: GitFork },
@@ -127,8 +133,10 @@ export function XRayDebugLens({
               return (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
                     isActive
                       ? 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-bold shadow-sm'
                       : 'border border-transparent text-neutral-400 hover:text-white hover:bg-white/5'
@@ -154,7 +162,7 @@ export function XRayDebugLens({
                       <span>Execution Latency</span>
                       <Clock size={16} className="text-emerald-400" />
                     </div>
-                    <div className="text-2xl font-bold text-white">
+                    <div className="text-2xl font-bold tabular-nums text-white">
                       {telemetry.lastDurationMs} <span className="text-xs text-emerald-400">ms</span>
                     </div>
                     <div className="text-[10px] text-emerald-400/80">
@@ -168,7 +176,7 @@ export function XRayDebugLens({
                       <span>WASM Memory Heap</span>
                       <Database size={16} className="text-cyan-400" />
                     </div>
-                    <div className="text-2xl font-bold text-white">
+                    <div className="text-2xl font-bold tabular-nums text-white">
                       {telemetry.memoryMb.toFixed(1)} <span className="text-xs text-cyan-400">MB</span>
                     </div>
                     <div className="text-[10px] text-cyan-400/80">

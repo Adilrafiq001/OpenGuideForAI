@@ -28,6 +28,7 @@ import { track4 } from '../data/track4';
 import { track5 } from '../data/track5';
 import { track6 } from '../data/track6';
 import { track7 } from '../data/track7';
+import { BUILDER_TRACKS } from '../data/builderTracks';
 import { THEMES_DATA } from '../data/themesData';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore, type SupportedLanguage } from '../store/useLanguageStore';
@@ -37,9 +38,10 @@ interface CommandPaletteModalProps {
   onClose: () => void;
   onOpenThemes?: () => void;
   onOpenDemo?: () => void;
+  onOpenForwardEngineer?: () => void;
 }
 
-export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThemes, onOpenDemo }: CommandPaletteModalProps) {
+export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThemes, onOpenDemo, onOpenForwardEngineer }: CommandPaletteModalProps) {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
@@ -48,10 +50,17 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
   const { setTheme } = useSettingsStore();
   const { setLanguage } = useLanguageStore();
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (prevIsOpen !== isOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 
@@ -120,6 +129,43 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
         });
       });
     });
+
+    // Builder Path (Tracks B0 - B7) & Forward Deployed AI Engineer Labs
+    BUILDER_TRACKS.forEach((bTrack) => {
+      list.push({
+        id: `track-${bTrack.id}`,
+        title: `${bTrack.title}`,
+        subtitle: `Builder Track ${bTrack.id.toUpperCase()}: ${bTrack.badge || 'Agentic Builder'} • Briefing`,
+        category: 'Track',
+        icon: Workflow,
+        action: () => { onClose(); navigate(`/track/${bTrack.id}/intro`); }
+      });
+
+      bTrack.modules.forEach((mod, mIdx) => {
+        mod.lessons.forEach((les, lIdx) => {
+          list.push({
+            id: `builder-lab-${les.id}`,
+            title: les.title,
+            subtitle: `Builder Track ${bTrack.id.toUpperCase()} • ${mod.title}`,
+            category: 'Lab',
+            icon: BookOpen,
+            action: () => { onClose(); navigate(`/track/${bTrack.id}/engine?module=${mIdx}&lesson=${lIdx}`); }
+          });
+        });
+      });
+    });
+
+    // Forward Deployed AI Engineer Blueprint Tools
+    if (onOpenForwardEngineer) {
+      list.push({
+        id: 'tool-forward-engineer',
+        title: 'Forward Deployed AI Engineering Blueprint',
+        subtitle: 'ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack • Secret Hygiene',
+        category: 'Tool',
+        icon: Workflow,
+        action: () => { onClose(); onOpenForwardEngineer(); }
+      });
+    }
 
     // Interactive Labs & Tools
     list.push({
@@ -228,7 +274,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
     });
 
     return list;
-  }, [navigate, onClose, setTheme, setLanguage, onOpenDemo]);
+  }, [navigate, onClose, setTheme, setLanguage, onOpenDemo, onOpenForwardEngineer]);
 
   const filteredItems = useMemo(() => {
     if (!query.trim()) return items.slice(0, 16);
