@@ -107,7 +107,7 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
     await expect(page.locator('h1:has-text("Spatial Holodeck")').first()).toBeVisible({ timeout: 15000 });
 
     // Switch to WebXR Spatial Gateway tab
-    const webxrTab = page.locator('button:has-text("WebXR Spatial Gateway")').first();
+    const webxrTab = page.locator('#tab-webxr, button:has-text("WebXR Gateway")').first();
     await expect(webxrTab).toBeVisible({ timeout: 10000 });
     await webxrTab.click();
 
@@ -119,7 +119,7 @@ test.describe('OpenGuide Universal Compatibility & Cross-Platform Suite', () => 
     // Verify Simulator HUD rendered
     const simViewport = page.locator('[data-testid="xr-simulator-viewport"]').first();
     await expect(simViewport).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('text=HARDWARE EMULATION ACTIVE').first()).toBeVisible();
+    await expect(page.locator('text=SPATIAL OPTICAL EMULATION ACTIVE').first()).toBeVisible();
 
     // Switch between Meta Quest 3 and Apple Vision Pro profiles
     const visionProTab = page.locator('[data-testid="profile-visionpro-btn"]').first();

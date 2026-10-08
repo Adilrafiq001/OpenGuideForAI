@@ -111,19 +111,19 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
   }, [currentThemeInfo.accent]);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-4 md:px-6 xl:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 xl:gap-3 flex-nowrap backdrop-blur-xl transition-all duration-300 max-w-full ${
+    <header className={`fixed top-0 left-0 right-0 z-[100] px-3 sm:px-4 lg:px-2.5 xl:px-3 py-2 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-2 xl:gap-2 flex-nowrap backdrop-blur-xl transition-all duration-300 max-w-full ${
       isScrolled 
         ? 'bg-[var(--color-primary)]/92 border-b border-[var(--color-border)] shadow-md shadow-black/5 dark:shadow-black/25 backdrop-blur-2xl' 
         : 'bg-[var(--color-primary)]/75 border-b border-[var(--color-border)]/50 backdrop-blur-xl'
     }`}>
-      <div className="flex items-center gap-2 xl:gap-4 min-w-0 shrink-0">
+      <div className="flex items-center gap-1.5 xl:gap-2.5 min-w-0 shrink-0">
         {/* Brand Logo with OG Monogram & Perfectly Aligned AI Studio Badge */}
         <a href="/" className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-xl shrink-0">
           <BrandLogo size="md" />
         </a>
           
           {/* Desktop Streamlined Navigation with Unified Tactile Pill Controls */}
-          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1 2xl:gap-1.5 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
             {/* Pathways Pill */}
             <Tooltip
               position="bottom"
@@ -132,7 +132,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <a 
                 href="#pathways" 
-                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
+                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
               >
                 <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>Pathways</span>
@@ -147,11 +147,11 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <a 
                 href="#tasks" 
-                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
+                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
               >
                 <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>Tasks</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">57</span>
+                <span className="hidden 2xl:inline px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">57</span>
               </a>
             </Tooltip>
 
@@ -166,7 +166,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 id="nav-tracks-menu"
                 aria-label="Select Learning Track"
                 onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
                 aria-expanded={isTracksMenuOpen}
                 aria-haspopup="true"
               >
@@ -234,7 +234,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <a 
                 href="#curriculum" 
-                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
+                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
               >
                 <Layers size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>{t('nav_curriculum')}</span>
@@ -243,7 +243,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
 
             {/* Unified Spatial & Holodeck Group Dropdown */}
             <div 
-              className="relative hidden lg:block"
+              className="relative hidden xl:block"
               onMouseEnter={() => setIsSpatialMenuOpen(true)}
               onMouseLeave={() => setIsSpatialMenuOpen(false)}
             >
@@ -252,7 +252,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 data-testid="header-spatial-group-btn"
                 aria-label="Spatial AR & Holodeck Controls"
                 onClick={() => setIsSpatialMenuOpen(!isSpatialMenuOpen)}
-                className={`inline-flex items-center gap-1.5 px-3 h-9 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
+                className={`inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border text-[11px] xl:text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
                   isSpatialModeActive
                     ? 'bg-cyan-500/15 border-cyan-400 text-cyan-400 shadow-cyan-500/20 shadow-sm'
                     : 'border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -261,7 +261,8 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 aria-haspopup="true"
               >
                 <Glasses size={13} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400'} />
-                <span>Spatial & Holodeck</span>
+                <span className="hidden 2xl:inline">Spatial & Holodeck</span>
+                <span className="2xl:hidden">Spatial</span>
                 <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
                   {isSpatialModeActive ? 'ACTIVE' : 'XR'}
                 </span>
@@ -456,19 +457,20 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
 
             {/* Hover Reveal Dropdown: Explore Labs & Ecosystem Pill */}
             <div 
-              className="relative block"
+              className="relative hidden xl:block"
               onMouseEnter={() => setIsExploreOpen(true)}
               onMouseLeave={() => setIsExploreOpen(false)}
             >
               <button 
                 id="nav-labs-menu"
                 onClick={() => setIsExploreOpen(!isExploreOpen)}
-                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
                 aria-expanded={isExploreOpen}
                 aria-haspopup="true"
               >
                 <Sparkles size={13} className="text-[var(--color-accent)] opacity-80" />
-                <span>{t('nav_labs_science')}</span>
+                <span className="hidden 2xl:inline">{t('nav_labs_science')}</span>
+                <span className="2xl:hidden">Labs</span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -640,7 +642,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
         </div>
 
         {/* Right High-Craft Unified Dock */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 xl:gap-1.5 shrink-0">
           {/* 1. Global Search Command Pill */}
           <Tooltip
             position="bottom"
@@ -651,17 +653,17 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             <button 
               onClick={() => onOpenCommandPalette?.()}
               data-testid="header-command-palette-btn"
-              className="hidden md:flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
+              className="hidden md:flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full bg-[var(--color-secondary)]/80 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-sm cursor-pointer active:scale-[0.98] group"
               aria-label="Open Studio Search Palette"
             >
               <Search size={13} className="text-[var(--color-accent)] opacity-80 group-hover:opacity-100 transition-opacity" />
-              <span className="hidden lg:inline text-xs">Search</span>
+              <span className="hidden 2xl:inline text-xs">Search</span>
               <kbd className="hidden sm:inline px-1.5 py-0.5 rounded text-[9px] font-mono bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">⌘K</kbd>
             </button>
           </Tooltip>
 
           {/* 2. Studio Utilities Segmented Capsule (Tour & Demo) */}
-          <div className="hidden 2xl:flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
+          <div className="hidden xl:flex items-center rounded-full bg-[var(--color-secondary)]/80 border border-[var(--color-border)] p-0.5 shadow-sm">
             <Tooltip
               position="bottom"
               content="Studio Tour"
@@ -670,7 +672,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               <button 
                 onClick={() => startAppTour(false)}
                 data-testid="header-quick-tour-btn"
-                className="flex items-center gap-1.5 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                className="flex items-center gap-1 px-2 h-7 xl:h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
                 aria-label="Start Quick Studio Tour"
               >
                 <Compass size={13} className="text-[var(--color-accent)]" />
@@ -686,7 +688,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               <button 
                 onClick={() => onOpenDemo?.()}
                 data-testid="header-interactive-demo-btn"
-                className="flex items-center gap-1.5 px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
+                className="flex items-center gap-1 px-2 h-7 xl:h-8 rounded-full hover:bg-[var(--color-primary)] transition-all text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer active:scale-[0.98]"
                 aria-label="Open Studio Interactive Flow Demo"
               >
                 <Play size={12} className="text-[var(--color-accent)]" />
@@ -751,14 +753,14 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <button 
                 onClick={() => navigate('/track/0/intro')}
-                className="group px-4 h-9 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-black/10 hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] cursor-pointer shrink-0"
+                className="group px-3 xl:px-3.5 h-8 xl:h-8.5 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-black/10 hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] cursor-pointer shrink-0"
                 style={{
                   backgroundColor: currentThemeInfo.accent,
                   color: accentTextColor
                 }}
               >
                 <span>{t('nav_launch_track0')}</span>
-                <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                <ChevronRight size={13} className="transition-transform group-hover:translate-x-0.5" />
               </button>
             </Tooltip>
           </div>

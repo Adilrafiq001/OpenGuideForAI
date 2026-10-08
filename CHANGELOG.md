@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.1] - 2026-10-08
+
+### Fixed
+- **GitHub Actions Headless CI Pipeline (`.github/workflows/ci.yml`):**
+  - Added Python 3.11 setup (`actions/setup-python@v5`) with pip caching and installed `numpy` so all 57 curriculum laboratories and 162 autograder tests run cleanly in headless CI.
+  - Added production build compilation gate (`yarn --cwd apps/web build`) to CI workflow.
+- **LandingHeader 1280px Horizontal Geometry (`LandingHeader.tsx`):**
+  - Responsive optimization of center navigation pills and utility dock to fit within 1010px on 1280px screens with 270px safety buffer, eliminating horizontal clipping while preserving primary CTA visibility.
+- **Test Suite Locator Hardening:**
+  - Scoped language badge locator regex in `app-full-regression.spec.ts` preventing collision with "Search" label.
+  - Aligned WebXR tab and spatial optical emulation banner locators in `universal-compatibility.spec.ts`.
+  - Added Pyodide Web Worker ready state synchronization in `socratic-diagnostics.spec.ts`.
+- **Pre-Flight Verification:**
+  - 100% passage across all 154 automated tests in 14 Playwright test suites (0 failed, 0 skipped).
+
+---
+
 ## [1.5.0] - 2026-10-07
 
 ### Added

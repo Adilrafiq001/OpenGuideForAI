@@ -190,7 +190,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
       expect(htmlLang).toBe('ur');
 
       // Verify Urdu translation rendered on badge/headings
-      await expect(page.locator('text=UR').first()).toBeVisible();
+      await expect(langBtn.locator('text=/^ur$/i')).toBeVisible();
 
       // Verify Track 0 button has Urdu text
       const urTrack0Btn = page.locator('text=مشن بریفنگ میں داخل ہوں').or(page.locator('text=ٹریک 0 شروع کریں')).first();
@@ -207,7 +207,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
 
       const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
       expect(htmlDir).toBe('rtl');
-      await expect(page.locator('text=AR').first()).toBeVisible();
+      await expect(langBtn.locator('text=/^ar$/i')).toBeVisible();
     }
 
     // 3. Switch to Spanish (Español) - verify LTR returns
@@ -220,7 +220,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
 
       const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
       expect(htmlDir).toBe('ltr');
-      await expect(page.locator('text=ES').first()).toBeVisible();
+      await expect(langBtn.locator('text=/^es$/i')).toBeVisible();
     }
 
     // 4. Switch back to English (English)
@@ -233,7 +233,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
 
       const htmlDir = await page.evaluate(() => document.documentElement.getAttribute('dir'));
       expect(htmlDir).toBe('ltr');
-      await expect(page.locator('text=EN').first()).toBeVisible();
+      await expect(langBtn.locator('text=/^en$/i')).toBeVisible();
     }
   });
 

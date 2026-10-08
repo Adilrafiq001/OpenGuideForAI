@@ -125,17 +125,17 @@ test.describe('Phase F0: Pedagogical Socratic Diagnostic Engine (Anti-Tautologic
   });
 
   test('16. LIVE BROWSER: Starter code on lesson-4-1-2 triggers Socratic Subspace Decomposition card', async ({ page }) => {
-    await page.goto('http://localhost:5173/track/4?module=0&lesson=1');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/track/4?module=0&lesson=1', { waitUntil: 'domcontentloaded' });
 
-    // Click Run Code with starter code (split_heads returns [])
+    // Wait until Pyodide is fully initialized and run button is enabled
     const runBtn = page.locator('button[data-testid="run-code-button"]');
-    await expect(runBtn).toBeVisible({ timeout: 15000 });
+    await expect(runBtn).toBeVisible({ timeout: 20000 });
+    await expect(runBtn).toBeEnabled({ timeout: 45000 });
     await runBtn.click();
 
     // Verify Syntax Doctor card appears with exact Socratic card title
     const doctorCard = page.locator('[data-testid="syntax-doctor-card"]');
-    await expect(doctorCard).toBeVisible({ timeout: 15000 });
+    await expect(doctorCard).toBeVisible({ timeout: 30000 });
     await expect(doctorCard).toContainText('Socratic Transformer Lens: Empty Subspace Decomposition');
     await expect(doctorCard).toContainText('d_k = d_model // num_heads');
   });
