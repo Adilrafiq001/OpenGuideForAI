@@ -21,7 +21,7 @@ import {
   Brain,
   Download,
   Search,
-  Sparkles,
+  SlidersHorizontal,
   Boxes
 } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -162,7 +162,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       title: 'Fine-Tuning, LoRA & Adaptation',
       badge: 'LoRA & DPO',
       desc: 'Rank decomposition, QLoRA 4-bit NormalFloat & alignment',
-      icon: Sparkles,
+      icon: SlidersHorizontal,
       path: '/track/5/intro',
       color: '#ec4899'
     },

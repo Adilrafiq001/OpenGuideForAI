@@ -18,12 +18,11 @@ import {
   Cpu,
   Play,
   Search,
-  Sparkles,
+  Code2,
+  SlidersHorizontal,
   Boxes,
   Target,
-  CheckSquare,
-  Keyboard as KeyboardIcon,
-  Hand
+  CheckSquare
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -50,7 +49,7 @@ interface LandingHeaderProps {
 }
 
 const ALL_BUILDER_TRACKS_NAV = [
-  { id: 'b0', title: 'Track B0: Say It', desc: 'Zero to working screen from plain English description', path: '/builder/0/intro', icon: Sparkles, badge: 'SAY IT' },
+  { id: 'b0', title: 'Track B0: Say It', desc: 'Zero to working screen from plain English description', path: '/builder/0/intro', icon: Code2, badge: 'SAY IT' },
   { id: 'b1', title: 'Track B1: Build It', desc: 'Specs not vibes, iteration loops & escaping fix loops', path: '/builder/1/intro', icon: Terminal, badge: 'SPECS' },
   { id: 'b2', title: 'Track B2: Understand It', desc: 'App anatomy in plain words, Git safety & reading diffs', path: '/builder/2/intro', icon: Layers, badge: 'CODE & GIT' },
   { id: 'b3', title: 'Track B3: Ship It', desc: 'Free hosting, preview vs prod, settings & zero-cost DBs', path: '/builder/3/intro', icon: Zap, badge: 'HOSTING' },
@@ -66,7 +65,7 @@ const ALL_TRACKS_NAV = [
   { id: '2', title: 'Track 2: Agents', desc: 'Sliding-window chunking, ReAct loops & FastMCP tool calling', path: '/track/2/intro', icon: Cpu, badge: 'Applied AI' },
   { id: '3', title: 'Track 3: Evals', desc: 'LLM-as-a-Judge rubrics, OWASP AI Top 10 & canary fuzzing', path: '/track/3/intro', icon: ShieldCheck, badge: 'Production' },
   { id: '4', title: 'Track 4: Frontier Attention', desc: 'Scaled dot-product attention, RoPE, KV-cache & reasoning trees', path: '/track/4/intro', icon: Brain, badge: 'Frontier' },
-  { id: '5', title: 'Track 5: Fine-Tuning & LoRA', desc: 'Low-Rank Adaptation, QLoRA 4-bit NormalFloat & DPO alignment', path: '/track/5/intro', icon: Sparkles, badge: 'Adaptation' },
+  { id: '5', title: 'Track 5: Fine-Tuning & LoRA', desc: 'Low-Rank Adaptation, QLoRA 4-bit NormalFloat & DPO alignment', path: '/track/5/intro', icon: SlidersHorizontal, badge: 'Adaptation' },
   { id: '6', title: 'Track 6: Production MLOps', desc: 'vLLM, PagedAttention block paging & speculative decoding loops', path: '/track/6/intro', icon: Zap, badge: 'Systems' },
   { id: '7', title: 'Track 7: Generative Diffusion', desc: 'DDPM closed-form sampling, CFG vectors & Vision Transformers', path: '/track/7/intro', icon: Boxes, badge: 'Multimodal' },
 ];
@@ -87,11 +86,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
   const { t, language } = useLanguageStore();
   const { 
     isSpatialModeActive, 
-    toggleSpatialMode,
-    isVirtualKeyboardOpen,
-    toggleVirtualKeyboard,
-    isHandTrackingEnabled,
-    toggleHandTracking
+    toggleSpatialMode 
   } = useSpatialStore();
 
   const { currentPath } = usePathStore();
@@ -106,7 +101,6 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isTracksMenuOpen, setIsTracksMenuOpen] = useState(false);
-  const [isSpatialMenuOpen, setIsSpatialMenuOpen] = useState(false);
 
   // Dynamic header elevation state (only updates when crossing threshold, zero per-frame re-renders)
   useEffect(() => {
@@ -161,7 +155,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           >
             {currentPath === 'builder' ? (
               <>
-                <Sparkles size={12} className="text-emerald-400 shrink-0" />
+                <Code2 size={12} className="text-emerald-400 shrink-0" />
                 <span className="truncate">{t('nav_path_builder') || 'Builder'}</span>
               </>
             ) : (
@@ -173,41 +167,9 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             <ChevronDown size={10} className="opacity-60 shrink-0" />
           </button>
         </Tooltip>
-          
-          {/* Desktop Streamlined Navigation with Unified Tactile Pill Controls */}
-          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1 2xl:gap-1.5 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
-            {/* Pathways Pill */}
-            <Tooltip
-              position="bottom"
-              content="Learning Pathways"
-              subtitle="Foundations to autonomous production pipelines"
-            >
-              <a 
-                href="#pathways" 
-                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
-              >
-                <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
-                <span>Pathways</span>
-              </a>
-            </Tooltip>
-
-            {/* Tasks & Labs Pill */}
-            <Tooltip
-              position="bottom"
-              content="Engineering Tasks & Labs"
-              subtitle="57 hands-on in-browser coding tasks across 8 tracks"
-            >
-              <a 
-                href="#tasks" 
-                className="hidden xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
-              >
-                <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
-                <span>Tasks</span>
-                <span className="hidden 2xl:inline px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">57</span>
-              </a>
-            </Tooltip>
-
-            {/* Unified Hover Reveal Dropdown: Tracks (Builder & Engineer) */}
+                  {/* Desktop Streamlined Navigation: 3 Distinct World-Class Groupings */}
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
+            {/* 1. Tracks & Curriculum Dropdown */}
             <div 
               className="relative"
               onMouseEnter={() => setIsTracksMenuOpen(true)}
@@ -217,16 +179,19 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 id="nav-tracks-menu"
                 aria-label="Select Learning Track"
                 onClick={() => setIsTracksMenuOpen(!isTracksMenuOpen)}
-                className="inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
                 aria-expanded={isTracksMenuOpen}
                 aria-haspopup="true"
               >
                 {currentPath === 'builder' ? (
-                  <Sparkles size={13} className="text-emerald-400 opacity-90" />
+                  <Code2 size={13} className="text-emerald-400 opacity-90" />
                 ) : (
                   <Terminal size={13} className="text-[var(--color-accent)] opacity-80" />
                 )}
-                <span>{t('nav_tracks')}</span>
+                <span>{t('nav_tracks')} & Curriculum</span>
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                  8 Tracks
+                </span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isTracksMenuOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -241,7 +206,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                   >
                     <div 
                       style={{ backgroundColor: 'var(--color-secondary)' }}
-                      className="w-96 rounded-2xl border border-[var(--color-border)] p-2.5 shadow-2xl shadow-black/30 dark:shadow-black/70 backdrop-blur-2xl"
+                      className="w-96 rounded-2xl border border-[var(--color-border)] p-2.5 shadow-2xl shadow-black/40 backdrop-blur-2xl"
                     >
                       {/* Pathway Category Tabs inside Dropdown */}
                       <div className="p-1 border-b border-[var(--color-border)] mb-2 flex items-center gap-1">
@@ -254,7 +219,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                               : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
                           }`}
                         >
-                          <Sparkles size={11} />
+                          <Code2 size={11} />
                           <span>Builder Path (B0–B7)</span>
                         </button>
                         <button
@@ -278,7 +243,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         </span>
                       </div>
                       
-                      <div className="p-1 space-y-1 max-h-[65vh] overflow-y-auto">
+                      <div className="p-1 space-y-1 max-h-[50vh] overflow-y-auto">
                         {(tracksMenuTab === 'builder' ? ALL_BUILDER_TRACKS_NAV : ALL_TRACKS_NAV).map(trk => (
                           <button 
                             key={trk.id}
@@ -305,257 +270,61 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                           </button>
                         ))}
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-            
-            {/* Curriculum Pill */}
-            <Tooltip
-              position="bottom"
-              content="Curriculum Architecture"
-              subtitle="Foundations, Vector DBs, RAG, Pyodide & 100% Free Stack"
-            >
-              <a 
-                href="#curriculum" 
-                className="hidden 2xl:inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap select-none"
-              >
-                <Layers size={13} className="text-[var(--color-accent)] opacity-80" />
-                <span>{t('nav_curriculum')}</span>
-              </a>
-            </Tooltip>
 
-            {/* Unified Spatial & Holodeck Group Dropdown */}
-            <div 
-              className="relative hidden xl:block"
-              onMouseEnter={() => setIsSpatialMenuOpen(true)}
-              onMouseLeave={() => setIsSpatialMenuOpen(false)}
-            >
-              <button 
-                id="nav-spatial-menu"
-                data-testid="header-spatial-group-btn"
-                aria-label="Spatial AR & Holodeck Controls"
-                onClick={() => setIsSpatialMenuOpen(!isSpatialMenuOpen)}
-                className={`inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border text-[11px] xl:text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
-                  isSpatialModeActive
-                    ? 'bg-cyan-500/15 border-cyan-400 text-cyan-400 shadow-cyan-500/20 shadow-sm'
-                    : 'border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                }`}
-                aria-expanded={isSpatialMenuOpen}
-                aria-haspopup="true"
-              >
-                <Glasses size={13} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400'} />
-                <span className="hidden 2xl:inline">Spatial & Holodeck</span>
-                <span className="2xl:hidden">Spatial</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                  {isSpatialModeActive ? 'ACTIVE' : 'XR'}
-                </span>
-                <ChevronDown size={12} className={`opacity-60 transition-transform duration-200 ${isSpatialMenuOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {/* Solid 100% Opaque Dropdown Flyout (Zero Overlay Bleed-Through Invariant) */}
-              <AnimatePresence>
-                {isSpatialMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                    transition={{ duration: 0.15, ease: 'easeOut' }}
-                    className="absolute top-full left-0 mt-1.5 w-80 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-2xl p-2.5 z-50 overflow-hidden"
-                  >
-                    <div className="px-2.5 py-1.5 border-b border-[var(--color-border)]/60 mb-1 flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--color-text-secondary)] flex items-center gap-1.5">
-                        <Glasses size={11} className="text-cyan-400" />
-                        Spatial Computing Suite
-                      </span>
-                      <span className="text-[9px] font-mono text-cyan-400 font-semibold">SpaceWalker • Nebula</span>
-                    </div>
-
-                    <div className="space-y-1">
-                      {/* 1. Launch 3D Spatial Holodeck */}
-                      <button
-                        onClick={() => {
-                          setIsSpatialMenuOpen(false);
-                          navigate('/holodeck');
-                        }}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors flex items-center justify-between group cursor-pointer"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors">
-                            <Boxes size={14} />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-cyan-400 transition-colors">
-                              3D Spatial Holodeck
-                            </div>
-                            <div className="text-[10px] text-[var(--color-text-secondary)]">
-                              3D vector space & neural synapses
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400">
-                          /holodeck
-                        </span>
-                      </button>
-
-                      {/* 2. Toggle App-Wide Spatial AR Glasses Mode */}
-                      <button
-                        data-testid="header-spatial-mode-btn"
-                        onClick={() => {
-                          toggleSpatialMode();
-                        }}
-                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
-                          isSpatialModeActive 
-                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
-                            : 'hover:bg-[var(--color-primary)]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                            <Glasses size={14} />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-[var(--color-text-primary)] flex items-center gap-1.5">
-                              <span>Spatial AR Glasses Mode</span>
-                              {isSpatialModeActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />}
-                            </div>
-                            <div className="text-[10px] text-[var(--color-text-secondary)]">
-                              Whole-app 3D floating cockpit & HUD
-                            </div>
-                          </div>
-                        </div>
-                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
-                          isSpatialModeActive ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400'
-                        }`}>
-                          {isSpatialModeActive ? 'ON' : 'Alt+S'}
-                        </span>
-                      </button>
-
-                      {/* 3. Floating Spatial Keyboard Toggle */}
-                      <button
-                        onClick={() => {
-                          toggleVirtualKeyboard();
-                        }}
-                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
-                          isVirtualKeyboardOpen 
-                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
-                            : 'hover:bg-[var(--color-primary)]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                            <KeyboardIcon size={14} />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-[var(--color-text-primary)]">
-                              Spatial Keyboard
-                            </div>
-                            <div className="text-[10px] text-[var(--color-text-secondary)]">
-                              Flat-surface desk snap & in-air typing
-                            </div>
-                          </div>
-                        </div>
-                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
-                          isVirtualKeyboardOpen ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
-                        }`}>
-                          {isVirtualKeyboardOpen ? 'OPEN' : 'OFF'}
-                        </span>
-                      </button>
-
-                      {/* 4. Software Hand Tracking Gestures */}
-                      <button
-                        onClick={() => {
-                          toggleHandTracking();
-                        }}
-                        className={`w-full text-left p-2 rounded-xl transition-colors flex items-center justify-between group cursor-pointer ${
-                          isHandTrackingEnabled 
-                            ? 'bg-cyan-500/15 border border-cyan-500/30' 
-                            : 'hover:bg-[var(--color-primary)]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                            <Hand size={14} />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-[var(--color-text-primary)]">
-                              Camera Hand Tracking
-                            </div>
-                            <div className="text-[10px] text-[var(--color-text-secondary)]">
-                              Optical pinch gesture without glasses camera
-                            </div>
-                          </div>
-                        </div>
-                        <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
-                          isHandTrackingEnabled ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)]'
-                        }`}>
-                          {isHandTrackingEnabled ? 'ON' : 'OFF'}
-                        </span>
-                      </button>
-
-                      {/* 5. AR Glasses Hardware Setup Guide */}
-                      <button
-                        onClick={() => {
-                          setIsSpatialMenuOpen(false);
-                          onOpenARGlassesGuide?.();
-                        }}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors flex items-center justify-between group cursor-pointer border-t border-[var(--color-border)]/60 pt-2.5 mt-1"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 flex items-center justify-center text-[var(--color-accent)]">
-                            <Glasses size={14} />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                              Hardware Setup Guide
-                            </div>
-                            <div className="text-[10px] text-[var(--color-text-secondary)]">
-                              Viture, Xreal, RayNeo, Rokid & Quest
-                            </div>
-                          </div>
-                        </div>
-                        <ChevronRight size={13} className="text-[var(--color-text-secondary)] group-hover:translate-x-0.5 transition-transform" />
-                      </button>
+                      {/* Footer Quick Access to Labs, Curriculum & Pathways */}
+                      <div className="border-t border-[var(--color-border)] mt-2 pt-2 grid grid-cols-3 gap-1">
+                        <button 
+                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#tasks'); }}
+                          className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                        >
+                          <CheckSquare size={11} className="text-[var(--color-accent)]" />
+                          <span>57 Labs</span>
+                        </button>
+                        <button 
+                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#curriculum'); }}
+                          className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                        >
+                          <Layers size={11} className="text-[var(--color-accent)]" />
+                          <span>Curriculum</span>
+                        </button>
+                        <button 
+                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#pathways'); }}
+                          className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                        >
+                          <Compass size={11} className="text-[var(--color-accent)]" />
+                          <span>Pathways</span>
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Credentials / Portfolio link (2xl) */}
-            <div className="hidden 2xl:flex">
-              <Tooltip
-                position="bottom"
-                content="Credentials & Portfolio [SHA-256]"
-                subtitle="Verifiable learning accomplishments & cryptographic certificate"
-              >
-                <button 
-                  onClick={() => navigate('/portfolio')}
-                  className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
-                >
-                  <Award size={13} className="text-[var(--color-accent)] opacity-80" />
-                  <span>Portfolio</span>
-                </button>
-              </Tooltip>
-            </div>
-
-            {/* Hover Reveal Dropdown: Explore Labs & Ecosystem Pill */}
+            {/* 2. Studio & Labs Dropdown (Consolidates Spatial XR, Knight Lab, Pillars, Synapse, Free Stack) */}
             <div 
-              className="relative hidden xl:block"
+              className="relative"
               onMouseEnter={() => setIsExploreOpen(true)}
               onMouseLeave={() => setIsExploreOpen(false)}
             >
               <button 
                 id="nav-labs-menu"
+                data-testid="header-spatial-group-btn"
+                aria-label="Studio, Labs and Spatial Computing"
                 onClick={() => setIsExploreOpen(!isExploreOpen)}
-                className="inline-flex items-center gap-1.5 px-2 xl:px-2.5 h-7.5 xl:h-8 rounded-full border border-[var(--color-border)]/70 bg-[var(--color-secondary)]/60 hover:bg-[var(--color-secondary)] hover:border-[var(--color-border)] text-[11px] xl:text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className={`inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none ${
+                  isSpatialModeActive
+                    ? 'bg-cyan-500/15 border-cyan-400 text-cyan-400 shadow-cyan-500/20 shadow-sm'
+                    : 'border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)]'
+                }`}
                 aria-expanded={isExploreOpen}
                 aria-haspopup="true"
               >
-                <Sparkles size={13} className="text-[var(--color-accent)] opacity-80" />
-                <span className="hidden 2xl:inline">{t('nav_labs_science')}</span>
-                <span className="2xl:hidden">Labs</span>
+                <Glasses size={13} className={isSpatialModeActive ? 'text-cyan-400 animate-pulse' : 'text-cyan-400'} />
+                <span>Studio & Labs</span>
+                <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                  {isSpatialModeActive ? 'XR ON' : 'XR & Labs'}
+                </span>
                 <ChevronDown size={11} className={`transition-transform duration-200 opacity-60 ${isExploreOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -570,42 +339,88 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                   >
                     <div 
                       style={{ backgroundColor: 'var(--color-secondary)' }}
-                      className="w-80 rounded-2xl border border-[var(--color-border)] p-3 shadow-2xl shadow-black/30 dark:shadow-black/70 backdrop-blur-2xl"
+                      className="w-88 rounded-2xl border border-[var(--color-border)] p-3 shadow-2xl shadow-black/40 backdrop-blur-2xl"
                     >
-                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-3 py-1.5 font-bold border-b border-[var(--color-border)] flex items-center justify-between">
-                        <span>{t('nav_labs_science')}</span>
-                        <span className="text-[9px] text-[var(--color-accent)] font-semibold">Specialized Labs</span>
+                      <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-2.5 py-1.5 font-bold border-b border-[var(--color-border)] flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Boxes size={12} className="text-cyan-400" />
+                          Spatial & Applied Science
+                        </span>
+                        <span className="text-[9px] text-[var(--color-accent)] font-semibold">Interactive</span>
                       </div>
                       
-                      <div className="space-y-1 mt-1">
+                      <div className="space-y-1 mt-1.5">
+                        {/* 3D Holodeck */}
                         <button 
                           onClick={() => { setIsExploreOpen(false); navigate('/holodeck'); }}
-                          className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                          className="w-full flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
                         >
                           <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
                             <Glasses size={14} className="text-cyan-400" />
                           </div>
                           <div>
                             <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5">
-                              <span>{t('nav_holodeck')}</span>
-                              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">AR & VR</span>
+                              <span>3D Spatial Holodeck</span>
+                              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">WebXR</span>
                             </div>
                             <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                              Xreal, Viture, RayNeo & WebXR 3D space
+                              Xreal, Viture, RayNeo & 3D space
                             </div>
                           </div>
                         </button>
 
+                        {/* Spatial Mode Toggle */}
+                        <button 
+                          data-testid="header-spatial-mode-btn"
+                          onClick={() => { toggleSpatialMode(); }}
+                          className={`w-full flex items-start gap-3 p-2 rounded-xl transition-colors group ltr:text-left rtl:text-right cursor-pointer ${
+                            isSpatialModeActive ? 'bg-cyan-500/15 border border-cyan-500/30' : 'hover:bg-[var(--color-primary)]'
+                          }`}
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Boxes size={14} className="text-cyan-400" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] flex items-center justify-between">
+                              <span>Spatial AR Glasses Mode</span>
+                              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                                isSpatialModeActive ? 'bg-cyan-400 text-black' : 'bg-[var(--color-primary)] border border-[var(--color-border)] text-cyan-400'
+                              }`}>
+                                {isSpatialModeActive ? 'ACTIVE' : 'Alt+S'}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Whole-app 3D floating cockpit & HUD
+                            </div>
+                          </div>
+                        </button>
+
+                        {/* AR Glasses Guide */}
+                        <button 
+                          onClick={() => { setIsExploreOpen(false); onOpenARGlassesGuide?.(); }}
+                          className="w-full flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <Compass size={14} className="text-[var(--color-accent)]" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              AR Glasses Setup Guide
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Viture, Xreal, RayNeo, Rokid & Quest
+                            </div>
+                          </div>
+                        </button>
+
+                        {/* Autonomous Breach Mystery */}
                         <button 
                           onClick={() => {
                             setIsExploreOpen(false);
-                            if (onOpenMysteryLab) {
-                              onOpenMysteryLab();
-                            } else {
-                              navigate('/#mystery-lab');
-                            }
+                            if (onOpenMysteryLab) onOpenMysteryLab();
+                            else navigate('/#mystery-lab');
                           }}
-                          className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                          className="w-full flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
                         >
                           <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 mt-0.5">
                             <Target size={14} className="text-rose-400" />
@@ -616,29 +431,26 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                               <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-rose-500/15 text-rose-400 border border-rose-500/30">Knight Lab</span>
                             </div>
                             <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                              Forensic AI investigation & vector deduction
+                              Forensic AI investigation & deduction
                             </div>
                           </div>
                         </button>
 
+                        {/* 11 Architectural Pillars */}
                         <button 
                           onClick={() => {
                             setIsExploreOpen(false);
-                            if (onOpenPillars) {
-                              onOpenPillars();
-                            } else {
-                              navigate('/#pillars');
-                            }
+                            if (onOpenPillars) onOpenPillars();
+                            else navigate('/#pillars');
                           }}
-                          className="w-full flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
+                          className="w-full flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group ltr:text-left rtl:text-right cursor-pointer"
                         >
                           <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
                             <ShieldCheck size={14} className="text-blue-400" />
                           </div>
                           <div>
-                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5">
-                              <span>{t('nav_pillars')}</span>
-                              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-blue-500/15 text-blue-400 border border-blue-500/30">Interactive</span>
+                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                              {t('nav_pillars')}
                             </div>
                             <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
                               Foundational principles for production AI
@@ -646,28 +458,11 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                           </div>
                         </button>
 
-                        <a 
-                          href="#cognitive-accelerator" 
-                          onClick={() => setIsExploreOpen(false)}
-                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <Zap size={14} className="text-emerald-400" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                              {t('nav_cognitive_accelerator')}
-                            </div>
-                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                              Pareto, blurting retrieval & Feynman test
-                            </div>
-                          </div>
-                        </a>
-
+                        {/* Synapse Lounge */}
                         <a 
                           href="#synapse-lounge" 
                           onClick={() => setIsExploreOpen(false)}
-                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                          className="flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
                         >
                           <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
                             <Brain size={14} className="text-violet-400" />
@@ -682,10 +477,11 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                           </div>
                         </a>
 
+                        {/* Free Stack */}
                         <a 
                           href="#free-stack" 
                           onClick={() => setIsExploreOpen(false)}
-                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
+                          className="flex items-start gap-3 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
                         >
                           <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
                             <Layers size={14} className="text-cyan-400" />
@@ -699,30 +495,45 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                             </div>
                           </div>
                         </a>
-
-                        <a 
-                          href="#vault" 
-                          onClick={() => setIsExploreOpen(false)}
-                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <Award size={14} className="text-amber-400" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
-                              {t('nav_science_vault')}
-                            </div>
-                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                              Ultralearning, Anki & research sheets
-                            </div>
-                          </div>
-                        </a>
                       </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
+
+            {/* 3. Tasks / Labs Direct Pill */}
+            <a 
+              href="#tasks"
+              className="inline-flex items-center gap-1.5 px-2.5 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+            >
+              <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
+              <span>{t('nav_labs')}</span>
+            </a>
+
+            {/* 4. Pathways Direct Pill */}
+            <a 
+              href="#pathways"
+              className="inline-flex items-center gap-1.5 px-2.5 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+            >
+              <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
+              <span>{t('nav_pathways')}</span>
+            </a>
+
+            {/* 5. Portfolio Direct Pill */}
+            <Tooltip
+              position="bottom"
+              content="Credentials & Portfolio [SHA-256]"
+              subtitle="Verifiable learning accomplishments & certificate"
+            >
+              <button 
+                onClick={() => navigate('/portfolio')}
+                className="inline-flex items-center gap-1.5 px-3 h-8 xl:h-8.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+              >
+                <Award size={13} className="text-[var(--color-accent)] opacity-80" />
+                <span>Portfolio</span>
+              </button>
+            </Tooltip>
           </nav>
         </div>
 
@@ -907,7 +718,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 className="flex items-center justify-between p-2.5 rounded-2xl bg-[var(--color-primary)]/70 border border-[var(--color-border)] mb-1 text-left cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  {currentPath === 'builder' ? <Sparkles size={16} className="text-emerald-400" /> : <Terminal size={16} className="text-[var(--color-accent)]" />}
+                  {currentPath === 'builder' ? <Code2 size={16} className="text-emerald-400" /> : <Terminal size={16} className="text-[var(--color-accent)]" />}
                   <div>
                     <div className="text-xs font-bold text-[var(--color-text-primary)]">
                       {currentPath === 'builder' ? (t('nav_path_builder') || 'Builder Path (B0–B7)') : (t('nav_path_engineer') || 'Engineer Path (0–7)')}

@@ -5,7 +5,7 @@ import {
   Glasses, 
   Tv, 
   Eye, 
-  Sparkles,
+  Zap,
   Hand,
   Compass
 } from 'lucide-react';
@@ -261,7 +261,7 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
 
                 {/* Pro Tip */}
                 <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2.5">
-                  <Sparkles size={15} className="text-amber-400 shrink-0 mt-0.5" />
+                  <Zap size={15} className="text-amber-400 shrink-0 mt-0.5" />
                   <span>{currentGuide.tip}</span>
                 </div>
               </div>

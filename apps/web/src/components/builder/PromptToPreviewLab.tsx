@@ -4,7 +4,6 @@ import {
   Stop, 
   Code, 
   Key, 
-  Sparkle, 
   Copy, 
   Check, 
   ArrowClockwise, 
@@ -238,7 +237,7 @@ export function PromptToPreviewLab({
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)] p-3 shrink-0 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkle size={14} className="text-[var(--color-accent)]" />
+              <Lightning size={14} className="text-[var(--color-accent)]" />
               <span className="font-bold text-[var(--color-text-primary)] text-[11px] uppercase tracking-wider">
                 {blueprintMode === 'structured' ? 'The 3-Sentence Blueprint Formula' : 'Freeform Builder Prompt'}
               </span>

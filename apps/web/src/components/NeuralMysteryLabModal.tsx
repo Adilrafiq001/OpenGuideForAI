@@ -12,7 +12,6 @@ import {
   Copy,
   Database,
   Award,
-  Sparkles,
   ArrowRight,
   UserCheck,
   Shield,
@@ -565,7 +564,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                   {/* Mission Directives */}
                   <div className="p-5 rounded-2xl bg-[var(--color-primary)]/30 border border-[var(--color-border)] space-y-3">
                     <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)] flex items-center gap-2">
-                      <Sparkles size={14} className="text-[var(--color-accent)]" />
+                      <Terminal size={14} className="text-[var(--color-accent)]" />
                       <span>Investigative Workflow & Done Criteria</span>
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">

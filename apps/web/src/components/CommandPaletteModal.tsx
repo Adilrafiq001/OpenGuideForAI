@@ -17,7 +17,7 @@ import {
   Workflow,
   Zap,
   Target,
-  Sparkles,
+  SlidersHorizontal,
   Boxes
 } from 'lucide-react';
 import { track0 } from '../data/track0';
@@ -92,7 +92,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
       { track: track2, id: '2', icon: Cpu, categoryLabel: 'RAG & Agents' },
       { track: track3, id: '3', icon: ShieldCheck, categoryLabel: 'Evals & Security' },
       { track: track4, id: '4', icon: Brain, categoryLabel: 'Frontier Attention' },
-      { track: track5, id: '5', icon: Sparkles, categoryLabel: 'Fine-Tuning & LoRA' },
+      { track: track5, id: '5', icon: SlidersHorizontal, categoryLabel: 'Fine-Tuning & LoRA' },
       { track: track6, id: '6', icon: Zap, categoryLabel: 'Production MLOps' },
       { track: track7, id: '7', icon: Boxes, categoryLabel: 'Generative Diffusion' },
     ];

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, XCircle, ArrowClockwise, Sparkle } from '@phosphor-icons/react';
+import { CheckCircle, XCircle, ArrowClockwise, Target } from '@phosphor-icons/react';
 
 export interface QuizQuestion {
   question: string;
@@ -42,10 +42,10 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
   if (!questions || questions.length === 0) return null;
 
   return (
-    <div className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/50 p-4 font-mono text-xs">
+    <div data-testid="check-understanding-quiz" className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/50 p-4 font-mono text-xs">
       <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-2.5">
         <div className="flex items-center gap-2">
-          <Sparkle size={15} className="text-[var(--color-accent)]" />
+          <Target size={15} className="text-[var(--color-accent)]" />
           <span className="font-bold text-[var(--color-text-primary)] text-sm tracking-tight">
             Check Your Understanding (3 Questions)
           </span>

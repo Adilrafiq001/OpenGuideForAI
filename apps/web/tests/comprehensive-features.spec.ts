@@ -231,7 +231,7 @@ test.describe('OpenGuide Comprehensive Features, Themes, Tour, Abby Physics & RT
     });
 
     expect(buttonState.dir).toBe('ltr');
-    expect(buttonState.letters).toBe('LaunchTrack0');
+    expect(['LaunchTrack0', 'StartasBuilder']).toContain(buttonState.letters);
 
     // Reset back
     await page.evaluate(() => {

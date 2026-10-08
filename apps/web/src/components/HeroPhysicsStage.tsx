@@ -15,10 +15,11 @@ import {
   ShieldCheck, 
   Activity,
   Code2,
-  Workflow,
-  Sparkles
+  Workflow
 } from 'lucide-react';
 import { ExplainerPill } from './ExplainerPill';
+import { LaunchTrack0HeroButton } from './LaunchTrack0HeroButton';
+import { DeepAiEngineerHeroButton } from './DeepAiEngineerHeroButton';
 import { type SupportedLanguage } from '../store/useLanguageStore';
 import { 
   executeWebGpuKernel, 
@@ -47,7 +48,7 @@ type StudioLens = 'wasm' | 'vector' | 'rag' | 'mcp' | 'webgpu';
 export function HeroPhysicsStage({
   currentThemeInfo,
   accentTextColor,
-  language,
+  language: _language,
   t,
   onExplorePathways,
   onLaunchTrack0,
@@ -178,47 +179,24 @@ export function HeroPhysicsStage({
         className="flex flex-col items-center gap-3 w-full sm:w-auto mb-4"
       >
         <div 
-          className="launch-track-hero-container flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto"
+          className="flex flex-col md:flex-row items-start justify-center gap-6 sm:gap-10 lg:gap-12 w-full my-4"
           style={{ direction: 'ltr' }}
         >
-          {/* Option A: Start as Builder */}
-          <button
-            data-testid="hero-start-as-builder-btn"
-            onClick={onLaunchBuilder0}
-            className="group w-full sm:w-auto px-7 py-3.5 rounded-full font-bold text-xs tracking-tight transition-all duration-200 flex items-center justify-center gap-2.5 shadow-lg shadow-black/15 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-            style={{
-              backgroundColor: currentThemeInfo.accent,
-              color: accentTextColor
-            }}
-          >
-            <Sparkles size={16} className="shrink-0" />
-            <div className="flex flex-col text-left rtl:text-right">
-              <span className="leading-tight text-sm font-extrabold">{t('hero_start_as_builder') || 'Start as Builder'}</span>
-              <span className="text-[10px] opacity-85 font-normal">{t('hero_builder_subtitle') || 'From zero to apps with AI'}</span>
-            </div>
-            <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180 shrink-0" />
-          </button>
+          {/* Option A: Start as Builder (Bespoke Mechanical Tactile Sliding-Case Button) */}
+          <div className="flex flex-col items-center w-full sm:w-[280px]">
+            <LaunchTrack0HeroButton
+              onLaunch={onLaunchBuilder0 || onLaunchTrack0}
+              subtitle={t('hero_builder_subtitle') || 'From zero to working apps with AI assistance'}
+            />
+          </div>
 
-          {/* Option B: Deep AI Engineer */}
-          <button
-            id="launch-track-0-hero-btn"
-            data-testid="hero-deep-ai-engineer-btn"
-            aria-label="Launch Track 0: Deep AI Engineer"
-            onClick={onLaunchTrack0}
-            className="group w-full sm:w-auto px-7 py-3.5 rounded-full bg-stone-100/90 dark:bg-[var(--color-secondary)] hover:bg-stone-200/90 border border-stone-300/80 dark:border-[var(--color-border)] text-stone-900 dark:text-[var(--color-text-primary)] font-bold text-xs tracking-tight transition-all duration-200 flex items-center justify-center gap-2.5 shadow-sm hover:border-[var(--color-accent)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-          >
-            <Terminal size={16} className="text-[var(--color-accent)] shrink-0" />
-            <div className="flex flex-col text-left rtl:text-right">
-              <span className="leading-tight text-sm font-extrabold">
-                {language === 'ur' ? 'مشن بریفنگ میں داخل ہوں' : (t('hero_deep_ai_engineer') || 'Deep AI Engineer')}
-              </span>
-              <span className="text-[10px] text-[var(--color-text-secondary)] font-normal">
-                {language === 'ur' ? 'ٹریک 0 شروع کریں • نیورل نیٹ ورکس اور ریاضی کی بنیادیں' : (t('hero_engineer_subtitle') || 'Neural nets & math foundations')}
-              </span>
-              <span className="sr-only">Launch Track 0</span>
-            </div>
-            <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180 shrink-0 opacity-60 group-hover:opacity-100" />
-          </button>
+          {/* Option B: Deep AI Engineer (Bespoke Turbulent Displacement Multi-Layer Button) */}
+          <div className="flex flex-col items-center w-full sm:w-[280px]">
+            <DeepAiEngineerHeroButton
+              onLaunch={onLaunchTrack0}
+              subtitle={t('hero_engineer_subtitle') || 'Deep neural networks & mathematical foundations'}
+            />
+          </div>
 
           {/* Mechanical Button Text Nodes for backward compatibility audit */}
           <span className="text sr-only" aria-hidden="true">

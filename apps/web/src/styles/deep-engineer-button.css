@@ -1,0 +1,167 @@
+/* Deep AI Engineer - Obsidian Titanium Glass Console Button
+   Tactile, 0.1% engineering craft, synchronized with Builder mechanical button.
+*/
+
+.deep-engineer-btn-wrapper {
+  --btn-h: 52px;
+  --btn-w: 244px;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+
+.deep-engineer-console-btn {
+  position: relative;
+  height: var(--btn-h);
+  width: var(--btn-w);
+  border-radius: 100px;
+  background: linear-gradient(180deg, #1c212b 0%, #12161f 55%, #0a0d12 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.85),
+    0 10px 28px -6px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  transition: transform 0.2s var(--ease-spring), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Subtle electric filament glow along bottom border */
+.deep-engineer-console-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(6, 182, 212, 0) 0%,
+    rgba(6, 182, 212, 0.5) 45%,
+    rgba(16, 185, 129, 0.7) 55%,
+    rgba(16, 185, 129, 0) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Glass specular reflex line */
+.deep-engineer-console-btn::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.deep-engineer-console-btn:hover {
+  transform: translateY(-1.5px) scale(1.008);
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.9),
+    0 14px 34px -4px rgba(6, 182, 212, 0.2),
+    0 0 16px rgba(6, 182, 212, 0.15);
+}
+
+.deep-engineer-console-btn:hover::before {
+  opacity: 0.9;
+}
+
+.deep-engineer-console-btn:active,
+.deep-engineer-console-btn.is-active {
+  transform: translateY(1px) scale(0.985);
+  border-color: var(--color-accent, #10b981);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.8),
+    0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.deep-engineer-console-btn:focus-visible {
+  outline: 2px solid var(--color-accent, #10b981);
+  outline-offset: 3px;
+}
+
+/* Internal console content */
+.deep-engineer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+.deep-engineer-prompt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #38bdf8;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.deep-engineer-label {
+  font-family: var(--font-mono, 'JetBrains Mono', 'Geist Mono', monospace);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+}
+
+/* Blinking terminal prompt cursor */
+.deep-engineer-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background-color: #38bdf8;
+  vertical-align: middle;
+  margin-left: 2px;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: engineerCursorBlink 1.1s cubic-bezier(1, 0, 0, 1) infinite;
+}
+
+@keyframes engineerCursorBlink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Pulse animation when activated */
+@keyframes synapticPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(6, 182, 212, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+  }
+}
+
+.deep-engineer-console-btn.is-active {
+  animation: synapticPulse 0.6s ease-out;
+}

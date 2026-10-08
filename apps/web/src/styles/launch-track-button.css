@@ -399,7 +399,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   position: absolute;
   inset: 0;
   padding-left: 10px;
@@ -414,12 +414,12 @@
   display: inline-block;
   color: transparent;
   position: relative;
-  min-width: 8px;
+  min-width: 7.5px;
   text-align: center;
 }
 
-.launch-track-hero-container .text.state-1 span:nth-child(6),
-.launch-track-hero-container .text.state-1 span:nth-child(11) {
+.launch-track-hero-container .text.state-1 span:nth-child(5),
+.launch-track-hero-container .text.state-1 span:nth-child(7) {
   margin-right: 6px;
 }
 

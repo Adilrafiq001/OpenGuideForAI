@@ -5,9 +5,13 @@ import '../styles/launch-track-button.css';
 
 interface LaunchTrack0HeroButtonProps {
   onLaunch: () => void;
+  subtitle?: string;
 }
 
-export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ onLaunch }) => {
+export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
+  onLaunch,
+  subtitle 
+}) => {
   const { language, t } = useLanguageStore();
   const isRTL = isRTLLanguage(language);
 
@@ -77,31 +81,32 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
     // 1. Steel case slides open (-30px) ~0.9s
     // 2. Screw bolts pulse in sequence ~0.8s  
     // 3. Filaments ignite with golden glow ~0.6s
-    // 4. "Launch Track 0" flies out (~1.78s)
-    // 5. "Time To Shine" text springs in (~1.53s) and settles into luminescence
-    // Total 2,150ms allows the complete sequence to be appreciated before route change.
+    // 4. "Start as Builder" flies out (~1.78s)
+    // 5. "Time To Build!" text springs in (~1.53s) and settles into luminescence
     timerRef.current = window.setTimeout(() => {
       onLaunchRef.current();
-    }, 2150);
+    }, 1850);
   }, []);
 
-  // State 1: "Launch Track 0" (resting text)
+  // State 1: "Start as Builder" (resting text)
   const state1Chars = [
-    { char: 'L', idx: 1 },
-    { char: 'a', idx: 2 },
-    { char: 'u', idx: 3 },
-    { char: 'n', idx: 4 },
-    { char: 'c', idx: 5 },
-    { char: 'h', idx: 6, margin: true },
-    { char: 'T', idx: 7 },
-    { char: 'r', idx: 8 },
-    { char: 'a', idx: 9 },
-    { char: 'c', idx: 10 },
-    { char: 'k', idx: 11, margin: true },
-    { char: '0', idx: 12 }
+    { char: 'S', idx: 1 },
+    { char: 't', idx: 2 },
+    { char: 'a', idx: 3 },
+    { char: 'r', idx: 4 },
+    { char: 't', idx: 5, margin: true },
+    { char: 'a', idx: 6 },
+    { char: 's', idx: 7, margin: true },
+    { char: 'B', idx: 8 },
+    { char: 'u', idx: 9 },
+    { char: 'i', idx: 10 },
+    { char: 'l', idx: 11 },
+    { char: 'd', idx: 12 },
+    { char: 'e', idx: 13 },
+    { char: 'r', idx: 14 }
   ];
 
-  // State 2: "Time To Shine" (triggered text)
+  // State 2: "Time To Build!" (triggered text)
   const state2Chars = [
     { char: 'T', idx: 1 },
     { char: 'i', idx: 2 },
@@ -109,24 +114,26 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
     { char: 'e', idx: 4, margin: true },
     { char: 'T', idx: 5 },
     { char: 'o', idx: 6, margin: true },
-    { char: 'S', idx: 7 },
-    { char: 'h', idx: 8 },
+    { char: 'B', idx: 7 },
+    { char: 'u', idx: 8 },
     { char: 'i', idx: 9 },
-    { char: 'n', idx: 10 },
-    { char: 'e', idx: 11 }
+    { char: 'l', idx: 10 },
+    { char: 'd', idx: 11 },
+    { char: '!', idx: 12 }
   ];
 
   return (
-    <div className="launch-track-hero-container" key={resetKey}>
-      <div className="area">
+    <div className="flex flex-col items-center select-none w-full" key={resetKey}>
+      <div className="launch-track-hero-container">
+        <div className="area">
         <div className="bg" aria-hidden="true">
           <div className="light-1" />
           <div className="light-2" />
           <div className="light-3" />
         </div>
         <div
-          id="launch-track-0-hero-btn"
-          data-testid="launch-track-0-hero-btn"
+          id="hero-start-as-builder-mechanical-btn"
+          data-testid="hero-start-as-builder-btn"
           className="area-wrapper"
           onClick={handleTrigger}
           onKeyDown={(e) => {
@@ -136,8 +143,9 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
           }}
           tabIndex={0}
           role="button"
-          aria-label={t('nav_launch_track0') || 'Launch Track 0'}
+          aria-label={t('hero_start_as_builder') || 'Start as Builder'}
         >
+          <span className="sr-only">Start as Builder</span>
           <div className="wrapper" aria-hidden="true">
             <input
               type="checkbox"
@@ -247,10 +255,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                           <span
                             key={item.idx}
                             data-label={item.char}
-                            style={{
-                              ['--i' as any]: item.idx,
-                              marginRight: item.margin ? '5px' : undefined
-                            }}
+                            style={{ ['--i' as any]: item.idx }}
                           >
                             {item.char}
                           </span>
@@ -261,10 +266,7 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
                           <span
                             key={item.idx}
                             data-label={item.char}
-                            style={{
-                              ['--i' as any]: item.idx,
-                              marginRight: item.margin ? '5px' : undefined
-                            }}
+                            style={{ ['--i' as any]: item.idx }}
                           >
                             {item.char}
                           </span>
@@ -277,6 +279,12 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({ 
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+      {/* Subtitle Below Button */}
+      <div className="text-[11px] font-mono text-[var(--color-text-secondary)] mt-2 text-center max-w-[280px] min-h-[34px] flex items-center justify-center leading-snug">
+        {subtitle || (language === 'ur' ? 'صفر سے ورکنگ ایپس تک' : 'From zero to working apps with AI assistance')}
       </div>
     </div>
   );

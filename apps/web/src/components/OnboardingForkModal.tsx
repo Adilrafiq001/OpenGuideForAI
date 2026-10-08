@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
-  Sparkles, 
+  Code2, 
   Terminal, 
   ArrowRight, 
   Compass 
@@ -148,7 +148,7 @@ export function OnboardingForkModal({ isOpen, onClose, onSelectPath }: Onboardin
                 >
                   <div>
                     <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Sparkles size={20} />
+                      <Code2 size={20} />
                     </div>
                     <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-400 block mb-1">
                       New • Tracks B0 – B7

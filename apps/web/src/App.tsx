@@ -305,6 +305,14 @@ function AppContent() {
                 <Route path="/builder/:trackId/intro" element={<BuilderTrackBriefingWrapper onOpenThemes={handleOpenThemes} />} />
                 <Route path="/builder/:trackId" element={<BuilderCoursePlayerWrapper />} />
                 <Route path="/builder/:trackId/engine" element={<BuilderCoursePlayerWrapper />} />
+                <Route path="/track/builder-0" element={<Navigate to="/builder/0" replace />} />
+                <Route path="/track/builder-1" element={<Navigate to="/builder/1" replace />} />
+                <Route path="/track/builder-2" element={<Navigate to="/builder/2" replace />} />
+                <Route path="/track/builder-3" element={<Navigate to="/builder/3" replace />} />
+                <Route path="/track/builder-4" element={<Navigate to="/builder/4" replace />} />
+                <Route path="/track/builder-5" element={<Navigate to="/builder/5" replace />} />
+                <Route path="/track/builder-6" element={<Navigate to="/builder/6" replace />} />
+                <Route path="/track/builder-7" element={<Navigate to="/builder/7" replace />} />
                 <Route path="/holodeck" element={<SpatialHolodeck />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="*" element={<NotFoundPage />} />
@@ -439,12 +447,12 @@ function StudioAnnouncementPill({
   onDismiss: () => void;
 }) {
   const location = useLocation();
-  // Do not show floating announcement pill inside active coding IDE tracks
-  if (location.pathname.startsWith('/track')) return null;
+  // Do not show floating announcement pill inside active coding IDE tracks or builder tracks
+  if (location.pathname.startsWith('/track') || location.pathname.startsWith('/builder')) return null;
   if (lastSeenVersion === CURRENT_STUDIO_VERSION) return null;
 
   return (
-    <div className="fixed bottom-28 md:bottom-32 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)]/95 border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
+    <div className="hidden sm:flex fixed bottom-28 md:bottom-32 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
       <div className="min-w-0">
         <div className="flex items-center gap-1.5 font-bold text-[var(--color-text-primary)]">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

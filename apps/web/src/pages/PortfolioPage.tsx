@@ -22,7 +22,7 @@ import {
   Cloud,
   Share2,
   X,
-  Sparkles,
+  SlidersHorizontal,
   Zap,
   Boxes
 } from 'lucide-react';
@@ -116,7 +116,7 @@ export function PortfolioPage() {
       formatTrack(track2, 2, 'Agent Commander', 'Multi-Hop RAG & Autonomous ReAct Loops', Terminal, 'text-violet-700 dark:text-violet-400', 'border-violet-500/40'),
       formatTrack(track3, 3, 'Systems Defender', 'OWASP Top 10 Guardrails & Production Evals', ShieldCheck, 'text-amber-700 dark:text-amber-400', 'border-amber-500/40'),
       formatTrack(track4, 4, 'Frontier Architect', 'Attention Mechanics, Reasoning & MCP Protocols', Network, 'text-rose-700 dark:text-rose-400', 'border-rose-500/40'),
-      formatTrack(track5, 5, 'Adaptation Engineer', 'Low-Rank Adaptation, QLoRA & DPO Alignment', Sparkles, 'text-pink-700 dark:text-pink-400', 'border-pink-500/40'),
+      formatTrack(track5, 5, 'Adaptation Engineer', 'Low-Rank Adaptation, QLoRA & DPO Alignment', SlidersHorizontal, 'text-pink-700 dark:text-pink-400', 'border-pink-500/40'),
       formatTrack(track6, 6, 'Inference Operator', 'KV-Cache, PagedAttention & Speculative Systems', Zap, 'text-teal-700 dark:text-teal-400', 'border-teal-500/40'),
       formatTrack(track7, 7, 'Generative Synthesis', 'Diffusion Models, CFG & Vision Transformers', Boxes, 'text-fuchsia-700 dark:text-fuchsia-400', 'border-fuchsia-500/40')
     ];

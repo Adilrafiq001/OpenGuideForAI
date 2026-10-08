@@ -38,6 +38,8 @@ import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
 import { diagnosePythonError, type PythonDiagnostic } from '../utils/pythonDiagnostic';
 import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
 import { PromptToPreviewLab } from './builder/PromptToPreviewLab';
+import { SpecStudioLab } from './builder/SpecStudioLab';
+import { DiffReaderLab } from './builder/DiffReaderLab';
 import { CheckUnderstandingQuiz } from './builder/CheckUnderstandingQuiz';
 import type { Track } from '../data/track0';
 
@@ -772,23 +774,49 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
           </div>
         </div>
 
-        {/* Right Column: Prompt-to-Preview Lab (Builder) OR Code Editor + Terminal (Engineer) */}
+        {/* Right Column: Specialized Builder Labs OR Code Editor + Terminal (Engineer) */}
         {track.path === 'builder' ? (
           <div className={`col-span-1 lg:col-span-7 xl:col-span-8 h-full flex flex-col gap-3 min-h-0 overflow-hidden ${
             mobileTab === 'briefing' ? 'hidden lg:flex' : 'flex'
           }`}>
-            <PromptToPreviewLab
-              key={currentLesson.id}
-              initialPrompt={currentLesson.blueprint || currentLesson.initialCode || currentLesson.title}
-              lessonId={currentLesson.id}
-              onPreviewSuccess={() => {
-                completeLesson(currentLesson.id, track.id);
-                setIsChallengePassed(true);
-                playTactileSound('success');
-                triggerHaptic('success');
-                setFeedback({ type: 'success', message: '✓ App preview generated and verified in sandbox.' });
-              }}
-            />
+            {track.id === 'builder-1' || currentLesson.id.startsWith('lesson-b1-') ? (
+              <SpecStudioLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onSpecPassed={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ Specification verified against 5-rule rubric.' });
+                }}
+              />
+            ) : track.id === 'builder-2' || currentLesson.id.startsWith('lesson-b2-') ? (
+              <DiffReaderLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onMasteryAchieved={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ Code diff reviewed and audited with zero hazard compromise.' });
+                }}
+              />
+            ) : (
+              <PromptToPreviewLab
+                key={currentLesson.id}
+                initialPrompt={currentLesson.blueprint || currentLesson.initialCode || currentLesson.title}
+                lessonId={currentLesson.id}
+                onPreviewSuccess={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ App preview generated and verified in sandbox.' });
+                }}
+              />
+            )}
           </div>
         ) : (
           <div className={`col-span-1 lg:col-span-7 xl:col-span-8 h-full flex flex-col gap-3 min-h-0 overflow-hidden ${

@@ -31,7 +31,7 @@ import {
   Search,
   ChevronRight,
   ArrowLeft,
-  Sparkles,
+  Zap,
   Lightbulb
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -750,7 +750,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
               {/* Sample Prompts Across Tiers */}
               <div className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)]/30">
                 <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-text-primary)] mb-4 flex items-center gap-2">
-                  <Sparkles size={14} className="text-emerald-500" />
+                  <Zap size={14} className="text-emerald-500" />
                   <span>Real-World Prompts Across the Continuum (Click to Copy)</span>
                 </h4>
 

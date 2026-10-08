@@ -109,6 +109,7 @@ test.describe('Builder Path Milestone 2 — Track B0 Playable Slice & Sandboxed 
 
     const iframe = page.locator('[data-testid="sandboxed-preview-iframe"]');
     await expect(iframe).toBeVisible({ timeout: 4000 });
+    await page.waitForTimeout(600);
 
     // 1. Verify strict sandbox attributes: allow-scripts ONLY, NEVER allow-same-origin
     const sandboxAttr = await iframe.getAttribute('sandbox');
