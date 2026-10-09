@@ -350,7 +350,7 @@ export function HeroPhysicsStage({
           <button
             type="button"
             aria-busy={isSimRunning}
-            aria-label={isSimRunning ? "Simulation currently running" : "Run interactive simulation"}
+            aria-label={isSimRunning ? "simulation currently running" : "Run Simulation - interactive simulation"}
             onClick={handleRunSim}
             disabled={isSimRunning}
             className="px-3 py-1 rounded-xl bg-[var(--color-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"

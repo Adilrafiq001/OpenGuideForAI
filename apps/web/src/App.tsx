@@ -139,7 +139,14 @@ function AppContent() {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignore if typing inside input, textarea, or contentEditable
       const target = e.target as HTMLElement | null;
-      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('.cm-editor'));
+      const isInput = Boolean(
+        target && (
+          target.tagName === 'INPUT' || 
+          target.tagName === 'TEXTAREA' || 
+          target.isContentEditable || 
+          (typeof target.closest === 'function' && target.closest('.cm-editor'))
+        )
+      );
 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();

@@ -1,22 +1,22 @@
-/* OpenGuide Liquid Glass Driver.js Tour Theme */
+/* OpenGuide Solid Sovereign Driver.js Tour Theme conforming to Rule 17 */
 
 .driver-popover.openguide-tour-popover {
-  background: var(--color-secondary, #0d0d0f) !important;
-  color: var(--color-text-primary, #ffffff) !important;
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15)) !important;
+  background: var(--color-secondary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border) !important;
   border-radius: 1.5rem !important;
   padding: 1.25rem 1.5rem !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 25px var(--color-accent-trans, rgba(16, 185, 129, 0.15)) !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
-  max-width: 380px !important;
+  max-width: 400px !important;
   font-family: inherit !important;
   z-index: 1000000 !important;
 }
 
 @media (max-width: 640px) {
   .driver-popover.openguide-tour-popover {
-    max-width: calc(100vw - 2rem) !important;
+    max-width: calc(100vw - 1.5rem) !important;
     padding: 1rem 1.15rem !important;
     border-radius: 1.25rem !important;
   }
@@ -24,9 +24,9 @@
 
 .driver-popover.openguide-tour-popover .driver-popover-title {
   font-size: 1rem !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   letter-spacing: -0.02em !important;
-  color: var(--color-text-primary, #ffffff) !important;
+  color: var(--color-text-primary) !important;
   margin-bottom: 0.5rem !important;
   display: flex !important;
   align-items: center !important;
@@ -36,7 +36,7 @@
 .driver-popover.openguide-tour-popover .driver-popover-description {
   font-size: 0.8125rem !important;
   line-height: 1.55 !important;
-  color: var(--color-text-secondary, #a1a1aa) !important;
+  color: var(--color-text-secondary) !important;
   margin-bottom: 1rem !important;
   white-space: pre-line !important;
 }
@@ -45,25 +45,28 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
   margin-top: 0.75rem !important;
   padding-top: 0.75rem !important;
-  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08)) !important;
+  border-top: 1px solid var(--color-border) !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-progress-text {
   font-family: ui-monospace, SFMono-Regular, monospace !important;
   font-size: 0.6875rem !important;
-  font-weight: 600 !important;
-  color: var(--color-accent, #10b981) !important;
-  background: var(--color-primary, rgba(0, 0, 0, 0.3)) !important;
-  padding: 0.2rem 0.5rem !important;
+  font-weight: 700 !important;
+  color: var(--color-accent) !important;
+  background: var(--color-primary) !important;
+  padding: 0.25rem 0.6rem !important;
   border-radius: 9999px !important;
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1)) !important;
+  border: 1px solid var(--color-border) !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-btn-group {
   display: flex !important;
   gap: 0.5rem !important;
+  align-items: center !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-prev-btn,
@@ -78,20 +81,21 @@
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-prev-btn {
-  background: var(--color-primary, rgba(0, 0, 0, 0.2)) !important;
-  color: var(--color-text-secondary, #a1a1aa) !important;
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1)) !important;
+  background: var(--color-primary) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1px solid var(--color-border) !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-prev-btn:hover {
-  color: var(--color-text-primary, #ffffff) !important;
-  border-color: var(--color-accent, #10b981) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-accent) !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-next-btn {
-  background: var(--color-accent, #10b981) !important;
+  background: var(--color-accent) !important;
   color: #000000 !important;
   border: none !important;
+  font-weight: 700 !important;
   box-shadow: 0 4px 12px var(--color-accent-trans, rgba(16, 185, 129, 0.3)) !important;
 }
 
@@ -101,14 +105,14 @@
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-close-btn {
-  color: var(--color-text-secondary, #a1a1aa) !important;
+  color: var(--color-text-secondary) !important;
 }
 
 .driver-popover.openguide-tour-popover .driver-popover-close-btn:hover {
-  color: var(--color-text-primary, #ffffff) !important;
+  color: var(--color-text-primary) !important;
 }
 
 /* Arrow indicator match */
 .driver-popover.openguide-tour-popover .driver-popover-arrow {
-  border-color: var(--color-secondary, #0d0d0f) !important;
+  border-color: var(--color-secondary) !important;
 }

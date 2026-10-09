@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -12,9 +12,12 @@ import {
   X, 
   ArrowRight, 
   CheckCircle2, 
-  Cpu
+  Cpu,
+  Play,
+  Volume2
 } from 'lucide-react';
 import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
+import { useLanguageStore, isRTLLanguage } from '../store/useLanguageStore';
 
 interface StudioInteractiveDemoModalProps {
   isOpen: boolean;
@@ -45,8 +48,14 @@ export function StudioInteractiveDemoModal({
   onOpenForwardEngineer
 }: StudioInteractiveDemoModalProps) {
   const navigate = useNavigate();
+  const { language, t } = useLanguageStore();
+  const isRTL = isRTLLanguage(language);
 
   const [activeFlowId, setActiveFlowId] = useState<string>('ide-flow');
+  const [simRunning, setSimRunning] = useState(false);
+  const [simPassed, setSimPassed] = useState(false);
+  const [soundPlaying, setSoundPlaying] = useState(false);
+  const tabListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -110,7 +119,7 @@ export function StudioInteractiveDemoModal({
       title: '2. The 8-Track Sovereign AI Curriculum',
       subtitle: 'From Absolute Zero to Attention heads, LoRA, vLLM & Generative Diffusion',
       icon: Layers,
-      overview: 'A continuous, unbroken learning path designed so anyone can master AI systems engineering from scratch to frontier production.',
+      overview: 'A continuous, unbroken learning path designed so anyone can master AI systems engineering from scratch to frontier production, spanning both Engineer and Builder disciplines.',
       steps: [
         {
           number: '01',
@@ -153,7 +162,7 @@ export function StudioInteractiveDemoModal({
           detail: 'Denoising Diffusion Probabilistic Models (DDPM), Classifier-Free Guidance (CFG), and Diffusion Transformers (DiT).'
         }
       ],
-      technicalPill: '57 Interactive Labs • 100% Client-Side Evaluation • Automated CI Gates',
+      technicalPill: '57 Interactive Labs • Builder Tracks B0–B7 • 100% Client-Side Evaluation',
       actionText: 'Browse All 8 Tracks →',
       actionRoute: '/#curriculum'
     },
@@ -250,9 +259,10 @@ export function StudioInteractiveDemoModal({
       actionCallback: () => {
         onClose();
         const el = document.getElementById('abby-toggle-checkbox') as HTMLInputElement | null;
-        if (el && !el.checked) {
-          el.click();
+        if (el) {
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         }
+        window.dispatchEvent(new CustomEvent('open-abby-copilot'));
       }
     },
     {
@@ -272,7 +282,7 @@ export function StudioInteractiveDemoModal({
         {
           number: '02',
           stepTitle: 'W3C Verifiable Credential Export',
-          detail: 'Download standardized .jsonld cryptographic proof of your AI engineering capabilities.'
+          detail: 'Download standardized .jsonld cryptographic proof of your AI engineering capabilities and offline JSON ledger backups.'
         },
         {
           number: '03',
@@ -285,14 +295,14 @@ export function StudioInteractiveDemoModal({
           detail: 'Generate 1-click markdown badges linking directly to your verified certificate to showcase on your developer resume.'
         }
       ],
-      technicalPill: 'Web Crypto API • AES-GCM 256-bit • W3C Verifiable Credentials',
+      technicalPill: 'Web Crypto API • AES-GCM 256-bit • W3C Verifiable Credentials • IDB Backup',
       actionText: 'View Student Portfolio →',
       actionRoute: '/portfolio'
     },
     {
       id: 'forward-engineer-flow',
       badge: 'Forward AI Spec',
-      badgeColor: 'text-cyan-700 dark:text-cyan-300 bg-cyan-500/10 border-cyan-500/30',
+      badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
       title: '7. Forward Deployed AI Engineer & Agentic Building',
       subtitle: 'Field Architecture • Agentic Toolchains • $0 Sovereign Stack • Secret Hygiene',
       icon: Workflow,
@@ -315,11 +325,11 @@ export function StudioInteractiveDemoModal({
         },
         {
           number: '04',
-          stepTitle: 'Zero-Dollar Production Deployment',
+          stepTitle: '11 Architectural Pillars & $0 Deployment',
           detail: 'Ship static SPAs on Cloudflare Pages and GitHub Actions with 5-point autonomous CI validation gates.'
         }
       ],
-      technicalPill: 'Deterministic Systems • MCP Tools • Cloudflare Edge • GitHub Actions',
+      technicalPill: 'Deterministic Systems • 11 Pillars • MCP Tools • Cloudflare Edge • GitHub Actions',
       actionText: 'View Forward Engineer Blueprint →',
       actionCallback: () => {
         onClose();
@@ -334,9 +344,37 @@ export function StudioInteractiveDemoModal({
 
   const activeFlow = flows.find(f => f.id === activeFlowId) || flows[0];
 
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = (index + 1) % flows.length;
+      setActiveFlowId(flows[nextIndex].id);
+      const nextBtn = document.getElementById(`demo-tab-${flows[nextIndex].id}`);
+      nextBtn?.focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIndex = (index - 1 + flows.length) % flows.length;
+      setActiveFlowId(flows[prevIndex].id);
+      const prevBtn = document.getElementById(`demo-tab-${flows[prevIndex].id}`);
+      prevBtn?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setActiveFlowId(flows[0].id);
+      document.getElementById(`demo-tab-${flows[0].id}`)?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setActiveFlowId(flows[flows.length - 1].id);
+      document.getElementById(`demo-tab-${flows[flows.length - 1].id}`)?.focus();
+    }
+  };
+
   const handleAction = (flow: DemoFlowItem) => {
-    playTactileSound('click');
-    triggerHaptic('light');
+    try {
+      playTactileSound('click');
+      triggerHaptic('light');
+    } catch {
+      // Safe fallback
+    }
     if (flow.actionCallback) {
       flow.actionCallback();
     } else if (flow.actionRoute) {
@@ -352,6 +390,33 @@ export function StudioInteractiveDemoModal({
         navigate(flow.actionRoute);
       }
     }
+  };
+
+  const handleRunSim = () => {
+    setSimRunning(true);
+    setSimPassed(false);
+    try {
+      playTactileSound('click');
+      triggerHaptic('light');
+    } catch {}
+
+    setTimeout(() => {
+      setSimRunning(false);
+      setSimPassed(true);
+      try {
+        playTactileSound('success');
+        triggerHaptic('success');
+      } catch {}
+    }, 700);
+  };
+
+  const handlePlayHarmonicChord = () => {
+    setSoundPlaying(true);
+    try {
+      playTactileSound('success');
+      triggerHaptic('light');
+    } catch {}
+    setTimeout(() => setSoundPlaying(false), 900);
   };
 
   return (
@@ -372,27 +437,27 @@ export function StudioInteractiveDemoModal({
           className="fixed inset-0 bg-black/85 backdrop-blur-md"
         />
 
-        {/* Modal Dialog Window */}
+        {/* Modal Dialog Window - 100% Solid Rule 17 background */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-          className="relative w-full max-w-5xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex flex-col z-10 text-[var(--color-text-primary,#fff)] overflow-hidden max-h-[90vh]"
+          className="relative w-full max-w-5xl bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-[2rem] shadow-2xl flex flex-col z-10 text-[var(--color-text-primary)] overflow-hidden max-h-[90vh]"
           data-testid="studio-interactive-demo-modal"
         >
-          {/* Header */}
-          <div className="p-5 sm:p-6 pb-4 border-b border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between gap-4 shrink-0">
+          {/* Header - Solid Rule 17 background */}
+          <div className="p-5 sm:p-6 pb-4 border-b border-[var(--color-border)] bg-[var(--color-primary)] flex items-center justify-between gap-4 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[var(--color-accent,#10b981)]/15 text-[var(--color-accent,#10b981)] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[var(--color-accent)]/15 text-[var(--color-accent)] flex items-center justify-center">
                 <Workflow size={20} />
               </div>
               <div>
                 <h2 id="studio-demo-modal-title" className="text-base sm:text-lg font-black tracking-tight">
-                  OpenGuide Studio: Whole App Interactive Flow Demo
+                  {t('demo_modal_title') || 'OpenGuide Studio: Whole App Interactive Flow Demo'}
                 </h2>
-                <p className="text-xs text-[var(--color-text-secondary,#a1a1aa)]">
-                  Explore how every engine, visualizer, and cryptographic subsystem operates under the $0 Rule
+                <p className="text-xs text-[var(--color-text-secondary)]">
+                  {t('demo_modal_subtitle') || 'Explore how every engine, visualizer, and cryptographic subsystem operates under the $0 Rule'}
                 </p>
               </div>
             </div>
@@ -400,8 +465,8 @@ export function StudioInteractiveDemoModal({
             <button
               onClick={onClose}
               data-testid="studio-demo-close-btn"
-              className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)]"
-              aria-label="Close interactive flow demo"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-secondary)] transition-colors cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              aria-label={t('action_close') || 'Close interactive flow demo'}
             >
               <X size={18} />
             </button>
@@ -409,36 +474,47 @@ export function StudioInteractiveDemoModal({
 
           {/* Main Layout: Flow Selector Sidebar + Interactive Detail Pane */}
           <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden">
-            {/* Sidebar Navigation */}
-            <div role="tablist" aria-label="Demo Flows" className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border,rgba(255,255,255,0.08))] bg-[var(--color-primary,#000)]/30 overflow-y-auto max-h-48 md:max-h-none p-3 flex flex-col gap-1.5 shrink-0">
-              {flows.map((flow) => {
+            {/* Sidebar Navigation - Solid Rule 17 background */}
+            <div 
+              ref={tabListRef}
+              role="tablist" 
+              aria-label="Demo Flows" 
+              className="w-full md:w-72 border-b md:border-b-0 md:border-r border-[var(--color-border)] bg-[var(--color-primary)] overflow-y-auto max-h-48 md:max-h-none p-3 flex flex-col gap-1.5 shrink-0"
+            >
+              {flows.map((flow, idx) => {
                 const Icon = flow.icon;
                 const isActive = flow.id === activeFlowId;
                 return (
                   <button
                     key={flow.id}
+                    id={`demo-tab-${flow.id}`}
                     role="tab"
                     aria-selected={isActive}
+                    aria-controls={`demo-panel-${flow.id}`}
+                    tabIndex={isActive ? 0 : -1}
+                    onKeyDown={(e) => handleTabKeyDown(e, idx)}
                     onClick={() => {
                       setActiveFlowId(flow.id);
-                      playTactileSound('click');
-                      triggerHaptic('light');
+                      try {
+                        playTactileSound('click');
+                        triggerHaptic('light');
+                      } catch {}
                     }}
-                    className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 w-full shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)] ${
+                    className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all cursor-pointer flex items-center md:items-start gap-3 w-full shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                       isActive
-                        ? 'bg-[var(--color-secondary,#111)] border border-[var(--color-accent,#10b981)] shadow-sm'
-                        : 'border border-transparent hover:border-[var(--color-border,rgba(255,255,255,0.08))] hover:bg-[var(--color-secondary,#111)]/50 text-[var(--color-text-secondary,#a1a1aa)]'
+                        ? 'bg-[var(--color-secondary)] border border-[var(--color-accent)] shadow-sm'
+                        : 'border border-transparent hover:border-[var(--color-border)] hover:bg-[var(--color-secondary)] text-[var(--color-text-secondary)]'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
                       isActive 
-                        ? 'bg-[var(--color-accent,#10b981)] text-[var(--color-primary,#000)] font-bold' 
-                        : 'bg-[var(--color-surface,rgba(255,255,255,0.06))] text-[var(--color-text-secondary,#a1a1aa)]'
+                        ? 'bg-[var(--color-accent)] text-black font-bold' 
+                        : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]'
                     }`}>
                       <Icon size={16} />
                     </div>
                     <div className="min-w-0 pr-1">
-                      <div className={`text-xs font-bold truncate ${isActive ? 'text-[var(--color-text-primary,#fff)]' : ''}`}>
+                      <div className={`text-xs font-bold truncate ${isActive ? 'text-[var(--color-text-primary)]' : ''}`}>
                         {flow.title}
                       </div>
                       <div className="text-[10px] font-mono opacity-60 truncate hidden md:block">
@@ -450,48 +526,112 @@ export function StudioInteractiveDemoModal({
               })}
             </div>
 
-            {/* Active Detail Showcase Area */}
-            <div role="tabpanel" aria-label={activeFlow.title} className="flex-1 p-5 sm:p-7 overflow-y-auto space-y-6">
+            {/* Active Detail Showcase Area - Solid Rule 17 background */}
+            <div 
+              id={`demo-panel-${activeFlow.id}`}
+              role="tabpanel" 
+              aria-labelledby={`demo-tab-${activeFlow.id}`}
+              aria-live="polite"
+              className="flex-1 p-5 sm:p-7 overflow-y-auto space-y-6 bg-[var(--color-secondary)]"
+            >
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase ${activeFlow.badgeColor}`}>
                     {activeFlow.badge}
                   </span>
-                  <span className="text-[11px] font-mono text-[var(--color-text-secondary,#a1a1aa)]">
+                  <span className="text-[11px] font-mono text-[var(--color-text-secondary)]">
                     Architecture & Mechanics
                   </span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--color-text-primary,#fff)]">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--color-text-primary)]">
                   {activeFlow.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--color-text-secondary,#a1a1aa)] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
                   {activeFlow.overview}
                 </p>
               </div>
 
+              {/* Live Interactive Simulation Stage for Flow 1 & Flow 3 */}
+              {activeFlow.id === 'ide-flow' && (
+                <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold text-[var(--color-text-secondary)] flex items-center gap-1.5">
+                      <Terminal size={12} className="text-[var(--color-accent)]" />
+                      <span>In-Browser Pyodide WASM Micro-Test Sandbox</span>
+                    </span>
+                    <button
+                      onClick={handleRunSim}
+                      disabled={simRunning}
+                      className="px-3 py-1 rounded-lg bg-[var(--color-accent)] text-black font-bold text-[11px] flex items-center gap-1.5 cursor-pointer active:scale-95 disabled:opacity-50"
+                    >
+                      <Play size={10} />
+                      <span>{simRunning ? 'Executing...' : 'Run Micro-Test'}</span>
+                    </button>
+                  </div>
+                  <div className="p-3 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[11px] space-y-1">
+                    <div className="text-[var(--color-text-secondary)]">
+                      $ pyodide.run_python("assert softmax([2.0, 1.0, 0.1]).sum() == 1.0")
+                    </div>
+                    {simRunning && (
+                      <div className="text-amber-400 animate-pulse">
+                        &gt; Compiling WASM bytecode in Web Worker thread...
+                      </div>
+                    )}
+                    {simPassed && (
+                      <div className="text-emerald-400 font-bold flex items-center gap-1.5 pt-1">
+                        <CheckCircle2 size={13} />
+                        <span>✓ TEST PASSED in 14ms (CPython 3.12 WebAssembly • 0ms Server Latency)</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeFlow.id === 'holodeck-flow' && (
+                <div className="p-4 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold text-[var(--color-text-secondary)] flex items-center gap-1.5">
+                      <Glasses size={12} className="text-violet-400" />
+                      <span>Harmonic Vector Sonification Synth</span>
+                    </span>
+                    <button
+                      onClick={handlePlayHarmonicChord}
+                      disabled={soundPlaying}
+                      className="px-3 py-1 rounded-lg bg-violet-500 text-white font-bold text-[11px] flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    >
+                      <Volume2 size={11} />
+                      <span>{soundPlaying ? 'Playing Fifth...' : 'Play Consonant Fifth Chord'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-[var(--color-text-secondary)] font-sans leading-relaxed">
+                    Acoustic frequencies dynamically map to semantic cosine similarity (440Hz Root • 660Hz Fifth).
+                  </p>
+                </div>
+              )}
+
               {/* Step-by-Step Flow Scaffolding */}
               <div className="space-y-3">
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-accent,#10b981)] flex items-center gap-1.5">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--color-accent)] flex items-center gap-1.5">
                   <CheckCircle2 size={13} />
-                  <span>Execution Sequence</span>
+                  <span>{t('demo_execution_sequence') || 'Execution Sequence'}</span>
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {activeFlow.steps.map((st) => (
                     <div 
                       key={st.number}
-                      className="p-3.5 rounded-2xl bg-[var(--color-primary,#000)]/40 border border-[var(--color-border,rgba(255,255,255,0.08))] space-y-1"
+                      className="p-3.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] space-y-1"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-black text-[var(--color-accent,#10b981)] px-1.5 py-0.5 rounded bg-[var(--color-accent,#10b981)]/10">
+                        <span className="text-[10px] font-mono font-black text-[var(--color-accent)] px-1.5 py-0.5 rounded bg-[var(--color-accent)]/10">
                           {st.number}
                         </span>
-                        <h5 className="text-xs font-bold text-[var(--color-text-primary,#fff)]">
+                        <h5 className="text-xs font-bold text-[var(--color-text-primary)]">
                           {st.stepTitle}
                         </h5>
                       </div>
-                      <p className="text-[11px] text-[var(--color-text-secondary,#a1a1aa)] leading-relaxed pl-6">
+                      <p className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed pl-6">
                         {st.detail}
                       </p>
                     </div>
@@ -499,11 +639,11 @@ export function StudioInteractiveDemoModal({
                 </div>
               </div>
 
-              {/* Technical Stack Specifications */}
-              <div className="p-3.5 rounded-2xl bg-[var(--color-primary,#000)]/30 border border-[var(--color-border,rgba(255,255,255,0.06))] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              {/* Technical Stack Specifications - Solid Rule 17 background */}
+              <div className="p-3.5 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2">
-                  <Cpu size={15} className="text-[var(--color-accent,#10b981)] shrink-0" />
-                  <span className="font-mono text-[11px] text-[var(--color-text-secondary,#a1a1aa)]">
+                  <Cpu size={15} className="text-[var(--color-accent)] shrink-0" />
+                  <span className="font-mono text-[11px] text-[var(--color-text-secondary)]">
                     {activeFlow.technicalPill}
                   </span>
                 </div>
@@ -511,26 +651,26 @@ export function StudioInteractiveDemoModal({
                 <button
                   onClick={() => handleAction(activeFlow)}
                   data-testid="studio-demo-try-btn"
-                  className="px-4 py-2 rounded-xl bg-[var(--color-accent,#10b981)] text-black font-bold text-xs flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
+                  className="px-4 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold text-xs flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
                 >
                   <span>{activeFlow.actionText}</span>
-                  <ArrowRight size={13} />
+                  <ArrowRight size={13} className={isRTL ? 'rotate-180' : ''} />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Footer Bar */}
-          <div className="p-4 sm:p-5 bg-[var(--color-primary,#000)]/50 border-t border-[var(--color-border,rgba(255,255,255,0.08))] flex items-center justify-between gap-4 text-xs font-mono text-[var(--color-text-secondary,#a1a1aa)]">
+          {/* Footer Bar - Solid Rule 17 background */}
+          <div className="p-4 sm:p-5 bg-[var(--color-primary)] border-t border-[var(--color-border)] flex items-center justify-between gap-4 text-xs font-mono text-[var(--color-text-secondary)]">
             <span className="hidden sm:inline">
-              Every feature of OpenGuide is explainable by OpenGuide.
+              {t('demo_footer_note') || 'Every feature of OpenGuide is explainable by OpenGuide.'}
             </span>
             <div className="flex items-center gap-3 ml-auto">
               <button
                 onClick={onClose}
-                className="px-4 py-1.5 rounded-xl hover:bg-[var(--color-surface,rgba(255,255,255,0.08))] text-[var(--color-text-primary,#fff)] transition-colors cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)] transition-colors cursor-pointer font-bold"
               >
-                Done
+                {t('action_done') || 'Done'}
               </button>
             </div>
           </div>

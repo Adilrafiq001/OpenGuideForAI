@@ -247,19 +247,19 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   ];
 
   // 11 Core Pillars
-  const pillars = [
-    { title: 'AI Fundamentals', desc: 'Tokens, neural weights, attention matrices, and inference math explained with zero jargon.' },
-    { title: 'Data Engineering', desc: 'Ingestion, clean pipelines, vector embeddings, and chunking strategies that prevent hallucination.' },
-    { title: 'Modular Architecture', desc: 'Decoupled, ports-and-adapters architecture where components swap without breaking the system.' },
-    { title: 'Open Standards & APIs', desc: 'Master REST, JSON Schema tool schemas, and Model Context Protocol (MCP) for lifetime transferability.' },
-    { title: 'Version Control & Git', desc: 'Reproducible environments, conventional commits, and deterministic model prompt versioning.' },
-    { title: 'CI/CD & Automated QA', desc: 'Headless Playwright test suites running on every commit to catch edge-case regressions automatically.' },
-    { title: 'Scalable Folder Structure', desc: 'Clean separation: frontend, backend adapters, local vector indices, and testing harnesses.' },
-    { title: 'Optimized Playwright Tests', desc: 'Parallel headless browser runs, zero flakiness, verified accessibility, and instant reporting.' },
-    { title: 'Intuitive UX & Design', desc: 'World-class spatial interfaces, 20 calibrated themes, and interfaces beginners love to use.' },
-    { title: 'Legal & Ethical AI', desc: 'Client-side privacy, BYOK zero-cloud-exposure keys, copyright safety, and responsible deployment.' },
-    { title: 'Adaptive Learning', desc: 'Curriculum updated continuously as frontier models release new capabilities.' }
-  ];
+  const pillars = useMemo(() => [
+    { id: 1, category: 'Foundations', title: t('pillar_1_title') || 'AI Fundamentals & Invariant Math', desc: t('pillar_1_desc') || 'Tokens, vector embeddings, attention matrices, and inference math without black boxes.' },
+    { id: 2, category: 'Vector Systems', title: t('pillar_2_title') || 'Data Engineering & Semantic Indexing', desc: t('pillar_2_desc') || 'Deterministic ingestion, sliding-window chunking, and metadata filtering that prevent hallucination.' },
+    { id: 3, category: 'System Design', title: t('pillar_3_title') || 'Modular Ports & Adapters Architecture', desc: t('pillar_3_desc') || 'Decoupled model drivers, swappable vector DBs, and clean boundaries where vendors never leak into logic.' },
+    { id: 4, category: 'Protocols', title: t('pillar_4_title') || 'Open Standards & Model Context Protocol (MCP)', desc: t('pillar_4_desc') || 'Typed JSON-RPC 2.0 schemas, standard tool registries, and vendor-neutral agent execution.' },
+    { id: 5, category: 'Reproducibility', title: t('pillar_5_title') || 'Version Control & Deterministic Environments', desc: t('pillar_5_desc') || 'Deterministic lockfiles, conventional commits, and prompt versioning ensuring output reproducibility.' },
+    { id: 6, category: 'Quality Assurance', title: t('pillar_6_title') || 'CI/CD & Automated Regression Gates', desc: t('pillar_6_desc') || 'Headless Playwright sweeps catching bugs, broken layouts, and memory leaks before human review.' },
+    { id: 7, category: 'Architecture', title: t('pillar_7_title') || 'Scalable Folder & Monorepo Architecture', desc: t('pillar_7_desc') || 'Strict separation between frontend UI, Web Worker engines, and pure data stores with clean dependency flows.' },
+    { id: 8, category: 'Evaluation', title: t('pillar_8_title') || 'Deterministic Evaluation & Fuzzing', desc: t('pillar_8_desc') || 'LLM-as-a-Judge rubrics, quantitative scoring, and synthetic adversarial test suites catching drift.' },
+    { id: 9, category: 'Design Engineering', title: t('pillar_9_title') || 'Human Psychological Ergonomics & Usability', desc: t('pillar_9_desc') || 'WCAG AAA contrast across 24 themes, Miller Law chunking, and tactile feedback reducing cognitive load.' },
+    { id: 10, category: 'Security', title: t('pillar_10_title') || 'Client Privacy & Sovereign Security', desc: t('pillar_10_desc') || '100% Client-Side WebAssembly compute, BYOK key isolation, and zero third-party telemetry exposure.' },
+    { id: 11, category: 'Pedagogy', title: t('pillar_11_title') || 'Adaptive Lifelong Learning & WASM Sovereignty', desc: t('pillar_11_desc') || 'Continuous evolution matching frontier AI breakthroughs for $0 with eternal first-principles math.' }
+  ], [t]);
 
   // First-Principles Industry Voices
   const firstPrinciplesQuotes = [
@@ -843,39 +843,41 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pillars.map((pillar, idx) => (
+          {pillars.map((pillar) => (
             <button 
-              key={idx}
+              key={pillar.id}
               type="button"
-              aria-label={`Pillar ${idx + 1}: ${pillar.title}. ${pillar.desc}`}
+              aria-label={`Pillar ${pillar.id}: ${pillar.title}. ${pillar.desc}`}
               onClick={() => {
-                setSelectedPillarId(idx + 1);
+                setSelectedPillarId(pillar.id);
                 setIsPillarsModalOpen(true);
               }}
-              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between text-left cursor-pointer group hover:scale-[1.01] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between text-left cursor-pointer group hover:scale-[1.01] active:scale-[0.98] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between mb-3 gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <div 
-                      className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-[var(--color-accent)]/15 text-[var(--color-accent)]"
+                      className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30 shrink-0"
                     >
-                      {idx + 1}
+                      {pillar.id}
                     </div>
-                    <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
+                    <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors truncate">
                       {pillar.title}
                     </h3>
                   </div>
-                  <ArrowUpRight size={15} className="text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors" />
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] group-hover:border-[var(--color-accent)]/40 transition-colors shrink-0">
+                    {pillar.category}
+                  </span>
                 </div>
 
-                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
                   {pillar.desc}
                 </p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-[var(--color-border)]/60 flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
-                <span>EXPLORE FORMULA & FAULT MODES</span>
+                <span>{t('pillar_explore_action') || 'EXPLORE FORMULA & FAULT MODES'}</span>
                 <span className="text-[var(--color-accent)] group-hover:translate-x-0.5 transition-transform">→</span>
               </div>
             </button>

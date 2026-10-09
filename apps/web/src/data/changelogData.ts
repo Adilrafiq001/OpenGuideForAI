@@ -5,9 +5,32 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.5.1';
+export const CURRENT_STUDIO_VERSION = '1.7.0';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.7.0',
+    date: 'October 2026',
+    title: 'Search, Tour, Demo Hardening & 120 Architectural Pillars Precision Remediation',
+    highlights: [
+      'Studio Command Palette: WAI-ARIA 1.2 Combobox with dynamic aria-activedescendant, Home/End keyboard jump navigation, category filter bar (All, Lab, Track, Tool, Theme, Language), exhaustive indexing across 8 Engineer Tracks, 8 Builder Tracks, 11 Pillars, 24 Themes, and 12 Languages, and Rule 17 solid opaque styling.',
+      'App Guided Tour: Dynamic DOM presence filtering preventing offscreen detachment on subpages, focus recovery upon completion, WCAG AAA theme contrast calibration across all 24 themes, mobile flex-wrap footer layout, and tactile audio haptics.',
+      'Studio Interactive Demo Modal: WAI-ARIA 1.2 Tablist keyboard navigation, live in-browser Pyodide WASM micro-test sandbox verifying 0ms server latency, consonant harmonic vector sonification chord synthesis in Flow 3, comprehensive curriculum coverage across 57 Engineer labs and 48 Builder milestone labs, and Rule 17 solid backgrounds.',
+      'Universal Multi-Language Synchronization: Synchronized translation keys across all 12 supported locales (en, es, zh, hi, fr, de, ja, pt, ru, it, ur, ar).',
+      'Architectural Pillars Deep Hardening: Surgical remediation of 120 precision issues across ArchitecturalPillarsModal, vendor prefix order (-webkit-backdrop-filter), and accessible button names.'
+    ]
+  },
+  {
+    version: '1.6.0',
+    date: 'October 2026',
+    title: 'Forward Deployed AI Engineering Blueprint & The Builder Path (Tracks B0–B7)',
+    highlights: [
+      'Forward Deployed AI Engineering Blueprint: ASD-STE100 Systems Role Matrix, Agentic IDE mastery guides (Google Antigravity, Anthropic Claude Code, OpenAI Codex & Cursor), $0 Sovereign Stack architecture, zero-leakage secret hygiene, and repository governance standards.',
+      'The Builder Path: Complete implementation of Tracks B0 through B7 across 24 modules, including interactive Spec Studio Lab and Diff Reader Lab.',
+      'Header Navigation Consolidation: De-cluttered top navigation bar with unified Tracks & Curriculum flyout containing premier Forward AI hero card.',
+      'FDE Operational Knowledge Bank: 24 production-grade operational cards across 9 enterprise categories with copyable production code and live search.'
+    ]
+  },
   {
     version: '1.5.1',
     date: 'October 2026',

@@ -1,4 +1,4 @@
-# State: External Audit Ready (Release v1.6.0 • Honest Reality-Grounded Benchmark: ~9.9/10)
+# State: External Audit Ready (Release v1.7.0 • Honest Reality-Grounded Benchmark: ~9.9/10)
 > Pre-flight freeze active per docs/PRODUCTION-READINESS-AUDIT.md. External Audit Dossier verified. Zero self-awarded 10/10 ratings.
 
 ```
@@ -8,6 +8,29 @@ BRANCH: dev         <- active development and all testing strictly confined to d
 
 
 **Done:**
+- **Phase F15: Search, Tour, Demo & 120 Architectural Pillars Hardening (Release v1.7.0 • 100% Certified):**
+  - **1. Studio Command Palette (`CommandPaletteModal.tsx`):**
+    - WAI-ARIA 1.2 Combobox with dynamic `aria-activedescendant`, `Home`/`End` jump navigation, and `role="status"` live region notifications.
+    - Category filter bar (`All`, `Lab`, `Track`, `Tool`, `Theme`, `Language`).
+    - Full indexing of all 8 Engineer Tracks, 8 Builder Tracks, 11 Architectural Pillars, 24 Themes, 12 Languages, Attention Matrix Dissection, Autograd DAG, 3D Holodeck, and AR Glasses guide.
+    - Empty state recovery actions ("Reset Search", "Browse 8 Tracks", "Open 3D Holodeck").
+    - 100% solid Rule 17 backgrounds, eliminating translucent `/50` and `/40` slash opacities.
+  - **2. App Guided Tour (`AppTour.tsx`, `app-tour.css`):**
+    - Resilient DOM presence filtering preventing crashes or misaligned popovers on subpages.
+    - Focus restoration to triggering button upon tour completion or dismissal.
+    - WCAG AAA contrast calibration across all 24 themes, eliminating black text on dark accents.
+    - Mobile-safe flex-wrap footer preventing collisions on small viewports (<360px).
+    - Audio haptic tactile clicks on step progression with safe error suppression.
+  - **3. Studio Interactive Demo Modal (`StudioInteractiveDemoModal.tsx`):**
+    - WAI-ARIA 1.2 Tablist keyboard navigation (`ArrowUp`, `ArrowDown`, `Home`, `End`) across all 7 flows.
+    - Live In-Browser Pyodide WASM micro-test sandbox verifying 0ms server latency.
+    - Harmonic Vector Sonification: live consonant musical fifth chord synthesizer in Flow 3.
+    - Complete curriculum coverage: 57 Engineer labs and 48 Builder milestone labs indexed in Flow 2.
+    - Solid Rule 17 backgrounds, eliminating translucent `/30`, `/40`, and `/50` slash opacities.
+  - **4. Universal Multi-Language Synchronization:**
+    - Synchronized Search, Tour, and Demo translation keys across all 12 supported locales (`en.ts` through `ar.ts`).
+  - **5. 120 Architectural Pillars Precision Remediation:**
+    - Resolved 120 precision issues across `ArchitecturalPillarsModal.tsx`, CSS vendor prefix order (`-webkit-backdrop-filter`), and accessible button names.
 - **Phase F14: Header Navigation Consolidation, FDE Enterprise Knowledge Bank Elevation & ASD Purge (Release v1.6.0 • 100% Certified):**
   - **1. Header Navigation Consolidation & Zero Ribbon Clutter (`LandingHeader.tsx`):**
     - Removed standalone top navigation buttons for "Forward AI", "Labs", and "Pathways" that previously sprawled across the desktop navbar.

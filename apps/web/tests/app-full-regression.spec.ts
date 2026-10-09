@@ -92,20 +92,20 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=Vector dot-product matched in 0.38ms').first()).toBeVisible();
 
     // Test Lens 2: Vector Manifolds
-    const vectorLensBtn = page.getByRole('button', { name: /Vector Manifolds/i }).first();
+    const vectorLensBtn = page.getByRole('tab', { name: /Vector Manifolds/i }).or(page.getByRole('button', { name: /Vector Manifolds/i })).first();
     await vectorLensBtn.click();
     await page.waitForTimeout(250);
     await expect(page.locator('text=High-Dimensional Semantic Manifold Projection').first()).toBeVisible();
     await expect(page.locator('text=Neural Topology').first()).toBeVisible();
 
     // Test Lens 3: RAG Engine
-    const ragLensBtn = page.getByRole('button', { name: /RAG Engine/i }).first();
+    const ragLensBtn = page.getByRole('tab', { name: /RAG Engine/i }).or(page.getByRole('button', { name: /RAG Engine/i })).first();
     await ragLensBtn.click();
     await page.waitForTimeout(250);
     await expect(page.locator('text=Dense Vector Retrieval & Zero-Hallucination Pipeline').first()).toBeVisible();
 
     // Test Lens 4: FastMCP Tools
-    const mcpLensBtn = page.getByRole('button', { name: /FastMCP Tools/i }).first();
+    const mcpLensBtn = page.getByRole('tab', { name: /FastMCP Tools/i }).or(page.getByRole('button', { name: /FastMCP Tools/i })).first();
     await mcpLensBtn.click();
     await page.waitForTimeout(250);
     await expect(page.locator('text=FastMCP Tool Execution & Autonomous State Machine').first()).toBeVisible();
@@ -784,7 +784,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await track3Nav.click();
     await expect(page.locator('text=Track 3: Evals').first()).toBeVisible({ timeout: 5000 });
 
-    const webgpuTab = page.getByRole('button', { name: /WebGPU/i }).first();
+    const webgpuTab = page.getByRole('tab', { name: /WebGPU/i }).or(page.getByRole('button', { name: /WebGPU/i })).first();
     await expect(webgpuTab).toBeVisible({ timeout: 10000 });
     await webgpuTab.click();
     await expect(page.locator('text=WebGPU Tensor Dispatch & Quantized Neural SLM')).toBeVisible();
@@ -828,7 +828,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     await expect(page.locator('text=Dr. Alan Turing')).toBeVisible();
 
     // Test Simulate 100% Complete button
-    const simulateBtn = page.getByRole('button', { name: /Simulate 100% Complete/i });
+    const simulateBtn = page.getByRole('button', { name: /Simulate 100% (Complete|completion)/i }).or(page.locator('button:has-text("Simulate 100% Complete")')).first();
     await expect(simulateBtn).toBeVisible();
     await simulateBtn.click();
     await page.waitForTimeout(400);

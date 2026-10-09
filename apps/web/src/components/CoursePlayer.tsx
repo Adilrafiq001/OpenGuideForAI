@@ -733,7 +733,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                                   </button>
                                   <button
                                     onClick={handleInsertSolution}
-                                    aria-label="Insert solution into editor"
+                                    aria-label="Load into Editor - Insert canonical solution code into editor"
                                     className="flex items-center gap-1 px-2 py-1 rounded bg-[var(--color-accent)] hover:brightness-110 text-white text-[10px] font-mono font-bold transition-all cursor-pointer active:scale-95 shadow-sm"
                                   >
                                     <ArrowSquareIn size={11} />
@@ -995,7 +995,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     data-testid="run-code-button"
                     onClick={executeCode}
                     disabled={state !== 'ready' && state !== 'running'}
-                    aria-label="Execute Python code (Ctrl+Enter)"
+                    aria-label="Run Code - Execute Python code (Ctrl+Enter)"
                     className={`flex items-center gap-2 rounded-full px-5 py-2.5 font-medium text-xs sm:text-sm transition-all active:scale-[0.98] cursor-pointer shadow-md min-h-[44px] ${
                       state === 'ready' || state === 'running'
                         ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] hover:opacity-90' 

@@ -56,17 +56,19 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     // Wait for Pyodide (ready) indicator
     await expect(page.locator('text=Pyodide (ready)').first()).toBeVisible({ timeout: 15000 });
 
-    // Locate solution reveal button
-    const revealAccordion = page.getByRole('button', { name: /Reveal Canonical Solution/i }).first();
-    if (await revealAccordion.count() > 0) {
-      await revealAccordion.click();
-      await page.waitForTimeout(300);
+    // Locate solution reveal button and load solution into editor
+    const revealAccordion = page.locator('button[aria-label="Reveal canonical solution"]').first();
+    await revealAccordion.scrollIntoViewIfNeeded();
+    await revealAccordion.click();
 
-      const loadBtn = page.getByRole('button', { name: /Load into Editor/i }).first();
-      if (await loadBtn.count() > 0) {
-        await loadBtn.click();
-        await page.waitForTimeout(300);
-      }
+    const loadBtn = page.getByRole('button', { name: /Load into Editor/i }).first();
+    await expect(loadBtn).toBeVisible({ timeout: 5000 });
+    await loadBtn.click();
+
+    // Switch to editor tab if on mobile viewport
+    const mobileEditorTab = page.locator('[data-testid="mobile-tab-editor"]');
+    if (await mobileEditorTab.isVisible()) {
+      await mobileEditorTab.click();
     }
 
     // Click Run Code
@@ -91,11 +93,11 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     await expect(page.locator('text=AI Engineering Credentials & Portfolio.').first()).toBeVisible({ timeout: 10000 });
 
     // Verify export button
-    const exportBtn = page.getByRole('button', { name: /Export Ledger/i }).first();
+    const exportBtn = page.getByRole('button', { name: /Download cryptographic learning ledger as JSON|Export Ledger/i }).first();
     await expect(exportBtn).toBeVisible();
 
     // Verify import button
-    const importBtn = page.getByRole('button', { name: /Import Backup/i }).first();
+    const importBtn = page.getByRole('button', { name: /Import learning ledger from JSON backup file|Import Backup/i }).first();
     await expect(importBtn).toBeVisible();
 
     // Verify 4 track badges exist
@@ -108,15 +110,9 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
   test('05. Abby Chatbot opens with offline knowledge engine and responds immediately', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Trigger Abby open via native event dispatch
-    await page.evaluate(() => {
-      const cb = document.querySelector('#abby-toggle-checkbox') as HTMLInputElement | null;
-      if (cb) {
-        cb.checked = true;
-        cb.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
-    await page.waitForTimeout(500);
+    // Trigger Abby open via dispatchEvent click
+    await page.locator('#abby-toggle-checkbox').dispatchEvent('click');
+    await page.waitForTimeout(600);
 
     // Verify Abby chat window opened
     const abbyHeader = page.locator('.abby-chat-header').first();
@@ -132,8 +128,8 @@ test.describe('OpenGuide CodeMirror 6, Scaffolding & Tiered Persistence Suite', 
     await textarea.press('Enter');
 
     // Expect assistant response bubble to appear
-    await expect(page.locator('.abby-message-bubble.assistant').nth(1)).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('.abby-message-bubble.assistant').nth(1)).toContainText('Track 1');
+    const assistantReply = page.locator('.abby-message-bubble.assistant').filter({ hasText: 'Track 1' }).first();
+    await expect(assistantReply).toBeVisible({ timeout: 10000 });
   });
 
   test('06. Track 4: Frontier Intelligence mounts with 9 labs and scaled dot-product attention', async ({ page }) => {

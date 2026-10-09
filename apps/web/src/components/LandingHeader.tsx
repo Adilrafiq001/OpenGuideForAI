@@ -565,7 +565,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             <button 
               onClick={() => onOpenCommandPalette?.()}
               data-testid="header-command-palette-btn"
-              className="hidden md:flex items-center gap-1.5 px-2.5 h-8 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xs cursor-pointer active:scale-[0.98] group"
+              className="flex items-center gap-1.5 px-2 md:px-2.5 h-8 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-all text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] shadow-xs cursor-pointer active:scale-[0.98] group"
               aria-label="Open Studio Search Palette"
             >
               <Search size={13} className="text-[var(--color-accent)] opacity-80 group-hover:opacity-100 transition-opacity" />
@@ -883,16 +883,28 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 {t('nav_pillars')}
               </a>
 
-              <div className="pt-2 mt-1 border-t border-[var(--color-border)] flex items-center gap-2">
+              <div className="pt-2 mt-1 border-t border-[var(--color-border)] grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenCommandPalette?.();
+                  }}
+                  data-testid="mobile-drawer-search-btn"
+                  className="py-2 px-2 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1 text-[var(--color-text-primary)] cursor-pointer"
+                  aria-label="Search Studio"
+                >
+                  <Search size={13} className="text-[var(--color-accent)]" />
+                  <span>Search</span>
+                </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     startAppTour(true);
                   }}
                   data-testid="mobile-drawer-tour-btn"
-                  className="flex-1 py-2 px-3 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1.5 text-[var(--color-text-primary)] cursor-pointer"
+                  className="py-2 px-2 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1 text-[var(--color-text-primary)] cursor-pointer"
                 >
-                  <Compass size={14} className="text-[var(--color-accent)]" />
+                  <Compass size={13} className="text-[var(--color-accent)]" />
                   <span>{t('nav_tour')}</span>
                 </button>
                 <button
@@ -901,7 +913,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                     onOpenDemo?.();
                   }}
                   data-testid="mobile-drawer-demo-btn"
-                  className="flex-1 py-2 px-3 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1.5 text-[var(--color-text-primary)] cursor-pointer"
+                  className="py-2 px-2 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs font-semibold flex items-center justify-center gap-1 text-[var(--color-text-primary)] cursor-pointer"
                 >
                   <Play size={13} className="text-[var(--color-accent)]" />
                   <span>Demo</span>

@@ -21,7 +21,7 @@ yarn dev
 # Run Oxlint static analysis (0 errors)
 yarn lint
 
-# Execute Playwright automated test suite across all 17 spec files
+# Execute Playwright automated test suite across all 18 spec files
 npx playwright test --config apps/web/playwright.config.ts
 
 # Compile production bundle

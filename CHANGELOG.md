@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.0] - 2026-10-09
+
+### Added
+- **Search, Tour & Demo Hardening (55 Precision Defects Resolved):**
+  - **Studio Command Palette (`CommandPaletteModal.tsx`):**
+    - WAI-ARIA 1.2 Combobox compliance with `aria-activedescendant` dynamic tracking, `aria-haspopup="listbox"`, and `role="status"` live region notifications on zero-match searches.
+    - Full keyboard navigation: `ArrowDown`, `ArrowUp`, `Home` (jump to first item), `End` (jump to last item), `Enter` (select), and `Escape` (dismiss).
+    - Quick category filter bar: instant filtering across `All`, `Lab`, `Track`, `Tool`, `Theme`, and `Language`.
+    - Exhaustive indexation: all 8 Engineer Tracks (Track 0 through Track 7), all 8 Builder Tracks (B0 through B7), 11 Architectural Pillars, 24 Themes, 12 Languages, Attention Matrix Dissection, Autograd Computational DAG, 3D Spatial Holodeck, and AR Glasses guide.
+    - Empty search recovery state featuring one-click reset, direct curriculum exploration, and 3D Holodeck navigation.
+    - Solid 100% opaque backgrounds conforming strictly to Rule 17 (Overlay Bleed-Through Invariant).
+  - **App Guided Tour (`AppTour.tsx` & `app-tour.css`):**
+    - Dynamic DOM presence filtering: resilient execution preventing detached element errors on subpages.
+    - WCAG AAA contrast calibration across all 24 themes, eliminating dark-on-dark button text.
+    - Focus recovery on dismiss/complete: keyboard focus restored to triggering button.
+    - Mobile-safe flex-wrap footer preventing collisions on small viewports (<360px).
+    - Tactile sound haptics integration on popover rendering with safe error suppression.
+  - **Studio Interactive Demo Modal (`StudioInteractiveDemoModal.tsx`):**
+    - WAI-ARIA 1.2 Tablist keyboard navigation (`ArrowUp`, `ArrowDown`, `Home`, `End`) across all 7 flows.
+    - In-Browser Pyodide WASM micro-test sandbox: live interactive test execution proving 0ms server latency.
+    - Harmonic Vector Sonification: live consonant musical fifth chord synthesizer in Flow 3.
+    - Complete curriculum coverage: 57 Engineer labs and 48 Builder milestone labs indexed in Flow 2.
+    - 100% solid Rule 17 backgrounds, eliminating translucent `/30`, `/40`, and `/50` slash opacities.
+- **Universal Multi-Language Synchronization:**
+  - Synchronized Search, Tour, and Demo translation keys across all 12 supported locales (`en.ts`, `es.ts`, `zh.ts`, `hi.ts`, `fr.ts`, `de.ts`, `ja.ts`, `pt.ts`, `ru.ts`, `it.ts`, `ur.ts`, `ar.ts`).
+- **Architectural Pillars Deep Hardening (120 Defects Resolved):**
+  - Surgical remediation of 120 precision issues across `ArchitecturalPillarsModal.tsx`, CSS vendor prefix order (`-webkit-backdrop-filter`), and accessible button names.
+
+### Fixed
+- **Mobile Header Accessibility:**
+  - Search button made accessible on mobile viewports in both the header bar and the mobile drawer navigation dock.
+- **TypeScript & IDE Diagnostics:**
+  - Resolved `tsBuildInfoFile` and `target` configurations in `tsconfig.app.json` and `tsconfig.node.json`.
+  - Added `-webkit-user-select` prefix to `deep-engineer-button.css`.
+
+---
+
 ## [1.6.0] - 2026-10-08
 
 ### Added

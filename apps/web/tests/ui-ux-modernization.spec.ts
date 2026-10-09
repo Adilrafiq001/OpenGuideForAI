@@ -54,7 +54,7 @@ test.describe('OpenGuide UI/UX Modernization & Universal Synchronization Suite',
     await expect(page.locator('text=Production Failure Mode')).toBeVisible();
 
     // Close modal
-    await page.locator('button[aria-label="Close modal"]').first().click();
+    await page.locator('button[aria-label="Close 11 Architectural Pillars modal"]').or(page.locator('button[aria-label*="Close"]')).first().click();
     await expect(page.locator('#pillars-modal-title')).toBeHidden();
   });
 

@@ -1879,6 +1879,127 @@ ZeroDivisionError: division by zero`;
     // 19. Zero console errors
     expect(errors).toHaveLength(0);
   });
+
+  test('TC-AUDIT-120-PILLARS: Comprehensive Physical Verification of 120 Architectural Pillars Invariants', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#pillars', { state: 'attached' });
+
+    // 1. Verify Section 4 Headings and Badge
+    const pillarsSection = page.locator('#pillars');
+    await expect(pillarsSection).toBeVisible();
+    await expect(pillarsSection.getByText('Comprehensive Engineering')).toBeVisible();
+    await expect(pillarsSection.getByText('The 11 Pillars of Real AI Systems')).toBeVisible();
+
+    // 2. Verify all 11 Cards exist with synchronized titles, categories, and resolved Evaluation Pillar 8
+    const pillarCards = pillarsSection.locator('button[type="button"][aria-label^="Pillar "]');
+    await expect(pillarCards).toHaveCount(11);
+
+    // Pillar 1: AI Fundamentals & Invariant Math
+    const card1 = pillarCards.nth(0);
+    await expect(card1).toContainText('AI Fundamentals & Invariant Math');
+    await expect(card1).toContainText('Foundations');
+
+    // Pillar 4: Open Standards & MCP
+    const card4 = pillarCards.nth(3);
+    await expect(card4).toContainText('Open Standards & Model Context Protocol (MCP)');
+    await expect(card4).toContainText('Protocols');
+
+    // Pillar 8: MUST be Deterministic Evaluation & Fuzzing (NOT duplicate Playwright tests)
+    const card8 = pillarCards.nth(7);
+    await expect(card8).toContainText('Deterministic Evaluation & Fuzzing');
+    await expect(card8).toContainText('Evaluation');
+    await expect(card8).not.toContainText('Optimized Playwright Tests');
+
+    // Pillar 10: Client Privacy & Sovereign Security
+    const card10 = pillarCards.nth(9);
+    await expect(card10).toContainText('Client Privacy & Sovereign Security');
+    await expect(card10).toContainText('Security');
+
+    // Pillar 11: Adaptive Lifelong Learning & WASM Sovereignty
+    const card11 = pillarCards.nth(10);
+    await expect(card11).toContainText('Adaptive Lifelong Learning & WASM Sovereignty');
+    await expect(card11).toContainText('Pedagogy');
+
+    // Action label translation on all cards
+    await expect(card1.getByText('EXPLORE FORMULA & FAULT MODES')).toBeVisible();
+
+    // 3. Open Modal via Pillar 4 Card Click
+    await card4.click();
+
+    // 4. Verify Modal Dialog WAI-ARIA Semantics
+    const modal = page.locator('div[role="dialog"][aria-modal="true"]');
+    await expect(modal).toBeVisible();
+    await expect(modal).toHaveAttribute('aria-labelledby', 'pillars-modal-title');
+    await expect(modal).toHaveAttribute('aria-describedby', 'pillars-modal-desc');
+
+    // Close button
+    const closeBtn = modal.locator('button[aria-label="Close 11 Architectural Pillars modal"]');
+    await expect(closeBtn).toHaveAttribute('type', 'button');
+
+    // 5. Verify Master Tablist and Tab 4
+    const tablist = modal.locator('div[role="tablist"][aria-orientation="vertical"]');
+    await expect(tablist).toBeVisible();
+
+    const tab4 = tablist.locator('#pillar-tab-4');
+    await expect(tab4).toHaveAttribute('role', 'tab');
+    await expect(tab4).toHaveAttribute('aria-selected', 'true');
+    await expect(tab4).toHaveAttribute('aria-controls', 'pillar-detail-panel');
+
+    // 6. Verify Detail Panel for Pillar 4
+    const detailPanel = modal.locator('#pillar-detail-panel');
+    await expect(detailPanel).toHaveAttribute('role', 'tabpanel');
+    await expect(detailPanel).toHaveAttribute('aria-labelledby', 'pillar-tab-4');
+    await expect(detailPanel).toContainText('Model Context Protocol (MCP)');
+
+    // 7. Verify MCP Python Verification Code has 'arguments' schema per official spec
+    const codeBlock = detailPanel.locator('pre');
+    await expect(codeBlock).toHaveAttribute('tabIndex', '0');
+    await expect(codeBlock).toContainText('tools/call');
+    await expect(codeBlock).toContainText('arguments');
+
+    // 8. Test In-Modal Simulation Execution
+    const runSimBtn = detailPanel.locator('button[aria-label="Run verification script in client WebAssembly"]');
+    await expect(runSimBtn).toHaveAttribute('type', 'button');
+    await runSimBtn.click();
+    await expect(detailPanel.getByText('All mathematical invariants evaluated successfully.')).toBeVisible({ timeout: 5000 });
+
+    // 9. Test Copy Code Action and Accessible Notification
+    const copyBtn = detailPanel.locator('button[aria-label*="Copy"]');
+    await expect(copyBtn).toHaveAttribute('type', 'button');
+    await copyBtn.click();
+    await expect(detailPanel.getByText('Copied!')).toBeVisible();
+
+    // 10. Test Search Filtering in Modal
+    const searchInput = modal.locator('input[type="text"]');
+    await searchInput.fill('Evaluation');
+    const filteredTabs = tablist.locator('button[role="tab"]');
+    await expect(filteredTabs).toHaveCount(1);
+    await expect(filteredTabs.first()).toContainText('Deterministic Evaluation & Fuzzing');
+
+    // Clear search
+    const clearBtn = modal.locator('button[aria-label="Clear pillar search"]');
+    await clearBtn.click();
+    await expect(tablist.locator('button[role="tab"]')).toHaveCount(11);
+
+    // 11. Test Next / Previous Linear Navigation
+    const nextBtn = detailPanel.getByRole('button', { name: /Next/i });
+    await nextBtn.click();
+    // After clicking next from 4, active tab should be Pillar 5
+    const tab5 = tablist.locator('#pillar-tab-5');
+    await expect(tab5).toHaveAttribute('aria-selected', 'true');
+
+    // 12. Dismiss Modal via Escape Key
+    await page.keyboard.press('Escape');
+    await expect(modal).not.toBeVisible();
+
+    // 13. Zero console errors
+    expect(errors).toHaveLength(0);
+  });
 });
 
 
