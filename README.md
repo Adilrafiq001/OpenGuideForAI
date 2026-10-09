@@ -41,7 +41,7 @@
 
 ---
 
-### [Launch Studio Online](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [The Experience](#what-you-experience) &nbsp;•&nbsp; [Curriculum](#curriculum-tracks) &nbsp;•&nbsp; [Technical Explainer](explainer.md) &nbsp;•&nbsp; [Quickstart](#get-started-in-60-seconds) &nbsp;•&nbsp; [Shortcuts](#power-shortcuts)
+### [Launch Studio Online](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [The Experience](#what-you-experience) &nbsp;•&nbsp; [Spatial AR Holodeck](#spatial-holodeck-on-smart-ar-glasses) &nbsp;•&nbsp; [Curriculum](#curriculum-tracks) &nbsp;•&nbsp; [Technical Explainer](explainer.md) &nbsp;•&nbsp; [Quickstart](#get-started-in-60-seconds) &nbsp;•&nbsp; [Shortcuts](#power-shortcuts)
 
 </div>
 
@@ -60,6 +60,18 @@ OpenGuide is not a cloud service or a toy tutorial. It is a browser-native labor
 | **Offline PWA & Knowledge** | Progressive Web App caches the curriculum, CPython engine, and 250 frontier AI and everyday trade knowledge topics with runnable Python code on your device. | Code, experiment, and learn seamlessly anywhere on Earth with zero internet connection. |
 
 > 📖 **Deep Engineering Specification:** For the complete system architecture, execution pipeline, 15-second watchdog supervisor, and progressive disclosure design, read the [ASD-STE100 Technical Explainer](explainer.md).
+
+---
+
+## Spatial Holodeck on Smart AR Glasses
+
+OpenGuide features a native, browser-based WebXR / WebGL 3D Spatial Computing Holodeck (`/holodeck`) optimized for flagship optical see-through Smart AR Glasses (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S, and Apple Vision Pro):
+
+* **60FPS Sustained Zero-Thrashing Engine:** Real-time Three.js visualization of 3D vector space manifolds, high-dimensional semantic clustering, and interactive neural synapse DAGs. Optimized with offscreen `IntersectionObserver` auto-pausing, zero-allocation pre-cached vector buffers, and asynchronous state isolation.
+* **True-Black OLED Optical Passthrough:** Calibrated `#000000` emission cutoff mode that turns off OLED pixels on optical waveguides, achieving flawless spatial HUD compositing directly over your physical environment.
+* **Binaural Harmonic Spatial Audio:** Web Audio API sound engine synthesizing musical fifth chord harmonics with spatial panning proportional to vector cosine similarity and synaptic node connections.
+* **Virtual Spatial Keyboard & Head Tracking:** In-visor virtual floating keyboard with acoustic and haptic feedback, 3-DoF head-tracking sensor emulation, and rapid text dispatch.
+* **Smart AR Glasses Hardware Matrix:** Complete interactive guide and calibration profiles for major AR glasses ecosystems (SpaceWalker, Nebula, MyGlasses) with IPD adjustment, FOV alignment, and custom 120Hz refresh rates.
 
 ---
 
@@ -143,6 +155,7 @@ OpenGuide functions as an **Installable Progressive Web App (PWA)** with native 
 | **`Cmd + K` / `Ctrl + K`** | Command Palette | Fuzzy search across all 57 labs, 24 themes, 12 languages, and studio tools. |
 | **`Ctrl + Enter`** | Code Runner | Instantly compiles and executes active Python code in the Web Worker. |
 | **`Alt + X`** | X-Ray Debug Lens | Inspects real-time WebAssembly memory heap, AST nodes, and IndexedDB tables. |
+| **`Alt + S`** | Spatial HUD | Toggles 3-DoF floating spatial headset HUD, gimbal indicators, and true-black passthrough. |
 | **Touch Ribbon** | Mobile Editor | Single-tap access to syntax keys (`Tab`, `:`, `( )`, `[ ]`, `def`, `assert`). |
 | **`.ipynb` Export** | Notebook Creator | Downloads verified lab solutions as standard Jupyter Notebooks (nbformat 4.5). |
 | **Harmonic Audio** | 3D Holodeck | Synthesizes harmonic chord frequencies proportional to vector cosine similarity. |

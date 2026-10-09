@@ -601,18 +601,30 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
     window.addEventListener('touchmove', handlePointerMove, { passive: true });
     window.addEventListener('touchend', handlePointerUp);
 
-    // Animation Loop (auto-rotates ONLY when not dragging AND not hovering canvas)
+    // Animation Loop with Visibility Guard and Throttled Gimbal Updates
     let animId: number;
+    let lastGimbalTime = 0;
+    let isVisible = true;
+    const observer = new IntersectionObserver((entries) => {
+      isVisible = entries[0]?.isIntersecting ?? true;
+    }, { threshold: 0.05 });
+    observer.observe(container);
+
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (!isVisible || document.hidden) return;
 
       if (!isDragging && isRotatingRef.current && !isHoveringCanvasRef.current) {
         galaxyGroup.rotation.y += 0.0018;
         starField.rotation.y += 0.0004;
 
-        const yaw = Math.round((galaxyGroup.rotation.y * 180 / Math.PI) % 360);
-        const pitch = Math.round((galaxyGroup.rotation.x * 180 / Math.PI) % 360);
-        setGimbalAngles({ yaw, pitch });
+        const now = performance.now();
+        if (now - lastGimbalTime > 250) {
+          lastGimbalTime = now;
+          const yaw = Math.round((galaxyGroup.rotation.y * 180 / Math.PI) % 360);
+          const pitch = Math.round((galaxyGroup.rotation.x * 180 / Math.PI) % 360);
+          setGimbalAngles({ yaw, pitch });
+        }
       }
 
       renderer.render(scene, camera);
@@ -637,6 +649,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('mousemove', handleCanvasMouseMove);

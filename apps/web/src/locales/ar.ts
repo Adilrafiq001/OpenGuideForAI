@@ -243,5 +243,12 @@ export const ar: Record<string, string> = {
   demo_execution_sequence: 'تسلسل التنفيذ',
   demo_footer_note: 'كل ميزة في OpenGuide قابلة للتفسير الذاتي بواسطة OpenGuide.',
   action_done: 'تم',
-  action_close: 'إغلاق'
+  action_close: 'إغلاق',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: 'منصة الهولوديك المكانية',
+  spatial_holodeck_desc: 'كون التضمينات ثلاثية الأبعاد ونظارات الواقع المعزز الذكية',
+  spatial_ar_glasses_guide: 'دليل نظارات الواقع المعزز الذكية',
+  spatial_true_black_passthrough: 'نفاذية بصرية بتقنية Micro-OLED بالسواد الحقيقي',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF نشط'
 };

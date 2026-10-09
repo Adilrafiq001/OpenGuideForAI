@@ -90,6 +90,18 @@ OpenGuide fonctionne sous la **Règle des 0 $**. **Aucun serveur backend**. **Au
 
 ---
 
+## Holodeck Spatial sur Lunettes AR Intelligentes (Spatial Holodeck)
+
+OpenGuide intègre un Holodeck d'informatique spatiale 3D WebXR / WebGL directement dans le navigateur (`/holodeck`), optimisé pour les lunettes AR à vision optique transparente (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S et Apple Vision Pro) :
+
+* **Moteur 60FPS Soutenu sans Ralentissement :** Visualisation Three.js en temps réel des variétés vectorielles 3D, du clustering sémantique et des graphes synaptiques neuronaux.
+* **Passthrough Optique OLED Noir Pur (True-Black) :** Mode étalonné `#000000` éteignant les pixels OLED sur les guides d'ondes optiques pour une incrustation spatiale nette au-dessus de votre environnement physique.
+* **Audio Spatial Harmonique Binaural :** Synthèse d'accords musicaux harmoniques proportionnels à la similarité cosinus vectorielle via l'API Web Audio.
+* **Clavier Spatial Virtuel et Suivi de Tête :** Clavier flottant avec retour haptique et acoustique, et émulation des capteurs de tête 3-DoF.
+* **Matrice de Matériel pour Lunettes AR :** Guide interactif et profils de calibrage pour SpaceWalker, Nebula et MyGlasses avec réglage IPD et taux de rafraîchissement 120Hz.
+
+---
+
 <a id="vue-densemble-du-programme"></a>
 ## Vue d'Ensemble du Programme
 
@@ -166,6 +178,7 @@ OpenGuide est conçu comme une **Application Web Progressive Installable (PWA)**
 * **Docteur de Syntaxe Bienveillant :** Traduit les erreurs de compilation complexes en explications claires et en conseils pratiques.
 * **Exportation Jupyter Notebook (`.ipynb`) :** Téléchargez vos exercices résolus sous forme de notebooks Jupyter standards.
 * **Lentille de Débogage Rayons X (`Alt + X`) :** Inspectez la mémoire du Web Worker et les données locales en temps réel.
+* **HUD Spatial pour Lunettes AR (`Alt + S`) :** Activez le HUD spatial flottant 3-DoF, les angles de cardan et le mode passthrough noir pur.
 * **Synchronisation Gist Chiffrée :** Sauvegardez votre progression avec un chiffrement sécurisé **AES-GCM 256 bits** sur votre compte GitHub.
 
 ---

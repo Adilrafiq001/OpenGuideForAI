@@ -785,6 +785,26 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     takeaway: 'PagedAttention stores KV cache in non-contiguous virtual memory blocks, eliminating allocation waste and boosting serving throughput.',
     interactiveWidgetId: 'paged-attention'
   },
+  {
+    id: 'tools-spatial-holodeck-ar',
+    keywords: ['spatial', 'holodeck', 'ar glasses', 'viture', 'xreal', 'rayneo', 'rokid', 'spacewalker', 'nebula', 'webxr', 'micro-oled', 'optical passthrough', 'true-black', 'smart glasses'],
+    title: 'Spatial Holodeck on Smart AR Glasses (SpaceWalker & Nebula Architecture)',
+    category: 'tools',
+    summary: 'In-browser 3D semantic vector visualization, WebXR spatial computing, and True-Black Micro-OLED passthrough for smart glasses.',
+    explanation: 'Smart AR Glasses (such as Viture Pro XR/Pro 2, Xreal Air 2/Ultra, RayNeo Air 2s, and Rokid Max) connect directly to client host devices via USB-C DisplayPort Alt-Mode without requiring any cloud streaming or paid apps:\n1. True-Black Micro-OLED Passthrough: In birdbath and optical waveguide prisms, pure black pixels (#000000) emit zero photons. This renders the physical display glass 100% transparent, seamlessly blending luminous 3D vector embeddings with the learner\'s physical room.\n2. SpaceWalker 3DOF Gyro Engine: Operates in three sovereign anchoring modes: Fixed-Pin (latched to absolute coordinates), Smooth-Follow (graceful inertial damping following head movements), and Body-Anchor (anchored to torso orientation).\n3. In-Air Hand Computer Vision: OpenGuide runs lightweight client-side computer vision on the host laptop/phone webcam to track 21 hand landmarks at 60FPS. Index-thumb pinch triggers laser clicks, while open palm drag scrolls documents in mid-air.\n4. Virtual Spatial Desk Keyboard: Snaps down to the user\'s tabletop plane with customizable 30°-75° tilt angle and IMU downward gaze snap.',
+    codeSnippet: '# 3DOF Rotational Quaternion Transformation\nimport numpy as np\n\ndef euler_to_quaternion(yaw_deg, pitch_deg, roll_deg):\n    y, p, r = np.radians([yaw_deg, pitch_deg, roll_deg]) / 2.0\n    qw = np.cos(r)*np.cos(p)*np.cos(y) + np.sin(r)*np.sin(p)*np.sin(y)\n    qx = np.sin(r)*np.cos(p)*np.cos(y) - np.cos(r)*np.sin(p)*np.sin(y)\n    qy = np.cos(r)*np.sin(p)*np.cos(y) + np.sin(r)*np.cos(p)*np.sin(y)\n    qz = np.cos(r)*np.cos(p)*np.sin(y) - np.sin(r)*np.sin(p)*np.cos(y)\n    return np.array([qw, qx, qy, qz])\n\nquat = euler_to_quaternion(45.0, -15.0, 0.0)\nprint(f"3DOF Spatial Lock Quaternion: {np.round(quat, 4)}")',
+    takeaway: 'Smart AR glasses transform OpenGuide into a sovereign 215-inch floating spatial workstation with zero cloud subscriptions.'
+  },
+  {
+    id: 'architecture-micro-oled-waveguide-physics',
+    keywords: ['micro-oled', 'waveguide', 'birdbath', 'electrochromic', 'optical passthrough', 'transparency', 'zero photons', 'optics'],
+    title: 'Micro-OLED Optical Waveguides & Zero-Photon Physical Transparency',
+    category: 'architecture',
+    summary: 'The physics of constructive optical interference, birdbath prisms, and self-emissive subpixels in AR displays.',
+    explanation: 'Unlike traditional LCD displays that require a global backlight, Micro-OLED displays feature self-emissive organic subpixels capable of true individual turn-off:\n1. Zero Photon Emission: When rendering hexadecimal #000000, current to the organic emissive layer drops to 0.0mA. The subpixel emits no light.\n2. Optical Combiner Physics: Light from the micro-display bounces off a 50/50 beam splitter (birdbath) or enters total internal reflection inside a diffractive surface-relief waveguide. Ambient physical light passes straight through the semi-reflective combiner.\n3. Transparent Reality: Because the dark regions emit 0 photons, ambient photons from the room enter the learner\'s eyes unobstructed, creating holographic floating UI.\n4. Electrochromic Film: Flagship glasses (Viture Pro XR, Xreal Air 2 Pro) use an electrochromic polymer layer that changes opacity from 0% to 100% upon applied electric voltage, switching instantly between AR transparency and dark cinema VR.',
+    codeSnippet: '# Micro-OLED Contrast Ratio Calculation\nblack_level_nits = 0.0001\npeak_luminance_nits = 5000.0\ncontrast_ratio = peak_luminance_nits / black_level_nits\nprint(f"Micro-OLED Dynamic Range: {contrast_ratio:,.0f}:1 (Perceived infinite contrast in AR)")',
+    takeaway: 'True-Black Micro-OLED optics leverage subpixel turn-off to make reality the canvas without battery-draining camera pass-through.'
+  },
   ...FRONTIER_KNOWLEDGE_BATCH_1,
   ...FRONTIER_KNOWLEDGE_BATCH_2,
   ...FORWARD_ENGINEER_KNOWLEDGE_BATCH
@@ -792,6 +812,14 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
 
 // Abbreviation & Domain Synonym Mapping Dictionary
 const DOMAIN_SYNONYMS: Record<string, string[]> = {
+  glasses: ['ar', 'holodeck', 'viture', 'xreal', 'rayneo', 'rokid', 'spacewalker', 'nebula', 'true-black', 'micro-oled'],
+  viture: ['glasses', 'ar', 'spacewalker', 'pro', 'electrochromic', 'diopter', 'micro-oled'],
+  xreal: ['glasses', 'ar', 'nebula', 'air', 'ultra', 'micro-oled'],
+  rayneo: ['glasses', 'ar', 'waveguide', 'micro-led', 'air'],
+  rokid: ['glasses', 'ar', 'max', 'station', 'micro-oled'],
+  holodeck: ['spatial', 'vectors', 'synapses', 'webxr', 'glasses', '3d'],
+  spacewalker: ['viture', '3dof', 'anchor', 'spatial', 'glasses'],
+  nebula: ['xreal', '3dof', 'anchor', 'spatial', 'glasses'],
   fde: ['forward', 'deployed', 'engineer', 'blueprint', 'ste100', 'agentic', 'sovereign', 'antigravity', 'mcp'],
   forward: ['fde', 'deployed', 'engineer', 'blueprint', 'ste100', 'agentic', 'sovereign'],
   mcp: ['fastmcp', 'tools', 'json-rpc', 'protocol', 'sandbox', 'stdio'],

@@ -92,12 +92,12 @@ export const useSpatialStore = create<SpatialState>()(
       },
       setSpatialModeActive: (active) => set({ isSpatialModeActive: active }),
       setSpatialAnchorMode: (mode) => set({ spatialAnchorMode: mode }),
-      setScreenCurvature: (val) => set({ screenCurvature: val }),
-      setVirtualDistance: (val) => set({ virtualDistance: val }),
+      setScreenCurvature: (val) => set({ screenCurvature: Math.max(0, Math.min(120, Number(val) || 0)) }),
+      setVirtualDistance: (val) => set({ virtualDistance: Math.max(1.0, Math.min(5.0, Number(val) || 2.5)) }),
       setPassthroughMode: (mode) => set({ passthroughMode: mode }),
       setDeviceProfile: (profile) => set({ deviceProfile: profile }),
 
-      setOrientation: (yaw, pitch, roll) => set({ yaw, pitch, roll }),
+      setOrientation: (yaw, pitch, roll) => set({ yaw: Number(yaw) || 0, pitch: Number(pitch) || 0, roll: Number(roll) || 0 }),
       resetCenter: () => set((state) => ({ originYaw: state.yaw, originPitch: state.pitch })),
 
       toggleHandTracking: () => set((state) => ({ isHandTrackingEnabled: !state.isHandTrackingEnabled })),
@@ -106,13 +106,13 @@ export const useSpatialStore = create<SpatialState>()(
       toggleVirtualKeyboard: () => set((state) => ({ isVirtualKeyboardOpen: !state.isVirtualKeyboardOpen })),
       setVirtualKeyboardOpen: (open) => set({ isVirtualKeyboardOpen: open }),
       setKeyboardPlacementMode: (mode) => set({ keyboardPlacementMode: mode }),
-      setKeyboardTiltAngle: (angle) => set({ keyboardTiltAngle: angle }),
+      setKeyboardTiltAngle: (angle) => set({ keyboardTiltAngle: Math.max(0, Math.min(90, Number(angle) || 55)) }),
       setVirtualKeyboardText: (text) => set({ virtualKeyboardText: text }),
       appendVirtualKeyboardChar: (char) => set((state) => ({ virtualKeyboardText: state.virtualKeyboardText + char })),
       deleteVirtualKeyboardChar: () => set((state) => ({ virtualKeyboardText: state.virtualKeyboardText.slice(0, -1) })),
 
-      setCursorPos: (x, y) => set({ cursorPos: { x, y } }),
-      setPinching: (pinching) => set({ isPinching: pinching }),
+      setCursorPos: (x, y) => set({ cursorPos: { x: Math.max(0, Math.min(100, Number(x) || 50)), y: Math.max(0, Math.min(100, Number(y) || 50)) } }),
+      setPinching: (pinching) => set({ isPinching: Boolean(pinching) }),
       setDetectedGesture: (gesture) => set({ detectedGesture: gesture }),
     }),
     {
@@ -123,6 +123,8 @@ export const useSpatialStore = create<SpatialState>()(
         virtualDistance: state.virtualDistance,
         passthroughMode: state.passthroughMode,
         deviceProfile: state.deviceProfile,
+        keyboardPlacementMode: state.keyboardPlacementMode,
+        keyboardTiltAngle: state.keyboardTiltAngle,
       }),
     }
   )

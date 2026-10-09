@@ -90,6 +90,18 @@ OpenGuide arbeitet strikt nach der **0-Dollar-Regel**. **Es gibt keinen Backend-
 
 ---
 
+## Spatial Holodeck auf Smart-AR-Brillen
+
+OpenGuide bietet ein browsernatives WebXR / WebGL 3D Spatial Computing Holodeck (`/holodeck`), optimiert für optisch transparente Smart-AR-Brillen (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S und Apple Vision Pro):
+
+* **Nachhaltige 60FPS-Leistung:** Three.js-Echtzeitvisualisierung von 3D-Vektorräumen, semantischen Clustern und neuronalen Synapsen-Graphen.
+* **True-Black OLED Optical Passthrough:** Kalibrierter `#000000` Abschaltmodus, der OLED-Pixel auf den optischen Wellenleitern komplett ausschaltet.
+* **Binaurales Harmonisches Spatial Audio:** Web Audio API-Klangerzeugung, die musikalische Quinten proportional zur Vektor-Kosinus-Ähnlichkeit synthetisiert.
+* **Virtuelle Spatial-Tastatur & Head-Tracking:** Schwebende Tastatur mit haptischem und akustischem Feedback und 3-DoF-Kopfsensorik.
+* **AR-Brillen-Hardwarematrix:** Interaktiver Leitfaden für SpaceWalker, Nebula und MyGlasses mit IPD-Anpassung und 120Hz-Unterstützung.
+
+---
+
 <a id="lehrplan-%C3%BCbersicht"></a>
 ## Lehrplan-Übersicht
 
@@ -166,6 +178,7 @@ OpenGuide ist als **Installierbare Progressive Web App (PWA)** konzipiert:
 * **Verständlicher Syntax-Doktor:** Übersetzt unklare Compiler-Fehlermeldungen in einfache Erklärungen und Lösungsvorschläge.
 * **Jupyter Notebook Export (`.ipynb`):** Laden Sie gelöste Aufgaben als standardisierte Jupyter Notebooks herunter.
 * **Röntgen-Diagnosemodus (`Alt + X`):** Prüfen Sie Web-Worker-Speicher und lokale Datenbanken live.
+* **AR-Brillen Spatial HUD (`Alt + S`):** Aktiviert das schwebende 3-DoF-Headset-HUD, Kardanwinkel und den True-Black-Modus.
 * **Verschlüsselte Gist-Synchronisation:** Speichern Sie Ihren Lernfortschritt mit **AES-GCM 256-Bit-Verschlüsselung** in privaten GitHub Gists.
 
 ---

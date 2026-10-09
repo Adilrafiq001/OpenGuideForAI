@@ -90,6 +90,18 @@ O OpenGuide opera sob a **Regra dos US$ 0**. **Não há servidor backend**. **N�
 
 ---
 
+## Holodeck Espacial em Óculos AR Inteligentes (Spatial Holodeck)
+
+O OpenGuide inclui um Holodeck de computação espacial 3D WebXR / WebGL nativo no navegador (`/holodeck`), otimizado para óculos inteligentes AR com visão óptica transparente (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S e Apple Vision Pro):
+
+* **Desempenho Sustentado a 60FPS sem Sobrecarga:** Visualização Three.js em tempo real de variedades vetoriais 3D, agrupamento semântico e grafos de sinapses neurais.
+* **Passthrough Óptico OLED Preto Puro (True-Black):** Modo calibrado `#000000` que desliga os pixels OLED nas lentes de guia de onda para uma sobreposição espacial perfeita sobre o ambiente físico.
+* **Áudio Espacial Harmônico Binaural:** Síntese de acordes musicais harmônicos proporcionais à similaridade de cosseno vetorial via Web Audio API.
+* **Teclado Espacial Virtual e Rastreamento de Cabeça:** Teclado flutuante com resposta acústica e háptica, e emulação de sensores 3-DoF.
+* **Matriz de Hardware para Óculos AR:** Guia interativo e perfis de calibração para SpaceWalker, Nebula e MyGlasses com ajuste de IPD e 120Hz.
+
+---
+
 <a id="vis%C3%A3o-geral-do-curr%C3%ADculo"></a>
 ## Visão Geral do Currículo
 
@@ -166,6 +178,7 @@ O OpenGuide é construído como um **Aplicativo Web Progressivo (PWA)** com supo
 * **Médico de Sintaxe Amigável:** Traduz erros complexos em orientações claras e correções práticas de código.
 * **Exportação para Jupyter Notebook (`.ipynb`):** Baixe seus exercícios resolvidos no formato padrão Jupyter.
 * **Lente Raio-X (`Alt + X`):** Inspecione a memória do Web Worker e tabelas IndexedDB em tempo real.
+* **HUD Espacial para Óculos AR (`Alt + S`):** Ative o HUD espacial flutuante 3-DoF, ângulos de gimbal e modo passthrough preto puro.
 * **Sincronização Criptografada no Gist:** Faça backup do seu progresso com criptografia **AES-GCM de 256 bits** em Gists privados do GitHub.
 
 ---

@@ -243,5 +243,12 @@ export const zh: Record<string, string> = {
   demo_execution_sequence: '执行序列',
   demo_footer_note: 'OpenGuide 的每一项功能皆可自解释。',
   action_done: '完成',
-  action_close: '关闭'
+  action_close: '关闭',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: '空间全息甲板',
+  spatial_holodeck_desc: '3D 语义嵌入宇宙与 Micro-OLED 智能 AR 眼镜',
+  spatial_ar_glasses_guide: '智能 AR 眼镜配置指南',
+  spatial_true_black_passthrough: '纯黑 Micro-OLED 光学透视',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF 已激活'
 };

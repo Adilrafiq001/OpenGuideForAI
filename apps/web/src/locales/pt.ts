@@ -243,5 +243,12 @@ export const pt: Record<string, string> = {
   demo_execution_sequence: 'Sequência de Execução',
   demo_footer_note: 'Cada recurso do OpenGuide é explicável pelo próprio OpenGuide.',
   action_done: 'Concluído',
-  action_close: 'Fechar'
+  action_close: 'Fechar',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: 'Holodeck Espacial',
+  spatial_holodeck_desc: 'Cosmo de Incorporação 3D & Óculos AR Inteligentes em Micro-OLED',
+  spatial_ar_glasses_guide: 'Guia de Óculos AR Inteligentes',
+  spatial_true_black_passthrough: 'Transparência Óptica Micro-OLED Preto Verdadeiro',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF Ativo'
 };

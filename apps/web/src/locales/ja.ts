@@ -243,5 +243,12 @@ export const ja: Record<string, string> = {
   demo_execution_sequence: '実行シーケンス',
   demo_footer_note: 'OpenGuideのすべての機能はOpenGuide自身で説明可能です。',
   action_done: '完了',
-  action_close: '閉じる'
+  action_close: '閉じる',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: '空間ホロデッキ',
+  spatial_holodeck_desc: '3D意味埋め込みコスモス＆Micro-OLEDスマートARグラス',
+  spatial_ar_glasses_guide: 'スマートARグラス利用ガイド',
+  spatial_true_black_passthrough: '完全ブラックMicro-OLED光学シースルー',
+  spatial_spacewalker_active: 'SpaceWalker 3DOFアクティブ'
 };

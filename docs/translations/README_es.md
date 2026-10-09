@@ -90,6 +90,18 @@ OpenGuide opera bajo la **Regla de los $0**. **No hay servidor backend**. **No h
 
 ---
 
+## Holodeck Espacial en Gafas Inteligentes AR
+
+OpenGuide incluye un Holodeck de computación espacial 3D nativo en el navegador WebXR / WebGL (`/holodeck`) optimizado para gafas inteligentes AR de visión óptica transparente (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S y Apple Vision Pro):
+
+* **Rendimiento Sostenido a 60FPS sin Sobrecarga:** Visualización Three.js en tiempo real de variedades vectoriales 3D, agrupamiento semántico y grafos de sinapsis neuronales. Optimizado con `IntersectionObserver` para pausar bucles de renderizado fuera de pantalla y búferes preasignados sin asignaciones de memoria dinámicas.
+* **Passthrough Óptico OLED en Negro Puro:** Modo calibrado con corte de emisión `#000000` que apaga los píxeles OLED en las guías de ondas ópticas, logrando una superposición espacial perfecta sobre tu entorno físico.
+* **Audio Espacial Armónico Binaural:** Motor de sonido Web Audio API que sintetiza acordes armónicos de quinta justa proporcionales a la similitud coseno vectorial.
+* **Teclado Espacial Virtual y Seguimiento de Cabeza:** Teclado flotante con respuesta acústica y háptica, emulación de sensores 3-DoF y despacho rápido de texto.
+* **Matriz de Hardware de Gafas AR:** Guía interactiva y perfiles de calibración para SpaceWalker, Nebula y MyGlasses con ajuste de IPD, alineación de FOV y frecuencias de 120Hz.
+
+---
+
 <a id="resumen-del-curr%C3%ADculo"></a>
 ## Resumen del Currículo
 
@@ -183,6 +195,7 @@ OpenGuide está diseñado como una **Aplicación Web Progresiva Instalable (PWA)
 * **Doctor de Sintaxis Amigable:** Traduce errores crípticos de compilador en consejos prácticos en lenguaje claro.
 * **Exportación a Jupyter Notebook (`.ipynb`):** Descarga tus soluciones verificadas como notebooks estándar de Jupyter.
 * **Lente de Depuración Rayos X (`Alt + X`):** Inspecciona el árbol sintáctico (AST), la memoria del Web Worker y las tablas de IndexedDB en tiempo real.
+* **HUD Espacial para Gafas AR (`Alt + S`):** Activa el HUD flotante 3-DoF, indicadores de ángulo de cardán y modo passthrough negro puro para gafas inteligentes AR.
 * **Sincronización en Gist Cifrada:** Exporta tu progreso con cifrado **AES-GCM de 256 bits** a tus Gists privados de GitHub.
 
 ---

@@ -356,10 +356,19 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
     window.addEventListener('touchmove', handlePointerMove, { passive: true });
     window.addEventListener('touchend', handlePointerUp);
 
-    // Animation Loop
+    // Animation Loop with Vector Allocation Reuse & IntersectionObserver
+    const tempFrom = new THREE.Vector3();
+    const tempTo = new THREE.Vector3();
+    let isVisible = true;
+    const observer = new IntersectionObserver((entries) => {
+      isVisible = entries[0]?.isIntersecting ?? true;
+    }, { threshold: 0.05 });
+    observer.observe(container);
+
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (!isVisible || document.hidden) return;
 
       if (isPlayingRef.current) {
         pulses.forEach(pulse => {
@@ -369,9 +378,9 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
             pulse.edge = edges[Math.floor(Math.random() * edges.length)];
           }
 
-          const from = new THREE.Vector3(...pulse.edge.fromCoords);
-          const to = new THREE.Vector3(...pulse.edge.toCoords);
-          pulse.mesh.position.lerpVectors(from, to, pulse.progress);
+          tempFrom.set(pulse.edge.fromCoords[0], pulse.edge.fromCoords[1], pulse.edge.fromCoords[2]);
+          tempTo.set(pulse.edge.toCoords[0], pulse.edge.toCoords[1], pulse.edge.toCoords[2]);
+          pulse.mesh.position.lerpVectors(tempFrom, tempTo, pulse.progress);
         });
 
         if (!isDragging) {
@@ -402,6 +411,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('mousemove', handleCanvasMouseMove);

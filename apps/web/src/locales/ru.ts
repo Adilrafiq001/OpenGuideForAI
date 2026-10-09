@@ -243,5 +243,12 @@ export const ru: Record<string, string> = {
   demo_execution_sequence: 'Последовательность выполнения',
   demo_footer_note: 'Каждая функция OpenGuide объяснима самим OpenGuide.',
   action_done: 'Готово',
-  action_close: 'Закрыть'
+  action_close: 'Закрыть',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: 'Пространственный Голодек',
+  spatial_holodeck_desc: '3D семантический космос эмбеддингов и умные AR-очки на Micro-OLED',
+  spatial_ar_glasses_guide: 'Руководство по умным AR-очкам',
+  spatial_true_black_passthrough: 'Оптическая прозрачность True-Black Micro-OLED',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF активен'
 };

@@ -243,5 +243,12 @@ export const ur: Record<string, string> = {
   demo_execution_sequence: 'عمل درآمد کا تسلسل',
   demo_footer_note: 'اوپن گائیڈ کی ہر خصوصیت خود اوپن گائیڈ کے ذریعے قابل فہم ہے۔',
   action_done: 'مکمل',
-  action_close: 'بند کریں'
+  action_close: 'بند کریں',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: 'مکانی ہولوڈیک',
+  spatial_holodeck_desc: 'تھری ڈی سیمینٹک ایمبیڈنگ کائنات اور مائیکرو اولیڈ اسمارٹ اے آر عینکیں',
+  spatial_ar_glasses_guide: 'اسمارٹ اے آر عینکوں کی گائیڈ',
+  spatial_true_black_passthrough: 'حقیقی سیاہ مائیکرو اولیڈ آپٹیکل شفافیت',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF فعال'
 };

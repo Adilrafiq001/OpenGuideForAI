@@ -90,6 +90,18 @@ OpenGuide 严格恪守 **$0 成本法则**。**没有后端服务器**，**没�
 
 ---
 
+## 智能 AR 眼镜空间全息舱 (Spatial Holodeck)
+
+OpenGuide 原生内置基于 WebXR / WebGL 的浏览器端 3D 空间计算全息舱 (`/holodeck`)，针对行业旗舰光学透视 AR 眼镜（Viture Pro 2、Xreal Air 2 Ultra、RayNeo Air 2s、Rokid Max 2、Meta Quest 3/3S 与 Apple Vision Pro）深度调优：
+
+* **60FPS 极速稳定零抖动引擎：** 基于 Three.js 的实时 3D 向量流形空间、高维语义聚类与神经突触计算图可视化。结合视口外 `IntersectionObserver` 自动休眠与无垃圾回收预分配向量缓冲池。
+* **纯黑 OLED 光学透视模式：** 经过色彩学精确校准的 `#000000` 纯黑零发射截止模式，在光波导镜片上彻底熄灭 OLED 像素，实现与现实世界无缝融合的悬浮全息 HUD。
+* **双耳立体声空间泛音化：** 利用 Web Audio API 实现高维余弦相似度谐波声学映射，在空间定位中以五度音程直接“听见”语义距离。
+* **虚拟空间全息键盘与头部追踪：** 悬浮式虚拟键盘配备触觉声效反馈、3-DoF 头部传感模拟与极速文本输入。
+* **智能 AR 眼镜硬件参数矩阵：** 完整覆盖 SpaceWalker、Nebula、MyGlasses 等生态的瞳距 (IPD) 调节、视场角 (FOV) 对齐与 120Hz 高刷配置。
+
+---
+
 <a id="课程体系全景"></a>
 ## 课程体系全景
 
@@ -167,6 +179,7 @@ OpenGuide 深度集成为**可安装的渐进式 Web 应用 (PWA)**，与操作�
 * **语法医生友善诊断:** 将报错 Traceback 实时转化为通俗自然语言解答与代码修复建议。
 * **Jupyter Notebook 一键导出 (`.ipynb`):** 支持将已验证的代码实验直接导出为标准的 Jupyter 文件。
 * **X 射线调试透视镜 (`Alt + X`):** 实时监控 Web Worker 堆内存、Pyodide 抽象语法树与本地 IndexedDB 记录。
+* **AR 眼镜空间 HUD (`Alt + S`):** 随时唤起 3-DoF 悬浮空间抬头显示、姿态云台角度与纯黑透视遮罩。
 * **AES-GCM 256 位加密 Gist 同步:** 学习进度通过高强度加密安全同步至个人私有 GitHub Gist。
 
 ---

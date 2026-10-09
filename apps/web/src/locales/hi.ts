@@ -243,5 +243,12 @@ export const hi: Record<string, string> = {
   demo_execution_sequence: 'निष्पादन क्रम',
   demo_footer_note: 'OpenGuide की प्रत्येक विशेषता OpenGuide द्वारा समझाई जा सकती है।',
   action_done: 'संपन्न',
-  action_close: 'बंद करें'
+  action_close: 'बंद करें',
+
+  // Spatial Holodeck & Smart AR Glasses
+  spatial_holodeck_title: 'स्थानिक होलोडैक',
+  spatial_holodeck_desc: '3D सेमेंटिक एम्बेडिंग कॉस्मॉस और स्मार्ट AR ग्लासेस',
+  spatial_ar_glasses_guide: 'स्मार्ट AR ग्लासेस गाइड',
+  spatial_true_black_passthrough: 'ट्रू-ब्लैक OLED ऑप्टिकल पासथ्रू',
+  spatial_spacewalker_active: 'SpaceWalker 3DOF सक्रिय'
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -19,29 +19,102 @@ interface ARGlassesGuideModalProps {
 
 type DeviceCategory = 'viture' | 'xreal' | 'rayneo' | 'rokid' | 'meta';
 
+const DEVICE_TABS: { id: DeviceCategory; label: string }[] = [
+  { id: 'viture', label: 'Viture (One/Pro XR)' },
+  { id: 'xreal', label: 'Xreal (Air 1/2/Ultra)' },
+  { id: 'rayneo', label: 'RayNeo (Air 2/X2)' },
+  { id: 'rokid', label: 'Rokid (Max)' },
+  { id: 'meta', label: 'Meta Quest / Vision Pro' }
+];
+
 export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGuideModalProps) {
   const [activeDevice, setActiveDevice] = useState<DeviceCategory>('viture');
   const { isSpatialModeActive, toggleSpatialMode } = useSpatialStore();
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const tabListRef = useRef<HTMLDivElement | null>(null);
 
+  // Focus trap & escape key handler
   useEffect(() => {
     if (isOpen) {
       const prevOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+
+      // Focus first interactive element or dialog
+      const timer = setTimeout(() => {
+        const closeBtn = dialogRef.current?.querySelector<HTMLButtonElement>('button[aria-label="Close AR Glasses Guide"]');
+        closeBtn?.focus();
+      }, 50);
+
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          onClose();
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          if (!dialogRef.current) return;
+          const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusable.length === 0) return;
+
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       };
+
       window.addEventListener('keydown', handleKeyDown);
       return () => {
+        clearTimeout(timer);
         document.body.style.overflow = prevOverflow;
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [isOpen, onClose]);
 
+  const handleDeviceTabKeyDown = useCallback((e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = (index + 1) % DEVICE_TABS.length;
+      const nextTab = DEVICE_TABS[nextIndex].id;
+      setActiveDevice(nextTab);
+      const btn = tabListRef.current?.querySelector<HTMLButtonElement>(`#ar-tab-${nextTab}`);
+      btn?.focus();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIndex = (index - 1 + DEVICE_TABS.length) % DEVICE_TABS.length;
+      const prevTab = DEVICE_TABS[prevIndex].id;
+      setActiveDevice(prevTab);
+      const btn = tabListRef.current?.querySelector<HTMLButtonElement>(`#ar-tab-${prevTab}`);
+      btn?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const firstTab = DEVICE_TABS[0].id;
+      setActiveDevice(firstTab);
+      const btn = tabListRef.current?.querySelector<HTMLButtonElement>(`#ar-tab-${firstTab}`);
+      btn?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const lastTab = DEVICE_TABS[DEVICE_TABS.length - 1].id;
+      setActiveDevice(lastTab);
+      const btn = tabListRef.current?.querySelector<HTMLButtonElement>(`#ar-tab-${lastTab}`);
+      btn?.focus();
+    }
+  }, []);
+
   const deviceGuides = {
     viture: {
       name: 'Viture (Pro XR, Pro 2, One, One Lite)',
-      optics: 'Sony Micro-OLED 1080p 120Hz • 43°-46° FoV • Electrochromic Tinting',
+      optics: 'Sony Micro-OLED 1080p 120Hz • 135% sRGB • 46° FoV • Electrochromic Film',
       cable: 'Direct Magnetic USB-C DP Alt-Mode (PC / Mac / iPhone 15+ / Android)',
       handTracking: 'Software Computer Vision: Uses host laptop/phone webcam for 60FPS in-air hand pinch gestures (no cameras needed on glasses!)',
       steps: [
@@ -51,13 +124,13 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
         'SpaceWalker 3DOF engine instantly anchors OpenGuide in 3D mid-air (Fixed-Pin, Smooth-Follow, or Body-Anchor).',
         'Enable Hand Gestures (Press H): Point your laptop/phone webcam at your desk. Pinch index + thumb to click links, drag palm to scroll.'
       ],
-      tip: 'Pro Tip: Double-click the left temple button on Viture Pro XR to activate electrochromic lens tinting for instant optical black immersion.'
+      tip: 'Pro Tip: Double-click the left temple button on Viture Pro XR / Pro 2 to activate electrochromic lens tinting for instant optical black immersion.'
     },
     xreal: {
-      name: 'Xreal (Air 1, Air 2, Air 2 Pro, Ultra)',
-      optics: 'Birdbath Prism • Sony Micro-OLED 1080p 120Hz • 46°-52° FoV',
+      name: 'Xreal (Air 2 Ultra, Air 2 Pro, Air 1/2)',
+      optics: 'Birdbath Prism • Sony Micro-OLED 1080p 120Hz • 52° FoV • 500 Nits',
       cable: 'Direct USB-C DisplayPort Alt-Mode (Zero adapters required)',
-      handTracking: 'Software CV via webcam (Air 1/2) or direct 6-DOF tracking on Xreal Ultra',
+      handTracking: 'Software CV via webcam (Air 1/2) or dual 3D environment sensors on Xreal Ultra',
       steps: [
         'Plug your Xreal glasses directly into your computer, Mac, iPad, or mobile phone via USB-C.',
         'The OS instantly treats the glasses as a secondary 1080p 120Hz spatial display.',
@@ -68,8 +141,8 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
       tip: 'Pro Tip: On Xreal Air 2 Pro, use the rocker switch on the right temple to cycle through 0%, 35%, and 100% ambient light transmission.'
     },
     rayneo: {
-      name: 'RayNeo (Air 2, Air 2s, X2, X2 Lite)',
-      optics: 'Micro-LED & Micro-OLED Waveguide • Up to 1500 Nits Brightness',
+      name: 'RayNeo (Air 2s, Air 2, X2, X2 Lite)',
+      optics: 'Micro-LED & Micro-OLED Waveguide • 5000 Nits Peak Brightness • 120Hz',
       cable: 'USB-C DP Alt-Mode or Standalone Wireless (RayNeo X2)',
       handTracking: 'Software webcam hand tracking or right-temple capacitive touchpad gestures',
       steps: [
@@ -81,8 +154,8 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
       tip: 'Pro Tip: RayNeo optical waveguides provide true see-through visibility even outdoors in bright direct sunlight.'
     },
     rokid: {
-      name: 'Rokid (Max, Max 2, Station, Air)',
-      optics: 'Birdbath Micro-OLED • 50° FoV • 120Hz Refresh Rate',
+      name: 'Rokid (Max 2, Max, Station 2, Air)',
+      optics: 'Qualcomm Spatial Computing Unit • 50° FoV • 120Hz Refresh Rate',
       cable: 'Direct USB-C Cable to PC, Mac, iPad, or Rokid Station',
       handTracking: 'Host webcam computer vision or Rokid Station pointer clicker',
       steps: [
@@ -118,6 +191,7 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
           className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md"
         >
           <motion.div
+            ref={dialogRef}
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
@@ -137,10 +211,10 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
                 </div>
                 <div>
                   <div className="flex items-center flex-wrap gap-2">
-                    <h2 id="ar-guide-title" className="text-base sm:text-lg font-bold tracking-tight">
+                    <h2 id="ar-guide-title" className="text-base sm:text-lg font-bold tracking-tight text-[var(--color-text-primary)]">
                       Smart AR Glasses Mode: Setup & Controls (SpaceWalker & Nebula Architecture)
                     </h2>
-                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-bold uppercase">
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold uppercase">
                       App-Wide • 3DOF / 6DOF • Hand Gestures
                     </span>
                   </div>
@@ -152,7 +226,7 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
 
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-hidden"
                 aria-label="Close AR Glasses Guide"
               >
                 <X size={16} />
@@ -160,30 +234,44 @@ export function ARGlassesGuideModal({ isOpen, onClose, onLaunchAR }: ARGlassesGu
             </div>
 
             {/* Device Selector Tabs */}
-            <div className="flex items-center gap-1.5 px-6 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-primary)]/20 text-xs font-mono shrink-0 overflow-x-auto">
-              {[
-                { id: 'viture' as const, label: 'Viture (One/Pro XR)' },
-                { id: 'xreal' as const, label: 'Xreal (Air 1/2/Ultra)' },
-                { id: 'rayneo' as const, label: 'RayNeo (Air 2/X2)' },
-                { id: 'rokid' as const, label: 'Rokid (Max)' },
-                { id: 'meta' as const, label: 'Meta Quest / Vision Pro' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveDevice(tab.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                    activeDevice === tab.id
-                      ? 'bg-cyan-500 text-black font-bold shadow-sm'
-                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+            <div 
+              ref={tabListRef}
+              role="tablist"
+              aria-label="AR Glasses Manufacturers"
+              aria-orientation="horizontal"
+              className="flex items-center gap-1.5 px-6 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-primary)]/20 text-xs font-mono shrink-0 overflow-x-auto"
+            >
+              {DEVICE_TABS.map((tab, idx) => {
+                const isSelected = activeDevice === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    id={`ar-tab-${tab.id}`}
+                    role="tab"
+                    tabIndex={isSelected ? 0 : -1}
+                    aria-selected={isSelected}
+                    aria-controls={`ar-tabpanel-${tab.id}`}
+                    onClick={() => setActiveDevice(tab.id)}
+                    onKeyDown={(e) => handleDeviceTabKeyDown(e, idx)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-hidden ${
+                      isSelected
+                        ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Modal Body */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 min-h-0">
+            <div 
+              id={`ar-tabpanel-${activeDevice}`}
+              role="tabpanel"
+              aria-labelledby={`ar-tab-${activeDevice}`}
+              className="flex-1 overflow-y-auto p-6 space-y-6 min-h-0"
+            >
               {/* App-Wide Architecture Highlight Card */}
               <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="space-y-1">

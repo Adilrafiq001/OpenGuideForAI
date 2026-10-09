@@ -115,9 +115,30 @@ export function VirtualSpatialKeyboard() {
           if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
           copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
         })
-        .catch((err) => {
-          console.warn('[VirtualSpatialKeyboard] Failed to copy text:', err);
+        .catch(() => {
+          fallbackCopy();
         });
+    } else {
+      fallbackCopy();
+    }
+  };
+
+  const fallbackCopy = () => {
+    try {
+      const el = document.createElement('textarea');
+      el.value = virtualKeyboardText;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.warn('[VirtualSpatialKeyboard] Fallback copy failed:', err);
     }
   };
 
@@ -275,15 +296,19 @@ export function VirtualSpatialKeyboard() {
         {virtualKeyboardText && (
           <div className="flex items-center gap-1.5 shrink-0">
             <button
+              type="button"
+              aria-label="Copy virtual keyboard text to clipboard"
               onClick={handleCopy}
-              className="px-2 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+              className="px-2 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-hidden"
             >
               {copied ? <Check size={11} /> : <Copy size={11} />}
               <span>{copied ? 'COPIED' : 'COPY'}</span>
             </button>
             <button
+              type="button"
+              aria-label="Clear virtual keyboard text buffer"
               onClick={() => setVirtualKeyboardText('')}
-              className="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[10px] font-bold cursor-pointer transition-colors"
+              className="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[10px] font-bold cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:outline-hidden"
             >
               CLEAR
             </button>

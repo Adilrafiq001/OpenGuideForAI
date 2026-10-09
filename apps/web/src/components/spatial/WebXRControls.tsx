@@ -138,27 +138,27 @@ export function WebXRControls({ className = '' }: { className?: string }) {
 
   const deviceSpecs = {
     viture: {
-      name: 'Viture (Pro XR / One)',
-      optics: 'Sony Micro-OLED 1080p 120Hz • 43° FoV • Electrochromic Film',
-      details: 'Built-in rotary diopter dials (0 to -5.0D). Zero front cameras; uses OpenGuide software computer vision via host webcam for in-air hand pinch gestures.'
+      name: 'Viture (Pro XR / Pro 2 / One)',
+      optics: 'Sony Micro-OLED 1080p 120Hz • 135% sRGB • 46° FoV • Electrochromic Film',
+      details: 'Built-in rotary diopter dials (0 to -5.0D). Zero front cameras; uses OpenGuide software computer vision via host webcam for 60FPS in-air hand pinch gestures.'
     },
     xreal: {
-      name: 'Xreal (Air 2 Ultra / Air 1/2)',
-      optics: 'Birdbath Prism Micro-OLED • 52° FoV • 120Hz',
-      details: 'Connects directly over USB-C DP Alt Mode. OpenGuide projects high-contrast neon vector space with pure pitch-black (#000000) optical transparency.'
+      name: 'Xreal (Air 2 Ultra / Air 2 Pro / Air 1/2)',
+      optics: 'Birdbath Prism Micro-OLED • 52° FoV • 120Hz • 500 Nits',
+      details: 'Connects directly over USB-C DP Alt Mode. OpenGuide projects high-contrast neon vector space with pure pitch-black (#000000) optical transparency and dual 3D sensors on Ultra.'
     },
     rayneo: {
-      name: 'RayNeo (Air 2 / X2)',
-      optics: 'Micro-LED & Waveguide • Up to 1500 Nits Brightness',
-      details: 'Diffractive optical waveguides provide razor-sharp readability even outdoors in direct sunlight.'
+      name: 'RayNeo (Air 2s / Air 2 / X2)',
+      optics: '5000 Nits Peak Micro-OLED Waveguide • 120Hz • Symmetric 4-Speaker Audio',
+      details: 'Diffractive optical waveguides provide razor-sharp readability even outdoors in direct sunlight with acoustic whisper mode.'
     },
     rokid: {
-      name: 'Rokid (Max / Air)',
-      optics: 'Birdbath Micro-OLED • 50° FoV • Perceived 215" Screen at 6m',
-      details: 'Hardware diopter adjustments and physical 3D SBS mode support.'
+      name: 'Rokid (Max 2 / Max / Air)',
+      optics: 'Qualcomm Spatial Computing Unit • 50° FoV • Perceived 215" Screen at 6m',
+      details: 'Hardware diopter adjustments and physical 3D SBS mode support with 120Hz refresh rate.'
     },
     visionpro: {
-      name: 'Apple Vision Pro & Meta Quest 3',
+      name: 'Apple Vision Pro & Meta Quest 3/3S',
       optics: 'Dual 4K Micro-OLED / Pancake Lens Spatial Passthrough',
       details: 'Full 6-DOF room tracking with gaze + pinch micro-gestures and spatial audio acoustics.'
     }

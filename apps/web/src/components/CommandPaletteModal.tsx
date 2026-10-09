@@ -255,12 +255,29 @@ export function CommandPaletteModal({
     // Interactive Labs & Tools
     list.push({
       id: 'tool-holodeck',
-      title: 'Spatial Holodeck (3D / WebXR)',
-      subtitle: '3D Vector Manifold & WebXR Stereoscopic Simulation',
+      title: 'Spatial Holodeck (3D / WebXR / AR)',
+      subtitle: '3D Vector Manifold, Synaptic Propagation & Smart AR Glasses Gateway',
       category: 'Tool',
       icon: Glasses,
-      keywords: ['holodeck', '3d', 'webxr', 'vr', 'vectors', 'spatial', 'webgl'],
+      keywords: ['holodeck', '3d', 'webxr', 'vr', 'vectors', 'spatial', 'webgl', 'ar glasses', 'viture', 'xreal', 'rayneo', 'rokid', 'spacewalker', 'nebula', 'true-black', 'micro-oled', 'passthrough'],
       action: () => { onClose(); navigate('/holodeck'); }
+    });
+
+    list.push({
+      id: 'tool-ar-glasses-guide',
+      title: 'Smart AR Glasses Guide (Xreal • Viture • RayNeo • Rokid)',
+      subtitle: 'Setup, USB-C DP Alt-Mode, SpaceWalker 3DOF & In-Air Controls',
+      category: 'Tool',
+      icon: Glasses,
+      keywords: ['ar glasses', 'guide', 'viture', 'xreal', 'rayneo', 'rokid', 'spacewalker', 'nebula', 'true-black', 'micro-oled', 'passthrough', 'alt+s', 'gestures'],
+      action: () => {
+        onClose();
+        if (onOpenARGlassesGuide) {
+          onOpenARGlassesGuide();
+        } else {
+          window.dispatchEvent(new CustomEvent('open-ar-glasses-guide'));
+        }
+      }
     });
 
     list.push({

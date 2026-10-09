@@ -18,8 +18,37 @@ interface AppWideSpatialHUDProps {
 }
 
 export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
+  const isSpatialModeActive = useSpatialStore(s => s.isSpatialModeActive);
+  const setSpatialModeActive = useSpatialStore(s => s.setSpatialModeActive);
+  const isVirtualKeyboardOpen = useSpatialStore(s => s.isVirtualKeyboardOpen);
+
+  // Global hotkeys for AR Glasses wearers (Alt+S / Option+S on macOS, Windows, Linux)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
+        e.preventDefault();
+        setSpatialModeActive(!isSpatialModeActive);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSpatialModeActive, setSpatialModeActive]);
+
+  if (!isSpatialModeActive) {
+    return (
+      <>
+        {children}
+        {isVirtualKeyboardOpen && <VirtualSpatialKeyboard />}
+      </>
+    );
+  }
+
+  return <ActiveSpatialHUDContent>{children}</ActiveSpatialHUDContent>;
+}
+
+function ActiveSpatialHUDContent({ children }: AppWideSpatialHUDProps) {
   const {
-    isSpatialModeActive,
     setSpatialModeActive,
     spatialAnchorMode,
     setSpatialAnchorMode,
@@ -29,8 +58,6 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
     setVirtualDistance,
     passthroughMode,
     setPassthroughMode,
-    deviceProfile: _deviceProfile,
-    setDeviceProfile: _setDeviceProfile,
     yaw,
     pitch,
     originYaw,
@@ -54,17 +81,9 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
   const [_cameraError, setCameraError] = useState<string | null>(null);
   const wasPinchingRef = useRef(false);
 
-  // Global hotkeys for AR Glasses wearers
+  // Hotkeys while inside active spatial mode
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Alt+S: Toggle Spatial Mode
-      if (e.altKey && (e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-        setSpatialModeActive(!isSpatialModeActive);
-      }
-      if (!isSpatialModeActive) return;
-
-      // When inside spatial mode
       const target = e.target as HTMLElement | null;
       const isEditable = target && (
         target.tagName === 'INPUT' ||
@@ -83,17 +102,23 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
         toggleVirtualKeyboard();
       } else if (e.key === 'h' || e.key === 'H') {
         toggleHandTracking();
+      } else if (e.key === 'g' || e.key === 'G') {
+        setPassthroughMode(passthroughMode === 'true-black' ? 'cinema-dark' : 'true-black');
+      } else if (e.key === '1') {
+        setSpatialAnchorMode('fixed-pin');
+      } else if (e.key === '2') {
+        setSpatialAnchorMode('smooth-follow');
+      } else if (e.key === '3') {
+        setSpatialAnchorMode('body-anchor');
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSpatialModeActive, setSpatialModeActive, resetCenter, toggleVirtualKeyboard, toggleHandTracking]);
+  }, [resetCenter, toggleVirtualKeyboard, toggleHandTracking, setPassthroughMode, passthroughMode, setSpatialAnchorMode]);
 
   // Orientation tracking (Gyro 3DOF)
   useEffect(() => {
-    if (!isSpatialModeActive) return;
-
     handGestureEngine.startOrientationTracking((newYaw, newPitch, newRoll) => {
       setOrientation(newYaw, newPitch, newRoll);
     });
@@ -101,11 +126,11 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
     return () => {
       handGestureEngine.stopOrientationTracking();
     };
-  }, [isSpatialModeActive, setOrientation]);
+  }, [setOrientation]);
 
   // Webcam Hand Tracking lifecycle
   useEffect(() => {
-    if (!isSpatialModeActive || !isHandTrackingEnabled) {
+    if (!isHandTrackingEnabled) {
       handGestureEngine.stopWebcamHandTracking();
       wasPinchingRef.current = false;
       return;
@@ -149,7 +174,7 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
       handGestureEngine.stopWebcamHandTracking();
       wasPinchingRef.current = false;
     };
-  }, [isSpatialModeActive, isHandTrackingEnabled, setCursorPos, setPinching, setDetectedGesture]);
+  }, [isHandTrackingEnabled, setCursorPos, setPinching, setDetectedGesture]);
 
   // Calculate 3DOF rotational transform offsets
   const deltaYaw = yaw - originYaw;
@@ -169,10 +194,6 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
   // Clamp rotation angles to prevent flipping
   rotateYDeg = Math.max(-45, Math.min(45, rotateYDeg));
   rotateXDeg = Math.max(-30, Math.min(30, rotateXDeg));
-
-  if (!isSpatialModeActive) {
-    return <>{children}</>;
-  }
 
   const isBezelMode = passthroughMode !== 'native-theme';
   const containerBg = passthroughMode === 'true-black' 

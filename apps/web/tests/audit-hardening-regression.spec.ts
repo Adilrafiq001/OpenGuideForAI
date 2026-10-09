@@ -706,7 +706,7 @@ ZeroDivisionError: division by zero`;
       const mod = await import('/src/data/offlineKnowledge.ts');
       return mod.OFFLINE_KNOWLEDGE_BASE.length;
     });
-    expect(totalCount).toBe(283);
+    expect(totalCount).toBe(285);
     expect(totalCount).toBeGreaterThanOrEqual(250);
 
     const errors: string[] = [];

@@ -156,8 +156,14 @@ function AppContent() {
         setIsCommandPaletteOpen(true);
       }
     };
+
+    const handleCustomOpen = () => setIsCommandPaletteOpen(true);
+    window.addEventListener('open-command-palette', handleCustomOpen);
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('open-command-palette', handleCustomOpen);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   // Remove pre-bootstrap style tag and inline overrides once React hydrates
@@ -321,8 +327,8 @@ function AppContent() {
                 <Route path="/track/builder-4" element={<Navigate to="/builder/4" replace />} />
                 <Route path="/track/builder-5" element={<Navigate to="/builder/5" replace />} />
                 <Route path="/track/builder-6" element={<Navigate to="/builder/6" replace />} />
-                <Route path="/track/builder-7" element={<Navigate to="/builder/7" replace />} />
                 <Route path="/holodeck" element={<SpatialHolodeck />} />
+                <Route path="/spatial" element={<Navigate to="/holodeck" replace />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

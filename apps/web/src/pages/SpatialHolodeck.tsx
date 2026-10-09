@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Compass, 
@@ -17,13 +17,31 @@ import { detectHardwareFull, type HardwareTelemetry } from '../utils/hardwareDet
 
 type HolodeckTab = 'vectors' | 'synapses' | 'webxr';
 
+const TABS: { id: HolodeckTab; label: string; icon: typeof Compass; badge?: string }[] = [
+  { id: 'vectors', label: 'Semantic Vector Galaxy (3D/2D)', icon: Compass },
+  { id: 'synapses', label: 'Neural Synapse Propagation', icon: Network },
+  { id: 'webxr', label: 'Smart AR Glasses & WebXR Gateway', icon: Glasses, badge: 'Xreal • Viture • RayNeo • Rokid' }
+];
+
 export function SpatialHolodeck() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { graphicsTier, setGraphicsTier } = useSettingsStore();
 
-  const [activeTab, setActiveTab] = useState<HolodeckTab>('vectors');
+  const tabParam = searchParams.get('tab') as HolodeckTab | null;
+  const activeTab: HolodeckTab = (tabParam && ['vectors', 'synapses', 'webxr'].includes(tabParam)) ? tabParam : 'vectors';
+
   const [telemetry, setTelemetry] = useState<HardwareTelemetry | null>(null);
   const [isARGlassesGuideOpen, setIsARGlassesGuideOpen] = useState(false);
+  const tabListRef = useRef<HTMLDivElement | null>(null);
+
+  const setActiveTab = useCallback((tab: HolodeckTab) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set('tab', tab);
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,6 +53,36 @@ export function SpatialHolodeck() {
     };
   }, []);
 
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = (index + 1) % TABS.length;
+      const nextTab = TABS[nextIndex].id;
+      setActiveTab(nextTab);
+      const nextBtn = tabListRef.current?.querySelector<HTMLButtonElement>(`#tab-${nextTab}`);
+      nextBtn?.focus();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIndex = (index - 1 + TABS.length) % TABS.length;
+      const prevTab = TABS[prevIndex].id;
+      setActiveTab(prevTab);
+      const prevBtn = tabListRef.current?.querySelector<HTMLButtonElement>(`#tab-${prevTab}`);
+      prevBtn?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const firstTab = TABS[0].id;
+      setActiveTab(firstTab);
+      const firstBtn = tabListRef.current?.querySelector<HTMLButtonElement>(`#tab-${firstTab}`);
+      firstBtn?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const lastTab = TABS[TABS.length - 1].id;
+      setActiveTab(lastTab);
+      const lastBtn = tabListRef.current?.querySelector<HTMLButtonElement>(`#tab-${lastTab}`);
+      lastBtn?.focus();
+    }
+  };
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--color-primary,#09090b)] text-[var(--color-text-primary,#fafafa)] flex flex-col transition-colors selection:bg-[var(--color-accent,#10b981)] selection:text-black">
       
@@ -43,7 +91,8 @@ export function SpatialHolodeck() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/')}
-            className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] font-semibold transition-colors cursor-pointer flex items-center gap-2 text-xs font-mono shadow-sm"
+            aria-label="Back to Studio"
+            className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] font-semibold transition-colors cursor-pointer flex items-center gap-2 text-xs font-mono shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:outline-hidden"
           >
             <ArrowLeft size={16} />
             <span>Back to Studio</span>
@@ -156,57 +205,44 @@ export function SpatialHolodeck() {
         </div>
 
         {/* Tab Selection */}
-        <div className="flex flex-wrap border-b border-[var(--color-border)] gap-2 max-w-full pb-0.5" role="tablist" aria-label="Holodeck Visualizer Views">
-          <button
-            id="tab-vectors"
-            role="tab"
-            aria-selected={activeTab === 'vectors'}
-            aria-controls="tabpanel-vectors"
-            onClick={() => setActiveTab('vectors')}
-            className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
-              activeTab === 'vectors'
-                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            <Compass size={16} />
-            <span>Semantic Vector Galaxy (3D/2D)</span>
-          </button>
-
-          <button
-            id="tab-synapses"
-            role="tab"
-            aria-selected={activeTab === 'synapses'}
-            aria-controls="tabpanel-synapses"
-            onClick={() => setActiveTab('synapses')}
-            className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
-              activeTab === 'synapses'
-                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            <Network size={16} />
-            <span>Neural Synapse Propagation</span>
-          </button>
-
-          <button
-            id="tab-webxr"
-            role="tab"
-            aria-selected={activeTab === 'webxr'}
-            aria-controls="tabpanel-webxr"
-            onClick={() => setActiveTab('webxr')}
-            className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
-              activeTab === 'webxr'
-                ? 'border-cyan-400 text-cyan-400'
-                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            <Glasses size={16} />
-            <span>Smart AR Glasses & WebXR Gateway</span>
-            <span className="hidden sm:inline px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-              Xreal • Viture • RayNeo
-            </span>
-          </button>
+        <div 
+          ref={tabListRef}
+          className="flex flex-wrap border-b border-[var(--color-border)] gap-2 max-w-full pb-0.5" 
+          role="tablist" 
+          aria-label="Holodeck Visualizer Views"
+          aria-orientation="horizontal"
+        >
+          {TABS.map((tab, idx) => {
+            const Icon = tab.icon;
+            const isSelected = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                id={`tab-${tab.id}`}
+                role="tab"
+                tabIndex={isSelected ? 0 : -1}
+                aria-selected={isSelected}
+                aria-controls={`tabpanel-${tab.id}`}
+                onClick={() => setActiveTab(tab.id)}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                className={`pb-3 px-4 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:outline-hidden ${
+                  isSelected
+                    ? tab.id === 'webxr' 
+                      ? 'border-cyan-400 text-cyan-400' 
+                      : 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                    : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span className="hidden sm:inline px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Active View */}
@@ -231,7 +267,7 @@ export function SpatialHolodeck() {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                     <span className="font-bold text-cyan-300">Live Spatial Vector Canvas</span>
-                    <span className="text-[10px] text-slate-400 hidden sm:inline">• Orbit & Calibrate with AR Glasses</span>
+                    <span className="text-[10px] text-[var(--color-text-secondary)] hidden sm:inline">• Orbit & Calibrate with AR Glasses</span>
                   </div>
                   <span className="text-[10px] text-cyan-400 font-semibold bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
                     Interactive 3D / 2D

@@ -90,6 +90,18 @@ OpenGuide opera rigorosamente sotto la **Regola dello $0**. **Nessun server back
 
 ---
 
+## Holodeck Spaziale su Occhiali AR Intelligenti (Spatial Holodeck)
+
+OpenGuide include un Holodeck di calcolo spaziale 3D WebXR / WebGL nativo nel browser (`/holodeck`), ottimizzato per occhiali intelligenti AR a visione ottica trasparente (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S e Apple Vision Pro):
+
+* **Prestazioni Costanti a 60FPS senza Rallentamenti:** Visualizzazione Three.js in tempo reale di spazi vettoriali 3D, clustering semantico e grafi sinaptici neurali.
+* **Passthrough Ottico OLED Nero Puro (True-Black):** Modalità calibrata `#000000` che spegne i pixel OLED sulle guide d'onda ottiche per una sovrapposizione spaziale nitida sull'ambiente reale.
+* **Audio Spaziale Armonico Binaurale:** Sintesi di accordi musicali di quinta giusta proporzionali alla similarità coseno vettoriale tramite Web Audio API.
+* **Tastiera Spaziale Virtuale e Head Tracking:** Tastiera fluttuante con feedback acustico e aptico ed emulazione dei sensori 3-DoF.
+* **Matrice Hardware per Occhiali AR:** Guida interattiva e profili di calibrazione per SpaceWalker, Nebula e MyGlasses con regolazione IPD e frequenza a 120Hz.
+
+---
+
 <a id="panoramica-del-curriculum"></a>
 ## Panoramica del Curriculum
 
@@ -166,6 +178,7 @@ OpenGuide è progettato come una **Progressive Web App (PWA) installabile** e pe
 * **Dottore di Sintassi Empatico:** Traduce i messaggi di errore complessi in spiegazioni amichevoli e chiare.
 * **Esportazione Jupyter Notebook (`.ipynb`):** Scarica i tuoi esercizi risolti come veri notebook Jupyter riutilizzabili.
 * **Lente di Debug a Raggi X (`Alt + X`):** Ispeziona in tempo reale lo stato della memoria del Web Worker e le risorse locali.
+* **HUD Spaziale per Occhiali AR (`Alt + S`):** Attiva l'HUD spaziale fluttuante 3-DoF, gli angoli del gimbal e la modalità passthrough nero puro.
 * **Sincronizzazione Cifrata su Gist:** Salva i tuoi progressi con crittografia **AES-GCM a 256 bit** sul tuo account GitHub personale.
 
 ---
