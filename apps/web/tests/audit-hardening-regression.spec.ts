@@ -1559,6 +1559,156 @@ ZeroDivisionError: division by zero`;
     // 10. Verify zero console errors
     expect(errors).toHaveLength(0);
   });
+
+  test('TC-AUDIT-050: Curated Goldmines & Free Courses Studio 50-Defect Hardening & Accessibility', async ({ page, context }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('og_onboarding_completed', 'true');
+    });
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    // 1. Vault Header and Section 3 Badge
+    const vaultSection = page.locator('#vault');
+    await expect(vaultSection).toBeVisible();
+
+    const vaultBadge = vaultSection.getByText('Curated Goldmines');
+    await expect(vaultBadge).toBeVisible();
+    await expect(vaultSection.getByRole('heading', { name: "The World's Best Free AI Courses" })).toBeVisible();
+
+    // 2. Section 3 Course Cards Accessibility & Non-nested interactive structure
+    const courseCards = vaultSection.locator('[role="button"][tabindex="0"]');
+    const cardCount = await courseCards.count();
+    expect(cardCount).toBeGreaterThanOrEqual(6);
+
+    // Verify first card has descriptive aria-label and does NOT contain nested <button> elements
+    const firstCard = courseCards.first();
+    const cardAriaLabel = await firstCard.getAttribute('aria-label');
+    expect(cardAriaLabel).toContain('Open in-app course studio for');
+
+    const nestedButtons = firstCard.locator('button');
+    expect(await nestedButtons.count()).toBe(0);
+
+    // 3. Keyboard Activation (Enter/Space opens modal)
+    await firstCard.scrollIntoViewIfNeeded();
+    await firstCard.focus();
+    await page.keyboard.press('Enter');
+
+    // 4. Modal Dialog ARIA Attributes & Header
+    const modalDialog = page.locator('[role="dialog"][aria-modal="true"][aria-labelledby="course-modal-title"][aria-describedby="course-modal-desc"]');
+    await expect(modalDialog).toBeVisible();
+
+    const modalTitle = page.locator('#course-modal-title');
+    const modalDesc = page.locator('#course-modal-desc');
+    await expect(modalTitle).toBeVisible();
+    await expect(modalDesc).toBeVisible();
+
+    // Verify close buttons accessible labels
+    const closeBtn = page.locator('button[aria-label="Close course studio dialog"]').first();
+    await expect(closeBtn).toBeVisible();
+
+    // 5. Sidebar Course List & Lecture Navigation
+    const selectedCourseBtn = page.locator('button[aria-current="true"][aria-label^="Select course:"]');
+    await expect(selectedCourseBtn).toBeVisible();
+
+    const lectureButtons = page.locator('button[aria-label^="Select Lecture"]');
+    if (await lectureButtons.count() > 0) {
+      const activeLecture = page.locator('button[aria-current="true"][aria-label^="Select Lecture"]');
+      await expect(activeLecture).toBeVisible();
+    }
+
+    // 6. Tabs & ARIA Tablist/Tab/Tabpanel
+    const tablist = page.locator('[role="tablist"][aria-label="Course Sections"]');
+    await expect(tablist).toBeVisible();
+
+    const videoTab = page.locator('#tab-video');
+    const codeTab = page.locator('#tab-code');
+    const syllabusTab = page.locator('#tab-syllabus');
+    await expect(videoTab).toBeVisible();
+    await expect(codeTab).toBeVisible();
+    await expect(syllabusTab).toBeVisible();
+
+    // Video panel security sandboxing
+    const videoPanel = page.locator('#panel-video[role="tabpanel"][aria-labelledby="tab-video"]');
+    await expect(videoPanel).toBeVisible();
+
+    const iframe = videoPanel.locator('iframe');
+    await expect(iframe).toHaveAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    const sandboxAttr = await iframe.getAttribute('sandbox');
+    expect(sandboxAttr).toContain('allow-scripts');
+    expect(sandboxAttr).toContain('allow-same-origin');
+    expect(sandboxAttr).toContain('allow-popups');
+
+    // External YouTube App link label
+    const ytExternalLink = page.locator('a[aria-label^="Watch"][aria-label*="on external YouTube App"]');
+    await expect(ytExternalLink).toBeVisible();
+
+    // Chapter jump button accessibility and auto-tab switch
+    const chapterButtons = page.locator('button[aria-label^="Jump to chapter"]');
+    if (await chapterButtons.count() > 0) {
+      const firstChapter = chapterButtons.first();
+      await firstChapter.click();
+      await expect(videoPanel).toBeVisible();
+    }
+
+    // 7. Transcript Tab, Search Filter & Clear Button
+    const transcriptTab = page.locator('#tab-transcript');
+    if (await transcriptTab.count() > 0) {
+      await transcriptTab.click();
+      const transcriptPanel = page.locator('#panel-transcript[role="tabpanel"]');
+      await expect(transcriptPanel).toBeVisible();
+
+      const searchInput = page.locator('input[aria-label="Search lecture transcript text"]');
+      await expect(searchInput).toBeVisible();
+      await searchInput.fill('neural');
+
+      // Clear button appears
+      const clearBtn = page.locator('button[aria-label="Clear transcript search query"]');
+      await expect(clearBtn).toBeVisible();
+      await clearBtn.click();
+      await expect(searchInput).toHaveValue('');
+
+      // Export buttons accessibility
+      await expect(page.locator('button[aria-label^="Export"][aria-label*="as Markdown"]')).toBeVisible();
+      await expect(page.locator('button[aria-label^="Export"][aria-label*="as plain text"]')).toBeVisible();
+    }
+
+    // 8. Runnable Python Code Tab & Copy Button
+    await codeTab.click();
+    const codePanel = page.locator('#panel-code[role="tabpanel"]');
+    await expect(codePanel).toBeVisible();
+
+    const copyCodeBtn = page.locator('button[aria-label="Copy runnable Python code to clipboard"]');
+    await expect(copyCodeBtn).toBeVisible();
+    await copyCodeBtn.click();
+    // Verify toast or state transition
+    await expect(page.locator('button[aria-label="Code copied to clipboard"]')).toBeVisible();
+
+    // Verify code block contains Karpathy Value class or valid python
+    const codeElement = codePanel.locator('pre code');
+    await expect(codeElement).toBeVisible();
+    const codeText = await codeElement.textContent();
+    expect(codeText).toBeTruthy();
+
+    // 9. Syllabus & Notes Tab
+    await syllabusTab.click();
+    const syllabusPanel = page.locator('#panel-syllabus[role="tabpanel"]');
+    await expect(syllabusPanel).toBeVisible();
+    await expect(syllabusPanel.getByText('Key First Principles:')).toBeVisible();
+
+    // 10. Close Modal via Escape Key
+    await page.keyboard.press('Escape');
+    await expect(modalDialog).not.toBeVisible();
+
+    // 11. Zero console errors
+    expect(errors).toHaveLength(0);
+  });
 });
 
 

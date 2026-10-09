@@ -709,8 +709,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-[var(--color-border)] pb-8">
           <div>
             <span 
-              className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-2"
-              style={{ color: currentThemeInfo.accent }}
+              className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-2 text-[var(--color-accent)]"
             >
               {t('vault_badge')}
             </span>
@@ -727,11 +726,21 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           {knowledgeVault.map((course, idx) => (
             <div 
               key={idx}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open in-app course studio for ${course.title} by ${course.author}`}
               onClick={() => {
                 setSelectedCourseId(course.id);
                 setIsCoursesModalOpen(true);
               }}
-              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedCourseId(course.id);
+                  setIsCoursesModalOpen(true);
+                }
+              }}
+              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               title="Click to open full in-app course studio with transcripts & code"
             >
               <div>
@@ -740,11 +749,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                     {course.author}
                   </span>
                   <span 
-                    className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold"
-                    style={{
-                      backgroundColor: `${currentThemeInfo.accent}20`,
-                      color: currentThemeInfo.accent
-                    }}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30"
                   >
                     {course.badge}
                   </span>
@@ -762,18 +767,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
               <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-xs font-mono text-[var(--color-text-secondary)]">
                 <span>{t('vault_free_access')}</span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCourseId(course.id);
-                    setIsCoursesModalOpen(true);
-                  }}
-                  className="text-emerald-500 hover:text-emerald-400 font-semibold flex items-center gap-1 hover:underline cursor-pointer"
-                >
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 group-hover:underline">
                   <span>{t('vault_included')}</span>
                   <ChevronRight size={13} />
-                </button>
+                </span>
               </div>
             </div>
           ))}

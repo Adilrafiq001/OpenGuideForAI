@@ -115,6 +115,29 @@ class Value:
     def __rmul__(self, other):
         return self * other
 
+    def __neg__(self):
+        return self * -1.0
+
+    def __sub__(self, other):
+        return self + (-other)
+
+    def __rsub__(self, other):
+        return other + (-self)
+
+    def __pow__(self, other):
+        assert isinstance(other, (int, float)), "only supporting int/float powers for now"
+        out = Value(self.data**other, (self,), f'**{other}')
+        def _backward():
+            self.grad += (other * self.data**(other - 1)) * out.grad
+        out._backward = _backward
+        return out
+
+    def __truediv__(self, other):
+        return self * (other**-1)
+
+    def __rtruediv__(self, other):
+        return other * (self**-1)
+
     def tanh(self):
         x = self.data
         t = (math.exp(2*x) - 1) / (math.exp(2*x) + 1)
@@ -695,21 +718,27 @@ print("Token IDs:", ids)
         labGoal: 'Transcribe live browser microphone audio using Whisper.'
       }
     ],
-    codeSnippet: `# Hugging Face Transformers & smolagents Example
+    codeSnippet: `# Hugging Face: Multi-Task Pipelines & Smolagents Autonomous Tool Dispatch
 from transformers import pipeline
 
-# 1. Sentiment analysis in 2 lines
-classifier = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
-result = classifier("OpenGuide runs 100% free with client-side Pyodide!")
-print("Sentiment:", result)
+# 1. Zero-shot classification without fine-tuning
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+text = "OpenGuide compiles and executes Python CPython kernels in-browser via Pyodide WebAssembly."
+labels = ["software architecture", "finance", "medical research"]
+res = classifier(text, candidate_labels=labels)
+print("Top Classified Domain:", res["labels"][0], f"(Score: {res['scores'][0]:.4f})")
 
-# 2. Tokenizer Inspection
-from transformers import AutoTokenizer
-tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-tokens = tokenizer.tokenize("AI Sovereign Studio")
-ids = tokenizer.convert_tokens_to_ids(tokens)
-print("Tokens:", tokens)
-print("Token IDs:", ids)
+# 2. Smolagents Python-Native Tool Calling Pattern
+class SmolCodeAgent:
+    """Simulates Hugging Face smolagents direct Python code action execution."""
+    def __init__(self, tools):
+        self.tools = tools
+    def execute(self, action_call):
+        tool_name = action_call.get("tool")
+        return f"Smolagent dispatched '{tool_name}' with verified execution: {self.tools.get(tool_name, False)}"
+
+agent = SmolCodeAgent({"python_sandbox": True, "hf_inference_api": True})
+print(agent.execute({"tool": "python_sandbox", "code": "import math; math.sqrt(256)"}))
 `,
     keyTakeaways: [
       'The Hugging Face Hub is the open-source decentralized model weight repository.',
@@ -784,21 +813,22 @@ print("Similarity Doc 2 (Divergent):", round(cosine_similarity(query, doc_2), 4)
         labGoal: 'Deploy a hardened agent that rejects prompt injection attempts.'
       }
     ],
-    codeSnippet: `# Microsoft GenAI Lesson 7: Semantic Vector Retrieval
-import math
+    codeSnippet: `# Microsoft GenAI: Production Hybrid Search (Reciprocal Rank Fusion - RRF)
+# Bridges sparse BM25 keyword precision and dense semantic embedding recall.
 
-def cosine_similarity(vec_a, vec_b):
-    dot = sum(a * b for a, b in zip(vec_a, vec_b))
-    norm_a = math.sqrt(sum(a * a for a in vec_a))
-    norm_b = math.sqrt(sum(b * b for b in vec_b))
-    return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
+def reciprocal_rank_fusion(sparse_ranks, dense_ranks, k=60):
+    all_docs = set(sparse_ranks.keys()).union(set(dense_ranks.keys()))
+    fusion_scores = {}
+    for doc in all_docs:
+        r_sparse = sparse_ranks.get(doc, 1000)
+        r_dense = dense_ranks.get(doc, 1000)
+        fusion_scores[doc] = (1.0 / (k + r_sparse)) + (1.0 / (k + r_dense))
+    return sorted(fusion_scores.items(), key=lambda x: x[1], reverse=True)
 
-query = [0.82, 0.15, 0.55]
-doc_1 = [0.80, 0.18, 0.52]  # Highly related
-doc_2 = [0.05, 0.95, 0.20]  # Unrelated
-
-print("Similarity Doc 1:", cosine_similarity(query, doc_1))
-print("Similarity Doc 2:", cosine_similarity(query, doc_2))
+sparse_results = {"doc_kernel": 1, "doc_lora": 3, "doc_general": 10}
+dense_results = {"doc_lora": 1, "doc_kernel": 4, "doc_attention": 2}
+ranked = reciprocal_rank_fusion(sparse_results, dense_results)
+print("Top Fused Document:", ranked[0][0], f"(Score: {ranked[0][1]:.5f})")
 `,
     keyTakeaways: [
       'Prompting requires structured schemas; avoid open-ended natural text for backend automation.',
@@ -851,9 +881,16 @@ class ToolAgent:
         self.history.append((task, observation))
         return observation
 
+def safe_calculate(expr_text):
+    clean = "".join(c for c in expr_text if c in "0123456789+-*/. ")
+    try:
+        return f"Calculated value: {eval(clean.strip(), {'__builtins__': None}, {})}"
+    except Exception as err:
+        return f"Evaluation error: {err}"
+
 tools = {
-    "calculator": lambda expr: "Result = 42.0",
-    "search": lambda query: "Found 3 relevant documentation pages."
+    "calculator": safe_calculate,
+    "search": lambda query: f"Found indexed docs matching query: '{query}'"
 }
 
 agent = ToolAgent("CopilotAgent", tools)
@@ -968,20 +1005,34 @@ print(json.dumps(evaluation_schema, indent=2))
         labGoal: 'Evaluate model answers against ground-truth benchmarks.'
       }
     ],
-    codeSnippet: `# Google Gemini Structured Output Blueprint
-# (Zero-dependency Python representation)
-schema = {
-    "type": "OBJECT",
-    "properties": {
-        "verdict": {"type": "STRING", "enum": ["PASS", "FAIL"]},
-        "score": {"type": "NUMBER"},
-        "rationale": {"type": "STRING"}
-    },
-    "required": ["verdict", "score", "rationale"]
-}
-print("Structured JSON Schema for deterministic evaluation:")
+    codeSnippet: `# Google Gemini 2.5 Flash: Multimodal Context & Structured Schema Blueprint
 import json
-print(json.dumps(schema, indent=2))
+
+multimodal_request = {
+    "contents": [
+        {
+            "role": "user",
+            "parts": [
+                {"text": "Analyze this AI system architecture schematic and verify memory bounds."},
+                {"inline_data": {"mime_type": "image/png", "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB..."}}
+            ]
+        }
+    ],
+    "generation_config": {
+        "response_mime_type": "application/json",
+        "response_schema": {
+            "type": "OBJECT",
+            "properties": {
+                "system_name": {"type": "STRING"},
+                "vram_footprint_mb": {"type": "NUMBER"},
+                "subsystems": {"type": "ARRAY", "items": {"type": "STRING"}}
+            },
+            "required": ["system_name", "vram_footprint_mb"]
+        }
+    }
+}
+print("Configured Multimodal Structured JSON Request:")
+print(json.dumps(multimodal_request, indent=2))
 `,
     keyTakeaways: [
       'Gemini 2.5 Flash offers near-zero latency for client-side tool routing.',
@@ -1045,16 +1096,23 @@ print("Top Document Selected by Cross-Encoder:", re_ranked[0]["doc"])
         labGoal: 'Build an end-to-end customer support router with security gates.'
       }
     ],
-    codeSnippet: `# DeepLearning.AI Pattern: Cross-Encoder Re-Ranking Concept
-# Step 1: Broad bi-encoder vector search retrieves Top 20 candidates.
-# Step 2: Accurate cross-encoder scores (query, candidate) pairs to select Top 3.
-candidates = [
-    {"doc": "Python memory management and garbage collection", "score": 0.82},
-    {"doc": "Building RAG applications with vector databases", "score": 0.89},
-    {"doc": "Neural network backpropagation calculus", "score": 0.74}
-]
-re_ranked = sorted(candidates, key=lambda x: x["score"], reverse=True)
-print("Top Document:", re_ranked[0]["doc"])
+    codeSnippet: `# DeepLearning.AI: Hypothetical Document Embeddings (HyDE) Pipeline Blueprint
+# Overcomes query-document vocabulary mismatch by hallucinating an ideal answer passage.
+
+def hyde_retrieval_step(user_query, generate_hypo_fn, embed_fn, vector_index):
+    print(f"User Technical Query: '{user_query}'")
+    # Step 1: Synthesize a hypothetical ideal answer passage
+    hypothetical_passage = generate_hypo_fn(f"Write a comprehensive technical explanation answering: {user_query}")
+    print(f"Synthesized HyDE Passage: '{hypothetical_passage[:80]}...'")
+    
+    # Step 2: Dense embedding of the hypothetical passage instead of short raw query
+    hyde_embedding = embed_fn(hypothetical_passage)
+    
+    # Step 3: Dense vector search over real knowledge chunks
+    real_chunks = vector_index.search(hyde_embedding, top_k=3)
+    return real_chunks
+
+print("HyDE Pipeline Loaded: Bridges short query vocabulary gap to high-density passages.")
 `,
     keyTakeaways: [
       'HyDE (Hypothetical Document Embeddings) synthesizes a fake answer first to find real matching chunks.',
@@ -1103,10 +1161,12 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
   }
 
   const copiedCodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const exportRevokeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       if (copiedCodeTimerRef.current) clearTimeout(copiedCodeTimerRef.current);
+      if (exportRevokeTimerRef.current) clearTimeout(exportRevokeTimerRef.current);
     };
   }, []);
 
@@ -1164,6 +1224,11 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
 
   const hasVideo = Boolean(currentLecture?.youtubeId);
 
+  // Derive effective active tab: if current course/lecture does not have a video lecture, fallback to runnable code
+  const effectiveActiveTab = (!hasVideo && (activeTab === 'video' || activeTab === 'transcript'))
+    ? 'code'
+    : activeTab;
+
   // Filtered transcript lines
   const filteredTranscript = useMemo(() => {
     if (!currentLecture) return '';
@@ -1179,7 +1244,9 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
   // Export Transcript handler
   const handleExportTranscript = (format: 'md' | 'txt') => {
     if (!currentLecture) return;
-    const filename = `${currentCourse.id}-${currentLecture.id}-transcript.${format}`;
+    const sanitizedCourseId = currentCourse.id.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const sanitizedLectureId = currentLecture.id.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `${sanitizedCourseId}-${sanitizedLectureId}-transcript.${format}`;
     let content = '';
 
     if (format === 'md') {
@@ -1196,7 +1263,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    if (exportRevokeTimerRef.current) clearTimeout(exportRevokeTimerRef.current);
+    exportRevokeTimerRef.current = setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleCopyCode = async () => {
@@ -1218,6 +1286,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="course-modal-title"
+          aria-describedby="course-modal-desc"
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
@@ -1235,7 +1304,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
           {/* Header Bar */}
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--color-border)] bg-[var(--color-secondary)]/50 shrink-0">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 flex items-center justify-center text-[var(--color-accent)] shrink-0">
                 <BookOpen size={16} />
               </div>
               <div className="min-w-0">
@@ -1243,11 +1312,11 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                   <h2 id="course-modal-title" className="text-sm sm:text-base font-bold truncate">
                     {currentCourse.title}
                   </h2>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
                     {currentCourse.badge}
                   </span>
                 </div>
-                <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
+                <p id="course-modal-desc" className="text-[11px] text-[var(--color-text-secondary)] truncate">
                   By {currentCourse.author} • In-App Sovereign Player (Zero External Redirects)
                 </p>
               </div>
@@ -1256,6 +1325,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setMobilePane(prev => prev === 'sidebar' ? 'content' : 'sidebar')}
+                aria-label={mobilePane === 'sidebar' ? "Switch to course player view" : "Switch to course list view"}
+                aria-expanded={mobilePane === 'sidebar'}
                 className="md:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
               >
                 <BookOpen size={13} />
@@ -1265,7 +1336,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               <button
                 onClick={onClose}
                 className="p-2 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer shrink-0"
-                aria-label="Close dialog"
+                aria-label="Close course studio dialog"
               >
                 <X size={18} />
               </button>
@@ -1286,6 +1357,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                 {FREE_COURSES.map(course => (
                   <button
                     key={course.id}
+                    aria-current={selectedCourseId === course.id ? 'true' : undefined}
+                    aria-label={`Select course: ${course.title} by ${course.author}`}
                     onClick={() => {
                       setSelectedCourseId(course.id);
                       setSelectedLectureIdx(0);
@@ -1322,6 +1395,8 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     {currentCourse.lectures.map((lec, idx) => (
                       <button
                         key={lec.id}
+                        aria-current={selectedLectureIdx === idx ? 'true' : undefined}
+                        aria-label={`Select Lecture ${idx + 1}: ${lec.title}`}
                         onClick={() => {
                           setSelectedLectureIdx(idx);
                           setPlayerStartTime(0);
@@ -1353,15 +1428,17 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                   {hasVideo && (
                     <button
                       role="tab"
-                      aria-selected={activeTab === 'video'}
+                      id="tab-video"
+                      aria-controls="panel-video"
+                      aria-selected={effectiveActiveTab === 'video'}
                       onClick={() => setActiveTab('video')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                        activeTab === 'video'
+                        effectiveActiveTab === 'video'
                           ? 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] shadow-sm'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
-                      <Play size={12} className="text-red-400" />
+                      <Play size={12} className="text-red-600 dark:text-red-400" />
                       <span>Video Lecture</span>
                     </button>
                   )}
@@ -1369,44 +1446,50 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                   {hasVideo && (
                     <button
                       role="tab"
-                      aria-selected={activeTab === 'transcript'}
+                      id="tab-transcript"
+                      aria-controls="panel-transcript"
+                      aria-selected={effectiveActiveTab === 'transcript'}
                       onClick={() => setActiveTab('transcript')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                        activeTab === 'transcript'
+                        effectiveActiveTab === 'transcript'
                           ? 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] shadow-sm'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                       }`}
                     >
-                      <FileText size={12} className="text-amber-400" />
+                      <FileText size={12} className="text-amber-600 dark:text-amber-400" />
                       <span>Transcript</span>
                     </button>
                   )}
 
                   <button
                     role="tab"
-                    aria-selected={activeTab === 'code'}
+                    id="tab-code"
+                    aria-controls="panel-code"
+                    aria-selected={effectiveActiveTab === 'code'}
                     onClick={() => setActiveTab('code')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                      activeTab === 'code'
+                      effectiveActiveTab === 'code'
                         ? 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] shadow-sm'
                         : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                     }`}
                   >
-                    <Code2 size={12} className="text-blue-400" />
+                    <Code2 size={12} className="text-blue-600 dark:text-blue-400" />
                     <span>Runnable Python</span>
                   </button>
 
                   <button
                     role="tab"
-                    aria-selected={activeTab === 'syllabus'}
+                    id="tab-syllabus"
+                    aria-controls="panel-syllabus"
+                    aria-selected={effectiveActiveTab === 'syllabus'}
                     onClick={() => setActiveTab('syllabus')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                      activeTab === 'syllabus'
+                      effectiveActiveTab === 'syllabus'
                         ? 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] shadow-sm'
                         : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                     }`}
                   >
-                    <Layers size={12} className="text-emerald-400" />
+                    <Layers size={12} className="text-emerald-600 dark:text-emerald-400" />
                     <span>Syllabus & Notes</span>
                   </button>
                 </div>
@@ -1416,6 +1499,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                     href={currentCourse.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`View official GitHub repository for ${currentCourse.title}`}
                     className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
                   >
                     <span>Official Repo</span>
@@ -1428,15 +1512,22 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 min-h-0">
                 
                 {/* 1. Video Player Tab */}
-                {activeTab === 'video' && hasVideo && currentLecture && (
-                  <div className="space-y-4 max-w-4xl mx-auto">
+                {effectiveActiveTab === 'video' && hasVideo && currentLecture && (
+                  <div
+                    role="tabpanel"
+                    id="panel-video"
+                    aria-labelledby="tab-video"
+                    tabIndex={0}
+                    className="space-y-4 max-w-4xl mx-auto focus-visible:outline-none"
+                  >
                     {/* Security Hardened YouTube Player */}
                     <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black/90 border border-[var(--color-border)] shadow-xl">
                       <iframe
                         src={`https://www.youtube-nocookie.com/embed/${currentLecture.youtubeId}?start=${playerStartTime}&rel=0&enablejsapi=1`}
                         title={currentLecture.title}
                         className="absolute inset-0 w-full h-full border-0"
-                        referrerPolicy="no-referrer-when-downgrade"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                       />
@@ -1458,6 +1549,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                             href={`https://www.youtube.com/watch?v=${currentLecture.youtubeId}${playerStartTime > 0 ? `&t=${playerStartTime}s` : ''}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={`Watch ${currentLecture.title} on external YouTube App`}
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600/15 hover:bg-red-600/25 border border-red-500/30 text-red-600 dark:text-red-400 font-mono text-xs font-semibold transition-all cursor-pointer active:scale-95 shadow-sm"
                             title="Open in YouTube App"
                           >
@@ -1479,7 +1571,11 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                           {currentLecture.timestamps.map((ts, idx) => (
                             <button
                               key={idx}
-                              onClick={() => setPlayerStartTime(ts.time)}
+                              onClick={() => {
+                                setPlayerStartTime(ts.time);
+                                setActiveTab('video');
+                              }}
+                              aria-label={`Jump to chapter ${ts.label} at timestamp ${ts.timeStr}`}
                               className="px-2.5 py-1 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-[11px] font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
                             >
                               <Clock size={10} className="text-[var(--color-accent)]" />
@@ -1494,8 +1590,14 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                 )}
 
                 {/* 2. Transcript Tab */}
-                {activeTab === 'transcript' && currentLecture && (
-                  <div className="space-y-4 max-w-4xl mx-auto flex flex-col h-full">
+                {effectiveActiveTab === 'transcript' && currentLecture && (
+                  <div
+                    role="tabpanel"
+                    id="panel-transcript"
+                    aria-labelledby="tab-transcript"
+                    tabIndex={0}
+                    className="space-y-4 max-w-4xl mx-auto flex flex-col h-full focus-visible:outline-none"
+                  >
                     {/* Transcript Controls */}
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 bg-[var(--color-secondary)] p-3 rounded-xl border border-[var(--color-border)]">
                       <div className="relative flex-1">
@@ -1506,13 +1608,29 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                           value={transcriptSearch}
                           onChange={(e) => setTranscriptSearch(e.target.value)}
                           placeholder="Search lecture transcript text..."
-                          className="w-full pl-9 pr-3 py-1.5 text-xs bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)]"
+                          className="w-full pl-9 pr-8 py-1.5 text-xs bg-[var(--color-primary)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-secondary)]"
                         />
+                        {transcriptSearch && (
+                          <button
+                            type="button"
+                            onClick={() => setTranscriptSearch('')}
+                            aria-label="Clear transcript search query"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
+                          >
+                            <X size={12} />
+                          </button>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
+                        {transcriptSearch.trim() && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] shrink-0">
+                            {filteredTranscript ? filteredTranscript.split('\n').filter(Boolean).length : 0} matching lines
+                          </span>
+                        )}
                         <button
                           onClick={() => handleExportTranscript('md')}
+                          aria-label={`Export ${currentLecture.title} transcript as Markdown`}
                           className="px-3 py-1.5 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <Download size={12} />
@@ -1520,6 +1638,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         </button>
                         <button
                           onClick={() => handleExportTranscript('txt')}
+                          aria-label={`Export ${currentLecture.title} transcript as plain text`}
                           className="px-3 py-1.5 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <Download size={12} />
@@ -1536,23 +1655,30 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                 )}
 
                 {/* 3. Runnable Python Code Tab */}
-                {activeTab === 'code' && (
-                  <div className="space-y-4 max-w-4xl mx-auto">
+                {effectiveActiveTab === 'code' && (
+                  <div
+                    role="tabpanel"
+                    id="panel-code"
+                    aria-labelledby="tab-code"
+                    tabIndex={0}
+                    className="space-y-4 max-w-4xl mx-auto focus-visible:outline-none"
+                  >
                     <div className="flex items-center justify-between bg-[var(--color-secondary)] p-3 rounded-xl border border-[var(--color-border)]">
                       <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-text-secondary)]">
-                        <Terminal size={14} className="text-emerald-400" />
+                        <Terminal size={14} className="text-emerald-600 dark:text-emerald-400" />
                         <span className="font-semibold text-[var(--color-text-primary)]">
                           {currentLecture ? `${currentLecture.title}` : 'First-Principles Python Implementation'}
                         </span>
                       </div>
                       <button
                         onClick={handleCopyCode}
+                        aria-label={copiedCode ? "Code copied to clipboard" : "Copy runnable Python code to clipboard"}
                         className="px-3 py-1 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
                       >
                         {copiedCode ? (
                           <>
-                            <CheckCircle size={12} className="text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <CheckCircle size={12} className="text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
                           </>
                         ) : (
                           <>
@@ -1577,8 +1703,14 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                 )}
 
                 {/* 4. Syllabus & Notes Tab */}
-                {activeTab === 'syllabus' && (
-                  <div className="space-y-6 max-w-4xl mx-auto">
+                {effectiveActiveTab === 'syllabus' && (
+                  <div
+                    role="tabpanel"
+                    id="panel-syllabus"
+                    aria-labelledby="tab-syllabus"
+                    tabIndex={0}
+                    className="space-y-6 max-w-4xl mx-auto focus-visible:outline-none"
+                  >
                     {/* Course Overview */}
                     <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-5 space-y-3">
                       <h3 className="text-base font-bold text-[var(--color-text-primary)]">
@@ -1595,7 +1727,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         <ul className="space-y-1.5">
                           {currentCourse.keyTakeaways.map((takeaway, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-xs text-[var(--color-text-secondary)]">
-                              <CheckCircle size={13} className="text-emerald-400 shrink-0 mt-0.5" />
+                              <CheckCircle size={13} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                               <span>{takeaway}</span>
                             </li>
                           ))}
@@ -1630,7 +1762,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                                   </span>
                                 ))}
                               </div>
-                              <div className="text-[11px] text-emerald-400/90 font-mono pt-1">
+                              <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono pt-1">
                                 Lab Objective: {mod.labGoal}
                               </div>
                             </div>
@@ -1654,6 +1786,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={onClose}
+                aria-label="Close course studio dialog"
                 className="px-4 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] font-semibold transition-colors cursor-pointer"
               >
                 Close Studio
