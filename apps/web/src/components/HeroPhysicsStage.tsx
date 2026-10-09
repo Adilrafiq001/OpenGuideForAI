@@ -57,7 +57,6 @@ export function HeroPhysicsStage({
   onOpenMatrixModal,
   onOpenEverydayCrafts,
 }: HeroPhysicsStageProps) {
-  const safeAccent = currentThemeInfo?.accent || '#10b981';
   const [activeLens, setActiveLens] = useState<StudioLens>('wasm');
   const [isSimRunning, setIsSimRunning] = useState(false);
   const [simOutput, setSimOutput] = useState<string | null>(null);
@@ -128,6 +127,8 @@ export function HeroPhysicsStage({
 
       {/* 1. Eyebrow Badge */}
       <motion.div
+        role="status"
+        aria-label="OpenGuide platform status: 100% Free Sovereign AI Studio"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -146,15 +147,13 @@ export function HeroPhysicsStage({
       >
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.08] text-[var(--color-text-primary)] select-none">
           <span 
-            className="font-mono font-bold ltr:mr-2 rtl:ml-2 inline-block select-none"
-            style={{ color: safeAccent }}
+            className="font-mono font-bold ltr:mr-2 rtl:ml-2 inline-block select-none text-[var(--color-accent)]"
           >
             /
           </span>
           <bdi className="inline">{t('hero_title_prefix')} </bdi>
           <bdi 
-            className="inline"
-            style={{ color: safeAccent }}
+            className="inline text-[var(--color-accent)]"
           >
             {t('hero_title_suffix')}
           </bdi>
@@ -209,9 +208,11 @@ export function HeroPhysicsStage({
         {/* Pathway Guide Helper & Explore Pathways Link */}
         <div className="flex items-center gap-4 text-xs font-mono text-[var(--color-text-secondary)]">
           <button
+            type="button"
             data-testid="hero-guide-toggle-btn"
+            aria-label="Open 30-second onboarding guide to choose your learning pathway"
             onClick={() => onOpenOnboardingFork?.('guide')}
-            className="inline-flex items-center gap-1.5 hover:text-[var(--color-text-primary)] underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)] transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 hover:text-[var(--color-text-primary)] underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent)]"
           >
             <Compass size={13} className="text-[var(--color-accent)]" />
             <span>{t('hero_not_sure_guide') || 'Not sure? Take 30s guide'}</span>
@@ -237,8 +238,10 @@ export function HeroPhysicsStage({
         className="mb-14 flex flex-wrap items-center justify-center gap-3"
       >
         <button
+          type="button"
+          aria-label="Never coded before? Start at Track 0: Absolute Zero with zero setup required"
           onClick={onLaunchTrack0}
-          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-600/50 dark:border-emerald-500/30 bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100/90 text-emerald-950 dark:text-emerald-300 font-mono tabular-nums text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+          className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-600/50 dark:border-emerald-500/30 bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100/90 text-emerald-950 dark:text-emerald-300 font-mono tabular-nums text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-700 dark:bg-emerald-400 animate-pulse" />
           <span className="font-bold text-emerald-950 dark:text-emerald-300">
@@ -257,8 +260,10 @@ export function HeroPhysicsStage({
 
         {onOpenEverydayCrafts && (
           <button
+            type="button"
+            aria-label="Explore Universal Spectrum from zero knowledge to frontier AI expert"
             onClick={() => onOpenEverydayCrafts('beginner')}
-            className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-100/95 dark:bg-stone-800/90 hover:bg-stone-200/90 dark:hover:bg-stone-700/90 text-stone-900 dark:text-stone-100 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+            className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-100/95 dark:bg-stone-800/90 hover:bg-stone-200/90 dark:hover:bg-stone-700/90 text-stone-900 dark:text-stone-100 font-mono text-xs transition-all duration-200 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             <Compass size={14} className="text-stone-600 dark:text-stone-300 transition-transform group-hover:rotate-45" />
             <span className="font-bold text-stone-900 dark:text-stone-100">Universal Spectrum:</span>
@@ -305,7 +310,11 @@ export function HeroPhysicsStage({
 
         {/* Console Lens Switcher Bar */}
         <div className="px-3 sm:px-5 py-2.5 border-b border-[var(--color-border)] bg-black/[0.02] dark:bg-black/20 flex flex-wrap items-center justify-between gap-2 max-w-full">
-          <div className="flex flex-wrap items-center gap-1.5 max-w-full py-0.5">
+          <div 
+            role="tablist"
+            aria-label="Studio preview lens switcher"
+            className="flex flex-wrap items-center gap-1.5 max-w-full py-0.5"
+          >
             {[
               { id: 'wasm' as const, label: t('hero_console_tab_wasm'), icon: Terminal },
               { id: 'vector' as const, label: t('hero_console_tab_vector'), icon: Database },
@@ -318,14 +327,20 @@ export function HeroPhysicsStage({
               return (
                 <button
                   key={lens.id}
+                  type="button"
+                  role="tab"
+                  id={`hero-lens-tab-${lens.id}`}
+                  aria-selected={isActive}
+                  aria-controls="hero-lens-canvas"
+                  aria-label={`Studio lens: ${lens.label}`}
                   onClick={() => setActiveLens(lens.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-2 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                     isActive
                       ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-[var(--color-border)] shadow-sm font-semibold'
                       : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-black/5 dark:hover:bg-white/5'
                   }`}
                 >
-                  <Icon size={13} style={{ color: isActive ? currentThemeInfo.accent : undefined }} />
+                  <Icon size={13} className={isActive ? 'text-[var(--color-accent)]' : undefined} />
                   <bdi>{lens.label}</bdi>
                 </button>
               );
@@ -333,17 +348,23 @@ export function HeroPhysicsStage({
           </div>
 
           <button
+            type="button"
+            aria-busy={isSimRunning}
+            aria-label={isSimRunning ? "Simulation currently running" : "Run interactive simulation"}
             onClick={handleRunSim}
             disabled={isSimRunning}
-            className="px-3 py-1 rounded-xl bg-[var(--color-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-50"
+            className="px-3 py-1 rounded-xl bg-[var(--color-primary)] hover:border-[var(--color-accent)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
-            <Play size={12} className={isSimRunning ? 'animate-spin' : ''} style={{ color: currentThemeInfo.accent }} />
+            <Play size={12} className={`text-[var(--color-accent)] ${isSimRunning ? 'animate-spin' : ''}`} />
             <span>{isSimRunning ? t('hero_console_sim_running') : t('hero_console_run_sim')}</span>
           </button>
         </div>
 
         {/* Lens Interactive Display Canvas */}
         <div 
+          role="tabpanel"
+          id="hero-lens-canvas"
+          aria-labelledby={`hero-lens-tab-${activeLens}`}
           className="p-6 font-mono overflow-x-auto momentum-scroll-x custom-scrollbar min-h-[170px] flex flex-col justify-between bg-[var(--color-primary)]/40 transition-all duration-150"
           style={{
             fontFamily: 'var(--font-code-mono)',
@@ -408,7 +429,7 @@ export function HeroPhysicsStage({
                     <div key={i} className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
                       <div className="text-[10px] text-[var(--color-text-secondary)]">{cluster.cluster}</div>
                       <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">{cluster.name}</div>
-                      <div className="text-[10px] font-mono text-emerald-400 mt-1">{cluster.vectors}</div>
+                      <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 mt-1">{cluster.vectors}</div>
                     </div>
                   ))}
                 </div>
@@ -425,7 +446,7 @@ export function HeroPhysicsStage({
                 className="space-y-3"
               >
                 <div className="flex items-center gap-2 text-[11px] text-[var(--color-text-secondary)]">
-                  <Layers size={13} className="text-blue-400" />
+                  <Layers size={13} className="text-blue-600 dark:text-blue-400" />
                   <span>Dense Vector Retrieval & Zero-Hallucination Pipeline</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
@@ -458,13 +479,13 @@ export function HeroPhysicsStage({
               >
                 <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)]">
                   <span className="flex items-center gap-2">
-                    <Workflow size={13} className="text-amber-400" />
+                    <Workflow size={13} className="text-amber-600 dark:text-amber-400" />
                     <span>FastMCP Tool Execution & Autonomous State Machine</span>
                   </span>
-                  <span className="text-emerald-400 font-semibold">Ready</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Ready</span>
                 </div>
                 <div className="p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60 font-mono text-[11px] text-[var(--color-text-secondary)]">
-                  <span className="text-[var(--color-accent)]">@mcp_tool</span> dispatch: compute_matrix_similarity(query=&apos;vector&apos;) &rarr; returned <span className="text-emerald-400">100% verified</span> in 1.4ms
+                  <span className="text-[var(--color-accent)]">@mcp_tool</span> dispatch: compute_matrix_similarity(query=&apos;vector&apos;) &rarr; returned <span className="text-emerald-600 dark:text-emerald-400 font-semibold">100% verified</span> in 1.4ms
                 </div>
               </motion.div>
             )}
@@ -480,10 +501,10 @@ export function HeroPhysicsStage({
               >
                 <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)]">
                   <span className="flex items-center gap-2">
-                    <Cpu size={13} className="text-purple-400" />
+                    <Cpu size={13} className="text-purple-600 dark:text-purple-400" />
                     <span>In-Browser WebGPU Tensor Dispatch & Quantized Neural SLM</span>
                   </span>
-                  <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                     <CheckCircle2 size={12} />
                     Hardware Acceleration ($0 Rule)
                   </span>
@@ -494,7 +515,7 @@ export function HeroPhysicsStage({
                     <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">
                       {webGpuTelemetry?.tier || 'WebGPU Native'}
                     </div>
-                    <div className="text-[10px] font-mono text-purple-400 mt-1 truncate" title={webGpuTelemetry?.adapterName}>
+                    <div className="text-[10px] font-mono text-purple-600 dark:text-purple-400 mt-1 truncate" title={webGpuTelemetry?.adapterName}>
                       {webGpuTelemetry?.vendor || 'Direct3D / Metal / Vulkan'}
                     </div>
                   </div>
@@ -503,23 +524,23 @@ export function HeroPhysicsStage({
                     <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">
                       {webGpuKernelOutput ? `${webGpuKernelOutput.durationMs}ms` : '0ms Network'}
                     </div>
-                    <div className="text-[10px] font-mono text-emerald-400 mt-1">
+                    <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 mt-1">
                       {webGpuKernelOutput ? webGpuKernelOutput.backend.split(' ')[0] : 'Local VRAM'}
                     </div>
                   </div>
                   <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
                     <div className="text-[10px] text-[var(--color-text-secondary)]">Throughput</div>
                     <div className="text-xs font-bold text-[var(--color-text-primary)] mt-0.5">~48 tokens/sec</div>
-                    <div className="text-[10px] font-mono text-cyan-400 mt-1">Quantized Q4_K</div>
+                    <div className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 mt-1">Quantized Q4_K</div>
                   </div>
                   <div className="p-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]/60">
                     <div className="text-[10px] text-[var(--color-text-secondary)]">Cost</div>
-                    <div className="text-xs font-bold text-emerald-400 mt-0.5">$0.00 Forever</div>
+                    <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">$0.00 Forever</div>
                     <div className="text-[10px] font-mono text-[var(--color-text-secondary)] mt-1">100% Client-Side</div>
                   </div>
                 </div>
                 <div className="pt-2 border-t border-[var(--color-border)] flex items-center justify-between text-[11px]">
-                  <span className="text-purple-400 font-semibold flex items-center gap-1.5 truncate">
+                  <span className="text-purple-600 dark:text-purple-400 font-semibold flex items-center gap-1.5 truncate">
                     <CheckCircle2 size={13} className="shrink-0" />
                     <span className="truncate">
                       {webGpuKernelOutput 
@@ -539,19 +560,19 @@ export function HeroPhysicsStage({
         {/* Capability Telemetry Chips Bar */}
         <div className="px-5 py-3 border-t border-[var(--color-border)] bg-black/[0.02] dark:bg-white/[0.01] grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
-            <Cpu size={14} style={{ color: currentThemeInfo.accent }} />
+            <Cpu size={14} className="text-[var(--color-accent)]" />
             <span className="font-mono text-[11px] font-medium">0ms Local WASM</span>
           </div>
           <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
-            <Zap size={14} style={{ color: currentThemeInfo.accent }} />
+            <Zap size={14} className="text-[var(--color-accent)]" />
             <span className="font-mono text-[11px] font-medium">$0 Free GPU Stack</span>
           </div>
           <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
-            <ShieldCheck size={14} style={{ color: currentThemeInfo.accent }} />
+            <ShieldCheck size={14} className="text-[var(--color-accent)]" />
             <span className="font-mono text-[11px] font-medium">Client-Side Privacy</span>
           </div>
           <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
-            <Activity size={14} style={{ color: currentThemeInfo.accent }} />
+            <Activity size={14} className="text-[var(--color-accent)]" />
             <span className="font-mono text-[11px] font-medium">6-DOF XR Holodeck</span>
           </div>
         </div>
@@ -598,10 +619,12 @@ export function HeroPhysicsStage({
 
           {/* Matrix Expander Button */}
           <button
+            type="button"
+            aria-label="Explore all first-principles questions in the interactive matrix modal"
             onClick={onOpenMatrixModal}
-            className="px-3.5 py-1.5 rounded-full border border-[var(--color-border)] hover:border-[var(--color-accent)] bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-semibold text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+            className="px-3.5 py-1.5 rounded-full border border-[var(--color-border)] hover:border-[var(--color-accent)] bg-[var(--color-secondary)]/90 hover:bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-semibold text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
-            <HelpCircle size={13} style={{ color: currentThemeInfo.accent }} />
+            <HelpCircle size={13} className="text-[var(--color-accent)]" />
             <span>{t('exploreAllQuestions')} &rarr;</span>
           </button>
         </div>

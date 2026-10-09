@@ -379,17 +379,27 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
         {/* 6-Stage Universal Continuum Stage Switcher */}
         <div className="mb-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
+          <div 
+            role="tablist"
+            aria-label="Universal AI continuum learning stages"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5"
+          >
             {SPECTRUM_TIERS.map((tier) => {
               const isSelected = activeLandingTier === tier.id;
               return (
                 <button
                   key={tier.id}
+                  type="button"
+                  role="tab"
+                  id={`spectrum-stage-tab-${tier.id}`}
+                  aria-selected={isSelected}
+                  aria-controls="spectrum-stage-panel"
+                  aria-label={`Stage ${tier.number}: ${tier.title}`}
                   onClick={() => {
                     setActiveLandingTier(tier.id);
                     setLandingSpectrumSearch('');
                   }}
-                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer shadow-xs border min-w-0 ${
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer shadow-xs border min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                     isSelected
                       ? 'bg-[var(--color-text-primary)] text-[var(--color-primary)] font-bold shadow-md scale-[1.02] border-[var(--color-text-primary)]'
                       : 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)] border-[var(--color-border)]'
@@ -413,7 +423,12 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           </div>
 
           {/* Active Stage Description Banner */}
-          <div className="mt-4 p-4 rounded-2xl bg-[var(--color-secondary)]/50 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div 
+            id="spectrum-stage-panel"
+            role="tabpanel"
+            aria-labelledby={`spectrum-stage-tab-${activeLandingTier}`}
+            className="mt-4 p-4 rounded-2xl bg-[var(--color-secondary)]/50 border border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+          >
             <div className="min-w-0 max-w-full">
               <span 
                 className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase text-white shadow-xs inline-block max-w-full truncate"
@@ -426,12 +441,14 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               </p>
             </div>
             <button
+              type="button"
               onClick={() => {
                 setSelectedCraftRole(activeLandingTier);
                 setIsCraftModalOpen(true);
               }}
-              className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer shrink-0"
+              className="flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-lg p-1"
               style={{ color: activeTierDetails.color }}
+              aria-label={`Explore all ${ALL_SPECTRUM_PROFILES.length} real-world scenarios for ${activeTierDetails.title}`}
             >
               <span>Explore All {ALL_SPECTRUM_PROFILES.length} Real-World Scenarios in Depth</span>
               <ArrowRight size={13} />
@@ -453,8 +470,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           />
           {landingSpectrumSearch && (
             <button
+              type="button"
               onClick={() => setLandingSpectrumSearch('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
+              aria-label="Clear search input"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent)] px-1 py-0.5 rounded"
             >
               Clear
             </button>
@@ -462,42 +481,53 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         </div>
 
         {/* Dynamic Profile Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          {filteredLandingProfiles.slice(0, 4).map((item) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                setSelectedCraftRole(item.id as CraftRole);
-                setIsCraftModalOpen(true);
-              }}
-              className="group p-5 rounded-2xl bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 flex flex-col justify-between min-h-[210px]"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span 
-                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border"
-                    style={{ borderColor: `${item.accent}50`, color: item.accent }}
-                  >
-                    STAGE {item.tier.replace('tier', '')}
-                  </span>
-                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
-                    BLUEPRINT ↗
-                  </span>
+        {filteredLandingProfiles.length === 0 ? (
+          <div 
+            role="status" 
+            aria-live="polite"
+            className="p-8 mb-10 text-center rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] font-mono"
+          >
+            No profiles matching "{landingSpectrumSearch}". Try searching for keywords like "budget", "diagnostic", "quote", or clear the search.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            {filteredLandingProfiles.slice(0, 4).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                aria-label={`View blueprint and code solution for ${item.title}: ${item.tagline}`}
+                onClick={() => {
+                  setSelectedCraftRole(item.id as CraftRole);
+                  setIsCraftModalOpen(true);
+                }}
+                className="group p-5 rounded-2xl bg-[var(--color-secondary)]/70 hover:bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 flex flex-col justify-between min-h-[210px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span 
+                      className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border bg-[var(--color-accent)]/10 text-[var(--color-accent)] border-[var(--color-accent)]/30"
+                    >
+                      STAGE {item.tier.replace('tier', '')}
+                    </span>
+                    <span className="text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
+                      BLUEPRINT ↗
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
+                    {item.tagline}
+                  </p>
                 </div>
-                <h3 className="text-sm font-bold text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
-                  {item.tagline}
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-[var(--color-border)]/50 flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
-                <span>View Solution & Code</span>
-                <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-              </div>
-            </button>
-          ))}
-        </div>
+                <div className="mt-4 pt-3 border-t border-[var(--color-border)]/50 flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+                  <span>View Solution & Code</span>
+                  <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* "You Are an LLM: The Simplest Plain-English Guide" Interactive Feature Box */}
         <div className="p-6 md:p-8 rounded-3xl bg-[var(--color-secondary)] border border-[var(--color-border)] shadow-sm">
@@ -516,11 +546,13 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             </div>
 
             <button
+              type="button"
+              aria-label="Open plain-English universal guide for talking to an AI"
               onClick={() => {
                 setSelectedCraftRole('beginner');
                 setIsCraftModalOpen(true);
               }}
-              className="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-lg transition-all cursor-pointer whitespace-nowrap self-stretch lg:self-auto flex items-center justify-center gap-2"
+              className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition-all cursor-pointer whitespace-nowrap self-stretch lg:self-auto flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
             >
               <span>Open Universal Guide</span>
               <ArrowRight size={14} />
@@ -557,14 +589,22 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-1.5">
+              <div 
+                role="tablist"
+                aria-label="Sample prompt categories"
+                className="flex flex-wrap items-center gap-1.5"
+              >
                 {LLM_PLAIN_ENGLISH_GUIDE.samplePrompts.map((s, idx) => (
                   <button
                     key={idx}
+                    type="button"
+                    role="tab"
+                    aria-selected={activePromptSampleIdx === idx}
+                    aria-label={`Prompt category: ${s.category}`}
                     onClick={() => setActivePromptSampleIdx(idx)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer whitespace-nowrap ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
                       activePromptSampleIdx === idx
-                        ? 'bg-emerald-500 text-white font-bold'
+                        ? 'bg-emerald-600 text-white font-bold'
                         : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
                     }`}
                   >
@@ -579,8 +619,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                 "{LLM_PLAIN_ENGLISH_GUIDE.samplePrompts[activePromptSampleIdx].prompt}"
               </p>
               <button
+                type="button"
+                aria-label={copiedPrompt ? "Prompt copied to clipboard" : "Copy sample prompt to clipboard"}
                 onClick={() => handleCopyLandingPrompt(LLM_PLAIN_ENGLISH_GUIDE.samplePrompts[activePromptSampleIdx].prompt)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] transition-all cursor-pointer whitespace-nowrap shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-[var(--color-text-primary)] transition-all cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               >
                 {copiedPrompt ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                 <span>{copiedPrompt ? 'Copied!' : 'Copy'}</span>
@@ -595,7 +637,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 border-b border-[var(--color-border)] pb-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Compass size={16} style={{ color: currentThemeInfo.accent }} />
+              <Compass size={16} className="text-[var(--color-accent)]" />
               <span className="text-xs font-mono font-bold tracking-[0.25em] uppercase text-[var(--color-text-secondary)]">
                 {t('pathways_heading')}
               </span>
@@ -617,8 +659,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       <section id="free-stack" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span 
-            className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3"
-            style={{ color: currentThemeInfo.accent }}
+            className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3 text-[var(--color-accent)]"
           >
             {t('free_stack_badge')}
           </span>
@@ -639,17 +680,14 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <button 
+                    type="button"
+                    aria-label={`Open step-by-step setup guide for ${category.category}`}
                     onClick={() => {
                       setSelectedToolCategory(category.category as any);
                       setSelectedToolId(category.tools[0].id);
                       setIsToolsModalOpen(true);
                     }}
-                    className="text-xs font-mono font-bold px-3 py-1 rounded-full border hover:scale-105 active:scale-95 transition-all cursor-pointer"
-                    style={{
-                      borderColor: `${category.accentColor}40`,
-                      backgroundColor: `${category.accentColor}15`,
-                      color: category.accentColor
-                    }}
+                    className="text-xs font-mono font-bold px-3 py-1 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/15 text-[var(--color-accent)] hover:scale-105 active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                     title={`Open step-by-step setup guide for ${category.category}`}
                   >
                     <span>{category.category} ↗</span>
@@ -675,12 +713,23 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
                   {category.tools.map((tool, tIdx) => (
                     <div 
                       key={tIdx}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Open setup guide for ${tool.name}: ${tool.desc}`}
                       onClick={() => {
                         setSelectedToolCategory(category.category as any);
                         setSelectedToolId(tool.id);
                         setIsToolsModalOpen(true);
                       }}
-                      className="p-3 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-secondary)] transition-all duration-200 cursor-pointer flex flex-col gap-1 group"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedToolCategory(category.category as any);
+                          setSelectedToolId(tool.id);
+                          setIsToolsModalOpen(true);
+                        }
+                      }}
+                      className="p-3 rounded-xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-secondary)] transition-all duration-200 cursor-pointer flex flex-col gap-1 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                       title="Click for idiot-proof step-by-step setup guide"
                     >
                       <div className="flex items-center justify-between">
@@ -781,8 +830,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       <section id="pillars" className="py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-[var(--color-border)]">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span 
-            className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3"
-            style={{ color: currentThemeInfo.accent }}
+            className="text-xs font-mono font-bold tracking-[0.25em] uppercase block mb-3 text-[var(--color-accent)]"
           >
             {t('pillars_badge')}
           </span>
@@ -799,21 +847,18 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
             <button 
               key={idx}
               type="button"
+              aria-label={`Pillar ${idx + 1}: ${pillar.title}. ${pillar.desc}`}
               onClick={() => {
                 setSelectedPillarId(idx + 1);
                 setIsPillarsModalOpen(true);
               }}
-              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between text-left cursor-pointer group hover:scale-[1.01] hover:shadow-lg"
+              className="p-6 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all flex flex-col justify-between text-left cursor-pointer group hover:scale-[1.01] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div 
-                      className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold"
-                      style={{
-                        backgroundColor: `${currentThemeInfo.accent}20`,
-                        color: currentThemeInfo.accent
-                      }}
+                      className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-[var(--color-accent)]/15 text-[var(--color-accent)]"
                     >
                       {idx + 1}
                     </div>
@@ -874,12 +919,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
               <figcaption className="pt-6 mt-6 border-t border-[var(--color-border)] flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs font-mono shrink-0 shadow-inner"
-                  style={{
-                    backgroundColor: `${currentThemeInfo.accent}25`,
-                    color: currentThemeInfo.accent,
-                    border: `1px solid ${currentThemeInfo.accent}40`
-                  }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs font-mono shrink-0 shadow-inner bg-[var(--color-accent)]/15 text-[var(--color-accent)] border border-[var(--color-accent)]/30"
                 >
                   {item.initials}
                 </div>
@@ -920,8 +960,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
               <button
+                type="button"
+                aria-label="Launch Spatial Holodeck in 3D WebGL and WebXR"
                 onClick={() => navigate('/holodeck')}
-                className="px-6 py-3.5 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs font-mono flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
+                className="px-6 py-3.5 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs font-mono flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
                 <Glasses size={16} />
                 <span>Launch Spatial Holodeck</span>
@@ -929,8 +971,10 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
               </button>
 
               <button
+                type="button"
+                aria-label="Open setup and connection guide for Smart AR Glasses"
                 onClick={() => setIsARGlassesGuideOpen(true)}
-                className="px-6 py-3.5 rounded-2xl bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/80 border border-[var(--color-border)] text-xs font-mono font-semibold text-[var(--color-text-primary)] flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                className="px-6 py-3.5 rounded-2xl bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/80 border border-[var(--color-border)] text-xs font-mono font-semibold text-[var(--color-text-primary)] flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               >
                 <Sliders size={14} className="text-cyan-400" />
                 <span>How to Connect AR Glasses</span>
@@ -984,8 +1028,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
         <div className="flex justify-between items-end mb-16 border-b border-[var(--color-border)] pb-8">
           <div>
             <h2 
-              className="text-xs font-mono font-bold tracking-[0.3em] uppercase mb-2"
-              style={{ color: currentThemeInfo.accent }}
+              className="text-xs font-mono font-bold tracking-[0.3em] uppercase mb-2 text-[var(--color-accent)]"
             >
               {t('curriculum_badge')}
             </h2>
@@ -1016,15 +1059,11 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           >
             <div>
               <div className="flex items-center justify-between mb-5">
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-emerald-500/15 border-emerald-500/30 text-emerald-500">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
                   Track 00 • Active
                 </span>
                 <div 
-                  className="w-8 h-8 rounded-full border border-[var(--color-border)] group-hover:scale-110 flex items-center justify-center transition-all duration-300"
-                  style={{
-                    backgroundColor: currentThemeInfo.accent,
-                    color: accentTextColor
-                  }}
+                  className="w-8 h-8 rounded-full border border-[var(--color-border)] group-hover:scale-110 flex items-center justify-center transition-all duration-300 bg-[var(--color-accent)] text-[var(--color-primary)]"
                 >
                   <ArrowUpRight size={16} />
                 </div>
@@ -1041,7 +1080,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
             <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span>3 Modules • 9 Labs</span>
-              <span className="font-semibold text-emerald-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
                 Briefing →
               </span>
             </div>
@@ -1063,15 +1102,15 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           >
             <div>
               <div className="flex items-center justify-between mb-5">
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-cyan-500/15 border-cyan-500/30 text-cyan-500">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-cyan-500/15 border-cyan-500/30 text-cyan-600 dark:text-cyan-400">
                   Track 01 • Active
                 </span>
-                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-cyan-500/10 text-cyan-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
                   <ArrowUpRight size={16} />
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-cyan-500 transition-colors">
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                 Track 1: Embeddings
               </h3>
               
@@ -1082,7 +1121,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
             <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span>3 Modules • 9 Labs</span>
-              <span className="font-semibold text-cyan-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+              <span className="font-semibold text-cyan-600 dark:text-cyan-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
                 Briefing →
               </span>
             </div>
@@ -1104,15 +1143,15 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           >
             <div>
               <div className="flex items-center justify-between mb-5">
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-violet-500/15 border-violet-500/30 text-violet-400">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-violet-500/15 border-violet-500/30 text-violet-600 dark:text-violet-400">
                   Track 02 • Active
                 </span>
-                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-violet-500/10 text-violet-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
                   <ArrowUpRight size={16} />
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-violet-400 transition-colors">
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
                 Track 2: Agents & RAG
               </h3>
               
@@ -1123,7 +1162,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
             <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span>3 Modules • 9 Labs</span>
-              <span className="font-semibold text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+              <span className="font-semibold text-violet-600 dark:text-violet-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
                 Briefing →
               </span>
             </div>
@@ -1145,15 +1184,15 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           >
             <div>
               <div className="flex items-center justify-between mb-5">
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-amber-500/15 border-amber-500/30 text-amber-500">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border font-bold bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400">
                   Track 03 • Active
                 </span>
-                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-amber-500/10 text-amber-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
+                <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 flex items-center justify-center transition-all duration-300">
                   <ArrowUpRight size={16} />
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-amber-500 transition-colors">
+              <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                 Track 3: Production Evals
               </h3>
               
@@ -1164,7 +1203,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
 
             <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
               <span>3 Modules • 9 Labs</span>
-              <span className="font-semibold text-amber-500 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+              <span className="font-semibold text-amber-600 dark:text-amber-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
                 Briefing →
               </span>
             </div>
@@ -1404,10 +1443,11 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
           <button
             type="button"
             id="ask-bluee-now-btn"
+            aria-label="Ask Bluee offline AI copilot about tracks and studio tools"
             onClick={() => {
               window.dispatchEvent(new CustomEvent('open-offline-copilot'));
             }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-text-primary)] text-[var(--color-primary)] font-semibold text-sm shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             <MessageSquareCode size={15} />
             <span>Ask Bluee Now</span>

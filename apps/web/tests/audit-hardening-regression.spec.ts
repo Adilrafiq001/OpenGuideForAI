@@ -1709,6 +1709,176 @@ ZeroDivisionError: division by zero`;
     // 11. Zero console errors
     expect(errors).toHaveLength(0);
   });
+
+  test('TC-AUDIT-062-HOME: Home Page 62-Defect Surgical Audit Hardening Verification', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        const text = msg.text();
+        if (!text.includes('favicon') && !text.includes('Failed to load resource')) {
+          errors.push(text);
+        }
+      }
+    });
+
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // 1. Hero Eyebrow Status Pill
+    const heroStatus = page.locator('div[role="status"][aria-label*="OpenGuide platform status"]');
+    await expect(heroStatus).toBeVisible();
+
+    // 2. Hero Headline Slash & Suffix
+    const heroSlash = page.locator('h1 span.text-\\[var\\(--color-accent\\)\\]');
+    await expect(heroSlash).toBeVisible();
+
+    // 3. Pathway Guide Toggle Button
+    const guideBtn = page.locator('[data-testid="hero-guide-toggle-btn"]');
+    await expect(guideBtn).toHaveAttribute('type', 'button');
+    await expect(guideBtn).toHaveAttribute('aria-label', /30-second onboarding guide/);
+
+    // 4. Never Coded Before & Universal Spectrum Buttons
+    const neverCodedBtn = page.locator('button[aria-label*="Never coded before"]');
+    await expect(neverCodedBtn).toHaveAttribute('type', 'button');
+
+    const spectrumHeroBtn = page.locator('button[aria-label*="Explore Universal Spectrum"]');
+    if (await spectrumHeroBtn.count() > 0) {
+      await expect(spectrumHeroBtn).toHaveAttribute('type', 'button');
+    }
+
+    // 5. Console Lens Tablist & Tabs
+    const lensTablist = page.locator('div[role="tablist"][aria-label="Studio preview lens switcher"]');
+    await expect(lensTablist).toBeVisible();
+
+    const wasmTab = page.locator('#hero-lens-tab-wasm[role="tab"]');
+    await expect(wasmTab).toHaveAttribute('type', 'button');
+    await expect(wasmTab).toHaveAttribute('aria-selected', 'true');
+    await expect(wasmTab).toHaveAttribute('aria-controls', 'hero-lens-canvas');
+
+    const runSimBtn = page.locator('button[aria-label*="simulation"]');
+    await expect(runSimBtn).toHaveAttribute('type', 'button');
+    await expect(runSimBtn).toHaveAttribute('aria-busy', 'false');
+
+    // 6. Console Lens Tabpanel
+    const lensCanvas = page.locator('#hero-lens-canvas[role="tabpanel"]');
+    await expect(lensCanvas).toBeVisible();
+    await expect(lensCanvas).toHaveAttribute('aria-labelledby', 'hero-lens-tab-wasm');
+
+    // 7. First-Principles Matrix Expander Button
+    const matrixExpanderBtn = page.locator('button[aria-label*="Explore all first-principles questions"]');
+    await expect(matrixExpanderBtn).toHaveAttribute('type', 'button');
+
+    // 8. 6-Stage Universal Continuum Stage Switcher & Tabpanel
+    const stageTablist = page.locator('div[role="tablist"][aria-label="Universal AI continuum learning stages"]');
+    await expect(stageTablist).toBeVisible();
+
+    const stage1Tab = page.locator('#spectrum-stage-tab-tier1[role="tab"]');
+    await expect(stage1Tab).toHaveAttribute('type', 'button');
+    await expect(stage1Tab).toHaveAttribute('aria-controls', 'spectrum-stage-panel');
+
+    const stagePanel = page.locator('#spectrum-stage-panel[role="tabpanel"]');
+    await expect(stagePanel).toBeVisible();
+
+    const exploreScenariosBtn = page.locator('button[aria-label*="Explore all"][aria-label*="real-world scenarios"]');
+    await expect(exploreScenariosBtn).toHaveAttribute('type', 'button');
+
+    // 9. Search Input, Clear Button & Empty State
+    const searchInput = page.locator('#landing-spectrum-search-input');
+    await expect(searchInput).toBeVisible();
+    await searchInput.fill('xyznonexistentquery999');
+
+    // Empty state appears
+    const emptyState = page.locator('div[role="status"][aria-live="polite"]');
+    await expect(emptyState).toBeVisible();
+    await expect(emptyState).toContainText('No profiles matching');
+
+    // Clear search
+    const clearSearchBtn = page.locator('button[aria-label="Clear search input"]');
+    await expect(clearSearchBtn).toHaveAttribute('type', 'button');
+    await clearSearchBtn.click();
+    await expect(searchInput).toHaveValue('');
+
+    // 10. Dynamic Profile Cards
+    const profileCards = page.locator('div.grid button[aria-label^="View blueprint and code solution"]');
+    await expect(profileCards.first()).toBeVisible();
+    await expect(profileCards.first()).toHaveAttribute('type', 'button');
+
+    // 11. Universal Guide & Sample Prompts Tablist
+    const universalGuideBtn = page.locator('button[aria-label="Open plain-English universal guide for talking to an AI"]');
+    await expect(universalGuideBtn).toHaveAttribute('type', 'button');
+
+    const promptTablist = page.locator('div[role="tablist"][aria-label="Sample prompt categories"]');
+    await expect(promptTablist).toBeVisible();
+
+    const promptTabs = promptTablist.locator('button[role="tab"]');
+    await expect(promptTabs.first()).toHaveAttribute('type', 'button');
+    await expect(promptTabs.first()).toHaveAttribute('aria-selected', 'true');
+
+    const copyPromptBtn = page.locator('button[aria-label*="Copy sample prompt"], button[aria-label*="Prompt copied"]');
+    await expect(copyPromptBtn).toHaveAttribute('type', 'button');
+
+    // 12. Free Tools Stack Cards & Modals
+    const toolCategoryBtn = page.locator('button[aria-label^="Open step-by-step setup guide for"]').first();
+    await expect(toolCategoryBtn).toHaveAttribute('type', 'button');
+
+    const toolCards = page.locator('div[role="button"][aria-label^="Open setup guide for"]');
+    await expect(toolCards.first()).toHaveAttribute('tabindex', '0');
+
+    // 13. Core Engineering Pillars
+    const pillarButtons = page.locator('button[aria-label^="Pillar 1:"]');
+    await expect(pillarButtons.first()).toHaveAttribute('type', 'button');
+
+    // 14. Spatial Holodeck Launchers
+    const launchHolodeckBtn = page.locator('button[aria-label="Launch Spatial Holodeck in 3D WebGL and WebXR"]');
+    await expect(launchHolodeckBtn).toHaveAttribute('type', 'button');
+
+    const connectGlassesBtn = page.locator('button[aria-label="Open setup and connection guide for Smart AR Glasses"]');
+    await expect(connectGlassesBtn).toHaveAttribute('type', 'button');
+
+    // 15. Tracks 0–7 Cards
+    const track0Card = page.locator('article[role="link"][aria-label="Track 0: Absolute Zero briefing"]');
+    await expect(track0Card).toBeVisible();
+    await expect(track0Card).toHaveAttribute('tabindex', '0');
+
+    const track1Card = page.locator('article[role="link"][aria-label="Track 1: Embeddings briefing"]');
+    await expect(track1Card).toBeVisible();
+
+    const track2Card = page.locator('article[role="link"][aria-label="Track 2: Agents & RAG briefing"]');
+    await expect(track2Card).toBeVisible();
+
+    const track3Card = page.locator('article[role="link"][aria-label="Track 3: Production Evals briefing"]');
+    await expect(track3Card).toBeVisible();
+
+    const track4Card = page.locator('article[role="link"][aria-label="Track 4: Frontier Intelligence briefing"]');
+    await expect(track4Card).toBeVisible();
+
+    const track5Card = page.locator('article[role="link"][aria-label="Track 5: Fine-Tuning & LoRA briefing"]');
+    await expect(track5Card).toBeVisible();
+
+    const track6Card = page.locator('article[role="link"][aria-label="Track 6: Production MLOps briefing"]');
+    await expect(track6Card).toBeVisible();
+
+    const track7Card = page.locator('article[role="link"][aria-label="Track 7: Generative Diffusion briefing"]');
+    await expect(track7Card).toBeVisible();
+
+    // 16. Panoramic Spatial Holodeck Banner
+    const panoramicBanner = page.locator('article[role="link"][aria-label="Universal Spatial Holodeck"]');
+    await expect(panoramicBanner).toBeVisible();
+
+    // 17. Ask Bluee Now Button
+    const askBlueeBtn = page.locator('#ask-bluee-now-btn');
+    await expect(askBlueeBtn).toHaveAttribute('type', 'button');
+    await expect(askBlueeBtn).toHaveAttribute('aria-label', 'Ask Bluee offline AI copilot about tracks and studio tools');
+
+    // 18. Scroll To Top Button
+    const scrollTopBtn = page.locator('button[aria-label="Scroll to top of page"]');
+    if (await scrollTopBtn.count() > 0) {
+      await expect(scrollTopBtn).toHaveAttribute('type', 'button');
+    }
+
+    // 19. Zero console errors
+    expect(errors).toHaveLength(0);
+  });
 });
 
 
