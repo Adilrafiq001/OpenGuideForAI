@@ -211,6 +211,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             Spec Template:
           </span>
           <button
+            id="template-prod-spec"
             data-testid="template-prod-spec"
             onClick={() => handleSelectTemplate('prod')}
             aria-pressed={activeTemplate === 'prod'}
@@ -223,6 +224,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             Production Spec (5/5)
           </button>
           <button
+            id="template-vibe-spec"
             data-testid="template-vibe-spec"
             onClick={() => handleSelectTemplate('vibe')}
             aria-pressed={activeTemplate === 'vibe'}
@@ -235,6 +237,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             Vibe Prompt (Fails)
           </button>
           <button
+            id="template-custom-spec"
             data-testid="template-custom-spec"
             onClick={() => handleSelectTemplate('custom')}
             aria-pressed={activeTemplate === 'custom'}

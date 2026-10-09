@@ -1362,7 +1362,7 @@ ZeroDivisionError: division by zero`;
     await page.goto('/builder/1/engine');
     await page.waitForLoadState('domcontentloaded');
 
-    const prodSpecBtn = page.locator('#template-prod-spec');
+    const prodSpecBtn = page.locator('#template-prod-spec, [data-testid="template-prod-spec"]').first();
     await expect(prodSpecBtn).toBeVisible({ timeout: 10000 });
     await expect(prodSpecBtn).toHaveAttribute('aria-pressed', 'true');
 
@@ -1387,7 +1387,7 @@ ZeroDivisionError: division by zero`;
     await expect(splitBtn).toBeVisible();
     await expect(splitBtn).toHaveAttribute('aria-pressed', 'false');
 
-    const scenario1Btn = page.locator('button[aria-label^="Select scenario s1:"]').first();
+    const scenario1Btn = page.locator('button[aria-label^="Select scenario safe-refactor:"], [data-testid="scenario-btn-safe-refactor"]').first();
     await expect(scenario1Btn).toBeVisible();
     await expect(scenario1Btn).toHaveAttribute('aria-pressed', 'true');
 
