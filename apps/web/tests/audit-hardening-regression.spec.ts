@@ -1351,7 +1351,7 @@ ZeroDivisionError: division by zero`;
     await expect(offlineProviderBtn).toBeVisible();
     await expect(offlineProviderBtn).toHaveAttribute('aria-pressed', 'true');
 
-    const viewCodeBtn = page.locator('button[aria-label="Toggle generated source code view"]');
+    const viewCodeBtn = page.locator('[data-testid="toggle-view-code-btn"]');
     await expect(viewCodeBtn).toBeVisible();
     await expect(viewCodeBtn).toHaveAttribute('aria-pressed', 'false');
 

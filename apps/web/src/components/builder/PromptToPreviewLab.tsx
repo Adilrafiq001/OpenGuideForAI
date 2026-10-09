@@ -219,7 +219,7 @@ export function PromptToPreviewLab({
               onClick={() => setIsViewCodeOpen(!isViewCodeOpen)}
               data-testid="toggle-view-code-btn"
               aria-pressed={isViewCodeOpen}
-              aria-label={isViewCodeOpen ? 'Hide Generated Code & Return to Preview' : 'View Generated Code (Read-Only)'}
+              aria-label={isViewCodeOpen ? 'Hide Generated Code & Return to Preview' : 'Toggle generated source code view'}
               className={`px-2.5 py-1 rounded-lg border text-[11px] flex items-center gap-1.5 transition-all cursor-pointer ${
                 isViewCodeOpen 
                   ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]' 
