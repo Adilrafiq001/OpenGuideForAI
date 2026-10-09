@@ -31,25 +31,25 @@ export const PagedAttentionWidget: React.FC = () => {
         <div className="flex gap-1">
           <button
             onClick={() => addTokens(-2)}
-            aria-label="Remove 2 tokens"
+            aria-label="Evict 2 tokens from cache sequence"
             className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
-            title="Remove 2 tokens"
+            title="Evict 2 tokens from cache sequence"
           >
             -2
           </button>
           <button
             onClick={() => addTokens(2)}
-            aria-label="Add 2 tokens"
+            aria-label="Add 2 tokens to cache sequence"
             className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
-            title="Add 2 tokens"
+            title="Add 2 tokens to cache sequence"
           >
             +2
           </button>
           <button
             onClick={reset}
-            aria-label="Reset token count to 10"
+            aria-label="Reset KV cache to starter prompt sequence"
             className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
-            title="Reset"
+            title="Reset KV cache to starter prompt sequence"
           >
             Reset
           </button>

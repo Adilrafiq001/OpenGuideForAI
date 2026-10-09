@@ -123,6 +123,7 @@ export function playTactileSound(type: 'click' | 'success' | 'error' | 'chime') 
 export function triggerHaptic(type: 'light' | 'success' | 'error' | 'boss') {
   const { hapticsEnabled = true } = useSettingsStore.getState() as any;
   if (!hapticsEnabled || typeof navigator === 'undefined' || !navigator.vibrate) return;
+  if ('userActivation' in navigator && (navigator as any).userActivation && !(navigator as any).userActivation.hasBeenActive) return;
 
   try {
     if (type === 'light') {

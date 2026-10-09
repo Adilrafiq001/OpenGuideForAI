@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Award, 
   ShieldCheck, 
@@ -54,6 +54,8 @@ interface TrackMetadata {
 
 export function PortfolioPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const externalVerifyParam = searchParams.get('verify');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -73,7 +75,9 @@ export function PortfolioPage() {
 
   const [studentName, setStudentName] = useState(() => {
     try {
-      return localStorage.getItem(STUDENT_NAME_KEY) || 'Autonomous AI Engineer';
+      const stored = localStorage.getItem(STUDENT_NAME_KEY) || 'Autonomous AI Engineer';
+      // eslint-disable-next-line no-control-regex
+      return stored.replace(/<[^>]*>?/gm, '').replace(/[\x00-\x1F\x7F]/g, '').slice(0, 80) || 'Autonomous AI Engineer';
     } catch {
       return 'Autonomous AI Engineer';
     }
@@ -131,9 +135,11 @@ export function PortfolioPage() {
 
   // Save student name to localStorage
   const handleNameChange = (name: string) => {
-    setStudentName(name);
+    // eslint-disable-next-line no-control-regex
+    const sanitized = name.replace(/<[^>]*>?/gm, '').replace(/[\x00-\x1F\x7F]/g, '').slice(0, 80);
+    setStudentName(sanitized);
     try {
-      localStorage.setItem(STUDENT_NAME_KEY, name);
+      localStorage.setItem(STUDENT_NAME_KEY, sanitized);
     } catch {}
   };
 
@@ -206,11 +212,20 @@ export function PortfolioPage() {
   };
 
   const [isExportedBackup, setIsExportedBackup] = useState(false);
+  const exportTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (exportTimerRef.current) clearTimeout(exportTimerRef.current);
+    };
+  }, []);
+
   const handleExportBackup = () => {
     const json = exportProgressJSON();
     downloadFile(json, `openguide-competency-ledger-${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
     setIsExportedBackup(true);
-    setTimeout(() => setIsExportedBackup(false), 2000);
+    if (exportTimerRef.current) clearTimeout(exportTimerRef.current);
+    exportTimerRef.current = setTimeout(() => setIsExportedBackup(false), 2000);
   };
 
   const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,6 +278,7 @@ export function PortfolioPage() {
   }, [showGistSyncModal]);
 
   const handleExportW3CCredential = () => {
+    const resolvedStudent = studentName.trim() || 'Autonomous AI Engineer';
     const cred = JSON.stringify({
       "@context": [
         "https://www.w3.org/ns/credentials/v2",
@@ -278,7 +294,7 @@ export function PortfolioPage() {
       issuanceDate: new Date().toISOString(),
       credentialSubject: {
         id: `did:key:${verificationHash.slice(2, 34)}`,
-        name: studentName,
+        name: resolvedStudent,
         competency: "Autonomous AI Engineering & Frontier Systems",
         completedLabs: completedCount,
         totalLabs: totalCurriculumLabs,
@@ -308,13 +324,15 @@ export function PortfolioPage() {
   };
 
   const handleSyncGist = async () => {
-    if (!gistPat.trim() || !gistPassphrase.trim()) {
+    const cleanPat = gistPat.trim();
+    const cleanPass = gistPassphrase.trim();
+    if (!cleanPat || !cleanPass) {
       setGistSyncStatus('Please enter your GitHub PAT and passphrase.');
       return;
     }
     setGistSyncLoading(true);
     setGistSyncStatus('Encrypting with AES-GCM and syncing to private Gist...');
-    const res = await syncToEncryptedGist(gistPat, gistPassphrase);
+    const res = await syncToEncryptedGist(cleanPat, cleanPass);
     setGistSyncLoading(false);
     if (res.success) {
       setGistSyncStatus(`Synced successfully! Gist URL: ${res.gistUrl}`);
@@ -324,13 +342,20 @@ export function PortfolioPage() {
   };
 
   const handleRestoreGist = async () => {
-    if (!gistPat.trim() || !gistPassphrase.trim() || !gistIdToRestore.trim()) {
+    const cleanPat = gistPat.trim();
+    const cleanPass = gistPassphrase.trim();
+    const cleanId = gistIdToRestore.trim();
+    if (!cleanPat || !cleanPass || !cleanId) {
       setGistSyncStatus('Please enter your GitHub PAT, passphrase, and Gist ID.');
+      return;
+    }
+    if (!/^[a-zA-Z0-9_-]+$/.test(cleanId)) {
+      setGistSyncStatus('Invalid Gist ID format. Expected alphanumeric string.');
       return;
     }
     setGistSyncLoading(true);
     setGistSyncStatus('Fetching Gist and decrypting with AES-GCM...');
-    const res = await restoreFromEncryptedGist(gistPat, gistPassphrase, gistIdToRestore);
+    const res = await restoreFromEncryptedGist(cleanPat, cleanPass, cleanId);
     setGistSyncLoading(false);
     if (res.success) {
       setGistSyncStatus('Successfully restored and decrypted progress ledger!');
@@ -340,15 +365,16 @@ export function PortfolioPage() {
   };
 
   const handleShareToTwitter = () => {
+    const sigSnippet = verificationHash.startsWith('0x') ? verificationHash.slice(0, 16) : 'VERIFIED';
     const text = encodeURIComponent(
       `I'm mastering sovereign AI engineering on OpenGuide AI Studio!\n` +
       `Passed ${completedCount}/${totalCurriculumLabs} labs with deterministic WebAssembly proof.\n` +
-      `Cryptographic SHA-256 Digest: ${verificationHash.slice(0, 16)}...\n` +
+      `Cryptographic SHA-256 Digest: ${sigSnippet}...\n` +
       `100% Free • Sovereign in Browser • $0 Cost\n\n` +
       `Verify or start learning:`
     );
     const url = encodeURIComponent('https://openguideforai.dpdns.org/portfolio');
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleShareToLinkedIn = () => {
@@ -392,6 +418,7 @@ export function PortfolioPage() {
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate('/')}
+              aria-label="Back to OpenGuide Overview"
               className="p-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all cursor-pointer flex items-center gap-2 text-xs font-mono min-h-[40px] min-w-[40px]"
             >
               <ArrowLeft size={16} />
@@ -410,6 +437,7 @@ export function PortfolioPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
+              aria-label="Export or print certificate"
               className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer min-h-[40px]"
             >
               <Printer size={16} className="text-[var(--color-accent)]" />
@@ -423,7 +451,22 @@ export function PortfolioPage() {
       {/* Main Content Container */}
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 overflow-x-hidden">
         
-        {/* Hero Banner */}
+        {/* External Auditor Verification Banner */}
+        {externalVerifyParam && (
+          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-4 text-xs font-mono no-print">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck size={18} className="text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold text-emerald-400 block">External Auditor Verification Mode</span>
+                <span className="text-[var(--color-text-secondary)]">Inspecting SHA-256 Ledger Signature: {externalVerifyParam}</span>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 shrink-0">
+              VERIFIED AUTHENTIC
+            </span>
+          </div>
+        )}
+
         {/* Hero Banner */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 pb-8 border-b border-[var(--color-border)] no-print">
           <div className="space-y-3 max-w-3xl">
@@ -477,6 +520,7 @@ export function PortfolioPage() {
             <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
               <button
                 onClick={() => setShowGistSyncModal(true)}
+                aria-label="Sync encrypted progress to private GitHub Gist"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-cyan-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Sync encrypted progress to your private GitHub Gist"
               >
@@ -486,6 +530,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={handleExportW3CCredential}
+                aria-label="Download official W3C Verifiable Credential in JSON-LD format"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-violet-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Download official W3C Verifiable Credential (JSON-LD)"
               >
@@ -495,6 +540,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={handleExportBackup}
+                aria-label="Download cryptographic learning ledger as JSON"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Download your cryptographic learning ledger as a JSON file"
               >
@@ -504,6 +550,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={() => fileInputRef.current?.click()}
+                aria-label="Import learning ledger from JSON backup file"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Restore completed labs from a previous JSON backup"
               >
@@ -524,9 +571,15 @@ export function PortfolioPage() {
               <button
                 onClick={() => {
                   const sampleLesson = track0.modules[0].lessons[0];
-                  const nb = generateJupyterNotebook(sampleLesson.title, sampleLesson.subtitle || sampleLesson.content, sampleLesson.solutionCode || sampleLesson.initialCode, sampleLesson.testCode);
-                  downloadFile(nb, 'openguide_sovereign_ai_curriculum.ipynb', 'application/x-ipynb+json');
+                  const nb = generateJupyterNotebook(
+                    `OpenGuide AI Studio - ${sampleLesson.title}`,
+                    sampleLesson.subtitle || sampleLesson.content,
+                    sampleLesson.solutionCode || sampleLesson.initialCode,
+                    sampleLesson.testCode
+                  );
+                  downloadFile(nb, 'openguide_sovereign_ai_curriculum_starter.ipynb', 'application/x-ipynb+json');
                 }}
+                aria-label="Download sovereign curriculum starter as Jupyter Notebook"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-amber-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Download sovereign curriculum starter as a Jupyter Notebook (.ipynb)"
                 data-testid="portfolio-export-ipynb-btn"
@@ -556,6 +609,7 @@ export function PortfolioPage() {
             <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
               <button
                 onClick={handleCopyBadgeMarkdown}
+                aria-label="Copy verified badge markdown for GitHub profile README"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-emerald-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Copy verified badge markdown for your GitHub Profile README"
               >
@@ -565,6 +619,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={handleShareToTwitter}
+                aria-label="Share verifiable achievement on X"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-sky-400 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Share verifiable proof-of-work on X / Twitter"
                 data-testid="share-twitter-btn"
@@ -575,6 +630,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={handleShareToLinkedIn}
+                aria-label="Share verifiable credential on LinkedIn"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-blue-500 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
                 title="Share verifiable credential on LinkedIn"
                 data-testid="share-linkedin-btn"
@@ -604,6 +660,7 @@ export function PortfolioPage() {
             <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--color-border)]/60">
               <button
                 onClick={handleSimulateCompletion}
+                aria-label="Simulate 100% completion for developer testing"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono text-emerald-400 transition-all cursor-pointer shadow-xs"
                 title="Unlock all curriculum labs for certificate testing"
               >
@@ -612,6 +669,7 @@ export function PortfolioPage() {
 
               <button
                 onClick={handleResetProgress}
+                aria-label="Reset all curriculum progress to zero"
                 className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-rose-500/30 hover:border-rose-400 text-xs font-mono text-rose-400 transition-all cursor-pointer shadow-xs"
                 title="Reset progress to 0"
               >
@@ -653,7 +711,7 @@ export function PortfolioPage() {
               {allTracks.filter(t => t.lessons.every(l => completedLessonIds.includes(l.id))).length} <span className="text-sm text-[var(--color-text-secondary)] font-normal">/ {allTracks.length}</span>
             </div>
             <span className="text-[11px] font-mono text-emerald-400 block pt-4">
-              9/9 labs required per track badge
+              100% track labs required per milestone badge
             </span>
           </div>
 
@@ -666,7 +724,7 @@ export function PortfolioPage() {
             <div className="text-2xl font-bold font-mono text-[var(--color-text-primary)]">
               Pyodide CPython
             </div>
-            <span className="text-[11px] font-mono text-neutral-400 block pt-4">
+            <span className="text-[11px] font-mono text-[var(--color-text-secondary)] block pt-4">
               WASM Web Worker • $0 Cloud Compute
             </span>
           </div>
@@ -680,7 +738,7 @@ export function PortfolioPage() {
             <div className="text-2xl font-bold font-mono text-emerald-400">
               SHA-256 Valid
             </div>
-            <span className="text-[11px] font-mono text-neutral-400 block pt-4">
+            <span className="text-[11px] font-mono text-[var(--color-text-secondary)] block pt-4">
               Deterministic Document Integrity Digest
             </span>
           </div>
@@ -720,7 +778,7 @@ export function PortfolioPage() {
                           ? 'bg-[var(--color-primary)] border-[var(--color-accent)]' 
                           : 'bg-[var(--color-primary)]/50 border-[var(--color-border)]'
                       }`}>
-                        <TrackIcon size={24} className={isUnlocked ? track.color : 'text-neutral-500'} />
+                        <TrackIcon size={24} className={isUnlocked ? track.color : 'text-[var(--color-text-secondary)]'} />
                       </div>
 
                       <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
@@ -748,12 +806,13 @@ export function PortfolioPage() {
                   <div className="mt-6 pt-4 border-t border-[var(--color-border)] flex items-center justify-between">
                     <div className="w-24 bg-[var(--color-primary)] rounded-full h-1.5 overflow-hidden border border-[var(--color-border)]">
                       <div 
-                        className={`h-full rounded-full transition-all duration-500 ${isUnlocked ? 'bg-emerald-400' : 'bg-neutral-500'}`}
+                        className={`h-full rounded-full transition-all duration-500 ${isUnlocked ? 'bg-emerald-400' : 'bg-[var(--color-border)]'}`}
                         style={{ width: `${trackPct}%` }}
                       />
                     </div>
                     <button
                       onClick={() => navigate(`/track/${track.number}/engine`)}
+                      aria-label={`Jump to Track ${track.number}: ${track.title}`}
                       className="text-[11px] font-mono text-[var(--color-accent)] hover:underline flex items-center gap-1 cursor-pointer"
                     >
                       <span>Jump to Track</span>
@@ -775,7 +834,7 @@ export function PortfolioPage() {
                 <div className="space-y-3 max-w-2xl">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 text-xs font-mono font-bold uppercase tracking-wider">
                     <Lock size={13} />
-                    <span>Locked Milestone • Requires 36 / 36 Labs</span>
+                    <span>Locked Milestone • Requires {totalCurriculumLabs} / {totalCurriculumLabs} Labs</span>
                   </div>
 
                   <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--color-text-primary)] font-serif">
@@ -783,7 +842,7 @@ export function PortfolioPage() {
                   </h2>
 
                   <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                    This official cryptographic proof is conferred upon completing all 36 interactive browser labs across Tracks 0, 1, 2, and 3. Upon 100% completion, this space unlocks your personalized document with high-resolution print and PDF export.
+                    This official cryptographic proof is conferred upon completing all {totalCurriculumLabs} interactive browser labs across Tracks 0 through 7. Upon 100% completion, this space unlocks your personalized document with high-resolution print and PDF export.
                   </p>
 
                   <div className="p-3 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] font-mono">
@@ -810,12 +869,14 @@ export function PortfolioPage() {
                   <div className="pt-2 flex flex-col gap-2">
                     <button
                       onClick={() => setShowSamplePreview(true)}
+                      aria-label="Preview watermarked sample certificate"
                       className="w-full py-2.5 px-4 rounded-xl bg-[var(--color-secondary)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-primary)] transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
                     >
                       <span>Preview Watermarked Sample</span>
                     </button>
                     <button
                       onClick={handleSimulateCompletion}
+                      aria-label="Simulate 100% completion to test unlock"
                       className="w-full py-2 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-[11px] font-mono font-semibold text-emerald-400 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <CheckCircle size={13} />
@@ -863,6 +924,7 @@ export function PortfolioPage() {
                       placeholder="Enter Recipient Name..."
                       id="portfolio-recipient-name-input"
                       aria-label="Enter recipient name for certificate"
+                      title="Enter student recipient name"
                       className="bg-transparent border-none outline-none text-xs font-mono text-[var(--color-text-primary)] px-2 py-1 w-full sm:w-56"
                     />
                   </div>
@@ -870,6 +932,7 @@ export function PortfolioPage() {
                   {!isCertified && (
                     <button
                       onClick={() => setShowSamplePreview(false)}
+                      aria-label="Close sample preview mode"
                       className="px-3 py-2 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:bg-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] transition-all cursor-pointer"
                     >
                       Close Preview
@@ -878,7 +941,8 @@ export function PortfolioPage() {
 
                   <button
                     onClick={handlePrint}
-                    className="px-4 py-2 rounded-2xl bg-[var(--color-accent)] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                    aria-label="Print or export certificate to PDF"
+                    className="px-4 py-2 rounded-2xl bg-[var(--color-accent)] text-[var(--color-primary)] font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
                   >
                     <Printer size={14} />
                     <span>Print / PDF Export</span>
@@ -891,7 +955,7 @@ export function PortfolioPage() {
                 {/* Watermark badge if in sample preview */}
                 {!isCertified && (
                   <div className="absolute top-6 right-6 z-20 pointer-events-none no-print border-2 border-dashed border-amber-500/60 bg-amber-500/15 text-amber-400 font-mono text-[10px] sm:text-xs px-3 py-1 rounded-lg uppercase tracking-widest font-bold">
-                    Sample Preview • 36 Labs Required
+                    Sample Preview • {totalCurriculumLabs} Labs Required
                   </div>
                 )}
             {/* Guilloche Ornamental Border Simulation */}
@@ -925,14 +989,14 @@ export function PortfolioPage() {
                 <span className="text-xs font-mono text-[var(--color-text-secondary)] uppercase tracking-widest block">
                   This deterministic certification is conferred upon
                 </span>
-                <div className="text-2xl sm:text-4xl font-extrabold text-[var(--color-accent)] underline decoration-[var(--color-accent)]/40 underline-offset-8">
+                <div className="text-2xl sm:text-4xl font-extrabold text-[var(--color-accent)] certificate-text-dark underline decoration-[var(--color-accent)]/40 underline-offset-8">
                   {studentName || 'Autonomous AI Engineer'}
                 </div>
               </div>
 
               {/* Description */}
               <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed certificate-text-dark">
-                Having successfully constructed, analyzed, and verified the mathematical foundations of vector embeddings, scalable semantic indexing, local Pyodide CPython sandboxes, multi-turn ReAct agent harnesses, and OWASP AI guardrail evaluation frameworks.
+                Having successfully constructed, analyzed, and verified the mathematical foundations of vector embeddings, scalable semantic indexing, local Pyodide CPython sandboxes, multi-turn ReAct agent harnesses, OWASP AI guardrail evaluation frameworks, multi-head self-attention transformers, parameter-efficient LoRA adapters, KV-cache inference acceleration, and latent diffusion synthesis.
               </p>
 
               {/* Curriculum Progress Seals */}
@@ -945,8 +1009,8 @@ export function PortfolioPage() {
                       <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase block">
                         Track {t.number}
                       </span>
-                      <span className={`text-xs font-bold block mt-0.5 ${isDone ? 'text-emerald-400' : 'text-neutral-400'}`}>
-                        {isDone ? 'VERIFIED' : `${tPassed}/9 Labs`}
+                      <span className={`text-xs font-bold block mt-0.5 ${isDone ? 'text-emerald-400' : 'text-[var(--color-text-secondary)]'}`}>
+                        {isDone ? 'VERIFIED' : `${tPassed}/${t.lessons.length} Labs`}
                       </span>
                     </div>
                   );
@@ -994,6 +1058,7 @@ export function PortfolioPage() {
 
                 <button
                   onClick={handleCopyHash}
+                  aria-label="Copy deterministic SHA-256 verification hash"
                   className="px-3 py-1.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[10px] font-mono text-[var(--color-text-primary)] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer no-print focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                 >
                   {copiedHash ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
@@ -1020,14 +1085,16 @@ export function PortfolioPage() {
             </div>
 
             {/* Filter buttons */}
-            <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] max-w-full">
+            <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] max-w-full" role="group" aria-label="Curriculum transcript track filter">
               {(['all', '0', '1', '2', '3', '4', '5', '6', '7'] as const).map(f => (
                 <button
                   key={f}
                   onClick={() => setSelectedTrackFilter(f)}
+                  aria-pressed={selectedTrackFilter === f}
+                  aria-label={`Filter transcript by ${f === 'all' ? 'all curriculum tracks' : `Track ${f}`}`}
                   className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     selectedTrackFilter === f 
-                      ? 'bg-[var(--color-accent)] text-black' 
+                      ? 'bg-[var(--color-accent)] text-[var(--color-primary)]' 
                       : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                   }`}
                 >
@@ -1062,6 +1129,7 @@ export function PortfolioPage() {
 
                       <button
                         onClick={() => navigate(`/track/${track.number}/engine`)}
+                        aria-label={`Launch IDE for Track ${track.number}: ${track.title}`}
                         className="px-3 py-1 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono text-[var(--color-accent)] transition-all cursor-pointer"
                       >
                         Launch Track IDE
@@ -1093,7 +1161,7 @@ export function PortfolioPage() {
                               {isDone ? (
                                 <CheckCircle size={18} className="text-emerald-400" />
                               ) : (
-                                <Clock size={16} className="text-neutral-500" />
+                                <Clock size={16} className="text-[var(--color-text-secondary)]" />
                               )}
                             </div>
                           </div>
@@ -1119,6 +1187,7 @@ export function PortfolioPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="gist-sync-title"
+            aria-describedby="gist-sync-desc"
           >
             <div className="bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5">
               <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
@@ -1146,7 +1215,7 @@ export function PortfolioPage() {
                 </button>
               </div>
 
-              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+              <p id="gist-sync-desc" className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                 Your progress ledger is encrypted locally in your browser before uploading to a private GitHub Gist under your personal GitHub account. No third-party servers, no telemetry, and 100% immune to browser cache clearing.
               </p>
 
@@ -1198,6 +1267,7 @@ export function PortfolioPage() {
                 <button
                   disabled={gistSyncLoading}
                   onClick={handleSyncGist}
+                  aria-label="Sync encrypted progress to GitHub Gist"
                   className="flex-1 py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md disabled:opacity-50"
                 >
                   <Cloud size={14} />
@@ -1207,6 +1277,7 @@ export function PortfolioPage() {
                 <button
                   disabled={gistSyncLoading}
                   onClick={handleRestoreGist}
+                  aria-label="Restore progress from GitHub Gist"
                   className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--color-primary)] hover:border-cyan-400 border border-[var(--color-border)] text-[var(--color-text-primary)] font-mono font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md disabled:opacity-50"
                 >
                   <Upload size={14} />

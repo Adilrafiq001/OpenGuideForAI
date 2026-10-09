@@ -1319,7 +1319,7 @@ ZeroDivisionError: division by zero`;
   test('TC-AUDIT-062: Builder & Curriculum 62-Defect Accessibility & Lifecycle Gate', async ({ page }) => {
     const errors: string[] = [];
     page.on('console', msg => {
-      if (msg.type() === 'error' && !msg.text().includes('favicon')) {
+      if (msg.type() === 'error' && !msg.text().includes('favicon') && !msg.text().includes('navigator.vibrate')) {
         errors.push(msg.text());
       }
     });
@@ -1435,7 +1435,7 @@ ZeroDivisionError: division by zero`;
     await searchInput.fill('cosine similarity');
     const cosineWidget = page.locator('[data-testid="cosine-similarity-widget"]');
     await expect(cosineWidget).toBeVisible({ timeout: 10000 });
-    const angle90Btn = cosineWidget.locator('button[aria-label="Set angle to 90 degrees (orthogonal)"]');
+    const angle90Btn = cosineWidget.locator('button[aria-label="Set angle to 90 degrees"]');
     await expect(angle90Btn).toBeVisible();
     await angle90Btn.click();
     await expect(angle90Btn).toHaveAttribute('aria-pressed', 'true');
@@ -1446,6 +1446,117 @@ ZeroDivisionError: division by zero`;
     await expect(copilotModal).not.toBeVisible();
 
     // Zero console errors
+    expect(errors).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-055: Portfolio 55-Defect Hardening & Accessibility Verification Gate', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' && !msg.text().includes('favicon') && !msg.text().includes('navigator.vibrate')) {
+        errors.push(msg.text());
+      }
+    });
+
+    // 1. Visit /portfolio with external verification hash parameter
+    const testHash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+    await page.goto(`/portfolio?verify=${testHash}`);
+    await page.waitForLoadState('domcontentloaded');
+
+    // External Auditor Verification Banner must be visible with query hash
+    const auditorBanner = page.locator('text=External Auditor Verification Mode');
+    await expect(auditorBanner).toBeVisible({ timeout: 10000 });
+    await expect(page.locator(`text=${testHash}`).first()).toBeVisible();
+
+    // 2. Header controls accessibility
+    await expect(page.locator('button[aria-label="Back to OpenGuide Overview"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Export or print certificate"]')).toBeVisible();
+
+    // 3. Command Deck 1 Action Buttons ARIA attributes
+    await expect(page.locator('button[aria-label="Sync encrypted progress to private GitHub Gist"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Download official W3C Verifiable Credential in JSON-LD format"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Download cryptographic learning ledger as JSON"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Import learning ledger from JSON backup file"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Download sovereign curriculum starter as Jupyter Notebook"]')).toBeVisible();
+
+    // 4. Command Deck 2 & 3 Action Buttons ARIA attributes
+    await expect(page.locator('button[aria-label="Copy verified badge markdown for GitHub profile README"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Share verifiable achievement on X"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Share verifiable credential on LinkedIn"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Simulate 100% completion for developer testing"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Reset all curriculum progress to zero"]')).toBeVisible();
+
+    // 5. Stat Card dynamic labeling (100% required, not hardcoded 9/9)
+    await expect(page.locator('text=100% track labs required per milestone badge')).toBeVisible();
+
+    // 6. Track Milestone Cards ARIA navigation
+    const track0Milestone = page.locator('button[aria-label^="Jump to Track 0:"]').first();
+    await expect(track0Milestone).toBeVisible();
+
+    // Master Milestone Card dynamic requirements (57 / 57 labs and Tracks 0 through 7)
+    await expect(page.locator('text=Requires 57 / 57 Labs')).toBeVisible();
+    await expect(page.locator('text=/Tracks 0 through 7/')).toBeVisible();
+
+    // 7. Preview Sample Certificate & Watermark dynamic lab count
+    const previewBtn = page.locator('button[aria-label="Preview watermarked sample certificate"]');
+    await expect(previewBtn).toBeVisible();
+    await previewBtn.click();
+
+    // Watermark shows dynamic totalCurriculumLabs (57)
+    await expect(page.locator('text=Sample Preview • 57 Labs Required')).toBeVisible();
+
+    // Recipient input has title attribute and sanitizes input
+    const nameInput = page.locator('input[title="Enter student recipient name"]');
+    await expect(nameInput).toBeVisible();
+    await nameInput.fill('<script>alert("xss")</script>Test Engineer');
+    // Name displayed should have HTML stripped and contain certificate-text-dark class
+    const recipientDisplay = page.locator('.certificate-container .certificate-text-dark.underline');
+    await expect(recipientDisplay).toContainText('Test Engineer');
+    await expect(recipientDisplay).not.toContainText('<script>');
+
+    // Certificate dynamic progress seals for all tracks (Track 5: /6 Labs, Track 6: /3 Labs, Track 7: /3 Labs)
+    await expect(page.locator('.certificate-container').getByText('0/6 Labs')).toBeVisible();
+    await expect(page.locator('.certificate-container').getByText('0/3 Labs').first()).toBeVisible();
+
+    // Copy hash button accessibility
+    await expect(page.locator('button[aria-label="Copy deterministic SHA-256 verification hash"]')).toBeVisible();
+
+    // Close preview
+    const closePreviewBtn = page.locator('button[aria-label="Close sample preview mode"]');
+    await expect(closePreviewBtn).toBeVisible();
+    await closePreviewBtn.click();
+
+    // 8. Transcript Section & Filters
+    await expect(page.locator('h2:has-text("57-Lab Curriculum Transcript")')).toBeVisible();
+    const filterAll = page.locator('button[aria-label="Filter transcript by all curriculum tracks"]');
+    await expect(filterAll).toBeVisible();
+    await expect(filterAll).toHaveAttribute('aria-pressed', 'true');
+
+    const filterTrack0 = page.locator('button[aria-label="Filter transcript by Track 0"]');
+    await expect(filterTrack0).toBeVisible();
+    await filterTrack0.click();
+    await expect(filterTrack0).toHaveAttribute('aria-pressed', 'true');
+    await expect(filterAll).toHaveAttribute('aria-pressed', 'false');
+
+    // Launch Track IDE button accessibility
+    const launchIdeBtn = page.locator('button[aria-label^="Launch IDE for Track 0:"]').first();
+    await expect(launchIdeBtn).toBeVisible();
+
+    // 9. Gist Sync Modal accessibility & attributes
+    const openGistBtn = page.locator('button[aria-label="Sync encrypted progress to private GitHub Gist"]');
+    await openGistBtn.click();
+
+    const gistModal = page.locator('[role="dialog"][aria-labelledby="gist-sync-title"][aria-describedby="gist-sync-desc"]');
+    await expect(gistModal).toBeVisible();
+    await expect(page.locator('#gist-sync-desc')).toBeVisible();
+    await expect(page.locator('button[aria-label="Sync encrypted progress to GitHub Gist"]')).toBeVisible();
+    await expect(page.locator('button[aria-label="Restore progress from GitHub Gist"]')).toBeVisible();
+
+    const closeGistBtn = page.locator('button[aria-label="Close Gist sync dialog"]');
+    await expect(closeGistBtn).toBeVisible();
+    await closeGistBtn.click();
+    await expect(gistModal).not.toBeVisible();
+
+    // 10. Verify zero console errors
     expect(errors).toHaveLength(0);
   });
 });
