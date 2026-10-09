@@ -174,5 +174,17 @@ export const ur: Record<string, string> = {
   theme_settings_subtitle: '20 معیاری تھیمز • اسٹوڈیو ترجیحات اور بی وائی او کے',
   select_language: 'زبان منتخب کریں',
   footer_credit: 'معمار اور ڈیزائنر: عادل رفیق ڈار (ARD)',
-  footer_tagline: 'اوپن سورس اے آئی انجینئرنگ اسٹوڈیو • ہمیشہ 100% مفت'
+  footer_tagline: 'اوپن سورس اے آئی انجینئرنگ اسٹوڈیو • ہمیشہ 100% مفت',
+
+  // Navigation & Hero Enhancements
+  nav_pillars: '11 معماراتی ستون',
+  nav_labs: 'لیبز',
+  nav_pathways: 'راستے',
+  ide_tab_lessons: 'اسباق',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'فارورڈ AI',
+  nav_forward_engineer_desc: 'فیلڈ آرکیٹیکچر، ایجنٹک ٹول چینز اور $0 خود مختار اسٹیک',
+  forward_engineer_title: 'فارورڈ ڈیپلائیڈ AI انجینئرنگ',
+  forward_engineer_badge: 'پروڈکشن معیار • 0.001% سختی'
 };

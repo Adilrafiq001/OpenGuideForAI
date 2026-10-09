@@ -794,10 +794,15 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
           <span>Threshold:</span>
           <input
             type="range"
+            aria-label="Semantic similarity threshold"
             min="0"
             max="1"
             step="0.05"
             value={simThreshold}
+            aria-valuemin={0}
+            aria-valuemax={1}
+            aria-valuenow={simThreshold}
+            aria-valuetext={`${(simThreshold * 100).toFixed(0)} percent`}
             onChange={(e) => setSimThreshold(parseFloat(e.target.value))}
             className="w-20 accent-[var(--color-accent)] cursor-pointer"
             title="Filter semantic connections"

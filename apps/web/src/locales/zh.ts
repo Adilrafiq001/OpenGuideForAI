@@ -170,5 +170,21 @@ export const zh: Record<string, string> = {
   theme_settings_subtitle: '20 套高对比度主题 • 工作室偏好与 BYOK 密钥',
   select_language: '选择语言',
   footer_credit: '架构与设计: Adil Rafiq Dar (ARD)',
-  footer_tagline: '开源人工智能工程师工作室 • 永久 100% 免费'
+  footer_tagline: '开源人工智能工程师工作室 • 永久 100% 免费',
+
+  // Navigation & Hero Enhancements
+  nav_tour: '导览',
+  nav_portfolio: '作品集',
+  nav_labs: '实验室',
+  nav_pathways: '学习路径',
+  hero_never_coded_label: '从未写过代码？',
+  hero_never_coded_subtitle: '从赛道 0：绝对零度开始（零配置）',
+  hero_never_coded_badge: '赛道 0：绝对零度',
+  ide_tab_lessons: '课程',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: '前沿部署',
+  nav_forward_engineer_desc: '现场架构、智能体工具链与 $0 主权技术栈',
+  forward_engineer_title: '前沿现场部署 AI 工程',
+  forward_engineer_badge: '生产级标准 • 0.001% 严谨度'
 };

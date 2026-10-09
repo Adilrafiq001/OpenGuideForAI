@@ -61,7 +61,17 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
   if (!isOpen) return null;
 
   return (
-    <div className="copilot-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Offline AI Copilot">
+    <div 
+      className="copilot-backdrop" 
+      onClick={onClose} 
+      role="dialog" 
+      aria-modal="true" 
+      aria-label="Offline AI Copilot"
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+    >
       <div className="copilot-modal" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="copilot-header">
@@ -98,6 +108,7 @@ export const OfflineAICopilot: React.FC<OfflineAICopilotProps> = ({ isOpen, onCl
           <input
             type="text"
             className="copilot-search-input"
+            aria-label="Search offline knowledge"
             placeholder="Ask about vector spaces, Pyodide, $0 rule, cosine similarity, or shortcuts..."
             value={query}
             onChange={e => setQuery(e.target.value)}

@@ -211,19 +211,31 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
   }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   const handleCopy = (code: string, id: string) => {
     playTactileSound('click');
     triggerHaptic('light');
-    navigator.clipboard.writeText(code);
+    try {
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(code).catch(() => {});
+      }
+    } catch {
+      // Ignore synchronous clipboard exceptions
+    }
     setCopiedCodeId(id);
     setTimeout(() => setCopiedCodeId(null), 2000);
   };
@@ -757,6 +769,7 @@ VITE_PYODIDE_CDN_URL="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"`}
                         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-700 dark:text-cyan-300" />
                         <input
                           type="text"
+                          aria-label="Search FDE knowledge topics, protocols, and code"
                           value={knowledgeSearchQuery}
                           onChange={(e) => setKnowledgeSearchQuery(e.target.value)}
                           placeholder="Search 28 operational FDE knowledge topics, protocols, code..."

@@ -177,7 +177,8 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
   border-radius: 20px;
 }
 
-.container-wrap input:checked + .card .container-ai-chat {
+.container-wrap input:checked + .card .container-ai-chat,
+.container-ai-input.is-open .container-ai-chat {
   opacity: 1;
   visibility: visible;
   z-index: 99999;
@@ -342,9 +343,10 @@ body:has(.abby-floating-anchor.is-open) [data-testid="scroll-to-top-container"] 
   height: 100%;
   padding: 6px;
   opacity: 0;
+  visibility: hidden;
   overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .container-wrap .card .chat {

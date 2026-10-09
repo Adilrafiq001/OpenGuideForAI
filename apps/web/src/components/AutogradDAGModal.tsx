@@ -53,6 +53,10 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
       role="dialog" 
       aria-modal="true" 
       aria-labelledby="dag-modal-title"
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -90,6 +94,9 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
               step="0.5" 
               value={a} 
               aria-label="Input scalar value a"
+              aria-valuemin={-5}
+              aria-valuemax={5}
+              aria-valuenow={a}
               onChange={(e) => setA(parseFloat(e.target.value))} 
               className="w-24 accent-[var(--color-accent)] cursor-pointer" 
             />
@@ -104,6 +111,9 @@ export const AutogradDAGModal: React.FC<AutogradDAGModalProps> = ({ isOpen, onCl
               step="0.5" 
               value={b} 
               aria-label="Input scalar value b"
+              aria-valuemin={-5}
+              aria-valuemax={5}
+              aria-valuenow={b}
               onChange={(e) => setB(parseFloat(e.target.value))} 
               className="w-24 accent-[var(--color-accent)] cursor-pointer" 
             />

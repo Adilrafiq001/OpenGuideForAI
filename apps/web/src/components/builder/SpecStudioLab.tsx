@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import {
   CheckSquare,
   XSquare,
@@ -119,6 +119,16 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
     setSimulationLogs([]);
   };
 
+  const simulationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (simulationTimerRef.current) clearTimeout(simulationTimerRef.current);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
   const handleSimulateAgent = () => {
     if (!isAllPassed) return;
     setIsSimulating(true);
@@ -130,7 +140,8 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
       'Running virtual test suite: 4 assertions verified',
       'Artifact generated: Ready for production review (100% deterministic, 0 hallucinated scope)'
     ]);
-    setTimeout(() => {
+    if (simulationTimerRef.current) clearTimeout(simulationTimerRef.current);
+    simulationTimerRef.current = setTimeout(() => {
       setIsSimulating(false);
       onSpecPassed?.();
     }, 1200);
@@ -139,7 +150,8 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
   const handleCopySpec = async () => {
     await navigator.clipboard.writeText(specText);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -183,7 +195,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
 
           <button
             onClick={handleCopySpec}
-            aria-label="Copy spec to clipboard"
+            aria-label="Copy specification prompt to clipboard"
             className="p-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             title="Copy spec"
           >
@@ -201,6 +213,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           <button
             data-testid="template-prod-spec"
             onClick={() => handleSelectTemplate('prod')}
+            aria-pressed={activeTemplate === 'prod'}
             className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
               activeTemplate === 'prod'
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
@@ -212,6 +225,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           <button
             data-testid="template-vibe-spec"
             onClick={() => handleSelectTemplate('vibe')}
+            aria-pressed={activeTemplate === 'vibe'}
             className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
               activeTemplate === 'vibe'
                 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
@@ -223,6 +237,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           <button
             data-testid="template-custom-spec"
             onClick={() => handleSelectTemplate('custom')}
+            aria-pressed={activeTemplate === 'custom'}
             className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
               activeTemplate === 'custom'
                 ? 'bg-[var(--color-accent)]/20 text-[var(--color-accent)] border border-[var(--color-accent)]/40'
@@ -235,6 +250,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
 
         <button
           onClick={() => handleSelectTemplate(activeTemplate)}
+          aria-label="Reset current specification template"
           className="inline-flex items-center gap-1 text-[11px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
         >
           <ArrowCounterClockwise size={12} />
@@ -277,6 +293,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
               data-testid="simulate-agent-btn"
               onClick={handleSimulateAgent}
               disabled={!isAllPassed || isSimulating}
+              aria-label="Simulate deterministic agent execution"
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
                 isAllPassed
                   ? 'bg-emerald-500 hover:bg-emerald-400 text-black cursor-pointer shadow-md shadow-emerald-500/20 active:scale-[0.98]'

@@ -174,5 +174,17 @@ export const ar: Record<string, string> = {
   theme_settings_subtitle: '20 سمة معتمدة • تفضيلات الأستوديو ومفاتيح BYOK',
   select_language: 'اختر اللغة',
   footer_credit: 'تصميم وهندسة: عادل رفيق دار (ARD)',
-  footer_tagline: 'أستوديو هندسة الذكاء الاصطناعي مفتوح المصدر • مجاني 100% دائماً'
+  footer_tagline: 'أستوديو هندسة الذكاء الاصطناعي مفتوح المصدر • مجاني 100% دائماً',
+
+  // Navigation & Hero Enhancements
+  nav_pillars: '11 ركيزة معمارية',
+  nav_labs: 'مختبرات',
+  nav_pathways: 'مسارات',
+  ide_tab_lessons: 'دروس',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'ذكاء اصطناعي ميداني',
+  nav_forward_engineer_desc: 'هندسة ميدانية، أدوات وكيلة ومجموعة سيادية بقيمة $0',
+  forward_engineer_title: 'هندسة الذكاء الاصطناعي الميدانية',
+  forward_engineer_badge: 'معيار الإنتاج • دقة 0.001%'
 };

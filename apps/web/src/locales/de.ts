@@ -170,5 +170,21 @@ export const de: Record<string, string> = {
   theme_settings_subtitle: '20 kalibrierte Themen • Studio-Präferenzen & BYOK',
   select_language: 'Sprache Auswählen',
   footer_credit: 'Architektur & Design von Adil Rafiq Dar (ARD)',
-  footer_tagline: 'Open-Source KI-Engineering Studio • Für Immer 100% Kostenlos'
+  footer_tagline: 'Open-Source KI-Engineering Studio • Für Immer 100% Kostenlos',
+
+  // Navigation & Hero Enhancements
+  nav_tour: 'Tour',
+  nav_portfolio: 'Portfolio',
+  nav_labs: 'Labore',
+  nav_pathways: 'Lernpfade',
+  hero_never_coded_label: 'Noch nie programmiert?',
+  hero_never_coded_subtitle: 'Starten Sie mit Track 0: Absoluter Nullpunkt (0 Setup)',
+  hero_never_coded_badge: 'Track 0: Absoluter Nullpunkt',
+  ide_tab_lessons: 'Lektionen',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'Vor-Ort-KI',
+  nav_forward_engineer_desc: 'Feldarchitektur, Agenten-Toolchains & $0 Sovereign-Stack',
+  forward_engineer_title: 'Vor-Ort eingesetzte KI-Entwicklung (FDE)',
+  forward_engineer_badge: 'Produktionsstandard • 0,001 % Präzision'
 };

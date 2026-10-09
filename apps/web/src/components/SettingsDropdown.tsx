@@ -162,7 +162,11 @@ export function SettingsDropdown() {
 
                   {/* Word Wrap Toggle */}
                   <div className="px-2 py-2 flex items-center justify-between">
-                    <span id="word-wrap-label" className="text-[13px] font-medium text-[var(--color-text-primary)] pl-7">
+                    <span 
+                      id="word-wrap-label" 
+                      onClick={() => setWordWrap(!wordWrap)}
+                      className="text-[13px] font-medium text-[var(--color-text-primary)] pl-7 cursor-pointer select-none"
+                    >
                       Word Wrap
                     </span>
                     <button
@@ -170,7 +174,7 @@ export function SettingsDropdown() {
                       aria-checked={wordWrap}
                       aria-labelledby="word-wrap-label"
                       onClick={() => setWordWrap(!wordWrap)}
-                      className={`w-9 h-5 rounded-full p-[2px] transition-colors flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-2 ${
+                      className={`w-9 h-5 rounded-full p-[2px] transition-colors flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-2 cursor-pointer ${
                         wordWrap ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-border)]'
                       }`}
                     >

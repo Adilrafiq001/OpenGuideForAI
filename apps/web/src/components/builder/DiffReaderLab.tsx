@@ -151,6 +151,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             <button
               onClick={() => setViewMode('unified')}
               aria-label="Unified diff view"
+              aria-pressed={viewMode === 'unified'}
               className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 viewMode === 'unified'
                   ? 'bg-[var(--color-secondary)] text-[var(--color-accent)] shadow-xs'
@@ -163,6 +164,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             <button
               onClick={() => setViewMode('split')}
               aria-label="Split diff view"
+              aria-pressed={viewMode === 'split'}
               className={`px-2.5 py-1 rounded text-xs font-mono font-semibold flex items-center gap-1 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 viewMode === 'split'
                   ? 'bg-[var(--color-secondary)] text-[var(--color-accent)] shadow-xs'
@@ -186,6 +188,8 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
             key={s.id}
             data-testid={`scenario-btn-${s.id}`}
             onClick={() => handleSelectScenario(s.id)}
+            aria-pressed={activeScenarioId === s.id}
+            aria-label={`Select scenario ${s.id}: ${s.title}`}
             className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               activeScenarioId === s.id
                 ? s.hazardDetected
@@ -282,22 +286,22 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
         ) : (
           /* Split View */
           <div className="grid grid-cols-2 gap-2 text-[11px]">
-            <div className="border-r border-zinc-800 pr-2">
-              <div className="text-[10px] font-bold text-zinc-400 mb-1 border-b border-zinc-800 pb-0.5">BEFORE (Original)</div>
+            <div className="border-r border-[var(--color-border)] pr-2">
+              <div className="text-[10px] font-bold text-[var(--color-text-secondary)] mb-1 border-b border-[var(--color-border)] pb-0.5">BEFORE (Original)</div>
               {scenario.diffLines.filter(l => l.type !== 'add').map((line, idx) => (
                 <div
                   key={idx}
                   className={`px-1.5 py-0.5 rounded ${
-                    line.type === 'del' ? 'bg-rose-950/40 text-rose-400' : 'text-zinc-400'
+                    line.type === 'del' ? 'bg-rose-950/40 text-rose-400' : 'text-[var(--color-text-secondary)]'
                   }`}
                 >
-                  <span className="inline-block w-6 text-zinc-600 select-none">{line.oldLine}</span>
+                  <span className="inline-block w-6 text-[var(--color-text-secondary)] opacity-60 select-none">{line.oldLine}</span>
                   <span className="whitespace-pre">{line.content.replace(/^[+-]\s*/, '')}</span>
                 </div>
               ))}
             </div>
             <div className="pl-2">
-              <div className="text-[10px] font-bold text-zinc-400 mb-1 border-b border-zinc-800 pb-0.5">AFTER (AI Edit)</div>
+              <div className="text-[10px] font-bold text-[var(--color-text-secondary)] mb-1 border-b border-[var(--color-border)] pb-0.5">AFTER (AI Edit)</div>
               {scenario.diffLines.filter(l => l.type !== 'del').map((line, idx) => (
                 <div
                   key={idx}
@@ -306,10 +310,10 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
                       ? line.isHazard
                         ? 'bg-rose-500/25 text-rose-200'
                         : 'bg-emerald-500/15 text-emerald-300'
-                      : 'text-zinc-400'
+                      : 'text-[var(--color-text-secondary)]'
                   }`}
                 >
-                  <span className="inline-block w-6 text-zinc-600 select-none">{line.newLine}</span>
+                  <span className="inline-block w-6 text-[var(--color-text-secondary)] opacity-60 select-none">{line.newLine}</span>
                   <span className="whitespace-pre">{line.content.replace(/^[+-]\s*/, '')}</span>
                 </div>
               ))}
@@ -350,6 +354,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
           <button
             data-testid="diff-reject-btn"
             onClick={() => handleDecision('rejected')}
+            aria-label="Reject diff and rollback changes"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-mono font-semibold transition-all cursor-pointer active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
           >
             <X size={14} weight="bold" />
@@ -359,6 +364,7 @@ export function DiffReaderLab({ onMasteryAchieved, lessonId }: DiffReaderLabProp
           <button
             data-testid="diff-accept-btn"
             onClick={() => handleDecision('accepted')}
+            aria-label="Accept diff and commit to dev branch"
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               scenario.hazardDetected
                 ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30'

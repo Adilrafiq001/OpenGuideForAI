@@ -337,6 +337,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
                 ref={inputRef}
                 type="text"
                 role="combobox"
+                aria-label="Search labs, themes, languages, and tools"
                 aria-autocomplete="list"
                 aria-expanded="true"
                 aria-controls="command-palette-results"

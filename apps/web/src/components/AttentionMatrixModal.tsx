@@ -79,6 +79,10 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
       role="dialog" 
       aria-modal="true" 
       aria-labelledby="attention-modal-title"
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -133,10 +137,15 @@ export const AttentionMatrixModal: React.FC<AttentionMatrixModalProps> = ({ isOp
           <div className="flex items-center gap-2">
             <input
               type="range"
+              aria-label="Softmax Temperature"
               min="0.2"
               max="2.0"
               step="0.1"
               value={temperature}
+              aria-valuemin={0.2}
+              aria-valuemax={2.0}
+              aria-valuenow={temperature}
+              aria-valuetext={`${temperature.toFixed(1)}`}
               onChange={(e) => setTemperature(parseFloat(e.target.value))}
               className="w-24 accent-[var(--color-accent)] cursor-pointer"
             />

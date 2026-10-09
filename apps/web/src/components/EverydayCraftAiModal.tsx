@@ -305,6 +305,7 @@ export function EverydayCraftAiModal({ isOpen, onClose, initialRole = 'beginner'
                     <input
                       ref={searchInputRef}
                       type="text"
+                      aria-label="Search trade, dilemma, or formula"
                       value={searchQuery}
                       onChange={(e) => {
                         const val = e.target.value;

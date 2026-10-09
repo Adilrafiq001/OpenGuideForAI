@@ -590,10 +590,15 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Live app backdrop visibility. 100% gives full live visibility without dimming.</p>
                       <input 
                         type="range" 
+                        aria-label="Stage Transparency"
                         min="0.2" 
                         max="1.0" 
                         step="0.05"
                         value={modalOpacity ?? 0.85}
+                        aria-valuemin={0.2}
+                        aria-valuemax={1.0}
+                        aria-valuenow={modalOpacity ?? 0.85}
+                        aria-valuetext={`${Math.round((modalOpacity ?? 0.85) * 100)} percent`}
                         onChange={(e) => setModalOpacity(parseFloat(e.target.value))}
                         data-testid="modal-transparency-slider"
                         className="w-full accent-[var(--color-accent)] cursor-pointer h-1.5 bg-[var(--color-tertiary)] border border-[var(--color-border)] rounded-lg appearance-none"
@@ -664,9 +669,14 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Base font size for interactive Python code editor.</p>
                       <input 
                         type="range" 
+                        aria-label="Editor Font Size"
                         min="11" 
                         max="22" 
                         value={fontSize}
+                        aria-valuemin={11}
+                        aria-valuemax={22}
+                        aria-valuenow={fontSize}
+                        aria-valuetext={`${fontSize} pixels`}
                         onChange={(e) => setFontSize(Number(e.target.value))}
                         className="w-full accent-[var(--color-accent)] cursor-pointer h-1.5 bg-[var(--color-tertiary)] border border-[var(--color-border)] rounded-lg appearance-none"
                       />
@@ -978,6 +988,10 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                             max="1.0" 
                             step="0.05" 
                             value={soundVolume} 
+                            aria-valuemin={0.1}
+                            aria-valuemax={1.0}
+                            aria-valuenow={soundVolume}
+                            aria-valuetext={`${Math.round(soundVolume * 100)} percent`}
                             onChange={(e) => setSoundVolume(parseFloat(e.target.value))} 
                             className="w-32 accent-[var(--color-accent)] cursor-pointer h-1.5" 
                             aria-label="Sound Volume" 
@@ -1147,6 +1161,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           placeholder="Paste API key (e.g. sk-or-v1-..., AIzaSy...)"
                           className="w-full px-3.5 py-2 pr-10 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/50 font-mono focus:outline-none focus:border-[var(--color-accent)]"
                           id="byok-api-key-input"
+                          aria-label="BYOK API Key"
                         />
                         <button
                           type="button"
@@ -1161,7 +1176,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
                     {/* Model Name Input */}
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-semibold text-[var(--color-text-primary)]">
+                      <label htmlFor="byok-model-input" className="text-[11px] font-semibold text-[var(--color-text-primary)]">
                         Model Identifier
                       </label>
                       <input
@@ -1171,6 +1186,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         placeholder="e.g. google/gemini-2.5-flash or gpt-4o-mini"
                         className="w-full px-3.5 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] font-mono focus:outline-none focus:border-[var(--color-accent)]"
                         id="byok-model-input"
+                        aria-label="Model Identifier"
                       />
                     </div>
 

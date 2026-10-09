@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Key, ShieldCheck, Eye, EyeSlash, Trash, ArrowSquareOut, Check } from '@phosphor-icons/react';
 import { getBuilderApiKey, setBuilderApiKey } from '../../services/builderProvider';
@@ -27,20 +27,34 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
 
   useEffect(() => {
     if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
+
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, []);
 
   const handleSave = () => {
     const sanitized = keyInput.trim();
     setBuilderApiKey(sanitized, persist);
     setIsSaved(true);
-    setTimeout(() => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
       onSaved?.();
       onClose();
     }, 500);
@@ -148,6 +162,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                   type="checkbox"
                   checked={persist}
                   onChange={(e) => setPersist(e.target.checked)}
+                  aria-label="Save API key to this browser across sessions"
                   className="rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-0 cursor-pointer"
                 />
                 <span>Save to this browser across sessions (opt-in)</span>
@@ -160,6 +175,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                 <button
                   type="button"
                   onClick={handleClear}
+                  aria-label="Remove stored API key"
                   className="px-3 py-1.5 rounded-lg border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Trash size={13} />
@@ -171,6 +187,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                 <button
                   type="button"
                   onClick={onClose}
+                  aria-label="Cancel and close dialog"
                   className="px-3 py-1.5 rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-secondary)] transition-colors cursor-pointer"
                 >
                   Cancel
@@ -179,6 +196,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                   type="button"
                   onClick={handleSave}
                   data-testid="save-api-key-btn"
+                  aria-label="Save API key"
                   className="px-4 py-1.5 rounded-lg bg-[var(--color-accent)] hover:brightness-110 text-white font-bold text-xs font-mono flex items-center gap-1.5 transition-all shadow-sm cursor-pointer active:scale-95"
                 >
                   {isSaved ? <Check size={14} /> : <Key size={14} />}

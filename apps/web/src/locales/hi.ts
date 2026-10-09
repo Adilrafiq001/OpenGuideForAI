@@ -170,5 +170,21 @@ export const hi: Record<string, string> = {
   theme_settings_subtitle: '20 सत्यापित थीम • स्टूडियो प्राथमिकताएं और BYOK',
   select_language: 'भाषा चुनें',
   footer_credit: 'वास्तुकार और डिज़ाइनर: आदिल रफ़ीक डार (ARD)',
-  footer_tagline: 'ओपन-सोर्स एआई इंजीनियरिंग स्टूडियो • हमेशा 100% मुफ़्त'
+  footer_tagline: 'ओपन-सोर्स एआई इंजीनियरिंग स्टूडियो • हमेशा 100% मुफ़्त',
+
+  // Navigation & Hero Enhancements
+  nav_tour: 'टूर',
+  nav_portfolio: 'पोर्टफोलियो',
+  nav_labs: 'लैब्स',
+  nav_pathways: 'मार्ग',
+  hero_never_coded_label: 'पहले कभी कोड नहीं किया?',
+  hero_never_coded_subtitle: 'ट्रैक 0 से शुरू करें: एब्सोल्यूट ज़ीरो (शून्य सेटअप)',
+  hero_never_coded_badge: 'ट्रैक 0: एब्सोल्यूट ज़ीरो',
+  ide_tab_lessons: 'पाठ',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'अग्रणी AI',
+  nav_forward_engineer_desc: 'फील्ड आर्किटेक्चर, एजेंटिक टूलचेन और $0 सॉवरेन स्टैक',
+  forward_engineer_title: 'फॉरवर्ड डिप्लॉयड AI इंजीनियरिंग',
+  forward_engineer_badge: 'प्रोडक्शन स्टैंडर्ड • 0.001% कठोरता'
 };

@@ -170,5 +170,21 @@ export const ru: Record<string, string> = {
   theme_settings_subtitle: '20 калиброванных тем • Настройки студии и BYOK',
   select_language: 'Выбрать Язык',
   footer_credit: 'Архитектура и Дизайн: Adil Rafiq Dar (ARD)',
-  footer_tagline: 'Open-Source Студия AI-Инженерии • Навсегда 100% Бесплатно'
+  footer_tagline: 'Open-Source Студия AI-Инженерии • Навсегда 100% Бесплатно',
+
+  // Navigation & Hero Enhancements
+  nav_tour: 'Тур',
+  nav_portfolio: 'Портфолио',
+  nav_labs: 'Лаборатории',
+  nav_pathways: 'Траектории',
+  hero_never_coded_label: 'Никогда не программировали?',
+  hero_never_coded_subtitle: 'Начните с Трека 0: Абсолютный Ноль (0 Настройки)',
+  hero_never_coded_badge: 'Трек 0: Абсолютный Ноль',
+  ide_tab_lessons: 'Уроки',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'Полевой ИИ',
+  nav_forward_engineer_desc: 'Полевая Архитектура, Агентские Инструменты и Суверенный Стек за $0',
+  forward_engineer_title: 'Полевая Инженерия ИИ (FDE)',
+  forward_engineer_badge: 'Производственный Стандарт • Строгость 0.001%'
 };

@@ -20,7 +20,7 @@ export const PagedAttentionWidget: React.FC = () => {
 
   return (
     <div
-      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-primary,#121316)] text-xs text-[var(--color-text-primary,#e5e7eb)] shadow-sm select-none"
+      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-primary)] text-xs text-[var(--color-text-primary)] shadow-sm select-none"
       data-testid="paged-attention-widget"
     >
       <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border)]/50">
@@ -31,21 +31,24 @@ export const PagedAttentionWidget: React.FC = () => {
         <div className="flex gap-1">
           <button
             onClick={() => addTokens(-2)}
-            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-bg-secondary,#202227)] hover:bg-[var(--color-bg-tertiary,#2a2d35)] border border-[var(--color-border)] transition-colors cursor-pointer"
+            aria-label="Remove 2 tokens"
+            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
             title="Remove 2 tokens"
           >
             -2
           </button>
           <button
             onClick={() => addTokens(2)}
-            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-bg-secondary,#202227)] hover:bg-[var(--color-bg-tertiary,#2a2d35)] border border-[var(--color-border)] transition-colors cursor-pointer"
+            aria-label="Add 2 tokens"
+            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
             title="Add 2 tokens"
           >
             +2
           </button>
           <button
             onClick={reset}
-            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-bg-secondary,#202227)] hover:bg-[var(--color-bg-tertiary,#2a2d35)] border border-[var(--color-border)] transition-colors cursor-pointer"
+            aria-label="Reset token count to 10"
+            className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
             title="Reset"
           >
             Reset
@@ -54,25 +57,25 @@ export const PagedAttentionWidget: React.FC = () => {
       </div>
 
       <div className="mt-2 grid grid-cols-3 gap-2 text-[11px] font-mono text-center">
-        <div className="p-1.5 rounded bg-[var(--color-bg-secondary,#181a1f)] border border-[var(--color-border)]/50">
-          <div className="text-neutral-400 text-[10px]">Active Tokens</div>
-          <div className="text-sky-300 font-bold text-sm">{tokenCount} / {TOTAL_PHYSICAL_BLOCKS * BLOCK_SIZE}</div>
+        <div className="p-1.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]/50">
+          <div className="text-[var(--color-text-secondary)] text-[10px]">Active Tokens</div>
+          <div className="text-sky-500 dark:text-sky-300 font-bold text-sm">{tokenCount} / {TOTAL_PHYSICAL_BLOCKS * BLOCK_SIZE}</div>
         </div>
-        <div className="p-1.5 rounded bg-[var(--color-bg-secondary,#181a1f)] border border-[var(--color-border)]/50">
-          <div className="text-neutral-400 text-[10px]">Blocks Allocated</div>
-          <div className="text-sky-300 font-bold text-sm">{numBlocksNeeded} / {TOTAL_PHYSICAL_BLOCKS}</div>
+        <div className="p-1.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]/50">
+          <div className="text-[var(--color-text-secondary)] text-[10px]">Blocks Allocated</div>
+          <div className="text-sky-500 dark:text-sky-300 font-bold text-sm">{numBlocksNeeded} / {TOTAL_PHYSICAL_BLOCKS}</div>
         </div>
-        <div className="p-1.5 rounded bg-[var(--color-bg-secondary,#181a1f)] border border-[var(--color-border)]/50">
-          <div className="text-neutral-400 text-[10px]">KV Utilization</div>
-          <div className="text-emerald-400 font-bold text-sm">{memoryUtilization}%</div>
+        <div className="p-1.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)]/50">
+          <div className="text-[var(--color-text-secondary)] text-[10px]">KV Utilization</div>
+          <div className="text-emerald-500 dark:text-emerald-400 font-bold text-sm">{memoryUtilization}%</div>
         </div>
       </div>
 
       {/* Logical to Physical Page Table */}
       <div className="mt-3">
-        <div className="text-[10px] uppercase font-mono text-neutral-400 mb-1 flex justify-between">
+        <div className="text-[10px] uppercase font-mono text-[var(--color-text-secondary)] mb-1 flex justify-between">
           <span>Logical-to-Physical Block Table</span>
-          <span className="text-neutral-400">Fixed Block Size: {BLOCK_SIZE} Tokens</span>
+          <span className="text-[var(--color-text-secondary)]">Fixed Block Size: {BLOCK_SIZE} Tokens</span>
         </div>
         <div className="flex flex-wrap gap-1 font-mono text-[10px]">
           {Array.from({ length: numBlocksNeeded }).map((_, logicalIdx) => {
@@ -82,7 +85,7 @@ export const PagedAttentionWidget: React.FC = () => {
                 key={logicalIdx}
                 className="px-2 py-1 rounded bg-sky-950/60 border border-sky-600/50 flex items-center gap-1.5"
               >
-                <span className="text-neutral-400">L#{logicalIdx}</span>
+                <span className="text-[var(--color-text-secondary)]">L#{logicalIdx}</span>
                 <span className="text-sky-400">→</span>
                 <span className="text-sky-200 font-bold">P#{physBlock}</span>
               </div>
@@ -93,7 +96,7 @@ export const PagedAttentionWidget: React.FC = () => {
 
       {/* Physical GPU Memory Slots */}
       <div className="mt-3">
-        <div className="text-[10px] uppercase font-mono text-neutral-400 mb-1">
+        <div className="text-[10px] uppercase font-mono text-[var(--color-text-secondary)] mb-1">
           Scattered Physical GPU Blocks (Zero External Fragmentation)
         </div>
         <div className="grid grid-cols-4 gap-1 font-mono text-[10px]">
@@ -106,7 +109,7 @@ export const PagedAttentionWidget: React.FC = () => {
                 className={`p-1.5 rounded border text-center transition-all ${
                   isAllocated
                     ? 'bg-sky-900/40 border-sky-500/70 text-sky-200 shadow-sm'
-                    : 'bg-neutral-900/30 border-neutral-800 text-neutral-400'
+                    : 'bg-[var(--color-secondary)]/50 border-[var(--color-border)] text-[var(--color-text-secondary)]'
                 }`}
               >
                 <div className="font-semibold">Block #{physId}</div>
@@ -119,7 +122,7 @@ export const PagedAttentionWidget: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-2 text-[10px] text-neutral-400 italic bg-[var(--color-bg-secondary,#181a1f)] p-1.5 rounded border border-[var(--color-border)]/40">
+      <div className="mt-2 text-[10px] text-[var(--color-text-secondary)] italic bg-[var(--color-secondary)] p-1.5 rounded border border-[var(--color-border)]/40">
         Non-contiguous physical blocks allocated on demand. Only {wastedSlots} idle slots in the tail block ({wastedSlots * 4}B wasted vs traditional contiguous reservation of ~{TOTAL_PHYSICAL_BLOCKS * BLOCK_SIZE - tokenCount} slots).
       </div>
     </div>

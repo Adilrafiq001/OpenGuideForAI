@@ -84,7 +84,8 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           >
             <button
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all group cursor-pointer"
+              aria-label="Back to OpenGuide Studio"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
               <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
               <span>{t('briefing_back')}</span>
@@ -347,8 +348,17 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
                 {mod.lessons.map((les, lIdx) => (
                   <div 
                     key={les.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Open lesson ${lIdx + 1}: ${les.title}`}
                     onClick={() => navigate(isBuilderPath ? `/builder/${trackNum.replace('B','')}/engine?module=${mIdx}&lesson=${lIdx}` : `/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`)}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98]"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        navigate(isBuilderPath ? `/builder/${trackNum.replace('B','')}/engine?module=${mIdx}&lesson=${lIdx}` : `/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`);
+                      }
+                    }}
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
                       <div className="w-5 h-5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-center justify-center text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] shrink-0">

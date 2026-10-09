@@ -11,7 +11,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
   const navigate = useNavigate();
 
   // On interactive IDE routes, hide mobile bottom nav so CodeMirror & Pyodide terminal have full viewport
-  const isIdeRoute = Boolean(location.pathname.match(/^\/track\/\d+(\/engine)?$/));
+  const isIdeRoute = Boolean(location.pathname.match(/^\/(track|builder)\/\d+(\/engine)?$/));
   if (isIdeRoute) return null;
 
   const navItems = [

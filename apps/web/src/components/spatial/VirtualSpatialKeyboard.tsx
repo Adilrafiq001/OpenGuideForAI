@@ -214,10 +214,15 @@ export function VirtualSpatialKeyboard() {
               <span className="text-slate-400">Tilt:</span>
               <input
                 type="range"
+                aria-label="Virtual keyboard desk tilt angle"
                 min="30"
                 max="75"
                 step="5"
                 value={keyboardTiltAngle}
+                aria-valuemin={30}
+                aria-valuemax={75}
+                aria-valuenow={keyboardTiltAngle}
+                aria-valuetext={`${keyboardTiltAngle} degrees`}
                 onChange={(e) => setKeyboardTiltAngle(Number(e.target.value))}
                 className="w-14 accent-cyan-400 cursor-pointer"
                 title="Adjust desk tilt angle to match physical tabletop"

@@ -15,7 +15,16 @@ interface CheckUnderstandingQuizProps {
 }
 
 export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = false }: CheckUnderstandingQuizProps) {
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>(() => {
+    if (isCompleted && questions.length > 0) {
+      const initial: Record<number, number> = {};
+      questions.forEach((q, i) => {
+        initial[i] = q.answerIndex;
+      });
+      return initial;
+    }
+    return {};
+  });
   const [isSubmitted, setIsSubmitted] = useState(isCompleted);
 
   const handleSelect = (qIdx: number, oIdx: number) => {
@@ -47,7 +56,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
         <div className="flex items-center gap-2">
           <Target size={15} className="text-[var(--color-accent)]" />
           <span className="font-bold text-[var(--color-text-primary)] text-sm tracking-tight">
-            Check Your Understanding (3 Questions)
+            Check Your Understanding ({questions.length} Question{questions.length === 1 ? '' : 's'})
           </span>
         </div>
         {isSubmitted && (
@@ -98,6 +107,8 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
                       onClick={() => handleSelect(qIdx, oIdx)}
                       disabled={isSubmitted}
                       data-testid={`quiz-option-${qIdx}-${oIdx}`}
+                      aria-pressed={isThisSelected}
+                      aria-label={`Option ${oIdx + 1}: ${opt}`}
                       className={`w-full text-left p-2 rounded-lg border text-[11px] transition-all flex items-center justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${borderClass} ${bgClass}`}
                     >
                       <span>{opt}</span>
@@ -123,14 +134,15 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
       </div>
 
       <div className="flex items-center justify-between pt-2">
-        {isSubmitted && !isPerfect ? (
+        {isSubmitted ? (
           <button
             type="button"
             onClick={handleReset}
+            aria-label={isPerfect ? 'Retake quiz for practice' : 'Try quiz again'}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)] transition-all cursor-pointer"
           >
             <ArrowClockwise size={13} />
-            <span>Try Again</span>
+            <span>{isPerfect ? 'Retake Quiz' : 'Try Again'}</span>
           </button>
         ) : <div />}
 
@@ -140,6 +152,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
             onClick={handleSubmit}
             disabled={!allAnswered}
             data-testid="submit-quiz-btn"
+            aria-label="Check quiz answers"
             className={`px-4 py-1.5 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
               allAnswered
                 ? 'bg-[var(--color-accent)] hover:brightness-110 text-white cursor-pointer active:scale-95 shadow-sm'

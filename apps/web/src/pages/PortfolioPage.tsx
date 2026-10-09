@@ -517,6 +517,8 @@ export function PortfolioPage() {
                 accept=".json,application/json"
                 className="hidden"
                 onChange={handleImportBackup}
+                id="portfolio-import-backup-file"
+                aria-label="Import JSON backup file"
               />
 
               <button
@@ -859,6 +861,8 @@ export function PortfolioPage() {
                       value={studentName}
                       onChange={(e) => handleNameChange(e.target.value)}
                       placeholder="Enter Recipient Name..."
+                      id="portfolio-recipient-name-input"
+                      aria-label="Enter recipient name for certificate"
                       className="bg-transparent border-none outline-none text-xs font-mono text-[var(--color-text-primary)] px-2 py-1 w-full sm:w-56"
                     />
                   </div>
@@ -1048,7 +1052,7 @@ export function PortfolioPage() {
                         </div>
                         <div>
                           <h3 className="font-bold text-sm text-[var(--color-text-primary)]">
-                            Track {track.number}: {track.title}
+                            {track.title.startsWith('Track ') ? track.title : `Track ${track.number}: ${track.title}`}
                           </h3>
                           <span className="text-[11px] font-mono text-[var(--color-text-secondary)]">
                             Badge: {track.badgeName}
@@ -1151,6 +1155,7 @@ export function PortfolioPage() {
                   <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">GitHub Personal Access Token (PAT with 'gist' scope):</label>
                   <input
                     type="password"
+                    aria-label="GitHub Personal Access Token (PAT)"
                     value={gistPat}
                     onChange={(e) => setGistPat(e.target.value)}
                     placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
@@ -1162,6 +1167,7 @@ export function PortfolioPage() {
                   <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">Passphrase (Used for AES-GCM Encryption / Decryption):</label>
                   <input
                     type="password"
+                    aria-label="AES-GCM Encryption Passphrase"
                     value={gistPassphrase}
                     onChange={(e) => setGistPassphrase(e.target.value)}
                     placeholder="Enter a secret passphrase"
@@ -1173,6 +1179,7 @@ export function PortfolioPage() {
                   <label className="block text-[11px] text-[var(--color-text-secondary)] mb-1">Gist ID (Only required if Restoring on a new device):</label>
                   <input
                     type="text"
+                    aria-label="GitHub Gist ID"
                     value={gistIdToRestore}
                     onChange={(e) => setGistIdToRestore(e.target.value)}
                     placeholder="e.g. 7f3b8c9d0e1f2a3b4c5d"

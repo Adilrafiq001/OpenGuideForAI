@@ -503,21 +503,21 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
     >
       <div className={`container-ai-input ${isOpen ? 'is-open' : ''} size-${chatSize}`}>
         {/* 15 3D Mouse Hover Tilt Areas */}
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
-        <div className="area" onClick={handleMascotClick} />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
+        <div className="area" onClick={handleMascotClick} aria-hidden="true" />
 
         <label className={`container-wrap ${isOpen ? 'is-open' : ''}`}>
           <input 
@@ -694,11 +694,11 @@ export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
                   )}
                   {isTyping && (
                     <div className="abby-message-bubble assistant">
-                      <div className="flex items-center gap-1.5 py-1 text-slate-400 text-xs">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span className="ml-2 font-mono text-[11px] text-slate-400">Synthesizing...</span>
+                      <div className="flex items-center gap-1.5 py-1 text-[var(--color-text-secondary)] text-xs">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
+                        <span className="ml-2 font-mono text-[11px] text-[var(--color-text-secondary)] font-semibold">Synthesizing...</span>
                       </div>
                     </div>
                   )}

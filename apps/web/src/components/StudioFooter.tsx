@@ -75,6 +75,8 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
 
   useEffect(() => {
     if (!legalModalOpen && !contactModalOpen && !changelogModalOpen && !sponsorModalOpen && !profilerModalOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setLegalModalOpen(false);
@@ -85,7 +87,10 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [legalModalOpen, contactModalOpen, changelogModalOpen, sponsorModalOpen, profilerModalOpen]);
 
   // Commit hash copy state
@@ -278,6 +283,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   type="email"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
+                  aria-label="Email address for lab drops"
                   placeholder="engineer@domain.com"
                   required
                   disabled={newsletterSubmitted}
@@ -907,6 +913,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                       type="text"
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                      aria-label="Your Name"
                       placeholder="Alex / AI Engineer"
                       className="w-full bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-[var(--color-accent)] rounded-xl px-3 py-2 text-xs text-[var(--color-text-primary)] outline-none"
                     />
@@ -920,6 +927,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                       type="email"
                       value={contactForm.email}
                       onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                      aria-label="Your Email (Optional)"
                       placeholder="engineer@domain.com"
                       className="w-full bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-[var(--color-accent)] rounded-xl px-3 py-2 text-xs text-[var(--color-text-primary)] outline-none"
                     />
@@ -951,6 +959,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                       required
                       value={contactForm.message}
                       onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                      aria-label="Contact Message"
                       placeholder="Detail your inquiry, proposed lab topic, or bug report..."
                       className="w-full bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-[var(--color-accent)] rounded-xl px-3 py-2 text-xs text-[var(--color-text-primary)] outline-none"
                     />

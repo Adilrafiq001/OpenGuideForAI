@@ -187,6 +187,7 @@ export function FirstTimeSetupModal({
               data-testid="first-time-skip-btn"
               className="px-3 py-1.5 rounded-xl text-xs font-mono text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors flex items-center gap-1 cursor-pointer shrink-0"
               title="Skip setup and explore directly"
+              aria-label="Skip setup and explore directly"
             >
               <span>Skip</span>
               <X size={14} />

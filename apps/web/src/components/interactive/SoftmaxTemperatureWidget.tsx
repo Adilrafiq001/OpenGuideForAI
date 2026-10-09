@@ -47,17 +47,18 @@ export const SoftmaxTemperatureWidget: React.FC = () => {
 
   return (
     <div
-      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-primary,#121316)] text-xs text-[var(--color-text-primary,#e5e7eb)] shadow-sm select-none"
+      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-primary)] text-xs text-[var(--color-text-primary)] shadow-sm select-none"
       data-testid="softmax-temperature-widget"
     >
       <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border)]/50">
-        <span className="font-semibold text-emerald-400 flex items-center gap-1.5">
+        <span className="font-semibold text-emerald-500 dark:text-emerald-400 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           Interactive: Softmax Temperature Scaling [P_i = exp(z_i / T) / Σ exp(z_j / T)]
         </span>
         <button
           onClick={() => setTemperature(0.7)}
-          className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-bg-secondary,#202227)] hover:bg-[var(--color-bg-tertiary,#2a2d35)] border border-[var(--color-border)] transition-colors cursor-pointer"
+          aria-label="Reset temperature to 0.7"
+          className="px-2 py-0.5 text-[10px] rounded bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] transition-colors cursor-pointer"
           title="Reset to default T=0.7"
         >
           Reset
@@ -65,8 +66,8 @@ export const SoftmaxTemperatureWidget: React.FC = () => {
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <label htmlFor="temp-slider" className="font-mono text-neutral-300">
-          Temperature T: <strong className="text-emerald-300 text-sm">{temperature.toFixed(2)}</strong>
+        <label htmlFor="temp-slider" className="font-mono text-[var(--color-text-secondary)]">
+          Temperature T: <strong className="text-emerald-500 dark:text-emerald-300 text-sm">{temperature.toFixed(2)}</strong>
         </label>
         <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--color-border)]" style={{ color: entropyLabel.color }}>
           {entropyLabel.label}
@@ -80,8 +81,12 @@ export const SoftmaxTemperatureWidget: React.FC = () => {
         max="3.0"
         step="0.05"
         value={temperature}
+        aria-valuemin={0.1}
+        aria-valuemax={3.0}
+        aria-valuenow={temperature}
+        aria-valuetext={`${temperature.toFixed(2)}`}
         onChange={e => setTemperature(parseFloat(e.target.value))}
-        className="w-full mt-1 accent-emerald-400 cursor-pointer h-1.5 bg-neutral-700 rounded-lg appearance-none"
+        className="w-full mt-1 accent-emerald-500 cursor-pointer h-1.5 bg-[var(--color-border)] rounded-lg appearance-none"
         aria-label="Softmax temperature slider"
       />
 
@@ -91,20 +96,20 @@ export const SoftmaxTemperatureWidget: React.FC = () => {
           const pct = (prob * 100).toFixed(1);
           return (
             <div key={item.token} className="flex items-center gap-2">
-              <span className="w-24 truncate text-neutral-300 text-[11px] text-right">"{item.token}"</span>
-              <div className="flex-1 h-3.5 bg-neutral-800 rounded overflow-hidden relative border border-neutral-700/50">
+              <span className="w-24 truncate text-[var(--color-text-secondary)] text-[11px] text-right">"{item.token}"</span>
+              <div className="flex-1 h-3.5 bg-[var(--color-secondary)] rounded overflow-hidden relative border border-[var(--color-border)]">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-100 ease-out"
                   style={{ width: `${Math.max(2, prob * 100)}%` }}
                 />
               </div>
-              <span className="w-12 text-right text-[11px] text-emerald-300 font-semibold">{pct}%</span>
+              <span className="w-12 text-right text-[11px] text-emerald-500 dark:text-emerald-300 font-semibold">{pct}%</span>
             </div>
           );
         })}
       </div>
 
-      <div className="mt-2 text-[10px] text-neutral-400 italic bg-[var(--color-bg-secondary,#181a1f)] p-1.5 rounded border border-[var(--color-border)]/40">
+      <div className="mt-2 text-[10px] text-[var(--color-text-secondary)] italic bg-[var(--color-secondary)] p-1.5 rounded border border-[var(--color-border)]/40">
         {entropyLabel.desc}
       </div>
     </div>

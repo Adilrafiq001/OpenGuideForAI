@@ -706,7 +706,7 @@ ZeroDivisionError: division by zero`;
       const mod = await import('/src/data/offlineKnowledge.ts');
       return mod.OFFLINE_KNOWLEDGE_BASE.length;
     });
-    expect(totalCount).toBe(255);
+    expect(totalCount).toBe(283);
     expect(totalCount).toBeGreaterThanOrEqual(250);
 
     const errors: string[] = [];
@@ -1241,7 +1241,215 @@ ZeroDivisionError: division by zero`;
     await closeBtn.click();
     await expect(copilotModal).not.toBeVisible();
   });
+
+  test('TC-AUDIT-006: 50 Application-Wide Defects Hardening Verification', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' && !msg.text().includes('favicon')) {
+        errors.push(msg.text());
+      }
+    });
+
+    // 1. Landing Page Accessible Controls
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    const spectrumSearch = page.locator('#landing-spectrum-search-input');
+    await expect(spectrumSearch).toBeVisible();
+    await expect(spectrumSearch).toHaveAttribute('aria-label', 'Search trades, dilemmas, or scenarios');
+
+    const heroCheckbox = page.locator('#hero-start-as-builder-mechanical-btn input[type="checkbox"]');
+    await expect(heroCheckbox).toHaveAttribute('aria-label', 'Mechanical launch toggle switch');
+
+    // 2. Settings Modal Sliders & BYOK Accessible Inputs
+    const settingsBtn = page.locator('button[aria-label="Themes and Studio Settings"]').first();
+    await settingsBtn.click();
+    const settingsModal = page.locator('[data-testid="theme-settings-modal-dialog"]');
+    await expect(settingsModal).toBeVisible();
+
+    const preferencesTabBtn = page.locator('[data-testid="tab-preferences-btn"]');
+    await preferencesTabBtn.click();
+
+    const byokKeyInput = page.locator('#byok-api-key-input');
+    await expect(byokKeyInput).toHaveAttribute('aria-label', 'BYOK API Key');
+
+    const byokModelInput = page.locator('#byok-model-input');
+    await expect(byokModelInput).toHaveAttribute('aria-label', 'Model Identifier');
+
+    // Test Escape key dismiss
+    await page.keyboard.press('Escape');
+    await expect(settingsModal).not.toBeVisible();
+
+    // 3. Offline Copilot Keyboard Dismiss
+    const askBlueeBtn = page.locator('#ask-bluee-now-btn');
+    await askBlueeBtn.click();
+    const copilotModal = page.locator('div[role="dialog"][aria-label="Offline AI Copilot"]');
+    await expect(copilotModal).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(copilotModal).not.toBeVisible();
+
+    // 4. Portfolio Page Accessible File & Certificate Inputs
+    await page.goto('/portfolio');
+    await page.waitForLoadState('domcontentloaded');
+
+    const fileInput = page.locator('#portfolio-import-backup-file');
+    await expect(fileInput).toHaveAttribute('aria-label', 'Import JSON backup file');
+
+    // Open sample preview to verify recipient name input
+    const previewBtn = page.locator('button:has-text("Preview Sample Document")');
+    if (await previewBtn.isVisible()) {
+      await previewBtn.click();
+      const recipientInput = page.locator('#portfolio-recipient-name-input');
+      await expect(recipientInput).toBeVisible();
+      await expect(recipientInput).toHaveAttribute('aria-label', 'Enter recipient name for certificate');
+    }
+
+    // 5. External Link Security: Target Blank Has Rel Noopener/Noreferrer
+    const externalLinks = await page.locator('a[target="_blank"]').all();
+    for (const link of externalLinks) {
+      const rel = await link.getAttribute('rel');
+      expect(rel).toBeTruthy();
+      expect(rel).toMatch(/(noopener|noreferrer)/);
+    }
+
+    // Zero console errors
+    expect(errors).toHaveLength(0);
+  });
+
+  test('TC-AUDIT-062: Builder & Curriculum 62-Defect Accessibility & Lifecycle Gate', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' && !msg.text().includes('favicon')) {
+        errors.push(msg.text());
+      }
+    });
+
+    // 1. Builder Track 0: CheckUnderstandingQuiz dynamic count & ARIA states
+    await page.goto('/builder/0/engine');
+    await page.waitForLoadState('domcontentloaded');
+
+    const quizHeader = page.locator('text=/Check Your Understanding \\(\\d+ Questions?\\)/');
+    await expect(quizHeader).toBeVisible({ timeout: 10000 });
+
+    // If already submitted/completed from a previous session, click Retake/Try Again to test selection
+    const retakeBtn = page.locator('button[aria-label="Retake quiz for practice"], button[aria-label="Try quiz again"]');
+    if (await retakeBtn.isVisible()) {
+      await retakeBtn.click();
+    }
+
+    const quizOption = page.locator('button[aria-label^="Option 1:"]').first();
+    await expect(quizOption).toBeVisible();
+    await expect(quizOption).toHaveAttribute('aria-pressed', 'false');
+    await quizOption.click();
+    await expect(quizOption).toHaveAttribute('aria-pressed', 'true');
+
+    const checkAnswersBtn = page.locator('button[aria-label="Check quiz answers"]');
+    await expect(checkAnswersBtn).toBeVisible();
+
+    // 2. PromptToPreviewLab controls & ARIA attributes
+    const offlineProviderBtn = page.locator('button:has-text("Offline Demo")').first();
+    await expect(offlineProviderBtn).toBeVisible();
+    await expect(offlineProviderBtn).toHaveAttribute('aria-pressed', 'true');
+
+    const viewCodeBtn = page.locator('button[aria-label="Toggle generated source code view"]');
+    await expect(viewCodeBtn).toBeVisible();
+    await expect(viewCodeBtn).toHaveAttribute('aria-pressed', 'false');
+
+    const generateBtn = page.locator('button[aria-label="Generate code and run live preview"]');
+    await expect(generateBtn).toBeVisible();
+
+    // 3. Builder Track 1: SpecStudioLab template selection & ARIA states
+    await page.goto('/builder/1/engine');
+    await page.waitForLoadState('domcontentloaded');
+
+    const prodSpecBtn = page.locator('#template-prod-spec');
+    await expect(prodSpecBtn).toBeVisible({ timeout: 10000 });
+    await expect(prodSpecBtn).toHaveAttribute('aria-pressed', 'true');
+
+    const resetSpecBtn = page.locator('button[aria-label="Reset current specification template"]');
+    await expect(resetSpecBtn).toBeVisible();
+
+    const copySpecBtn = page.locator('button[aria-label="Copy specification prompt to clipboard"]');
+    await expect(copySpecBtn).toBeVisible();
+
+    const simulateBtn = page.locator('button[aria-label="Simulate deterministic agent execution"]');
+    await expect(simulateBtn).toBeVisible();
+
+    // 4. Builder Track 2: DiffReaderLab mode toggles, scenario selectors, accept/reject
+    await page.goto('/builder/2/engine');
+    await page.waitForLoadState('domcontentloaded');
+
+    const unifiedBtn = page.locator('button:has-text("Unified")').first();
+    await expect(unifiedBtn).toBeVisible({ timeout: 10000 });
+    await expect(unifiedBtn).toHaveAttribute('aria-pressed', 'true');
+
+    const splitBtn = page.locator('button:has-text("Split")').first();
+    await expect(splitBtn).toBeVisible();
+    await expect(splitBtn).toHaveAttribute('aria-pressed', 'false');
+
+    const scenario1Btn = page.locator('button[aria-label^="Select scenario s1:"]').first();
+    await expect(scenario1Btn).toBeVisible();
+    await expect(scenario1Btn).toHaveAttribute('aria-pressed', 'true');
+
+    const rejectBtn = page.locator('button[aria-label="Reject diff and rollback changes"]');
+    await expect(rejectBtn).toBeVisible();
+
+    const acceptBtn = page.locator('button[aria-label="Accept diff and commit to dev branch"]');
+    await expect(acceptBtn).toBeVisible();
+
+    // 5. TrackBriefing keyboard navigation & back button
+    await page.goto('/track/0/intro');
+    await page.waitForLoadState('domcontentloaded');
+
+    const backBtn = page.locator('button[aria-label="Back to OpenGuide Studio"]');
+    await expect(backBtn).toBeVisible({ timeout: 10000 });
+
+    const firstLessonCard = page.locator('div[role="button"][aria-label^="Open lesson 1:"]').first();
+    await expect(firstLessonCard).toBeVisible();
+    await expect(firstLessonCard).toHaveAttribute('tabindex', '0');
+
+    // 6. Interactive widgets ARIA verification via Offline AI Copilot
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+    await page.evaluate(() => {
+      window.dispatchEvent(new CustomEvent('open-offline-copilot'));
+    });
+
+    const copilotModal = page.locator('.copilot-modal');
+    await expect(copilotModal).toBeVisible();
+
+    const searchInput = page.locator('#copilot-search-input');
+    await searchInput.fill('temperature');
+    const tempWidget = page.locator('[data-testid="softmax-temperature-widget"]');
+    await expect(tempWidget).toBeVisible({ timeout: 10000 });
+    const resetTempBtn = tempWidget.locator('button[aria-label="Reset temperature to 0.7"]');
+    await expect(resetTempBtn).toBeVisible();
+
+    await searchInput.fill('paged attention');
+    const pagedWidget = page.locator('[data-testid="paged-attention-widget"]');
+    await expect(pagedWidget).toBeVisible({ timeout: 10000 });
+    await expect(pagedWidget.locator('button[aria-label="Add 2 tokens to cache sequence"]')).toBeVisible();
+    await expect(pagedWidget.locator('button[aria-label="Evict 2 tokens from cache sequence"]')).toBeVisible();
+    await expect(pagedWidget.locator('button[aria-label="Reset KV cache to starter prompt sequence"]')).toBeVisible();
+
+    await searchInput.fill('cosine similarity');
+    const cosineWidget = page.locator('[data-testid="cosine-similarity-widget"]');
+    await expect(cosineWidget).toBeVisible({ timeout: 10000 });
+    const angle90Btn = cosineWidget.locator('button[aria-label="Set angle to 90 degrees (orthogonal)"]');
+    await expect(angle90Btn).toBeVisible();
+    await angle90Btn.click();
+    await expect(angle90Btn).toHaveAttribute('aria-pressed', 'true');
+
+    // Close Copilot via close button
+    const closeCopilotBtn = page.locator('#close-copilot-btn');
+    await closeCopilotBtn.click();
+    await expect(copilotModal).not.toBeVisible();
+
+    // Zero console errors
+    expect(errors).toHaveLength(0);
+  });
 });
+
 
 
 

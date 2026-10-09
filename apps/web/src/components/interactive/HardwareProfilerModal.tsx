@@ -171,10 +171,15 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
               </div>
               <input
                 type="range"
+                aria-label="Context Window Tokens"
                 min={512}
                 max={32768}
                 step={512}
                 value={contextTokens}
+                aria-valuemin={512}
+                aria-valuemax={32768}
+                aria-valuenow={contextTokens}
+                aria-valuetext={`${contextTokens.toLocaleString()} tokens`}
                 onChange={(e) => setContextTokens(Number(e.target.value))}
                 className="w-full accent-[var(--color-accent)] cursor-pointer"
               />
@@ -187,9 +192,14 @@ export const HardwareProfilerModal: React.FC<HardwareProfileProps> = ({ isOpen, 
               </div>
               <input
                 type="range"
+                aria-label="Batch Size"
                 min={1}
                 max={16}
                 value={batchSize}
+                aria-valuemin={1}
+                aria-valuemax={16}
+                aria-valuenow={batchSize}
+                aria-valuetext={`${batchSize} batch`}
                 onChange={(e) => setBatchSize(Number(e.target.value))}
                 className="w-full accent-[var(--color-accent)] cursor-pointer"
               />

@@ -175,6 +175,10 @@ test.describe('OpenGuide Comprehensive Features, Themes, Tour, Abby Physics & RT
   });
 
   test('07. PWA Installation: Manifest, PNG Icons & Install Prompt Banner', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('openguide_pwa_dismissed');
+      sessionStorage.removeItem('openguide_pwa_dismissed');
+    });
     await page.goto('/');
 
     // Verify manifest & icon links in DOM

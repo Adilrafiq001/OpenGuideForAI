@@ -109,13 +109,20 @@ export function CommandDock({ onOpenThemes, onOpenSettings, onOpenHelp, onOpenDe
     },
     {
       icon: <Terminal size={20} className={location.pathname.endsWith('/engine') ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-secondary)]'} />,
-      label: 'IDE Workspace (Pyodide)',
-      onClick: () => navigate(
-        location.pathname.includes('/track/4') ? '/track/4/engine' :
-        location.pathname.includes('/track/3') ? '/track/3/engine' :
-        location.pathname.includes('/track/2') ? '/track/2/engine' :
-        location.pathname.includes('/track/1') ? '/track/1/engine' : '/track/0/engine'
-      )
+      label: 'IDE Workspace',
+      onClick: () => {
+        const builderMatch = location.pathname.match(/\/builder\/(\d+)/);
+        if (builderMatch) {
+          navigate(`/builder/${builderMatch[1]}/engine`);
+          return;
+        }
+        const trackMatch = location.pathname.match(/\/track\/(\d+)/);
+        if (trackMatch) {
+          navigate(`/track/${trackMatch[1]}/engine`);
+          return;
+        }
+        navigate('/track/0/engine');
+      }
     },
     {
       icon: <Target size={20} className="text-[var(--color-accent)]" />,

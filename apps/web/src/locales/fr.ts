@@ -170,5 +170,21 @@ export const fr: Record<string, string> = {
   theme_settings_subtitle: '20 thèmes calibrés • Préférences du studio et BYOK',
   select_language: 'Sélectionner la Langue',
   footer_credit: 'Conçu et Architecturé par Adil Rafiq Dar (ARD)',
-  footer_tagline: 'Studio d’Ingénierie IA Open-Source • 100% Gratuit pour Toujours'
+  footer_tagline: 'Studio d’Ingénierie IA Open-Source • 100% Gratuit pour Toujours',
+
+  // Navigation & Hero Enhancements
+  nav_tour: 'Visite',
+  nav_portfolio: 'Portfolio',
+  nav_labs: 'Laboratoires',
+  nav_pathways: 'Parcours',
+  hero_never_coded_label: 'Jamais codé auparavant ?',
+  hero_never_coded_subtitle: 'Commencez sur le Parcours 0 : Zéro Absolu (0 Configuration)',
+  hero_never_coded_badge: 'Parcours 0 : Zéro Absolu',
+  ide_tab_lessons: 'Leçons',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: 'IA Déployée',
+  nav_forward_engineer_desc: 'Architecture Terrain, Chaînes d’Outils Agentes et Pile Souveraine à 0 $',
+  forward_engineer_title: 'Ingénierie IA Déployée sur le Terrain',
+  forward_engineer_badge: 'Standard de Production • Rigueur 0,001 %'
 };

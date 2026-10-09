@@ -153,8 +153,10 @@ export const LaunchTrack0HeroButton: React.FC<LaunchTrack0HeroButtonProps> = ({
               type="checkbox"
               checked={isChecked}
               onChange={() => {}}
+              readOnly
               tabIndex={-1}
               aria-hidden="true"
+              aria-label="Mechanical launch toggle switch"
               autoComplete="off"
               style={{ pointerEvents: 'none' }}
             />

@@ -149,6 +149,8 @@ export const BugHunterChallenge: React.FC = () => {
                 setRevealedHintTier(0);
                 setAdversarialTestPassed(null);
               }}
+              aria-pressed={activeScenarioIdx === idx}
+              aria-label={`Select Case ${idx + 1}: ${s.title}`}
               className={`px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
                 activeScenarioIdx === idx
                   ? 'bg-[var(--color-accent)] text-black font-bold shadow-sm'
@@ -176,6 +178,7 @@ export const BugHunterChallenge: React.FC = () => {
       <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2 text-[11px] font-mono">
         <button
           onClick={() => setActiveTab('diff')}
+          aria-pressed={activeTab === 'diff'}
           className={`pb-1 px-1 cursor-pointer transition-colors border-b-2 ${
             activeTab === 'diff' ? 'border-[var(--color-accent)] text-[var(--color-accent)] font-bold' : 'border-transparent text-[var(--color-text-secondary)]'
           }`}
@@ -184,6 +187,7 @@ export const BugHunterChallenge: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveTab('diagram')}
+          aria-pressed={activeTab === 'diagram'}
           className={`pb-1 px-1 cursor-pointer transition-colors border-b-2 ${
             activeTab === 'diagram' ? 'border-[var(--color-accent)] text-[var(--color-accent)] font-bold' : 'border-transparent text-[var(--color-text-secondary)]'
           }`}
@@ -192,6 +196,7 @@ export const BugHunterChallenge: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveTab('mutant')}
+          aria-pressed={activeTab === 'mutant'}
           className={`pb-1 px-1 cursor-pointer transition-colors border-b-2 ${
             activeTab === 'mutant' ? 'border-[var(--color-accent)] text-[var(--color-accent)] font-bold' : 'border-transparent text-[var(--color-text-secondary)]'
           }`}
@@ -259,6 +264,7 @@ export const BugHunterChallenge: React.FC = () => {
           {revealedHintTier < scenario.hints.length && (
             <button
               onClick={() => setRevealedHintTier(prev => Math.min(scenario.hints.length, prev + 1))}
+              aria-label={`Unlock hint tier ${revealedHintTier + 1}`}
               className="text-[11px] font-mono text-[var(--color-accent)] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>Unlock Next Tier</span>
@@ -289,6 +295,7 @@ export const BugHunterChallenge: React.FC = () => {
       <div className="flex items-center justify-between pt-1">
         <button
           onClick={handleRunAdversarialSuite}
+          aria-label="Execute Adversarial Stress Test Suite"
           className="px-4 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold text-xs flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all cursor-pointer shadow-sm"
         >
           <Bug size={14} />

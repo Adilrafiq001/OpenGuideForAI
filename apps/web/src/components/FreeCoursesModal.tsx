@@ -1502,6 +1502,7 @@ export const FreeCoursesModal: React.FC<FreeCoursesModalProps> = ({
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
                         <input
                           type="text"
+                          aria-label="Search lecture transcript text"
                           value={transcriptSearch}
                           onChange={(e) => setTranscriptSearch(e.target.value)}
                           placeholder="Search lecture transcript text..."

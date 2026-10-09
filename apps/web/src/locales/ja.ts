@@ -170,5 +170,21 @@ export const ja: Record<string, string> = {
   theme_settings_subtitle: '20種の調整済みテーマ • スタジオ設定＆BYOKキー',
   select_language: '言語を選択',
   footer_credit: '設計・開発: Adil Rafiq Dar (ARD)',
-  footer_tagline: 'オープンソースAIエンジニアリングスタジオ • 永久完全無料'
+  footer_tagline: 'オープンソースAIエンジニアリングスタジオ • 永久完全無料',
+
+  // Navigation & Hero Enhancements
+  nav_tour: 'ツアー',
+  nav_portfolio: 'ポートフォリオ',
+  nav_labs: 'ラボ',
+  nav_pathways: '学習パス',
+  hero_never_coded_label: 'プログラミング未経験ですか？',
+  hero_never_coded_subtitle: 'トラック0：絶対零度からスタート（環境構築不要）',
+  hero_never_coded_badge: 'トラック0：絶対零度',
+  ide_tab_lessons: 'レッスン',
+
+  // Forward Deployed AI Engineer Blueprint
+  nav_forward_engineer: '実戦配備AI',
+  nav_forward_engineer_desc: '現場アーキテクチャ、エージェントツールチェーン＆$0主権スタック',
+  forward_engineer_title: 'フォワードデプロイドAIエンジニアリング (FDE)',
+  forward_engineer_badge: '本番環境標準 • 0.001%の厳格性'
 };

@@ -204,6 +204,8 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                     className="absolute top-full left-0 pt-2 z-[150] pointer-events-auto"
                   >
                     <div 
+                      role="menu"
+                      aria-label="Tracks Menu"
                       style={{ backgroundColor: 'var(--color-secondary)' }}
                       className="w-96 rounded-2xl border border-[var(--color-border)] p-2.5 shadow-2xl shadow-black/40 backdrop-blur-2xl"
                     >
@@ -368,6 +370,8 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                     className="absolute top-full left-0 pt-2 z-[150] pointer-events-auto"
                   >
                     <div 
+                      role="menu"
+                      aria-label="Studio and Labs Menu"
                       style={{ backgroundColor: 'var(--color-secondary)' }}
                       className="w-88 rounded-2xl border border-[var(--color-border)] p-3 shadow-2xl shadow-black/40 backdrop-blur-2xl"
                     >

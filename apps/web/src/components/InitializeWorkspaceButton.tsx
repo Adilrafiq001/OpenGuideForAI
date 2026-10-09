@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/mechanical-button.css';
 
 interface InitializeWorkspaceButtonProps {
@@ -13,6 +13,13 @@ export const InitializeWorkspaceButton: React.FC<InitializeWorkspaceButtonProps>
 }) => {
   const [isChecked, setIsChecked] = useState(true); // defaultChecked per ARD mechanism
   const [isOpening, setIsOpening] = useState(false);
+  const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (openTimerRef.current) clearTimeout(openTimerRef.current);
+    };
+  }, []);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,7 +29,8 @@ export const InitializeWorkspaceButton: React.FC<InitializeWorkspaceButtonProps>
       setIsChecked(false); // Unchecks -> triggers :not(:checked) cover-open + gears + sparks
       setIsOpening(true);
       // Allow the opening sequence (0.9s cover-open + gooey spinning gears & sparks) to finish completely before redirecting
-      setTimeout(() => {
+      if (openTimerRef.current) clearTimeout(openTimerRef.current);
+      openTimerRef.current = setTimeout(() => {
         onClick();
       }, 1250);
     } else {

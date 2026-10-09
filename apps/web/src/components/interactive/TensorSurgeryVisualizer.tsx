@@ -86,7 +86,12 @@ export const TensorSurgeryVisualizer: React.FC = () => {
             min={1}
             max={8}
             value={batch}
+            aria-valuemin={1}
+            aria-valuemax={8}
+            aria-valuenow={batch}
+            aria-valuetext={`Batch ${batch}`}
             onChange={(e) => setBatch(Number(e.target.value))}
+            aria-label="Batch size (B)"
             className="w-full accent-[var(--color-accent)] cursor-pointer"
           />
         </div>
@@ -100,7 +105,12 @@ export const TensorSurgeryVisualizer: React.FC = () => {
             min={1}
             max={16}
             value={heads}
+            aria-valuemin={1}
+            aria-valuemax={16}
+            aria-valuenow={heads}
+            aria-valuetext={`Heads ${heads}`}
             onChange={(e) => setHeads(Number(e.target.value))}
+            aria-label="Attention heads (H)"
             className="w-full accent-[var(--color-accent)] cursor-pointer"
           />
         </div>
@@ -114,7 +124,12 @@ export const TensorSurgeryVisualizer: React.FC = () => {
             min={2}
             max={64}
             value={seqLen}
+            aria-valuemin={2}
+            aria-valuemax={64}
+            aria-valuenow={seqLen}
+            aria-valuetext={`Sequence Length ${seqLen}`}
             onChange={(e) => setSeqLen(Number(e.target.value))}
+            aria-label="Sequence length (S)"
             className="w-full accent-[var(--color-accent)] cursor-pointer"
           />
         </div>
@@ -129,7 +144,12 @@ export const TensorSurgeryVisualizer: React.FC = () => {
             max={64}
             step={8}
             value={headDim}
+            aria-valuemin={8}
+            aria-valuemax={64}
+            aria-valuenow={headDim}
+            aria-valuetext={`Head Dimension ${headDim}`}
             onChange={(e) => setHeadDim(Number(e.target.value))}
+            aria-label="Head dimension (D)"
             className="w-full accent-[var(--color-accent)] cursor-pointer"
           />
         </div>

@@ -321,10 +321,15 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
               <span className="text-slate-400">Virtual Distance:</span>
               <input
                 type="range"
+                aria-label="Virtual Screen Distance"
                 min="1.0"
                 max="5.0"
                 step="0.1"
                 value={virtualDistance}
+                aria-valuemin={1.0}
+                aria-valuemax={5.0}
+                aria-valuenow={virtualDistance}
+                aria-valuetext={`${virtualDistance} meters`}
                 onChange={(e) => setVirtualDistance(parseFloat(e.target.value))}
                 className="w-32 accent-cyan-400 cursor-pointer"
               />
@@ -336,10 +341,15 @@ export function AppWideSpatialHUD({ children }: AppWideSpatialHUDProps) {
               <span className="text-slate-400">Curvature:</span>
               <input
                 type="range"
+                aria-label="Screen Curvature"
                 min="0"
                 max="120"
                 step="5"
                 value={screenCurvature}
+                aria-valuemin={0}
+                aria-valuemax={120}
+                aria-valuenow={screenCurvature}
+                aria-valuetext={`${screenCurvature} degrees`}
                 onChange={(e) => setScreenCurvature(parseInt(e.target.value))}
                 className="w-32 accent-cyan-400 cursor-pointer"
               />

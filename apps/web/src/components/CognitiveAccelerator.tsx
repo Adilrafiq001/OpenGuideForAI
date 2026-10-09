@@ -261,6 +261,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
               <textarea
                 value={userBlurtText}
                 onChange={e => setUserBlurtText(e.target.value)}
+                aria-label="Blank canvas memory recall notes"
                 placeholder="Type down every single concept, formula, word, and mechanism you retained from memory now..."
                 className="w-full h-40 p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/60 font-mono text-xs focus:outline-none focus:border-purple-400 leading-relaxed custom-scrollbar"
                 autoFocus
@@ -377,6 +378,7 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
             <textarea
               value={userFeynmanText}
               onChange={e => setUserFeynmanText(e.target.value)}
+              aria-label="Feynman simple explanation input"
               placeholder="Start explaining without using buzzwords... (e.g. 'Imagine two friends holding flashlights...')"
               className="w-full h-32 p-4 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/60 font-mono text-xs focus:outline-none focus:border-amber-400 leading-relaxed custom-scrollbar"
             />

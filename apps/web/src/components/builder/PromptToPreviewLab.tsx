@@ -9,7 +9,8 @@ import {
   ArrowClockwise, 
   ShieldCheck, 
   Lightning,
-  WarningCircle
+  WarningCircle,
+  Eye
 } from '@phosphor-icons/react';
 import { 
   type BuilderProviderType, 
@@ -121,12 +122,21 @@ export function PromptToPreviewLab({
     setIsPreviewRunning(true);
   };
 
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
   const handleCopyCode = async () => {
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(generatedHtml);
         setCopiedCode(true);
-        setTimeout(() => setCopiedCode(false), 2000);
+        if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+        copyTimerRef.current = setTimeout(() => setCopiedCode(false), 2000);
       }
     } catch {}
   };
@@ -149,6 +159,7 @@ export function PromptToPreviewLab({
             <button
               onClick={() => setProvider('offline')}
               data-testid="provider-offline-btn"
+              aria-pressed={provider === 'offline'}
               className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
                 provider === 'offline' 
                   ? 'bg-[var(--color-accent)] text-white shadow-xs' 
@@ -163,6 +174,7 @@ export function PromptToPreviewLab({
                 if (!hasBuilderApiKey()) setIsKeyModalOpen(true);
               }}
               data-testid="provider-byok-btn"
+              aria-pressed={provider === 'gemini-byok'}
               className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 provider === 'gemini-byok' 
                   ? 'bg-amber-600 text-white shadow-xs' 
@@ -175,6 +187,7 @@ export function PromptToPreviewLab({
             <button
               onClick={() => setProvider('mock')}
               data-testid="provider-mock-btn"
+              aria-pressed={provider === 'mock'}
               className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
                 provider === 'mock' 
                   ? 'bg-indigo-600 text-white shadow-xs' 
@@ -192,6 +205,7 @@ export function PromptToPreviewLab({
             <button
               onClick={() => setIsKeyModalOpen(true)}
               data-testid="open-api-key-modal-btn"
+              aria-label="Manage Gemini API Key"
               className="px-2 py-1 rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-primary)] text-[11px] text-amber-500 flex items-center gap-1 transition-colors cursor-pointer"
               title="Manage Gemini API Key"
             >
@@ -200,18 +214,20 @@ export function PromptToPreviewLab({
             </button>
           )}
 
-          <Tooltip position="bottom" content={isViewCodeOpen ? 'Hide Generated Code' : 'View Generated Code (Read-Only)'}>
+          <Tooltip position="bottom" content={isViewCodeOpen ? 'Hide Generated Code & Return to Preview' : 'View Generated Code (Read-Only)'}>
             <button
               onClick={() => setIsViewCodeOpen(!isViewCodeOpen)}
               data-testid="toggle-view-code-btn"
+              aria-pressed={isViewCodeOpen}
+              aria-label={isViewCodeOpen ? 'Hide Generated Code & Return to Preview' : 'View Generated Code (Read-Only)'}
               className={`px-2.5 py-1 rounded-lg border text-[11px] flex items-center gap-1.5 transition-all cursor-pointer ${
                 isViewCodeOpen 
                   ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]' 
                   : 'border-[var(--color-border)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
               }`}
             >
-              <Code size={14} />
-              <span className="hidden sm:inline">View Code</span>
+              {isViewCodeOpen ? <Eye size={14} /> : <Code size={14} />}
+              <span className="hidden sm:inline">{isViewCodeOpen ? 'Show Preview' : 'View Code'}</span>
             </button>
           </Tooltip>
 
@@ -220,6 +236,7 @@ export function PromptToPreviewLab({
               <button
                 onClick={handleStopPreview}
                 data-testid="stop-preview-btn"
+                aria-label="Stop preview execution"
                 className="px-2.5 py-1 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
               >
                 <Stop size={13} weight="fill" />
@@ -230,6 +247,7 @@ export function PromptToPreviewLab({
             <button
               onClick={handleRestartPreview}
               data-testid="restart-preview-btn"
+              aria-label="Resume preview execution"
               className="px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
             >
               <Play size={13} weight="fill" />
@@ -255,6 +273,7 @@ export function PromptToPreviewLab({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setBlueprintMode('structured')}
+                aria-pressed={blueprintMode === 'structured'}
                 className={`px-2 py-0.5 rounded text-[10px] transition-all cursor-pointer ${
                   blueprintMode === 'structured' ? 'bg-[var(--color-accent)] text-white font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
@@ -263,6 +282,7 @@ export function PromptToPreviewLab({
               </button>
               <button
                 onClick={() => setBlueprintMode('freeform')}
+                aria-pressed={blueprintMode === 'freeform'}
                 className={`px-2 py-0.5 rounded text-[10px] transition-all cursor-pointer ${
                   blueprintMode === 'freeform' ? 'bg-[var(--color-accent)] text-white font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
@@ -275,9 +295,11 @@ export function PromptToPreviewLab({
           {blueprintMode === 'structured' ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-sky-400">1. Goal (What It Is)</label>
+                <label htmlFor="blueprint-goal-input" className="text-[10px] uppercase font-bold text-sky-400">1. Goal (What It Is)</label>
                 <input
                   type="text"
+                  id="blueprint-goal-input"
+                  aria-label="1. Goal (What It Is)"
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="e.g. Smart Tip Calculator"
@@ -286,9 +308,11 @@ export function PromptToPreviewLab({
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-amber-400">2. Controls (User Inputs)</label>
+                <label htmlFor="blueprint-controls-input" className="text-[10px] uppercase font-bold text-amber-400">2. Controls (User Inputs)</label>
                 <input
                   type="text"
+                  id="blueprint-controls-input"
+                  aria-label="2. Controls (User Inputs)"
                   value={controls}
                   onChange={(e) => setControls(e.target.value)}
                   placeholder="e.g. Bill input & tip buttons"
@@ -297,9 +321,11 @@ export function PromptToPreviewLab({
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-emerald-400">3. Rules (Calculation)</label>
+                <label htmlFor="blueprint-rules-input" className="text-[10px] uppercase font-bold text-emerald-400">3. Rules (Calculation)</label>
                 <input
                   type="text"
+                  id="blueprint-rules-input"
+                  aria-label="3. Rules (Calculation)"
                   value={rules}
                   onChange={(e) => setRules(e.target.value)}
                   placeholder="e.g. Total = bill + tip"
@@ -311,6 +337,8 @@ export function PromptToPreviewLab({
           ) : (
             <textarea
               rows={2}
+              id="blueprint-freeform-textarea"
+              aria-label="Freeform application description prompt"
               value={freeformPrompt}
               onChange={(e) => setFreeformPrompt(e.target.value)}
               placeholder="Describe the application you want to build..."
@@ -329,6 +357,7 @@ export function PromptToPreviewLab({
               onClick={() => handleGenerate()}
               disabled={isGenerating}
               data-testid="generate-preview-btn"
+              aria-label="Generate code and run live preview"
               className="px-4 py-1.5 rounded-lg bg-[var(--color-accent)] hover:brightness-110 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm disabled:opacity-50"
             >
               {isGenerating ? <ArrowClockwise size={14} className="animate-spin" /> : <Play size={13} weight="fill" />}
@@ -352,13 +381,24 @@ export function PromptToPreviewLab({
             <div className="flex-1 flex flex-col min-h-0 bg-[#090d16] text-[#e2e8f0]">
               <div className="h-9 px-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60 shrink-0">
                 <span className="text-[11px] font-bold text-slate-400">Generated Single-Page Source (index.html)</span>
-                <button
-                  onClick={handleCopyCode}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-200 transition-colors cursor-pointer"
-                >
-                  {copiedCode ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                  <span>{copiedCode ? 'Copied!' : 'Copy Code'}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleCopyCode}
+                    aria-label="Copy generated HTML source"
+                    className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-200 transition-colors cursor-pointer"
+                  >
+                    {copiedCode ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                    <span>{copiedCode ? 'Copied!' : 'Copy Code'}</span>
+                  </button>
+                  <button
+                    onClick={() => setIsViewCodeOpen(false)}
+                    aria-label="Return to interactive sandboxed preview"
+                    className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-200 hover:text-white transition-colors cursor-pointer border border-slate-700/50"
+                  >
+                    <Eye size={11} />
+                    <span>Back to Preview</span>
+                  </button>
+                </div>
               </div>
               <div className="flex-1 overflow-auto p-4 font-mono text-[11px] leading-relaxed selection:bg-cyan-500/30">
                 <pre><code>{generatedHtml || '<!-- No code generated yet. Click Generate & Preview above. -->'}</code></pre>
@@ -388,6 +428,7 @@ export function PromptToPreviewLab({
               <button
                 onClick={handleRestartPreview}
                 data-testid="resume-preview-btn"
+                aria-label="Resume sandboxed preview execution"
                 className="px-4 py-1.5 rounded-lg bg-[var(--color-accent)] hover:brightness-110 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
               >
                 <Play size={13} weight="fill" />

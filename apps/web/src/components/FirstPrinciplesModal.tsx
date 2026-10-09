@@ -161,6 +161,7 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
                 <input
                   type="text"
                   placeholder="Filter questions..."
+                  aria-label="Filter first principles questions"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-[var(--color-primary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#10b981)] focus:border-[var(--color-accent,#10b981)] shadow-inner"

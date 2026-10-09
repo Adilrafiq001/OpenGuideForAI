@@ -52,7 +52,7 @@ export const CosineSimilarityWidget: React.FC = () => {
 
   return (
     <div
-      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-primary,#121316)] text-xs text-[var(--color-text-primary,#e5e7eb)] shadow-sm select-none"
+      className="p-3 my-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-primary)] text-xs text-[var(--color-text-primary)] shadow-sm select-none"
       data-testid="cosine-similarity-widget"
     >
       <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border)]/50">
@@ -65,10 +65,12 @@ export const CosineSimilarityWidget: React.FC = () => {
             <button
               key={deg}
               onClick={() => setAngleDeg(deg)}
+              aria-pressed={angleDeg === deg}
+              aria-label={`Set angle to ${deg} degrees`}
               className={`px-1.5 py-0.5 text-[10px] rounded border transition-colors cursor-pointer ${
                 angleDeg === deg
-                  ? 'bg-amber-500/20 border-amber-500 text-amber-300 font-bold'
-                  : 'bg-[var(--color-bg-secondary,#202227)] border-[var(--color-border)] text-neutral-400'
+                  ? 'bg-amber-500/20 border-amber-500 text-amber-500 font-bold'
+                  : 'bg-[var(--color-secondary)] border-[var(--color-border)] text-[var(--color-text-secondary)]'
               }`}
             >
               {deg}°
@@ -82,11 +84,11 @@ export const CosineSimilarityWidget: React.FC = () => {
         <div className="relative flex-shrink-0">
           <svg width="150" height="150" viewBox="0 0 150 150" className="overflow-visible">
             {/* Unit circle outline */}
-            <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" strokeDasharray="3 3" />
+            <circle cx={cx} cy={cy} r={r} fill="none" stroke="currentColor" className="text-[var(--color-border)]" strokeWidth="1.5" strokeDasharray="3 3" />
 
             {/* Axes */}
-            <line x1={cx - r - 8} y1={cy} x2={cx + r + 8} y2={cy} stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
-            <line x1={cx} y1={cy - r - 8} x2={cx} y2={cy + r + 8} stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+            <line x1={cx - r - 8} y1={cy} x2={cx + r + 8} y2={cy} stroke="currentColor" className="text-[var(--color-border)]" strokeWidth="1" />
+            <line x1={cx} y1={cy - r - 8} x2={cx} y2={cy + r + 8} stroke="currentColor" className="text-[var(--color-border)]" strokeWidth="1" />
 
             {/* Vector A (fixed along x-axis) */}
             <line x1={cx} y1={cy} x2={ax} y2={ay} stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
@@ -94,19 +96,19 @@ export const CosineSimilarityWidget: React.FC = () => {
             <text x={ax + 6} y={ay + 3} fill="#f59e0b" fontSize="9" fontFamily="monospace" fontWeight="bold">A</text>
 
             {/* Vector B (interactive angle) */}
-            <line x1={cx} y1={cy} x2={bx} y2={by} stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx={bx} cy={by} r="3.5" fill="#38bdf8" />
-            <text x={bx + 6} y={by + 3} fill="#38bdf8" fontSize="9" fontFamily="monospace" fontWeight="bold">B</text>
+            <line x1={cx} y1={cy} x2={bx} y2={by} stroke="#0284c7" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx={bx} cy={by} r="3.5" fill="#0284c7" />
+            <text x={bx + 6} y={by + 3} fill="#0284c7" fontSize="9" fontFamily="monospace" fontWeight="bold">B</text>
 
             {/* Origin */}
-            <circle cx={cx} cy={cy} r="2.5" fill="#ffffff" />
+            <circle cx={cx} cy={cy} r="2.5" fill="currentColor" className="text-[var(--color-text-primary)]" />
           </svg>
         </div>
 
         {/* Readout & Controls */}
         <div className="flex-1 w-full space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-neutral-300">Angle θ: <strong className="text-amber-300">{angleDeg}°</strong></span>
+            <span className="font-mono text-[var(--color-text-secondary)]">Angle θ: <strong className="text-amber-500 font-bold">{angleDeg}°</strong></span>
             <span className="font-mono font-bold text-sm px-2 py-0.5 rounded border border-[var(--color-border)]" style={{ color: status.color }}>
               cos(θ) = {cosVal.toFixed(3)}
             </span>
@@ -118,20 +120,23 @@ export const CosineSimilarityWidget: React.FC = () => {
             max="360"
             step="1"
             value={angleDeg}
+            aria-valuemin={0}
+            aria-valuemax={360}
+            aria-valuenow={angleDeg}
             onChange={e => setAngleDeg(parseInt(e.target.value, 10))}
-            className="w-full accent-amber-400 cursor-pointer h-1.5 bg-neutral-700 rounded-lg appearance-none"
+            className="w-full accent-amber-500 cursor-pointer h-1.5 bg-[var(--color-border)] rounded-lg appearance-none"
             aria-label="Cosine angle slider"
           />
 
-          <div className="p-2 rounded bg-[var(--color-bg-secondary,#181a1f)] border border-[var(--color-border)]/50 font-mono text-[11px]">
-            <div className="flex justify-between text-neutral-400 text-[10px] mb-1">
+          <div className="p-2 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] font-mono text-[11px]">
+            <div className="flex justify-between text-[var(--color-text-secondary)] text-[10px] mb-1">
               <span>Vector A = [1.000, 0.000]</span>
               <span>Vector B = [{cosVal.toFixed(3)}, {sinVal.toFixed(3)}]</span>
             </div>
             <div className="font-semibold" style={{ color: status.color }}>
               Status: {status.label}
             </div>
-            <div className="text-[10px] text-neutral-400 italic mt-0.5">
+            <div className="text-[10px] text-[var(--color-text-secondary)] italic mt-0.5">
               {status.desc}
             </div>
           </div>

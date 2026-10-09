@@ -355,10 +355,15 @@ export function WebXRControls({ className = '' }: { className?: string }) {
             </div>
             <input 
               type="range"
+              aria-label="Display screen curvature"
               min="0"
               max="120"
               step="5"
               value={screenCurvature}
+              aria-valuemin={0}
+              aria-valuemax={120}
+              aria-valuenow={screenCurvature}
+              aria-valuetext={`${screenCurvature} degrees`}
               onChange={(e) => setScreenCurvature(Number(e.target.value))}
               className="w-full accent-cyan-400 cursor-pointer"
             />
@@ -376,10 +381,15 @@ export function WebXRControls({ className = '' }: { className?: string }) {
             </div>
             <input 
               type="range"
+              aria-label="Virtual projection distance"
               min="1.0"
               max="5.0"
               step="0.2"
               value={virtualDistance}
+              aria-valuemin={1.0}
+              aria-valuemax={5.0}
+              aria-valuenow={virtualDistance}
+              aria-valuetext={`${virtualDistance.toFixed(1)} meters`}
               onChange={(e) => setVirtualDistance(Number(e.target.value))}
               className="w-full accent-cyan-400 cursor-pointer"
             />

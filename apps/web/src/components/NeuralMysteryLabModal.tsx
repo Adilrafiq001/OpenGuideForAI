@@ -848,9 +848,9 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                       </div>
 
                       {/* Raw File Viewer */}
-                      <div className="rounded-2xl border border-[var(--color-border)] bg-black/95 overflow-hidden">
-                        <div className="p-3 bg-neutral-900 border-b border-neutral-800 flex items-center justify-between text-[11px] text-neutral-400">
-                          <span className="font-bold text-neutral-200">{selectedRawFile}</span>
+                      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-primary)] overflow-hidden">
+                        <div className="p-3 bg-[var(--color-secondary)] border-b border-[var(--color-border)] flex items-center justify-between text-[11px] text-[var(--color-text-secondary)]">
+                          <span className="font-bold text-[var(--color-text-primary)]">{selectedRawFile}</span>
                           <span>Read-Only Forensic Dump</span>
                         </div>
                         <pre className="p-4 text-emerald-400 overflow-x-auto text-[11px] leading-relaxed max-h-72">
@@ -910,6 +910,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
 
                     <button
                       onClick={handleCopyCode}
+                      aria-label="Copy terminal python code"
                       className="px-3 py-1 rounded-full text-xs font-mono bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-center gap-1.5 cursor-pointer text-[var(--color-text-secondary)]"
                     >
                       <Copy size={12} />
@@ -918,17 +919,18 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                   </div>
 
                   {/* Code Editor */}
-                  <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-black/90">
-                    <div className="px-4 py-2.5 bg-neutral-900 border-b border-neutral-800 flex items-center justify-between">
+                  <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-[var(--color-primary)]">
+                    <div className="px-4 py-2.5 bg-[var(--color-secondary)] border-b border-[var(--color-border)] flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                        <span className="text-[11px] text-neutral-400 ml-2">forensic_analysis_kernel.py</span>
+                        <span className="text-[11px] text-[var(--color-text-secondary)] ml-2">forensic_analysis_kernel.py</span>
                       </div>
                       <button
                         onClick={handleRunInvestigation}
                         disabled={isRunningCode}
+                        aria-label="Run forensic audit"
                         className="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
                       >
                         <Play size={12} />
@@ -938,6 +940,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                     <textarea
                       value={terminalCode}
                       onChange={(e) => setTerminalCode(e.target.value)}
+                      aria-label="Forensic audit Python code editor"
                       rows={11}
                       className="w-full p-4 bg-transparent text-emerald-400 font-mono text-xs focus:outline-none resize-none leading-relaxed selection:bg-emerald-500 selection:text-black"
                       spellCheck={false}
@@ -983,11 +986,11 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                   </div>
 
                   {/* Guardrail Code Editor */}
-                  <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-black/90">
-                    <div className="px-4 py-2.5 bg-neutral-900 border-b border-neutral-800 flex items-center justify-between">
+                  <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden font-mono text-xs bg-[var(--color-primary)]">
+                    <div className="px-4 py-2.5 bg-[var(--color-secondary)] border-b border-[var(--color-border)] flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-cyan-500/80" />
-                        <span className="text-[11px] text-neutral-300 font-bold">defense_guardrail_patch.py</span>
+                        <span className="text-[11px] text-[var(--color-text-primary)] font-bold">defense_guardrail_patch.py</span>
                       </div>
                       <button
                         onClick={handleTestGuardrail}
@@ -1000,6 +1003,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                     <textarea
                       value={guardrailCode}
                       onChange={(e) => setGuardrailCode(e.target.value)}
+                      aria-label="Defense guardrail Python patch editor"
                       rows={16}
                       className="w-full p-4 bg-transparent text-cyan-300 font-mono text-xs focus:outline-none resize-none leading-relaxed selection:bg-cyan-400 selection:text-black"
                       spellCheck={false}
@@ -1181,6 +1185,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                             type="text"
                             value={stage1Input}
                             onChange={(e) => setStage1Input(e.target.value)}
+                            aria-label="Stage 1 Suspect or Chunk ID"
                             placeholder="e.g. Chunk-007 or Dr. Zachary Sterling"
                             className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] font-mono"
                           />
@@ -1239,6 +1244,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
                               type="text"
                               value={stage2Input}
                               onChange={(e) => setStage2Input(e.target.value)}
+                              aria-label="Stage 2 Corporate Mastermind"
                               placeholder="e.g. Miranda Vance"
                               className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] focus:outline-none focus:border-cyan-400 font-mono"
                             />

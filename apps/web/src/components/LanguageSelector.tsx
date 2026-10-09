@@ -47,6 +47,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
+        aria-haspopup="listbox"
         aria-label="Select interface language"
         className={buttonClasses}
       >

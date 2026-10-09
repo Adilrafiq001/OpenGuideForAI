@@ -521,6 +521,10 @@ export function SynapseLounge() {
                       max="360"
                       value={probeAngle}
                       aria-label="Probe Vector Angle"
+                      aria-valuemin={0}
+                      aria-valuemax={360}
+                      aria-valuenow={probeAngle}
+                      aria-valuetext={`${probeAngle} degrees`}
                       onChange={(e) => {
                         hasInteractedAngleRef.current = true;
                         setProbeAngle(Number(e.target.value));
@@ -684,6 +688,10 @@ export function SynapseLounge() {
                         step="0.5"
                         value={neuronWeights.w1}
                         aria-label="Neuron Weight 1 (W1)"
+                        aria-valuemin={-2}
+                        aria-valuemax={2}
+                        aria-valuenow={neuronWeights.w1}
+                        aria-valuetext={`${neuronWeights.w1}`}
                         onChange={(e) => {
                           hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, w1: Number(e.target.value) }));
@@ -726,6 +734,10 @@ export function SynapseLounge() {
                         step="0.5"
                         value={neuronWeights.w2}
                         aria-label="Neuron Weight 2 (W2)"
+                        aria-valuemin={-2}
+                        aria-valuemax={2}
+                        aria-valuenow={neuronWeights.w2}
+                        aria-valuetext={`${neuronWeights.w2}`}
                         onChange={(e) => {
                           hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, w2: Number(e.target.value) }));
@@ -768,6 +780,10 @@ export function SynapseLounge() {
                         step="0.5"
                         value={neuronWeights.bias}
                         aria-label="Activation Bias (B)"
+                        aria-valuemin={-3}
+                        aria-valuemax={2}
+                        aria-valuenow={neuronWeights.bias}
+                        aria-valuetext={`${neuronWeights.bias}`}
                         onChange={(e) => {
                           hasInteractedGateRef.current = true;
                           setNeuronWeights(nw => ({ ...nw, bias: Number(e.target.value) }));
@@ -947,6 +963,10 @@ export function SynapseLounge() {
                       step="0.05"
                       value={temperature}
                       aria-label="Softmax Temperature (τ)"
+                      aria-valuemin={0.1}
+                      aria-valuemax={2.5}
+                      aria-valuenow={temperature}
+                      aria-valuetext={`${temperature.toFixed(2)}`}
                       onChange={(e) => {
                         hasInteractedAttentionRef.current = true;
                         setTemperature(Number(e.target.value));
@@ -989,6 +1009,7 @@ export function SynapseLounge() {
                             playSound('click', soundFx);
                             setUseScaleFactor(e.target.checked);
                           }}
+                          aria-label="Scale by square root of d_k"
                           className="rounded accent-[var(--color-accent)]"
                         />
                         <span>Scale by √d_k (d_k=64, √d_k=8)</span>
