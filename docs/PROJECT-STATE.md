@@ -8,6 +8,46 @@ BRANCH: dev         <- active development and all testing strictly confined to d
 
 
 **Done:**
+- **Phase F14: Header Navigation Consolidation, FDE Enterprise Knowledge Bank Elevation & ASD Purge (Release v1.6.0 • 100% Certified):**
+  - **1. Header Navigation Consolidation & Zero Ribbon Clutter (`LandingHeader.tsx`):**
+    - Removed standalone top navigation buttons for "Forward AI", "Labs", and "Pathways" that previously sprawled across the desktop navbar.
+    - Embedded Forward Deployed AI Engineering (FDE) as a premier hero card inside the unified "Tracks & Curriculum" dropdown flyout (`#nav-tracks-menu`), with instant click handling (`data-testid="header-forward-engineer-btn"`), systems role subtitle (`Field Architecture • Agentic Toolchains • Production Enclaves`), and `FDE Spec` badge.
+    - Eliminated redundant `FDE Spec` button from the dropdown footer quick-access row, converting it into a clean, well-spaced 3-column grid (`57 Labs`, `Tracks`, `Pathways`).
+    - Resolved WCAG AAA theme contrast for cyan accent elements (`text-cyan-700 dark:text-cyan-300`, `border-cyan-600/30 dark:border-cyan-400/30`) across all 24 calibrated light and dark themes.
+    - Reduced desktop top bar to 3 clean, uncluttered navigation groups (`Tracks & Curriculum ▾`, `Studio & Labs ▾`, `Portfolio`), eliminating horizontal ribbon overflow.
+  - **2. Purge of Public ASD-STE100 Mentions & Controlled Rigor Application:**
+    - Purged all public mentions of "ASD" / "ASD-STE100" from UI copy, modal badges, subtitles, pill names, and tabs per user direction (*"ASD-STE100 is to be applied, not written"*).
+    - Modal badge updated from `ASD-STE100 • 0.001% Rigor` to `Production Standard • 0.001% Rigor`.
+    - Modal Tab 1 matrix renamed to Systems Role Matrix with pure systems engineering terminology.
+    - Internalized controlled specification rigor into prompt contracts, condition-action-outcome rules, and autograder definitions.
+  - **3. FDE Knowledge Bank Elevated to Enterprise One-Stop Powerhouse (`forwardEngineerKnowledge.ts`, `ForwardEngineerModal.tsx`):**
+    - Replaced basic overview notes with 24 deep, production-grade operational cards across 9 enterprise categories:
+      1. Architecture & Enterprise Integration (Core Systems Discipline, Hybrid BM25+Dense RAG & Cross-Encoder Re-Ranking, Model Adaptation Decision Matrix: Fine-Tuning vs RAG vs In-Context Learning).
+      2. Agentic Toolchains (Agentic IDE Harnesses, Autonomous Execution Loops: Reproduce→Root Cause→Surgical Fix→Verify, Hierarchical Multi-Agent Orchestration & StateGraphs).
+      3. FastMCP & Tool Execution Sandboxes (FastMCP Tool Server Architecture, Dynamic Tool Discovery & Pagination, Process-Level Sandboxing & Path Traversal Guards).
+      4. Context Windows & Token Economics (Context Window Compaction & Sliding Windows, Prompt Caching & KV Cache Architecture, Grammar-Constrained Decoding & Outlines).
+      5. Governance & Constitutions (AGENTS.md Multi-Zone Constitutional Governance, Anti-AI-Slop Standards: Systems Engineering vs Generic Vibes, Human-in-the-Loop Gateways & Execution Escrow).
+      6. Specification & Deterministic Systems (Deterministic Systems Specification & 0.001% Matrix, Finite State Machine Agent Steering, Deterministic Seeding & Replayable Transcripts).
+      7. Security & OWASP Top 10 for LLMs (Zero-Leakage BYOK & Secret Isolation, Indirect Prompt Injection & Canary Token Defenses, Hallucination Firewalls & Grounding Ratios, Denial of Wallet & Token Exhaustion Mitigation).
+      8. Evals & Continuous Quality Gates (Production Evals & Mutation Testing, 5-Point Local Pre-Flight Gate & Zero-Tolerance CI, OpenTelemetry Distributed Agent Tracing).
+      9. Sovereign Cloud & Edge Architecture ($0 Sovereign Stack, Air-Gapped Sovereign Deployment & On-Device WASM, Local-First Persistence & IndexedDB Storage).
+    - Every card contains production-grade copyable code (FastMCP Python servers, sliding window compactors, RRF hybrid retrieval, canary token verifiers, WebCrypto vaults, Dexie schemas, and OTel spans).
+  - **4. Checkpoint R Strategic Decisions Formally Resolved (`docs/OPEN-QUESTIONS.md`):**
+    - Q-R1: "The Builder Path" (Subtitled: *From Vibe Coder to Agentic Engineer*) approved as primary learner-facing front door name.
+    - Q-R2: Strictly isolated `iframe` with `sandbox="allow-scripts"` and strict CSP approved for preview/review sandbox labs.
+    - Q-R3: 1-click modal choice onboarding fork approved with top-bar instant switching.
+    - Q-R4: Single shared modules with dual-audience tags (`audience: ["builder", "engineer"]`) approved.
+    - Q-R5: Automated readability plain-language lint standard approved.
+  - **5. Lint & State Hygiene (0 Warnings, 0 Errors):**
+    - Cleaned up unescaped regex in `TrackBriefing.tsx`.
+    - Removed synchronous `setState` in `useEffect` across `ThemeSettingsModal.tsx`, `FreeToolsModal.tsx`, `FreeCoursesModal.tsx`, `FirstPrinciplesModal.tsx`, and `CommandDock.tsx`.
+    - `yarn lint` passed with 0 warnings and 0 errors across 152 files.
+  - **6. 5-Point Local Pre-Flight Gate & E2E Verification:**
+    - Local dev server HTTP 200 OK verified.
+    - Playwright MCP physical browser verification with 0 console errors.
+    - `yarn lint` 0 warnings, 0 errors.
+    - Production build compiled with 0 errors via `yarn --cwd apps/web build`.
+    - All tests passing.
 - **Phase F13: Forward Deployed AI Engineer Blueprint, Complete Builder Path (B0–B7) & 55 Project Defect Fixes (Release v1.6.0 • 100% Certified):**
   - **1. Forward Deployed AI Engineer (FDE) Operational Blueprint (`ForwardEngineerModal.tsx`, `LandingHeader.tsx`, `MobileNavDrawer.tsx`, `CommandPaletteModal.tsx`, `StudioInteractiveDemoModal.tsx`, `AppTour.tsx`):**
     - Built comprehensive 6-tab modal containing:

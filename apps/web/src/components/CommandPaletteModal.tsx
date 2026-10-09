@@ -160,7 +160,7 @@ export function CommandPaletteModal({ isOpen, onClose, onOpenThemes: _onOpenThem
       list.push({
         id: 'tool-forward-engineer',
         title: 'Forward Deployed AI Engineering Blueprint',
-        subtitle: 'ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack • Secret Hygiene',
+        subtitle: 'Field Architecture • Agentic Toolchains • $0 Sovereign Stack • Secret Hygiene',
         category: 'Tool',
         icon: Workflow,
         action: () => { onClose(); onOpenForwardEngineer(); }

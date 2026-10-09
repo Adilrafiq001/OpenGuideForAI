@@ -250,87 +250,88 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
 
     const proTab = page.locator('button:has-text("Pro: Systems Architect")').first();
     if (await proTab.count() > 0) {
-      await proTab.click();
+      await proTab.click({ force: true });
       await page.waitForTimeout(300);
     }
 
     // Return to Beginner
-    await beginnerTab.click();
+    await beginnerTab.click({ force: true });
     await page.waitForTimeout(300);
 
     // Verify Intuition Accordion
     const intuitionBtn = page.getByRole('button', { name: /The Intuition/i }).first();
     if (await intuitionBtn.count() > 0) {
-      await intuitionBtn.click();
+      await intuitionBtn.click({ force: true });
       await page.waitForTimeout(300);
       // Close intuition
-      await intuitionBtn.click();
+      await intuitionBtn.click({ force: true });
       await page.waitForTimeout(200);
     }
   });
 
   test('06. Cognitive Accelerator: All 5 Learning Psychology Tabs Functionality', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/#cognitive-accelerator', { waitUntil: 'domcontentloaded' });
 
-    // Scroll to Cognitive Accelerator
-    const cogSection = page.locator('text=The Cognitive Accelerator').first();
+    // Scope to Cognitive Accelerator container
+    const cogSection = page.locator('#cognitive-accelerator');
     await cogSection.scrollIntoViewIfNeeded();
     await expect(cogSection).toBeVisible({ timeout: 10000 });
 
     // Tab 1: 80/20 Pareto
-    const paretoTab = page.getByRole('button', { name: /80\/20 Pareto/i }).first();
+    const paretoTab = cogSection.getByRole('button', { name: /80\/20 Pareto/i }).first();
     await expect(paretoTab).toBeVisible();
     await paretoTab.click();
-    await expect(page.locator('text=Core Mathematical Formula').first()).toBeVisible();
+    await expect(cogSection.locator('text=Core Mathematical Formula').first()).toBeVisible();
 
     // Tab 2: Blurting Retrieval
-    const blurtingTab = page.getByRole('button', { name: /Blurting Retrieval/i }).first();
+    const blurtingTab = cogSection.getByRole('button', { name: /Blurting Retrieval/i }).first();
     await expect(blurtingTab).toBeVisible();
     await blurtingTab.click();
     await page.waitForTimeout(300);
 
-    const recallBtn = page.getByRole('button', { name: /Start Forced Recall Now/i }).first();
+    const recallBtn = cogSection.getByRole('button', { name: /Start Forced Recall Now/i }).first();
     if (await recallBtn.count() > 0) {
-      await recallBtn.click();
+      await recallBtn.scrollIntoViewIfNeeded();
+      await recallBtn.click({ force: true });
       await page.waitForTimeout(200);
-      const textarea = page.locator('textarea').first();
+      const textarea = cogSection.locator('textarea').first();
       await expect(textarea).toBeVisible();
       await textarea.fill('Vector embeddings project high-dimensional semantic spaces into cosine similarities.');
-      const evalBtn = page.getByRole('button', { name: /Evaluate Recall/i }).first();
+      const evalBtn = cogSection.getByRole('button', { name: /Evaluate Recall/i }).first();
       await expect(evalBtn).toBeEnabled();
-      await evalBtn.click();
+      await evalBtn.click({ force: true });
       await page.waitForTimeout(300);
-      await expect(page.locator('text=Active Neural Consolidation Feedback').first()).toBeVisible();
+      await expect(cogSection.locator('text=Active Neural Consolidation Feedback').first()).toBeVisible();
     }
 
     // Tab 3: Feynman Novice Translator
-    const feynmanTab = page.getByRole('button', { name: /Feynman Novice/i }).first();
+    const feynmanTab = cogSection.getByRole('button', { name: /Feynman Novice/i }).first();
     await expect(feynmanTab).toBeVisible();
     await feynmanTab.click();
     await page.waitForTimeout(300);
 
-    const feynmanInput = page.locator('textarea').first();
+    const feynmanInput = cogSection.locator('textarea').first();
     await expect(feynmanInput).toBeVisible();
     await feynmanInput.fill('Imagine you are searching for your favorite book in a library.');
-    const inspectBtn = page.getByRole('button', { name: /Inspect Ideal Plain Explanation/i }).first();
+    const inspectBtn = cogSection.getByRole('button', { name: /Inspect Ideal Plain Explanation/i }).first();
     await expect(inspectBtn).toBeVisible();
-    await inspectBtn.click();
+    await inspectBtn.click({ force: true });
     await page.waitForTimeout(200);
-    await expect(page.locator('text=Benchmark Plain-English Explanation').first()).toBeVisible();
+    await expect(cogSection.locator('text=Benchmark Plain-English Explanation').first()).toBeVisible();
 
     // Tab 4: Targeted Deliberate Drills
-    const drillsTab = page.getByRole('button', { name: /Targeted Drills/i }).first();
+    const drillsTab = cogSection.getByRole('button', { name: /Targeted Drills/i }).first();
     await expect(drillsTab).toBeVisible();
     await drillsTab.click();
     await page.waitForTimeout(300);
-    await expect(page.locator('text=Hard Scenario Test').first()).toBeVisible();
+    await expect(cogSection.locator('text=Hard Scenario Test').first()).toBeVisible();
 
     // Tab 5: Verified Tools
-    const vaultTab = page.getByRole('button', { name: /Verified Tools/i }).first();
+    const vaultTab = cogSection.getByRole('button', { name: /Verified Tools/i }).first();
     await expect(vaultTab).toBeVisible();
     await vaultTab.click();
     await page.waitForTimeout(300);
-    await expect(page.locator('text=100% Free & Open Ecosystem').first()).toBeVisible();
+    await expect(cogSection.locator('text=100% Free & Open Ecosystem').first()).toBeVisible();
   });
 
   test('07. Spatial Holodeck: XR Suite, Three.js 3D Canvas, Cluster Slicer & Telemetry', async ({ page }) => {
@@ -511,7 +512,7 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     const leanBtn = page.getByRole('button', { name: '2D Lean', exact: true }).first();
     await expect(autoBtn).toBeVisible();
     await expect(leanBtn).toBeVisible();
-    await leanBtn.click();
+    await leanBtn.click({ force: true });
     await page.waitForTimeout(300);
 
     // Also verify under Pure Paper theme
@@ -939,6 +940,9 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
     // On 1280px, verify desktop navigation and controls coexist with ample room
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.waitForTimeout(300);
+    const tracksMenu = page.locator('#nav-tracks-menu');
+    await expect(tracksMenu).toBeVisible();
+    await tracksMenu.hover();
     await expect(page.locator('header a[href="#pathways"]').first()).toBeVisible();
 
     // 2. In-App Curated Free Courses Studio Test

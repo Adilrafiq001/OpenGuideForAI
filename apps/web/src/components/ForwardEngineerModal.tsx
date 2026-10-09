@@ -16,17 +16,22 @@ import {
   FolderGit2,
   Lock,
   Boxes,
-  HelpCircle
+  HelpCircle,
+  BookOpen,
+  Search,
+  AlertTriangle,
+  CheckCircle2
 } from 'lucide-react';
 import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
+import { FDE_KNOWLEDGE_CARDS } from '../data/forwardEngineerKnowledge';
 
 interface ForwardEngineerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'matrix' | 'ide-setup' | 'zero-dollar' | 'governance' | 'case-studies' | 'secret-hygiene';
+  initialTab?: 'matrix' | 'ide-setup' | 'zero-dollar' | 'governance' | 'case-studies' | 'secret-hygiene' | 'knowledge-bank';
 }
 
-interface SteComparisonRow {
+interface SystemsComparisonRow {
   dimension: string;
   naiveVibeCoder: string;
   traditionalSwe: string;
@@ -34,7 +39,7 @@ interface SteComparisonRow {
   forwardAiEngineer: string;
 }
 
-const STE_MATRIX_ROWS: SteComparisonRow[] = [
+const SYSTEMS_MATRIX_ROWS: SystemsComparisonRow[] = [
   {
     dimension: 'Core Mission',
     naiveVibeCoder: 'Types chat prompts until code runs once.',
@@ -182,15 +187,28 @@ const ZERO_DOLLAR_STACK = [
 
 export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }: ForwardEngineerModalProps) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'matrix' | 'ide-setup' | 'zero-dollar' | 'governance' | 'case-studies' | 'secret-hygiene'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'matrix' | 'ide-setup' | 'zero-dollar' | 'governance' | 'case-studies' | 'secret-hygiene' | 'knowledge-bank'>(initialTab);
   const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
+  const [knowledgeSearchQuery, setKnowledgeSearchQuery] = useState('');
+  const [selectedKnowledgeCategory, setSelectedKnowledgeCategory] = useState<string>('all');
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
+  if (initialTab !== prevInitialTab) {
+    setPrevInitialTab(initialTab);
+    setActiveTab(initialTab);
+  }
+
+  // Lock body scroll while modal is active
   useEffect(() => {
     if (isOpen) {
-      setActiveTab(initialTab);
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
     }
-  }, [isOpen, initialTab]);
+  }, [isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -232,7 +250,7 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
           {/* Header Bar */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-primary)] shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-600/30 dark:border-cyan-400/30 flex items-center justify-center text-cyan-700 dark:text-cyan-300">
                 <Workflow size={20} />
               </div>
               <div>
@@ -240,8 +258,8 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
                   <h2 id="forward-engineer-title" className="text-base sm:text-lg font-bold tracking-tight">
                     Forward Deployed AI Engineering
                   </h2>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                    ASD-STE100 • 0.001% Rigor
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-600/30 dark:border-cyan-400/30">
+                    Production Standard • 0.001% Rigor
                   </span>
                 </div>
                 <p id="forward-engineer-subtitle" className="text-xs text-[var(--color-text-secondary)]">
@@ -268,6 +286,7 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
               { id: 'secret-hygiene', label: '4. Secret Hygiene & .env', icon: Lock },
               { id: 'governance', label: '5. Governance & Docs', icon: FileCode2 },
               { id: 'case-studies', label: '6. Real Case Studies', icon: Boxes },
+              { id: 'knowledge-bank', label: '7. Knowledge Bank', icon: BookOpen },
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -293,8 +312,8 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
             {/* TAB 1: ROLE MATRIX */}
             {activeTab === 'matrix' && (
               <div className="space-y-6">
-                <div className="p-4 rounded-2xl bg-cyan-500/5 border border-cyan-500/20 text-xs text-[var(--color-text-secondary)] space-y-2">
-                  <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
+                <div className="p-4 rounded-2xl bg-cyan-500/5 border border-cyan-600/20 dark:border-cyan-400/20 text-xs text-[var(--color-text-secondary)] space-y-2">
+                  <div className="flex items-center gap-2 text-cyan-700 dark:text-cyan-300 font-bold text-sm">
                     <HelpCircle size={16} />
                     <span>What is a Forward Deployed AI Engineer (FDE)?</span>
                   </div>
@@ -308,14 +327,14 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
                     <thead>
                       <tr className="bg-[var(--color-primary)] border-b border-[var(--color-border)]">
                         <th className="p-3 font-mono font-bold uppercase text-[10px] text-[var(--color-text-secondary)]">Dimension</th>
-                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-rose-400">Naive Vibe Coder</th>
-                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-amber-400">Traditional SWE</th>
-                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-blue-400">Deep AI Engineer</th>
-                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-cyan-400">Forward AI Engineer</th>
+                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-rose-500 dark:text-rose-400">Naive Vibe Coder</th>
+                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-amber-600 dark:text-amber-400">Traditional SWE</th>
+                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-blue-600 dark:text-blue-400">Deep AI Engineer</th>
+                        <th className="p-3 font-mono font-bold uppercase text-[10px] text-cyan-700 dark:text-cyan-400">Forward AI Engineer</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--color-border)]">
-                      {STE_MATRIX_ROWS.map((row, idx) => (
+                      {SYSTEMS_MATRIX_ROWS.map((row, idx) => (
                         <tr key={idx} className="hover:bg-[var(--color-primary)]/40 transition-colors">
                           <td className="p-3 font-semibold text-[var(--color-text-primary)] font-mono text-[11px] whitespace-nowrap">
                             {row.dimension}
@@ -329,7 +348,7 @@ export function ForwardEngineerModal({ isOpen, onClose, initialTab = 'matrix' }:
                           <td className="p-3 text-[var(--color-text-secondary)] opacity-85 leading-relaxed">
                             {row.deepAiEngineer}
                           </td>
-                          <td className="p-3 text-cyan-300 font-medium leading-relaxed bg-cyan-500/5">
+                          <td className="p-3 text-cyan-800 dark:text-cyan-300 font-medium leading-relaxed bg-cyan-500/5">
                             {row.forwardAiEngineer}
                           </td>
                         </tr>
@@ -699,6 +718,211 @@ VITE_PYODIDE_CDN_URL="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"`}
                 </div>
               </div>
             )}
+
+            {/* TAB 7: KNOWLEDGE BANK */}
+            {activeTab === 'knowledge-bank' && (() => {
+              const query = knowledgeSearchQuery.trim().toLowerCase();
+              const filteredCards = FDE_KNOWLEDGE_CARDS.filter(card => {
+                const matchesCategory = selectedKnowledgeCategory === 'all' || card.category === selectedKnowledgeCategory;
+                if (!matchesCategory) return false;
+                if (!query) return true;
+                return (
+                  card.title.toLowerCase().includes(query) ||
+                  card.summary.toLowerCase().includes(query) ||
+                  card.operationalGuidance.toLowerCase().includes(query) ||
+                  card.badge.toLowerCase().includes(query) ||
+                  (card.codeSnippet && card.codeSnippet.toLowerCase().includes(query))
+                );
+              });
+
+              const categoryTabs = [
+                { id: 'all', label: 'All Topics' },
+                { id: 'architecture', label: 'Architecture & RAG' },
+                { id: 'agentic-ides', label: 'Agentic IDEs' },
+                { id: 'fastmcp', label: 'FastMCP & Tools' },
+                { id: 'token-engineering', label: 'Context & Tokens' },
+                { id: 'governance', label: 'Governance & Rules' },
+                { id: 'spec-rigor', label: 'Specification Rigor' },
+                { id: 'security', label: 'Security & OWASP' },
+                { id: 'evals', label: 'Evals & Gates' },
+                { id: 'sovereign-wasm', label: 'Sovereign & $0 Stack' },
+              ];
+
+              return (
+                <div className="space-y-6">
+                  {/* Search and Category Filter Dock */}
+                  <div className="p-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-primary)] space-y-3.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                      <div className="relative flex-1">
+                        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-700 dark:text-cyan-300" />
+                        <input
+                          type="text"
+                          value={knowledgeSearchQuery}
+                          onChange={(e) => setKnowledgeSearchQuery(e.target.value)}
+                          placeholder="Search 28 operational FDE knowledge topics, protocols, code..."
+                          className="w-full pl-9 pr-8 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] focus:border-cyan-400/70 focus:outline-none text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)] transition-colors"
+                        />
+                        {knowledgeSearchQuery && (
+                          <button
+                            onClick={() => setKnowledgeSearchQuery('')}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                          >
+                            <X size={12} />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="text-[11px] font-mono text-[var(--color-text-secondary)] shrink-0 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse" />
+                        <span>{filteredCards.length} of {FDE_KNOWLEDGE_CARDS.length} Topics Loaded</span>
+                      </div>
+                    </div>
+
+                    {/* Category Filter Pills */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                      {categoryTabs.map(cat => {
+                        const isSelected = selectedKnowledgeCategory === cat.id;
+                        return (
+                          <button
+                            key={cat.id}
+                            onClick={() => { playTactileSound('click'); setSelectedKnowledgeCategory(cat.id); }}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                              isSelected
+                                ? 'bg-cyan-500 text-black font-bold shadow-xs'
+                                : 'bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-cyan-400/40'
+                            }`}
+                          >
+                            {cat.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Knowledge Cards List */}
+                  {filteredCards.length === 0 ? (
+                    <div className="p-8 rounded-2xl border border-[var(--color-border)] bg-[var(--color-primary)] text-center space-y-3">
+                      <div className="w-10 h-10 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 mx-auto flex items-center justify-center">
+                        <Search size={18} />
+                      </div>
+                      <div className="text-sm font-bold text-[var(--color-text-primary)]">
+                        No matching knowledge topics found
+                      </div>
+                      <p className="text-xs text-[var(--color-text-secondary)] max-w-md mx-auto">
+                        No topic matched "{knowledgeSearchQuery}". Try clearing filters or searching for terms like "MCP", "WASM", "RAG", or "evals".
+                      </p>
+                      <button
+                        onClick={() => { setKnowledgeSearchQuery(''); setSelectedKnowledgeCategory('all'); }}
+                        className="px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        Reset Search Filters
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {filteredCards.map((card) => (
+                        <div
+                          key={card.id}
+                          className="p-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-primary)] space-y-4 shadow-sm hover:border-cyan-500/30 transition-all"
+                        >
+                          {/* Card Header */}
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--color-border)]/60 pb-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-600/30 dark:border-cyan-400/30">
+                                  {card.badge}
+                                </span>
+                                <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-wider">
+                                  {card.categoryLabel}
+                                </span>
+                              </div>
+                              <h3 className="text-sm font-bold text-[var(--color-text-primary)] tracking-tight">
+                                {card.title}
+                              </h3>
+                            </div>
+                          </div>
+
+                          {/* Summary & Operational Guidance */}
+                          <div className="space-y-2.5 text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                            <p className="text-[var(--color-text-primary)] font-medium">
+                              {card.summary}
+                            </p>
+                            <p>
+                              {card.operationalGuidance}
+                            </p>
+                          </div>
+
+                          {/* Code Snippet Box */}
+                          {card.codeSnippet && (
+                            <div className="space-y-1.5">
+                              <div className="flex items-center justify-between text-[11px] font-mono text-[var(--color-text-secondary)]">
+                                <span>Operational Specification / Configuration</span>
+                                <button
+                                  onClick={() => handleCopy(card.codeSnippet!, `kb-${card.id}`)}
+                                  className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[var(--color-secondary)] transition-colors cursor-pointer text-cyan-400"
+                                >
+                                  {copiedCodeId === `kb-${card.id}` ? (
+                                    <>
+                                      <Check size={12} className="text-emerald-400" />
+                                      <span className="text-emerald-400">Copied!</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Copy size={12} />
+                                      <span>Copy</span>
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                              <pre className="p-3.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-[11px] font-mono text-cyan-300 overflow-x-auto custom-scrollbar leading-relaxed">
+                                <code>{card.codeSnippet}</code>
+                              </pre>
+                            </div>
+                          )}
+
+                          {/* Traps vs Best Practices Two-Column Grid */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            {/* Common Traps */}
+                            <div className="p-3 rounded-xl bg-rose-500/5 border border-rose-500/20 space-y-1.5">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-rose-400 font-mono">
+                                <AlertTriangle size={13} />
+                                <span>Naive Failure Modes</span>
+                              </div>
+                              <ul className="space-y-1 text-[11px] text-[var(--color-text-secondary)] list-disc list-inside">
+                                {card.commonTraps.map((trap, idx) => (
+                                  <li key={idx} className="leading-snug">{trap}</li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            {/* Best Practices */}
+                            <div className="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-1.5">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 font-mono">
+                                <CheckCircle2 size={13} />
+                                <span>Forward AI Engineering Standard</span>
+                              </div>
+                              <ul className="space-y-1 text-[11px] text-[var(--color-text-secondary)] list-disc list-inside">
+                                {card.bestPractices.map((bp, idx) => (
+                                  <li key={idx} className="leading-snug">{bp}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          {/* Key Takeaway Pill */}
+                          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex items-start gap-2 text-xs">
+                            <Zap size={14} className="text-cyan-400 shrink-0 mt-0.5" />
+                            <div className="text-[11px] text-cyan-300">
+                              <strong>Key Invariant:</strong> {card.takeaway}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Modal Footer Bar */}

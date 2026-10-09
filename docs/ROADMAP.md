@@ -284,6 +284,12 @@
 - [x] **55 Surgical Defect Fixes:** UI collision elimination, 1440px header breathing room, `Workflow` icon import repair, `PromptToPreviewLab` auto-generation loop fix with `initialGeneratedKeyRef`, and accessibility focus trap harmonization.
 - [x] **100% Automated Regression Passage:** New `forward-engineer-blueprint.spec.ts` suite (3/3), `builder-b0-playable.spec.ts` (8/8), `builder-milestone-3a.spec.ts` (5/5), and `ui-ux-modernization.spec.ts` (9/9) passing with 0 errors.
 
+## Phase 32: Header Navigation Consolidation & FDE Knowledge Bank Expansion (Release v1.6.0 • Delivered)
+- [x] **Header Navigation Consolidation & Ribbon De-Cluttering:** Consolidated top navigation by removing standalone "Forward AI", "Labs", and "Pathways" buttons. Forward Deployed AI Engineering is embedded as a premier hero card inside the unified "Tracks & Curriculum" dropdown flyout (`LandingHeader.tsx`), with direct quick links to `#tasks` and `#pathways` in the flyout footer.
+- [x] **Operational FDE Knowledge Bank Loaded:** Created Tab 7 (`7. Knowledge Bank`) with real-time text search, 9 category filters, copyable production configs, naive failure modes vs FDE standards, and key system invariants across 12 operational topics (`forwardEngineerKnowledge.ts`, `ForwardEngineerModal.tsx`).
+- [x] **Offline AI Mentor & Search Integration:** Merged FDE operational knowledge batch into `OFFLINE_KNOWLEDGE_BASE` and added domain synonym mappings in `offlineKnowledge.ts` for instant offline discovery.
+- [x] **Lint & Pre-Flight Gate Pass:** 0 oxlint errors/warnings across 152 files, 0 console errors, clean production build, and 100% automated test suite passage.
+
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 
 

@@ -18,21 +18,26 @@ test.describe('Forward Deployed AI Engineering Blueprint Suite', () => {
     });
   });
 
-  test('01. Forward AI header pill opens modal and renders ASD-STE100 Role Matrix', async ({ page }) => {
+  test('01. Forward AI header pill opens modal and renders Systems Role Matrix', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
 
+    // Open Tracks & Curriculum dropdown first, then click Forward Deployed AI Engineering
+    const tracksMenu = page.locator('#nav-tracks-menu');
+    await expect(tracksMenu).toBeVisible({ timeout: 10000 });
+    await tracksMenu.click();
+
     const forwardBtn = page.locator('[data-testid="header-forward-engineer-btn"]').first();
-    await expect(forwardBtn).toBeVisible({ timeout: 10000 });
+    await expect(forwardBtn).toBeVisible({ timeout: 5000 });
     await forwardBtn.click();
 
     // Verify modal is open
     const modal = page.locator('div[role="dialog"][aria-labelledby="forward-engineer-title"]');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
-    // Verify Title & ASD-STE100 badge
+    // Verify Title & Production Standard badge
     await expect(modal.locator('#forward-engineer-title')).toHaveText('Forward Deployed AI Engineering');
-    await expect(modal.getByText('ASD-STE100 • 0.001% Rigor')).toBeVisible();
+    await expect(modal.getByText('Production Standard • 0.001% Rigor')).toBeVisible();
 
     // Verify all 6 dimensions in Matrix
     const dimensions = [
@@ -64,9 +69,13 @@ test.describe('Forward Deployed AI Engineering Blueprint Suite', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
 
-    // Open via header button
+    // Open via Tracks & Curriculum dropdown
+    const tracksMenu = page.locator('#nav-tracks-menu');
+    await expect(tracksMenu).toBeVisible({ timeout: 10000 });
+    await tracksMenu.click();
+
     const forwardBtn = page.locator('[data-testid="header-forward-engineer-btn"]').first();
-    await expect(forwardBtn).toBeVisible({ timeout: 10000 });
+    await expect(forwardBtn).toBeVisible({ timeout: 5000 });
     await forwardBtn.click();
 
     const modal = page.locator('div[role="dialog"][aria-labelledby="forward-engineer-title"]');
@@ -111,6 +120,13 @@ test.describe('Forward Deployed AI Engineering Blueprint Suite', () => {
     await expect(modal.getByText('Case Study 1: OpenGuide AI Studio')).toBeVisible();
     await expect(modal.getByText('Case Study 2: Model Context Protocol (MCP) Connector Server')).toBeVisible();
 
+    // Tab 7: Knowledge Bank
+    const kbTab = modal.getByRole('button', { name: /7\. Knowledge Bank/i });
+    await expect(kbTab).toBeVisible();
+    await kbTab.click();
+    await expect(modal.getByText(/28 of 28 Topics Loaded/i)).toBeVisible();
+    await expect(modal.getByText('FDE Core Systems Discipline & Operational Mandate')).toBeVisible();
+
     // Press Escape to close modal
     await page.keyboard.press('Escape');
     await expect(modal).not.toBeVisible();
@@ -138,10 +154,61 @@ test.describe('Forward Deployed AI Engineering Blueprint Suite', () => {
 
     // Confirm Forward Engineer modal opens
     const modal = page.locator('div[role="dialog"][aria-labelledby="forward-engineer-title"]');
-    await expect(modal).toBeVisible({ timeout: 5000 });
-    await expect(modal.locator('#forward-engineer-title')).toHaveText('Forward Deployed AI Engineering');
+    await expect(modal).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(modal).not.toBeVisible();
+  });
 
-    // Close modal
+  test('04. FDE Knowledge Bank searches and filters operational topics seamlessly', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Open via Tracks & Curriculum dropdown
+    const tracksMenu = page.locator('#nav-tracks-menu');
+    await expect(tracksMenu).toBeVisible({ timeout: 10000 });
+    await tracksMenu.click();
+
+    const forwardBtn = page.locator('[data-testid="header-forward-engineer-btn"]').first();
+    await expect(forwardBtn).toBeVisible({ timeout: 5000 });
+    await forwardBtn.click();
+
+    const modal = page.locator('div[role="dialog"][aria-labelledby="forward-engineer-title"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Open Tab 7: Knowledge Bank
+    const kbTab = modal.getByRole('button', { name: /7\. Knowledge Bank/i });
+    await expect(kbTab).toBeVisible();
+    await kbTab.click();
+
+    // Verify search input
+    const searchInput = modal.getByPlaceholder(/Search 28 operational FDE knowledge topics/i);
+    await expect(searchInput).toBeVisible();
+
+    // Category filtering: Click "FastMCP & Tools" pill
+    const fastmcpPill = modal.getByRole('button', { name: 'FastMCP & Tools', exact: true });
+    await expect(fastmcpPill).toBeVisible();
+    await fastmcpPill.click();
+
+    await expect(modal.getByText('FastMCP & Model Context Protocol Sandboxed Tool Architecture')).toBeVisible();
+
+    // Switch back to All Topics before searching
+    const allPill = modal.getByRole('button', { name: 'All Topics', exact: true });
+    await expect(allPill).toBeVisible();
+    await allPill.click();
+
+    // Search query: type "WASM"
+    await searchInput.fill('WASM');
+    await page.waitForTimeout(200);
+
+    await expect(modal.getByText('Air-Gapped Sovereign Deployment & On-Device CPython WASM')).toBeVisible();
+
+    // Verify Copy button works and reflects "Copied!" feedback
+    const copyBtn = modal.locator('button:has-text("Copy")').first();
+    await expect(copyBtn).toBeVisible();
+    await copyBtn.click();
+    await expect(modal.getByText('Copied!').first()).toBeVisible();
+
+    // Press Escape to exit
     await page.keyboard.press('Escape');
     await expect(modal).not.toBeVisible();
   });

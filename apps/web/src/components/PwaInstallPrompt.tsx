@@ -58,6 +58,7 @@ export function PwaInstallPrompt() {
   if (location.pathname.startsWith('/track')) return null;
   if (location.pathname.startsWith('/builder')) return null;
   if (location.pathname.includes('/engine')) return null;
+  if (location.pathname.startsWith('/holodeck')) return null;
   if (isInstalled && !showInstalledToast) return null;
   if (isDismissed && !showIosModal) return null;
 

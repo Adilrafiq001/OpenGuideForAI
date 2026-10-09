@@ -270,36 +270,59 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         ))}
                       </div>
 
-                      {/* Footer Quick Access to Labs, Curriculum, Pathways & Forward AI */}
-                      <div className="border-t border-[var(--color-border)] mt-2 pt-2 grid grid-cols-4 gap-1">
-                        <button 
-                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#tasks'); }}
+                      {/* Forward Deployed AI Engineering (FDE) Blueprint Card */}
+                      <div className="p-1 mb-2">
+                        <button
+                          data-testid="header-forward-engineer-btn"
+                          onClick={() => {
+                            setIsTracksMenuOpen(false);
+                            onOpenForwardEngineer?.();
+                          }}
+                          className="w-full flex items-start gap-2.5 p-2 rounded-xl bg-cyan-500/10 dark:bg-cyan-500/15 hover:bg-cyan-500/20 border border-cyan-600/30 dark:border-cyan-400/30 transition-all group ltr:text-left rtl:text-right cursor-pointer"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-cyan-500/20 border border-cyan-600/30 dark:border-cyan-400/40 flex items-center justify-center shrink-0 mt-0.5 text-cyan-700 dark:text-cyan-300 group-hover:scale-105 transition-transform">
+                            <Workflow size={14} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs font-bold text-cyan-700 dark:text-cyan-300 group-hover:text-cyan-800 dark:group-hover:text-cyan-200 transition-colors flex items-center justify-between gap-1">
+                              <span>Forward Deployed AI Engineering</span>
+                              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 border border-cyan-600/30 dark:border-cyan-400/40 text-cyan-700 dark:text-cyan-300 shrink-0 font-bold">
+                                FDE SPEC
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
+                              Field Architecture • Agentic Toolchains • Production Enclaves
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+
+                      {/* Footer Quick Access to Labs, Curriculum & Pathways */}
+                      <div className="border-t border-[var(--color-border)] mt-2 pt-2 grid grid-cols-3 gap-1.5">
+                        <a 
+                          href="#tasks"
+                          onClick={() => { setIsTracksMenuOpen(false); }}
                           className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
                         >
                           <CheckSquare size={11} className="text-[var(--color-accent)]" />
                           <span>57 Labs</span>
-                        </button>
-                        <button 
-                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#curriculum'); }}
+                        </a>
+                        <a 
+                          href="#curriculum"
+                          onClick={() => { setIsTracksMenuOpen(false); }}
                           className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
                         >
                           <Layers size={11} className="text-[var(--color-accent)]" />
                           <span>Tracks</span>
-                        </button>
-                        <button 
-                          onClick={() => { setIsTracksMenuOpen(false); navigate('/#pathways'); }}
+                        </a>
+                        <a 
+                          href="#pathways"
+                          onClick={() => { setIsTracksMenuOpen(false); }}
                           className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-[var(--color-primary)]/50 hover:bg-[var(--color-primary)] text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
                         >
                           <Compass size={11} className="text-[var(--color-accent)]" />
                           <span>Pathways</span>
-                        </button>
-                        <button 
-                          onClick={() => { setIsTracksMenuOpen(false); onOpenForwardEngineer?.(); }}
-                          className="flex items-center justify-center gap-1 p-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-[10px] font-mono text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
-                        >
-                          <Workflow size={11} className="text-cyan-400" />
-                          <span>FDE Spec</span>
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </motion.div>
@@ -509,42 +532,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
               </AnimatePresence>
             </div>
 
-            {/* 3. Forward Deployed AI Engineer Blueprint Direct Pill */}
-            <Tooltip
-              position="bottom"
-              content="Forward Deployed AI Engineering Blueprint"
-              subtitle="ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack"
-            >
-              <button
-                onClick={() => onOpenForwardEngineer?.()}
-                data-testid="header-forward-engineer-btn"
-                className="hidden lg:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-cyan-400/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 select-none"
-              >
-                <Workflow size={13} className="text-cyan-400 opacity-90" />
-                <span>Forward AI</span>
-                <span className="hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">FDE</span>
-              </button>
-            </Tooltip>
-
-            {/* 4. Tasks / Labs Direct Pill */}
-            <a 
-              href="#tasks"
-              className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
-            >
-              <CheckSquare size={13} className="text-[var(--color-accent)] opacity-80" />
-              <span>{t('nav_labs')}</span>
-            </a>
-
-            {/* 5. Pathways Direct Pill */}
-            <a 
-              href="#pathways"
-              className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
-            >
-              <Compass size={13} className="text-[var(--color-accent)] opacity-80" />
-              <span>{t('nav_pathways')}</span>
-            </a>
-
-            {/* 5. Portfolio Direct Pill */}
+            {/* 3. Portfolio Direct Pill */}
             <Tooltip
               position="bottom"
               content="Credentials & Portfolio [SHA-256]"
@@ -552,7 +540,7 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
             >
               <button 
                 onClick={() => navigate('/portfolio')}
-                className="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
+                className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-xs font-semibold text-[var(--color-text-primary)] transition-all cursor-pointer shadow-xs active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] select-none"
               >
                 <Award size={13} className="text-[var(--color-accent)] opacity-80" />
                 <span>Portfolio</span>

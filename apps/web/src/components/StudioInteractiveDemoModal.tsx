@@ -292,9 +292,9 @@ export function StudioInteractiveDemoModal({
     {
       id: 'forward-engineer-flow',
       badge: 'Forward AI Spec',
-      badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+      badgeColor: 'text-cyan-700 dark:text-cyan-300 bg-cyan-500/10 border-cyan-500/30',
       title: '7. Forward Deployed AI Engineer & Agentic Building',
-      subtitle: 'ASD-STE100 Matrix • Agentic IDEs • $0 Sovereign Stack • Secret Hygiene',
+      subtitle: 'Field Architecture • Agentic Toolchains • $0 Sovereign Stack • Secret Hygiene',
       icon: Workflow,
       overview: 'How elite Forward AI Engineers bridge frontier models into real-world software: specification-driven loops, sandboxed MCP tools, and deterministic CI evaluation gates.',
       steps: [
@@ -319,7 +319,7 @@ export function StudioInteractiveDemoModal({
           detail: 'Ship static SPAs on Cloudflare Pages and GitHub Actions with 5-point autonomous CI validation gates.'
         }
       ],
-      technicalPill: 'ASD-STE100 Conformance • MCP Tools • Cloudflare Edge • GitHub Actions',
+      technicalPill: 'Deterministic Systems • MCP Tools • Cloudflare Edge • GitHub Actions',
       actionText: 'View Forward Engineer Blueprint →',
       actionCallback: () => {
         onClose();

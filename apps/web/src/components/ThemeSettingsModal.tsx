@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -125,19 +125,17 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     }
   }, [isOpen, isPeeking]);
 
-  const prevIsOpenRef = useRef(false);
-  const prevInitialTabRef = useRef(initialTab);
+  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
-  useEffect(() => {
-    if (isOpen && (!prevIsOpenRef.current || prevInitialTabRef.current !== initialTab)) {
-      if (initialTab) {
-        setActiveTab(initialTab);
-      }
+  if (initialTab !== prevInitialTab || isOpen !== prevIsOpen) {
+    setPrevInitialTab(initialTab);
+    setPrevIsOpen(isOpen);
+    if (isOpen) {
+      if (initialTab) setActiveTab(initialTab);
       setActiveMode(activeThemeInfo.mode || 'dark');
     }
-    prevIsOpenRef.current = isOpen;
-    prevInitialTabRef.current = initialTab;
-  }, [isOpen, initialTab, activeThemeInfo.mode]);
+  }
 
   const filteredThemes = THEMES_DATA.filter(t => t.mode === activeMode);
 

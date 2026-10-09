@@ -7,6 +7,7 @@
 import { resolveMultilingualTerms } from './multilingualLexicon';
 import { FRONTIER_KNOWLEDGE_BATCH_1 } from './frontierKnowledgeBatch1';
 import { FRONTIER_KNOWLEDGE_BATCH_2 } from './frontierKnowledgeBatch2';
+import { FORWARD_ENGINEER_KNOWLEDGE_BATCH } from './forwardEngineerKnowledge';
 
 export interface KnowledgeEntry {
   id: string;
@@ -785,11 +786,18 @@ export const OFFLINE_KNOWLEDGE_BASE: KnowledgeEntry[] = [
     interactiveWidgetId: 'paged-attention'
   },
   ...FRONTIER_KNOWLEDGE_BATCH_1,
-  ...FRONTIER_KNOWLEDGE_BATCH_2
+  ...FRONTIER_KNOWLEDGE_BATCH_2,
+  ...FORWARD_ENGINEER_KNOWLEDGE_BATCH
 ];
 
 // Abbreviation & Domain Synonym Mapping Dictionary
 const DOMAIN_SYNONYMS: Record<string, string[]> = {
+  fde: ['forward', 'deployed', 'engineer', 'blueprint', 'ste100', 'agentic', 'sovereign', 'antigravity', 'mcp'],
+  forward: ['fde', 'deployed', 'engineer', 'blueprint', 'ste100', 'agentic', 'sovereign'],
+  mcp: ['fastmcp', 'tools', 'json-rpc', 'protocol', 'sandbox', 'stdio'],
+  fastmcp: ['mcp', 'tools', 'json-rpc', 'protocol', 'sandbox'],
+  ste100: ['asd-ste100', 'simplified', 'technical', 'english', 'specification', 'rigor'],
+  byok: ['bring', 'your', 'own', 'key', 'secret', 'hygiene', 'isolation', 'vault'],
   moe: ['mixture', 'experts', 'routing', 'gate'],
   dpo: ['preference', 'optimization', 'alignment', 'rlhf'],
   flash: ['flashattention', 'tiling', 'sram', 'online', 'softmax'],

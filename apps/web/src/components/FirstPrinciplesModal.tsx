@@ -25,11 +25,11 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
     FIRST_PRINCIPLES_MATRIX[0]?.id || ''
   );
 
-  useEffect(() => {
-    if (isOpen && initialCategory) {
-      setActiveCategory(initialCategory);
-    }
-  }, [isOpen, initialCategory]);
+  const [prevCategory, setPrevCategory] = useState(initialCategory);
+  if (initialCategory !== prevCategory) {
+    setPrevCategory(initialCategory);
+    setActiveCategory(initialCategory);
+  }
 
   useEffect(() => {
     if (!isOpen) return;

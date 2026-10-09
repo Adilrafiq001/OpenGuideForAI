@@ -50,7 +50,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
   const accentTextColor = getContrastColor(currentThemeInfo.accent);
 
   const isBuilderPath = Boolean(propTrack?.path === 'builder' || location.pathname.startsWith('/builder'));
-  const builderMatch = location.pathname.match(/\/builder\/([^\/]+)/);
+  const builderMatch = location.pathname.match(/\/builder\/([^/]+)/);
   const builderTrackId = builderMatch ? builderMatch[1] : '0';
 
   const activeTrack: Track = propTrack || (

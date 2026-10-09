@@ -23,6 +23,10 @@ export default defineConfig({
               name: 'og_onboarding_completed',
               value: 'true',
             },
+            {
+              name: 'openguide_pwa_dismissed',
+              value: 'true',
+            },
           ],
         },
       ],

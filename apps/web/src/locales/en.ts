@@ -181,7 +181,7 @@ export const en: Record<string, string> = {
 
   // Forward Deployed AI Engineer Blueprint
   nav_forward_engineer: 'Forward AI',
-  nav_forward_engineer_desc: 'ASD-STE100 Blueprint, Agentic IDEs & $0 Stack',
+  nav_forward_engineer_desc: 'Field Architecture, Agentic Toolchains & $0 Sovereign Stack',
   forward_engineer_title: 'Forward Deployed AI Engineering',
-  forward_engineer_badge: 'ASD-STE100 • 0.001% Rigor'
+  forward_engineer_badge: 'Production Standard • 0.001% Rigor'
 };
