@@ -34,9 +34,10 @@ Open `http://localhost:5173` in your browser.
 Before opening any pull request, your branch must satisfy the 5-point quality gate:
 1. **Lint**: `yarn lint` must pass with 0 errors and 0 warnings.
 2. **Build**: `yarn --cwd apps/web build` must compile with 0 TypeScript or bundling errors.
-3. **Playwright Tests**: `npx playwright test` must pass 100% across all test suites.
-4. **WCAG AAA Compliance**: High contrast ratios across all 20 calibrated themes.
-5. **No Slop**: Zero low-effort filler text, placeholder components, or unverified claims.
+3. **Playwright Tests**: `npx playwright test` must pass 100% across all 20 spec files (199 tests).
+4. **WCAG AAA Compliance**: High contrast ratios across all 24 calibrated themes (12 Dark, 12 Light).
+5. **Dual Pathways Integrity**: Preserve curriculum invariants across Pathway A (57 Labs) and Pathway B (48 Milestones).
+6. **No Slop**: Zero low-effort filler text, placeholder components, or unverified claims.
 
 ## Pull Requests
 

@@ -35,5 +35,5 @@ jobs:
       - name: Verify Build
         run: |
           corepack enable
-          yarn install
-          yarn build
+          yarn install --immutable
+          yarn --cwd apps/web build

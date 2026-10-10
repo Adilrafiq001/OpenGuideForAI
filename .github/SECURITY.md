@@ -6,8 +6,8 @@ OpenGuide is deployed as a continuous delivery static web application. Only the 
 
 | Version | Supported          |
 | ------- | ------------------ |
-| Latest  | :white_check_mark: |
-| < 3.0   | :x:                |
+| 1.8.x   | :white_check_mark: |
+| < 1.8   | :x:                |
 
 ## Architecture & Security Boundaries
 

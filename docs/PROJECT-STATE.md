@@ -8,6 +8,31 @@ BRANCH: main / dev
 
 
 **Done:**
+- **Phase F18: Global README Headline Architecture Realignment, GitHub Releases v1.8.0/v1.8.1 Publication & 20-Issue Repository Remediation (Release v1.8.1 • 100% Certified):**
+  - **1. Headline Architecture Re-alignment Across All 12 Language READMEs:**
+    - Root [README.md](file:///d:/AI/Study/README.md) and all 11 translation editions in `docs/translations/` (`es`, `zh`, `ur`, `ar`, `hi`, `fr`, `de`, `ja`, `pt`, `ru`, `it`) re-architected to showcase the best of OpenGuide at the forefront:
+      1. What You Experience (Sovereign Studio, CPython 3.12 WebAssembly, $0 Rule).
+      2. Dual Learning Pathways (Pathway A: The Deep AI Engineer [57 Labs] & Pathway B: The Builder Path [24 Modules / 48 Milestones]).
+      3. Ungameable Dual-Phase Autograders (100% Mutation Kill Rate across 171 mutants).
+      4. Sovereign Offline Knowledge Bank & Bluee AI Mentor (250 Topics, Okapi BM25 engine).
+      5. Universal Human AI Continuum (Stages 0 to 5).
+      6. Universal Design & WCAG AAA Accessibility (24 Calibrated Contrast Themes, 12 World Languages).
+      7. Forward Deployed AI Engineering (FDE) Blueprint.
+      8. Client-Side Sovereign Architecture ($0 Rule, Dexie IndexedDB).
+      9. Interactive 3D Spatial Holodeck & Hardware Extensions (nested under Section 10).
+  - **2. GitHub Releases v1.8.0 & v1.8.1 Publication Across Dual Remotes:**
+    - Authored and published full release notes via GitHub REST API for [v1.8.0](https://github.com/openguideforai/OpenGuideForAI/releases/tag/v1.8.0) covering foundational sovereign studio features.
+    - Authored and published full release notes for [v1.8.1](https://github.com/openguideforai/OpenGuideForAI/releases/tag/v1.8.1) covering welcome onboarding wizard, in-app changelog modal, and 60 surgical upgrades.
+    - Synchronized releases on both primary (`openguideforai`) and personal archive mirror (`Adilrafiq001`).
+  - **3. Repository & GitHub 20-Issue Remediation:**
+    - Fixed `.github/workflows/ci.yml`: added `dev` branch to push/PR triggers; removed unneeded `cache: 'pip'`.
+    - Fixed `.github/workflows/curriculum-freshness.yml`: corrected monorepo build command to `yarn --cwd apps/web build`.
+    - Fixed `.github/dependabot.yml`: added root monorepo directory `/` and devDependencies version grouping.
+    - Fixed `.github/SECURITY.md`: updated supported version table to `1.8.x` / `< 1.8`.
+    - Fixed `.github/CONTRIBUTING.md`: updated to 24 calibrated themes, Dual Pathways (57 Labs, 48 Milestones), and 199 regression tests across 20 spec files.
+    - Fixed `.github/FUNDING.yml`: added creator handle `Adilrafiq001`.
+    - Fixed `.github/pull_request_template.md`: added dual-remote multi-push, pre-flight gate, and zero AI attribution verification items.
+    - Fixed mirror repo `Adilrafiq001/OpenGuideForAI`: synchronized description, homepage, and 20 topics.
 - **Phase F17: Welcome Onboarding, Settings, Languages & Footer 60-Defect Precision Hardening (Release v1.8.1 • 100% Certified):**
   - **1. Welcome Onboarding Wizard Overhaul (`FirstTimeSetupModal.tsx`):**
     - 4-step structured onboarding wizard:

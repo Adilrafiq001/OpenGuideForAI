@@ -18,9 +18,9 @@
 
 [![License: AGPL-3.0 / CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-AGPL--3.0%20%7C%20CC%20BY--NC--SA%204.0-0f172a.svg?style=flat)](../../LICENSE)
 [![Runtime: CPython 3.12 WASM](https://img.shields.io/badge/Laufzeit-CPython%203.12%20WASM-0f172a.svg?style=flat)](https://pyodide.org/)
-[![Architecture: Local--First $0](https://img.shields.io/badge/Architektur-Lokal--Zuerst%20$0-0f172a.svg?style=flat)](#souveräne-client-seitige-architektur)
-[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/Lehrplan-8%20Tracks%20%E2%80%A2%2057%20Labs-0f172a.svg?style=flat)](#lehrplan-%C3%BCbersicht)
-[![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#barrierefreiheit-und-standards)
+[![Architecture: Local--First $0](https://img.shields.io/badge/Architektur-Lokal--Zuerst%20$0-0f172a.svg?style=flat)](../../explainer.md)
+[![Curriculum: 8 Tracks • 57 Labs](https://img.shields.io/badge/Lehrplan-8%20Tracks%20%E2%80%A2%2057%20Labs-0f172a.svg?style=flat)](#duale-lernpfade)
+[![Design: WCAG AAA](https://img.shields.io/badge/Design-WCAG%20AAA-0f172a.svg?style=flat)](#universelles-design-und-barrierefreiheit)
 [![PWA: Offline Ready](https://img.shields.io/badge/PWA-Vollst%C3%A4ndig%20Offline-0f172a.svg?style=flat)](#desktop--und-pwa-installation)
 
 <p align="center">
@@ -41,29 +41,150 @@
 
 ---
 
-### [Studio Starten](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Architektur](#souveräne-client-seitige-architektur) &nbsp;•&nbsp; [Lehrplan](#lehrplan-%C3%BCbersicht) &nbsp;•&nbsp; [Erklärung (STE)](../../explainer.md) &nbsp;•&nbsp; [Desktop-App](#desktop--und-pwa-installation) &nbsp;•&nbsp; [Tastatur-Shortcuts](#ergonomie-und-shortcuts) &nbsp;•&nbsp; [Lokaler Schnellstart](#lokale-entwicklung)
+### [Studio Starten](https://openguideforai.dpdns.org) &nbsp;•&nbsp; [Das Erlebnis](#was-sie-erleben) &nbsp;•&nbsp; [Duale Lernpfade](#duale-lernpfade) &nbsp;•&nbsp; [Auto-Grading](#unmanipulierbare-zwei-phasen-autograder) &nbsp;•&nbsp; [Wissensdatenbank](#souver%C3%A4ne-offline-wissensdatenbank-und-bluee-mentor) &nbsp;•&nbsp; [Barrierefreiheit](#universelles-design-und-barrierefreiheit) &nbsp;•&nbsp; [Erklärung STE](../../explainer.md) &nbsp;•&nbsp; [Schnellstart](#in-60-sekunden-starten)
 
 </div>
 
 ---
 
-## Philosophie und Mission
+## Was Sie Erleben
 
-Die herkömmliche KI-Ausbildung leidet unter drei großen Problemen:
-1. **Oberflächliche API-Tutorials:** Es werden Blackbox-Funktionen vermittelt, die in 6 Monaten veraltet sind.
-2. **Einschüchternde mathematische Hürden:** Dichte akademische Abhandlungen ohne praktische Programmiermöglichkeiten.
-3. **Teure Cloud-Sandboxes:** Erfordern Kreditkarten, Cloud-Konten, Docker-Setups oder 30 $/Monat Abonnements.
+OpenGuide ist kein gewöhnlicher Cloud-Dienst oder oberflächliches Tutorial. Es ist ein browsernatives, souveränes Labor, in dem Sie Systeme der künstlichen Intelligenz durch reale Codeausführung zerlegen, analysieren und grundlegend verstehen.
 
-**OpenGuide überwindet alle drei Barrieren.**
+| Grundpfeiler | Was im Inneren geschieht | Warum es entscheidend ist |
+|---|---|---|
+| **Reine Grundlagenbildung** | Lernen Sie echte Mathematik: Schreiben Sie BPE-Tokenizer, Vektor-Skalarprodukte und Self-Attention von Grund auf neu. | Sie erlangen ein dauerhaftes konzeptionelles Verständnis statt kurzlebiger Bibliotheks-Wrapper. |
+| **Sofortige Ausführung** | Echtes CPython 3.12 läuft lokal in Ihrem Browser via WebAssembly (Pyodide v0.26) in einem dedizierten Web Worker. | Null Einrichtung. Keine Installation von Python, Anaconda oder Docker auf Ihrem Rechner erforderlich. |
+| **Duale Lernpfade** | Wechseln Sie nahtlos zwischen tiefer mathematischer Modellarchitektur und vollwertiger Software-Entwicklung. | Perfekt für theoretische Forscher wie auch praktische Entwickler – ohne jeden Fortschrittsverlust. |
+| **Souverän und Privat** | 100 % clientseitige Berechnung. Daten werden lokal in der IndexedDB Ihres Browsers gespeichert. Null Telemetrie. | Vollständige Privatsphäre. Keine Abonnements. Keine unerwarteten Cloud-Rechnungen (0-Dollar-Regel). |
+| **PWA & Offline-Wissen** | Die Progressive Web App speichert den gesamten Lehrplan, die Python-Engine und 250 KI-Themen mit ausführbarem Code lokal. | Coden, experimentieren und lernen Sie überall auf der Welt – selbst völlig ohne Internetverbindung. |
+| **Interaktive Raumvisualisierungen** | GPU-beschleunigte Three.js-3D-Mannigfaltigkeiten und WebXR-Projektionen machen Tensoren physisch greifbar. | Sie sehen, manipulieren und verstehen hochdimensionale Embeddings und neuronale Graphen intuitiv. |
 
-Wir glauben, dass Künstliche Intelligenz eine Grundfertigkeit der modernen Zivilisation ist. Ganz gleich, ob Sie auf einem **100-Dollar-Android-Smartphone**, einem alten Laptop oder einer High-End-Workstation arbeiten; ob Sie Screenreader oder eine Maus nutzen: **OpenGuide bietet Ihnen ein erstklassiges Labor direkt in Ihrem Browser – völlig kostenlos.**
-
-> *"Jedes Feature in OpenGuide wird durch OpenGuide selbst erklärt. Sie studieren nicht nur mathematische Formeln; Sie sehen Tensoren fließen, zerlegen Attention Heads in Echtzeit, hören Kosinus-Distanzen über harmonische Töne und untersuchen den WebAssembly-Speicher mit dem Röntgenmodus (`Alt + X`)."*
+> 📖 **Detaillierte Technologiespezifikation:** Für die vollständige Systemarchitektur, Datenkanäle, den 15-Sekunden-Watchdog-Wächter und das Progressive-Disclosure-Design lesen Sie bitte den [ASD-STE100 Leitfaden](../../explainer.md).
 
 ---
 
-<a id="souveräne-client-seitige-architektur"></a>
-## Souveräne Client-Seitige Architektur
+## Duale Lernpfade
+
+OpenGuide bietet zwei synchronisierte Lernpfade auf Weltklasseniveau. Über die obere Navigationsleiste können Sie jederzeit frei zwischen ihnen wechseln:
+
+### Pfad A: Deep AI Engineer (Tracks 0–7 • 57 Laboratorien)
+*Tiefe mathematische Intuition, reale CPython 3.12 WebAssembly-Ausführung im Browser und Pionier-Modelle von Grund auf.*
+
+```mermaid
+graph LR
+    T0["Track 0: Fundamente<br/>(CPython WASM, Schleifen, BPE)"]
+    T1["Track 1: Vektorräume<br/>(Embeddings, Kosinus-Suche)"]
+    T2["Track 2: Agenten & RAG<br/>(ReAct-Loops, FastMCP)"]
+    T3["Track 3: Evals & Sicherheit<br/>(OWASP AI Top 10, WebGPU)"]
+    T4["Track 4: Frontier-Systeme<br/>(Self-Attention, RoPE, DPO)"]
+    T5["Track 5: Fine-Tuning<br/>(LoRA, SVD, NF4-Bins)"]
+    T6["Track 6: Inferenz-Engines<br/>(KV-Paging, Spekulativ)"]
+    T7["Track 7: Generative Modelle<br/>(Diffusion, CFG, ViT)"]
+
+    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
+```
+
+| Track | Labs | Leitprinzip | Abschlussprojekt |
+|:---|:---:|:---|:---|
+| **Track 0: Absoluter Nullpunkt** | 9 | Python-Syntax über anschauliche Alltags- und Küchenmetaphern | Byte-Pair Encoding (BPE) Tokenizer von Grund auf neu |
+| **Track 1: Vektorräume** | 9 | Hochdimensionale Geometrie, Skalarprodukte und semantische Dichte | `SemanticSearchEngine` im Arbeitsspeicher zur Dokumentenindizierung |
+| **Track 2: RAG & Agenten** | 9 | Zustandsmaschinen aus Denken $\rightarrow$ Handeln $\rightarrow$ Beobachten | Autonomer Forschungsagent mit mehrstufigem logischem Schließen |
+| **Track 3: Evals & Leitplanken** | 9 | Adversarial Testing, Prompt Injection und Sicherheitsregeln | Synthetischer Evaluierungsprüfstand mit WebGPU-Inferenz |
+| **Track 4: Frontier-Systeme** | 9 | Scaled Dot-Product Attention, KV-Cache-Physik und RoPE | Zerlegung von Transformer-Aufmerksamkeitsköpfen & DPO-Loss |
+| **Track 5: Fine-Tuning & LoRA** | 6 | Parametereffiziente Low-Rank-Adaption und NF4-Quantisierung | Dynamische LoRA-Gewichtsfusions-Engine ohne Rechenüberhang |
+| **Track 6: Inferenz-Engines** | 3 | Hochdurchsatz-Serving, virtuelles Paging und spekulative Dekodierung | Virtueller PagedAttention-Paging-Simulator |
+| **Track 7: Multimodal & Diffusion** | 3 | Vorwärtsdiffusions-Rauschen, CFG-Vektoren und ViT-Patches | Linearer Patch-Projektor für Vision Transformer |
+
+---
+
+### Pfad B: The Builder Path (Tracks B0–B7 • 24 Module / 48 Meilensteine)
+*Forward Deployed AI Engineering (FDE): Erstellen Sie produktionsreife Softwaresysteme mithilfe präziser Spezifikationen, Sandkästen und agentenbasierter Workflows.*
+
+```mermaid
+graph LR
+    B0["Track B0: Formulieren<br/>(Instant Utility Studio)"]
+    B1["Track B1: Spezifizieren<br/>(Rubriken & Testfälle)"]
+    B2["Track B2: Prüfen<br/>(Diff-Lesen & Risiken)"]
+    B3["Track B3: Verbinden<br/>(IndexedDB & APIs)"]
+    B4["Track B4: Verankern<br/>(Kontext & Evals)"]
+    B5["Track B5: Ausliefern<br/>($0 Sovereign Cloud)"]
+    B6["Track B6: Härten<br/>(Red-Teaming & Secrets)"]
+    B7["Track B7: Beweisen<br/>(Capstone-Verteidigung)"]
+
+    B0 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
+```
+
+| Builder-Track | Module | Kernprinzip | Interaktives Labor |
+|:---|:---:|:---|:---|
+| **Track B0: Formulieren (Say It)** | 3 | Von Null zum ersten funktionierenden Interface in 3 Sätzen | **Prompt-to-Preview Lab:** Isolierte Iframe-Generierung |
+| **Track B1: Spezifizieren (Spec It)** | 3 | Eindeutige technische Spezifikationen ohne Modell-Missverständnisse | **Spec Studio Lab:** Autograder mit 5-Regeln-Rubrik |
+| **Track B2: Prüfen (Verify It)** | 3 | Professionelles Lesen von Code-Diffs und Erkennen von Sicherheitsrisiken | **Diff Reader Lab:** Visuelles Diff- & Sicherheitsrisiko-Audit |
+| **Track B3: Verbinden (Connect It)** | 3 | Clientseitige Persistenz (Dexie IndexedDB) und Mock-Endpunkte | **Storage Workbench:** Local-First Datenbankschema-Modellierung |
+| **Track B4: Verankern (Ground It)** | 3 | Kontext-Konstitutionen (`AGENTS.md`), Leitplanken und Evaluatoren | **Harness Studio Lab:** Durchgängige Aufgaben-Evaluierung |
+| **Track B5: Ausliefern (Ship It)** | 3 | 0-Dollar-Sovereign-Stack-Bereitstellung: GitHub Actions & Cloudflare | **Pipeline Deployer:** Konfiguration kontinuierlicher Auslieferung |
+| **Track B6: Härten (Harden It)** | 3 | Bedrohungsmodellierung, Secret-Hygiene und Pre-Commit-Scanner | **Sicherheits-Sandbox:** Null-Schlüssel-Leckage-Prävention |
+| **Track B7: Beweisen (Prove It)** | 3 | Architektur-Verteidigung, Portfolio-Nachweise und Capstone | **Capstone Defense:** Kryptografische SHA-256-Verifikation |
+
+---
+
+## Unmanipulierbare Zwei-Phasen-Autograder
+
+Jedes der **57 Lehrplan-Labore** von OpenGuide ist durch ein manipulationssicheres Zwei-Phasen-Prüfsystem geschützt:
+1. **Phase 1 (Sichtbare Herausforderung):** Überprüft Rückgabetypen, Matrixformen und Codesyntax anhand von Baseline-Beispielen.
+2. **Phase 2 (Verborgene mathematische Invarianten):** Testet Lösungen gegen fünf geheime mathematische Invarianten pro Labor – einschließlich Cauchy-Schwarz-Ungleichung, Varianzskalierung, Metriksymmetrie und Grenzfälle.
+3. **Mutationstest-Eliminierungsrate:** Vollautomatisch gegen 171 feindliche Mutanten getestet, mit einer **Eliminierungsrate von 100,0 % (171/171 Mutanten zerstört)** ohne falsch-positive Durchläufe.
+
+---
+
+## Souveräne Offline-Wissensdatenbank und Bluee-Mentor
+
+OpenGuide verfügt über eine integrierte clientseitige Wissensdatenbank ohne jegliche externe Cloud-Abhängigkeiten (0-Dollar-Regel):
+- **250 Kern- und Alltagsthemen:** Vollständige Abdeckung von Transformer Attention (FlashAttention-2/3, PagedAttention/vLLM, MLA), Alignment & Optimierung (DPO, KTO, ORPO, LoRA, QLoRA), Vektorgeometrie (HNSW, ColBERT), strukturierter Dekodierung, Quantisierung (FP8, INT8, AWQ, BitNet b1.58), multimodalen Modellen (ViT, CLIP) und praxisnahen Lösungen für über 17 Berufsfelder.
+- **Okapi BM25 Retrieval Engine:** Probabilistisches Ranking-Modell ($k_1=1.2, b=0.75$) mit geglätteter inverser Dokumenthäufigkeit und Mehrfeld-Gewichtung.
+- **Mehrsprachige Brücke:** Sofortige Suchtreffer über 12 Weltsprachen (Deutsch, Englisch, Spanisch, Hindi, Chinesisch, Französisch, Arabisch, Russisch, Japanisch, Urdu, Portugiesisch, Italienisch).
+- **Interaktive visuelle Erklärungen:** Reine JavaScript-Mikro-Widgets (Softmax-Temperaturschieberegler, PagedAttention-Blockzuteilung, Kosinus-Winkelskala, RoPE-Phasor) direkt in den Wissenskarten.
+- **Ausführbare Python-Code-Snippets:** Jeder technische Eintrag enthält ein eigenständiges, ausführbares Python-Skript, das lokal in der Pyodide-WASM-Umgebung läuft.
+
+---
+
+## Universelles Mensch-KI-Kontinuum
+
+OpenGuide richtet sich an das gesamte Spektrum menschlicher Neugier – von Personen ohne Programmiererfahrung bis hin zu führenden KI-Forschern:
+
+| Stufe & Profil | Realer Kontext | Was OpenGuide bietet |
+|---|---|---|
+| **Stufe 0: Neugierige Einsteiger ohne Vorkenntnisse** | Erste Berührung mit KI. Überfordert von Fachbegriffen und Bezahlschranken. | Einfache mentale Modelle („Du bist ein LLM“), die 3 goldenen Prompting-Regeln (Rolle + Kontext + Format) und 0 $ Kosten. |
+| **Stufe 1: Praktische Berufe & Handwerk** | Kfz-Mechaniker, Schuster, Schreiner, Stylisten, Köche, Klempner. | Angewandte KI: Fehlerdiagnosen, Kostenvoranschlags-Generatoren, Materialrechner und Werkstatt-Workflows. |
+| **Stufe 2: Wissens- & Dienstleistungsberufe** | Mediziner, Lehrkräfte, Buchhalter, Juristen, Landwirte. | Strukturierte Prompt-Vorlagen, Tabellendaten-Extraktion, Studienleitfäden und absolute lokale Privatsphäre. |
+| **Stufe 3: Angewandte Systementwickler** | Software-Ingenieure, die Anwendungen mit LLMs und Agenten entwickeln. | Reale Python-Ausführung im Browser, Tokenisierung, JSON-RPC-Schemas und Werkzeugaufrufe via Model Context Protocol (MCP). |
+| **Stufe 4: Sicherheits- & Evaluierungsarchitekten** | Zuverlässigkeitsingenieure zur Absicherung von Produktionsmodellen. | OWASP AI Top 10-Abwehr, Sandboxes gegen Prompt-Injektionen, PII-Filter und automatisierte Testumgebungen. |
+| **Stufe 5: Frontier-KI-Forscher & Modellbauer** | Spezialisten, die tief in generative mathematische Architekturen eintauchen. | Scaled Dot-Product Attention von Grund auf, KV-Cache-Dynamik, INT8-Quantisierung und geschlossener DPO-Verlust. |
+
+---
+
+## Universelles Design und Barrierefreiheit
+
+* **24 Wissenschaftlich Kalibrierte Themes:** 12 dunkle und 12 helle Themes, zertifiziert nach **WCAG 2.2 AAA Standards** (Kontrastverhältnisse von über 7:1 bis 20:1) für Augenschonung und klares Lesen.
+* **12 Unterstützte Weltsprachen:** Native Typografie mit echten Nastaliq-Ligaturen (**Urdu**), arabischer Schrift, Devanagari (**Hindi**), ostasiatischen Zeichen (**Chinesisch**, **Japanisch**) sowie lateinischen und kyrillischen Alphabeten (**Deutsch**, **Englisch**, **Spanisch**, **Französisch**, **Portugiesisch**, **Russisch**, **Italienisch**).
+* **Vollständig Screenreader-Kompatibel:** ARIA-Live-Regionen (`aria-live="polite"`), barrierefreie Fokusfallen in Modalfenstern und semantische Orientierungspunkte.
+* **Vollständige RTL-Unterstützung:** Spiegelbildliches Layout für Urdu und Arabisch bei gleichzeitig erhaltener Links-nach-Rechts-Ausrichtung für Programmcode.
+* **Schriftsichere Zeilenhöhe:** Dynamische Zeilenhöhenanpassung verhindert vertikale Textkollisionen in Devanagari und komplexen Schriftsystemen.
+
+---
+
+## Forward Deployed AI Engineering (FDE) Leitfaden
+
+OpenGuide enthält einen interaktiven **FDE-Leitfaden**, der direkt über die obere Navigationsleiste oder die Befehlspalette (`Cmd + K` / `Ctrl + K`) aufgerufen werden kann:
+- **Rollen- und Systemvergleich:** Vergleicht Gelegenheits-Programmierer, traditionelle Software-Entwickler, KI-Forscher und FDE-Ingenieure anhand von 6 Dimensionen.
+- **Agenten-IDE-Einrichtungsanleitungen:** Praxiserprobte Anleitungen, Terminalbefehle und Konfigurationen für Google Antigravity IDE, Anthropic Claude Code CLI und OpenAI Codex & Cursor.
+- **0-Dollar-Souveränitäts-Stack:** Umfassender Architekturplan für GitHub Actions CI, Cloudflare Pages Edge-Netzwerk, Neon Serverless Postgres, CPython WebAssembly und Hugging Face Spaces.
+- **Secret-Hygiene ohne Lecks:** Schlüssel-Isolation im Arbeitsspeicher (BYOK), Pre-Commit-Sicherheitsscanner und geschützte `.env.example`-Vorlagen.
+- **Repository-Governance-Standards:** Synchronisierte Regelwerke (`AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `CHANGELOG.md`).
+
+---
+
+## Souveräne Client-Seitige Architektur (0-Dollar-Regel)
 
 OpenGuide arbeitet strikt nach der **0-Dollar-Regel**. **Es gibt keinen Backend-Server**. **Keine Datenbank sammelt Ihre Daten**. 100 % der Berechnungen finden lokal in Ihrem Webbrowser statt:
 
@@ -90,175 +211,136 @@ OpenGuide arbeitet strikt nach der **0-Dollar-Regel**. **Es gibt keinen Backend-
 
 ---
 
-## Spatial Holodeck auf Smart-AR-Brillen
+## 3D Spatial Holodeck und Hardware-Erweiterungen
 
-OpenGuide bietet ein browsernatives WebXR / WebGL 3D Spatial Computing Holodeck (`/holodeck`), optimiert für optisch transparente Smart-AR-Brillen (Viture Pro 2, Xreal Air 2 Ultra, RayNeo Air 2s, Rokid Max 2, Meta Quest 3/3S und Apple Vision Pro):
+Als fortschrittliche interaktive Lernfunktion bietet OpenGuide ein browsernatives WebXR / WebGL 3D Spatial Computing Holodeck (`/holodeck`) und Hardwarebeschleunigung:
 
-* **Nachhaltige 60FPS-Leistung:** Three.js-Echtzeitvisualisierung von 3D-Vektorräumen, semantischen Clustern und neuronalen Synapsen-Graphen.
-* **True-Black OLED Optical Passthrough:** Kalibrierter `#000000` Abschaltmodus, der OLED-Pixel auf den optischen Wellenleitern komplett ausschaltet.
-* **Binaurales Harmonisches Spatial Audio:** Web Audio API-Klangerzeugung, die musikalische Quinten proportional zur Vektor-Kosinus-Ähnlichkeit synthetisiert.
-* **Virtuelle Spatial-Tastatur & Head-Tracking:** Schwebende Tastatur mit haptischem und akustischem Feedback und 3-DoF-Kopfsensorik.
-* **AR-Brillen-Hardwarematrix:** Interaktiver Leitfaden für SpaceWalker, Nebula und MyGlasses mit IPD-Anpassung und 120Hz-Unterstützung.
-
----
-
-<a id="lehrplan-%C3%BCbersicht"></a>
-## Lehrplan-Übersicht
-
-Acht anspruchsvolle Lernpfade mit insgesamt **57 interaktiven, direkt ausführbaren Labs**:
-
-```mermaid
-graph LR
-    T0["Track 0: Absolute Zero<br/>(CPython WASM, Schleifen, BPE)"]
-    T1["Track 1: Vektorräume<br/>(Geometrie, Kosinus-Suche)"]
-    T2["Track 2: RAG & Agenten<br/>(ReAct-Zyklen, MCP)"]
-    T3["Track 3: Evals & Sicherheit<br/>(OWASP AI Top 10, WebGPU)"]
-    T4["Track 4: Frontier Systeme<br/>(Attention, RoPE, DPO)"]
-    T5["Track 5: Fine-Tuning<br/>(LoRA, SVD, NF4)"]
-    T6["Track 6: Inferenz-Engines<br/>(PagedAttention, Spekulativ)"]
-    T7["Track 7: Generative Modelle<br/>(Diffusion, CFG, ViT)"]
-
-    T0 --> T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
-```
-
-| Track | Labs | Mentales Kernmodell | Abschluss-Projekt |
-|:---|:---:|:---|:---|
-| **Track 0: Absolute Zero** | 9 | Python-Syntax über intuitive Küchen- und Karten-Analogien | Eigenständiger Byte-Pair Encoding (BPE) Tokenizer |
-| **Track 1: Vektorräume** | 9 | Räumliche Geometrie, Skalarprodukte und semantische Dichte | Vollständige `SemanticSearchEngine` im Arbeitsspeicher |
-| **Track 2: RAG & Agenten** | 9 | Gedanken $\rightarrow$ Aktion $\rightarrow$ Beobachtung Zustandsmaschinen | Autonomer Forschungs-Agent mit mehrstufiger Logik |
-| **Track 3: Evals & Sicherheit**| 9 | Rote-Team-Tests, Abwehr von Prompt Injections und Metriken | Automatisiertes Testsystem mit lokaler WebGPU-Inferenz |
-| **Track 4: Frontier Systeme** | 9 | $\text{Softmax}(QK^T/\sqrt{d_k})V$, KV-Cache-Speicher, RoPE | Transformer-Attention-Head-Analyse und DPO-Loss-Engine |
-| **Track 5: Fine-Tuning & LoRA**| 6 | Niedrigrangige Anpassung, SVD-Kompression und NF4-Quantisierung | Zero-Overhead LoRA Weight Merging Engine |
-| **Track 6: Inferenz-Engines** | 3 | Durchsatzoptimierung, Bandbreiten-Roofline und spekulatives Decoding | PagedAttention Virtueller Paging-Simulator |
-| **Track 7: Multimodal & Diffusion**| 3 | Vorwärts-Rauschen, CFG-Vektorfeld und Vision-Transformer-Patches | ViT Patch Linearer Projektor |
+* **Stabile 60FPS Vektormannigfaltigkeiten:** Three.js-Echtzeitvisualisierung von 3D-Vektorräumen, semantischen Clustern und neuronalen Synapsengraphen mit vorab zugewiesenem Speicher und automatischer Pause außerhalb des Bildschirms.
+* **Binaurales Harmonisches Spatial Audio:** Web Audio API-Sound-Engine, die harmonische Quintenakkorde proportional zur Vektor-Kosinus-Ähnlichkeit erzeugt.
+* **Smart-AR-Brillen True-Black-Modus:** `#000000` Abschaltmodus, der OLED-Pixel ausschaltet, um ein klares HUD auf Viture, Xreal, RayNeo, Rokid, Meta Quest und Apple Vision Pro anzuzeigen.
+* **Virtuelle Spatial-Tastatur:** Freischwebend im Raum oder auf der Schreibtischebene verankerbar für immersive Erkundung.
 
 ---
 
-## Universelles KI-Kontinuum für die Gesamte Menschheit
+## In 60 Sekunden Starten
 
-OpenGuide richtet sich nicht an eine abgeschottete Elite. Es ist für das gesamte Spektrum menschlicher Bildung konzipiert — von Menschen ohne Programmiererfahrung bis hin zu KI-Forschern und Modellarchitekten an vorderster Front:
+### Direkt im Browser Starten (Keine Installation)
+Besuchen Sie **[https://openguideforai.dpdns.org](https://openguideforai.dpdns.org)** und klicken Sie auf **Track 0 starten** oder **Als Builder beginnen**. Die WebAssembly-Laufzeitumgebung startet in unter einer Sekunde.
 
-| Stufe & Profil | Reale Lebens- & Arbeitswelt | Der Mehrwert von OpenGuide |
-|---|---|---|
-| **Stufe 0: Neugierige Einsteiger & Ohne Vorkenntnisse** | Erste Berührung mit KI. Überwältigt von Fachjargon und Bezahlgrenzen. | Anschauliche Denkmodelle („Du bist ein LLM“), die 3 Goldenen Prompting-Regeln (Rolle + Kontext + Format) und 0-Euro-Klarheit. |
-| **Stufe 1: Praktisches Handwerk & Gewerbe** | Kfz-Mechaniker, Schuhmacher, Schreiner, Friseure, Köche, Installateure. | Alltags-KI in der Praxis: konkrete Fehlerdiagnosen, automatische Kostenvoranschläge, Materialberechnungen und Werkstattabläufe. |
-| **Stufe 2: Wissens- & Dienstleistungsberufe** | Ärztinnen, Lehrkräfte, Steuerberater, Juristen, Landwirte. | Strukturierte Prompt-Vorlagen, tabellarische Datenextraktion, Lernleitfäden und vollständiger lokaler Datenschutz. |
-| **Stufe 3: Angewandte System-Entwickler** | Programmierer, die Softwareanwendungen mit LLMs und Agenten entwickeln. | Echtes Python im Browser, Tokenisierung, JSON-RPC-Schemata und Werkzeugaufrufe per Model Context Protocol (MCP). |
-| **Stufe 4: KI-Sicherheits- & Eval-Architekten** | Reliability Engineers, die produktive KI-Systeme abhärten. | OWASP AI Top 10 Abwehr, Delimiter-Sandboxes gegen Prompt-Injections, PII-Bereinigung und automatisierte Test-Suites. |
-| **Stufe 5: Frontier-Forscher & Modellbauer** | Spezialisten für grundlegende generative Modellarchitekturen. | Skalierte Dot-Product-Attention von Grund auf, KV-Cache-Speicherkinematik, INT8-Gleichverteilungsquantisierung und DPO-Loss-Mathematik. |
-
----
-
-## Manipulationssichere Zwei-Phasen-Autograder
-
-Jedes einzelne der **57 Kurs-Labore** von OpenGuide wird durch ein rigides Zwei-Phasen-Prüfsystem geschützt:
-1. **Phase 1 (Sichtbare Challenge):** Validiert Rückgabetypen, Tensor-Dimensionen und Grundsyntax anhand von Referenzfällen.
-2. **Phase 2 (Verborgene mathematische Invarianten):** Prüft die Lösung gegen fünf verborgene mathematische Invarianten pro Labor: Cauchy-Schwarz-Ungleichungen, Varianzskalierung, Metriksymmetrie, dynamische Testvektoren und Randwertgrenzen.
-3. **Mutations-Test-Eliminierungsrate:** Geprüft durch eine Test-Suite mit 171 bösartigen Test-Mutanten, die eine **Eliminierungsrate von 100,0 % (171/171 Mutanten eliminiert)** ohne Fehlalarme erzielt.
-
----
-
-<a id="desktop--und-pwa-installation"></a>
-## Desktop- und PWA-Installation
-
-OpenGuide ist als **Installierbare Progressive Web App (PWA)** konzipiert:
-
-* **Windows (10 / 11):** In Chrome oder Edge auf das **OpenGuide installieren**-Symbol in der Adressleiste klicken. Erstellt automatisch ein Desktop-Icon und einen Eintrag im Startmenü.
-* **macOS:** In Safari auf **Ablage** $\rightarrow$ **Zum Dock hinzufügen** klicken, oder über Chrome/Edge installieren.
-* **Mobilgeräte (Android & iOS):** Über das Browsermenü **Zum Startbildschirm hinzufügen** wählen.
-* **Vollständige Offline-Fähigkeit:** Dank Service-Worker-Caching (`sw.js`) werden alle Kursinhalte und die Pyodide-WASM-Engine auf Ihrem Gerät gespeichert. Sie können im Zug oder Flugzeug ohne Internetverbindung programmieren.
-
----
-
-<a id="ergonomie-und-shortcuts"></a>
-## Ergonomie und Shortcuts
-
-* **Befehlspalette (`Cmd + K` / `Ctrl + K`):** Blitzschnelle Volltextsuche über alle Übungen, Werkzeuge und Farbschemata.
-* **Sofortige Ausführung (`Ctrl + Enter`):** Führt Ihren Python-Code direkt im Editor aus.
-* **Verständlicher Syntax-Doktor:** Übersetzt unklare Compiler-Fehlermeldungen in einfache Erklärungen und Lösungsvorschläge.
-* **Jupyter Notebook Export (`.ipynb`):** Laden Sie gelöste Aufgaben als standardisierte Jupyter Notebooks herunter.
-* **Röntgen-Diagnosemodus (`Alt + X`):** Prüfen Sie Web-Worker-Speicher und lokale Datenbanken live.
-* **AR-Brillen Spatial HUD (`Alt + S`):** Aktiviert das schwebende 3-DoF-Headset-HUD, Kardanwinkel und den True-Black-Modus.
-* **Verschlüsselte Gist-Synchronisation:** Speichern Sie Ihren Lernfortschritt mit **AES-GCM 256-Bit-Verschlüsselung** in privaten GitHub Gists.
-
----
-
-<a id="barrierefreiheit-und-standards"></a>
-## Barrierefreiheit und Standards
-
-* **24 Wissenschaftliche Themes:** 12 dunkle und 12 helle Designs, die den W3C WCAG 2.2 AAA Kontraststandard (>7:1 bis 20:1) einhalten.
-* **Screenreader-Zertifiziert:** Dynamische Sprachausgabe-Bereiche (`aria-live="polite"`).
-* **Vollständige RTL-Unterstützung:** Spiegelbildliches Layout für Arabisch und Urdu bei gleichzeitig sauberer LTR-Formatierung für Codezeilen.
-
----
-
-<a id="urheberschaft-und-f%C3%B6rderung"></a>
-## Urheberschaft und Förderung
-
-OpenGuide wurde von **Adil Rafiq Dar (ARD)** konzipiert, entwickelt und gestaltet.
-
-```
-                    EINE BOTSCHAFT ZUR DIGITALEN SOUVERÄNITÄT
-"Ich habe OpenGuide gebaut, weil ich es leid war zu sehen, wie talentierte Menschen
-durch teure Bootcamps, hohe Cloud-Gebühren und elitäre Barrieren vom Erlernen der
-Künstlichen Intelligenz ausgeschlossen wurden.
-
-Jede Zeile dieses Studios entstand in unzähligen Nächten intensiver Arbeit und mit
-höchstem Anspruch an mathematische Präzision und Ästhetik. OpenGuide ist mein Geschenk an die Welt.
-
-Damit dieses Studio dauerhaft 100 % kostenlos, unabhängig und werbefrei bleibt,
-freue ich mich über jede Unterstützung von Menschen, die an freie Bildung glauben."
-```
-
-Wenn Ihnen OpenGuide geholfen hat, können Sie die unabhängige Weiterentwicklung unterstützen:
-
-<div align="center">
-
-[![GitHub Sponsors](https://img.shields.io/badge/Sponsern-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
-&nbsp;&nbsp;
-[![Auf Ko-fi unterstützen](https://img.shields.io/badge/Unterst%C3%BCtzen%20auf-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
-&nbsp;&nbsp;
-[![Über PayPal fördern](https://img.shields.io/badge/F%C3%B6rdern%20via-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
-
-</div>
-
----
-
-<a id="lokale-entwicklung"></a>
-## Lokale Entwicklung
-
+### Lokal über Git Ausführen
 ```bash
+# 1. Corepack aktivieren und Repository klonen
+corepack enable
 git clone https://github.com/openguideforai/OpenGuideForAI.git
 cd OpenGuideForAI
-corepack enable
+
+# 2. Abhängigkeiten installieren und Entwicklungsserver starten
 yarn install
-yarn --cwd apps/web dev
+yarn dev
 ```
-Rufen Sie `http://localhost:5173` in Ihrem Browser auf.
+Öffnen Sie `http://localhost:5173` in Ihrem Browser.
+
+#### Lokales Netzwerk-Testing (Smartphones / Tablets)
+Zum Testen auf einem Smartphone oder Tablet in Ihrem lokalen WLAN:
+```bash
+yarn dev --host
+```
 
 ---
 
-## Qualitätssicherungs-Gate
+## Desktop- und PWA-Installation
 
-Jeder Beitrag muss die 5-Punkte-Qualitätsprüfung vor dem Zusammenführen bestehen:
+OpenGuide funktioniert als vollwertige **Installierbare Progressive Web App (PWA)**:
+
+* **Windows (10 / 11):** Klicken Sie in Chrome oder Edge auf das Installationssymbol in der Adressleiste, um eine Desktop- und Startmenü-Verknüpfung zu erstellen.
+* **macOS:** In Safari auf **Ablage** $\rightarrow$ **Zum Dock hinzufügen** klicken; oder in Chrome/Edge auf **Installieren**.
+* **Linux:** Klicken Sie in Chromium oder Chrome auf Installieren. Ein `.desktop`-Starter wird automatisch in Ihrer Anwendungsübersicht angelegt.
+* **Smartphones (Android & iOS):** In iOS Safari auf **Teilen** $\rightarrow$ **Zum Home-Bildschirm** tippen; unter Android auf **App installieren**.
+* **Vollständiger Offline-Modus (Air-Gapped):** Der Service Worker speichert alle Lektionen, Visualisierungen und die Python-Engine lokal, sodass Sie unterwegs völlig ohne Internet lernen können.
+
+---
+
+## Ergonomie und Shortcuts
+
+| Tastenkombination | Aktiviertes Werkzeug | Ausgeführte Aktion |
+|---|:---:|---|
+| **`Cmd + K` / `Ctrl + K`** | Befehlspalette | Blitzschnelle Fuzzy-Suche über alle 57 Labs, 24 Themes, 12 Sprachen und Werkzeuge. |
+| **`Ctrl + Enter`** | Code-Ausführer | Kompiliert und startet den aktiven Python-Code sofort im Web Worker. |
+| **`Alt + X`** | Röntgen-Debug-Linse | Echtzeit-Inspektion des WebAssembly-Speichers, AST-Baums und der lokalen Datenbank. |
+| **`Alt + S`** | Spatial-HUD | Schaltet das schwebende 3-DoF-Headset-HUD und den True-Black-Modus für AR-Brillen um. |
+| **Touch-Leiste** | Mobiler Editor | Schneller Zugriff auf häufige Programmiersymbole (`Tab`, `:`, `( )`, `[ ]`, `def`, `assert`). |
+| **`.ipynb` Export** | Notebook-Generator | Lädt verifizierte Labor-Lösungen als standardisierte Jupyter Notebooks herunter. |
+| **Harmonisches Audio** | 3D-Holodeck | Wandelt Vektor-Kosinus-Ähnlichkeit in harmonische Akkorde um. |
+
+---
+
+## Qualitätssicherungs-Gate (5-Punkte Pre-Flight Suite)
+
+Jeder Beitrag muss vor dem Zusammenführen den strengen 5-Punkte-Qualitätstest bestehen:
 ```bash
-# 1. Linter-Prüfung (0 Warnungen, 0 Fehler im gesamten Codebase)
+# 1. Lokaler Server-Live-Check (HTTP 200 OK)
+(Invoke-WebRequest http://localhost:5173).StatusCode == 200
+
+# 2. Automatisierte Headless-Browser-Prüfung (0 Konsolenfehler)
+# Vollautomatisch geprüft via Playwright
+
+# 3. Statische Linter-Prüfung (0 Codefehler)
 yarn lint
 
-# 2. Automatisierte Playwright-Test-Suite (100% Erfolgsquote über alle Regressions-Suites)
-yarn --cwd apps/web test:e2e
+# 4. Automatisierte Regressionstest-Suite (100% Erfolg über 20 Testdateien)
+npx playwright test --config apps/web/playwright.config.ts
 
-# 3. Statische Produktions-Kompilierung (0 TypeScript/Vite-Fehler)
+# 5. Statischer Produktions-Build (0 TypeScript/Vite-Fehler)
 yarn --cwd apps/web build
 ```
 
 ---
 
-## Technische Dokumentation & Referenzen
+## Urheberschaft und Verantwortung
 
-* **[Versions-Changelog](../../CHANGELOG.md):** Chronologische Meilenstein-Releases und Systemevolution.
-* **[ASD-STE100 System-Spezifikation](../../explainer.md):** Umfassende Spezifikation in vereinfachtem technischem Englisch.
-* **[System-Architektur](../../ARCHITECTURE.md):** Tiefgehende Analyse von Web Workern, WebGPU und lokaler Persistenz.
-* **[Lehrplan-Spezifikationen](../CURRICULUM.md):** Vollständiges Curriculum und Lernziele aller 57 Labore.
-* **[Externes Audit- & QS-Dossier](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Architektur-Grundlegung, Invarianten-Matrizen und Reproduktionsanleitung.
+OpenGuide wurde von **Adil Rafiq Dar (ARD)** konzipiert, architektonisch gestaltet und erbaut.
 
+```
+                   EIN STATEMENT ZU SOUVERÄNER BILDUNG
+"Ich habe OpenGuide geschaffen, weil ich fest davon überzeugt bin, dass das Wissen
+über künstliche Intelligenz der gesamten Menschheit gehören muss. Es darf nicht hinter
+teuren Cloud-Abonnements, Konzernmonopolen oder akademischem Elitismus eingesperrt sein.
+
+Jede Zeile dieses Studios entstand durch unzählige Arbeitsstunden, strenge mathematische
+Prüfungen und kompromisslose Hingabe an erstklassiges Design. OpenGuide ist ein Geschenk an die Welt.
+
+Um dieses Studio 100% kostenlos, unabhängig und frei von Werbung oder fremdbestimmten
+Investoren zu halten, begrüße ich die Unterstützung von Lernenden und Förderern,
+die diese Vision teilen."
+```
+
+Unterstützen Sie die unabhängige Weiterentwicklung:
+
+<div align="center">
+
+[![Über GitHub sponsern](https://img.shields.io/badge/Sponsern-GitHub%20Sponsors-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/openguideforai)
+&nbsp;&nbsp;
+[![Auf Ko-fi unterstützen](https://img.shields.io/badge/Kaffee%20ausgeben-Ko--fi-FF5E5B?style=flat&logo=kofi&logoColor=white)](https://ko-fi.com/buymegoodcoffee)
+&nbsp;&nbsp;
+[![Über PayPal unterstützen](https://img.shields.io/badge/Sponsern-PayPal-00457C?style=flat&logo=paypal&logoColor=white)](https://paypal.me/buymegoodcoffee)
+
+<br/>
+
+<sub>Ihre Unterstützung sichert Domain-Hosting, Continuous-Integration-Infrastruktur und die Erweiterung offener Lerninhalte.</sub>
+
+</div>
+
+---
+
+## Technische Dokumentation und Referenzen
+
+* **[Versionsverlauf (Changelog)](../../CHANGELOG.md):** Chronologische Auflistung aller Meilensteine und Systemupgrades.
+* **[ASD-STE100 Technische Spezifikation](../../explainer.md):** Umfassendes Dokument über Web-Worker-Kommunikation, Speichergrenzen und Progressive Disclosure.
+* **[Systemarchitektur](../../ARCHITECTURE.md):** Tiefgehende Analyse reaktiver Stores, Web Worker und WebGPU-Pipelines.
+* **[Lehrplan-Spezifikationen](../CURRICULUM.md):** Vollständiger Lehrplan aller 57 Labore (8 Lernpfade).
+* **[Externes Audit- & Qualitätssicherungs-Dossier](../EXTERNAL-AUDIT-QA-DOSSIER.md):** Architektur-Grundlegung, mathematische Invarianten und Verifizierungsanweisungen.
+* **[Unabhängiger Qualitätsprüfbericht](../AUDIT_QA.md):** Umfassender Cross-Platform-Qualitätsbericht.
+
+<div align="center">
+  <sub>Architektur und Entwicklung von Adil Rafiq Dar (ARD). Lizenziert unter AGPL-3.0 und CC BY-NC-SA 4.0.</sub>
+</div>
