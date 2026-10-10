@@ -1026,10 +1026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"driver.js@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "driver.js@npm:1.8.0"
-  checksum: 10c0/a770d0bf2d93ddafa064237ce002f90d3a8d4278e60954ad9efedda45cac4e74aa5a8508f3fd8800c094d59fb9bc53a0c0634d434d0889622de5f60ecc5a1fd2
+"driver.js@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "driver.js@npm:1.9.0"
+  checksum: 10c0/33f5c9b4500884f9c251f563c14bee7a6842079c580186a27de1d09df605d852251c390c954ce52ad9913c23f88e7656dc18fa63b6d6cc9249ef33a40d279c35
   languageName: node
   linkType: hard
 
@@ -2106,7 +2106,7 @@ __metadata:
     codemirror: "npm:^6.0.2"
     dexie: "npm:^4.4.6"
     dompurify: "npm:^3.4.16"
-    driver.js: "npm:^1.8.0"
+    driver.js: "npm:^1.9.0"
     framer-motion: "npm:^13.4.4"
     lenis: "npm:^1.3.26"
     lucide-react: "npm:^1.48.0"
