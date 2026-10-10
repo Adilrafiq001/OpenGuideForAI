@@ -18,9 +18,11 @@ import {
   Key,
   Article,
   SpeakerHigh,
-  Code
+  Code,
+  Globe
 } from '@phosphor-icons/react';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { useLanguageStore, LANGUAGES } from '../store/useLanguageStore';
 import { THEMES_DATA, type ThemeInfo } from '../data/themesData';
 import { ThemeSwitch } from './ThemeSwitch';
 import { playTactileSound, triggerHaptic } from '../services/soundHaptics';
@@ -35,11 +37,12 @@ interface ThemeSettingsModalProps {
 function getContrastColor(hexColor: string): string {
   const hex = hexColor.replace('#', '');
   if (hex.length < 6) return '#000000';
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 135 ? '#000000' : '#ffffff';
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  const [lr, lg, lb] = [r, g, b].map(c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  const lum = 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
+  return lum > 0.4 ? '#000000' : '#ffffff';
 }
 
 export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: ThemeSettingsModalProps) {
@@ -90,6 +93,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
     toggleThemeMode,
     resetDefaults
   } = useSettingsStore();
+  const { language, setLanguage } = useLanguageStore();
   const [activeTab, setActiveTab] = useState<'themes' | 'preferences'>(initialTab);
   const activeThemeInfo = THEMES_DATA.find(t => t.id === theme) || THEMES_DATA[0];
   const [activeMode, setActiveMode] = useState<'dark' | 'light'>(activeThemeInfo.mode || 'dark');
@@ -191,7 +195,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             data-testid="theme-settings-modal-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="Workspace Personalization Settings"
+            aria-labelledby="theme-settings-title"
           >
             {/* Header */}
             <div className="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-[var(--color-border,rgba(255,255,255,0.1))] flex items-center justify-between">
@@ -206,7 +210,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                   <Palette weight="duotone" size={20} />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold tracking-tight text-[var(--color-text-primary,#fff)]">
+                  <h2 id="theme-settings-title" className="text-base sm:text-lg font-bold tracking-tight text-[var(--color-text-primary,#fff)]">
                     Workspace Personalization
                   </h2>
                   <p className="text-[11px] sm:text-xs text-[var(--color-text-secondary,#a1a1aa)] line-clamp-1 sm:line-clamp-none">
@@ -248,6 +252,9 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             {/* Navigation Tabs */}
             <div className="px-4 sm:px-6 pt-2.5 pb-2 border-b border-[var(--color-border,rgba(255,255,255,0.06))] flex flex-wrap items-center gap-2">
               <button
+                type="button"
+                id="tab-themes"
+                aria-pressed={activeTab === 'themes'}
                 onClick={() => setActiveTab('themes')}
                 data-testid="tab-themes-btn"
                 className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 cursor-pointer ${
@@ -265,6 +272,9 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
               </button>
 
               <button
+                type="button"
+                id="tab-preferences"
+                aria-pressed={activeTab === 'preferences'}
                 onClick={() => setActiveTab('preferences')}
                 data-testid="tab-preferences-btn"
                 className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide uppercase transition-all flex items-center gap-2 cursor-pointer ${
@@ -284,7 +294,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
 
             {/* Body */}
             {activeTab === 'themes' ? (
-              <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
+              <div id="panel-themes" role="tabpanel" aria-labelledby="tab-themes" className="flex-1 overflow-hidden flex flex-col md:flex-row">
                 
                 {/* Left: Theme list with Day/Night toggle switch */}
                 <div className="flex-1 flex flex-col border-r border-[var(--color-border)] overflow-hidden">
@@ -561,10 +571,13 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         <span className="font-mono text-xs text-[var(--color-accent)] font-bold capitalize">{displaySize}</span>
                       </div>
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Optimizes touch targets and density across mobile & desktop displays.</p>
-                      <div className="flex gap-1.5">
+                      <div role="radiogroup" aria-label="Interface Scale" className="flex gap-1.5">
                         {(['compact', 'default', 'large'] as const).map(size => (
                           <button
                             key={size}
+                            type="button"
+                            role="radio"
+                            aria-checked={displaySize === size}
                             onClick={() => setDisplaySize(size)}
                             data-testid={`display-size-${size}-btn`}
                             className={`flex-1 py-1.5 rounded-xl text-xs font-medium capitalize border transition-all cursor-pointer ${
@@ -634,7 +647,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         </span>
                       </div>
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Engineered typography for code legibility and symbol clarity.</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                      <div role="radiogroup" aria-label="Code Monospace Font" className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                         {[
                           { id: 'jetbrains-mono', label: 'JetBrains Mono' },
                           { id: 'fira-code', label: 'Fira Code' },
@@ -644,9 +657,12 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         ].map(font => (
                           <button
                             key={font.id}
+                            type="button"
+                            role="radio"
+                            aria-checked={(editorFont || 'jetbrains-mono') === font.id}
                             onClick={() => setEditorFont(font.id as any)}
                             data-testid={`editor-font-${font.id}-btn`}
-                            className={`py-1.5 px-2 rounded-xl text-[11px] font-mono border transition-all truncate text-left ${
+                            className={`py-1.5 px-2 rounded-xl text-[11px] font-mono border transition-all truncate text-left cursor-pointer ${
                               (editorFont || 'jetbrains-mono') === font.id
                                 ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
                                 : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
@@ -696,6 +712,59 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           </button>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 1.5: Studio Language & Native Script Localization */}
+                <div className="space-y-4 pt-4 border-t border-[var(--color-border,rgba(255,255,255,0.08))]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-mono tracking-wider uppercase text-[var(--color-accent,#10b981)]">
+                      <Globe size={16} weight="bold" />
+                      <span>Studio Language & Native Script Localization</span>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--color-secondary)] text-[var(--color-text-secondary)] border border-[var(--color-border)] font-semibold">
+                      {LANGUAGES.length} Languages
+                    </span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-[var(--color-primary)]/40 border border-[var(--color-border)] space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[var(--color-text-primary)]">Active Language</span>
+                      <span className="font-mono text-xs text-[var(--color-accent)] font-bold">
+                        {LANGUAGES.find(l => l.code === language)?.name} ({LANGUAGES.find(l => l.code === language)?.nativeName})
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[var(--color-text-secondary)]">
+                      Instant client-side translation across all curriculum, UI controls, and code explanations.
+                    </p>
+                    <div role="radiogroup" aria-label="Studio Language Selection" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                      {LANGUAGES.map(langItem => {
+                        const isSelected = language === langItem.code;
+                        return (
+                          <button
+                            key={langItem.code}
+                            type="button"
+                            role="radio"
+                            aria-checked={isSelected}
+                            onClick={() => setLanguage(langItem.code)}
+                            data-testid={`settings-lang-${langItem.code}-btn`}
+                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-text-primary)] font-bold'
+                                : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-semibold">{langItem.nativeName}</span>
+                              {langItem.dir === 'rtl' && (
+                                <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">RTL</span>
+                              )}
+                            </div>
+                            <span className="text-[10px] font-mono text-[var(--color-text-secondary)] mt-0.5">{langItem.name}</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -882,7 +951,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         <span className="font-mono text-xs text-[var(--color-accent)] font-bold">{wasmHeapMb} MB</span>
                       </div>
                       <p className="text-[11px] text-[var(--color-text-secondary)]">Total isolated virtual memory allocated to the CPython WebAssembly runtime.</p>
-                      <div className="flex gap-2">
+                      <div role="radiogroup" aria-label="WASM Virtual Memory Heap" className="flex gap-2">
                         {[
                           { mb: 512, label: '512 MB (Fast)' },
                           { mb: 1024, label: '1 GB (Standard)' },
@@ -890,8 +959,11 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         ].map(opt => (
                           <button
                             key={opt.mb}
+                            type="button"
+                            role="radio"
+                            aria-checked={wasmHeapMb === opt.mb}
                             onClick={() => setWasmHeapMb(opt.mb)}
-                            className={`flex-1 py-1.5 rounded-xl text-[11px] font-mono border transition-all ${
+                            className={`flex-1 py-1.5 rounded-xl text-[11px] font-mono border transition-all cursor-pointer ${
                               wasmHeapMb === opt.mb
                                 ? 'bg-[var(--color-accent)]/20 border-[var(--color-accent)] text-[var(--color-accent)] font-bold'
                                 : 'border-[var(--color-border)] bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]/40'
@@ -1065,7 +1137,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     <p className="text-[11px] text-[var(--color-text-secondary)]">
                       Adaptively scales graphics between lightweight SVG (0% GPU) and hardware-accelerated 3D WebGL / WebXR.
                     </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div role="radiogroup" aria-label="Active Compute and Rendering Profile" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       {[
                         { id: 'auto' as const, label: 'Auto Detect', desc: 'Hardware-adaptive' },
                         { id: '2d-lean' as const, label: '2D Lean', desc: '0% GPU • Battery saver' },
@@ -1074,6 +1146,9 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                       ].map(tierOpt => (
                         <button
                           key={tierOpt.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={graphicsTier === tierOpt.id}
                           onClick={() => setGraphicsTier(tierOpt.id)}
                           className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
                             graphicsTier === tierOpt.id
@@ -1113,7 +1188,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                     {/* Provider Selection */}
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-semibold text-[var(--color-text-primary)]">AI Provider</label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      <div role="radiogroup" aria-label="AI Provider" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {[
                           { id: 'openrouter' as const, label: 'OpenRouter', hint: 'Any Model' },
                           { id: 'openai' as const, label: 'OpenAI', hint: 'GPT-4o' },
@@ -1123,6 +1198,8 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                           <button
                             key={p.id}
                             type="button"
+                            role="radio"
+                            aria-checked={byokProvider === p.id}
                             onClick={() => setByokProvider(p.id)}
                             className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
                               byokProvider === p.id
@@ -1157,7 +1234,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
                         <input
                           type={showApiKey ? 'text' : 'password'}
                           value={byokApiKey}
-                          onChange={(e) => setByokApiKey(e.target.value)}
+                          onChange={(e) => setByokApiKey(e.target.value.trim())}
                           placeholder="Paste API key (e.g. sk-or-v1-..., AIzaSy...)"
                           className="w-full px-3.5 py-2 pr-10 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] text-xs text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/50 font-mono focus:outline-none focus:border-[var(--color-accent)]"
                           id="byok-api-key-input"

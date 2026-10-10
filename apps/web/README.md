@@ -9,6 +9,7 @@ This package contains the Vite + React 18 + TypeScript web client, featuring:
 - **Spatial Holodeck on Smart AR Glasses (`/holodeck`):** Native WebXR / Three.js 3D spatial computing engine with 60FPS sustained performance, True-Black OLED optical passthrough (`#000000` emission cutoff), binaural harmonic audio sonification, virtual spatial keyboard, and 2026 hardware matrix for Viture, Xreal, RayNeo, Rokid, Meta Quest, and Apple Vision Pro.
 - **Forward Deployed AI Engineering Blueprint:** Embedded ASD-STE100 matrix, Agentic IDE setups (Antigravity IDE, Claude Code, Codex/Cursor), $0 sovereign cloud stack, and secret hygiene protocols.
 - **Sovereign Offline Knowledge Bank:** 250 core topics with Okapi BM25 probabilistic search and interactive visual explainables.
+- **Welcome Onboarding & Changelog Integration:** Calibrated 4-step first-time setup wizard (4 Dark, 4 Light WCAG AAA themes, 12 native scripts, pathway selection, PWA install & Pyodide pre-warm) and standalone WAI-ARIA 1.2 popup changelog modal.
 - **Design & Ergonomics:** 24 calibrated WCAG AAA themes (12 Dark, 12 Light), 12 supported languages with RTL support, and Spatial AR Glasses HUD (`Alt + S`).
 
 ## Development & Pre-Flight Scripts
@@ -22,7 +23,7 @@ yarn dev
 # Run Oxlint static analysis (0 errors)
 yarn lint
 
-# Execute Playwright automated test suite across all 18 spec files
+# Execute Playwright automated test suite across all 20 spec files (199 tests)
 npx playwright test --config apps/web/playwright.config.ts
 
 # Compile production bundle

@@ -13,7 +13,7 @@ test.describe('Onboarding, Tour, Interactive Demo & SEO Suite', () => {
     const dialog = page.locator('[role="dialog"]');
     await expect(dialog).toBeVisible();
     await expect(dialog).toContainText('Welcome to OpenGuide.');
-    await expect(dialog).toContainText('Step 1 of 3');
+    await expect(dialog).toContainText('Step 1 of 4');
 
     // Step 1: Select a theme (e.g. Nordic Frost)
     const nordicTheme = dialog.locator('button:has-text("Nordic Frost")');
@@ -24,16 +24,20 @@ test.describe('Onboarding, Tour, Interactive Demo & SEO Suite', () => {
     const urduLang = dialog.locator('button:has-text("اردو")');
     await expect(urduLang).toBeVisible();
 
-    // Click Continue to advance to Step 2
+    // Click Continue to advance to Step 2: Pathway Choice
     const continueBtn = dialog.locator('button:has-text("Continue")');
     await continueBtn.click();
-    await expect(dialog).toContainText('Step 2 of 3');
+    await expect(dialog).toContainText('Step 2 of 4');
+    await expect(dialog).toContainText('Choose Your Starting Pathway');
+
+    // Click Continue to advance to Step 3: Native App
+    await continueBtn.click();
+    await expect(dialog).toContainText('Step 3 of 4');
     await expect(dialog).toContainText('Install as Native Desktop / Mobile App');
 
-    // Click Continue to advance to Step 3
+    // Click Continue to advance to Step 4: Launch & Explore
     await continueBtn.click();
-    await expect(dialog).toContainText('Step 3 of 3');
-    await expect(dialog).toContainText('Take the 2-Minute Studio Tour');
+    await expect(dialog).toContainText('Step 4 of 4');
 
     // Click 'Start Exploring OpenGuide' to complete onboarding
     const exploreBtn = dialog.locator('button:has-text("Start Exploring OpenGuide")');

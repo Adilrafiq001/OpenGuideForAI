@@ -212,6 +212,7 @@ export const en: Record<string, string> = {
   abby_offline_status: '100% Client-Side • Local Memory',
 
   // Controls & Tooltips
+  select_language: 'Select Language',
   theme_settings_label: 'Themes & Settings',
   theme_settings_subtitle: '20 WCAG AAA themes • Studio preferences & BYOK',
   footer_credit: 'Architected & Designed by Adil Rafiq Dar (ARD)',

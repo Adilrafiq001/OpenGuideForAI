@@ -5,9 +5,24 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.8.0';
+export const CURRENT_STUDIO_VERSION = '1.8.1';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.8.1',
+    date: 'October 2026',
+    title: 'Flagship Welcome Onboarding Overhaul, Changelog Modal Popup & 60 Multi-Category Surgical Defects Resolved',
+    highlights: [
+      'Announcement Pill & Changelog Popup Integration: Fixed "What\'s New" announcement button to open dedicated, accessible popup ChangelogModal instead of redirecting to Settings; dynamically extracts latest highlights from CHANGELOG_DATA.',
+      'Standalone Reusable ChangelogModal: Decoupled changelog modal into standalone component shared across StudioFooter, App announcement pill, and global modals with WAI-ARIA 1.2 dialog standards, focus trap, and GitHub release archives.',
+      'Balanced Studio Atmosphere Onboarding: Overhauled Choose Studio Atmosphere with equal representation of top calibrated Dark (Obsidian, Nordic Frost, Cyberpunk Neon, Claude Dark) and Light themes (Pure Paper, E-Ink Papyrus, Claude Ivory, GitHub Light) with WCAG AAA swatches.',
+      'All 12 Supported Languages in Welcome Wizard: Expanded language selection to all 12 supported locales (EN, UR, AR, ES, ZH, HI, FR, DE, JA, PT, RU, IT) with native script ligatures and RTL support.',
+      'Starting Journey Pathway Selection: Added interactive pathway choice step to the welcome wizard (The Deep AI Engineer Tracks 0–7 vs The Builder Path Tracks B0–B7) synchronized directly with usePathStore.',
+      '60 Multi-Category Surgical Defects Resolved: Fixed 60 issues across Welcome dialog, Settings, Languages, and Footer section spanning correctness, accessibility, WAI-ARIA roles, WCAG AAA contrast, BYOK sanitization, and responsive layout.',
+      'Sitemap Discoverability: Added "The Builder Path" (Tracks B0–B7) directly to the platform sitemap in StudioFooter.',
+      'Universal Documentation & Translation Sync: Synchronized all project READMEs, translations, and project state documentation to v1.8.1.'
+    ]
+  },
   {
     version: '1.8.0',
     date: 'October 2026',

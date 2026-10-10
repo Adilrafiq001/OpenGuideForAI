@@ -12,7 +12,6 @@ import {
   BookOpen,
   Layers,
   FlaskConical,
-  Milestone,
   X,
   Cpu,
   Lock,
@@ -24,8 +23,9 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GitHubStarButton } from './GitHubStarButton';
-import { CURRENT_STUDIO_VERSION, CHANGELOG_DATA } from '../data/changelogData';
+import { CURRENT_STUDIO_VERSION } from '../data/changelogData';
 import { HardwareProfilerModal } from './interactive/HardwareProfilerModal';
+import { ChangelogModal } from './ChangelogModal';
 
 interface StudioFooterProps {
   onOpenThemes?: () => void;
@@ -95,9 +95,9 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
 
   // Commit hash copy state
   const [copiedHash, setCopiedHash] = useState(false);
-  const buildHash = 'dc8909b';
+  const buildHash = '68ea3d7';
   const buildVersion = `v${CURRENT_STUDIO_VERSION}`;
-  const buildDate = '2026.10.03-PROD';
+  const buildDate = '2026.10.10-PROD';
 
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const newsletterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -285,6 +285,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   aria-label="Email address for lab drops"
                   placeholder="engineer@domain.com"
+                  autoComplete="email"
                   required
                   disabled={newsletterSubmitted}
                   className="flex-1 bg-[var(--color-primary)] border border-[var(--color-border)] focus:border-[var(--color-accent)] rounded-xl px-3 py-2 text-xs font-mono text-[var(--color-text-primary)] outline-none transition-colors"
@@ -398,6 +399,49 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               >
                 <span>Track 7: Diffusion & Multimodal ViT</span>
                 <span className="text-[10px] font-mono opacity-60 group-hover:text-fuchsia-400">3 Labs</span>
+              </button>
+            </li>
+
+            {/* The Builder Path (Tracks B0 – B7) */}
+            <li className="pt-3 border-t border-[var(--color-border)]/60">
+              <span className="font-mono text-[10px] uppercase font-bold text-emerald-400 tracking-wider block mb-1">
+                The Builder Path (Tracks B0 – B7)
+              </span>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/builder/0/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track B0: First AI Project</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-emerald-400">6 Labs</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/builder/1/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track B1: The Technical Spec</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-emerald-400">6 Labs</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/builder/2/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track B2: Test-First AI Loop</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-emerald-400">6 Labs</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => navigate('/builder/3/intro')} 
+                className="hover:text-[var(--color-text-primary)] transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+              >
+                <span>Track B3: Defensive Architecture</span>
+                <span className="text-[10px] font-mono opacity-60 group-hover:text-emerald-400">6 Labs</span>
               </button>
             </li>
           </ul>
@@ -578,7 +622,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </span>
-            <span>by <strong className="text-[var(--color-text-primary)] font-bold">Adil Rafiq Dar</strong>.</span>
+            <span>by <a href="https://github.com/Adilrafiq001" target="_blank" rel="noopener noreferrer" className="text-[var(--color-text-primary)] font-bold hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-accent)]/40 hover:decoration-[var(--color-accent)]">Adil Rafiq Dar</a>.</span>
           </p>
         </div>
 
@@ -690,57 +734,34 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
               </div>
 
               {/* Tabs */}
-              <div className="flex flex-wrap border-b border-[var(--color-border)] px-4 bg-[var(--color-primary)]/40 text-xs font-mono shrink-0">
-                <button
-                  onClick={() => setLegalTab('terms')}
-                  className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                    legalTab === 'terms'
-                      ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
-                      : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  Terms of Service
-                </button>
-                <button
-                  onClick={() => setLegalTab('privacy')}
-                  className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                    legalTab === 'privacy'
-                      ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
-                      : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  Privacy Policy
-                </button>
-                <button
-                  onClick={() => setLegalTab('cookies')}
-                  className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                    legalTab === 'cookies'
-                      ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
-                      : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  Cookie Policy
-                </button>
-                <button
-                  onClick={() => setLegalTab('byok')}
-                  className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                    legalTab === 'byok'
-                      ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
-                      : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  BYOK Key Security
-                </button>
-                <button
-                  onClick={() => setLegalTab('licenses')}
-                  className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                    legalTab === 'licenses'
-                      ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
-                      : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  Open Source Licenses
-                </button>
+              <div role="tablist" aria-label="Legal Disclosures" className="flex flex-wrap border-b border-[var(--color-border)] px-4 bg-[var(--color-primary)]/40 text-xs font-mono shrink-0">
+                {(['terms', 'privacy', 'cookies', 'byok', 'licenses'] as const).map((tab) => {
+                  const labels: Record<string, string> = {
+                    terms: 'Terms of Service',
+                    privacy: 'Privacy Policy',
+                    cookies: 'Cookie Policy',
+                    byok: 'BYOK Key Security',
+                    licenses: 'Open Source Licenses'
+                  };
+                  const isSelected = legalTab === tab;
+                  return (
+                    <button
+                      key={tab}
+                      role="tab"
+                      id={`legal-tab-${tab}`}
+                      aria-selected={isSelected}
+                      aria-controls={`legal-panel-${tab}`}
+                      onClick={() => setLegalTab(tab)}
+                      className={`px-4 py-3 border-b-2 font-bold transition-colors cursor-pointer whitespace-nowrap ${
+                        isSelected
+                          ? 'border-[var(--color-accent)] text-[var(--color-text-primary)]'
+                          : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                      }`}
+                    >
+                      {labels[tab]}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Tab Content */}
@@ -1002,95 +1023,10 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
       {/* ========================================================================= */}
       {/* 3. CHANGELOG & MILESTONES MODAL                                           */}
       {/* ========================================================================= */}
-      <AnimatePresence>
-        {changelogModalOpen && (
-          <div
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setChangelogModalOpen(false);
-            }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              className="w-full max-w-2xl max-h-[85vh] bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden outline-none"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="changelog-modal-title"
-              tabIndex={-1}
-              onKeyDown={(e) => handleModalKeyDown(e, () => setChangelogModalOpen(false))}
-            >
-              <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2">
-                  <Milestone size={18} className="text-amber-400" />
-                  <h3 id="changelog-modal-title" className="text-base font-bold text-[var(--color-text-primary)]">
-                    Platform Changelog & Release Milestones
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setChangelogModalOpen(false)}
-                  className="p-1.5 rounded-full hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
-                  aria-label="Close changelog modal"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <div className="p-6 overflow-y-auto space-y-6 text-xs font-mono">
-                {CHANGELOG_DATA.map((rel, index) => {
-                  const isActive = rel.version === CURRENT_STUDIO_VERSION;
-                  return (
-                    <div
-                      key={rel.version}
-                      className={`space-y-2 border-l-2 pl-4 ${
-                        isActive
-                          ? 'border-[var(--color-accent)]'
-                          : index % 2 === 0
-                            ? 'border-cyan-500'
-                            : 'border-violet-500'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-bold text-[var(--color-text-primary)] font-sans">
-                          {rel.title}
-                        </span>
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded font-mono ${
-                            isActive
-                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold'
-                              : 'bg-[var(--color-primary)] text-[var(--color-text-secondary)] border border-[var(--color-border)]'
-                          }`}
-                        >
-                          v{rel.version}{isActive ? ' • Active' : ''}
-                        </span>
-                      </div>
-                      <p className="text-[11px] font-sans text-[var(--color-text-secondary)] mb-1">
-                        Released: {rel.date}
-                      </p>
-                      <ul className="text-[var(--color-text-secondary)] leading-relaxed font-sans space-y-1 list-disc list-inside">
-                        {rel.highlights.map((h, i) => (
-                          <li key={i}>{h}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-primary)]/40 flex justify-end shrink-0">
-                <button
-                  onClick={() => setChangelogModalOpen(false)}
-                  className="px-5 py-2 rounded-xl bg-[var(--color-accent)] text-black font-bold text-xs cursor-pointer hover:opacity-90 transition-opacity"
-                >
-                  Close Changelog
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <ChangelogModal
+        isOpen={changelogModalOpen}
+        onClose={() => setChangelogModalOpen(false)}
+      />
 
       {/* ========================================================================= */}
       {/* 4. SPONSOR & COMMUNITY SUPPORT MODAL                                       */}
@@ -1149,6 +1085,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     href="https://github.com/sponsors/openguideforai"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="GitHub Sponsors @openguideforai (opens in a new tab)"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-pink-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-pink-400 transition-colors">
@@ -1161,6 +1098,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     href="https://ko-fi.com/buymegoodcoffee"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Ko-fi buymegoodcoffee (opens in a new tab)"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-amber-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-amber-400 transition-colors">
@@ -1173,6 +1111,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({
                     href="https://paypal.me/buymegoodcoffee"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="PayPal buymegoodcoffee (opens in a new tab)"
                     className="p-3 rounded-2xl bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-blue-500/50 hover:bg-[var(--color-primary)]/80 flex flex-col items-center justify-center gap-1.5 group text-center cursor-pointer transition-all shadow-sm"
                   >
                     <span className="font-bold text-xs text-[var(--color-text-primary)] group-hover:text-blue-400 transition-colors">

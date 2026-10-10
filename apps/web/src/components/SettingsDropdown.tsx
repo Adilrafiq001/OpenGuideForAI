@@ -100,7 +100,7 @@ export function SettingsDropdown() {
             role="menu"
             aria-orientation="vertical"
             aria-label="Settings Menu"
-            className="absolute right-0 top-full mt-2 w-72 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-xl shadow-xl overflow-hidden z-50 flex flex-col"
+            className="absolute right-0 top-full mt-2 w-72 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col"
           >
             
             {activeView === 'main' && (
@@ -122,7 +122,7 @@ export function SettingsDropdown() {
                   <button 
                     onClick={() => setActiveView('themes')}
                     role="menuitem"
-                    className="w-full flex items-center justify-between px-2 py-2 rounded-lg hover:bg-[var(--color-tertiary)] transition-colors group text-left"
+                    className="w-full flex items-center justify-between px-2 py-2 rounded-lg hover:bg-[var(--color-tertiary)] transition-colors group text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <Palette size={16} className="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]" aria-hidden="true" />
@@ -150,12 +150,15 @@ export function SettingsDropdown() {
                       type="range" 
                       min="12" 
                       max="24" 
+                      step="1"
                       value={fontSize}
                       aria-label="Editor font size"
                       onChange={(e) => setFontSize(Number(e.target.value))}
                       aria-valuemin={12}
                       aria-valuemax={24}
                       aria-valuenow={fontSize}
+                      aria-valuetext={`${fontSize} pixels`}
+                      aria-orientation="horizontal"
                       className="w-full accent-[var(--color-accent)] bg-[var(--color-border)] rounded-full appearance-none h-1.5 cursor-pointer"
                     />
                   </div>

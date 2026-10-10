@@ -15,7 +15,7 @@ import { track5 } from './data/track5';
 import { track6 } from './data/track6';
 import { track7 } from './data/track7';
 import { getBuilderTrack, trackB0 } from './data/builderTracks';
-import { CURRENT_STUDIO_VERSION } from './data/changelogData';
+import { CURRENT_STUDIO_VERSION, CHANGELOG_DATA } from './data/changelogData';
 import './App.css';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -26,6 +26,7 @@ import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import { PhysicsBarLoader } from './components/PhysicsBarLoader';
 import { AppWideSpatialHUD } from './components/spatial/AppWideSpatialHUD';
 import { startAppTour } from './components/AppTour';
+import { ChangelogModal } from './components/ChangelogModal';
 import Lenis from 'lenis';
 
 function safeGetSessionItem(key: string): string | null {
@@ -121,6 +122,7 @@ function AppContent() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isForwardEngineerOpen, setIsForwardEngineerOpen] = useState(false);
+  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
 
   // Global listener to open the Offline AI Copilot Knowledge Bank
   useEffect(() => {
@@ -395,6 +397,19 @@ function AppContent() {
               onLaunchTrack0={() => {
                 navigate('/track/0/intro');
               }}
+              onLaunchBuilder0={() => {
+                navigate('/builder/0/intro');
+              }}
+            />
+          </Suspense>
+        )}
+
+        {/* Platform Changelog & Release Milestones Modal */}
+        {isChangelogOpen && (
+          <Suspense fallback={null}>
+            <ChangelogModal
+              isOpen={isChangelogOpen}
+              onClose={() => setIsChangelogOpen(false)}
             />
           </Suspense>
         )}
@@ -458,7 +473,7 @@ function AppContent() {
         {/* Studio Version Update Announcement Pill */}
         <StudioAnnouncementPill 
           lastSeenVersion={lastSeenVersion}
-          onOpenSettings={handleOpenSettings}
+          onOpenChangelog={() => setIsChangelogOpen(true)}
           onDismiss={() => setLastSeenVersion(CURRENT_STUDIO_VERSION)}
         />
       </div>
@@ -467,11 +482,11 @@ function AppContent() {
 
 function StudioAnnouncementPill({
   lastSeenVersion,
-  onOpenSettings,
+  onOpenChangelog,
   onDismiss
 }: {
   lastSeenVersion: string;
-  onOpenSettings: () => void;
+  onOpenChangelog: () => void;
   onDismiss: () => void;
 }) {
   const location = useLocation();
@@ -479,22 +494,24 @@ function StudioAnnouncementPill({
   if (location.pathname.startsWith('/track') || location.pathname.startsWith('/builder')) return null;
   if (lastSeenVersion === CURRENT_STUDIO_VERSION) return null;
 
+  const latestHighlight = CHANGELOG_DATA[0]?.highlights[0] || CHANGELOG_DATA[0]?.title || 'Platform Upgrades & Enhancements';
+
   return (
-    <div className="hidden sm:flex fixed bottom-28 md:bottom-32 right-4 sm:right-6 md:right-8 z-[110] max-w-xs p-3 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
+    <div className="hidden sm:flex fixed bottom-28 md:bottom-32 right-4 sm:right-6 md:right-8 z-[110] max-w-sm p-3 rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-accent)]/40 shadow-2xl backdrop-blur-xl items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
       <div className="min-w-0">
         <div className="flex items-center gap-1.5 font-bold text-[var(--color-text-primary)]">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>OpenGuide v{CURRENT_STUDIO_VERSION} Live</span>
         </div>
         <p className="text-[11px] text-[var(--color-text-secondary)] truncate">
-          Track 4, Mobile IDE Tabs, 50+ Bluee Offline Guides
+          {latestHighlight} • 50+ Bluee Offline Guides
         </p>
       </div>
       <div className="flex items-center gap-1.5 shrink-0">
         <button
           onClick={() => {
             onDismiss();
-            onOpenSettings();
+            onOpenChangelog();
           }}
           className="px-2.5 py-1 rounded-lg bg-[var(--color-accent)] text-[var(--color-primary)] font-mono font-bold text-[11px] hover:opacity-90 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         >

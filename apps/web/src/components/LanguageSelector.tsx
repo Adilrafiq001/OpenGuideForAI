@@ -13,6 +13,19 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0] || { code: 'en', name: 'English', nativeName: 'English' };
+  const [focusedIndex, setFocusedIndex] = useState<number>(() => {
+    const idx = LANGUAGES.findIndex(l => l.code === language);
+    return idx >= 0 ? idx : 0;
+  });
+
+  const handleToggle = () => {
+    const nextState = !isOpen;
+    if (nextState) {
+      const idx = LANGUAGES.findIndex(l => l.code === language);
+      setFocusedIndex(idx >= 0 ? idx : 0);
+    }
+    setIsOpen(nextState);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
@@ -21,10 +34,33 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
       }
     }
     function handleKeyDown(event: KeyboardEvent) {
+      if (!isOpen) return;
+
       if (event.key === 'Escape') {
+        event.preventDefault();
         setIsOpen(false);
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % LANGUAGES.length);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + LANGUAGES.length) % LANGUAGES.length);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        setFocusedIndex(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        setFocusedIndex(LANGUAGES.length - 1);
+      } else if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        const selected = LANGUAGES[focusedIndex];
+        if (selected) {
+          setLanguage(selected.code);
+          setIsOpen(false);
+        }
       }
     }
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
@@ -35,7 +71,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
       document.removeEventListener('touchstart', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, focusedIndex, setLanguage]);
 
   const buttonClasses = variant === 'capsule'
     ? 'inline-flex items-center justify-center gap-1 px-2 sm:px-2.5 h-8 rounded-full hover:bg-[var(--color-primary)] text-xs font-mono text-[var(--color-text-primary)] font-semibold transition-all cursor-pointer active:scale-95 group'
@@ -45,7 +81,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
     <div ref={dropdownRef} className="relative inline-block text-left" dir="ltr">
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-label="Select interface language"
@@ -65,16 +101,20 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
             transition={{ type: 'spring', stiffness: 280, damping: 22 }}
             role="listbox"
             aria-label={t('select_language')}
+            aria-activedescendant={isOpen && LANGUAGES[focusedIndex] ? `lang-opt-${LANGUAGES[focusedIndex].code}` : undefined}
+            tabIndex={-1}
             className={`absolute ${variant === 'capsule' ? '-left-14 sm:left-auto sm:right-0' : 'right-0'} mt-2 w-48 sm:w-52 max-h-80 overflow-y-auto rounded-2xl bg-[var(--color-secondary)] border border-[var(--color-border)] p-2 shadow-2xl backdrop-blur-xl z-[150] space-y-1 custom-scrollbar momentum-scroll-y`}
           >
             <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-[var(--color-text-secondary)] border-b border-[var(--color-border)] mb-1">
               {t('select_language')}
             </div>
-            {LANGUAGES.map((lang) => {
+            {LANGUAGES.map((lang, idx) => {
               const isSelected = lang.code === language;
+              const isFocused = idx === focusedIndex;
               return (
                 <button
                   key={lang.code}
+                  id={`lang-opt-${lang.code}`}
                   type="button"
                   role="option"
                   aria-selected={isSelected}
@@ -86,7 +126,7 @@ export function LanguageSelector({ variant = 'default' }: LanguageSelectorProps)
                     isSelected
                       ? 'bg-[var(--color-accent-trans,rgba(16,185,129,0.15))] text-[var(--color-accent)] font-bold'
                       : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]/40'
-                  }`}
+                  } ${isFocused ? 'ring-1 ring-[var(--color-accent)]' : ''}`}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="font-mono text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[var(--color-primary)]/60 border border-[var(--color-border)] opacity-80 w-7 text-center">
