@@ -85,7 +85,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
             <button
               onClick={() => navigate('/')}
               aria-label="Back to OpenGuide Studio"
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              className="flex items-center gap-2 px-3.5 py-2 min-h-[40px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/80 border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] active:scale-95"
             >
               <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
               <span>{t('briefing_back')}</span>
@@ -116,7 +116,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           >
             <button
               onClick={onOpenThemes}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              className="flex items-center gap-2 px-3.5 py-2 min-h-[40px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               aria-label="Themes and Studio Settings"
             >
               <div 
@@ -137,7 +137,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
           >
             <button
               onClick={() => navigate('/')}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors border border-[var(--color-border)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               aria-label="Close Briefing"
             >
               <X size={16} />
@@ -358,7 +358,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
                         navigate(isBuilderPath ? `/builder/${trackNum.replace('B','')}/engine?module=${mIdx}&lesson=${lIdx}` : `/track/${trackNum}/engine?module=${mIdx}&lesson=${lIdx}`);
                       }
                     }}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                    className="flex items-center justify-between p-2.5 min-h-[44px] rounded-xl bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)] border border-transparent hover:border-[var(--color-border)] cursor-pointer text-xs transition-all group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
                       <div className="w-5 h-5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] flex items-center justify-center text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] shrink-0">

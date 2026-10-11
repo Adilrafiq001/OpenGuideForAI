@@ -22,7 +22,10 @@ interface AbbyChatbotProps {
 
 export const AbbyChatbot: React.FC<AbbyChatbotProps> = ({ onOpenSettings }) => {
   const location = useLocation();
-  const isEngine = location.pathname.startsWith('/track/') && (location.pathname.endsWith('/engine') || /^\/track\/[0-9]+$/.test(location.pathname));
+  const isEngine = (
+    (/^\/track\/[0-9]+(\/engine)?$/.test(location.pathname)) ||
+    (/^\/builder\/[^/]+(\/engine)?$/.test(location.pathname))
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [chatSize, setChatSize] = useState<'standard' | 'expanded' | 'compact'>('standard');
   const [query, setQuery] = useState('');

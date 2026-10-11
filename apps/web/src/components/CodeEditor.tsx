@@ -269,7 +269,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
               type="button"
               onClick={() => insertText(k.insert)}
               title={k.title}
-              className="px-2.5 py-1 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-[var(--color-text-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[38px] min-w-[34px] flex items-center justify-center shrink-0 touch-manipulation"
+              className="px-3 py-1.5 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-[var(--color-text-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[42px] min-w-[38px] flex items-center justify-center shrink-0 touch-manipulation"
             >
               {k.label}
             </button>

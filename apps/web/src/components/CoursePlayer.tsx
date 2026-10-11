@@ -411,7 +411,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
             data-testid="mobile-tab-briefing"
             onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('briefing'); }}
             aria-pressed={mobileTab === 'briefing'}
-            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+            className={`flex-1 py-2 min-h-[42px] rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
               mobileTab === 'briefing'
                 ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -425,7 +425,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               data-testid="mobile-tab-editor"
               onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('editor'); }}
               aria-pressed={mobileTab !== 'briefing'}
-              className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+              className={`flex-1 py-2 min-h-[42px] rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 mobileTab !== 'briefing'
                   ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -440,7 +440,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 data-testid="mobile-tab-editor"
                 onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('editor'); }}
                 aria-pressed={mobileTab === 'editor'}
-                className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                className={`flex-1 py-2 min-h-[42px] rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   mobileTab === 'editor'
                     ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                     : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -453,7 +453,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                 data-testid="mobile-tab-output"
                 onClick={() => { playTactileSound('click'); triggerHaptic('light'); setMobileTab('output'); }}
                 aria-pressed={mobileTab === 'output'}
-                className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                className={`flex-1 py-2 min-h-[42px] rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   mobileTab === 'output'
                     ? 'bg-[var(--color-primary)] text-[var(--color-text-primary)] font-bold shadow-sm border border-[var(--color-border)]'
                     : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -483,7 +483,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               <button
                 onClick={() => setLeftTab('briefing')}
                 aria-pressed={leftTab === 'briefing'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   leftTab === 'briefing' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
@@ -493,7 +493,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
               <button
                 onClick={() => setLeftTab('curriculum')}
                 aria-pressed={leftTab === 'curriculum'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                   leftTab === 'curriculum' ? 'bg-[var(--color-secondary)] text-[var(--color-text-primary)] font-bold shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
@@ -917,9 +917,9 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                     }}
                     data-testid="export-ipynb-btn"
                     aria-label="Export lesson as Jupyter Notebook (.ipynb)"
-                    className="px-2 py-0.5 rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                    className="px-2.5 py-1.5 min-h-[38px] min-w-[38px] rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-tertiary)] text-xs font-mono transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <DownloadSimple size={12} />
+                    <DownloadSimple size={13} />
                     <span className="hidden sm:inline">.ipynb</span>
                   </button>
                 </Tooltip>
@@ -1015,7 +1015,7 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
           {/* Console Output Terminal Panel */}
           <div data-testid="terminal-container" className={`shrink-0 bg-[var(--color-secondary)] border border-[var(--color-border)] rounded-2xl p-1.5 flex flex-col overflow-hidden shadow-sm ${
-            mobileTab === 'output' ? 'flex-1 h-full flex' : mobileTab === 'editor' ? 'h-36 sm:h-44 flex' : 'h-36 sm:h-44 hidden lg:flex'
+            mobileTab === 'output' ? 'flex-1 h-full flex' : 'h-36 sm:h-44 hidden lg:flex'
           }`}>
             <div className="rounded-xl bg-[var(--color-primary)] h-full p-3 flex flex-col overflow-hidden">
               

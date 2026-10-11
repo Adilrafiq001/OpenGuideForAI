@@ -144,23 +144,23 @@ export function PromptToPreviewLab({
   return (
     <div className="h-full flex flex-col gap-3 min-h-0 overflow-hidden font-mono text-xs">
       {/* Top Controls Toolbar */}
-      <div className="h-11 border border-[var(--color-border)] rounded-xl bg-[var(--color-secondary)] px-3 flex items-center justify-between shrink-0 shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[var(--color-accent)] font-bold text-xs">
+      <div className="min-h-[48px] py-1.5 border border-[var(--color-border)] rounded-xl bg-[var(--color-secondary)] px-2.5 sm:px-3 flex items-center justify-between shrink-0 shadow-sm overflow-x-auto no-scrollbar gap-2 touch-pan-x">
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 text-[var(--color-accent)] font-bold text-xs shrink-0">
             <Lightning size={16} weight="fill" />
             <span className="hidden sm:inline">Prompt-to-Preview Lab</span>
             <span className="sm:hidden">Workbench</span>
           </div>
 
-          <span className="text-[var(--color-border)]">|</span>
+          <span className="text-[var(--color-border)] shrink-0">|</span>
 
           {/* Provider Selector Pill */}
-          <div className="flex items-center gap-1 bg-[var(--color-primary)] p-0.5 rounded-lg border border-[var(--color-border)]">
+          <div className="flex items-center gap-1 bg-[var(--color-primary)] p-0.5 rounded-lg border border-[var(--color-border)] shrink-0">
             <button
               onClick={() => setProvider('offline')}
               data-testid="provider-offline-btn"
               aria-pressed={provider === 'offline'}
-              className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+              className={`px-2.5 py-1.5 min-h-[38px] rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                 provider === 'offline' 
                   ? 'bg-[var(--color-accent)] text-white shadow-xs' 
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -175,7 +175,7 @@ export function PromptToPreviewLab({
               }}
               data-testid="provider-byok-btn"
               aria-pressed={provider === 'gemini-byok'}
-              className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1.5 min-h-[38px] rounded-md text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shrink-0 ${
                 provider === 'gemini-byok' 
                   ? 'bg-amber-600 text-white shadow-xs' 
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -188,7 +188,7 @@ export function PromptToPreviewLab({
               onClick={() => setProvider('mock')}
               data-testid="provider-mock-btn"
               aria-pressed={provider === 'mock'}
-              className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+              className={`px-2.5 py-1.5 min-h-[38px] rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                 provider === 'mock' 
                   ? 'bg-indigo-600 text-white shadow-xs' 
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -200,13 +200,13 @@ export function PromptToPreviewLab({
         </div>
 
         {/* Right Toolbar Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {provider === 'gemini-byok' && (
             <button
               onClick={() => setIsKeyModalOpen(true)}
               data-testid="open-api-key-modal-btn"
               aria-label="Manage Gemini API Key"
-              className="px-2 py-1 rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-primary)] text-[11px] text-amber-500 flex items-center gap-1 transition-colors cursor-pointer"
+              className="px-2.5 py-1.5 min-h-[38px] rounded-lg border border-[var(--color-border)] hover:bg-[var(--color-primary)] text-[11px] text-amber-500 flex items-center justify-center gap-1 transition-colors cursor-pointer shrink-0"
               title="Manage Gemini API Key"
             >
               <Key size={13} />
@@ -220,7 +220,7 @@ export function PromptToPreviewLab({
               data-testid="toggle-view-code-btn"
               aria-pressed={isViewCodeOpen}
               aria-label={isViewCodeOpen ? 'Hide Generated Code & Return to Preview' : 'Toggle generated source code view'}
-              className={`px-2.5 py-1 rounded-lg border text-[11px] flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[38px] rounded-lg border text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
                 isViewCodeOpen 
                   ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]' 
                   : 'border-[var(--color-border)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -237,7 +237,7 @@ export function PromptToPreviewLab({
                 onClick={handleStopPreview}
                 data-testid="stop-preview-btn"
                 aria-label="Stop preview execution"
-                className="px-2.5 py-1 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                className="px-3 py-1.5 min-h-[38px] rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shrink-0"
               >
                 <Stop size={13} weight="fill" />
                 <span className="hidden sm:inline">Stop Preview</span>
@@ -248,7 +248,7 @@ export function PromptToPreviewLab({
               onClick={handleRestartPreview}
               data-testid="restart-preview-btn"
               aria-label="Resume preview execution"
-              className="px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+              className="px-3 py-1.5 min-h-[38px] rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shrink-0"
             >
               <Play size={13} weight="fill" />
               <span>Resume</span>
@@ -270,11 +270,11 @@ export function PromptToPreviewLab({
               </span>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-[var(--color-primary)] p-0.5 rounded-lg border border-[var(--color-border)]">
               <button
                 onClick={() => setBlueprintMode('structured')}
                 aria-pressed={blueprintMode === 'structured'}
-                className={`px-2 py-0.5 rounded text-[10px] transition-all cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-[11px] font-mono transition-all cursor-pointer flex items-center justify-center ${
                   blueprintMode === 'structured' ? 'bg-[var(--color-accent)] text-white font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
@@ -283,7 +283,7 @@ export function PromptToPreviewLab({
               <button
                 onClick={() => setBlueprintMode('freeform')}
                 aria-pressed={blueprintMode === 'freeform'}
-                className={`px-2 py-0.5 rounded text-[10px] transition-all cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-[11px] font-mono transition-all cursor-pointer flex items-center justify-center ${
                   blueprintMode === 'freeform' ? 'bg-[var(--color-accent)] text-white font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
@@ -347,7 +347,7 @@ export function PromptToPreviewLab({
             />
           )}
 
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex flex-wrap items-center justify-between pt-1 gap-2">
             <div className="flex items-center gap-1.5 text-[10px] text-[var(--color-text-secondary)]">
               <ShieldCheck size={14} className="text-emerald-400" />
               <span>Strict Sandbox Isolation (<span className="text-[var(--color-accent)]">allow-scripts</span> only)</span>
@@ -358,7 +358,7 @@ export function PromptToPreviewLab({
               disabled={isGenerating}
               data-testid="generate-preview-btn"
               aria-label="Generate code and run live preview"
-              className="px-4 py-1.5 rounded-lg bg-[var(--color-accent)] hover:brightness-110 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm disabled:opacity-50"
+              className="px-4 py-2 min-h-[42px] rounded-lg bg-[var(--color-accent)] hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm disabled:opacity-50"
             >
               {isGenerating ? <ArrowClockwise size={14} className="animate-spin" /> : <Play size={13} weight="fill" />}
               <span>{isGenerating ? 'Building...' : 'Generate & Preview'}</span>

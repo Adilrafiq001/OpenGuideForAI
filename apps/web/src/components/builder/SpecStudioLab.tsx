@@ -196,7 +196,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           <button
             onClick={handleCopySpec}
             aria-label="Copy specification prompt to clipboard"
-            className="p-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            className="p-2 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             title="Copy spec"
           >
             {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -205,9 +205,9 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
       </div>
 
       {/* Preset Selector Tabs */}
-      <div className="px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-primary)]/20 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] mr-1 font-bold">
+      <div className="px-3 sm:px-4 py-2 border-b border-[var(--color-border)] bg-[var(--color-primary)]/20 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar touch-pan-x">
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] mr-1 font-bold shrink-0">
             Spec Template:
           </span>
           <button
@@ -215,7 +215,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             data-testid="template-prod-spec"
             onClick={() => handleSelectTemplate('prod')}
             aria-pressed={activeTemplate === 'prod'}
-            className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center justify-center shrink-0 ${
               activeTemplate === 'prod'
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                 : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
@@ -228,7 +228,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             data-testid="template-vibe-spec"
             onClick={() => handleSelectTemplate('vibe')}
             aria-pressed={activeTemplate === 'vibe'}
-            className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center justify-center shrink-0 ${
               activeTemplate === 'vibe'
                 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                 : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
@@ -241,7 +241,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
             data-testid="template-custom-spec"
             onClick={() => handleSelectTemplate('custom')}
             aria-pressed={activeTemplate === 'custom'}
-            className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center justify-center shrink-0 ${
               activeTemplate === 'custom'
                 ? 'bg-[var(--color-accent)]/20 text-[var(--color-accent)] border border-[var(--color-accent)]/40'
                 : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]'
@@ -254,7 +254,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
         <button
           onClick={() => handleSelectTemplate(activeTemplate)}
           aria-label="Reset current specification template"
-          className="inline-flex items-center gap-1 text-[11px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[38px] rounded-md text-[11px] font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] cursor-pointer shrink-0"
         >
           <ArrowCounterClockwise size={12} />
           <span>Reset</span>
@@ -288,7 +288,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
           />
 
           {/* Action Footer */}
-          <div className="mt-3 flex items-center justify-between gap-2">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-[var(--color-text-secondary)]">
               {isAllPassed ? '✓ Ready for deterministic generation' : '⚠ Resolve failed rubric criteria on right'}
             </span>
@@ -297,7 +297,7 @@ export function SpecStudioLab({ onSpecPassed, lessonId }: SpecStudioLabProps) {
               onClick={handleSimulateAgent}
               disabled={!isAllPassed || isSimulating}
               aria-label="Simulate deterministic agent execution"
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
+              className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[42px] rounded-xl text-xs font-mono font-bold transition-all w-full sm:w-auto ${
                 isAllPassed
                   ? 'bg-emerald-500 hover:bg-emerald-400 text-black cursor-pointer shadow-md shadow-emerald-500/20 active:scale-[0.98]'
                   : 'bg-[var(--color-border)] text-[var(--color-text-secondary)] cursor-not-allowed opacity-60'

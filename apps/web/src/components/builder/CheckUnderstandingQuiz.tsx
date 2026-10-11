@@ -109,7 +109,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
                       data-testid={`quiz-option-${qIdx}-${oIdx}`}
                       aria-pressed={isThisSelected}
                       aria-label={`Option ${oIdx + 1}: ${opt}`}
-                      className={`w-full text-left p-2 rounded-lg border text-[11px] transition-all flex items-center justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${borderClass} ${bgClass}`}
+                      className={`w-full text-left p-2.5 min-h-[40px] rounded-lg border text-xs transition-all flex items-center justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${borderClass} ${bgClass}`}
                     >
                       <span>{opt}</span>
                       {isSubmitted && oIdx === q.answerIndex && (
@@ -139,7 +139,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
             type="button"
             onClick={handleReset}
             aria-label={isPerfect ? 'Retake quiz for practice' : 'Try quiz again'}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)] transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)] transition-all cursor-pointer"
           >
             <ArrowClockwise size={13} />
             <span>{isPerfect ? 'Retake Quiz' : 'Try Again'}</span>
@@ -153,7 +153,7 @@ export function CheckUnderstandingQuiz({ questions, onPassed, isCompleted = fals
             disabled={!allAnswered}
             data-testid="submit-quiz-btn"
             aria-label="Check quiz answers"
-            className={`px-4 py-1.5 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
+            className={`px-4 py-2 min-h-[40px] rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
               allAnswered
                 ? 'bg-[var(--color-accent)] hover:brightness-110 text-white cursor-pointer active:scale-95 shadow-sm'
                 : 'bg-[var(--color-border)] text-[var(--color-text-secondary)]/50 cursor-not-allowed'

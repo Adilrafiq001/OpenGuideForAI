@@ -171,6 +171,7 @@
   left: 50%;
   top: 87%;
   transform: translateX(-50%);
+  max-width: min(401px, calc(100vw - 32px));
   stroke-dasharray: 60 150;
   stroke-dashoffset: 60;
   pointer-events: none;
