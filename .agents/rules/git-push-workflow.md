@@ -14,6 +14,8 @@
 ## Branch Strategy & Author Identity
 
 - **Active Development Branch:** `dev` (all development and testing happen on `dev` against local/dev-preview targets)
+- **Production Release Branch:** `main` (only updated on deployment to production)
+- **Strict Two-Branch Topology:** Strictly NO other branches are permitted in local or remote repositories except `main` (production release branch) and `dev` (active development branch). All experimental, bot, or Dependabot branches MUST be purged immediately from all remotes (`origin`, `open`, `ard`) so that ONLY `main` and `dev` exist across the entire project.
 - **Production Target:** Cloudflare Pages / Static CDN at `https://openguideforai.dpdns.org`
 - **Commit Author & Committer:** Strictly `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>`
 - **Commit Format:** Conventional Commits (`feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`)

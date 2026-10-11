@@ -46,6 +46,7 @@
 4. **Author Identity:** Strictly `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>` with zero AI attribution.
 5. **Dual-Remote Multi-Push:** Pushing to `origin` must simultaneously update both Cloudflare Pages target (`openguideforai/OpenGuideForAI.git`) and personal archive mirror (`Adilrafiq001/OpenGuideForAI.git`).
 6. **"Push to Prod" Universal Release Contract:** Triggering "push to prod" mandates: (1) All READMEs in all 12 languages updated, (2) CHANGELOG & in-app release updated, (3) GitHub Releases drafted, (4) All .md files synchronized, (5) 5-Point Pre-Flight Gate passed, (6) Clean As You Go hygiene, and (7) Post-deploy edge verification at `https://openguideforai.dpdns.org`.
+7. **Strict Two-Branch Topology:** Strictly NO other branches are permitted in local or remote repositories except `main` (production release branch) and `dev` (active development branch). All experimental, bot, or Dependabot branches MUST be purged immediately from all remotes (`origin`, `open`, `ard`) so that only `main` and `dev` exist.
 # Docs
 
 1. **Project State:** Update `docs/PROJECT-STATE.md` at the end of every session.
@@ -492,6 +493,8 @@ try { await riskyOp(); } catch (e) { console.error(e); }  // GOOD
 ## Branch Strategy & Author Identity
 
 - **Active Development Branch:** `dev` (all development and testing happen on `dev` against local/dev-preview targets)
+- **Production Release Branch:** `main` (only updated on deployment to production)
+- **Strict Two-Branch Topology:** Strictly NO other branches are permitted in local or remote repositories except `main` (production release branch) and `dev` (active development branch). All experimental, bot, or Dependabot branches MUST be purged immediately from all remotes (`origin`, `open`, `ard`) so that ONLY `main` and `dev` exist across the entire project.
 - **Production Target:** Cloudflare Pages / Static CDN at `https://openguideforai.dpdns.org`
 - **Commit Author & Committer:** Strictly `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>`
 - **Commit Format:** Conventional Commits (`feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`)
@@ -584,6 +587,7 @@ Every Git operation in OpenGuide MUST follow these standards. No exceptions.
 - **Active Development Branch:** `dev` (all feature work and testing happen on `dev` against local or dev-preview targets)
 - **Production Release Branch:** `main` (only updated with explicit human approval per AGENTS.md Zone B Branch Safety rule)
 - **Deployment Target:** Cloudflare Pages / Static CDN at `https://openguideforai.dpdns.org`
+- **Strict Two-Branch Topology:** Strictly NO other branches are permitted in local or remote repositories except `main` (production release branch) and `dev` (active development branch). All experimental, bot, or Dependabot branches MUST be purged immediately from all remotes (`origin`, `open`, `ard`) so that ONLY `main` and `dev` exist across the entire project.
 - **Dual-Remote Multi-Push:** Pushing to `origin` automatically updates both endpoints:
   1. `https://github.com/openguideforai/OpenGuideForAI.git` (Cloudflare Pages deploy target)
   2. `https://github.com/Adilrafiq001/OpenGuideForAI.git` (Personal archive mirror)
