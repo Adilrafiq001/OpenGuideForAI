@@ -62,6 +62,7 @@
   1. **Primary (Cloudflare Pages deploy target):** `https://github.com/openguideforai/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_OPEN`).
   2. **Secondary (Personal archive mirror):** `https://github.com/Adilrafiq001/OpenGuideForAI.git` (authenticated via `GITHUB_PAT_ARD`).
   Multi-push on `origin` must push to both endpoints in a single operation.
+- **"Push to Prod" Autonomous Trigger Definition:** Whenever the user says "push to prod" (or "deploy to production", "prod deploy"), it triggers the comprehensive release and synchronization protocol defined in Rule 21 below. No separate prompt or reminder is needed; the agent must automatically execute the complete multi-language README, changelog, GitHub Releases, all .md files, pre-flight gate, dual-remote push, and edge verification sequence.
 - **Clean As You Go & Project Hygiene (Mandatory Rule):** Zero junk policy. After test execution and physical verification passes, immediately clean transient test artifacts (such as temporary screenshots in `.playwright-mcp/`, `test-results/`, and temporary log files) as we advance to subsequent tasks. Maintain a strictly clean, neat, and tidy project directory tree at all times.
 - **Zero-Tolerance GitHub CI & Pre-Flight Gate (Strict Mandatory Rule):** Before ANY commit, push, or claiming completion of ANY task, the agent MUST run and physically verify the 5-Point Local Pre-Flight Suite:
   1. **Dev Server Live Check:** Confirm the local dev server is running as a daemon and responds with HTTP `200 OK` (`(Invoke-WebRequest http://localhost:5173).StatusCode == 200`).
@@ -105,6 +106,31 @@
   18. **Anti-AI-Slop & Zero-AI-Symbol Invariant (Strict Mandatory Rule):** Prohibit generic "AI magic" tropes and symbols across the entire application. Specifically, generic sparkle icons (`Sparkles`, `Sparkle`, `✨`, 4-pointed stars) are STRICTLY BANNED from all UI surfaces, headers, buttons, cards, and modals. In their place, agents MUST strictly use precision engineering, mathematical, and systems iconography (`Terminal`, `Cpu`, `Layers`, `Compass`, `Code2`, `ShieldCheck`, `SlidersHorizontal`, `Zap`, `GitFork`).
   19. **Component Preservation & Non-Destructive Craft Invariant (Strict Mandatory Rule):** Never delete, strip, discard, or replace bespoke high-craft interactive components (such as custom mechanical tactile buttons, interactive physics stages, or spatial WebXR controllers) with generic off-the-shelf primitives. Any requested refactor or architectural addition MUST preserve or enhance existing craft rather than flattening it.
   20. **Cognitive Header Hierarchy Standard (Strict Mandatory Rule):** Prohibit sprawled ribbons of horizontal buttons that crowd the top header bar and repeat navigation targets. Top navigation MUST be organized into clean, purposeful, grouped flyouts (Tracks & Curriculum, Studio & Labs, Portfolio) with dedicated utility docks (Search, Tour, Theme/Language capsule, and primary CTA), maintaining visual breathing room and zero horizontal overflow on all viewports.
+  21. **"Push to Prod" Universal Release & Synchronization Contract (Strict Mandatory Invariant):** Whenever the user issues the command `"push to prod"`, `"deploy to production"`, `"prod deploy"`, or clearly equivalent wording, the agent MUST treat this command as a full, unified release and synchronization protocol. It strictly mandates executing ALL of the following steps before and during the push operation without skipping, sample testing, or cutting corners:
+      - **Multi-Language README Synchronization:** Recursively discover and update ALL README files across the entire monorepo in all 12 supported languages:
+        - Root `README.md`
+        - Subpackage `apps/web/README.md`
+        - All 11 localized READMEs in `docs/translations/`: `README_ar.md`, `README_de.md`, `README_es.md`, `README_fr.md`, `README_hi.md`, `README_it.md`, `README_ja.md`, `README_pt.md`, `README_ru.md`, `README_ur.md`, `README_zh.md`.
+        All versions, badges, stats, counts (e.g. 57 Labs, 8 Tracks, 24 Themes, 12 Languages, WCAG AAA), feature highlights, and build instructions must be kept in complete lockstep synchronization across every language.
+      - **Changelog & In-App Release Notes Synchronization:**
+        - Atomically update `CHANGELOG.md` per Keep a Changelog and Semantic Versioning (SemVer), adding the new release version, date, and comprehensive categorized sections (`Added`, `Changed`, `Fixed`, `Performance`).
+        - Synchronize `apps/web/src/data/changelogData.ts` (`CURRENT_STUDIO_VERSION`, release title, highlights) and `ChangelogModal.tsx` so in-app users and the "What's New" announcement pill immediately reflect the release.
+        - Bump the semantic version in `apps/web/package.json`.
+      - **GitHub Releases & Version Tags:**
+        - Draft authoritative GitHub Release notes and release tag metadata (`vX.Y.Z`) corresponding to the changelog entry.
+        - Tag the release commit and push tags to both remote endpoints.
+      - **Exhaustive Project Documentation (.md) Synchronization:**
+        - Recursively synchronize ALL materially affected markdown documents: `docs/PROJECT-STATE.md` (session history, component counts, test metrics, current version), `docs/CURRICULUM.md` (tracks 0–7 and builder tracks B0–B7, lab counts), `docs/ROADMAP.md` (milestone statuses and roadmap progression), `ARCHITECTURE.md` (runtime stack, security models, local-first WASM Pyodide architecture), `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`, `.agents/rules/testing-standards.md`, `.agents/rules/80-docs.md`, `.agents/rules/git-push-workflow.md`, `.agents/rules/git-workflow-standards.md`, and related rule docs.
+      - **Mandatory 5-Point Local Pre-Flight Verification Gate:**
+        1. **Dev Server Live Check:** Confirm local dev server daemon responds with HTTP `200 OK` (`(Invoke-WebRequest http://localhost:5173).StatusCode == 200`).
+        2. **Physical Playwright MCP Verification:** Physically inspect live DOM, UI interactions, and confirm 0 console errors via `browser_console_messages(level: "error")`.
+        3. **Lint Verification:** `yarn lint` / `oxlint` must pass with 0 errors.
+        4. **100% Test Suite Passage:** `npx playwright test` across the entire test suite must pass with 100% success (0 failing, 0 skipped).
+        5. **Production Build Compilation:** `yarn --cwd apps/web build` must compile with 0 errors.
+      - **Clean As You Go Hygiene:** Purge all transient test screenshots (`.playwright-mcp/`), test output (`test-results/`), and temporary log files before committing.
+      - **Commit Author & Message Standards:** Author & committer strictly: `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>`. Conventional Commits format (`feat:`, `fix:`, `docs:`, `perf:`). Zero AI attribution tags or bot footers.
+      - **Dual-Remote Multi-Push:** Push to `origin` which automatically pushes simultaneously to both endpoints: (1) Cloudflare Pages target: `https://github.com/openguideforai/OpenGuideForAI.git`, and (2) Personal archive mirror: `https://github.com/Adilrafiq001/OpenGuideForAI.git`.
+      - **Post-Deploy Edge Verification:** Physically verify live edge deployment at canonical production URL `https://openguideforai.dpdns.org`. Confirm edge HTML script bundle hash matches local git HEAD build, Pyodide WebAssembly runner initializes, and browser console has 0 errors.
 
 
 

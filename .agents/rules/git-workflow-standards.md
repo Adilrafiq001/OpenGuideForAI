@@ -4,14 +4,18 @@ Every Git operation in OpenGuide MUST follow these standards. No exceptions.
 
 ---
 
-## 1. Branch Strategy
+## 1. Branch Strategy & Remotes
 
-- **Primary Branch:** `main` (active development and releases)
-- **Deployment Target:** Cloudflare Pages / Static CDN
+- **Active Development Branch:** `dev` (all feature work and testing happen on `dev` against local or dev-preview targets)
+- **Production Release Branch:** `main` (only updated with explicit human approval per AGENTS.md Zone B Branch Safety rule)
+- **Deployment Target:** Cloudflare Pages / Static CDN at `https://openguideforai.dpdns.org`
+- **Dual-Remote Multi-Push:** Pushing to `origin` automatically updates both endpoints:
+  1. `https://github.com/openguideforai/OpenGuideForAI.git` (Cloudflare Pages deploy target)
+  2. `https://github.com/Adilrafiq001/OpenGuideForAI.git` (Personal archive mirror)
 
 ---
 
-## 2. Commit Messages
+## 2. Commit Messages & Author Identity
 
 ### Format
 ```
@@ -34,46 +38,78 @@ Every Git operation in OpenGuide MUST follow these standards. No exceptions.
 | `style` | Formatting, CSS variables, tokens |
 | `perf` | Performance improvement (e.g., worker offload, memory optimization) |
 
-### Examples
-```
-feat(curriculum): scaffold Phase 2 Track 1 Vector Space modules
-fix(theme): restore WCAG AAA contrast for text on light themes
-perf(pyodide): offload Python execution to dedicated Web Worker
-docs(roadmap): update Phase 2 progress and track checklist
-```
-
 ### Rules
 - Use imperative mood: "add" not "added"
 - Keep subject line under 72 characters
-- Author must be strictly `Adil Rafiq Dar <sheenhatt@users.noreply.github.com>`
+- Author must be strictly `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>`
 - Zero AI attribution tags or bot footers (`Co-Authored-By`, `Generated with`)
 
 ---
 
-## 3. Pre-Commit Checklist
+## 3. Pre-Commit Checklist (5-Point Pre-Flight Gate)
 
 ```bash
-# 1. Typecheck and lint pass
-npm run lint
+# 1. Dev Server Live Check: responds HTTP 200 OK
+(Invoke-WebRequest http://localhost:5173).StatusCode == 200
 
-# 2. Production build succeeds
-npm run build
+# 2. Physical Playwright MCP Verification: 0 console errors
+# 3. Linter Check: 0 errors
+yarn lint  # or npm --prefix apps/web run lint
 
-# 3. Clean as you go: zero test screenshots or junk left in repository
-# 4. Zero secrets committed (no BYOK API keys, tokens, or .env files)
+# 4. 100% Test Suite Passage: 0 failures, 0 skipped
+npx playwright test
+
+# 5. Production Build Compilation: succeeds with 0 errors
+yarn --cwd apps/web build
+
+# 6. Clean As You Go: purge transient screenshots (.playwright-mcp/) and logs
+# 7. Zero secrets committed (no BYOK API keys, tokens, or .env files)
 ```
 
 ---
 
-## 4. Deployment Protocol
+## 4. The "Push to Prod" Universal Release & Synchronization Contract
 
-### Deploy Static SPA
-1. Verify production build passes (`npm run build`).
-2. Verify all Playwright MCP tests pass on local build.
-3. Clean transient test screenshots from `.playwright-mcp/` and `test-results/`.
-4. Commit changes with conventional commit format.
-5. Push to `origin main`.
-6. Cloudflare Pages automatically builds and deploys static assets.
+Whenever the user says **`push to prod`**, **`deploy to production`**, **`prod deploy`**, or equivalent, the agent MUST execute the full release and synchronization contract:
+
+1. **Multi-Language README Synchronization:**
+   - Recursively discover and update ALL READMEs across the entire monorepo in all 12 supported languages:
+     - Root [`README.md`](../../README.md)
+     - Subpackage [`apps/web/README.md`](../../apps/web/README.md)
+     - All 11 localized READMEs in [`docs/translations/`](../../docs/translations/): `README_ar.md`, `README_de.md`, `README_es.md`, `README_fr.md`, `README_hi.md`, `README_it.md`, `README_ja.md`, `README_pt.md`, `README_ru.md`, `README_ur.md`, `README_zh.md`.
+   - Ensure all versions, badges, track counts, lab counts, and feature highlights match across all 11 languages.
+
+2. **Changelog & In-App Release Synchronization:**
+   - Update [`CHANGELOG.md`](../../CHANGELOG.md) adhering to Keep a Changelog + SemVer.
+   - Synchronize [`apps/web/src/data/changelogData.ts`](../../apps/web/src/data/changelogData.ts) (`CURRENT_STUDIO_VERSION`, release highlights) and [`ChangelogModal.tsx`](../../apps/web/src/components/ChangelogModal.tsx).
+   - Bump version in [`apps/web/package.json`](../../apps/web/package.json).
+
+3. **GitHub Releases & Version Tags:**
+   - Draft authoritative GitHub Release notes and release tag metadata (`vX.Y.Z`) corresponding to the changelog entry.
+   - Tag the release and push tags to both remote endpoints.
+
+4. **All Project Documentation (.md) Synchronization:**
+   - Recursively synchronize:
+     - `docs/PROJECT-STATE.md` (session history, component counts, test metrics, current version)
+     - `docs/CURRICULUM.md` (curriculum status, tracks, lab counts)
+     - `docs/ROADMAP.md` (milestone statuses and roadmap progression)
+     - `ARCHITECTURE.md` (runtime stack, security models, local-first WASM Pyodide architecture)
+     - `docs/COMPATIBILITY-FINDINGS.md` and `docs/BACKLOG.md`
+     - `.agents/rules/testing-standards.md`, `.agents/rules/80-docs.md`, and related rule docs.
+
+5. **Mandatory 5-Point Local Pre-Flight Suite:**
+   - Dev server HTTP 200, Playwright MCP 0 console errors, `oxlint` 0 errors, 100% tests passing, production build succeeded.
+
+6. **Clean As You Go Hygiene:**
+   - Purge all temporary test screenshots (`.playwright-mcp/`), test output (`test-results/`), and temporary logs.
+
+7. **Dual-Remote Push Execution:**
+   - Commit with author `Adil Rafiq Dar <Adilrafiq001@users.noreply.github.com>` and conventional commit message.
+   - Push to `origin dev`.
+
+8. **Post-Deploy Edge Verification:**
+   - Physically verify live edge deployment at canonical production URL `https://openguideforai.dpdns.org`.
+   - Confirm edge HTML script bundle hash matches local git HEAD build, Pyodide WebAssembly runner initializes, and browser console has 0 errors.
 
 ---
 
@@ -81,8 +117,8 @@ npm run build
 
 ```bash
 # Tag major releases
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.8.2
+git push origin v1.8.2
 ```
 
 ### Version Scheme
@@ -94,9 +130,10 @@ git push origin v1.0.0
 
 ## 6. Forbidden
 
-- NEVER force-push to `main`
-- NEVER commit directly to `main`
+- NEVER force-push to `main` or `dev`
+- NEVER commit directly to `main` without explicit human approval
 - NEVER commit `.env`, `.env.local`, or secrets
 - NEVER commit `node_modules/` or `dist/`
 - NEVER use `git add .` without reviewing changes
 - NEVER merge broken code into `dev` or `main`
+- NEVER include AI attribution tags (`Co-Authored-By`, `Generated with...`)

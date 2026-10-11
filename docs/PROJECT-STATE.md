@@ -8,6 +8,10 @@ BRANCH: main / dev
 
 
 **Done:**
+- **Governance & Release Engineering: Rule 21 "Push to Prod" Universal Contract Codification:**
+  - Added Rule 21 to `AGENTS.md` Zone B ([PROFILE]), establishing the permanent, binding definition of `"push to prod"`, `"deploy to production"`, and `"prod deploy"`.
+  - Harmonized `.agents/rules/80-docs.md`, `.agents/rules/70-git-and-ci.md`, `.agents/rules/git-push-workflow.md`, `.agents/rules/git-workflow-standards.md`, `.agents/rules/MASTER_RULES.md`, `.agents/workflows/release.md`, and `.agents/skills/release/SKILL.md`.
+  - Defined mandatory 8-pillar protocol: (1) All READMEs in all 12 languages updated, (2) CHANGELOG & in-app release notes updated, (3) GitHub Releases notes & tags drafted, (4) Recursive update of all project `.md` files, (5) 5-Point Pre-Flight Verification Gate (Dev server 200, Playwright MCP 0 errors, oxlint, 100% tests, build compile), (6) Clean As You Go hygiene, (7) Dual-remote multi-push to `openguideforai` and `Adilrafiq001`, and (8) Canonical post-deploy edge verification at `https://openguideforai.dpdns.org`.
 - **Phase F20: Desktop Experience Overhaul & Comprehensive 5,000+ Defect Precision Remediation (Release v1.8.2 • 100% Certified):**
   - **1. Forensic Scan & Deep-Dive Defect Taxonomy (5,035 Defects Catalogued & Resolved):**
     - Exhaustive multi-layer forensic audit executed across all 144 source files, 12 routes, and viewports up to 4K UHD:
