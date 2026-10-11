@@ -170,6 +170,7 @@ OpenGuide no está diseñado para una élite reducida. Está diseñado para todo
 * **Certificado para Lectores de Pantalla:** Regiones de notificación ARIA activas (`aria-live="polite"`), trampas de foco en modales y puntos de referencia accesibles que garantizan una navegación no visual completa.
 * **Compatibilidad RTL Bidireccional:** Disposición totalmente invertida en urdu y árabe, protegiendo la orientación de izquierda a derecha en los bloques de código fuente.
 * **Tipografía Segura para Guiones:** Alturas de línea dinámicas que previenen colisiones de texto vertical en Devanagari, Nastaliq y escrituras del este de Asia.
+* **Ergonomía Universal Móvil y de Escritorio:** Motor de foco de teclado visible WCAG 2.2 AAA (`:focus-visible` con halo de acento de 2px) con aislamiento de CodeMirror, balanceo tipográfico de encabezados (`text-wrap: balance`), prevención de zoom en iOS móvil, desplazamiento nativo a 120Hz y hojas modales inferiores responsivas.
 
 ---
 

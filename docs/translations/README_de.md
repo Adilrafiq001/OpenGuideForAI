@@ -170,6 +170,7 @@ OpenGuide richtet sich an das gesamte Spektrum menschlicher Neugier – von Pers
 * **Vollständig Screenreader-Kompatibel:** ARIA-Live-Regionen (`aria-live="polite"`), barrierefreie Fokusfallen in Modalfenstern und semantische Orientierungspunkte.
 * **Vollständige RTL-Unterstützung:** Spiegelbildliches Layout für Urdu und Arabisch bei gleichzeitig erhaltener Links-nach-Rechts-Ausrichtung für Programmcode.
 * **Schriftsichere Zeilenhöhe:** Dynamische Zeilenhöhenanpassung verhindert vertikale Textkollisionen in Devanagari und komplexen Schriftsystemen.
+* **Universelle Mobil- und Desktop-Ergonomie:** Adaptive Split-View-Layouts, dynamische Viewport-Einheiten (`100dvh`), taktile Befehlsleisten mit hoher Informationsdichte und responsive Modalfenster, geprüft über Micro-Screens, Tablets, High-DPI-Displays und Multi-Monitor-Setups.
 
 ---
 
@@ -287,7 +288,7 @@ Jeder Beitrag muss vor dem Zusammenführen den strengen 5-Punkte-Qualitätstest 
 # 3. Statische Linter-Prüfung (0 Codefehler)
 yarn lint
 
-# 4. Automatisierte Regressionstest-Suite (100% Erfolg über 20 Testdateien)
+# 4. Automatisierte Regressionstest-Suite (100% Erfolg über alle Testdateien)
 npx playwright test --config apps/web/playwright.config.ts
 
 # 5. Statischer Produktions-Build (0 TypeScript/Vite-Fehler)

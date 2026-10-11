@@ -170,6 +170,7 @@ OpenGuide n'a pas été conçu pour une caste d'initiés. Il s'adresse à l'ense
 * **Certifié pour Lecteurs d'Écran :** Régions d'annonces ARIA dynamiques (`aria-live="polite"`), pièges de focus accessibles dans les fenêtres modales et repères de navigation fluides.
 * **Support Bidirectionnel RTL Complet :** Disposition d'interface entièrement inversée pour l'arabe et l'ourdou, tout en préservant l'alignement naturel de gauche à droite pour les blocs de code informatique.
 * **Préservation Dynamique du Texte :** Ajustement automatique de la hauteur de ligne pour éviter les collisions visuelles de diacritiques en devanagari et en écritures orientales.
+* **Ergonomie Universelle Mobile et Bureau :** Moteur de focus clavier visible WCAG 2.2 AAA (`:focus-visible` halo d'accentuation de 2px) avec isolation de l'éditeur CodeMirror, équilibrage typographique des titres (`text-wrap: balance`), prévention du zoom automatique sur iOS, défilement fluide à 120Hz et fenêtres modales en tiroirs responsifs.
 
 ---
 

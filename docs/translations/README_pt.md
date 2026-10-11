@@ -170,6 +170,7 @@ O OpenGuide não foi criado para uma casta seleta. Ele foi concebido para todo o
 * **Certificado para Leitores de Tela:** Regiões de notificação ARIA dinâmicas (`aria-live="polite"`), retenção de foco em modais e marcos semânticos que garantem navegação assistiva completa.
 * **Suporte Bidirecional RTL Completo:** Layout espelhado para urdu e árabe, mantendo a direção da esquerda para a direita (LTR) em blocos de código-fonte.
 * **Sistema de Segurança Tipográfica:** Alturas de linha dinâmicas que evitam sobreposições visuais em escritas complexas como devanagari e nastaliq.
+* **Ergonomia Universal Mobile e Desktop:** Layouts adaptativos em visualização dividida, contenção dinâmica de unidades de viewport (`100dvh`), barras de comando táteis de alta densidade e modais responsivos testados em telas compactas, tablets, displays de alta densidade e setups multimonitor.
 
 ---
 
@@ -287,7 +288,7 @@ Cada contribuição deve ser aprovada na verificação em 5 pontos antes de ser 
 # 3. Linter estático de código-fonte (0 erros)
 yarn lint
 
-# 4. Suíte automatizada de testes de regressão (100% de sucesso nos 20 arquivos de teste)
+# 4. Suíte automatizada de testes de regressão (100% de sucesso em todos os arquivos de teste)
 npx playwright test --config apps/web/playwright.config.ts
 
 # 5. Compilação estática de produção (0 erros TypeScript/Vite)

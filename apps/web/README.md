@@ -10,6 +10,7 @@ This package contains the Vite + React 18 + TypeScript web client, featuring:
 - **Forward Deployed AI Engineering Blueprint:** Embedded ASD-STE100 matrix, Agentic IDE setups (Antigravity IDE, Claude Code, Codex/Cursor), $0 sovereign cloud stack, and secret hygiene protocols.
 - **Sovereign Offline Knowledge Bank:** 250 core topics with Okapi BM25 probabilistic search and interactive visual explainables.
 - **Welcome Onboarding & Changelog Integration:** Calibrated 4-step first-time setup wizard (4 Dark, 4 Light WCAG AAA themes, 12 native scripts, pathway selection, PWA install & Pyodide pre-warm) and standalone WAI-ARIA 1.2 popup changelog modal.
+- **Mobile & Desktop Ergonomics Overhaul:** Universal desktop keyboard focus-visible engine (:focus-visible 2px halo), heading text-balancing (text-wrap: balance), mouse pointer affordances, 60/144fps GPU acceleration, mobile iOS auto-zoom prevention, 120Hz native momentum scrolling, and responsive bottom sheet modals.
 - **Design & Ergonomics:** 24 calibrated WCAG AAA themes (12 Dark, 12 Light), 12 supported languages with RTL support, and Spatial AR Glasses HUD (`Alt + S`).
 
 ## Development & Pre-Flight Scripts
@@ -23,7 +24,7 @@ yarn dev
 # Run Oxlint static analysis (0 errors)
 yarn lint
 
-# Execute Playwright automated test suite across all 20 spec files (199 tests)
+# Execute Playwright automated test suite across all spec files
 npx playwright test --config apps/web/playwright.config.ts
 
 # Compile production bundle

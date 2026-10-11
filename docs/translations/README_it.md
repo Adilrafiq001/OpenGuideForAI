@@ -170,6 +170,7 @@ OpenGuide non è pensato per un'élite esclusiva. È progettato per l'intero spe
 * **Certificato per Screen Reader:** Aree di notifica ARIA in tempo reale (`aria-live="polite"`), trappole di focus accessibili nelle modali e punti di riferimento semantici chiari.
 * **Supporto Completo RTL:** Layout specchiato per urdu e arabo, garantendo l'allineamento da sinistra a destra (LTR) per i blocchi di codice sorgente.
 * **Altezza della Linea Sicura:** Regolazione dinamica per prevenire collisioni verticali di caratteri complessi in devanagari e scritture orientali.
+* **Ergonomia Universale Mobile e Desktop:** Layout adattivi in visualizzazione divisa, contenimento dinamico delle unità viewport (`100dvh`), barre dei comandi tattili ad alta densità e modali reattivi testati su schermi compatti, tablet, monitor High-DPI e configurazioni multimonitor.
 
 ---
 
@@ -287,7 +288,7 @@ Ogni modifica deve superare il controllo rigoroso in 5 punti prima di essere int
 # 3. Linter statico del codice sorgente (0 errori)
 yarn lint
 
-# 4. Suite completa di test di regressione (100% superati su tutti i 20 file spec)
+# 4. Suite completa di test di regressione (100% superati su tutti i file spec)
 npx playwright test --config apps/web/playwright.config.ts
 
 # 5. Compilazione statica di produzione (0 errori TypeScript/Vite)

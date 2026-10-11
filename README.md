@@ -170,6 +170,7 @@ OpenGuide does not cater to an insular elite. It is engineered for the complete 
 * **Screen Reader Certified:** Live ARIA notification regions (`aria-live="polite"`), modal focus traps, and accessible element landmarks ensure complete non-visual navigation.
 * **Native RTL Bidirectional Support:** Fully mirrored layout for Urdu and Arabic, preserving isolated left-to-right alignment for programming code blocks.
 * **Script-Safe Typography:** Dynamic line-height adjustments prevent vertical text collisions in Devanagari, Nastaliq, and East Asian scripts.
+* **Universal Mobile & Desktop Ergonomics:** WCAG 2.2 AAA visible keyboard focus engine (`:focus-visible` 2px solid accent ring) with CodeMirror isolation, desktop heading text-balancing (`text-wrap: balance`) and measure clamping, mobile iOS zoom prevention, 120Hz native momentum scrolling, and responsive bottom sheets.
 
 ---
 

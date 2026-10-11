@@ -25,7 +25,7 @@ test.describe('Welcome Dialog, Settings, Languages & Footer v1.8.1 Suite', () =>
     // Verify Changelog Modal is open
     const changelogModal = page.getByRole('dialog', { name: "Platform Changelog & Release Milestones" });
     await expect(changelogModal).toBeVisible();
-    await expect(changelogModal.getByText('v1.8.1 Active')).toBeVisible();
+    await expect(changelogModal.getByText(/v1\.\d+\.\d+ Active/)).toBeVisible();
 
     // Verify URL did NOT change to /settings
     expect(page.url()).not.toContain('/settings');
@@ -135,7 +135,7 @@ test.describe('Welcome Dialog, Settings, Languages & Footer v1.8.1 Suite', () =>
 
     // Verify modal dismissed and URL routes to /builder/0/intro
     await expect(welcomeDialog).not.toBeVisible();
-    expect(page.url()).toContain('/builder/0/intro');
+    await expect(page).toHaveURL(/.*\/builder\/0\/intro/);
   });
 
   test('TC-WSF-005: ThemeSettingsModal Preferences includes all 12 languages and radiogroup semantics', async ({ page }) => {
@@ -217,7 +217,7 @@ test.describe('Welcome Dialog, Settings, Languages & Footer v1.8.1 Suite', () =>
     // Verify Changelog modal opens
     const changelogModal = page.getByRole('dialog', { name: "Platform Changelog & Release Milestones" });
     await expect(changelogModal).toBeVisible();
-    await expect(changelogModal.getByText('v1.8.1 Active')).toBeVisible();
+    await expect(changelogModal.getByText(/v1\.\d+\.\d+ Active/)).toBeVisible();
 
     // Close Changelog modal
     await changelogModal.getByRole('button', { name: 'Close changelog modal' }).click();
