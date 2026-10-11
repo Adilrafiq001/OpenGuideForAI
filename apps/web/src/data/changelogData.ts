@@ -5,9 +5,21 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.8.2';
+export const CURRENT_STUDIO_VERSION = '1.8.3';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.8.3',
+    date: 'October 2026',
+    title: 'Mobile Course Section Ergonomics, Strict Two-Branch Topology & Push to Prod Protocol',
+    highlights: [
+      'Mobile Course Section Touch Ergonomics: Upgraded touch target dimensions and padding to >=44px across CoursePlayer, SpecStudioLab, DiffReaderLab, PromptToPreviewLab, AbbyChatbot, and TrackBriefing on viewports <768px.',
+      'Mobile Layout Containment & Scrolling: Enforced overflow-x: hidden containment and touch-action: manipulation across interactive code editors and mobile tab strips, eliminating horizontal drift.',
+      'Strict Two-Branch Topology: Enforced strict two-branch repository architecture across all remotes—restricting all branches strictly to main (production) and dev (active development) and permanently purging bot/dependabot clutter.',
+      'Push to Prod Universal Contract: Codified Rule 21 in AGENTS.md and rules architecture, binding every production release to complete multi-language README, changelog, GitHub Releases, and recursive documentation synchronization.',
+      '100% Pre-Flight Verification: Passed 0-warning Oxlint linter across 156 files, dev server HTTP 200 health check, 201/201 Playwright test suite passage, and zero-error production build compilation.'
+    ]
+  },
   {
     version: '1.8.2',
     date: 'October 2026',

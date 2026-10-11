@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.8.3] - 2026-10-11
+
+### Added
+- **Mobile Course Section Ergonomics & Touch Target Precision:**
+  - Upgraded touch target dimensions and padding to $\ge 44$px across `CoursePlayer.tsx`, `SpecStudioLab.tsx`, `DiffReaderLab.tsx`, `PromptToPreviewLab.tsx`, `AbbyChatbot.tsx`, and `TrackBriefing.tsx` on viewports $<768$px.
+  - Enforced `overflow-x: hidden` layout containment and `touch-action: manipulation` across mobile interactive code editors, lab tab bars, and floating chatbot controllers, preventing horizontal drift and zoom delay.
+- **Strict Two-Branch Topology Governance:**
+  - Enforced strict repository branch topology across local and all remote endpoints (`origin`, `open`, `ard`): strictly prohibiting any branches other than `main` (production) and `dev` (active development).
+  - Purged all stale Dependabot and bot PR branches from all remote repositories.
+- **Rule 21 "Push to Prod" Universal Release & Synchronization Contract:**
+  - Codified Rule 21 in `AGENTS.md` Zone B and synchronized all `.agents/rules/` (`80-docs.md`, `70-git-and-ci.md`, `git-push-workflow.md`, `git-workflow-standards.md`, `MASTER_RULES.md`, `release.md`, `SKILL.md`).
+  - Mandated that every "push to prod" command automatically executes the full release sequence: multi-language README synchronization across all 12 languages, changelog and in-app releases, GitHub Releases notes drafting, recursive documentation synchronization, 5-point pre-flight verification gate, and post-deployment edge verification.
+
+### Verified
+- Zero lint errors (`oxlint` across 156 files).
+- 100% automated test suite passage (201/201 Playwright tests).
+- Production build compilation (`yarn --cwd apps/web build`) succeeded with 0 errors.
+
+---
+
 ## [1.8.2] - 2026-10-11
 
 ### Added

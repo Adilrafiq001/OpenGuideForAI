@@ -1,13 +1,18 @@
-# State: Production Deployed (Release v1.8.2 • Honest Reality-Grounded Benchmark: ~9.9/10)
-> Pre-flight verified across all 20 test suites (201 tests, 100% pass rate). Comprehensive Mobile (3,113 defects) & Desktop (5,035 defects) experience overhauls certified. Production Gate Opened (Pre-Approved).
+# State: Production Deployed (Release v1.8.3 • Honest Reality-Grounded Benchmark: ~9.9/10)
+> Pre-flight verified across all 20 test suites (201 tests, 100% pass rate). Strict Two-Branch Topology enforced. Production Gate Opened (Human Approved 2026-10-11).
 
 ```
-GATE: OPEN (Human Approved 2026-10-10)
+GATE: OPEN (Human Approved 2026-10-11)
 BRANCH: main / dev
 ```
 
 
 **Done:**
+- **Release v1.8.3: Mobile Course Section Precision, Strict Two-Branch Topology & Push to Prod Protocol:**
+  - Enforced strict repository topology across all remotes: strictly `main` (production) and `dev` (active development), purging all 8 stale Dependabot branches.
+  - Resolved mobile course section touch ergonomics ($\ge 44$px targets) and layout containment across `CoursePlayer.tsx`, `SpecStudioLab.tsx`, `DiffReaderLab.tsx`, `PromptToPreviewLab.tsx`, `AbbyChatbot.tsx`, and `TrackBriefing.tsx`.
+  - Codified Rule 21 "Push to Prod" Universal Contract in `AGENTS.md` and repository rule files.
+  - Merged and deployed to `main` with dual-remote synchronization on Cloudflare Pages and GitHub archive.
 - **Governance & Release Engineering: Rule 21 "Push to Prod" Universal Contract Codification:**
   - Added Rule 21 to `AGENTS.md` Zone B ([PROFILE]), establishing the permanent, binding definition of `"push to prod"`, `"deploy to production"`, and `"prod deploy"`.
   - Harmonized `.agents/rules/80-docs.md`, `.agents/rules/70-git-and-ci.md`, `.agents/rules/git-push-workflow.md`, `.agents/rules/git-workflow-standards.md`, `.agents/rules/MASTER_RULES.md`, `.agents/workflows/release.md`, and `.agents/skills/release/SKILL.md`.
