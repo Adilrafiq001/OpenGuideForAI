@@ -23,7 +23,8 @@ import {
   Boxes,
   Target,
   CheckSquare,
-  Workflow
+  Workflow,
+  Check
 } from 'lucide-react';
 
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -91,7 +92,8 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
     toggleSpatialMode 
   } = useSpatialStore();
 
-  const { currentPath } = usePathStore();
+  const { currentPath, setPath } = usePathStore();
+  const [isPathMenuOpen, setIsPathMenuOpen] = useState(false);
   const [tracksMenuTab, setTracksMenuTab] = useState<'builder' | 'engineer'>(currentPath);
   const [prevPath, setPrevPath] = useState(currentPath);
   if (prevPath !== currentPath) {
@@ -139,17 +141,19 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
           <BrandLogo size="md" />
         </a>
 
-        {/* Pathway Switcher Pill Button (Switch between Builder and Engineer anytime) */}
-        <Tooltip
-          position="bottom"
-          content={t('nav_switch_path') || 'Switch Learning Path'}
-          subtitle={currentPath === 'builder' ? 'Active: The Builder Path (B0–B7)' : 'Active: Deep AI Engineer (0–7)'}
+        {/* Pathway Switcher Pill Button with Interactive Flyout (Switch between Builder and Engineer anytime) */}
+        <div 
+          className="relative hidden sm:inline-block"
+          onMouseEnter={() => setIsPathMenuOpen(true)}
+          onMouseLeave={() => setIsPathMenuOpen(false)}
         >
           <button
             data-testid="header-path-switcher-btn"
-            onClick={() => onOpenOnboardingFork?.()}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)] text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] select-none"
+            onClick={(e) => { e.stopPropagation(); setIsPathMenuOpen(true); }}
+            className="inline-flex items-center gap-1.5 px-2.5 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-[var(--color-accent)]/50 text-[var(--color-text-primary)] text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98] select-none"
             aria-label={t('nav_switch_path') || 'Switch Learning Path'}
+            aria-expanded={isPathMenuOpen}
+            aria-haspopup="true"
           >
             {currentPath === 'builder' ? (
               <>
@@ -162,9 +166,109 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 <span className="truncate">{t('nav_path_engineer') || 'Engineer Path'}</span>
               </>
             )}
-            <ChevronDown size={10} className="opacity-60 shrink-0" />
+            <ChevronDown size={10} className={`transition-transform duration-200 opacity-60 shrink-0 ${isPathMenuOpen ? 'rotate-180' : ''}`} />
           </button>
-        </Tooltip>
+
+          <AnimatePresence>
+            {isPathMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                className="absolute top-full left-0 pt-2 z-[150] pointer-events-auto"
+              >
+                <div 
+                  role="menu"
+                  aria-label="Pathway Switcher Menu"
+                  style={{ backgroundColor: 'var(--color-secondary)' }}
+                  className="w-80 rounded-2xl border border-[var(--color-border)] p-2 shadow-2xl shadow-black/40 backdrop-blur-2xl space-y-1"
+                >
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-text-secondary)] px-2.5 py-1 font-bold border-b border-[var(--color-border)]/50 flex items-center justify-between">
+                    <span>Select Pathway</span>
+                    <span className="text-[9px] text-[var(--color-accent)] font-semibold">Dual Architecture</span>
+                  </div>
+
+                  {/* Option 1: Deep AI Engineer */}
+                  <button
+                    data-testid="path-select-engineer"
+                    onClick={() => {
+                      setPath('engineer');
+                      setTracksMenuTab('engineer');
+                      setIsPathMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl transition-colors cursor-pointer text-left ${
+                      currentPath === 'engineer' 
+                        ? 'bg-[var(--color-primary)] border border-[var(--color-accent)]/40 text-[var(--color-accent)] shadow-xs' 
+                        : 'hover:bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-center shrink-0">
+                        <Terminal size={14} className="text-[var(--color-accent)]" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold font-mono">The Deep AI Engineer</div>
+                        <div className="text-[10px] text-[var(--color-text-secondary)] truncate">Tracks 0–7 • 57 Labs • CPython WASM</div>
+                      </div>
+                    </div>
+                    {currentPath === 'engineer' && (
+                      <Check size={14} className="text-[var(--color-accent)] shrink-0 ml-1.5" />
+                    )}
+                  </button>
+
+                  {/* Option 2: The Builder Path */}
+                  <button
+                    data-testid="path-select-builder"
+                    onClick={() => {
+                      setPath('builder');
+                      setTracksMenuTab('builder');
+                      setIsPathMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl transition-colors cursor-pointer text-left ${
+                      currentPath === 'builder' 
+                        ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-xs' 
+                        : 'hover:bg-[var(--color-primary)] text-[var(--color-text-primary)] border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-center shrink-0">
+                        <Code2 size={14} className="text-emerald-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold font-mono">The Builder Path</div>
+                        <div className="text-[10px] text-[var(--color-text-secondary)] truncate">Tracks B0–B7 • 24 Modules • Zero-to-Prod</div>
+                      </div>
+                    </div>
+                    {currentPath === 'builder' && (
+                      <Check size={14} className="text-emerald-400 shrink-0 ml-1.5" />
+                    )}
+                  </button>
+
+                  <div className="h-px bg-[var(--color-border)]/60 my-1" />
+
+                  {/* Option 3: Recommendation Quiz / Pathway Fork */}
+                  <button
+                    data-testid="path-open-quiz"
+                    onClick={() => {
+                      setIsPathMenuOpen(false);
+                      onOpenOnboardingFork?.();
+                    }}
+                    className="w-full flex items-center gap-2.5 p-2 rounded-xl hover:bg-[var(--color-primary)] transition-colors cursor-pointer text-left text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-[var(--color-primary)] border border-[var(--color-border)] flex items-center justify-center shrink-0">
+                      <Compass size={13} className="text-[var(--color-text-secondary)]" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-medium">Pathway Recommendation Quiz</div>
+                      <div className="text-[10px] text-[var(--color-text-secondary)]/80">3 questions to diagnose your ideal path</div>
+                    </div>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
                   {/* Desktop Streamlined Navigation: 3 Distinct World-Class Groupings */}
           <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-[var(--color-text-secondary)] text-xs font-semibold tracking-tight whitespace-nowrap">
             {/* 1. Tracks & Curriculum Dropdown */}
@@ -212,18 +316,6 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                       {/* Pathway Category Tabs inside Dropdown */}
                       <div className="p-1 border-b border-[var(--color-border)] mb-2 flex items-center gap-1">
                         <button
-                          data-testid="tracks-tab-builder"
-                          onClick={(e) => { e.stopPropagation(); setTracksMenuTab('builder'); }}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                            tracksMenuTab === 'builder'
-                              ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-xs'
-                              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
-                          }`}
-                        >
-                          <Code2 size={11} />
-                          <span>Builder Path (B0–B7)</span>
-                        </button>
-                        <button
                           data-testid="tracks-tab-engineer"
                           onClick={(e) => { e.stopPropagation(); setTracksMenuTab('engineer'); }}
                           className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
@@ -234,6 +326,18 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                         >
                           <Terminal size={11} />
                           <span>Engineer (0–7)</span>
+                        </button>
+                        <button
+                          data-testid="tracks-tab-builder"
+                          onClick={(e) => { e.stopPropagation(); setTracksMenuTab('builder'); }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            tracksMenuTab === 'builder'
+                              ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-xs'
+                              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-primary)]'
+                          }`}
+                        >
+                          <Code2 size={11} />
+                          <span>Builder Path (B0–B7)</span>
                         </button>
                       </div>
 

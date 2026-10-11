@@ -84,6 +84,12 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
   const [isOnboardingForkOpen, setIsOnboardingForkOpen] = useState(false);
   const [isForwardEngineerModalOpen, setIsForwardEngineerModalOpen] = useState(false);
   const { setPath } = usePathStore();
+
+  // Flagship landing page defaults to the flagship Deep AI Engineer pathway
+  useEffect(() => {
+    setPath('engineer');
+  }, [setPath]);
+
   const [activeLandingTier, setActiveLandingTier] = useState<SpectrumTier>('tier0');
   const [landingSpectrumSearch, setLandingSpectrumSearch] = useState('');
   const [activePromptSampleIdx, setActivePromptSampleIdx] = useState(0);
