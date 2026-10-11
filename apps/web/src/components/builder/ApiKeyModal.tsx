@@ -74,14 +74,14 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="api-key-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex max-sm:items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)] shadow-2xl overflow-hidden text-[var(--color-text-primary)]"
+            className="w-full max-w-md max-sm:rounded-t-3xl sm:rounded-2xl border border-[var(--color-border)] bg-[var(--color-secondary)] shadow-2xl overflow-hidden text-[var(--color-text-primary)] max-h-[90dvh] overflow-y-auto overscroll-contain"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-primary)]/40">
@@ -102,9 +102,9 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
               <button
                 onClick={onClose}
                 aria-label="Close API Key dialog"
-                className="w-7 h-7 rounded-lg hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-center transition-colors cursor-pointer"
+                className="min-w-[44px] min-h-[44px] rounded-lg hover:bg-[var(--color-primary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-center transition-colors cursor-pointer touch-manipulation"
               >
-                <X size={15} />
+                <X size={16} />
               </button>
             </div>
 
@@ -129,7 +129,7 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                     href="https://aistudio.google.com/app/apikey"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[11px] text-[var(--color-accent)] hover:underline inline-flex items-center gap-1 font-mono"
+                    className="text-[11px] text-[var(--color-accent)] hover:underline inline-flex items-center gap-1 font-mono min-h-[32px]"
                   >
                     <span>Get free key</span>
                     <ArrowSquareOut size={12} />
@@ -144,20 +144,20 @@ export function ApiKeyModal({ isOpen, onClose, onSaved }: ApiKeyModalProps) {
                     onChange={(e) => setKeyInput(e.target.value)}
                     placeholder="AIzaSy..."
                     data-testid="gemini-api-key-input"
-                    className="w-full pr-10 pl-3 py-2 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-xl text-xs font-mono text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)]/50 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors"
+                    className="w-full pr-12 pl-3.5 py-3 bg-[var(--color-primary)] border border-[var(--color-border)] rounded-xl text-base sm:text-xs font-mono text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)]/50 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] transition-colors min-h-[44px]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowKey(!showKey)}
-                    className="absolute right-2.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors p-1 cursor-pointer"
+                    className="absolute right-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer touch-manipulation"
                     aria-label={showKey ? 'Hide key' : 'Show key'}
                   >
-                    {showKey ? <EyeSlash size={14} /> : <Eye size={14} />}
+                    {showKey ? <EyeSlash size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              <label className="flex items-center gap-2 cursor-pointer text-[11px] text-[var(--color-text-secondary)]">
+              <label className="flex items-center gap-2 cursor-pointer text-[11px] text-[var(--color-text-secondary)] min-h-[32px]">
                 <input
                   type="checkbox"
                   checked={persist}

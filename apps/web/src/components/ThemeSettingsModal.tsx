@@ -146,7 +146,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-[200] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-6 overflow-hidden overscroll-contain">
           {/* Clear Stage Backdrop (Beyond Popup) — Zero Blurring for Real-Time Main UI Visibility */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -185,7 +185,7 @@ export function ThemeSettingsModal({ isOpen, onClose, initialTab = 'themes' }: T
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             data-lenis-prevent="true"
-            className={`theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10 transition-all duration-200 ${
+            className={`theme-settings-modal-dialog relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[85vh] border border-[var(--color-border,rgba(255,255,255,0.12))] max-sm:rounded-t-3xl max-sm:rounded-b-none rounded-2xl sm:rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-10 transition-all duration-200 ${
               isPeeking ? 'pointer-events-none' : ''
             }`}
             style={{

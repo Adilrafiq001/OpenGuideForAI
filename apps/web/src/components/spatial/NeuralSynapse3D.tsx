@@ -537,7 +537,7 @@ export function NeuralSynapse3D({ className = '', force2D = false }: { className
       <div ref={containerRef} className="relative w-full h-[480px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#040711] via-[#080d1e] to-[#040711]">
         {use3D ? (
           <>
-            <canvas ref={canvasRef} className="w-full h-full block" style={{ touchAction: 'none' }} />
+            <canvas ref={canvasRef} className="w-full h-full block" style={{ touchAction: 'pan-y' }} />
             
             {/* Real-time Hovered / Active Neuron Badge */}
             {hoveredNode && (

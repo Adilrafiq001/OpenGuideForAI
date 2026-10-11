@@ -179,7 +179,7 @@ export function ArchitecturalPillarsModal({
       {isOpen && (
         <div 
           onClick={onClose}
-          className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-[120] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-6 bg-black/70 backdrop-blur-md overscroll-contain"
           role="presentation"
         >
           <motion.div
@@ -188,7 +188,7 @@ export function ArchitecturalPillarsModal({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-5xl max-h-[92vh] bg-[var(--color-primary)] border border-[var(--color-border)] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
+            className="w-full max-w-5xl max-h-[92dvh] sm:max-h-[92vh] bg-[var(--color-primary)] border border-[var(--color-border)] max-sm:rounded-t-[2rem] max-sm:rounded-b-none sm:rounded-[2rem] shadow-2xl flex flex-col overflow-hidden text-[var(--color-text-primary)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="pillars-modal-title"
@@ -213,10 +213,10 @@ export function ArchitecturalPillarsModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                className="w-10 h-10 rounded-full bg-[var(--color-primary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] min-h-[44px] min-w-[44px] shrink-0"
                 aria-label="Close 11 Architectural Pillars modal"
               >
-                <X size={16} />
+                <X size={18} />
               </button>
             </div>
 

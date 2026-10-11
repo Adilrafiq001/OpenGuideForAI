@@ -43,7 +43,7 @@ export function HelpModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 overflow-hidden">
+        <div className="fixed inset-0 z-[200] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-4 overflow-hidden overscroll-contain">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -61,7 +61,7 @@ export function HelpModal({
             aria-modal="true"
             aria-labelledby="help-modal-title"
             tabIndex={-1}
-            className="relative w-full max-w-2xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-[2rem] shadow-2xl p-6 sm:p-8 z-10 text-[var(--color-text-primary,#fff)] outline-none"
+            className="relative w-full max-w-2xl bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] max-sm:rounded-t-3xl max-sm:rounded-b-none rounded-[2rem] shadow-2xl p-6 sm:p-8 z-10 text-[var(--color-text-primary,#fff)] outline-none max-h-[92dvh] overflow-y-auto"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-5 border-b border-[var(--color-border,rgba(255,255,255,0.12))] mb-6">
@@ -77,9 +77,9 @@ export function HelpModal({
               <button
                 onClick={onClose}
                 aria-label="Close shortcuts modal"
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-surface,rgba(255,255,255,0.08))] transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-surface,rgba(255,255,255,0.08))] transition-colors min-h-[44px] min-w-[44px] shrink-0"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 

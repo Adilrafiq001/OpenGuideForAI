@@ -437,7 +437,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
       {isOpen && (
         <div 
           onClick={onClose}
-          className="fixed inset-0 z-[160] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 z-[160] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md overscroll-contain"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 14 }}
@@ -445,7 +445,7 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
             exit={{ opacity: 0, scale: 0.96, y: 14 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             style={{ backgroundColor: 'var(--color-secondary)' }}
-            className="w-full max-w-6xl max-h-[94vh] border border-[var(--color-border)] rounded-[2.5rem] shadow-2xl shadow-black/70 flex flex-col overflow-hidden text-[var(--color-text-primary)]"
+            className="w-full max-w-6xl max-h-[94dvh] sm:max-h-[94vh] border border-[var(--color-border)] max-sm:rounded-t-[2.5rem] max-sm:rounded-b-none rounded-[2.5rem] shadow-2xl shadow-black/70 flex flex-col overflow-hidden text-[var(--color-text-primary)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="mystery-lab-title"
@@ -475,10 +475,10 @@ Forensic Verdict: Miranda Vance paid Dr. Zachary Sterling $250k to sabotage the 
               <div className="flex items-center gap-2">
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-primary)] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer min-h-[44px] min-w-[44px] shrink-0"
                   aria-label="Close mystery modal"
                 >
-                  <X size={16} />
+                  <X size={18} />
                 </button>
               </div>
             </div>

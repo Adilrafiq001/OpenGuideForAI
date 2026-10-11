@@ -69,7 +69,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
         onClick={(e) => {
           if (e.target === e.currentTarget) handleDismiss();
         }}
-        className="fixed inset-0 z-[250] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+        className="fixed inset-0 z-[250] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
         aria-labelledby="changelog-modal-title"
@@ -81,7 +81,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
           transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-          className="w-full max-w-2xl max-h-[85vh] bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden outline-none text-[var(--color-text-primary,#fff)]"
+          className="w-full max-w-2xl max-h-[88dvh] sm:max-h-[85vh] bg-[var(--color-secondary,#0e0e11)] border border-[var(--color-border,rgba(255,255,255,0.12))] max-sm:rounded-t-3xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden outline-none text-[var(--color-text-primary,#fff)] overscroll-contain"
           tabIndex={-1}
         >
           {/* Header Bar */}
@@ -107,7 +107,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
 
             <button
               onClick={handleDismiss}
-              className="p-2 rounded-xl text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors cursor-pointer shrink-0"
+              className="p-2 rounded-xl text-[var(--color-text-secondary,#a1a1aa)] hover:text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-primary,#000)]/60 transition-colors cursor-pointer shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation"
               aria-label="Close changelog modal"
             >
               <X size={18} />
@@ -115,7 +115,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Release History Body */}
-          <div className="p-6 overflow-y-auto space-y-6 text-xs font-mono custom-scrollbar">
+          <div className="p-6 overflow-y-auto space-y-6 text-xs font-mono custom-scrollbar overscroll-contain pb-safe">
             {CHANGELOG_DATA.map((rel, index) => {
               const isActive = rel.version === CURRENT_STUDIO_VERSION;
               return (

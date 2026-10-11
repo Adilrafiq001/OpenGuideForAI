@@ -29,10 +29,10 @@ export const GitHubStarButton: React.FC<GitHubStarButtonProps> = ({
       whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       className={twMerge(
-        'group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/90 hover:border-amber-400/50 transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400',
-        variant === 'compact' ? 'h-9 px-3' : 
+        'group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:border-amber-400/50 transition-all text-xs font-semibold text-[var(--color-text-primary)] shadow-sm cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 min-h-[44px] touch-manipulation',
+        variant === 'compact' ? 'px-3.5' : 
         variant === 'drawer' ? 'w-full justify-center py-2.5 px-4' : 
-        'h-9 px-3.5',
+        'px-4',
         className
       )}
     >

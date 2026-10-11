@@ -50,6 +50,48 @@ body {
   overflow-x: hidden;
 }
 
+/* Mobile Safari Auto-Zoom Safeguard (Enforce 16px minimum font size on inputs on screens <768px) */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Universal Mobile Touch Target Safeguard & Latency Elimination */
+button, [role="button"], a, input, select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile Screen Typography Elevation: Prevent illegible micro-typography under 11px */
+@media (max-width: 639px) {
+  .text-\[8px\],
+  .text-\[9px\],
+  .text-\[10px\] {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Eliminate sticky hover artifacts on real touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button:hover:not(:active),
+  a:hover:not(:active),
+  [role="button"]:hover:not(:active) {
+    transform: none !important;
+  }
+}
+
+/* Safe Area Utility Classes */
+.pb-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+}
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top, 1rem));
+}
+
 /* Universal Tactile Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -297,5 +339,77 @@ html.lenis, html.lenis body {
 [dir="rtl"] svg.lucide-arrow-left {
   transform: scaleX(-1);
 }
+
+/* =========================================================================
+   UNIVERSAL DESKTOP ACCESSIBILITY & KEYBOARD FOCUS ENGINE
+   WCAG 2.2 AA / AAA Compliant Focus Rings Across All Interactive Controls
+   ========================================================================= */
+:focus-visible {
+  outline: 2px solid var(--color-accent, #10b981) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Exclude internal CodeMirror editable lines while retaining focused editor ring */
+.cm-editor :focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.cm-editor.cm-focused {
+  outline: 2px solid var(--color-accent, #10b981) !important;
+  outline-offset: -1px !important;
+}
+
+/* =========================================================================
+   UNIVERSAL DESKTOP TYPOGRAPHY & TEXT-BALANCE ENGINE
+   Eliminates heading orphans and prevents sprawling measures on wide displays
+   ========================================================================= */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+  text-rendering: optimizeLegibility;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.prose p, .instruction-body p {
+  max-width: 75ch;
+}
+
+/* Consistent tabular numbers for metrics, stats and numeric badges */
+.tabular-nums, [data-testid*="metric"], [data-testid*="stat"], [data-testid*="count"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mouse cursor affordance */
+button, [role="button"], a {
+  cursor: pointer;
+}
+
+button:disabled, [role="button"][aria-disabled="true"], a[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+
+/* =========================================================================
+   DESKTOP 60FPS / 144FPS HARDWARE ACCELERATION & ULTRA-WIDE CLAMPING
+   ========================================================================= */
+@media (min-width: 1024px) {
+  .hardware-accelerated, [data-testid="command-dock"], [data-testid="magnification-dock"] {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
+@media (min-width: 2560px) {
+  .container, [data-testid="main-content"], main {
+    max-width: 1720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 
 

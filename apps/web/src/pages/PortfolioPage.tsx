@@ -413,13 +413,13 @@ export function PortfolioPage() {
       `}</style>
 
       {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[var(--color-primary)]/80 backdrop-blur-md border-b border-[var(--color-border)] px-4 sm:px-6 py-3 sm:py-4 no-print">
+      <header className="sticky top-0 z-40 bg-[var(--color-primary)] border-b border-[var(--color-border)] shadow-md px-4 sm:px-6 py-3 sm:py-4 no-print">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate('/')}
               aria-label="Back to OpenGuide Overview"
-              className="p-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all cursor-pointer flex items-center gap-2 text-xs font-mono min-h-[40px] min-w-[40px]"
+              className="p-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] active:scale-95 transition-all cursor-pointer flex items-center gap-2 text-xs font-mono min-h-[44px] min-w-[44px] touch-manipulation"
             >
               <ArrowLeft size={16} />
               <span className="hidden sm:inline">Back to Overview</span>
@@ -438,7 +438,7 @@ export function PortfolioPage() {
             <button
               onClick={handlePrint}
               aria-label="Export or print certificate"
-              className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer min-h-[40px]"
+              className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border)] hover:border-[var(--color-accent)] active:scale-95 text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer min-h-[44px] touch-manipulation"
             >
               <Printer size={16} className="text-[var(--color-accent)]" />
               <span className="hidden sm:inline">Export / Print Certificate</span>
@@ -449,7 +449,7 @@ export function PortfolioPage() {
       </header>
 
       {/* Main Content Container */}
-      <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 overflow-x-hidden">
+      <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 overflow-x-hidden pb-32 md:pb-16">
         
         {/* External Auditor Verification Banner */}
         {externalVerifyParam && (

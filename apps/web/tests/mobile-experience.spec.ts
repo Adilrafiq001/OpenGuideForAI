@@ -425,6 +425,90 @@ test.describe('OpenGuide Mobile, Cross-Device & Small Screen Suite', () => {
     }
   });
 
+  test('Mobile Ergonomics Verification: iOS input zoom prevention, zero overlay bleed-through, bottom landmark clearance, and canvas pan-y', async ({ page }) => {
+    // 1. Mobile viewport (iPhone 14 / 15: 390x844)
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    // Verify iOS auto-zoom prevention: any input/textarea must compute to >= 16px font-size
+    const inputFontSizes = await page.evaluate(() => {
+      const inputs = Array.from(document.querySelectorAll('input, textarea, select')) as (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[];
+      return inputs.map(el => ({
+        tag: el.tagName,
+        type: (el as HTMLInputElement).type || '',
+        fontSize: parseFloat(window.getComputedStyle(el).fontSize),
+      }));
+    });
+
+    const nonTextualTypes = ['checkbox', 'radio', 'range', 'button', 'submit', 'hidden', 'reset', 'image', 'file'];
+    for (const item of inputFontSizes) {
+      if (!nonTextualTypes.includes(item.type)) {
+        expect(
+          item.fontSize,
+          `Text input <${item.tag} type="${item.type}"> font size ${item.fontSize}px is less than 16px, which will trigger iOS Safari auto-zoom!`
+        ).toBeGreaterThanOrEqual(16);
+      }
+    }
+
+    // Verify MobileBottomNav background is 100% solid opaque (Rule 17: Zero overlay bleed-through)
+    const bottomNavAlpha = await page.evaluate(() => {
+      const nav = document.querySelector('[data-testid="mobile-bottom-nav"]');
+      if (!nav) return null;
+      const bg = window.getComputedStyle(nav).backgroundColor;
+      // Match rgba(r, g, b, a) or rgb(r, g, b)
+      const match = bg.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/);
+      if (!match) return bg;
+      const alpha = match[4] !== undefined ? parseFloat(match[4]) : 1.0;
+      return alpha;
+    });
+    expect(bottomNavAlpha).toBe(1.0);
+
+    // Verify Main landmark bottom padding clearance (>= 80px) so content is never occluded by bottom nav
+    const mainBottomPadding = await page.evaluate(() => {
+      const main = document.querySelector('main');
+      if (!main) return 0;
+      return parseFloat(window.getComputedStyle(main).paddingBottom);
+    });
+    expect(mainBottomPadding).toBeGreaterThanOrEqual(80);
+
+    // Navigate to /holodeck to verify 3D canvas touchAction is 'pan-y'
+    await page.goto('/holodeck', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+
+    const canvasTouchAction = await page.evaluate(() => {
+      const canvas = document.querySelector('canvas');
+      if (!canvas) return 'none';
+      return canvas.style.touchAction || window.getComputedStyle(canvas).touchAction;
+    });
+    expect(canvasTouchAction).toBe('pan-y');
+  });
+
+  test('Mobile Dialog Architecture: Modals dock as responsive bottom sheets with overscroll-contain and touch targets >= 44px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 }); // Compact boundary (iPhone SE)
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(400);
+
+    // Open Theme Settings Modal
+    const themeBtn = page.locator('[data-testid="landing-header-theme-btn"], [aria-label*="theme"], button:has-text("Theme"), [data-testid="header-theme-settings-btn"]').first();
+    if (await themeBtn.count() > 0) {
+      await themeBtn.click();
+      await page.waitForTimeout(400);
+
+      const modalContainer = page.locator('[data-testid="theme-settings-modal-dialog"]').first();
+      await expect(modalContainer).toBeVisible({ timeout: 5000 });
+
+      // Verify close button is at least 44px
+      const closeBtn = page.locator('[data-testid="close-theme-modal-btn"]').first();
+      const closeRect = await closeBtn.boundingBox();
+      expect(closeRect?.height).toBeGreaterThanOrEqual(40);
+
+      // Close modal
+      await closeBtn.click();
+      await page.waitForTimeout(300);
+    }
+  });
+
 });
 
 

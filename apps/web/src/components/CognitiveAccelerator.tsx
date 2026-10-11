@@ -46,7 +46,8 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
     const timer = setInterval(() => {
       setCountdown(c => {
         if (c <= 1) {
-          setBlurtPhase('recall');
+          clearInterval(timer);
+          setTimeout(() => setBlurtPhase('recall'), 0);
           return 0;
         }
         return c - 1;
@@ -269,6 +270,8 @@ export function CognitiveAccelerator({ className = '' }: { className?: string })
 
               <div className="flex justify-end gap-3">
                 <button
+                  type="button"
+                  data-testid="evaluate-recall-btn"
                   onClick={() => setBlurtPhase('evaluated')}
                   disabled={userBlurtText.trim().length === 0}
                   className="px-6 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 disabled:opacity-40 text-black font-mono font-bold text-xs transition-all cursor-pointer shadow-lg"

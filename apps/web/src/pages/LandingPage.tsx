@@ -330,7 +330,7 @@ export function LandingPage({ onOpenThemes, onOpenHelp, onOpenDrawer, onOpenDemo
       />
 
       {/* Main Content Area Landmark (WCAG 2.2 AA SC 1.3.1) */}
-      <main id="main-content">
+      <main id="main-content" className="w-full pb-32 md:pb-16">
         {/* Hero Section: Motionsites-Inspired Physics, 3D Tilt & Orbital Nodes */}
       <HeroPhysicsStage
         currentThemeInfo={currentThemeInfo}

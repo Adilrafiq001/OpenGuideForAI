@@ -299,7 +299,8 @@ test.describe('OpenGuide Full Application Comprehensive End-To-End Regression Su
       await textarea.fill('Vector embeddings project high-dimensional semantic spaces into cosine similarities.');
       const evalBtn = cogSection.getByRole('button', { name: /Evaluate Recall/i }).first();
       await expect(evalBtn).toBeEnabled();
-      await evalBtn.click({ force: true });
+      await evalBtn.scrollIntoViewIfNeeded();
+      await evalBtn.click();
       await page.waitForTimeout(300);
       await expect(cogSection.locator('text=Active Neural Consolidation Feedback').first()).toBeVisible();
     }

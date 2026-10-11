@@ -1028,7 +1028,7 @@ export function VectorSpace3D({ onSelectNode, className = '', force2D = false }:
       >
         {use3D ? (
           <>
-            <canvas ref={canvasRef} className="w-full h-full block" style={{ touchAction: 'none' }} />
+            <canvas ref={canvasRef} className="w-full h-full block" style={{ touchAction: 'pan-y' }} />
             
             {/* Real-time Hovered Node Floating Badge */}
             {hoveredNode && (

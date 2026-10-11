@@ -226,19 +226,23 @@ function AppContent() {
       return;
     }
 
+    // On touch-first mobile devices, bypass JS touch interception to leverage 120Hz native compositor momentum
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0));
+
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: isTouchDevice ? 0.8 : 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.95,
-      touchMultiplier: 1.2,
+      touchMultiplier: isTouchDevice ? 0 : 1.0, // Zero JS touch hijacking on mobile phones
       infinite: false,
       allowNestedScroll: true,
       prevent: (node) => {
         if (!node) return false;
         return (
+          isTouchDevice ||
           node.hasAttribute?.('data-lenis-prevent') ||
           Boolean(node.closest?.('[data-lenis-prevent]')) ||
           Boolean(node.closest?.('[role="dialog"]')) ||
@@ -253,6 +257,11 @@ function AppContent() {
 
     let animId: number;
     function raf(time: number) {
+      // Pause animation loop when mobile tab is inactive to preserve battery
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        animId = requestAnimationFrame(raf);
+        return;
+      }
       lenis.raf(time);
       animId = requestAnimationFrame(raf);
     }

@@ -257,7 +257,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       {showAccessoryBar && (
         <div 
           data-testid="codemirror-accessory-bar"
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-secondary)]/95 border-b border-[var(--color-border)] overflow-x-auto no-scrollbar shrink-0 select-none z-10 touch-pan-x"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-secondary)] border-b border-[var(--color-border)] overflow-x-auto no-scrollbar shrink-0 select-none z-10 touch-pan-x"
           aria-label="Python Virtual Accessory Keyboard Bar"
         >
           <span className="text-[10px] font-mono text-[var(--color-text-secondary)] opacity-60 uppercase tracking-wider shrink-0 mr-1 hidden sm:inline">
@@ -269,7 +269,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
               type="button"
               onClick={() => insertText(k.insert)}
               title={k.title}
-              className="px-2.5 py-1 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-[var(--color-text-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[34px] min-w-[32px] flex items-center justify-center shrink-0"
+              className="px-2.5 py-1 rounded-md bg-[var(--color-primary)] hover:bg-[var(--color-accent-trans)] hover:text-[var(--color-accent)] active:bg-[var(--color-accent)] active:text-[var(--color-text-primary)] border border-[var(--color-border)] text-xs font-mono text-[var(--color-text-primary)] cursor-pointer active:scale-95 transition-all whitespace-nowrap shadow-sm min-h-[38px] min-w-[34px] flex items-center justify-center shrink-0 touch-manipulation"
             >
               {k.label}
             </button>

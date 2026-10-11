@@ -79,7 +79,7 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-[250] flex max-sm:items-end sm:items-center justify-center p-0 sm:p-6 overflow-hidden overscroll-contain">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -98,7 +98,7 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
             role="dialog"
             aria-modal="true"
             aria-label="First Principles Knowledge Matrix"
-            className="relative w-full max-w-5xl max-h-[88vh] bg-[var(--color-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border)] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col z-10"
+            className="relative w-full max-w-5xl max-h-[92dvh] sm:max-h-[88vh] bg-[var(--color-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border)] max-sm:rounded-t-3xl max-sm:rounded-b-none rounded-[2rem] shadow-2xl overflow-hidden flex flex-col z-10"
           >
             {/* Header */}
             <div className="px-6 py-5 border-b border-[var(--color-border)] flex items-center justify-between">
@@ -118,7 +118,7 @@ export function FirstPrinciplesModal({ isOpen, onClose, initialCategory = 'why' 
 
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+                className="w-10 h-10 rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-primary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center justify-center transition-colors cursor-pointer shadow-sm min-h-[44px] min-w-[44px] shrink-0"
                 aria-label="Close modal"
               >
                 <X size={18} />

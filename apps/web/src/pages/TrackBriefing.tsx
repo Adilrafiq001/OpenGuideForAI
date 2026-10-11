@@ -75,7 +75,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
     <div className="min-h-[100dvh] bg-[var(--color-primary,#050505)] text-[var(--color-text-primary,#ebebeb)] selection:bg-[var(--color-accent,#10b981)] selection:text-black font-sans pb-32 transition-colors duration-300">
       
       {/* Top Navigation & Close / Back Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-12 py-3 sm:py-4 flex items-center justify-between backdrop-blur-xl bg-[var(--color-primary)]/80 border-b border-[var(--color-border)]">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-12 py-3 sm:py-4 flex items-center justify-between bg-[var(--color-primary)] border-b border-[var(--color-border)] shadow-md">
         <div className="flex items-center gap-4">
           <Tooltip
             position="bottom"
@@ -147,7 +147,7 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-6xl mx-auto pt-20 sm:pt-28 px-4 sm:px-6 md:px-12">
+      <main className="max-w-6xl mx-auto pt-20 sm:pt-28 px-4 sm:px-6 md:px-12 pb-32 md:pb-16">
         
         {/* Banner Hero */}
         <div className="mb-12">

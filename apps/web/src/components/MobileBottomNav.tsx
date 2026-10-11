@@ -62,8 +62,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
     <nav 
       data-testid="mobile-bottom-nav"
       aria-label="Mobile Navigation Bar"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-[105] bg-[var(--color-secondary)]/95 backdrop-blur-2xl border-t border-[var(--color-border)] shadow-2xl px-2 pt-1.5 transition-all duration-200 select-none"
-      style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
+      className="md:hidden fixed bottom-0 left-0 right-0 z-[105] bg-[var(--color-secondary)] border-t border-[var(--color-border)] shadow-2xl px-2 pt-1.5 transition-all duration-200 select-none touch-manipulation"
+      style={{ paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom, 0.65rem))' }}
     >
       <div className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
@@ -75,7 +75,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
               onClick={item.onClick}
               aria-label={item.label}
               aria-current={item.active ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl min-w-[56px] min-h-[48px] active:scale-95 transition-all duration-150 cursor-pointer ${
+              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl min-w-[56px] min-h-[48px] active:scale-95 transition-all duration-150 cursor-pointer touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 item.active 
                   ? 'text-[var(--color-accent)] font-semibold' 
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
@@ -84,9 +84,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
               <div className={`p-1 rounded-xl transition-colors ${item.active ? 'bg-[var(--color-accent)]/15' : ''}`}>
                 <Icon size={20} className={item.active ? 'stroke-[2.5]' : 'stroke-[1.75]'} />
               </div>
-              <span className="text-[10px] mt-0.5 tracking-tight font-sans leading-none">{item.label}</span>
+              <span className="text-[11px] mt-0.5 tracking-tight font-sans leading-none">{item.label}</span>
               {item.active && (
-                <span className="w-1 h-1 rounded-full bg-[var(--color-accent)] mt-1 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] mt-1 animate-pulse" />
               )}
             </button>
           );
