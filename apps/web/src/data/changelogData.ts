@@ -5,9 +5,22 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.8.3';
+export const CURRENT_STUDIO_VERSION = '1.8.4';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.8.4',
+    date: 'October 2026',
+    title: 'Pathway Switcher Dual Architecture, Flagship Engineer Priority & Universal Documentation Sync',
+    highlights: [
+      'Interactive Pathway Switcher Dropdown: Upgraded header pathway pill into an accessible, tactile dropdown flyout with instant one-click switching between The Deep AI Engineer (Tracks 0–7 • 57 Labs) and The Builder Path (Tracks B0–B7 • 24 Modules).',
+      'Pathway Recommendation Quiz Integration: Integrated direct shortcut to the 3-question diagnostic onboarding fork from the pathway switcher menu.',
+      'Flagship Engineer Prioritization: Landing page (/) automatically synchronizes default pathway state to Engineer on mount; Tracks dropdown menu reordered with Engineer (0–7) as the primary first tab.',
+      'Universal Documentation & Translation Synchronization: Synchronized root README, apps/web README, and all 11 localized editions in docs/translations/ (Arabic, German, Spanish, French, Hindi, Italian, Japanese, Portuguese, Russian, Urdu, Chinese) in lockstep.',
+      'Authoritative GitHub Releases Synchronization: Fully synchronized GitHub Releases across both official repositories (openguideforai/OpenGuideForAI and Adilrafiq001/OpenGuideForAI) with permanent release tags.',
+      'Pre-Flight Verification Quality Gate: 0-warning Oxlint pass, zero-error production build compilation, and 100% automated test suite green across all 20 test files.'
+    ]
+  },
   {
     version: '1.8.3',
     date: 'October 2026',

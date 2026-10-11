@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.8.4] - 2026-10-11
+
+### Added
+- **Interactive Pathway Switcher Dropdown Flyout:**
+  - Upgraded header pathway switcher button into an accessible, tactile dropdown flyout with instant one-click switching between **The Deep AI Engineer** (`Tracks 0–7 • 57 Labs • CPython WASM`) and **The Builder Path** (`Tracks B0–B7 • 24 Modules • Zero-to-Prod`).
+  - Added active state indicators with WCAG AAA contrast and precision checkmarks for the active learning path.
+  - Integrated direct shortcut to the 3-question diagnostic onboarding fork (`OnboardingForkModal`).
+- **Flagship Engineer Pathway Prioritization:**
+  - Synchronized `LandingPage.tsx` mount lifecycle to automatically initialize the platform to the flagship Deep AI Engineer pathway (`'engineer'`) by default.
+  - Reordered the Tracks & Curriculum dropdown tabs to position **Engineer (0–7)** as the primary first tab on the left and **Builder Path (B0–B7)** as the secondary tab on the right.
+- **Universal Multi-Language README & Documentation Synchronization:**
+  - Synchronized root `README.md`, `apps/web/README.md`, and all 11 localized READMEs in `docs/translations/` (`ar`, `de`, `es`, `fr`, `hi`, `it`, `ja`, `pt`, `ru`, `ur`, `zh`).
+  - Synchronized `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, and `ARCHITECTURE.md`.
+- **Authoritative GitHub Releases Synchronization:**
+  - Published official release tags and release dossiers (`v1.8.3` and `v1.8.4`) across both repository remotes (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`).
+
+### Verified
+- Zero lint errors (`oxlint` across 156 files).
+- Zero build errors (`tsc -b && vite build` in 2.51s).
+- 100% automated test suite passage across all Playwright test files.
+- Physical Playwright MCP verification of header pathway dropdown and live edge deployment.
+
+---
+
 ## [1.8.3] - 2026-10-11
 
 ### Added

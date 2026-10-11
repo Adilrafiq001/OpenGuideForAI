@@ -66,7 +66,7 @@ OpenGuide non è un comune servizio cloud né una serie di tutorial superficiali
 
 ## Doppi Percorsi di Apprendimento
 
-OpenGuide offre due percorsi di apprendimento sincronizzati di livello mondiale, progettati per accoglierti a qualsiasi livello di partenza. Passa liberamente dall'uno all'altro in ogni momento dalla barra superiore:
+OpenGuide offre due percorsi di apprendimento sincronizzati di livello mondiale, progettati per accoglierti a qualsiasi livello di partenza. Passa liberamente dall'uno all'altro in ogni momento dalla barra superiore tramite il menu a discesa interattivo del Selettore di Percorso (che include un quiz di raccomandazione interattivo per orientarti), mantenendo per entrambi i percorsi progressi indipendenti e persistenti:
 
 ### Percorso A: Deep AI Engineer (Percorsi 0–7 • 57 Laboratori)
 *Profonda intuizione matematica, esecuzione WebAssembly di CPython 3.12 nel browser e meccanica dei modelli di frontiera dallo zero assoluto.*

@@ -3,9 +3,10 @@
 > Production web client for [OpenGuide](https://openguideforai.dpdns.org) — The Sovereign In-Browser AI Engineering Studio.
 
 This package contains the Vite + React 18 + TypeScript web client, featuring:
-- **Dual Learning Pathways:**
+- **Dual Learning Pathways & Interactive Switcher:**
   - **The Deep AI Engineer (Tracks 0–7):** 57 laboratories powered by CPython 3.12 WebAssembly (Pyodide v0.26 via Web Worker) with dual-phase autograders.
   - **The Builder Path (Tracks B0–B7):** 24 modules for Forward Deployed AI Engineers featuring sandboxed app preview generation, spec studio rubrics, and diff reader audits.
+  - **Interactive Pathway Switcher:** Tactile header dropdown flyout with instant one-click switching between Engineer and Builder paths and built-in diagnostic quiz shortcut.
 - **Spatial Holodeck on Smart AR Glasses (`/holodeck`):** Native WebXR / Three.js 3D spatial computing engine with 60FPS sustained performance, True-Black OLED optical passthrough (`#000000` emission cutoff), binaural harmonic audio sonification, virtual spatial keyboard, and 2026 hardware matrix for Viture, Xreal, RayNeo, Rokid, Meta Quest, and Apple Vision Pro.
 - **Forward Deployed AI Engineering Blueprint:** Embedded ASD-STE100 matrix, Agentic IDE setups (Antigravity IDE, Claude Code, Codex/Cursor), $0 sovereign cloud stack, and secret hygiene protocols.
 - **Sovereign Offline Knowledge Bank:** 250 core topics with Okapi BM25 probabilistic search and interactive visual explainables.

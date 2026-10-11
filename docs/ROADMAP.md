@@ -303,6 +303,20 @@
 - [x] **Version Bump & Dual-Remote Production Release:** Version bumped to `v1.8.2` across `apps/web/package.json`, `changelogData.ts`, `CHANGELOG.md`, `PROJECT-STATE.md`, and all 12 language documentation editions.
 - [x] **100% Pre-Flight Gate Pass:** 201/201 automated Playwright regression tests passing across 20 spec files, 0 lint errors, clean production build in under 3.3s.
 
+## Phase 35: Mobile Course Section Precision, Strict Two-Branch Topology & Push to Prod Protocol (Release v1.8.3 • Delivered)
+- [x] **Mobile Course Section Touch Ergonomics:** Touch target dimensions elevated to $\ge 44$px across `CoursePlayer.tsx`, `SpecStudioLab.tsx`, `DiffReaderLab.tsx`, `PromptToPreviewLab.tsx`, `AbbyChatbot.tsx`, and `TrackBriefing.tsx`.
+- [x] **Mobile Layout Containment:** Enforced `overflow-x: hidden` and `touch-action: manipulation` across interactive code editors and tab strips, eliminating horizontal drift.
+- [x] **Strict Two-Branch Topology:** Purged all stale Dependabot and bot branches across all remotes; enforced strict `main` (production) and `dev` (active development) repository topology.
+- [x] **Codified Rule 21 Push to Prod Universal Contract:** Defined comprehensive 8-pillar protocol for automated multi-language README, changelog, GitHub Releases, and recursive documentation sync.
+- [x] **GitHub Releases v1.8.3:** Published official release on both GitHub repositories (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`).
+
+## Phase 36: Pathway Switcher Dual Architecture, Flagship Engineer Priority & Production Readiness (Release v1.8.4 • Delivered)
+- [x] **Interactive Pathway Switcher Dropdown Flyout:** Upgraded header pathway switcher button into an accessible, tactile dropdown flyout with instant one-click switching between **The Deep AI Engineer** (`Tracks 0–7 • 57 Labs`) and **The Builder Path** (`Tracks B0–B7 • 24 Modules`).
+- [x] **Pathway Recommendation Quiz Shortcut:** Direct shortcut to the 3-question diagnostic onboarding fork from the pathway switcher menu.
+- [x] **Flagship Engineer Prioritization:** Landing page (`/`) automatically synchronizes default pathway state to Engineer on mount; Tracks dropdown menu reordered with Engineer (0–7) as the primary first tab.
+- [x] **Universal Multi-Language Documentation Synchronization:** Complete synchronization of root `README.md`, `apps/web/README.md`, all 11 localized READMEs in `docs/translations/`, and core architecture docs.
+- [x] **Authoritative GitHub Releases v1.8.4:** Published official release tag and release dossier across both repositories.
+
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 
 

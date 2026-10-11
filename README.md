@@ -66,7 +66,7 @@ OpenGuide is not a cloud service or a toy tutorial. It is a browser-native labor
 
 ## Dual Learning Pathways
 
-OpenGuide offers two synchronized, world-class learning tracks designed to meet learners wherever they stand. Switch freely between them at any time from top navigation:
+OpenGuide offers two synchronized, world-class learning tracks designed to meet learners wherever they stand. Switch freely between them at any time using the tactile **Pathway Switcher** dropdown in the top header or diagnose your optimal starting point with the built-in recommendation quiz:
 
 ### Pathway A: The Deep AI Engineer (Tracks 0–7 • 57 Laboratories)
 *Deep mathematical intuition, CPython 3.12 WebAssembly execution, and frontier model mechanics from absolute zero.*

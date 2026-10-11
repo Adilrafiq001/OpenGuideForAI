@@ -66,7 +66,7 @@ O OpenGuide não é um serviço comum em nuvem nem uma série de tutoriais super
 
 ## Trilhas Duplas de Aprendizado
 
-O OpenGuide oferece duas trilhas de aprendizado sincronizadas e de nível mundial. Alterne livremente entre elas a qualquer momento na barra de navegação superior:
+O OpenGuide oferece duas trilhas de aprendizado sincronizadas e de nível mundial. Alterne livremente entre elas a qualquer momento na barra de navegação superior usando o menu suspenso interativo do Seletor de Trilhas (que inclui um quiz interativo de recomendação para orientar sua escolha), com persistência independente de progresso para cada trilha:
 
 ### Trilha A: Engenheiro de IA Profunda (Trilhas 0–7 • 57 Laboratórios)
 *Intuição matemática profunda, execução em WebAssembly com CPython 3.12 e mecânica de modelos de fronteira a partir do zero absoluto.*

@@ -66,7 +66,7 @@ OpenGuide ist kein gewöhnlicher Cloud-Dienst oder oberflächliches Tutorial. Es
 
 ## Duale Lernpfade
 
-OpenGuide bietet zwei synchronisierte Lernpfade auf Weltklasseniveau. Über die obere Navigationsleiste können Sie jederzeit frei zwischen ihnen wechseln:
+OpenGuide bietet zwei synchronisierte Lernpfade auf Weltklasseniveau. Über die obere Navigationsleiste können Sie mit dem interaktiven Pfad-Umschalter-Dropdown jederzeit frei zwischen ihnen wechseln (einschließlich eines interaktiven Empfehlungs-Quiz zur Orientierung) – beide Pfade speichern Ihren Lernfortschritt unabhängig voneinander:
 
 ### Pfad A: Deep AI Engineer (Tracks 0–7 • 57 Laboratorien)
 *Tiefe mathematische Intuition, reale CPython 3.12 WebAssembly-Ausführung im Browser und Pionier-Modelle von Grund auf.*

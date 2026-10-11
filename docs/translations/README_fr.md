@@ -66,7 +66,7 @@ OpenGuide n'est ni un simple service cloud ni une suite de tutoriels simplistes.
 
 ## Parcours d'Apprentissage Doubles
 
-OpenGuide propose deux parcours d'apprentissage synchronisés de niveau mondial, conçus pour s'adapter à votre niveau et vos objectifs. Basculez librement entre eux à tout moment depuis la barre supérieure :
+OpenGuide propose deux parcours d'apprentissage synchronisés de niveau mondial, conçus pour s'adapter à votre niveau et vos objectifs. Basculez librement entre eux à tout moment depuis la barre supérieure grâce au menu déroulant interactif du sélecteur de parcours (comprenant un quiz de recommandation interactif pour vous orienter), chaque parcours conservant sa progression de manière indépendante :
 
 ### Parcours A : Ingénieur IA en Profondeur (Parcours 0–7 • 57 Laboratoires)
 *Intuition mathématique profonde, exécution WebAssembly avec CPython 3.12 et mécanismes des modèles de pointe depuis le zéro absolu.*

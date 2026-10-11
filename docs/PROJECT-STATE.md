@@ -1,4 +1,4 @@
-# State: Production Deployed (Release v1.8.3 • Honest Reality-Grounded Benchmark: ~9.9/10)
+# State: Production Deployed (Release v1.8.4 • Honest Reality-Grounded Benchmark: ~9.9/10)
 > Pre-flight verified across all 20 test suites (201 tests, 100% pass rate). Strict Two-Branch Topology enforced. Production Gate Opened (Human Approved 2026-10-11).
 
 ```
@@ -8,6 +8,14 @@ BRANCH: main / dev
 
 
 **Done:**
+- **Release v1.8.4: Pathway Switcher Dual Architecture, Flagship Engineer Priority & Universal Documentation Sync:**
+  - Upgraded header pathway switcher button into an interactive, solid, tactile dropdown flyout with instant one-click switching between **The Deep AI Engineer** (`Tracks 0–7 • 57 Labs`) and **The Builder Path** (`Tracks B0–B7 • 24 Modules`).
+  - Added active state indicators with WCAG AAA contrast and precision checkmarks for the active learning path.
+  - Integrated direct shortcut to the 3-question diagnostic onboarding fork (`OnboardingForkModal`).
+  - Synchronized `LandingPage.tsx` mount lifecycle to automatically initialize the platform to the flagship Deep AI Engineer pathway (`'engineer'`) by default.
+  - Reordered Tracks & Curriculum dropdown tabs to position **Engineer (0–7)** as the primary first tab on the left and **Builder Path (B0–B7)** as the secondary tab on the right.
+  - Published official GitHub Releases `v1.8.3` and `v1.8.4` across both official repositories (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`).
+  - Synchronized root `README.md`, `apps/web/README.md`, all 11 localized READMEs in `docs/translations/`, and all project documentation.
 - **Release v1.8.3: Mobile Course Section Precision, Strict Two-Branch Topology & Push to Prod Protocol:**
   - Enforced strict repository topology across all remotes: strictly `main` (production) and `dev` (active development), purging all 8 stale Dependabot branches.
   - Resolved mobile course section touch ergonomics ($\ge 44$px targets) and layout containment across `CoursePlayer.tsx`, `SpecStudioLab.tsx`, `DiffReaderLab.tsx`, `PromptToPreviewLab.tsx`, `AbbyChatbot.tsx`, and `TrackBriefing.tsx`.

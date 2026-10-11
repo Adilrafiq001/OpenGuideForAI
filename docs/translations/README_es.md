@@ -66,7 +66,7 @@ OpenGuide no es un servicio en la nube ni un tutorial simplista. Es un laborator
 
 ## Rutas de Aprendizaje Duales
 
-OpenGuide ofrece dos rutas de aprendizaje sincronizadas y de estándar mundial, diseñadas para encontrarte dondequiera que estés. Alterna libremente entre ellas en cualquier momento desde la barra superior:
+OpenGuide ofrece dos rutas de aprendizaje sincronizadas y de estándar mundial, diseñadas para encontrarte dondequiera que estés. Alterna libremente entre ellas en cualquier momento usando el menú desplegable táctil del **Selector de Ruta** en la cabecera superior o diagnostica tu punto de partida óptimo con el cuestionario de recomendación integrado:
 
 ### Ruta A: Ingeniero de IA Profunda (Rutas 0–7 • 57 Laboratorios)
 *Intuición matemática profunda, ejecución en WebAssembly con CPython 3.12 y mecánica de modelos de frontera desde cero absoluto.*
