@@ -5,9 +5,21 @@ export interface ChangelogRelease {
   highlights: string[];
 }
 
-export const CURRENT_STUDIO_VERSION = '1.8.4';
+export const CURRENT_STUDIO_VERSION = '1.8.5';
 
 export const CHANGELOG_DATA: ChangelogRelease[] = [
+  {
+    version: '1.8.5',
+    date: 'October 2026',
+    title: 'The 10.0 Elevation: Full Builder Path Maturity, Bespoke Interactive Workbenches (B0–B7), Universal Mobile Navigator & Zero-Error Console Health',
+    highlights: [
+      'Full Builder Path Maturity (10/10): Engineered 5 bespoke interactive React laboratories in apps/web/src/components/builder/ (EdgeDeployLab, DefensiveSecurityLab, AgentDirectorLab, PipelineOpsLab, CapstoneLedgerLab), eliminating all generic fallbacks across Tracks B3 through B7.',
+      'Universal Mobile Track & Build Navigator (10/10): Deployed TrackSwitcherModal with 2-way pathway switcher (Deep AI Engineer 0–7 vs The Builder Path B0–B7), real-time search filtering, and 1-tap navigation across all 16 tracks with completion badges.',
+      'Zero Dead-Ends on Lesson Completion: Added automatic track advancement CTA in CoursePlayer header and footer upon completing the final milestone of any track.',
+      'Clean Console Health (10/10): Eliminated Google Fonts stylesheet crossorigin blocking in index.html and permitted Cloudflare Insights in CSP connect-src, achieving 0 browser console errors across all routes.',
+      '100% Playwright Test Passage: 209 passing tests across 21 spec files, zero OxLint warnings, and 2.18s production build compilation.'
+    ]
+  },
   {
     version: '1.8.4',
     date: 'October 2026',

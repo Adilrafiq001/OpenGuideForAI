@@ -120,11 +120,11 @@ graph LR
 | **Trilha B0: Expresse (Say It)** | 3 | Do zero à primeira tela funcional em 3 frases | **Prompt-to-Preview Lab:** Renderização isolada em iframe |
 | **Trilha B1: Especifique (Spec It)** | 3 | Escrever especificações técnicas cristalinas sem ambiguidades | **Spec Studio Lab:** Autocalibrador com rubrica de 5 regras |
 | **Trilha B2: Verifique (Verify It)** | 3 | Leitura experiente de diffs de código e detecção de riscos de segurança | **Diff Reader Lab:** Auditoria visual de diffs e riscos de segurança |
-| **Trilha B3: Conecte (Connect It)** | 3 | Dados locais do lado do cliente (Dexie IndexedDB) e endpoints simulados | **Storage Workbench:** Modelagem de esquemas local-first |
-| **Trilha B4: Ancore (Ground It)** | 3 | Constituições de contexto (`AGENTS.md`), salvaguardas e avaliadores | **Harness Studio Lab:** Avaliação de tarefas de ponta a ponta |
-| **Trilha B5: Entregue (Ship It)** | 3 | Entrega soberana a US$ 0: GitHub Actions, Cloudflare Pages | **Pipeline Deployer:** Configuração de entrega contínua |
-| **Trilha B6: Fortaleça (Harden It)** | 3 | Modelagem de ameaças adversárias, higiene de chaves e verificações | **Security Sandbox:** Prevenção de vazamento de chaves |
-| **Trilha B7: Prove (Prove It)** | 3 | Defesa de arquitetura, portfólio de código e credencial verificável | **Capstone Defense:** Verificação criptográfica SHA-256 |
+| **Trilha B3: Entregue (Ship It)** | 3 | Simulação CDN Edge, persistência Dexie IndexedDB e escaneamento de vazamentos | **Edge Deploy Lab:** Simulador CDN, persistência IDB e scanner .env |
+| **Trilha B4: Confie (Trust It)** | 3 | Segurança a nível de linha (Postgres RLS), CVE-2025-48757 e guardas de injeção | **Defensive Security Lab:** Consultas atacantes RLS em tempo real e sanitizadores |
+| **Trilha B5: Dirija (Direct It)** | 3 | Constituições de projetos (`AGENTS.md`), orçamentos de tokens e anti-derivação | **Agent Director Lab:** Constituição de 5 cláusulas e compactação de contexto |
+| **Trilha B6: Opere (Run It)** | 3 | Portões CI do GitHub de 4 estágios, telemetria de erros e reversão sem inatividade | **Pipeline Ops Lab:** Executor de CI e simulação de recuperação de desastres |
+| **Trilha B7: Prove (Prove It)** | 3 | Defesa de arquitetura de 8 pontos, assinaturas Web Crypto SHA-256 e livro-razão imutável | **Capstone Ledger Lab:** Assinatura Web Crypto e exportação JSON imutável |
 
 ---
 

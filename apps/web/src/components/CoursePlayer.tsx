@@ -19,7 +19,8 @@ import {
   Lock,
   LockOpen,
   ArrowSquareIn,
-  DownloadSimple
+  DownloadSimple,
+  CaretDown
 } from '@phosphor-icons/react';
 import { usePyodide } from '../hooks/usePyodide';
 import { useSettingsStore } from '../store/useSettingsStore';
@@ -40,6 +41,11 @@ import { generateJupyterNotebook, downloadFile } from '../utils/notebookExport';
 import { PromptToPreviewLab } from './builder/PromptToPreviewLab';
 import { SpecStudioLab } from './builder/SpecStudioLab';
 import { DiffReaderLab } from './builder/DiffReaderLab';
+import { EdgeDeployLab } from './builder/EdgeDeployLab';
+import { DefensiveSecurityLab } from './builder/DefensiveSecurityLab';
+import { AgentDirectorLab } from './builder/AgentDirectorLab';
+import { PipelineOpsLab } from './builder/PipelineOpsLab';
+import { CapstoneLedgerLab } from './builder/CapstoneLedgerLab';
 import { CheckUnderstandingQuiz } from './builder/CheckUnderstandingQuiz';
 import type { Track } from '../data/track0';
 
@@ -355,10 +361,28 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
 
           <BrandLogo size="sm" />
           
-          <div className="w-px h-4 bg-[var(--color-border)] hidden md:block" />
-          <span className="text-[var(--color-text-secondary)] text-xs hidden md:inline font-mono">
-            {track.title}
-          </span>
+          <div className="w-px h-4 bg-[var(--color-border)] hidden sm:block" />
+
+          <Tooltip
+            position="bottom"
+            content="Switch Track or Build"
+            subtitle="Browse all 16 Engineer & Builder Tracks"
+          >
+            <button
+              data-testid="ide-track-switcher-btn"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-track-switcher'))}
+              aria-label="Switch Track or Build"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer active:scale-95 shadow-2xs"
+            >
+              <span className="font-bold text-[var(--color-accent)]">
+                {track.path === 'builder' ? `Track ${track.trackNumber || 'B0'}` : `Track ${trackNum}`}
+              </span>
+              <span className="text-[var(--color-text-secondary)] hidden md:inline truncate max-w-[180px]">
+                · {track.title}
+              </span>
+              <CaretDown size={11} className="opacity-60 shrink-0" />
+            </button>
+          </Tooltip>
         </div>
 
         {/* Right Navigation & Tools */}
@@ -834,6 +858,66 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                   setFeedback({ type: 'success', message: '✓ Code diff reviewed and audited with zero hazard compromise.' });
                 }}
               />
+            ) : track.id === 'builder-3' || currentLesson.id.startsWith('lesson-b3-') ? (
+              <EdgeDeployLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onDeploySuccess={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ Edge deployment verified with zero leaked secrets and persistent storage.' });
+                }}
+              />
+            ) : track.id === 'builder-4' || currentLesson.id.startsWith('lesson-b4-') ? (
+              <DefensiveSecurityLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onAuditComplete={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ Defensive RLS policies and prompt guardrails verified.' });
+                }}
+              />
+            ) : track.id === 'builder-5' || currentLesson.id.startsWith('lesson-b5-') ? (
+              <AgentDirectorLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onGovernancePassed={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ AGENTS.md constitution and token budget controls verified.' });
+                }}
+              />
+            ) : track.id === 'builder-6' || currentLesson.id.startsWith('lesson-b6-') ? (
+              <PipelineOpsLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onPipelinePassed={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ CI/CD verification pipeline and rollback drill completed.' });
+                }}
+              />
+            ) : track.id === 'builder-7' || currentLesson.id.startsWith('lesson-b7-') ? (
+              <CapstoneLedgerLab
+                key={currentLesson.id}
+                lessonId={currentLesson.id}
+                onCapstoneVerified={() => {
+                  completeLesson(currentLesson.id, track.id);
+                  setIsChallengePassed(true);
+                  playTactileSound('success');
+                  triggerHaptic('success');
+                  setFeedback({ type: 'success', message: '✓ Capstone architecture verified with SHA-256 integrity signature.' });
+                }}
+              />
             ) : (
               <PromptToPreviewLab
                 key={currentLesson.id}
@@ -980,6 +1064,41 @@ export function CoursePlayer({ track }: CoursePlayerProps) {
                       className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98] min-h-[44px]"
                     >
                       <span>{t('ide_next_lesson')}</span>
+                    </button>
+                  </Tooltip>
+                )}
+
+                {(isChallengePassed || isCurrentCompleted) && !hasNextLesson && (
+                  <Tooltip
+                    position="top"
+                    align="end"
+                    content="Advance to Next Track"
+                    subtitle="Track completed! Proceed to the next curriculum track"
+                  >
+                    <button
+                      data-testid="advance-next-track-btn"
+                      onClick={() => {
+                        const isBuilder = track.path === 'builder' || track.id.startsWith('builder-');
+                        const currentNum = parseInt(String(track.trackNumber || trackNum).replace('B', '').replace('builder-', ''), 10) || 0;
+                        const nextNum = currentNum + 1;
+                        if (isBuilder) {
+                          if (nextNum <= 7) {
+                            navigate(`/builder/${nextNum}/intro`);
+                          } else {
+                            navigate('/portfolio');
+                          }
+                        } else {
+                          if (nextNum <= 7) {
+                            navigate(`/track/${nextNum}/intro`);
+                          } else {
+                            navigate('/portfolio');
+                          }
+                        }
+                      }}
+                      aria-label="Advance to Next Track"
+                      className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-emerald-500 text-black font-mono font-bold text-xs hover:bg-emerald-400 transition-all cursor-pointer shadow-md active:scale-[0.98] min-h-[44px]"
+                    >
+                      <span>Advance to Next Track →</span>
                     </button>
                   </Tooltip>
                 )}

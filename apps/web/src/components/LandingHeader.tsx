@@ -852,59 +852,33 @@ export function LandingHeader({ onOpenThemes, onOpenHelp: _onOpenHelp, onOpenDra
                 </span>
               </button>
 
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate(currentPath === 'builder' ? '/builder/0/intro' : '/track/0/intro'); }}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold"
-                style={{ color: currentThemeInfo.accent }}
-              >
-                <span className="flex items-center gap-2">
-                  <Zap size={16} />
-                  <span>{currentPath === 'builder' ? (t('hero_start_as_builder') || 'Start Builder B0') : t('nav_launch_track0')}</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">
-                  {currentPath === 'builder' ? 'Track B0' : 'Track 0'}
-                </span>
-              </button>
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/1/intro'); }}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
-              >
-                <span className="flex items-center gap-2">
-                  <Layers size={16} style={{ color: currentThemeInfo.accent }} />
-                  <span>Track 1: Vector Space & Embeddings</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 1</span>
-              </button>
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/2/intro'); }}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
-              >
-                <span className="flex items-center gap-2">
-                  <Cpu size={16} style={{ color: currentThemeInfo.accent }} />
-                  <span>Track 2: RAG & Autonomous Agents</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 2</span>
-              </button>
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/3/intro'); }}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
-              >
-                <span className="flex items-center gap-2">
-                  <ShieldCheck size={16} style={{ color: currentThemeInfo.accent }} />
-                  <span>Track 3: Production Evals & Security</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 3</span>
-              </button>
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate('/track/4/intro'); }}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer font-bold text-[var(--color-text-primary)]"
-              >
-                <span className="flex items-center gap-2">
-                  <Brain size={16} style={{ color: currentThemeInfo.accent }} />
-                  <span>Track 4: Frontier Intelligence & Systems</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--color-primary)] border border-[var(--color-border)]">Track 4</span>
-              </button>
+              {/* Dynamic 8-Track List for Active Pathway */}
+              <div className="flex flex-col gap-1 max-h-[46vh] overflow-y-auto pr-1 custom-scrollbar">
+                {(currentPath === 'builder' ? ALL_BUILDER_TRACKS_NAV : ALL_TRACKS_NAV).map((trk) => {
+                  const Icon = trk.icon;
+                  return (
+                    <button
+                      key={trk.id}
+                      data-testid={`mobile-menu-track-${trk.id}`}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        navigate(trk.path);
+                      }}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[var(--color-primary)] transition-colors text-left cursor-pointer min-h-[44px]"
+                    >
+                      <span className="flex items-center gap-2.5 min-w-0">
+                        <Icon size={16} className="text-[var(--color-accent)] shrink-0" />
+                        <span className="text-xs font-bold text-[var(--color-text-primary)] truncate">
+                          {trk.title}
+                        </span>
+                      </span>
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] shrink-0 ml-2">
+                        {trk.badge}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
               <a 
                 href="#pathways" 
                 onClick={() => setIsMobileMenuOpen(false)}

@@ -4,9 +4,10 @@ import { Home, Compass, Box, Award, MoreVertical } from 'lucide-react';
 
 interface MobileBottomNavProps {
   onOpenDrawer: () => void;
+  onOpenTracks?: () => void;
 }
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }) => {
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer, onOpenTracks }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,8 +33,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenDrawer }
       id: 'tracks', 
       label: 'Tracks', 
       icon: Compass, 
-      onClick: () => navigate('/track/0/intro'), 
-      active: location.pathname.startsWith('/track') 
+      onClick: () => {
+        if (onOpenTracks) {
+          onOpenTracks();
+        } else {
+          window.dispatchEvent(new CustomEvent('open-track-switcher'));
+        }
+      }, 
+      active: location.pathname.startsWith('/track') || location.pathname.startsWith('/builder')
     },
     { 
       id: 'holodeck', 

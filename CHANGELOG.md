@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.8.5] - 2026-10-14
+
+### Added
+- **Full Builder Path Maturity (10/10):**
+  - Engineered 5 bespoke interactive React laboratories in `apps/web/src/components/builder/`, eliminating all generic placeholder fallbacks across Tracks B3 through B7:
+    - **Track B3: Ship It — `EdgeDeployLab.tsx`:** Cloudflare Pages 300+ Edge CDN simulator, DNS CNAME propagation checker, Dexie IndexedDB local-first persistence validator with hard reload simulation, and `.env` client secret leak scanner (Stripe, Supabase service roles, private API keys).
+    - **Track B4: Trust It — `DefensiveSecurityLab.tsx`:** Real-world CVE-2025-48757 Lovable RLS bypass case study with attacker queries, PostgreSQL Row-Level Security policy toggles (`auth.uid() = user_id`), prompt injection delimiter sanitizer, and least-privilege role matrix (anon, authenticated, service_role).
+    - **Track B5: Direct It — `AgentDirectorLab.tsx`:** 5-clause `AGENTS.md` project constitution builder, token budget & context compaction simulator (80% memory reduction with zero task state loss), and automated anti-drift proposal compliance auditor.
+    - **Track B6: Run It — `PipelineOpsLab.tsx`:** 4-stage automated GitHub Actions CI gate executor (OxLint AST -> Autograders -> Vite Build -> Pre-Flight), client error rate heartbeat monitor (<0.05% health), and 1-click zero-downtime Git SHA rollback drill.
+    - **Track B7: Prove It — `CapstoneLedgerLab.tsx`:** 8-point architectural defense checklist, Web Crypto API deterministic SHA-256 signature generator, and immutable JSON sovereign ledger exporter.
+- **Universal Mobile Track & Build Navigator (`TrackSwitcherModal.tsx`):**
+  - Designed and deployed full-screen modal with solid opaque background (`bg-[var(--color-secondary)]`), 2-way pathway switcher ("Deep AI Engineer (0–7)" vs "The Builder Path (B0–B7)"), real-time search filtering, and 1-tap navigation across all 16 tracks with completion badges.
+  - Wired mobile bottom navigation ("Tracks" icon), desktop/mobile headers, and drawer navigation to open the unified hub.
+  - Eliminated lesson completion dead-ends: Added automatic "Advance to Next Track →" CTA button in CoursePlayer when completing the final milestone of any track.
+- **Console Health & Security Architecture (10/10):**
+  - Resolved Google Fonts stylesheet CORS blocking in `index.html` by removing erroneous `crossorigin="anonymous"` from stylesheet `<link>`, eliminating `net::ERR_FAILED`.
+  - Added wildcard `https://*.cloudflareinsights.com` to `connect-src` in `apps/web/public/_headers` Content Security Policy.
+  - Verified 0 browser console errors across all routes via Playwright MCP.
+- **Automated Regression Suite:**
+  - Added `apps/web/tests/builder-path-maturity.spec.ts` with 8 comprehensive end-to-end test cases covering the complete Builder Path maturity and mobile navigation flows.
+
+### Verified
+- Zero lint errors (`oxlint` across 163 files).
+- Zero build errors (`tsc -b && vite build` completed in 2.18s).
+- 100% automated test suite passage across all 21 test files (209 passing tests, 0 failures, 0 skipped).
+- 5-point local pre-flight suite verified green.
+
+---
+
 ## [1.8.4] - 2026-10-11
 
 ### Added

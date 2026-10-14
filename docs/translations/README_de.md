@@ -120,11 +120,11 @@ graph LR
 | **Track B0: Formulieren (Say It)** | 3 | Von Null zum ersten funktionierenden Interface in 3 Sätzen | **Prompt-to-Preview Lab:** Isolierte Iframe-Generierung |
 | **Track B1: Spezifizieren (Spec It)** | 3 | Eindeutige technische Spezifikationen ohne Modell-Missverständnisse | **Spec Studio Lab:** Autograder mit 5-Regeln-Rubrik |
 | **Track B2: Prüfen (Verify It)** | 3 | Professionelles Lesen von Code-Diffs und Erkennen von Sicherheitsrisiken | **Diff Reader Lab:** Visuelles Diff- & Sicherheitsrisiko-Audit |
-| **Track B3: Verbinden (Connect It)** | 3 | Clientseitige Persistenz (Dexie IndexedDB) und Mock-Endpunkte | **Storage Workbench:** Local-First Datenbankschema-Modellierung |
-| **Track B4: Verankern (Ground It)** | 3 | Kontext-Konstitutionen (`AGENTS.md`), Leitplanken und Evaluatoren | **Harness Studio Lab:** Durchgängige Aufgaben-Evaluierung |
-| **Track B5: Ausliefern (Ship It)** | 3 | 0-Dollar-Sovereign-Stack-Bereitstellung: GitHub Actions & Cloudflare | **Pipeline Deployer:** Konfiguration kontinuierlicher Auslieferung |
-| **Track B6: Härten (Harden It)** | 3 | Bedrohungsmodellierung, Secret-Hygiene und Pre-Commit-Scanner | **Sicherheits-Sandbox:** Null-Schlüssel-Leckage-Prävention |
-| **Track B7: Beweisen (Prove It)** | 3 | Architektur-Verteidigung, Portfolio-Nachweise und Capstone | **Capstone Defense:** Kryptografische SHA-256-Verifikation |
+| **Track B3: Ausliefern (Ship It)** | 3 | Edge-CDN-Simulation, Dexie IndexedDB-Persistenz und Secret-Leak-Scanning | **Edge Deploy Lab:** CDN-Simulator, IDB-Persistenz & .env-Scanner |
+| **Track B4: Vertrauen (Trust It)** | 3 | Zeilenebenen-Sicherheit (Postgres RLS), CVE-2025-48757 und Injektions-Schutz | **Defensive Security Lab:** Live-RLS-Angreiferabfragen & Sanitizer |
+| **Track B5: Steuern (Direct It)** | 3 | Projekt-Konstitutionen (`AGENTS.md`), Token-Budgets und Anti-Drift-Wächter | **Agent Director Lab:** 5-Klauseln-Konstitution & Kontext-Kompaktierung |
+| **Track B6: Betreiben (Run It)** | 3 | 4-Stufen GitHub CI-Gates, Fehler-Telemetrie und ausfallfreies Rollback | **Pipeline Ops Lab:** CI-Gate-Executor & Notfallwiederherstellungs-Drill |
+| **Track B7: Beweisen (Prove It)** | 3 | 8-Punkte-Architekturverteidigung, Web Crypto SHA-256-Signaturen & Ledger | **Capstone Ledger Lab:** Web Crypto-Signatur & unveränderlicher JSON-Export |
 
 ---
 

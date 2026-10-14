@@ -120,11 +120,11 @@ graph LR
 | **Track B0: Say It** | 3 | Zero to your first running screen via 3-sentence blueprints | **Prompt-to-Preview Lab:** Sandboxed iframe generation |
 | **Track B1: Spec It** | 3 | Writing unambiguous specifications AI models cannot misunderstand | **Spec Studio Lab:** 5-rule rubric autograder |
 | **Track B2: Verify It** | 3 | Reading code diffs with expert precision; identifying regressions | **Diff Reader Lab:** Visual diff & security hazard audit |
-| **Track B3: Connect It** | 3 | Persistent client-side data (Dexie IndexedDB) and mock endpoints | **Storage Workbench:** Local-first schema modeling |
-| **Track B4: Ground It** | 3 | Context constitutions (`AGENTS.md`), guardrails, and evaluators | **Harness Studio:** E2E task evaluation |
-| **Track B5: Ship It** | 3 | $0 Sovereign stack deployment: GitHub Actions, Cloudflare Pages | **Pipeline Deployer:** Continuous delivery config |
-| **Track B6: Harden It** | 3 | Adversarial threat modeling, secret hygiene, and pre-commit checks | **Security Sandbox:** Zero-leakage key hygiene |
-| **Track B7: Prove It** | 3 | Architectural defense, portfolio credentialing, and live capstone | **Capstone Defense:** Cryptographic SHA-256 verification |
+| **Track B3: Ship It** | 3 | Edge CDN simulation, local-first IndexedDB, and secret leak scanning | **Edge Deploy Lab:** CDN simulator, IDB persistence & .env scanner |
+| **Track B4: Trust It** | 3 | Postgres Row-Level Security, CVE-2025-48757, and injection guards | **Defensive Security Lab:** Live RLS attacker queries & sanitizers |
+| **Track B5: Direct It** | 3 | Project constitutions (`AGENTS.md`), token budgets & anti-drift | **Agent Director Lab:** 5-clause constitution & token compaction |
+| **Track B6: Run It** | 3 | 4-stage GitHub CI gates, error telemetry, and zero-downtime rollback | **Pipeline Ops Lab:** CI gate executor & disaster recovery drill |
+| **Track B7: Prove It** | 3 | 8-point architecture defense, Web Crypto SHA-256 signatures & ledger | **Capstone Ledger Lab:** Web Crypto signature & immutable JSON export |
 
 ---
 

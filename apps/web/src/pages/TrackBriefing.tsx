@@ -7,7 +7,7 @@ import {
   Compass,
   ArrowRight
 } from '@phosphor-icons/react';
-import { Settings } from 'lucide-react';
+import { Settings, ChevronDown } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLanguageStore } from '../store/useLanguageStore';
 import { THEMES_DATA } from '../data/themesData';
@@ -94,13 +94,26 @@ export function TrackBriefing({ onOpenThemes, track: propTrack }: TrackBriefingP
 
           <div className="h-4 w-px bg-[var(--color-border)] hidden sm:block" />
 
-          <div className="hidden sm:flex items-center gap-2 text-xs font-mono">
-            <span className="font-bold" style={{ color: currentThemeInfo.accent }}>
-              {isBuilderPath ? `TRACK ${trackNum}` : (trackNum === '0' || trackNum === '00' ? 'TRACK 0' : `TRACK 0${trackNum}`)}
-            </span>
-            <span className="text-[var(--color-text-secondary)]">/</span>
-            <span className="font-medium text-[var(--color-text-primary)]">{activeTrack.title}</span>
-          </div>
+          <Tooltip
+            position="bottom"
+            content="Switch Track or Build"
+            subtitle="Browse all 16 Engineer & Builder Tracks"
+          >
+            <button
+              data-testid="briefing-track-switcher-btn"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-track-switcher'))}
+              aria-label="Switch Track or Build"
+              className="flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-full bg-[var(--color-secondary)] hover:bg-[var(--color-tertiary)] border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 text-xs font-mono text-[var(--color-text-primary)] transition-all cursor-pointer active:scale-95 shadow-xs"
+            >
+              <span className="font-bold" style={{ color: currentThemeInfo.accent }}>
+                {isBuilderPath ? `Track ${trackNum}` : (trackNum === '0' || trackNum === '00' ? 'Track 0' : `Track 0${trackNum}`)}
+              </span>
+              <span className="text-[var(--color-text-secondary)] hidden md:inline truncate max-w-[200px]">
+                · {activeTrack.title}
+              </span>
+              <ChevronDown size={12} className="opacity-60 shrink-0" />
+            </button>
+          </Tooltip>
         </div>
 
         <div className="flex items-center gap-3">

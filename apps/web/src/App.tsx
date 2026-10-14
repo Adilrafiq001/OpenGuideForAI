@@ -83,6 +83,7 @@ const StudioInteractiveDemoModal = lazyWithRetry(() => import('./components/Stud
 const CommandPaletteModal = lazyWithRetry(() => import('./components/CommandPaletteModal').then(m => ({ default: m.CommandPaletteModal })));
 const OfflineAICopilot = lazyWithRetry(() => import('./components/OfflineAICopilot').then(m => ({ default: m.OfflineAICopilot })));
 const ForwardEngineerModal = lazyWithRetry(() => import('./components/ForwardEngineerModal').then(m => ({ default: m.ForwardEngineerModal })));
+const TrackSwitcherModal = lazyWithRetry(() => import('./components/TrackSwitcherModal').then(m => ({ default: m.TrackSwitcherModal })));
 
 // Route Code-Splitting: Lazy-load heavy routes to keep initial bundle ultra-lean & blazing fast
 const TrackBriefing = lazyWithRetry(() => import('./pages/TrackBriefing').then(m => ({ default: m.TrackBriefing })));
@@ -123,6 +124,14 @@ function AppContent() {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isForwardEngineerOpen, setIsForwardEngineerOpen] = useState(false);
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+  const [isTracksModalOpen, setIsTracksModalOpen] = useState(false);
+
+  // Global listener to open the Track & Build Navigator
+  useEffect(() => {
+    const handleOpenTracksModal = () => setIsTracksModalOpen(true);
+    window.addEventListener('open-track-switcher', handleOpenTracksModal);
+    return () => window.removeEventListener('open-track-switcher', handleOpenTracksModal);
+  }, []);
 
   // Global listener to open the Offline AI Copilot Knowledge Bank
   useEffect(() => {
@@ -338,6 +347,7 @@ function AppContent() {
                 <Route path="/track/builder-4" element={<Navigate to="/builder/4" replace />} />
                 <Route path="/track/builder-5" element={<Navigate to="/builder/5" replace />} />
                 <Route path="/track/builder-6" element={<Navigate to="/builder/6" replace />} />
+                <Route path="/track/builder-7" element={<Navigate to="/builder/7" replace />} />
                 <Route path="/holodeck" element={<SpatialHolodeck />} />
                 <Route path="/spatial" element={<Navigate to="/holodeck" replace />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
@@ -360,6 +370,7 @@ function AppContent() {
         {/* Native-Grade Mobile Bottom Navigation Bar (<md screens only) */}
         <MobileBottomNav 
           onOpenDrawer={() => setIsNavDrawerOpen(true)}
+          onOpenTracks={() => setIsTracksModalOpen(true)}
         />
 
         {/* Luxury Mobile Navigation Sheet Drawer */}
@@ -454,6 +465,16 @@ function AppContent() {
             <ForwardEngineerModal
               isOpen={isForwardEngineerOpen}
               onClose={() => setIsForwardEngineerOpen(false)}
+            />
+          </Suspense>
+        )}
+
+        {/* Universal Mobile Track & Build Navigator Hub */}
+        {isTracksModalOpen && (
+          <Suspense fallback={null}>
+            <TrackSwitcherModal 
+              isOpen={isTracksModalOpen}
+              onClose={() => setIsTracksModalOpen(false)}
             />
           </Suspense>
         )}

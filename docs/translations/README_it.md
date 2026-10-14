@@ -120,11 +120,11 @@ graph LR
 | **Percorso B0: Dillo (Say It)** | 3 | Da zero alla prima interfaccia funzionante con 3 frasi di progetto | **Lab Prompt-to-Preview:** Rendering isolato in iframe |
 | **Percorso B1: Specificalo (Spec It)** | 3 | Scrivere specifiche tecniche prive di ambiguità a prova di allucinazione | **Lab Spec Studio:** Autovalutatore a rubrica di 5 regole |
 | **Percorso B2: Verificalo (Verify It)** | 3 | Lettura esperta dei diffs di codice e rilevamento di falle di sicurezza | **Lab Diff Reader:** Controllo visivo di diff e rischi di sicurezza |
-| **Percorso B3: Connettilo (Connect It)** | 3 | Persistenza dati lato client (Dexie IndexedDB) ed endpoint simulati | **Storage Workbench:** Modellazione di schemi local-first |
-| **Percorso B4: Ancoralo (Ground It)** | 3 | Costituzioni di contesto (`AGENTS.md`), barriere e valutatori | **Lab Harness Studio:** Valutazione delle attività end-to-end |
-| **Percorso B5: Rilascialo (Ship It)** | 3 | Rilascio su stack sovrano a $0: GitHub Actions, Cloudflare Pages | **Pipeline Deployer:** Configurazione di continuous delivery |
-| **Percorso B6: Fortificalo (Harden It)** | 3 | Modellazione delle minacce, igiene delle chiavi e scansioni pre-commit | **Sandbox Sicurezza:** Prevenzione totale di fughe di credenziali |
-| **Percorso B7: Dimostralo (Prove It)** | 3 | Difesa dell'architettura, portfolio e certificazione capstone | **Capstone Defense:** Verifica crittografica SHA-256 |
+| **Percorso B3: Rilascialo (Ship It)** | 3 | Simulazione Edge CDN, persistenza Dexie IndexedDB e scansione fughe di credenziali | **Edge Deploy Lab:** Simulatore CDN, persistenza IDB e scanner .env |
+| **Percorso B4: Proteggilo (Trust It)** | 3 | Sicurezza a livello di riga (Postgres RLS), CVE-2025-48757 e filtri di iniezione | **Defensive Security Lab:** Query attaccanti RLS in tempo reale e sanitizzatori |
+| **Percorso B5: Dirigilo (Direct It)** | 3 | Costituzioni di progetto (`AGENTS.md`), budget di token e guardie anti-deriva | **Agent Director Lab:** Costituzione a 5 clausole e compattazione del contesto |
+| **Percorso B6: Eseguilo (Run It)** | 3 | Gate CI GitHub a 4 fasi, telemetria degli errori e rollback a zero downtime | **Pipeline Ops Lab:** Esecutore CI e simulazione di disaster recovery |
+| **Percorso B7: Dimostralo (Prove It)** | 3 | Difesa dell'architettura in 8 punti, firme Web Crypto SHA-256 e registro immutabile | **Capstone Ledger Lab:** Firma Web Crypto ed esportazione JSON immutabile |
 
 ---
 

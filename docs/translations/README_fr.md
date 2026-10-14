@@ -120,11 +120,11 @@ graph LR
 | **Parcours B0 : Énoncez (Say It)** | 3 | Du néant à votre premier écran interactif en 3 phrases | **Lab Prompt-to-Preview :** Rendu isolé en iframe |
 | **Parcours B1 : Spécifiez (Spec It)** | 3 | Rédaction de spécifications techniques limpides sans hallucinations | **Lab Spec Studio :** Auto-évaluateur à grille de 5 critères |
 | **Parcours B2 : Vérifiez (Verify It)** | 3 | Lecture experte des diffs de code et détection des failles de sécurité | **Lab Diff Reader :** Audit visuel de diffs et risques de sécurité |
-| **Parcours B3 : Connectez (Connect It)** | 3 | Persistance locale côté client (Dexie IndexedDB) et points d'accès | **Atelier de Stockage :** Modélisation de schémas local-first |
-| **Parcours B4 : Ancrez (Ground It)** | 3 | Constitutions de contexte (`AGENTS.md`), garde-fous et évaluateurs | **Lab Harness Studio :** Évaluation des performances de bout en bout |
-| **Parcours B5 : Déployez (Ship It)** | 3 | Déploiement souverain à 0 $ : GitHub Actions, Cloudflare Pages | **Déployeur de Pipelines :** Configuration de livraison continue |
-| **Parcours B6 : Sécurisez (Harden It)** | 3 | Modélisation des menaces, hygiène des secrets et scans pré-commit | **Bac à Sable Sécurité :** Prévention totale des fuites de clés |
-| **Parcours B7 : Prouvez (Prove It)** | 3 | Soutenance d'architecture, portfolio et certification capstone | **Soutenance Capstone :** Vérification cryptographique SHA-256 |
+| **Parcours B3 : Déployez (Ship It)** | 3 | Simulation CDN Edge, persistance Dexie IndexedDB et détection de fuites de clés | **Edge Deploy Lab :** Simulateur CDN, persistance IDB et scanner .env |
+| **Parcours B4 : Sécurisez (Trust It)** | 3 | Sécurité au niveau des lignes (Postgres RLS), CVE-2025-48757 et filtres d'injection | **Defensive Security Lab :** Requêtes attaquantes RLS en direct et désinfecteurs |
+| **Parcours B5 : Dirigez (Direct It)** | 3 | Constitutions de projets (`AGENTS.md`), budgets de jetons et anti-dérive | **Agent Director Lab :** Constitution à 5 clauses et compaction de contexte |
+| **Parcours B6 : Exploitez (Run It)** | 3 | Portails CI GitHub à 4 étapes, télémétrie d'erreurs et retour arrière sans interruption | **Pipeline Ops Lab :** Exécuteur CI et exercice de reprise après sinistre |
+| **Parcours B7 : Prouvez (Prove It)** | 3 | Soutenance d'architecture en 8 points, signatures Web Crypto SHA-256 et registre immuable | **Capstone Ledger Lab :** Signature Web Crypto et export JSON immuable |
 
 ---
 

@@ -120,11 +120,11 @@ graph LR
 | **路线 B0: 构想显化 (Say It)** | 3 | 仅凭 3 句话架构蓝图，实现从无到有的首屏交互生成 | **Prompt-to-Preview 实验室：** 隔离 iframe 渲染 |
 | **路线 B1: 精确规范 (Spec It)** | 3 | 撰写毫无歧义的系统技术规格，消除大模型幻觉与误解 | **Spec Studio 实验室：** 5 项黄金法则自动评分器 |
 | **路线 B2: 代码审查 (Verify It)** | 3 | 专家级审查代码差异 (Diff)，敏锐捕获性能退化与安全陷阱 | **Diff Reader 实验室：** 可视化 Diff 与安全漏洞排查 |
-| **路线 B3: 状态持久化 (Connect It)** | 3 | 本地优先存储方案 (Dexie IndexedDB) 与模拟端点 | **Storage 工作台：** 本地优先数据库模式建模 |
-| **路线 B4: 锚定规则 (Ground It)** | 3 | 上下文宪法 (`AGENTS.md`)、安全边界与自动化评估器 | **Harness Studio 实验室：** 端到端任务效能评测 |
-| **路线 B5: 生产交付 (Ship It)** | 3 | $0 极简主权技术栈自动化交付：GitHub Actions + Cloudflare | **流水线部署器：** 生产级持续交付配置编写 |
-| **路线 B6: 安全加固 (Harden It)** | 3 | 对抗性威胁建模、零泄露密钥管理规范与预提交拦截 | **安全沙盒实验室：** 零密钥泄漏防御测试 |
-| **路线 B7: 毕业答辩 (Prove It)** | 3 | 系统架构在线答辩、成果作品集与密码学验证凭证 | **毕业架构答辩室：** SHA-256 密码学签名验证 |
+| **路线 B3: 边缘交付 (Ship It)** | 3 | Cloudflare 边缘 CDN 模拟、Dexie IndexedDB 持久化与机密泄露扫描 | **Edge Deploy 实验室：** 边缘 CDN 模拟器、IDB 持久化与 .env 扫描器 |
+| **路线 B4: 防御安全 (Trust It)** | 3 | Postgres 行级安全 (RLS) 实战、CVE-2025-48757 攻击重现与提示词注入防御 | **Defensive Security 实验室：** 实时 RLS 越权攻击查询与消毒器 |
+| **路线 B5: 智能体指挥 (Direct It)** | 3 | 5 核心条款项目宪法 (`AGENTS.md`)、Token 预算控制与上下文压缩防偏离 | **Agent Director 实验室：** 项目宪法构建器与上下文压缩模拟器 |
+| **路线 B6: 生产流水线 (Run It)** | 3 | 4 阶段 GitHub CI 门禁验证、生产错误率遥测与零停机 Git 回滚演练 | **Pipeline Ops 实验室：** CI 自动化门禁执行器与灾难恢复演练 |
+| **路线 B7: 毕业答辩 (Prove It)** | 3 | 8 维度系统架构防御答辩、Web Crypto SHA-256 签名与不可变账本导出 | **Capstone Ledger 实验室：** 密码学签名生成与 JSON 独立凭证导出 |
 
 ---
 

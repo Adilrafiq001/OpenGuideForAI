@@ -120,11 +120,11 @@ graph LR
 | **Ruta B0: Say It** | 3 | De cero a tu primera pantalla funcional mediante planos de 3 frases | **Prompt-to-Preview Lab:** Generación en iframe aislado |
 | **Ruta B1: Spec It** | 3 | Escribir especificaciones sin ambigüedad que los modelos no confundan | **Spec Studio Lab:** Autocalificador con rúbrica de 5 reglas |
 | **Ruta B2: Verify It** | 3 | Lectura de diffs de código con precisión experta; detección de riesgos | **Diff Reader Lab:** Auditoría visual de diffs y riesgos de seguridad |
-| **Ruta B3: Connect It** | 3 | Datos persistentes del lado del cliente (Dexie IndexedDB) y endpoints simulados | **Storage Workbench:** Modelado de esquemas local-first |
-| **Ruta B4: Ground It** | 3 | Constituciones de contexto (`AGENTS.md`), guardas y evaluadores | **Harness Studio:** Evaluación de tareas de extremo a extremo |
-| **Ruta B5: Ship It** | 3 | Despliegue en pila soberana $0: GitHub Actions, Cloudflare Pages | **Pipeline Deployer:** Configuración de entrega continua |
-| **Ruta B6: Harden It** | 3 | Modelado de amenazas adversarias, higiene de secretos y escaneo pre-commit | **Security Sandbox:** Higiene de claves con cero fugas |
-| **Ruta B7: Prove It** | 3 | Defensa de arquitectura, credenciales verificables y capstone en vivo | **Capstone Defense:** Verificación criptográfica SHA-256 |
+| **Ruta B3: Ship It** | 3 | Simulación CDN Edge, persistencia Dexie IndexedDB y escaneo de fugas de secretos | **Edge Deploy Lab:** Simulador CDN, persistencia IDB y escáner .env |
+| **Ruta B4: Trust It** | 3 | Seguridad a nivel de fila (Postgres RLS), CVE-2025-48757 y guardas contra inyecciones | **Defensive Security Lab:** Consultas atacantes RLS en vivo y sanitizadores |
+| **Ruta B5: Direct It** | 3 | Constituciones de proyectos (`AGENTS.md`), presupuestos de tokens y anti-deriva | **Agent Director Lab:** Constitución de 5 cláusulas y compactación de tokens |
+| **Ruta B6: Run It** | 3 | Compuertas CI GitHub de 4 fases, telemetría de errores y rollback sin inactividad | **Pipeline Ops Lab:** Ejecutor de CI y simulacro de recuperación ante desastres |
+| **Ruta B7: Prove It** | 3 | Defensa de arquitectura de 8 puntos, firmas Web Crypto SHA-256 y ledger inmutable | **Capstone Ledger Lab:** Firma Web Crypto y exportación JSON inmutable |
 
 ---
 

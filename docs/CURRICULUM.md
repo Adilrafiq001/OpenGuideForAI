@@ -166,35 +166,35 @@ graph LR
 - **Module B2.2: Identifying Catastrophic Security Hazards** (Leaked secrets, dropped Row Level Security, unsanitized inputs).
 - **Module B2.3: Diff Reader Lab** (`DiffReaderLab.tsx`): Split/unified visual diff explorer with 3 real-world scenarios and security alert banners.
 
-### Track B3: Connect It (Client-Side Storage & Mock APIs)
-**Goal:** Implement resilient local-first data persistence using IndexedDB / Dexie and typed mock APIs.
-- **Module B3.1: Local-First Storage Architecture** (Dexie.js IndexedDB schema, in-memory caching tier).
-- **Module B3.2: Mock API Contracts & Data Serialization** (JSON schemas, deterministic mock services).
-- **Module B3.3: Storage Workbench Lab** (`builderTrackB3.ts`): Client-side state modeling and offline data validation.
+### Track B3: Ship It (Edge Deployment & Storage Studio)
+**Goal:** Implement resilient local-first data persistence using IndexedDB / Dexie, multi-CDN static edge routing, and frontend secret leak scanning.
+- **Module B3.1: Cloudflare Pages Edge Routing & CDN Simulation** (Static single-page architecture, 300+ global edge caches, DNS CNAME verification).
+- **Module B3.2: Local-First Sovereign Persistence with IndexedDB** (Dexie.js schema, zero-cost client database, hard-reload state preservation).
+- **Module B3.3: Client-Side Secret Leak Auditor** (`EdgeDeployLab.tsx`): Interactive 3-tab workbench featuring edge CDN deployer, DNS verifier, IDB persistence tester, and automated `.env` client secret leak scanner.
 
-### Track B4: Ground It (Context Constitutions & Evals)
-**Goal:** Build context constitutions (`AGENTS.md`), guardrails, and deterministic task evaluation harnesses.
-- **Module B4.1: Repository Governance & Rules Files** (Constitution design, prompt anchoring).
-- **Module B4.2: Guardrail Systems & Invariant Checks** (Output filtering, semantic assertions).
-- **Module B4.3: Harness Studio Lab** (`builderTrackB4.ts`): End-to-end task evaluation and agent steering.
+### Track B4: Trust It (Defensive Security & RLS Audit)
+**Goal:** Build defense-in-depth security architectures: mitigate CVE-2025-48757 Lovable RLS bypasses, enforce least-privilege database roles, and neutralize prompt injections.
+- **Module B4.1: PostgreSQL Row-Level Security (RLS) & Tenant Isolation** (Row-level security policies, `auth.uid() = user_id`, unauthenticated attacker exploit testing).
+- **Module B4.2: Prompt Injection Defense & Instruction Stripping** (OWASP AI Top 10, delimiter sandboxing, adversarial payload neutralization).
+- **Module B4.3: Defensive Security Lab** (`DefensiveSecurityLab.tsx`): Interactive 3-tab workbench featuring live RLS attacker queries, policy toggles, input sanitizers, and least-privilege role matrix.
 
-### Track B5: Ship It ($0 Sovereign Deployment Pipeline)
-**Goal:** Automate continuous delivery using Cloudflare Pages, GitHub Actions CI, and preview branches for $0.
-- **Module B5.1: Zero-Cost CI/CD Architecture** (GitHub Actions workflows, automated build checks).
-- **Module B5.2: Edge Deployment & Static CDN Delivery** (Cloudflare Pages edge routing, custom headers, caching).
-- **Module B5.3: Pipeline Deployer Lab** (`builderTrackB5.ts`): Production delivery configuration and smoke testing.
+### Track B5: Direct It (Spec-Driven Governance & AGENTS.md Constitution)
+**Goal:** Steer autonomous coding agents deterministically using strict repository governance (`AGENTS.md`), context window compaction, and anti-drift validation.
+- **Module B5.1: The 5-Clause AGENTS.md Project Constitution** (Objectives, non-goals, architectural invariants, mandatory verification gates, done criteria).
+- **Module B5.2: Token Accounting & Context Compaction Mechanics** (Multi-turn tool interaction budgets, working memory pruning, 80% cost reduction).
+- **Module B5.3: Agent Director Lab** (`AgentDirectorLab.tsx`): Interactive 3-tab workbench featuring constitution checklist builder, token budget simulator, and automated anti-drift proposal auditor.
 
-### Track B6: Harden It (Adversarial Security & Secret Hygiene)
-**Goal:** Threat-model agentic applications, enforce strict secret hygiene, and conduct red-team evaluations.
-- **Module B6.1: Threat Modeling & Red-Teaming** (STRIDE, prompt injection vectors, bypass detection).
-- **Module B6.2: Secret Hygiene & Pre-Commit Scanning** (Entropy scanners, BYOK memory isolation, `.env.example`).
-- **Module B6.3: Security Sandbox Lab** (`builderTrackB6.ts`): Zero-leakage key protection and vulnerability auditing.
+### Track B6: Run It (CI/CD Gates & Error Rate Observability)
+**Goal:** Automate continuous verification using 4-stage GitHub Actions CI gates, monitor client error rate telemetry, and drill 1-click zero-downtime rollbacks.
+- **Module B6.1: Zero-Tolerance Automated CI/CD Gates** (OxLint syntax, ungameable mutation autograders, Vite build compilation, physical Playwright pre-flight).
+- **Module B6.2: Privacy-First Client Telemetry & Rollback Drills** (Zero-cookie error rate monitoring, 0.5% incident threshold, instant Git SHA rollback).
+- **Module B6.3: Pipeline Ops Lab** (`PipelineOpsLab.tsx`): Interactive 3-tab workbench featuring 4-stage CI gate executor, error rate heartbeat monitor, and 1-click disaster recovery rollback drill.
 
-### Track B7: Prove It (Capstone Architecture Defense)
-**Goal:** Defend an end-to-end production architecture in a live capstone evaluation and earn W3C Verifiable Credentials.
-- **Module B7.1: Architecture Defense & Socratic Interview** (Defending system choices, trade-offs, scaling bottlenecks).
-- **Module B7.2: Cryptographic W3C Credential Conferral** (SHA-256 local verification, tamper-proof credentials).
-- **Module B7.3: Capstone Defense Lab** (`builderTrackB7.ts`): Comprehensive project defense and portfolio certification.
+### Track B7: Prove It (Capstone Portfolio & Cryptographic Ledger)
+**Goal:** Defend an end-to-end production architecture across all 8 builder competencies and generate deterministic, tamper-proof Web Crypto SHA-256 signatures.
+- **Module B7.1: The 8 Architectural Defense Checks** (Adversarial inquiry verification across specs, diff reading, edge CDN, defensive RLS, governance, and CI).
+- **Module B7.2: Deterministic Web Crypto SHA-256 Hash Proofs** (Client-side cryptographic digest generation, mathematical proof of competency).
+- **Module B7.3: Capstone Ledger Lab** (`CapstoneLedgerLab.tsx`): Interactive 3-tab workbench featuring 8-competency defense checklist, Web Crypto SHA-256 signature generator, and immutable JSON ledger exporter.
 
 ---
 
