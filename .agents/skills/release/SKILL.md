@@ -8,7 +8,7 @@ When releasing or executing `"push to prod"` / `"deploy to production"`, execute
 
 1. **Multi-Language READMEs:** Update root `README.md`, `apps/web/README.md`, and all 11 localized READMEs in `docs/translations/` (`ar`, `de`, `es`, `fr`, `hi`, `it`, `ja`, `pt`, `ru`, `ur`, `zh`).
 2. **Changelog & In-App Release:** Update `CHANGELOG.md`, `apps/web/src/data/changelogData.ts`, `apps/web/src/components/ChangelogModal.tsx`, and `apps/web/package.json`.
-3. **GitHub Releases:** Authoritative GitHub Release notes drafted and git release tag prepared.
+3. **GitHub Releases & Tags (Mandatory REST API Automation):** Authoritative GitHub Release notes drafted, release tag tagged and pushed (`git push origin vX.Y.Z`), and release published to BOTH remote endpoints (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`) via GitHub REST API (`POST /repos/{owner}/{repo}/releases`). Never leave a release uncreated on GitHub.
 4. **All .md Docs Sync:** Recursively update `docs/PROJECT-STATE.md`, `docs/CURRICULUM.md`, `docs/ROADMAP.md`, `ARCHITECTURE.md`, `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`.
 5. **5-Point Pre-Flight Gate:**
    - Dev Server HTTP 200 Live Check.

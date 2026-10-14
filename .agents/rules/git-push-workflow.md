@@ -50,9 +50,10 @@ Ensure version numbers, badges, track counts (Tracks 0–7, Builder Tracks B0–
 - Synchronize [`apps/web/src/data/changelogData.ts`](../../apps/web/src/data/changelogData.ts) (`CURRENT_STUDIO_VERSION`, release highlights) and [`ChangelogModal.tsx`](../../apps/web/src/components/ChangelogModal.tsx) so in-app users and the "What's New" announcement pill immediately reflect the release.
 - Bump the version in [`apps/web/package.json`](../../apps/web/package.json).
 
-### 3. GitHub Releases & Version Tags
+### 3. GitHub Releases & Version Tags (Mandatory REST API Automation)
 - Draft authoritative GitHub Release notes and release tag metadata (`vX.Y.Z`) corresponding to the changelog entry.
-- Create and push release tags to both remote endpoints.
+- Create and push release tags to both remote endpoints (`git push origin vX.Y.Z`).
+- **Publish Dual GitHub Releases via REST API:** Immediately create and publish the official release with full changelog notes to BOTH remote endpoints (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`) via GitHub REST API (`POST /repos/{owner}/{repo}/releases`) using their respective credentials (`GITHUB_PAT_OPEN` / `GITHUB_PAT_ARD`). Never leave a release uncreated or only locally tagged.
 
 ### 4. Exhaustive Project Documentation (.md) Synchronization
 Recursively synchronize ALL materially affected markdown documents:

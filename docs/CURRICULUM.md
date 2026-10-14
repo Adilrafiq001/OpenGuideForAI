@@ -252,6 +252,44 @@ A **mutant** is a synthetically altered version of student code where a single o
 
 ---
 
+## Pathway B: The Builder Path (Tracks B0–B7 • 24 Modules • 48 Milestones)
+
+Designed for product builders, technical founders, and operators who command AI to scaffold, inspect, ship, secure, and monitor production systems with zero cloud lock-in.
+
+### Track B0: Say It (Vibe Coding & Intent Engineering)
+- **Workbench:** `PromptToPreviewLab.tsx`
+- **Focus:** Turning plain-English intent into working prototypes, component decomposition, prompt precision, and zero-hallucination iterative prompting.
+
+### Track B1: Build It (Full-Stack Scaffolding & Architecture)
+- **Workbench:** `SpecStudioLab.tsx`
+- **Focus:** Full-stack component trees, state boundaries, schema design, and local mock testing.
+
+### Track B2: Understand It (Code Anatomy & Diff Reading)
+- **Workbench:** `DiffReaderLab.tsx`
+- **Focus:** Code anatomy, AST inspection, reading pull request diffs, and surgical line-level refactoring.
+
+### Track B3: Ship It (Edge Deployment & Local Storage)
+- **Workbench:** `EdgeDeployLab.tsx`
+- **Focus:** Cloudflare Pages 300+ Edge CDN static hosting, DNS CNAME configuration, Dexie IndexedDB client-side persistence, and automated `.env` client secret scanner.
+
+### Track B4: Trust It (Defensive Security & Auth)
+- **Workbench:** `DefensiveSecurityLab.tsx`
+- **Focus:** Real-world CVE-2025-48757 Lovable RLS bypass case study, Postgres Row-Level Security policy isolation (`auth.uid() = user_id`), prompt injection delimiter sanitization, and least-privilege role matrix.
+
+### Track B5: Direct It (Spec-Driven Governance)
+- **Workbench:** `AgentDirectorLab.tsx`
+- **Focus:** 5-clause `AGENTS.md` project constitutions, token budget circuit breakers ($0.05 budget ceiling), context compaction, and anti-drift compliance verification.
+
+### Track B6: Run It (CI/CD, Monitoring & Observability)
+- **Workbench:** `PipelineOpsLab.tsx`
+- **Focus:** 4-stage GitHub Actions CI gate executor, client error rate telemetry (<0.05% health), and 1-click zero-downtime Git SHA rollback drills.
+
+### Track B7: Prove It (Capstone Portfolio & Cryptographic Proof)
+- **Workbench:** `CapstoneLedgerLab.tsx`
+- **Focus:** 8-competency architectural defense checklist, Web Crypto API deterministic SHA-256 cryptographic signing, and verifiable JSON sovereign ledger export.
+
+---
+
 ## Beginner-to-Pro Pedagogical Assessment & Modular Evolution Plan
 
 ### 1. Honest Gap Analysis & Resolution: How Current Labs Turn Any Learner Into a Pro

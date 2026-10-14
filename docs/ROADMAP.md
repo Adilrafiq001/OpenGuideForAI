@@ -336,6 +336,9 @@
   - Ungameable mutation autograders with 100% mutant kill rate.
 - [x] **Permanent Automated Regression Coverage:**
   - Added `apps/web/tests/builder-path-maturity.spec.ts` testing all 5 new builder workbenches, modal interactions, search filters, and mobile navigation flows.
+- [x] **Dual GitHub Releases Published (v1.8.5):**
+  - Published official release notes via GitHub REST API across both repositories (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`).
+  - Codified mandatory automated dual-remote GitHub Release publication in `AGENTS.md` Rule 21 and workflow standards.
 
 **Creator & Architect:** Adil Rafiq Dar (ARD)
 

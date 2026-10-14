@@ -28,6 +28,9 @@ STATUS: 10/10 ACROSS ALL AUDIT DIMENSIONS (Builder Path Maturity, Technical Accu
     - Physically verified 0 console errors via Playwright MCP `browser_console_messages(level: "error")` across landing, player, briefing, holodeck, and portfolio.
   - **Permanent Automated Regression Coverage:**
     - Created `apps/web/tests/builder-path-maturity.spec.ts` covering all 5 new builder workbenches, modal interactions, search filters, and mobile navigation flows.
+  - **Dual GitHub Releases Published (v1.8.5):**
+    - Published official release notes via GitHub REST API on primary repository (`openguideforai/OpenGuideForAI`, Release ID: 412651099) and personal archive mirror (`Adilrafiq001/OpenGuideForAI`, Release ID: 412651408).
+    - Codified mandatory automated dual-remote GitHub Release publication in `AGENTS.md` Rule 21 and workflow standards so releases are never omitted during "push to prod".
 - **Release v1.8.4: Pathway Switcher Dual Architecture, Flagship Engineer Priority & Universal Documentation Sync:**
   - Upgraded header pathway switcher button into an interactive, solid, tactile dropdown flyout with instant one-click switching between **The Deep AI Engineer** (`Tracks 0–7 • 57 Labs`) and **The Builder Path** (`Tracks B0–B7 • 24 Modules`).
   - Added active state indicators with WCAG AAA contrast and precision checkmarks for the active learning path.

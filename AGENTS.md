@@ -117,9 +117,10 @@
         - Atomically update `CHANGELOG.md` per Keep a Changelog and Semantic Versioning (SemVer), adding the new release version, date, and comprehensive categorized sections (`Added`, `Changed`, `Fixed`, `Performance`).
         - Synchronize `apps/web/src/data/changelogData.ts` (`CURRENT_STUDIO_VERSION`, release title, highlights) and `ChangelogModal.tsx` so in-app users and the "What's New" announcement pill immediately reflect the release.
         - Bump the semantic version in `apps/web/package.json`.
-      - **GitHub Releases & Version Tags:**
+      - **GitHub Releases & Version Tags (Mandatory REST API Automation):**
         - Draft authoritative GitHub Release notes and release tag metadata (`vX.Y.Z`) corresponding to the changelog entry.
-        - Tag the release commit and push tags to both remote endpoints.
+        - Tag the release commit and push tags to both remote endpoints (`git push origin vX.Y.Z`).
+        - **Publish Dual GitHub Releases via REST API:** Immediately create and publish the official release with full changelog notes to BOTH remote endpoints (`openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`) via `POST /repos/{owner}/{repo}/releases` using their respective credentials (`GITHUB_PAT_OPEN` / `GITHUB_PAT_ARD`). Never leave a release uncreated or only locally tagged.
       - **Exhaustive Project Documentation (.md) Synchronization:**
         - Recursively synchronize ALL materially affected markdown documents: `docs/PROJECT-STATE.md` (session history, component counts, test metrics, current version), `docs/CURRICULUM.md` (tracks 0–7 and builder tracks B0–B7, lab counts), `docs/ROADMAP.md` (milestone statuses and roadmap progression), `ARCHITECTURE.md` (runtime stack, security models, local-first WASM Pyodide architecture), `docs/COMPATIBILITY-FINDINGS.md`, `docs/BACKLOG.md`, `.agents/rules/testing-standards.md`, `.agents/rules/80-docs.md`, `.agents/rules/git-push-workflow.md`, `.agents/rules/git-workflow-standards.md`, and related rule docs.
       - **Mandatory 5-Point Local Pre-Flight Verification Gate:**

@@ -61,8 +61,10 @@ In accordance with Section 4 and Section 8 of `UNIVERSAL-COMPATIBILITY.md`, all 
   - Bug Hunter Challenge (`BugHunterChallenge.tsx`) with 0-day failure diagnostics and mutant kill explanations.
   - Tensor Surgery 4D Visualizer (`TensorSurgeryVisualizer.tsx`) for `[B, H, S, D]` strides and memory layouts.
   - Hardware & VRAM Profiler Modal (`HardwareProfilerModal.tsx`) for Roofline bandwidth analysis and FP16/INT8/INT4 sizing.
-- [x] **Community Multi-Sponsor Portal & Production Analytics:**
-  - Embedded support modal (`SupportModal.tsx`) supporting GitHub Sponsors, Ko-fi, and PayPal.
-  - Zero-cookie Cloudflare Web Analytics beacon with localhost bypass in `index.html`.
-  - Offline Daily Streak Reminder engine (`streakNotification.ts`) with Service Worker integration.
+- [x] **Full Builder Path Maturity (Release v1.8.5):**
+  - Engineered 5 bespoke interactive React laboratories in `apps/web/src/components/builder/` for Tracks B3 through B7 (`EdgeDeployLab`, `DefensiveSecurityLab`, `AgentDirectorLab`, `PipelineOpsLab`, `CapstoneLedgerLab`).
+  - Universal Mobile Track & Build Navigator (`TrackSwitcherModal.tsx`) with 2-way pathway switcher, search filtering, and 0 dead-ends on lesson completion.
+  - Zero-error console health achieved across all routes with CSP and Google Fonts CORS fixes.
+  - 209/209 automated Playwright tests passing across 21 test files.
+  - Published dual GitHub Releases via GitHub REST API on `openguideforai/OpenGuideForAI` and `Adilrafiq001/OpenGuideForAI`.
 
